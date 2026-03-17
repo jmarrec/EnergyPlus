@@ -115,11 +115,6 @@ namespace SurfaceGroundHeatExchanger {
 
     // OTHER NOTES: none
 
-    // USE STATEMENTS:
-    // Use statements for data only modules
-    // Using/Aliasing
-    using namespace DataLoopNode;
-
     // Use statements for access to subroutines in other modules
 
     // Data
@@ -181,9 +176,8 @@ namespace SurfaceGroundHeatExchanger {
         // Standard EnergyPlus methodology.
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
-        using NodeInputManager::GetOnlySingleNode;
-        using namespace DataLoopNode;
+        using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
@@ -253,12 +247,12 @@ namespace SurfaceGroundHeatExchanger {
                 GetOnlySingleNode(state,
                                   state.dataIPShortCut->cAlphaArgs(3),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::GroundHeatExchangerSurface,
+                                  Node::ConnectionObjectType::GroundHeatExchangerSurface,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  DataLoopNode::NodeFluidType::Water,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  ObjectIsNotParent);
+                                  Node::FluidType::Water,
+                                  Node::ConnectionType::Inlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsNotParent);
             if (state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).InletNodeNum == 0) {
                 ShowSevereError(state,
                                 EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
@@ -272,12 +266,12 @@ namespace SurfaceGroundHeatExchanger {
                 GetOnlySingleNode(state,
                                   state.dataIPShortCut->cAlphaArgs(4),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::GroundHeatExchangerSurface,
+                                  Node::ConnectionObjectType::GroundHeatExchangerSurface,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  DataLoopNode::NodeFluidType::Water,
-                                  DataLoopNode::ConnectionType::Outlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  ObjectIsNotParent);
+                                  Node::FluidType::Water,
+                                  Node::ConnectionType::Outlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsNotParent);
             if (state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).OutletNodeNum == 0) {
                 ShowSevereError(state,
                                 EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(4), state.dataIPShortCut->cAlphaArgs(4)));
@@ -1158,7 +1152,7 @@ namespace SurfaceGroundHeatExchanger {
         }
         // arguments are glycol name, temperature, and concentration
         if (Temperature < 0.0) { // check if fluid is water and would be freezing
-            if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex == WaterIndex) {
+            if (this->plantLoc.loop->FluidIndex == WaterIndex) {
                 if (this->FrozenErrIndex1 == 0) {
                     ShowWarningMessage(
                         state,
@@ -1382,7 +1376,7 @@ namespace SurfaceGroundHeatExchanger {
 
         // Calculate the water side outlet conditions and set the
         // appropriate conditions on the correct HVAC node.
-        if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName == "WATER") {
+        if (this->plantLoc.loop->FluidName == "WATER") {
             if (InletTemp < 0.0) {
                 ShowRecurringWarningErrorAtEnd(state,
                                                "UpdateSurfaceGroundHeatExchngr: Water is frozen in Surf HX=" + this->Name,

@@ -85,7 +85,6 @@
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::ZoneEquipmentManager;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::HeatBalanceAirManager;
 using namespace EnergyPlus::HeatBalanceManager;

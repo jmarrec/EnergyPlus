@@ -339,48 +339,48 @@ void GetMicroCHPGeneratorInput(EnergyPlusData &state)
             microCHP.PlantInletNodeName = AlphArray(4);  //  A4 Cooling Water Inlet Node Name
             microCHP.PlantOutletNodeName = AlphArray(5); //  A5 Cooling Water Outlet Node Name
             // find node ids for water path
-            microCHP.PlantInletNodeID = NodeInputManager::GetOnlySingleNode(state,
-                                                                            AlphArray(4),
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::GeneratorMicroCHP,
-                                                                            AlphArray(1),
-                                                                            DataLoopNode::NodeFluidType::Water,
-                                                                            DataLoopNode::ConnectionType::Inlet,
-                                                                            NodeInputManager::CompFluidStream::Primary,
-                                                                            DataLoopNode::ObjectIsNotParent);
-            microCHP.PlantOutletNodeID = NodeInputManager::GetOnlySingleNode(state,
-                                                                             AlphArray(5),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::GeneratorMicroCHP,
-                                                                             AlphArray(1),
-                                                                             DataLoopNode::NodeFluidType::Water,
-                                                                             DataLoopNode::ConnectionType::Outlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
-            BranchNodeConnections::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(4), AlphArray(5), "Heat Recovery Nodes");
+            microCHP.PlantInletNodeID = Node::GetOnlySingleNode(state,
+                                                                AlphArray(4),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::GeneratorMicroCHP,
+                                                                AlphArray(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Inlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
+            microCHP.PlantOutletNodeID = Node::GetOnlySingleNode(state,
+                                                                 AlphArray(5),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::GeneratorMicroCHP,
+                                                                 AlphArray(1),
+                                                                 Node::FluidType::Water,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
+            Node::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(4), AlphArray(5), "Heat Recovery Nodes");
 
             microCHP.AirInletNodeName = AlphArray(6); //  A6 Air Inlet Node Name
             // check the node connections
-            microCHP.AirInletNodeID = NodeInputManager::GetOnlySingleNode(state,
-                                                                          AlphArray(6),
-                                                                          ErrorsFound,
-                                                                          DataLoopNode::ConnectionObjectType::GeneratorMicroCHP,
-                                                                          AlphArray(1),
-                                                                          DataLoopNode::NodeFluidType::Air,
-                                                                          DataLoopNode::ConnectionType::Inlet,
-                                                                          NodeInputManager::CompFluidStream::Secondary,
-                                                                          DataLoopNode::ObjectIsNotParent);
+            microCHP.AirInletNodeID = Node::GetOnlySingleNode(state,
+                                                              AlphArray(6),
+                                                              ErrorsFound,
+                                                              Node::ConnectionObjectType::GeneratorMicroCHP,
+                                                              AlphArray(1),
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Inlet,
+                                                              Node::CompFluidStream::Secondary,
+                                                              Node::ObjectIsNotParent);
 
             microCHP.AirOutletNodeName = AlphArray(7); //  A7 Air Outlet Node Name
-            microCHP.AirOutletNodeID = NodeInputManager::GetOnlySingleNode(state,
-                                                                           AlphArray(7),
-                                                                           ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::GeneratorMicroCHP,
-                                                                           AlphArray(1),
-                                                                           DataLoopNode::NodeFluidType::Air,
-                                                                           DataLoopNode::ConnectionType::Outlet,
-                                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                                           DataLoopNode::ObjectIsNotParent);
+            microCHP.AirOutletNodeID = Node::GetOnlySingleNode(state,
+                                                               AlphArray(7),
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::GeneratorMicroCHP,
+                                                               AlphArray(1),
+                                                               Node::FluidType::Air,
+                                                               Node::ConnectionType::Outlet,
+                                                               Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
 
             microCHP.FuelSupplyID = Util::FindItemInList(AlphArray(8), state.dataGenerator->FuelSupply); // Fuel Supply ID
             if (microCHP.FuelSupplyID == 0) {
@@ -715,9 +715,9 @@ void MicroCHPDataStruct::onInitLoopEquip(EnergyPlusData &state, const EnergyPlus
         this->PlantMassFlowRateMax =
             2.0 * this->A42Model.WaterFlowCurve->value(state, this->A42Model.MaxElecPower, state.dataLoopNodes->Node(this->PlantInletNodeID).Temp);
     } else if (this->CWPlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply) {
-        if (state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).MaxMassFlowRate > 0.0) {
-            this->PlantMassFlowRateMax = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).MaxMassFlowRate;
-        } else if (state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).PlantSizNum > 0) {
+        if (this->CWPlantLoc.loop->MaxMassFlowRate > 0.0) {
+            this->PlantMassFlowRateMax = this->CWPlantLoc.loop->MaxMassFlowRate;
+        } else if (this->CWPlantLoc.loop->PlantSizNum > 0) {
             this->PlantMassFlowRateMax = state.dataSize->PlantSizData(this->CWPlantLoc.loopNum).DesVolFlowRate * rho;
         } else {
             this->PlantMassFlowRateMax = 2.0;

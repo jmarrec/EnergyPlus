@@ -1418,13 +1418,12 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
     // PURPOSE OF THIS SUBROUTINE:
     // Obtains input data for VRF systems and stores it in data structures
 
-    using namespace DataLoopNode;
-    using BranchNodeConnections::SetUpCompSets;
-    using BranchNodeConnections::TestCompSet;
     using Curve::checkCurveIsNormalizedToOne;
     using Curve::CurveValue;
     using Curve::GetCurveIndex;
     using DXCoils::GetDXCoilIndex;
+    using Node::SetUpCompSets;
+    using Node::TestCompSet;
 
     using DataSizing::AutoSize;
     using DXCoils::GetCoilCondenserInletNode;
@@ -1438,7 +1437,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
     using DXCoils::RatedOutdoorWetBulbTempHeat;
     using DXCoils::SetDXCoolingCoilData;
     using MixedAir::GetOAMixerNodeNumbers;
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetOnlySingleNode;
     using OutAirNodeManager::CheckOutAirNodeNumber;
     using SingleDuct::GetATMixer;
     using WaterManager::SetupTankDemandComponent;
@@ -2246,12 +2245,12 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                 thisVrfSys.CondenserNodeNum = GetOnlySingleNode(state,
                                                                 cAlphaArgs(35),
                                                                 ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
+                                                                Node::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
                                                                 thisVrfSys.Name,
-                                                                DataLoopNode::NodeFluidType::Air,
-                                                                DataLoopNode::ConnectionType::OutsideAirReference,
-                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                ObjectIsNotParent);
+                                                                Node::FluidType::Air,
+                                                                Node::ConnectionType::OutsideAirReference,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
                 if (!CheckOutAirNodeNumber(state, thisVrfSys.CondenserNodeNum)) {
                     ShowSevereError(state,
                                     EnergyPlus::format("{}, \"{}\" {} not a valid Outdoor Air Node = {}",
@@ -2267,12 +2266,12 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                 thisVrfSys.CondenserNodeNum = GetOnlySingleNode(state,
                                                                 cAlphaArgs(35),
                                                                 ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
+                                                                Node::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
                                                                 thisVrfSys.Name,
-                                                                DataLoopNode::NodeFluidType::Water,
-                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                NodeInputManager::CompFluidStream::Secondary,
-                                                                ObjectIsNotParent);
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Inlet,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsNotParent);
             } break;
             default:
                 break;
@@ -2283,12 +2282,12 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
             thisVrfSys.CondenserOutletNodeNum = GetOnlySingleNode(state,
                                                                   cAlphaArgs(36),
                                                                   ErrorsFound,
-                                                                  DataLoopNode::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
+                                                                  Node::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
                                                                   thisVrfSys.Name,
-                                                                  DataLoopNode::NodeFluidType::Water,
-                                                                  DataLoopNode::ConnectionType::Outlet,
-                                                                  NodeInputManager::CompFluidStream::Secondary,
-                                                                  ObjectIsNotParent);
+                                                                  Node::FluidType::Water,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Secondary,
+                                                                  Node::ObjectIsNotParent);
             TestCompSet(state, cCurrentModuleObject, thisVrfSys.Name, cAlphaArgs(35), cAlphaArgs(36), "Condenser Water Nodes");
         } else if (lAlphaFieldBlanks(36) && thisVrfSys.CondenserType == DataHeatBalance::RefrigCondenserType::Water) {
             ShowSevereError(state, EnergyPlus::format("{}, \"{}\" {} is blank.", cCurrentModuleObject, thisVrfSys.Name, cAlphaFieldNames(36)));
@@ -3384,22 +3383,22 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
         thisVrfTU.VRFTUInletNodeNum = GetOnlySingleNode(state,
                                                         cAlphaArgs(3),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::ZoneHVACTerminalUnitVariableRefrigerantFlow,
+                                                        Node::ConnectionObjectType::ZoneHVACTerminalUnitVariableRefrigerantFlow,
                                                         thisVrfTU.Name,
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsParent);
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Inlet,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsParent);
 
         thisVrfTU.VRFTUOutletNodeNum = GetOnlySingleNode(state,
                                                          cAlphaArgs(4),
                                                          ErrorsFound,
-                                                         DataLoopNode::ConnectionObjectType::ZoneHVACTerminalUnitVariableRefrigerantFlow,
+                                                         Node::ConnectionObjectType::ZoneHVACTerminalUnitVariableRefrigerantFlow,
                                                          thisVrfTU.Name,
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::Outlet,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         ObjectIsParent);
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::Outlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsParent);
 
         thisVrfTU.MaxCoolAirVolFlow = rNumericArgs(1);
         thisVrfTU.MaxNoCoolAirVolFlow = rNumericArgs(2);
@@ -5861,13 +5860,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                     state.dataHVACVarRefFlow->VRFTU(TUIndex).airLoopNum = AirLoopNum;
                                     AirLoopFound = true;
                                     state.dataHVACVarRefFlow->VRFTU(TUIndex).isInAirLoop = true;
-                                    BranchNodeConnections::TestCompSet(
-                                        state,
-                                        cCurrentModuleObject,
-                                        thisObjectName,
-                                        state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
-                                        state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
-                                        "Air Nodes");
+                                    Node::TestCompSet(state,
+                                                      cCurrentModuleObject,
+                                                      thisObjectName,
+                                                      state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
+                                                      state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
+                                                      "Air Nodes");
                                     if (state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneNum > 0) {
                                         state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneAirNode =
                                             state.dataZoneEquip->ZoneEquipConfig(state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneNum).ZoneNode;
@@ -5936,13 +5934,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                             // user may have inadvertently entered a zone name in the OA system TU object
                             state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneNum = 0;
                             state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneAirNode = 0;
-                            BranchNodeConnections::TestCompSet(
-                                state,
-                                cCurrentModuleObject,
-                                thisObjectName,
-                                state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
-                                state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
-                                "Air Nodes");
+                            Node::TestCompSet(state,
+                                              cCurrentModuleObject,
+                                              thisObjectName,
+                                              state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
+                                              state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
+                                              "Air Nodes");
                             goto EquipList_exit;
                         }
                     }
@@ -6126,25 +6123,24 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     // SP can be at outlet of TU or at outlet of coils
                     // if supp heat coil is present, a SP must be at the outlet of the TU
                     if (state.dataHVACVarRefFlow->VRFTU(TUIndex).SuppHeatingCoilPresent) {
-                        if (TUOutNodeSP == DataLoopNode::SensedNodeFlagValue) {
+                        if (TUOutNodeSP == Node::SensedNodeFlagValue) {
                             missingSetPoint = true;
                         }
                     } else {
                         if (state.dataHVACVarRefFlow->VRFTU(TUIndex).fanPlace == HVAC::FanPlace::DrawThru) {
                             // then SP must be at TU outlet
-                            if (TUOutNodeSP == DataLoopNode::SensedNodeFlagValue) {
+                            if (TUOutNodeSP == Node::SensedNodeFlagValue) {
                                 missingSetPoint = true;
                             }
                             // or at coil outlet nodes
                             if (missingSetPoint) {
-                                if (coolCoilOutNodeSP != DataLoopNode::SensedNodeFlagValue &&
-                                    heatCoilOutNodeSP != DataLoopNode::SensedNodeFlagValue) {
+                                if (coolCoilOutNodeSP != Node::SensedNodeFlagValue && heatCoilOutNodeSP != Node::SensedNodeFlagValue) {
                                     missingSetPoint = false;
                                 }
                             }
                         } else {
                             // else fan is blow thru or missing
-                            if (TUOutNodeSP == DataLoopNode::SensedNodeFlagValue) {
+                            if (TUOutNodeSP == Node::SensedNodeFlagValue) {
                                 missingSetPoint = true;
                             }
                         }
@@ -9068,7 +9064,7 @@ void VRFCondenserEquipment::SizeVRFCondenser(EnergyPlusData &state)
         if (this->WaterCondVolFlowRate == DataSizing::AutoSize) {
             int PltSizCondNum = 0;
             if (this->SourcePlantLoc.loopNum > 0) {
-                PltSizCondNum = state.dataPlnt->PlantLoop(this->SourcePlantLoc.loopNum).PlantSizNum;
+                PltSizCondNum = this->SourcePlantLoc.loop->PlantSizNum;
             }
             if (PltSizCondNum > 0) {
                 rho = this->SourcePlantLoc.loop->glycol->getDensity(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, RoutineName);
@@ -10255,7 +10251,7 @@ void InitializeOperatingMode(EnergyPlusData &state,
             // or the set point could be placed at either or both coils, update both if necessary
             if (state.dataHVACVarRefFlow->VRFTU(TUIndex).CoolingCoilPresent) {
                 if (state.dataLoopNodes->Node(state.dataHVACVarRefFlow->VRFTU(TUIndex).coolCoilAirOutNode).TempSetPoint !=
-                    DataLoopNode::SensedNodeFlagValue) {
+                    Node::SensedNodeFlagValue) {
                     coolCoilTempSetPoint = state.dataLoopNodes->Node(state.dataHVACVarRefFlow->VRFTU(TUIndex).coolCoilAirOutNode).TempSetPoint;
                     //// should we adjust for fan heat or not? What if it's a mixed air SP that already adjusts for fan heat?
                     // coolfanDeltaT = 0.0;
@@ -10263,7 +10259,7 @@ void InitializeOperatingMode(EnergyPlusData &state,
             }
             if (state.dataHVACVarRefFlow->VRFTU(TUIndex).HeatingCoilPresent) {
                 if (state.dataLoopNodes->Node(state.dataHVACVarRefFlow->VRFTU(TUIndex).heatCoilAirOutNode).TempSetPoint !=
-                    DataLoopNode::SensedNodeFlagValue) {
+                    Node::SensedNodeFlagValue) {
                     heatCoilTempSetPoint = state.dataLoopNodes->Node(state.dataHVACVarRefFlow->VRFTU(TUIndex).heatCoilAirOutNode).TempSetPoint;
                     //// should we adjust for fan heat or not? What if it's a mixed air SP that already adjusts for fan heat?
                     // heatfanDeltaT = 0.0;

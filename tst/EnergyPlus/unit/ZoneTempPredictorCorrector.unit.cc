@@ -90,7 +90,6 @@ using namespace EnergyPlus::DataSizing;
 using namespace EnergyPlus::HeatBalanceManager;
 using namespace EnergyPlus::ZonePlenum;
 using namespace EnergyPlus::ZoneTempPredictorCorrector;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataSurfaces;
 using namespace EnergyPlus::DataEnvironment;
 using namespace EnergyPlus::Psychrometrics;

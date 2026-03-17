@@ -110,7 +110,6 @@ using namespace RoomAir;
 using namespace DataMoistureBalanceEMPD;
 using namespace DataSurfaces;
 using namespace DataHeatBalSurface;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataHeatBalFanSys;
 using namespace EnergyPlus::Psychrometrics;
 

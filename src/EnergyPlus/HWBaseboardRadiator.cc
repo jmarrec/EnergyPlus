@@ -485,29 +485,29 @@ namespace HWBaseboardRadiator {
             thisHWBaseboard.WaterInletNode = GetOnlySingleNode(state,
                                                                state.dataIPShortCut->cAlphaArgs(4),
                                                                ErrorsFound,
-                                                               DataLoopNode::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveWater,
+                                                               Node::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveWater,
                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                               DataLoopNode::NodeFluidType::Water,
-                                                               DataLoopNode::ConnectionType::Inlet,
-                                                               NodeInputManager::CompFluidStream::Primary,
-                                                               DataLoopNode::ObjectIsNotParent);
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
 
             // Get outlet node number
             thisHWBaseboard.WaterOutletNode = GetOnlySingleNode(state,
                                                                 state.dataIPShortCut->cAlphaArgs(5),
                                                                 ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveWater,
+                                                                Node::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveWater,
                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                DataLoopNode::NodeFluidType::Water,
-                                                                DataLoopNode::ConnectionType::Outlet,
-                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                DataLoopNode::ObjectIsNotParent);
-            BranchNodeConnections::TestCompSet(state,
-                                               cCMO_BBRadiator_Water,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               state.dataIPShortCut->cAlphaArgs(5),
-                                               "Hot Water Nodes");
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
+            Node::TestCompSet(state,
+                              cCMO_BBRadiator_Water,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              state.dataIPShortCut->cAlphaArgs(5),
+                              "Hot Water Nodes");
 
             thisHWBaseboard.WaterTempAvg = state.dataIPShortCut->rNumericArgs(1);
             if (thisHWBaseboard.WaterTempAvg > MaxWaterTempAvg + 0.001) {
@@ -1049,7 +1049,7 @@ namespace HWBaseboardRadiator {
         }
 
         // find the appropriate heating Plant Sizing object
-        PltSizHeatNum = state.dataPlnt->PlantLoop(hWBaseboard.plantLoc.loopNum).PlantSizNum;
+        PltSizHeatNum = hWBaseboard.plantLoc.loop->PlantSizNum;
 
         if (PltSizHeatNum > 0) {
             if (state.dataSize->CurZoneEqNum > 0) {

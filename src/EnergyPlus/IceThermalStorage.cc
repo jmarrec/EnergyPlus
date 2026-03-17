@@ -172,17 +172,13 @@ namespace IceThermalStorage {
         static constexpr std::string_view RoutineName("SimpleIceStorageData::simulate");
 
         // this was happening in PlantLoopEquip before
-        auto &thisComp(state.dataPlnt->PlantLoop(calledFromLocation.loopNum)
-                           .LoopSide(calledFromLocation.loopSideNum)
-                           .Branch(calledFromLocation.branchNum)
-                           .Comp(calledFromLocation.compNum));
 
         // If component setpoint based control is active for this equipment
         // then reset CurLoad to original EquipDemand.
         // Allow negative CurLoad.  For cold storage this means the storage should
         // charge, for hot storage, this means the storage should discharge.
-        if (thisComp.CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) {
-            Real64 localCurLoad = thisComp.EquipDemand;
+        if (calledFromLocation.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) {
+            Real64 localCurLoad = calledFromLocation.comp->EquipDemand;
             if (localCurLoad != 0) {
                 RunFlag = true;
             }
@@ -218,7 +214,7 @@ namespace IceThermalStorage {
 
         Real64 TempSetPt(0.0);
         Real64 TempIn = state.dataLoopNodes->Node(this->PltInletNodeNum).Temp;
-        switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+        switch (this->plantLoc.loop->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
             TempSetPt = state.dataLoopNodes->Node(this->PltOutletNodeNum).TempSetPoint;
         } break;
@@ -353,7 +349,7 @@ namespace IceThermalStorage {
         int NodeNumOut = this->PlantOutNodeNum;                    // Plant loop outlet node number for component
         Real64 TempIn = state.dataLoopNodes->Node(NodeNumIn).Temp; // Inlet temperature to component (from plant loop) [C]
         Real64 TempSetPt(0.0);                                     // Setpoint temperature defined by loop controls [C]
-        switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+        switch (this->plantLoc.loop->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
             TempSetPt = state.dataLoopNodes->Node(NodeNumOut).TempSetPoint;
         } break;
@@ -372,7 +368,7 @@ namespace IceThermalStorage {
         this->MassFlowRate = state.dataLoopNodes->Node(NodeNumIn).MassFlowRate;
 
         // if two-way common pipe and no mass flow and tank is not full, then use design flow rate
-        if ((state.dataPlnt->PlantLoop(this->plantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+        if ((this->plantLoc.loop->CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
             (std::abs(this->MassFlowRate) < DataBranchAirLoopPlant::MassFlowTolerance) && (this->IceFracRemaining < TankChargeToler)) {
             this->MassFlowRate = this->DesignMassFlowRate;
         }
@@ -812,35 +808,35 @@ namespace IceThermalStorage {
 
             // Get Plant Inlet Node Num
             state.dataIceThermalStorage->SimpleIceStorage(iceNum).PltInletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::ThermalStorageIceSimple,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(3),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceSimple,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Get Plant Outlet Node Num
             state.dataIceThermalStorage->SimpleIceStorage(iceNum).PltOutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(4),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::ThermalStorageIceSimple,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(4),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceSimple,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Test InletNode and OutletNode
-            BranchNodeConnections::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Chilled Water Nodes");
+            Node::TestCompSet(state,
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Chilled Water Nodes");
 
             state.dataIceThermalStorage->SimpleIceStorage(iceNum).TESSizingIndex = Util::FindItemInList(
                 state.dataIPShortCut->cAlphaArgs(5), state.dataIceThermalStorage->ThermalStorageSizing, &ThermalStorageSizingData::name);
@@ -935,35 +931,35 @@ namespace IceThermalStorage {
 
             // Get Plant Inlet Node Num
             state.dataIceThermalStorage->DetailedIceStorage(iceNum).PlantInNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::ThermalStorageIceDetailed,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(3),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceDetailed,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Get Plant Outlet Node Num
             state.dataIceThermalStorage->DetailedIceStorage(iceNum).PlantOutNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(4),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::ThermalStorageIceDetailed,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(4),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceDetailed,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Test InletNode and OutletNode
-            BranchNodeConnections::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Chilled Water Nodes");
+            Node::TestCompSet(state,
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Chilled Water Nodes");
 
             // Obtain the Charging and Discharging Curve types and names
             state.dataIceThermalStorage->DetailedIceStorage(iceNum).DischargeCurveName = state.dataIPShortCut->cAlphaArgs(6);
@@ -1447,23 +1443,15 @@ namespace IceThermalStorage {
             this->TankOutletTemp = 0.0;
             this->DischargeIterErrors = 0;
             this->ChargeIterErrors = 0;
-            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).MaxMassFlowRate;
+            this->DesignMassFlowRate = this->plantLoc.loop->MaxMassFlowRate;
             // no design flow rates for model, assume min is zero and max is plant loop's max
             PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PlantInNodeNum, this->PlantOutNodeNum);
 
-            if ((state.dataPlnt->PlantLoop(this->plantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+            if ((this->plantLoc.loop->CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
                 (this->plantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
                 // up flow priority of other components on the same branch as the Ice tank
-                for (int CompNum = 1; CompNum <= state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                                                     .LoopSide(DataPlant::LoopSideLocation::Supply)
-                                                     .Branch(this->plantLoc.branchNum)
-                                                     .TotalComponents;
-                     ++CompNum) {
-                    state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                        .LoopSide(DataPlant::LoopSideLocation::Supply)
-                        .Branch(this->plantLoc.branchNum)
-                        .Comp(CompNum)
-                        .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+                for (int CompNum = 1; CompNum <= this->plantLoc.branch->TotalComponents; ++CompNum) {
+                    this->plantLoc.branch->Comp(CompNum).FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                 }
             }
 
@@ -1610,22 +1598,14 @@ namespace IceThermalStorage {
     {
 
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag2) {
-            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).MaxMassFlowRate;
+            this->DesignMassFlowRate = this->plantLoc.loop->MaxMassFlowRate;
             // no design flow rates for model, assume min is zero and max is plant loop's max
             PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PltInletNodeNum, this->PltOutletNodeNum);
-            if ((state.dataPlnt->PlantLoop(this->plantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+            if ((this->plantLoc.loop->CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
                 (this->plantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
                 // up flow priority of other components on the same branch as the Ice tank
-                for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                                                     .LoopSide(DataPlant::LoopSideLocation::Supply)
-                                                     .Branch(this->plantLoc.branchNum)
-                                                     .TotalComponents;
-                     ++compNum) {
-                    state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                        .LoopSide(DataPlant::LoopSideLocation::Supply)
-                        .Branch(this->plantLoc.branchNum)
-                        .Comp(compNum)
-                        .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+                for (int compNum = 1; compNum <= this->plantLoc.branch->TotalComponents; ++compNum) {
+                    this->plantLoc.branch->Comp(compNum).FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                 }
             }
             this->MyLoad = 0.0;
@@ -1706,7 +1686,7 @@ namespace IceThermalStorage {
 
         this->ITSInletTemp = state.dataLoopNodes->Node(this->PltInletNodeNum).Temp; //[C]
         this->ITSOutletTemp = this->ITSInletTemp;                                   //[C]
-        switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+        switch (this->plantLoc.loop->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
             this->ITSOutletSetPointTemp = state.dataLoopNodes->Node(this->PltOutletNodeNum).TempSetPoint;
         } break;
@@ -1736,7 +1716,7 @@ namespace IceThermalStorage {
 
         this->ITSInletTemp = state.dataLoopNodes->Node(this->PltInletNodeNum).Temp; //[C]
         this->ITSOutletTemp = this->ITSInletTemp;                                   //[C]
-        switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+        switch (this->plantLoc.loop->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
             this->ITSOutletSetPointTemp = state.dataLoopNodes->Node(this->PltOutletNodeNum).TempSetPoint;
         } break;
@@ -1885,7 +1865,7 @@ namespace IceThermalStorage {
         this->ITSCoolingRate = 0.0;
         this->ITSCoolingEnergy = 0.0;
 
-        switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+        switch (this->plantLoc.loop->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
             this->ITSOutletSetPointTemp = state.dataLoopNodes->Node(this->PltOutletNodeNum).TempSetPoint;
         } break;
@@ -1971,7 +1951,7 @@ namespace IceThermalStorage {
 
         Real64 ITSInletTemp_loc = state.dataLoopNodes->Node(this->PltInletNodeNum).Temp;
         Real64 ITSOutletTemp_loc = 0.0;
-        switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+        switch (this->plantLoc.loop->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
             ITSOutletTemp_loc = state.dataLoopNodes->Node(this->PltOutletNodeNum).TempSetPoint;
         } break;

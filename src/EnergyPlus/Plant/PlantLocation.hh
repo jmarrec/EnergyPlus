@@ -86,7 +86,6 @@ struct PlantLocation
         return !operator==(lhsPlantLoc, rhsPlantLoc);
     }
 
-    // Default Constructor
     PlantLocation() : loopNum(0), loopSideNum(DataPlant::LoopSideLocation::Invalid), branchNum(0), compNum(0)
     {
     }

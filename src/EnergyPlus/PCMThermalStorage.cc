@@ -196,27 +196,11 @@ namespace PCMStorage {
             PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
 
             // Set the component flow priorities so that the plant loop will attempt to deliver the required flow.
-            for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                                                 .LoopSide(this->usePlantLoc.loopSideNum)
-                                                 .Branch(this->usePlantLoc.branchNum)
-                                                 .TotalComponents;
-                 ++compNum) {
-                state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                    .LoopSide(this->usePlantLoc.loopSideNum)
-                    .Branch(this->usePlantLoc.branchNum)
-                    .Comp(compNum)
-                    .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+            for (int compNum = 1; compNum <= this->usePlantLoc.branch->TotalComponents; ++compNum) {
+                this->usePlantLoc.branch->Comp(compNum).FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
-            for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
-                                                 .LoopSide(this->sourcePlantLoc.loopSideNum)
-                                                 .Branch(this->sourcePlantLoc.branchNum)
-                                                 .TotalComponents;
-                 ++compNum) {
-                state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
-                    .LoopSide(this->sourcePlantLoc.loopSideNum)
-                    .Branch(this->sourcePlantLoc.branchNum)
-                    .Comp(compNum)
-                    .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+            for (int compNum = 1; compNum <= this->sourcePlantLoc.branch->TotalComponents; ++compNum) {
+                this->sourcePlantLoc.branch->Comp(compNum).FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
 
             // Reset state variables for the start of the new environment.
@@ -347,7 +331,8 @@ namespace PCMStorage {
         if (mUseReq > 0.0) {
             useOutlet.Temp = useOutletTemp;
         } else if (mPlantReq > 0.0) {
-            plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp);
+            plantOutlet.Temp =
+                std::min(plantOutletTemp, state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum).MaxTemp); // This was in brackets, probably a bug
         }
 
         // Recompute heat-transfer rates using the requested flows (W)
@@ -580,59 +565,59 @@ namespace PCMStorage {
             }
         }
 
-        PCM.PlantSideInletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                     state.dataIPShortCut->cAlphaArgs(3),
-                                                                     ErrorsFound,
-                                                                     DataLoopNode::ConnectionObjectType::ThermalStoragePCM,
-                                                                     PCM.Name,
-                                                                     DataLoopNode::NodeFluidType::Water,
-                                                                     DataLoopNode::ConnectionType::Inlet,
-                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                     DataLoopNode::ObjectIsNotParent);
+        PCM.PlantSideInletNode = Node::GetOnlySingleNode(state,
+                                                         state.dataIPShortCut->cAlphaArgs(3),
+                                                         ErrorsFound,
+                                                         Node::ConnectionObjectType::ThermalStoragePCM,
+                                                         PCM.Name,
+                                                         Node::FluidType::Water,
+                                                         Node::ConnectionType::Inlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsNotParent);
 
-        PCM.PlantSideOutletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                      state.dataIPShortCut->cAlphaArgs(4),
-                                                                      ErrorsFound,
-                                                                      DataLoopNode::ConnectionObjectType::ThermalStoragePCM,
-                                                                      PCM.Name,
-                                                                      DataLoopNode::NodeFluidType::Water,
-                                                                      DataLoopNode::ConnectionType::Outlet,
-                                                                      NodeInputManager::CompFluidStream::Primary,
-                                                                      DataLoopNode::ObjectIsNotParent);
+        PCM.PlantSideOutletNode = Node::GetOnlySingleNode(state,
+                                                          state.dataIPShortCut->cAlphaArgs(4),
+                                                          ErrorsFound,
+                                                          Node::ConnectionObjectType::ThermalStoragePCM,
+                                                          PCM.Name,
+                                                          Node::FluidType::Water,
+                                                          Node::ConnectionType::Outlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent);
 
-        PCM.UseSideInletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                   ErrorsFound,
-                                                                   DataLoopNode::ConnectionObjectType::ThermalStoragePCM,
-                                                                   PCM.Name,
-                                                                   DataLoopNode::NodeFluidType::Water,
-                                                                   DataLoopNode::ConnectionType::Inlet,
-                                                                   NodeInputManager::CompFluidStream::Secondary,
-                                                                   DataLoopNode::ObjectIsNotParent);
+        PCM.UseSideInletNode = Node::GetOnlySingleNode(state,
+                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                       ErrorsFound,
+                                                       Node::ConnectionObjectType::ThermalStoragePCM,
+                                                       PCM.Name,
+                                                       Node::FluidType::Water,
+                                                       Node::ConnectionType::Inlet,
+                                                       Node::CompFluidStream::Secondary,
+                                                       Node::ObjectIsNotParent);
 
-        PCM.UseSideOutletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                    ErrorsFound,
-                                                                    DataLoopNode::ConnectionObjectType::ThermalStoragePCM,
-                                                                    PCM.Name,
-                                                                    DataLoopNode::NodeFluidType::Water,
-                                                                    DataLoopNode::ConnectionType::Outlet,
-                                                                    NodeInputManager::CompFluidStream::Secondary,
-                                                                    DataLoopNode::ObjectIsNotParent);
+        PCM.UseSideOutletNode = Node::GetOnlySingleNode(state,
+                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                        ErrorsFound,
+                                                        Node::ConnectionObjectType::ThermalStoragePCM,
+                                                        PCM.Name,
+                                                        Node::FluidType::Water,
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Secondary,
+                                                        Node::ObjectIsNotParent);
 
-        BranchNodeConnections::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           PCM.Name,
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           "PCM Storage Plant Side");
+        Node::TestCompSet(state,
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          PCM.Name,
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          "PCM Storage Plant Side");
 
-        BranchNodeConnections::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           PCM.Name,
-                                           state.dataIPShortCut->cAlphaArgs(5),
-                                           state.dataIPShortCut->cAlphaArgs(6),
-                                           "PCM Storage Use Side");
+        Node::TestCompSet(state,
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          PCM.Name,
+                          state.dataIPShortCut->cAlphaArgs(5),
+                          state.dataIPShortCut->cAlphaArgs(6),
+                          "PCM Storage Use Side");
 
         // Allow the tank capacity to be autosized by entering a value <= 0.  A negative or zero
         // entry signals that the capacity should be determined automatically during initialization.

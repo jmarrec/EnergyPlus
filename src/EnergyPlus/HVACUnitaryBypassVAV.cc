@@ -434,63 +434,58 @@ namespace HVACUnitaryBypassVAV {
                 }
             }
 
-            thisCBVAV.AirInNode =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    Alphas(4),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                    Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+            thisCBVAV.AirInNode = Node::GetOnlySingleNode(state,
+                                                          Alphas(4),
+                                                          ErrorsFound,
+                                                          Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                          Alphas(1),
+                                                          Node::FluidType::Air,
+                                                          Node::ConnectionType::Inlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsParent);
 
             std::string MixerInletNodeName = Alphas(5);
             std::string SplitterOutletNodeName = Alphas(6);
 
-            thisCBVAV.AirOutNode =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    Alphas(7),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                    Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+            thisCBVAV.AirOutNode = Node::GetOnlySingleNode(state,
+                                                           Alphas(7),
+                                                           ErrorsFound,
+                                                           Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                           Alphas(1),
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Outlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsParent);
 
-            thisCBVAV.SplitterOutletAirNode =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    SplitterOutletNodeName,
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                    Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Internal,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+            thisCBVAV.SplitterOutletAirNode = Node::GetOnlySingleNode(state,
+                                                                      SplitterOutletNodeName,
+                                                                      ErrorsFound,
+                                                                      Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                                      Alphas(1),
+                                                                      Node::FluidType::Air,
+                                                                      Node::ConnectionType::Internal,
+                                                                      Node::CompFluidStream::Primary,
+                                                                      Node::ObjectIsParent);
 
             if (NumAlphas > 19 && !lAlphaBlanks(20)) {
-                thisCBVAV.PlenumMixerInletAirNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        Alphas(20),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                        Alphas(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Internal,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsParent);
-                thisCBVAV.PlenumMixerInletAirNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        Alphas(20),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                        Alphas(1) + "_PlenumMixerInlet",
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsParent);
+                thisCBVAV.PlenumMixerInletAirNode = Node::GetOnlySingleNode(state,
+                                                                            Alphas(20),
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                                            Alphas(1),
+                                                                            Node::FluidType::Air,
+                                                                            Node::ConnectionType::Internal,
+                                                                            Node::CompFluidStream::Primary,
+                                                                            Node::ObjectIsParent);
+                thisCBVAV.PlenumMixerInletAirNode = Node::GetOnlySingleNode(state,
+                                                                            Alphas(20),
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                                            Alphas(1) + "_PlenumMixerInlet",
+                                                                            Node::FluidType::Air,
+                                                                            Node::ConnectionType::Outlet,
+                                                                            Node::CompFluidStream::Primary,
+                                                                            Node::ObjectIsParent);
             }
 
             thisCBVAV.plenumIndex = ZonePlenum::getReturnPlenumIndexFromInletNode(state, thisCBVAV.PlenumMixerInletAirNode);
@@ -512,38 +507,35 @@ namespace HVACUnitaryBypassVAV {
                 ErrorsFound = true;
             }
 
-            thisCBVAV.MixerInletAirNode =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    MixerInletNodeName,
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                    Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Internal,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+            thisCBVAV.MixerInletAirNode = Node::GetOnlySingleNode(state,
+                                                                  MixerInletNodeName,
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                                  Alphas(1),
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Internal,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsParent);
 
-            thisCBVAV.MixerInletAirNode =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    MixerInletNodeName,
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                    Alphas(1) + "_Mixer",
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+            thisCBVAV.MixerInletAirNode = Node::GetOnlySingleNode(state,
+                                                                  MixerInletNodeName,
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                                  Alphas(1) + "_Mixer",
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsParent);
 
-            thisCBVAV.SplitterOutletAirNode =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    SplitterOutletNodeName,
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
-                                                    Alphas(1) + "_Splitter",
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+            thisCBVAV.SplitterOutletAirNode = Node::GetOnlySingleNode(state,
+                                                                      SplitterOutletNodeName,
+                                                                      ErrorsFound,
+                                                                      Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
+                                                                      Alphas(1) + "_Splitter",
+                                                                      Node::FluidType::Air,
+                                                                      Node::ConnectionType::Inlet,
+                                                                      Node::CompFluidStream::Primary,
+                                                                      Node::ObjectIsParent);
 
             thisCBVAV.OAMixType = Alphas(8);
             thisCBVAV.OAMixName = Alphas(9);
@@ -1057,42 +1049,41 @@ namespace HVACUnitaryBypassVAV {
             std::string CompSetCoolOutlet = state.dataLoopNodes->NodeID(thisCBVAV.DXCoilOutletNode);
 
             // Add fan to component sets array
-            BranchNodeConnections::SetUpCompSets(
-                state, thisCBVAV.UnitType, thisCBVAV.Name, Alphas(10), thisCBVAV.FanName, CompSetFanInlet, CompSetFanOutlet);
+            Node::SetUpCompSets(state, thisCBVAV.UnitType, thisCBVAV.Name, Alphas(10), thisCBVAV.FanName, CompSetFanInlet, CompSetFanOutlet);
 
             // Add cooling coil to component sets array
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 thisCBVAV.UnitType,
-                                                 thisCBVAV.Name,
-                                                 HVAC::coilTypeNamesUC[static_cast<int>(thisCBVAV.CoolCoilType)],
-                                                 thisCBVAV.DXCoolCoilName,
-                                                 CompSetCoolInlet,
-                                                 CompSetCoolOutlet);
+            Node::SetUpCompSets(state,
+                                thisCBVAV.UnitType,
+                                thisCBVAV.Name,
+                                HVAC::coilTypeNamesUC[static_cast<int>(thisCBVAV.CoolCoilType)],
+                                thisCBVAV.DXCoolCoilName,
+                                CompSetCoolInlet,
+                                CompSetCoolOutlet);
 
             // Add heating coil to component sets array
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 thisCBVAV.UnitType,
-                                                 thisCBVAV.Name,
-                                                 HVAC::coilTypeNamesUC[static_cast<int>(thisCBVAV.HeatCoilType)],
-                                                 thisCBVAV.HeatCoilName,
-                                                 state.dataLoopNodes->NodeID(thisCBVAV.HeatingCoilInletNode),
-                                                 state.dataLoopNodes->NodeID(thisCBVAV.HeatingCoilOutletNode));
+            Node::SetUpCompSets(state,
+                                thisCBVAV.UnitType,
+                                thisCBVAV.Name,
+                                HVAC::coilTypeNamesUC[static_cast<int>(thisCBVAV.HeatCoilType)],
+                                thisCBVAV.HeatCoilName,
+                                state.dataLoopNodes->NodeID(thisCBVAV.HeatingCoilInletNode),
+                                state.dataLoopNodes->NodeID(thisCBVAV.HeatingCoilOutletNode));
 
             // Set up component set for OA mixer - use OA node and Mixed air node
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 thisCBVAV.UnitType,
-                                                 thisCBVAV.Name,
-                                                 thisCBVAV.OAMixType,
-                                                 thisCBVAV.OAMixName,
-                                                 state.dataLoopNodes->NodeID(thisCBVAV.MixerOutsideAirNode),
-                                                 state.dataLoopNodes->NodeID(thisCBVAV.MixerMixedAirNode));
+            Node::SetUpCompSets(state,
+                                thisCBVAV.UnitType,
+                                thisCBVAV.Name,
+                                thisCBVAV.OAMixType,
+                                thisCBVAV.OAMixName,
+                                state.dataLoopNodes->NodeID(thisCBVAV.MixerOutsideAirNode),
+                                state.dataLoopNodes->NodeID(thisCBVAV.MixerMixedAirNode));
 
-            BranchNodeConnections::TestCompSet(state,
-                                               thisCBVAV.UnitType,
-                                               thisCBVAV.Name,
-                                               state.dataLoopNodes->NodeID(thisCBVAV.AirInNode),
-                                               state.dataLoopNodes->NodeID(thisCBVAV.AirOutNode),
-                                               "Air Nodes");
+            Node::TestCompSet(state,
+                              thisCBVAV.UnitType,
+                              thisCBVAV.Name,
+                              state.dataLoopNodes->NodeID(thisCBVAV.AirInNode),
+                              state.dataLoopNodes->NodeID(thisCBVAV.AirOutNode),
+                              "Air Nodes");
 
             //   Find air loop associated with CBVAV system
             for (int AirLoopNum = 1; AirLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys; ++AirLoopNum) {
@@ -1713,7 +1704,7 @@ namespace HVACUnitaryBypassVAV {
         // Check for correct control node at outlet of unit
         if (cBVAV.HumRatMaxCheck) {
             if (cBVAV.DehumidControlType != DehumidControl::None) {
-                if (state.dataLoopNodes->Node(OutNode).HumRatMax == DataLoopNode::SensedNodeFlagValue) {
+                if (state.dataLoopNodes->Node(OutNode).HumRatMax == Node::SensedNodeFlagValue) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowWarningError(state, EnergyPlus::format("Unitary System:VAV:ChangeOverBypass = {}", cBVAV.Name));
                         ShowContinueError(state,

@@ -177,13 +177,12 @@ void GetZoneEquipmentData(EnergyPlusData &state)
     // a zone
 
     // Using/Aliasing
-    using NodeInputManager::CheckUniqueNodeNames;
-    using NodeInputManager::CheckUniqueNodeNumbers;
-    using NodeInputManager::EndUniqueNodeCheck;
-    using NodeInputManager::GetNodeNums;
-    using NodeInputManager::GetOnlySingleNode;
-    using NodeInputManager::InitUniqueNodeCheck;
-    using namespace DataLoopNode;
+    using Node::CheckUniqueNodeNames;
+    using Node::CheckUniqueNodeNumbers;
+    using Node::EndUniqueNodeCheck;
+    using Node::GetNodeNums;
+    using Node::GetOnlySingleNode;
+    using Node::InitUniqueNodeCheck;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     static constexpr std::string_view RoutineName("GetZoneEquipmentData: "); // include trailing blank space
@@ -443,12 +442,12 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                     int spaceNodeNum = GetOnlySingleNode(state,
                                                          spaceNodeName,
                                                          state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
-                                                         DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections,
+                                                         Node::ConnectionObjectType::ZoneHVACEquipmentConnections,
                                                          AlphArray(1),
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::ZoneNode,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         DataLoopNode::ObjectIsNotParent);
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::ZoneNode,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsNotParent);
                     state.dataHeatBal->space(spaceNum).SystemZoneNodeNumber = spaceNodeNum;
                 }
             }
@@ -540,7 +539,7 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                 auto const &objectFields = instance.value();
                 auto &thisZeqSplitter = state.dataZoneEquip->zoneEquipSplitter[zeqSplitterNum];
                 thisZeqSplitter.Name = Util::makeUPPER(instance.key());
-                thisZeqSplitter.spaceEquipType = DataLoopNode::ConnectionObjectType::SpaceHVACZoneEquipmentSplitter;
+                thisZeqSplitter.spaceEquipType = Node::ConnectionObjectType::SpaceHVACZoneEquipmentSplitter;
                 ip->markObjectAsUsed(CurrentModuleObject, instance.key());
 
                 std::string zoneName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "zone_name");
@@ -588,7 +587,7 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                 auto const &objectFields = instance.value();
                 auto &thisZeqMixer = state.dataZoneEquip->zoneEquipMixer[zeqMixerNum];
                 thisZeqMixer.Name = Util::makeUPPER(instance.key());
-                thisZeqMixer.spaceEquipType = DataLoopNode::ConnectionObjectType::SpaceHVACZoneEquipmentMixer;
+                thisZeqMixer.spaceEquipType = Node::ConnectionObjectType::SpaceHVACZoneEquipmentMixer;
                 ip->markObjectAsUsed(CurrentModuleObject, instance.key());
 
                 std::string zoneName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "zone_name");
@@ -636,7 +635,7 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                 auto const &objectFields = instance.value();
                 auto &thisZretMixer = state.dataZoneEquip->zoneReturnMixer[zeqRetNum];
                 thisZretMixer.Name = Util::makeUPPER(instance.key());
-                thisZretMixer.spaceEquipType = DataLoopNode::ConnectionObjectType::SpaceHVACZoneReturnMixer;
+                thisZretMixer.spaceEquipType = Node::ConnectionObjectType::SpaceHVACZoneReturnMixer;
                 ip->markObjectAsUsed(CurrentModuleObject, instance.key());
 
                 std::string zoneName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "zone_name");
@@ -684,12 +683,12 @@ void GetZoneEquipmentData(EnergyPlusData &state)
         state.dataZoneEquip->SupplyAirPath(PathNum).InletNodeNum = GetOnlySingleNode(state,
                                                                                      AlphArray(2),
                                                                                      state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
-                                                                                     DataLoopNode::ConnectionObjectType::AirLoopHVACSupplyPath,
+                                                                                     Node::ConnectionObjectType::AirLoopHVACSupplyPath,
                                                                                      AlphArray(1),
-                                                                                     DataLoopNode::NodeFluidType::Air,
-                                                                                     DataLoopNode::ConnectionType::Inlet,
-                                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                                     ObjectIsParent);
+                                                                                     Node::FluidType::Air,
+                                                                                     Node::ConnectionType::Inlet,
+                                                                                     Node::CompFluidStream::Primary,
+                                                                                     Node::ObjectIsParent);
 
         state.dataZoneEquip->SupplyAirPath(PathNum).ComponentType.allocate(state.dataZoneEquip->SupplyAirPath(PathNum).NumOfComponents);
         state.dataZoneEquip->SupplyAirPath(PathNum).ComponentTypeEnum.allocate(state.dataZoneEquip->SupplyAirPath(PathNum).NumOfComponents);
@@ -754,12 +753,12 @@ void GetZoneEquipmentData(EnergyPlusData &state)
         state.dataZoneEquip->ReturnAirPath(PathNum).OutletNodeNum = GetOnlySingleNode(state,
                                                                                       AlphArray(2),
                                                                                       state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
-                                                                                      DataLoopNode::ConnectionObjectType::AirLoopHVACReturnPath,
+                                                                                      Node::ConnectionObjectType::AirLoopHVACReturnPath,
                                                                                       AlphArray(1),
-                                                                                      DataLoopNode::NodeFluidType::Air,
-                                                                                      DataLoopNode::ConnectionType::Outlet,
-                                                                                      NodeInputManager::CompFluidStream::Primary,
-                                                                                      ObjectIsParent);
+                                                                                      Node::FluidType::Air,
+                                                                                      Node::ConnectionType::Outlet,
+                                                                                      Node::CompFluidStream::Primary,
+                                                                                      Node::ObjectIsParent);
 
         state.dataZoneEquip->ReturnAirPath(PathNum).ComponentType.allocate(state.dataZoneEquip->ReturnAirPath(PathNum).NumOfComponents);
         state.dataZoneEquip->ReturnAirPath(PathNum).ComponentTypeEnum.allocate(state.dataZoneEquip->ReturnAirPath(PathNum).NumOfComponents);
@@ -850,20 +849,19 @@ void processZoneEquipmentInput(EnergyPlusData &state,
     thisEquipConfig.ZoneNode = GetOnlySingleNode(state,
                                                  AlphArray(5 + spaceFieldShift),
                                                  state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
-                                                 DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections,
+                                                 Node::ConnectionObjectType::ZoneHVACEquipmentConnections,
                                                  AlphArray(1),
-                                                 DataLoopNode::NodeFluidType::Air,
-                                                 DataLoopNode::ConnectionType::ZoneNode,
-                                                 NodeInputManager::CompFluidStream::Primary,
-                                                 DataLoopNode::ObjectIsNotParent); // all zone air state variables are
+                                                 Node::FluidType::Air,
+                                                 Node::ConnectionType::ZoneNode,
+                                                 Node::CompFluidStream::Primary,
+                                                 Node::ObjectIsNotParent); // all zone air state variables are
     if (thisEquipConfig.ZoneNode == 0) {
         ShowSevereError(state, EnergyPlus::format("{}{}: {}=\"{}\", invalid", RoutineName, zoneEqModuleObject, cAlphaFields(1), AlphArray(1)));
         ShowContinueError(state, EnergyPlus::format("{} must be present.", cAlphaFields(5 + spaceFieldShift)));
         state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
     } else {
         bool UniqueNodeError = false;
-        NodeInputManager::CheckUniqueNodeNames(
-            state, cAlphaFields(5 + spaceFieldShift), UniqueNodeError, AlphArray(5 + spaceFieldShift), AlphArray(1));
+        Node::CheckUniqueNodeNames(state, cAlphaFields(5 + spaceFieldShift), UniqueNodeError, AlphArray(5 + spaceFieldShift), AlphArray(1));
         if (UniqueNodeError) {
             // ShowContinueError(state, format("Occurs for {} = {}", trim( cAlphaFields( 1 ) ), trim( AlphArray( 1 ) )));
             state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
@@ -1099,13 +1097,12 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NumNodes,
                 NodeNums,
                 NodeListError,
-                DataLoopNode::NodeFluidType::Air,
-                (isSpace ? DataLoopNode::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                Node::FluidType::Air,
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
-                DataLoopNode::ConnectionType::ZoneInlet,
-                NodeInputManager::CompFluidStream::Primary,
-                DataLoopNode::ObjectIsNotParent);
+                Node::ConnectionType::ZoneInlet,
+                Node::CompFluidStream::Primary,
+                Node::ObjectIsNotParent);
 
     if (!NodeListError) {
         thisEquipConfig.NumInletNodes = NumNodes;
@@ -1119,7 +1116,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
         for (int NodeNum = 1; NodeNum <= NumNodes; ++NodeNum) {
             thisEquipConfig.InletNode(NodeNum) = NodeNums(NodeNum);
             bool UniqueNodeError = false;
-            NodeInputManager::CheckUniqueNodeNumbers(state, "Zone Air Inlet Nodes", UniqueNodeError, NodeNums(NodeNum), thisEquipConfig.ZoneName);
+            Node::CheckUniqueNodeNumbers(state, "Zone Air Inlet Nodes", UniqueNodeError, NodeNums(NodeNum), thisEquipConfig.ZoneName);
             if (UniqueNodeError) {
                 state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
             }
@@ -1148,13 +1145,12 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NumNodes,
                 NodeNums,
                 NodeListError,
-                DataLoopNode::NodeFluidType::Air,
-                (isSpace ? DataLoopNode::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                Node::FluidType::Air,
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
-                DataLoopNode::ConnectionType::ZoneExhaust,
-                NodeInputManager::CompFluidStream::Primary,
-                DataLoopNode::ObjectIsNotParent);
+                Node::ConnectionType::ZoneExhaust,
+                Node::CompFluidStream::Primary,
+                Node::ObjectIsNotParent);
 
     if (!NodeListError) {
         thisEquipConfig.NumExhaustNodes = NumNodes;
@@ -1164,7 +1160,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
         for (int NodeNum = 1; NodeNum <= NumNodes; ++NodeNum) {
             thisEquipConfig.ExhaustNode(NodeNum) = NodeNums(NodeNum);
             bool UniqueNodeError = false;
-            NodeInputManager::CheckUniqueNodeNumbers(state, "Zone Air Exhaust Nodes", UniqueNodeError, NodeNums(NodeNum), thisEquipConfig.ZoneName);
+            Node::CheckUniqueNodeNumbers(state, "Zone Air Exhaust Nodes", UniqueNodeError, NodeNums(NodeNum), thisEquipConfig.ZoneName);
             if (UniqueNodeError) {
                 // ShowContinueError(state, format("Occurs for Zone = {}", trim( AlphArray( 1 ) )));
                 state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
@@ -1183,13 +1179,12 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NumNodes,
                 NodeNums,
                 NodeListError,
-                DataLoopNode::NodeFluidType::Air,
-                (isSpace ? DataLoopNode::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                Node::FluidType::Air,
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
-                DataLoopNode::ConnectionType::ZoneReturn,
-                NodeInputManager::CompFluidStream::Primary,
-                DataLoopNode::ObjectIsNotParent);
+                Node::ConnectionType::ZoneReturn,
+                Node::CompFluidStream::Primary,
+                Node::ObjectIsNotParent);
 
     if (!NodeListError) {
         thisEquipConfig.NumReturnNodes = NumNodes;
@@ -1220,7 +1215,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
         for (int NodeNum = 1; NodeNum <= NumNodes; ++NodeNum) {
             thisEquipConfig.ReturnNode(NodeNum) = NodeNums(NodeNum);
             bool UniqueNodeError = false;
-            NodeInputManager::CheckUniqueNodeNumbers(state, "Zone Return Air Nodes", UniqueNodeError, NodeNums(NodeNum), thisEquipConfig.ZoneName);
+            Node::CheckUniqueNodeNumbers(state, "Zone Return Air Nodes", UniqueNodeError, NodeNums(NodeNum), thisEquipConfig.ZoneName);
             if (UniqueNodeError) {
                 // ShowContinueError(state, format("Occurs for Zone = {}", trim( AlphArray( 1 ) )));
                 state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
@@ -1239,13 +1234,12 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NumNodes,
                 NodeNums,
                 NodeListError,
-                DataLoopNode::NodeFluidType::Air,
-                (isSpace ? DataLoopNode::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                Node::FluidType::Air,
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
-                DataLoopNode::ConnectionType::Sensor,
-                NodeInputManager::CompFluidStream::Primary,
-                DataLoopNode::ObjectIsNotParent);
+                Node::ConnectionType::Sensor,
+                Node::CompFluidStream::Primary,
+                Node::ObjectIsNotParent);
 
     if (!NodeListError) {
         thisEquipConfig.NumReturnFlowBasisNodes = NumNodes;
@@ -1318,9 +1312,9 @@ void processZoneEquipSplitterInput(EnergyPlusData &state,
                           state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
                           thisZeqSplitter.spaceEquipType,
                           thisZeqSplitter.Name,
-                          DataLoopNode::NodeFluidType::Air,
-                          DataLoopNode::ConnectionType::Inlet,
-                          NodeInputManager::CompFluidStream::Primary,
+                          Node::FluidType::Air,
+                          Node::ConnectionType::Inlet,
+                          Node::CompFluidStream::Primary,
                           objectIsParent);
 
     thisZeqSplitter.tstatControl = DataZoneEquipment::ZoneEquipTstatControl(
@@ -1361,9 +1355,9 @@ void processZoneEquipSplitterInput(EnergyPlusData &state,
                                       state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
                                       thisZeqSplitter.spaceEquipType,
                                       thisZeqSplitter.Name,
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Primary,
+                                      Node::FluidType::Air,
+                                      Node::ConnectionType::Outlet,
+                                      Node::CompFluidStream::Primary,
                                       objectIsParent);
                 if (thisZeqSplitter.controlSpaceIndex == thisZeqSpace.spaceIndex) {
                     thisZeqSplitter.controlSpaceNumber = spaceCount;
@@ -1389,9 +1383,9 @@ void processZoneEquipMixerInput(EnergyPlusData &state,
                                                    state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
                                                    thisZeqMixer.spaceEquipType,
                                                    thisZeqMixer.Name,
-                                                   DataLoopNode::NodeFluidType::Air,
-                                                   DataLoopNode::ConnectionType::Outlet,
-                                                   NodeInputManager::CompFluidStream::Primary,
+                                                   Node::FluidType::Air,
+                                                   Node::ConnectionType::Outlet,
+                                                   Node::CompFluidStream::Primary,
                                                    objectIsParent);
     // Check zone exhaust nodes
     bool found = false;
@@ -1437,9 +1431,9 @@ void processZoneEquipMixerInput(EnergyPlusData &state,
                                                               state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
                                                               thisZeqMixer.spaceEquipType,
                                                               thisZeqMixer.Name,
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Inlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Inlet,
+                                                              Node::CompFluidStream::Primary,
                                                               objectIsParent);
                 // Check space exhaust nodes
                 found = false;
@@ -1480,9 +1474,9 @@ void processZoneReturnMixerInput(EnergyPlusData &state,
                                                     state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
                                                     thisZretMixer.spaceEquipType,
                                                     thisZretMixer.Name,
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Outlet,
+                                                    Node::CompFluidStream::Primary,
                                                     objectIsParent);
     // Check zone return nodes
     bool found = false;
@@ -1529,9 +1523,9 @@ void processZoneReturnMixerInput(EnergyPlusData &state,
                                       state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
                                       thisZretMixer.spaceEquipType,
                                       thisZretMixer.Name,
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Inlet,
-                                      NodeInputManager::CompFluidStream::Primary,
+                                      Node::FluidType::Air,
+                                      Node::ConnectionType::Inlet,
+                                      Node::CompFluidStream::Primary,
                                       objectIsParent);
                 // Check space return nodes
                 found = false;
@@ -1920,7 +1914,7 @@ void ZoneEquipmentSplitterMixer::size(EnergyPlusData &state)
         ShowSevereError(state,
                         EnergyPlus::format("ZoneEquipmentSplitterMixer::size: {} is unknown for {}={}. Unable to autosize Space Fractions.",
                                            DataZoneEquipment::spaceEquipSizingBasisNamesUC[(int)this->spaceSizingBasis],
-                                           BranchNodeConnections::ConnectionObjectTypeNames[(int)this->spaceEquipType],
+                                           Node::ConnectionObjectTypeNames[(int)this->spaceEquipType],
                                            this->Name));
         ShowFatalError(state,
                        "Set \"Do Space Heat Balance for Sizing\" to Yes in ZoneAirHeatBalanceAlgorithm or choose a different Space Fraction Method.");
@@ -1966,7 +1960,7 @@ void ZoneEquipmentSplitterMixer::size(EnergyPlusData &state)
         ShowSevereError(state,
                         EnergyPlus::format("ZoneEquipmentSplitterMixer::size: Total {} is zero for {}={}. Unable to autosize Space Fractions.",
                                            DataZoneEquipment::spaceEquipSizingBasisNamesUC[(int)this->spaceSizingBasis],
-                                           BranchNodeConnections::ConnectionObjectTypeNames[(int)this->spaceEquipType],
+                                           Node::ConnectionObjectTypeNames[(int)this->spaceEquipType],
                                            this->Name));
         Real64 spaceFrac = 1.0 / (int)this->spaces.size();
         ShowContinueError(state, EnergyPlus::format("Setting space fractions to 1/number of spaces = {}.", spaceFrac));
@@ -2004,7 +1998,7 @@ void ZoneEquipmentSplitterMixer::size(EnergyPlusData &state)
     for (auto &thisSpace : this->spaces) {
         ++spaceCounter;
         BaseSizer::reportSizerOutput(state,
-                                     BranchNodeConnections::ConnectionObjectTypeNames[(int)this->spaceEquipType],
+                                     Node::ConnectionObjectTypeNames[(int)this->spaceEquipType],
                                      this->Name,
                                      EnergyPlus::format("Space {} Fraction", spaceCounter),
                                      thisSpace.fraction);

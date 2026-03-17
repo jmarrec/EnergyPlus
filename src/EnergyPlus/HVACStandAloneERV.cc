@@ -318,39 +318,39 @@ void GetStandAloneERV(EnergyPlusData &state)
         standAloneERV.SupplyAirInletNode = GetOnlySingleNode(state,
                                                              state.dataLoopNodes->NodeID(standAloneERV.SupplyAirInletNode),
                                                              ErrorsFound,
-                                                             DataLoopNode::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
+                                                             Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                              Alphas(1),
-                                                             DataLoopNode::NodeFluidType::Air,
-                                                             DataLoopNode::ConnectionType::Inlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             DataLoopNode::ObjectIsParent);
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsParent);
         standAloneERV.SupplyAirOutletNode = GetOnlySingleNode(state,
                                                               state.dataLoopNodes->NodeID(standAloneERV.SupplyAirOutletNode),
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
+                                                              Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                               Alphas(1),
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              DataLoopNode::ObjectIsParent);
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Outlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsParent);
         standAloneERV.ExhaustAirInletNode = GetOnlySingleNode(state,
                                                               state.dataLoopNodes->NodeID(standAloneERV.ExhaustAirInletNode),
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
+                                                              Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                               Alphas(1),
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Inlet,
-                                                              NodeInputManager::CompFluidStream::Secondary,
-                                                              DataLoopNode::ObjectIsParent);
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Inlet,
+                                                              Node::CompFluidStream::Secondary,
+                                                              Node::ObjectIsParent);
         standAloneERV.ExhaustAirOutletNode = GetOnlySingleNode(state,
                                                                state.dataLoopNodes->NodeID(standAloneERV.ExhaustAirOutletNode),
                                                                ErrorsFound,
-                                                               DataLoopNode::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
+                                                               Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                                Alphas(1),
-                                                               DataLoopNode::NodeFluidType::Air,
-                                                               DataLoopNode::ConnectionType::ReliefAir,
-                                                               NodeInputManager::CompFluidStream::Secondary,
-                                                               DataLoopNode::ObjectIsParent);
+                                                               Node::FluidType::Air,
+                                                               Node::ConnectionType::ReliefAir,
+                                                               Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsParent);
 
         //   Check that supply air inlet node is an OA node
         if (!OutAirNodeManager::CheckOutAirNodeNumber(state, standAloneERV.SupplyAirInletNode)) {
@@ -597,28 +597,28 @@ void GetStandAloneERV(EnergyPlusData &state)
         std::string CompSetExhaustFanOutlet = state.dataLoopNodes->NodeID(standAloneERV.ExhaustAirOutletNode);
 
         // Add HX to component sets array
-        BranchNodeConnections::SetUpCompSets(
+        Node::SetUpCompSets(
             state, standAloneERV.UnitType, standAloneERV.Name, "UNDEFINED", standAloneERV.HeatExchangerName, "UNDEFINED", "UNDEFINED");
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchAirHRZoneHVACName, standAloneERV.HeatExchangerName, standAloneERV.Name);
 
         // Add supply fan to component sets array
-        BranchNodeConnections::SetUpCompSets(state,
-                                             standAloneERV.UnitType,
-                                             standAloneERV.Name,
-                                             "UNDEFINED",
-                                             standAloneERV.SupplyAirFanName,
-                                             CompSetSupplyFanInlet,
-                                             CompSetSupplyFanOutlet);
+        Node::SetUpCompSets(state,
+                            standAloneERV.UnitType,
+                            standAloneERV.Name,
+                            "UNDEFINED",
+                            standAloneERV.SupplyAirFanName,
+                            CompSetSupplyFanInlet,
+                            CompSetSupplyFanOutlet);
 
         // Add exhaust fan to component sets array
-        BranchNodeConnections::SetUpCompSets(state,
-                                             standAloneERV.UnitType,
-                                             standAloneERV.Name,
-                                             "UNDEFINED",
-                                             standAloneERV.ExhaustAirFanName,
-                                             CompSetExhaustFanInlet,
-                                             CompSetExhaustFanOutlet);
+        Node::SetUpCompSets(state,
+                            standAloneERV.UnitType,
+                            standAloneERV.Name,
+                            "UNDEFINED",
+                            standAloneERV.ExhaustAirFanName,
+                            CompSetExhaustFanInlet,
+                            CompSetExhaustFanOutlet);
 
         // Verify HX name in Stand Alone ERV object matches name of valid HX object
         if (state.dataInputProcessing->inputProcessor->getObjectItemNum(

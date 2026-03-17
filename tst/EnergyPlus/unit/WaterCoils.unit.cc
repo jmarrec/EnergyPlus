@@ -98,7 +98,6 @@ using namespace EnergyPlus::DataPlant;
 using namespace EnergyPlus::DataSizing;
 using namespace EnergyPlus::DataHeatBalance;
 using namespace EnergyPlus::DataHeatBalFanSys;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataZoneEnergyDemands;
 using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::FanCoilUnits;

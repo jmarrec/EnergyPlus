@@ -77,7 +77,6 @@
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::Furnaces;
-using namespace EnergyPlus::DataLoopNode;
 using namespace DataZoneEnergyDemands;
 using namespace EnergyPlus::DataAirLoop;
 using namespace EnergyPlus::OutputProcessor;

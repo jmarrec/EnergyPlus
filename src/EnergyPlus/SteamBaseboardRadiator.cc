@@ -103,8 +103,8 @@ namespace SteamBaseboardRadiator {
     // 1. HWBaseboardRadiator module (ZoneHVAC:Baseboard:RadiantConvective:Water)
     // 2. SteamCoils module (Coil:Heating:Steam)
 
-    using DataLoopNode::ObjectIsNotParent;
     using HVAC::SmallLoad;
+    using Node::ObjectIsNotParent;
 
     using DataZoneEquipment::CheckZoneEquipmentList;
 
@@ -266,10 +266,10 @@ namespace SteamBaseboardRadiator {
         static constexpr std::string_view routineName = "GetSteamBaseboardInput";
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
+        using Node::TestCompSet;
 
         using GlobalNames::VerifyUniqueBaseboardName;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
         using namespace DataSizing;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
@@ -562,11 +562,11 @@ namespace SteamBaseboardRadiator {
                 GetOnlySingleNode(state,
                                   state.dataIPShortCut->cAlphaArgs(4),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveSteam,
+                                  Node::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveSteam,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  DataLoopNode::NodeFluidType::Steam,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
+                                  Node::FluidType::Steam,
+                                  Node::ConnectionType::Inlet,
+                                  Node::CompFluidStream::Primary,
                                   ObjectIsNotParent);
 
             // Get outlet node number
@@ -574,11 +574,11 @@ namespace SteamBaseboardRadiator {
                 GetOnlySingleNode(state,
                                   state.dataIPShortCut->cAlphaArgs(5),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveSteam,
+                                  Node::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveSteam,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  DataLoopNode::NodeFluidType::Steam,
-                                  DataLoopNode::ConnectionType::Outlet,
-                                  NodeInputManager::CompFluidStream::Primary,
+                                  Node::FluidType::Steam,
+                                  Node::ConnectionType::Outlet,
+                                  Node::CompFluidStream::Primary,
                                   ObjectIsNotParent);
             TestCompSet(state,
                         state.dataSteamBaseboardRadiator->cCMO_BBRadiator_Steam,
@@ -1075,11 +1075,11 @@ namespace SteamBaseboardRadiator {
         Real64 SteamVolFlowRateMaxUser(0.0); // User hard-sized maximum steam volume flow for reporting
         Real64 TempSize;                     // autosized value of coil input field
 
-        SteamBaseboardDesignData SteamBaseboardDesignDataObject{state.dataSteamBaseboardRadiator->SteamBaseboardDesign(
+        SteamBaseboardDesignData const &SteamBaseboardDesignDataObject{state.dataSteamBaseboardRadiator->SteamBaseboardDesign(
             state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).DesignObjectPtr)}; // Contains the data for variable flow hydronic systems
 
         // Find the appropriate steam plant sizing object
-        PltSizSteamNum = state.dataPlnt->PlantLoop(state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).plantLoc.loopNum).PlantSizNum;
+        PltSizSteamNum = state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).plantLoc.loop->PlantSizNum;
         //    PltSizSteamNum = MyPlantSizingIndex('Coil:Heating:Steam', SteamBaseboard(BaseboardNum)%EquipID, &
         //                    SteamBaseboard(BaseboardNum)%SteamInletNode, &
         //                    SteamBaseboard(BaseboardNum)%SteamOutletNode, ErrorsFound)

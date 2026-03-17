@@ -78,32 +78,32 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
     // get inlet node num
     std::string const inletNodeName = Util::makeUPPER(j["inlet_node_name"].get<std::string>());
 
-    this->inletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                             inletNodeName,
-                                                             errorsFound,
-                                                             DataLoopNode::ConnectionObjectType::GroundHeatExchangerSystem,
-                                                             objName,
-                                                             DataLoopNode::NodeFluidType::Water,
-                                                             DataLoopNode::ConnectionType::Inlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             DataLoopNode::ObjectIsNotParent);
+    this->inletNodeNum = Node::GetOnlySingleNode(state,
+                                                 inletNodeName,
+                                                 errorsFound,
+                                                 Node::ConnectionObjectType::GroundHeatExchangerSystem,
+                                                 objName,
+                                                 Node::FluidType::Water,
+                                                 Node::ConnectionType::Inlet,
+                                                 Node::CompFluidStream::Primary,
+                                                 Node::ObjectIsNotParent);
 
     // get outlet node num
     std::string const outletNodeName = Util::makeUPPER(j["outlet_node_name"].get<std::string>());
 
-    this->outletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                              outletNodeName,
-                                                              errorsFound,
-                                                              DataLoopNode::ConnectionObjectType::GroundHeatExchangerSystem,
-                                                              objName,
-                                                              DataLoopNode::NodeFluidType::Water,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              DataLoopNode::ObjectIsNotParent);
+    this->outletNodeNum = Node::GetOnlySingleNode(state,
+                                                  outletNodeName,
+                                                  errorsFound,
+                                                  Node::ConnectionObjectType::GroundHeatExchangerSystem,
+                                                  objName,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Outlet,
+                                                  Node::CompFluidStream::Primary,
+                                                  Node::ObjectIsNotParent);
     this->available = true;
     this->on = true;
 
-    BranchNodeConnections::TestCompSet(state, moduleName, objName, inletNodeName, outletNodeName, "Condenser Water Nodes");
+    Node::TestCompSet(state, moduleName, objName, inletNodeName, outletNodeName, "Condenser Water Nodes");
 
     this->designFlow = j["design_flow_rate"].get<Real64>();
     PlantUtilities::RegisterPlantCompDesignFlow(state, this->inletNodeNum, this->designFlow);

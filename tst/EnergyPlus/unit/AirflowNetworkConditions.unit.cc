@@ -75,7 +75,6 @@ using namespace EnergyPlus;
 using namespace AirflowNetwork;
 using namespace DataSurfaces;
 using namespace DataHeatBalance;
-using namespace EnergyPlus::DataLoopNode;
 
 namespace EnergyPlus {
 
