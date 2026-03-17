@@ -10726,7 +10726,7 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     }
 
     if (this->NumCoils > 0) {
-        auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
+        const auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
         for (int CoilIndex = 1; CoilIndex <= this->NumCoils; ++CoilIndex) {
             int CoilID = this->CoilNum(CoilIndex);
             // already CALLed CalculateCoil(CoilID) in CoilSet specified order
@@ -15342,7 +15342,7 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
     } // Secondary(SecondaryNum)%NumWalkIns > 0
 
     if (this->NumCoils > 0) {
-        auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
+        const auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
         for (int CoilIndex = 1; CoilIndex <= this->NumCoils; ++CoilIndex) {
             int CoilID = this->CoilNum(CoilIndex);
             // already CALL CalculateCoil(CoilID) for each coil, dispatched in coilset order for each zone
