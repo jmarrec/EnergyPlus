@@ -1038,6 +1038,24 @@ namespace HeatBalFiniteDiffManager {
                                         OutputProcessor::Group::Building,
                                         OutputProcessor::EndUseCat::Heating);
                 }
+
+                // Setup EMS Actuator for Sky LW Radiation Override (per-surface)
+                if (state.dataSurface->Surface(SurfNum).ExtBoundCond == DataSurfaces::ExternalEnvironment) {
+                    EnergyPlus::SetupEMSActuator(state,
+                                                 "CondFD Surface",
+                                                 state.dataSurface->Surface(SurfNum).Name,
+                                                 "Sky Longwave Radiation Override",
+                                                 "[W/m2]",
+                                                 SurfaceFD(SurfNum).enetActuator.isActuated,
+                                                 SurfaceFD(SurfNum).enetActuator.actuatedValue);
+                    SetupOutputVariable(state,
+                                        "CondFD EMS Sky Longwave Radiation Override Heat Flux",
+                                        Constant::Units::W_m2,
+                                        SurfaceFD(SurfNum).enetActuator.actuatedValue,
+                                        OutputProcessor::TimeStepType::Zone,
+                                        OutputProcessor::StoreType::Average,
+                                        state.dataSurface->Surface(SurfNum).Name);
+                }
             }
 
             int TotNodes = ConstructFD(state.dataSurface->Surface(SurfNum).Construction).TotNodes; // Full size nodes, start with outside face.
@@ -1707,6 +1725,7 @@ namespace HeatBalFiniteDiffManager {
             Real64 const Toa(state.dataMstBal->TempOutsideAirFD(Surf));
             Real64 const Tgnd(Tgndsurface);
             Real64 const Tsurr(TsurrSurface);
+            auto const &enetAct = s_hbfd->SurfaceFD(Surf).enetActuator;
 
             if (surface.HeatTransferAlgorithm == DataSurfaces::HeatTransferModel::CondFD) {
 
@@ -1724,8 +1743,13 @@ namespace HeatBalFiniteDiffManager {
                 if (mat->ROnly || mat->group == Material::Group::AirGap) { // R Layer or Air Layer  **********
                     // Use algebraic equation for TDT based on R
                     Real64 const Rlayer(mat->Resistance);
-                    TDT_i = (TDT_p + (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) * Rlayer) /
-                            (1.0 + (hconvo + hgnd + hrad + hsky + hsurr) * Rlayer);
+                    if (enetAct.isActuated) {
+                        TDT_i = (TDT_p + (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + enetAct.actuatedValue + hsurr * Tsurr) * Rlayer) /
+                                (1.0 + (hconvo + hgnd + hrad + hsurr) * Rlayer);
+                    } else {
+                        TDT_i = (TDT_p + (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) * Rlayer) /
+                                (1.0 + (hconvo + hgnd + hrad + hsky + hsurr) * Rlayer);
+                    }
 
                 } else { // Regular or phase change material layer
 
@@ -1793,17 +1817,31 @@ namespace HeatBalFiniteDiffManager {
                         if (s_hbfd->CondFDSchemeType == CondFDScheme::CrankNicholsonSecondOrder) { // Second Order equation
                             Real64 const Cp_DelX_RhoS_2Delt(Cp * DelX * RhoS / (2.0 * Delt));
                             Real64 const kt_2DelX(kt / (2.0 * DelX));
-                            Real64 const hsum(0.5 * (hconvo + hgnd + hrad + hsky + hsurr));
-                            TDT_i = (QRadSWOutFD + Cp_DelX_RhoS_2Delt * TD_i + kt_2DelX * (TDT_p - TD_i + TD(i + 1)) + hgnd * Tgnd +
-                                     (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr - hsum * TD_i) /
-                                    (hsum + kt_2DelX + Cp_DelX_RhoS_2Delt);
+                            if (enetAct.isActuated) {
+                                Real64 const hsum(0.5 * (hconvo + hgnd + hrad + hsurr));
+                                TDT_i = (QRadSWOutFD + Cp_DelX_RhoS_2Delt * TD_i + kt_2DelX * (TDT_p - TD_i + TD(i + 1)) + hgnd * Tgnd +
+                                         (hconvo + hrad) * Toa + enetAct.actuatedValue + hsurr * Tsurr - hsum * TD_i) /
+                                        (hsum + kt_2DelX + Cp_DelX_RhoS_2Delt);
+                            } else {
+                                Real64 const hsum(0.5 * (hconvo + hgnd + hrad + hsky + hsurr));
+                                TDT_i = (QRadSWOutFD + Cp_DelX_RhoS_2Delt * TD_i + kt_2DelX * (TDT_p - TD_i + TD(i + 1)) + hgnd * Tgnd +
+                                         (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr - hsum * TD_i) /
+                                        (hsum + kt_2DelX + Cp_DelX_RhoS_2Delt);
+                            }
                         } else if (s_hbfd->CondFDSchemeType == CondFDScheme::FullyImplicitFirstOrder) { // First Order
                             Real64 const Two_Delt_DelX(2.0 * Delt_DelX);
                             Real64 const Cp_DelX2_RhoS(Cp * pow_2(DelX) * RhoS);
                             Real64 const Two_Delt_kt(2.0 * Delt * kt);
-                            TDT_i = (Two_Delt_DelX * (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) +
+                            if (enetAct.isActuated) {
+                                TDT_i =
+                                    (Two_Delt_DelX * (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + enetAct.actuatedValue + hsurr * Tsurr) +
                                      Cp_DelX2_RhoS * TD_i + Two_Delt_kt * TDT_p) /
-                                    (Two_Delt_DelX * (hconvo + hgnd + hrad + hsky + hsurr) + Two_Delt_kt + Cp_DelX2_RhoS);
+                                    (Two_Delt_DelX * (hconvo + hgnd + hrad + hsurr) + Two_Delt_kt + Cp_DelX2_RhoS);
+                            } else {
+                                TDT_i = (Two_Delt_DelX * (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) +
+                                         Cp_DelX2_RhoS * TD_i + Two_Delt_kt * TDT_p) /
+                                        (Two_Delt_DelX * (hconvo + hgnd + hrad + hsky + hsurr) + Two_Delt_kt + Cp_DelX2_RhoS);
+                            }
                         }
 
                     } else { // HMovInsul > 0.0: Transparent insulation on outside
@@ -1811,9 +1849,16 @@ namespace HeatBalFiniteDiffManager {
 
                         // Movable Insulation Layer Outside surface temp
 
-                        Real64 const TInsulOut(
-                            (QRadSWOutMvInsulFD + hgnd * Tgnd + HMovInsul * TDT_i + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) /
-                            (hconvo + hgnd + HMovInsul + hrad + hsky + hsurr)); // Temperature of outside face of Outside Insulation
+                        Real64 TInsulOut;
+                        if (enetAct.isActuated) {
+                            TInsulOut =
+                                (QRadSWOutMvInsulFD + hgnd * Tgnd + HMovInsul * TDT_i + (hconvo + hrad) * Toa + enetAct.actuatedValue + hsurr * Tsurr) /
+                                (hconvo + hgnd + HMovInsul + hrad + hsurr);
+                        } else {
+                            TInsulOut =
+                                (QRadSWOutMvInsulFD + hgnd * Tgnd + HMovInsul * TDT_i + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) /
+                                (hconvo + hgnd + HMovInsul + hrad + hsky + hsurr);
+                        }
                         Real64 const Two_Delt_DelX(2.0 * Delt_DelX);
                         Real64 const Cp_DelX2_RhoS(Cp * pow_2(DelX) * RhoS);
                         Real64 const Two_Delt_kt(2.0 * Delt * kt);
@@ -1844,15 +1889,26 @@ namespace HeatBalFiniteDiffManager {
             // One formulation that works for Fully Implicit and CrankNicholson and massless wall
 
             Real64 const Toa_TDT_i(Toa - TDT_i);
-            Real64 const QNetSurfFromOutside(
-                QRadSWOutFD + (hgnd * (-TDT_i + Tgnd) + (hconvo + hrad) * Toa_TDT_i + hsky * (-TDT_i + Tsky) + hsurr * (-TDT_i + Tsurr)));
+            Real64 QNetSurfFromOutside;
+            if (enetAct.isActuated) {
+                QNetSurfFromOutside =
+                    QRadSWOutFD + (hgnd * (-TDT_i + Tgnd) + (hconvo + hrad) * Toa_TDT_i + enetAct.actuatedValue + hsurr * (-TDT_i + Tsurr));
+            } else {
+                QNetSurfFromOutside =
+                    QRadSWOutFD + (hgnd * (-TDT_i + Tgnd) + (hconvo + hrad) * Toa_TDT_i + hsky * (-TDT_i + Tsky) + hsurr * (-TDT_i + Tsurr));
+            }
 
             // Same sign convention as CTFs
             state.dataHeatBalSurf->SurfOpaqOutFaceCondFlux(Surf) = -QNetSurfFromOutside;
 
             // Report all outside BC heat fluxes
-            state.dataHeatBalSurf->SurfQdotRadOutRepPerArea(Surf) =
-                -(hgnd * (TDT_i - Tgnd) + hrad * (-Toa_TDT_i) + hsky * (TDT_i - Tsky) + hsurr * (TDT_i - Tsurr));
+            if (enetAct.isActuated) {
+                state.dataHeatBalSurf->SurfQdotRadOutRepPerArea(Surf) =
+                    -(hgnd * (TDT_i - Tgnd) + hrad * (-Toa_TDT_i) + (-enetAct.actuatedValue) + hsurr * (TDT_i - Tsurr));
+            } else {
+                state.dataHeatBalSurf->SurfQdotRadOutRepPerArea(Surf) =
+                    -(hgnd * (TDT_i - Tgnd) + hrad * (-Toa_TDT_i) + hsky * (TDT_i - Tsky) + hsurr * (TDT_i - Tsurr));
+            }
             state.dataHeatBalSurf->SurfQdotRadOutRep(Surf) = surface.Area * state.dataHeatBalSurf->SurfQdotRadOutRepPerArea(Surf);
             state.dataHeatBalSurf->SurfQRadOutReport(Surf) = state.dataHeatBalSurf->SurfQdotRadOutRep(Surf) * state.dataGlobal->TimeStepZoneSec;
 
