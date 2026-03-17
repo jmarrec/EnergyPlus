@@ -7705,18 +7705,19 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
             //                    DataEMSOverride = 0.0;
             //                    DataBypassFrac = 0.0;
             //                }
-            PrintFlag = true;
             state.dataSize->DataTotCapCurveIndex = thisDXCoil.CCapFTemp(Mode);
             if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) {
                 CompName = thisDXCoil.Name + ":" + thisDXCoil.CoilPerformanceName(Mode);
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
             } else if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_HeatingEmpirical || thisDXCoil.DXCoilType_Num == HVAC::CoilVRF_Heating ||
                        thisDXCoil.DXCoilType_Num == HVAC::CoilVRF_FluidTCtrl_Heating) {
                 CompName = thisDXCoil.Name;
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
                 state.dataSize->DataCoolCoilCap = state.dataSize->DXCoolCap;
             } else if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_HeatPumpWaterHeaterPumped ||
@@ -7732,6 +7733,7 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 CompName = thisDXCoil.Name;
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
                 if (state.dataSize->CurZoneEqNum > 0) {
                     CoilInTemp =
@@ -7764,6 +7766,7 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 CompName = thisDXCoil.Name;
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
             }
             CompType = thisDXCoil.DXCoilType;
