@@ -1113,6 +1113,10 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
 
     Real64 const TDT_baseline = TDT_arr(nodeIdx);
     Real64 const QRad_baseline = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
+    Real64 const CondFlux_baseline = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
+
+    // With sky at -20C and surface at 20C, baseline has large net outgoing radiation → QRad negative
+    EXPECT_LT(QRad_baseline, 0.0);
 
     // --- Sub-case 2: Actuator ON, Enet=0 (no sky LW exchange) ---
     surfFD.enetActuator.isActuated = true;
@@ -1124,9 +1128,14 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
 
     Real64 const TDT_enet0 = TDT_arr(nodeIdx);
     Real64 const QRad_enet0 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
+    Real64 const CondFlux_enet0 = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
 
     // With Enet=0, no sky cooling, so surface should be warmer than baseline (where sky cools it)
     EXPECT_GT(TDT_enet0, TDT_baseline);
+    // Sky at -20C vs surface at 20C → baseline has large outgoing radiation; Enet=0 removes that sky term
+    EXPECT_GT(QRad_enet0, QRad_baseline);
+    // Less radiation out → less heat pulled through wall → smaller outward conduction flux
+    EXPECT_LT(CondFlux_enet0, CondFlux_baseline);
 
     // --- Sub-case 3: Actuator ON, Enet=-200 (strong sky cooling) ---
     surfFD.enetActuator.isActuated = true;
@@ -1137,6 +1146,8 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
                    TotNodes, HMovInsul);
 
     Real64 const TDT_enetNeg200 = TDT_arr(nodeIdx);
+    Real64 const QRad_enetNeg200 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
+    Real64 const CondFlux_enetNeg200 = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
 
     // Enet=-200 is much stronger cooling than the default sky term, so surface should be colder
     EXPECT_LT(TDT_enetNeg200, TDT_baseline);
@@ -1150,11 +1161,36 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
                    TotNodes, HMovInsul);
 
     Real64 const TDT_enetPos200 = TDT_arr(nodeIdx);
+    Real64 const QRad_enetPos200 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
+    Real64 const CondFlux_enetPos200 = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
+
+    // Enet=+200 W/m² net incoming → QRad sign flips positive (surface gains radiation)
+    EXPECT_GT(QRad_enetPos200, 0.0);
 
     // Ordering: Enet=-200 < baseline < Enet=0 < Enet=+200
     EXPECT_LT(TDT_enetNeg200, TDT_baseline);
     EXPECT_LT(TDT_baseline, TDT_enet0);
     EXPECT_LT(TDT_enet0, TDT_enetPos200);
+
+    // QRad and CondFlux have matching monotonic ordering: stronger cooling → more negative QRad, larger outward CondFlux
+    EXPECT_LT(QRad_enetNeg200, QRad_baseline);
+    EXPECT_LT(QRad_baseline, QRad_enet0);
+    EXPECT_LT(QRad_enet0, QRad_enetPos200);
+    EXPECT_GT(CondFlux_enetNeg200, CondFlux_baseline);
+    EXPECT_GT(CondFlux_baseline, CondFlux_enet0);
+    EXPECT_GT(CondFlux_enet0, CondFlux_enetPos200);
+
+    // --- Sub-case 5: Actuator toggled back OFF → recovers baseline ---
+    surfFD.enetActuator.isActuated = false;
+    surfFD.enetActuator.actuatedValue = 0.0;
+    TDT_arr = 20.0; // reset
+
+    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
+                   TotNodes, HMovInsul);
+
+    EXPECT_NEAR(TDT_arr(nodeIdx), TDT_baseline, 1e-10);
+    EXPECT_NEAR(state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1), QRad_baseline, 1e-10);
+    EXPECT_NEAR(state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1), CondFlux_baseline, 1e-10);
 }
 
 } // namespace EnergyPlus
