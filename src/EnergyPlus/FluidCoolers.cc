@@ -220,11 +220,12 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                  state.dataIPShortCut->cAlphaFieldNames(1),
                                                  ErrorsFound);
 
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name = AlphArray(1);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerType = DataPlant::PlantEquipmentType::FluidCooler_SingleSpd;
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).indexInArray = FluidCoolerNum;
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerMassFlowRateMultiplier = 2.5;
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterInletNodeNum =
+        auto &fluidCooler = state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum);
+        fluidCooler.Name = AlphArray(1);
+        fluidCooler.FluidCoolerType = DataPlant::PlantEquipmentType::FluidCooler_SingleSpd;
+        fluidCooler.indexInArray = FluidCoolerNum;
+        fluidCooler.FluidCoolerMassFlowRateMultiplier = 2.5;
+        fluidCooler.WaterInletNodeNum =
             NodeInputManager::GetOnlySingleNode(state,
                                                 AlphArray(2),
                                                 ErrorsFound,
@@ -234,7 +235,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 DataLoopNode::ConnectionType::Inlet,
                                                 NodeInputManager::CompFluidStream::Primary,
                                                 DataLoopNode::ObjectIsNotParent);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterOutletNodeNum =
+        fluidCooler.WaterOutletNodeNum =
             NodeInputManager::GetOnlySingleNode(state,
                                                 AlphArray(3),
                                                 ErrorsFound,
@@ -245,46 +246,46 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 NodeInputManager::CompFluidStream::Primary,
                                                 DataLoopNode::ObjectIsNotParent);
         BranchNodeConnections::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA = NumArray(1);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUAWasAutoSized = true;
+        fluidCooler.HighSpeedFluidCoolerUA = NumArray(1);
+        if (fluidCooler.HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
+            fluidCooler.HighSpeedFluidCoolerUAWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerNominalCapacity = NumArray(2);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignEnteringWaterTemp = NumArray(3);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignEnteringAirTemp = NumArray(4);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignEnteringAirWetBulbTemp = NumArray(5);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignWaterFlowRate = NumArray(6);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignWaterFlowRate == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignWaterFlowRateWasAutoSized = true;
+        fluidCooler.FluidCoolerNominalCapacity = NumArray(2);
+        fluidCooler.DesignEnteringWaterTemp = NumArray(3);
+        fluidCooler.DesignEnteringAirTemp = NumArray(4);
+        fluidCooler.DesignEnteringAirWetBulbTemp = NumArray(5);
+        fluidCooler.DesignWaterFlowRate = NumArray(6);
+        if (fluidCooler.DesignWaterFlowRate == DataSizing::AutoSize) {
+            fluidCooler.DesignWaterFlowRateWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedAirFlowRate = NumArray(7);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedAirFlowRate == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedAirFlowRateWasAutoSized = true;
+        fluidCooler.HighSpeedAirFlowRate = NumArray(7);
+        if (fluidCooler.HighSpeedAirFlowRate == DataSizing::AutoSize) {
+            fluidCooler.HighSpeedAirFlowRateWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFanPower = NumArray(8);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFanPower == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFanPowerWasAutoSized = true;
+        fluidCooler.HighSpeedFanPower = NumArray(8);
+        if (fluidCooler.HighSpeedFanPower == DataSizing::AutoSize) {
+            fluidCooler.HighSpeedFanPowerWasAutoSized = true;
         }
 
         //   outdoor air inlet node
         if (AlphArray(5).empty()) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum = 0;
+            fluidCooler.OutdoorAirInletNodeNum = 0;
         } else {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum =
+            fluidCooler.OutdoorAirInletNodeNum =
                 NodeInputManager::GetOnlySingleNode(state,
                                                     AlphArray(5),
                                                     ErrorsFound,
                                                     DataLoopNode::ConnectionObjectType::FluidCoolerSingleSpeed,
-                                                    state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
+                                                    fluidCooler.Name,
                                                     DataLoopNode::NodeFluidType::Air,
                                                     DataLoopNode::ConnectionType::OutsideAirReference,
                                                     NodeInputManager::CompFluidStream::Primary,
                                                     DataLoopNode::ObjectIsNotParent);
-            if (!OutAirNodeManager::CheckOutAirNodeNumber(state, state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum)) {
+            if (!OutAirNodeManager::CheckOutAirNodeNumber(state, fluidCooler.OutdoorAirInletNodeNum)) {
                 ShowSevereError(state,
                                 EnergyPlus::format("{}= \"{}\" {}= \"{}\" not valid.",
                                                    cCurrentModuleObject,
-                                                   state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
+                                                   fluidCooler.Name,
                                                    state.dataIPShortCut->cAlphaFieldNames(5),
                                                    AlphArray(5)));
                 ShowContinueError(state, "...does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.");
@@ -321,11 +322,13 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                  state.dataIPShortCut->cAlphaFieldNames(1),
                                                  ErrorsFound);
 
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name = AlphArray(1);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerType = DataPlant::PlantEquipmentType::FluidCooler_TwoSpd;
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).indexInArray = FluidCoolerNum;
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerMassFlowRateMultiplier = 2.5;
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterInletNodeNum =
+        auto &fluidCooler = state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum);
+        
+        fluidCooler.Name = AlphArray(1);
+        fluidCooler.FluidCoolerType = DataPlant::PlantEquipmentType::FluidCooler_TwoSpd;
+        fluidCooler.indexInArray = FluidCoolerNum;
+        fluidCooler.FluidCoolerMassFlowRateMultiplier = 2.5;
+        fluidCooler.WaterInletNodeNum =
             NodeInputManager::GetOnlySingleNode(state,
                                                 AlphArray(2),
                                                 ErrorsFound,
@@ -335,7 +338,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 DataLoopNode::ConnectionType::Inlet,
                                                 NodeInputManager::CompFluidStream::Primary,
                                                 DataLoopNode::ObjectIsNotParent);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterOutletNodeNum =
+        fluidCooler.WaterOutletNodeNum =
             NodeInputManager::GetOnlySingleNode(state,
                                                 AlphArray(3),
                                                 ErrorsFound,
@@ -347,66 +350,66 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 DataLoopNode::ObjectIsNotParent);
         BranchNodeConnections::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
 
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA = NumArray(1);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUAWasAutoSized = true;
+        fluidCooler.HighSpeedFluidCoolerUA = NumArray(1);
+        if (fluidCooler.HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
+            fluidCooler.HighSpeedFluidCoolerUAWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFluidCoolerUA = NumArray(2);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFluidCoolerUA == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFluidCoolerUAWasAutoSized = true;
+        fluidCooler.LowSpeedFluidCoolerUA = NumArray(2);
+        if (fluidCooler.LowSpeedFluidCoolerUA == DataSizing::AutoSize) {
+            fluidCooler.LowSpeedFluidCoolerUAWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFluidCoolerUASizingFactor = NumArray(3);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerNominalCapacity = NumArray(4);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerLowSpeedNomCap = NumArray(5);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerLowSpeedNomCap == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerLowSpeedNomCapWasAutoSized = true;
+        fluidCooler.LowSpeedFluidCoolerUASizingFactor = NumArray(3);
+        fluidCooler.FluidCoolerNominalCapacity = NumArray(4);
+        fluidCooler.FluidCoolerLowSpeedNomCap = NumArray(5);
+        if (fluidCooler.FluidCoolerLowSpeedNomCap == DataSizing::AutoSize) {
+            fluidCooler.FluidCoolerLowSpeedNomCapWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerLowSpeedNomCapSizingFactor = NumArray(6);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignEnteringWaterTemp = NumArray(7);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignEnteringAirTemp = NumArray(8);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignEnteringAirWetBulbTemp = NumArray(9);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignWaterFlowRate = NumArray(10);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignWaterFlowRate == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).DesignWaterFlowRateWasAutoSized = true;
+        fluidCooler.FluidCoolerLowSpeedNomCapSizingFactor = NumArray(6);
+        fluidCooler.DesignEnteringWaterTemp = NumArray(7);
+        fluidCooler.DesignEnteringAirTemp = NumArray(8);
+        fluidCooler.DesignEnteringAirWetBulbTemp = NumArray(9);
+        fluidCooler.DesignWaterFlowRate = NumArray(10);
+        if (fluidCooler.DesignWaterFlowRate == DataSizing::AutoSize) {
+            fluidCooler.DesignWaterFlowRateWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedAirFlowRate = NumArray(11);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedAirFlowRate == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedAirFlowRateWasAutoSized = true;
+        fluidCooler.HighSpeedAirFlowRate = NumArray(11);
+        if (fluidCooler.HighSpeedAirFlowRate == DataSizing::AutoSize) {
+            fluidCooler.HighSpeedAirFlowRateWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFanPower = NumArray(12);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFanPower == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFanPowerWasAutoSized = true;
+        fluidCooler.HighSpeedFanPower = NumArray(12);
+        if (fluidCooler.HighSpeedFanPower == DataSizing::AutoSize) {
+            fluidCooler.HighSpeedFanPowerWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedAirFlowRate = NumArray(13);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedAirFlowRate == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedAirFlowRateWasAutoSized = true;
+        fluidCooler.LowSpeedAirFlowRate = NumArray(13);
+        if (fluidCooler.LowSpeedAirFlowRate == DataSizing::AutoSize) {
+            fluidCooler.LowSpeedAirFlowRateWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedAirFlowRateSizingFactor = NumArray(14);
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFanPower = NumArray(15);
-        if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFanPower == DataSizing::AutoSize) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFanPowerWasAutoSized = true;
+        fluidCooler.LowSpeedAirFlowRateSizingFactor = NumArray(14);
+        fluidCooler.LowSpeedFanPower = NumArray(15);
+        if (fluidCooler.LowSpeedFanPower == DataSizing::AutoSize) {
+            fluidCooler.LowSpeedFanPowerWasAutoSized = true;
         }
-        state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).LowSpeedFanPowerSizingFactor = NumArray(16);
+        fluidCooler.LowSpeedFanPowerSizingFactor = NumArray(16);
 
         //   outdoor air inlet node
         if (AlphArray(5).empty()) {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum = 0;
+            fluidCooler.OutdoorAirInletNodeNum = 0;
         } else {
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum =
+            fluidCooler.OutdoorAirInletNodeNum =
                 NodeInputManager::GetOnlySingleNode(state,
                                                     AlphArray(5),
                                                     ErrorsFound,
                                                     DataLoopNode::ConnectionObjectType::FluidCoolerTwoSpeed,
-                                                    state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
+                                                    fluidCooler.Name,
                                                     DataLoopNode::NodeFluidType::Air,
                                                     DataLoopNode::ConnectionType::OutsideAirReference,
                                                     NodeInputManager::CompFluidStream::Primary,
                                                     DataLoopNode::ObjectIsNotParent);
-            if (!OutAirNodeManager::CheckOutAirNodeNumber(state, state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum)) {
+            if (!OutAirNodeManager::CheckOutAirNodeNumber(state, fluidCooler.OutdoorAirInletNodeNum)) {
                 ShowSevereError(state,
                                 EnergyPlus::format("{}= \"{}\" {}= \"{}\" not valid.",
                                                    cCurrentModuleObject,
-                                                   state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
+                                                   fluidCooler.Name,
                                                    state.dataIPShortCut->cAlphaFieldNames(5),
                                                    AlphArray(5)));
                 ShowContinueError(state, "...does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.");
@@ -415,7 +418,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         }
 
         ErrorsFound |=
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum)
+            fluidCooler
                 .validateTwoSpeedInputs(
                     state, cCurrentModuleObject, AlphArray, state.dataIPShortCut->cNumericFieldNames, state.dataIPShortCut->cAlphaFieldNames);
     }
