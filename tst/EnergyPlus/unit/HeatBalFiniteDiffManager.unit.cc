@@ -1064,8 +1064,8 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     state->dataMstBal->HSurrFD.allocate(1);
 
     // Set exterior boundary conditions
-    Real64 const Toa = 10.0;   // outdoor air temp, C
-    Real64 const Tsky = -20.0; // sky temp, C
+    constexpr Real64 Toa = 10.0;   // outdoor air temp, C
+    constexpr Real64 Tsky = -20.0; // sky temp, C
     state->dataMstBal->TempOutsideAirFD(1) = Toa;
     state->dataMstBal->RhoVaporAirOut(1) = 0.005;
     state->dataMstBal->HConvExtFD(1) = 10.0; // convection coefficient
@@ -1087,10 +1087,10 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     s_hbfd->QHeatOutFlux(1) = 0.0;
 
     // ExteriorBCEqns parameters
-    int const Delt = 600;
-    int const nodeIdx = 1;    // outside face node
-    int const Lay = 1;        // first layer
-    Real64 const HMovInsul = 0.0;
+    constexpr int Delt = 600;
+    constexpr int nodeIdx = 1;    // outside face node
+    constexpr int Lay = 1;        // first layer
+    constexpr Real64 HMovInsul = 0.0;
 
     // Create local arrays for function call
     Array1D<Real64> T_arr(numNodes, 20.0);
@@ -1356,8 +1356,8 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride_CrankNic
     state->dataMstBal->HSurrFD.allocate(1);
 
     // Set exterior boundary conditions
-    Real64 const Toa = 10.0;
-    Real64 const Tsky = -20.0;
+    constexpr Real64 Toa = 10.0;
+    constexpr Real64 Tsky = -20.0;
     state->dataMstBal->TempOutsideAirFD(1) = Toa;
     state->dataMstBal->RhoVaporAirOut(1) = 0.005;
     state->dataMstBal->HConvExtFD(1) = 10.0;
@@ -1376,10 +1376,10 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride_CrankNic
     s_hbfd->QHeatOutFlux.allocate(1);
     s_hbfd->QHeatOutFlux(1) = 0.0;
 
-    int const Delt = 600;
-    int const nodeIdx = 1;
-    int const Lay = 1;
-    Real64 const HMovInsul = 0.0;
+    constexpr int Delt = 600;
+    constexpr int nodeIdx = 1;
+    constexpr int Lay = 1;
+    constexpr Real64 HMovInsul = 0.0;
 
     int const numNodesArr = numNodes;
     Array1D<Real64> T_arr(numNodesArr, 20.0);
