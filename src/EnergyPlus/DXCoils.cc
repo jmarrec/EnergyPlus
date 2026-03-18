@@ -15957,7 +15957,6 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
     Node::ConnectionObjectType CompSetsParentType; // Parent object type which uses DX heating coil pass into this function
     std::string CompSetsParentName;
     for (WhichComp = 1; WhichComp <= state.dataBranchNodeConnections->NumCompSets; ++WhichComp) {
-
         if (HeatingCoilTypeNum != state.dataBranchNodeConnections->CompSets(WhichComp).ComponentObjectType ||
             !Util::SameString(HeatingCoilName, state.dataBranchNodeConnections->CompSets(WhichComp).CName)) {
             continue;
@@ -16034,7 +16033,7 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
             if (thisDXCoolingCoil.CrankcaseHeaterCapacity != thisDXHeatingCoil.CrankcaseHeaterCapacity ||
                 thisDXCoolingCoil.MaxOATCrankcaseHeater != thisDXHeatingCoil.MaxOATCrankcaseHeater) {
                 ShowWarningError(state, "Crankcase heater capacity or max outdoor temp for crankcase heater operation specified in");
-                ShowContinueError(state, EnergyPlus::format("Coil:Cooling:DX:SingleSpeed = {}", thisDXCoolingCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("{} = {}", thisDXCoolingCoil.DXCoilType, thisDXCoolingCoil.Name));
                 ShowContinueError(state,
                                   EnergyPlus::format("is different than that specified in Coil:Heating:DX:SingleSpeed = {}.", HeatingCoilName));
                 ShowContinueError(state,
