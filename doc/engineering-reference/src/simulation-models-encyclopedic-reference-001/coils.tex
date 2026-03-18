@@ -1135,7 +1135,7 @@ where:
 
 \(\dot{Q}_{cap,crankcase}\) is the crankcase heater capacity (W).
 
-If this cooling coil is used as part of an air-to-air heat pump (Ref. AirLoopHVAC:UnitaryHeat-Pump:AirToAir), the crankcase heater defined for this DX cooling coil is disregarded and the associated output variable is omitted. Instead, the crankcase heater defined for the DX heating coil (Coil:Heating:DX:SingleSpeed) is enabled during the time that the compressor is not running for either heating or cooling. In this instance, RTF in the above equations would be the runtime fraction of the heat pump's heating coil or cooling coil, whichever is greater.
+If this cooling coil is used as part of an air-to-air heat pump (e.g., AirLoopHVAC:UnitaryHeatPump:AirToAir, AirLoopHVAC:UnitarySystem, or ZoneHVAC:PackagedTerminalHeatPump), the crankcase heater defined for this DX cooling coil is disregarded and the associated output variable is omitted. Instead, the crankcase heater defined for the DX heating coil (e.g., Coil:Heating:DX:SingleSpeed) is enabled during the time that the compressor is not running for either heating or cooling. In this instance, RTF in the above equations would be the runtime fraction of the heat pump's heating coil or cooling coil, whichever is greater.
 
 In addition to calculating the total cooling capacity provided by the DX air conditioner, it is important to properly determine the break down of total cooling capacity into its sensible (temperature) and latent (dehumidification) components. The model computes the sensible/ latent split using the rated SHR and the ADP/BF approach (Carrier et al. 1959). When the DX coil model is initially called during an EnergyPlus simulation, the rated total capacity and rated SHR are used to calculate the coil bypass factor (BF) at rated conditions. The rated total capacity and rated SHR are first used to determine the ratio of change in air humidity ratio to air dry-bulb temperature:
 
@@ -2070,7 +2070,7 @@ Using the above averaged outlet humidity ratio and specific enthalpy, the averag
 
 The main reason using the above approach is that outlet conditions are calculated in the same way in low and high speed operation.
 
-The crankcase heater defined for this DX cooling coil is enabled during the time that the compressor is not running for either heating or cooling. The crankcase heater power use from either heating or cooling is reported in the heating coil (Coil:Heating:DX:MultiSpeed).
+The crankcase heater defined for this DX cooling coil is enabled during the time that the compressor is not running for either heating or cooling. The crankcase heater power use from either heating or cooling is reported in the heating coil (e.g., Coil:Heating:DX:MultiSpeed).
 
 \subsubsection{Higher Speed Operation}\label{higher-speed-operation-000}
 
@@ -3732,7 +3732,7 @@ where:
 
 \({Q_{cap,crankcase}}\) is the crankcase heater capacity (W).
 
-If this heating coil is used as part of an air-to-air heat pump (Ref. AirLoopHVAC:UnitaryHeat-Pump:AirToAir), the crankcase heater defined for this DX heating coil is enabled during the time that the compressor is not running for either heating or cooling (and the crankcase heater power defined in the DX cooling coil object is disregarded in this case). In this instance, RTF in the above equations would be the runtime fraction of the heat pump's heating coil or cooling coil, whichever is greater.
+If this heating coil is used as part of an air-to-air heat pump (e.g., AirLoopHVAC:UnitaryHeatPump:AirToAir, AirLoopHVAC:UnitarySystem, or ZoneHVAC:PackagedTerminalHeatPump), the crankcase heater defined for this DX heating coil is enabled during the time that the compressor is not running for either heating or cooling (and the crankcase heater power defined in the DX cooling coil object is disregarded in this case). In this instance, RTF in the above equations would be the runtime fraction of the heat pump's heating coil or cooling coil, whichever is greater.
 
 The properties of the air leaving the heating coil at full-load operation are calculated using the following equations:
 
@@ -4153,7 +4153,7 @@ The heating coil's outlet air humidity ratio equals the inlet air humidity ratio
 
 The main reason for using the above approach is that outlet air conditions are calculated in the same way for all operating speeds.
 
-The crankcase heater defined for this DX heating coil is enabled during the time that the compressor is not running for either heating or cooling. The crankcase heater power use from either heating or cooling is reported in the heating coil.
+The crankcase heater defined for this DX heating coil is enabled during the time that the compressor is not running for either heating or cooling. The crankcase heater power use from either heating or cooling is reported in the heating coil (e.g., Coil:Heating:DX:MultiSpeed).
 
 \subsubsection{Higher Speed Operation}\label{higher-speed-operation-2}
 

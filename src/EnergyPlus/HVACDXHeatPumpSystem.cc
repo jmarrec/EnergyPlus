@@ -391,7 +391,11 @@ namespace HVACDXHeatPumpSystem {
             DXHeatPumpSystem(DXHeatSysNum).fanOp = HVAC::FanOp::Continuous;
 
             if (DXHeatPumpSystem(DXHeatSysNum).HeatPumpCoilType_Num != HVAC::Coil_HeatingAirToAirVariableSpeed) {
-                SetCoilSystemHeatingDXFlag(state, DXHeatPumpSystem(DXHeatSysNum).HeatPumpCoilType, DXHeatPumpSystem(DXHeatSysNum).HeatPumpCoilName);
+                DXCoils::SetCoilSystemHeatingDXFlag(
+                    state, DXHeatPumpSystem(DXHeatSysNum).HeatPumpCoilType, DXHeatPumpSystem(DXHeatSysNum).HeatPumpCoilName);
+            } else {
+                VariableSpeedCoils::SetCoilSystemHeatingDXFlag(
+                    state, DXHeatPumpSystem(DXHeatSysNum).HeatPumpCoilType, DXHeatPumpSystem(DXHeatSysNum).HeatPumpCoilName);
             }
 
         } // End of the DX System Loop
