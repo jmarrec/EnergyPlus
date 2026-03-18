@@ -786,11 +786,10 @@ InputProcessor::MaxFields InputProcessor::findMaxFields(
                         auto const &ext_key = ext.key();
                         for (std::size_t i = max_extensible_field; i < legacy_idd_extensibles.size(); ++i) {
                             if (ext_key == legacy_idd_extensibles[i].get<std::string>()) {
-                                max_extensible_field = (i + 1);
+                                maxFields.max_extensible_fields += (i + 1);
                             }
                         }
                     }
-                    maxFields.max_extensible_fields += max_extensible_field;
                 }
             }
         }
