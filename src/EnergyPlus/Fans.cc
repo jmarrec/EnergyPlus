@@ -1363,13 +1363,6 @@ void FanComponent::set_size(EnergyPlusData &state)
 
     bool errorsFound = false;
     SystemAirFlowSizer sizerSystemAirFlow;
-
-    if (sizerSystemAirFlow.overrideSizeString) {
-        if (state.dataGlobal->isEpJSON) {
-            SizingString = "Maximum Flow Rate";
-        }
-    }
-
     sizerSystemAirFlow.overrideSizingString(SizingString);
     sizerSystemAirFlow.initializeWithinEP(state, HVAC::fanTypeNames[(int)type], Name, _bPRINT, routineName);
     maxAirFlowRate = sizerSystemAirFlow.size(state, _tempFlow, errorsFound);
