@@ -1088,8 +1088,8 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
 
     // ExteriorBCEqns parameters
     constexpr int Delt = 600;
-    constexpr int nodeIdx = 1;    // outside face node
-    constexpr int Lay = 1;        // first layer
+    constexpr int nodeIdx = 1; // outside face node
+    constexpr int Lay = 1;     // first layer
     constexpr Real64 HMovInsul = 0.0;
 
     // Create local arrays for function call
@@ -1108,8 +1108,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     surfFD.enetActuator.actuatedValue = 0.0;
     TDT_arr = 20.0; // reset
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_baseline = TDT_arr(nodeIdx);
     Real64 const QRad_baseline = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
@@ -1123,8 +1137,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     surfFD.enetActuator.actuatedValue = 0.0;
     TDT_arr = 20.0; // reset
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_enet0 = TDT_arr(nodeIdx);
     Real64 const QRad_enet0 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
@@ -1142,8 +1170,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     surfFD.enetActuator.actuatedValue = -200.0;
     TDT_arr = 20.0; // reset
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_enetNeg200 = TDT_arr(nodeIdx);
     Real64 const QRad_enetNeg200 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
@@ -1157,8 +1199,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     surfFD.enetActuator.actuatedValue = 200.0;
     TDT_arr = 20.0; // reset
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_enetPos200 = TDT_arr(nodeIdx);
     Real64 const QRad_enetPos200 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
@@ -1185,8 +1241,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     surfFD.enetActuator.actuatedValue = 0.0;
     TDT_arr = 20.0; // reset
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     EXPECT_NEAR(TDT_arr(nodeIdx), TDT_baseline, 1e-10);
     EXPECT_NEAR(state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1), QRad_baseline, 1e-10);
@@ -1397,8 +1467,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride_CrankNic
     surfFD.enetActuator.actuatedValue = 0.0;
     TDT_arr = 20.0;
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_baseline = TDT_arr(nodeIdx);
     Real64 const QRad_baseline = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
@@ -1410,8 +1494,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride_CrankNic
     surfFD.enetActuator.actuatedValue = 0.0;
     TDT_arr = 20.0;
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_enet0 = TDT_arr(nodeIdx);
 
@@ -1420,8 +1518,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride_CrankNic
     surfFD.enetActuator.actuatedValue = -200.0;
     TDT_arr = 20.0;
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_enetNeg200 = TDT_arr(nodeIdx);
 
@@ -1430,8 +1542,22 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride_CrankNic
     surfFD.enetActuator.actuatedValue = 200.0;
     TDT_arr = 20.0;
 
-    ExteriorBCEqns(*state, Delt, nodeIdx, Lay, SurfNum, T_arr, TT_arr, Rhov_arr, RhoT_arr, RH_arr, TD_arr, TDT_arr, EnthOld_arr, EnthNew_arr,
-                   TotNodes, HMovInsul);
+    ExteriorBCEqns(*state,
+                   Delt,
+                   nodeIdx,
+                   Lay,
+                   SurfNum,
+                   T_arr,
+                   TT_arr,
+                   Rhov_arr,
+                   RhoT_arr,
+                   RH_arr,
+                   TD_arr,
+                   TDT_arr,
+                   EnthOld_arr,
+                   EnthNew_arr,
+                   TotNodes,
+                   HMovInsul);
 
     Real64 const TDT_enetPos200 = TDT_arr(nodeIdx);
 

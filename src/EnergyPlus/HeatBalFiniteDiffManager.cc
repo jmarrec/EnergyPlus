@@ -1833,10 +1833,9 @@ namespace HeatBalFiniteDiffManager {
                             Real64 const Cp_DelX2_RhoS(Cp * pow_2(DelX) * RhoS);
                             Real64 const Two_Delt_kt(2.0 * Delt * kt);
                             if (enetAct.isActuated) {
-                                TDT_i =
-                                    (Two_Delt_DelX * (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + enetAct.actuatedValue + hsurr * Tsurr) +
-                                     Cp_DelX2_RhoS * TD_i + Two_Delt_kt * TDT_p) /
-                                    (Two_Delt_DelX * (hconvo + hgnd + hrad + hsurr) + Two_Delt_kt + Cp_DelX2_RhoS);
+                                TDT_i = (Two_Delt_DelX * (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + enetAct.actuatedValue + hsurr * Tsurr) +
+                                         Cp_DelX2_RhoS * TD_i + Two_Delt_kt * TDT_p) /
+                                        (Two_Delt_DelX * (hconvo + hgnd + hrad + hsurr) + Two_Delt_kt + Cp_DelX2_RhoS);
                             } else {
                                 TDT_i = (Two_Delt_DelX * (QRadSWOutFD + hgnd * Tgnd + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) +
                                          Cp_DelX2_RhoS * TD_i + Two_Delt_kt * TDT_p) /
@@ -1851,13 +1850,12 @@ namespace HeatBalFiniteDiffManager {
 
                         Real64 TInsulOut;
                         if (enetAct.isActuated) {
-                            TInsulOut =
-                                (QRadSWOutMvInsulFD + hgnd * Tgnd + HMovInsul * TDT_i + (hconvo + hrad) * Toa + enetAct.actuatedValue + hsurr * Tsurr) /
-                                (hconvo + hgnd + HMovInsul + hrad + hsurr);
+                            TInsulOut = (QRadSWOutMvInsulFD + hgnd * Tgnd + HMovInsul * TDT_i + (hconvo + hrad) * Toa + enetAct.actuatedValue +
+                                         hsurr * Tsurr) /
+                                        (hconvo + hgnd + HMovInsul + hrad + hsurr);
                         } else {
-                            TInsulOut =
-                                (QRadSWOutMvInsulFD + hgnd * Tgnd + HMovInsul * TDT_i + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) /
-                                (hconvo + hgnd + HMovInsul + hrad + hsky + hsurr);
+                            TInsulOut = (QRadSWOutMvInsulFD + hgnd * Tgnd + HMovInsul * TDT_i + (hconvo + hrad) * Toa + hsky * Tsky + hsurr * Tsurr) /
+                                        (hconvo + hgnd + HMovInsul + hrad + hsky + hsurr);
                         }
                         Real64 const Two_Delt_DelX(2.0 * Delt_DelX);
                         Real64 const Cp_DelX2_RhoS(Cp * pow_2(DelX) * RhoS);
