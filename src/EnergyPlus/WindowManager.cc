@@ -2635,11 +2635,11 @@ namespace Window {
 
     void GetHeatBalanceEqCoefMatrixSimple(
         EnergyPlusData &state,
-        int const nglasslayer,                                                         // Number of glass layers
-        std::array<Real64, 2 * maxGlassLayers> const &hr,                              // Radiative conductance (W/m2-K)
-        std::array<Real64, maxGapLayers> &hgap,                                        // Gap gas conductive conductance (W/m2-K)
-        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &Aface, // Coefficient in equation Aface*thetas = Bface
-        std::array<Real64, 2 * maxGlassLayers> &Bface                                  // Coefficient in equation Aface*thetas = Bface
+        int const nglasslayer,                                             // Number of glass layers
+        std::array<Real64, maxArraySize> const &hr,                        // Radiative conductance (W/m2-K)
+        std::array<Real64, maxGapLayers> &hgap,                            // Gap gas conductive conductance (W/m2-K)
+        std::array<std::array<Real64, maxArraySize>, maxArraySize> &Aface, // Coefficient in equation Aface*thetas = Bface
+        std::array<Real64, maxArraySize> &Bface                            // Coefficient in equation Aface*thetas = Bface
     )
     {
         Real64 gr;  // Grashof number of gas in a gap
@@ -2794,9 +2794,9 @@ namespace Window {
                                     std::array<Real64, 2> const &hcvBG, // Convection coefficient from gap glass or shade to gap gas (W/m2-K)
                                     std::array<Real64, 2> const &TGapNewBG,
                                     std::array<Real64, 2> const &AbsRadShadeFace,
-                                    std::array<Real64, 2 * maxGlassLayers> const &hr,
-                                    std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &Aface,
-                                    std::array<Real64, 2 * maxGlassLayers> &Bface)
+                                    std::array<Real64, maxArraySize> const &hr,
+                                    std::array<std::array<Real64, maxArraySize>, maxArraySize> &Aface,
+                                    std::array<Real64, maxArraySize> &Bface)
     {
         auto &wm = state.dataWindowManager;
 
@@ -3304,16 +3304,16 @@ namespace Window {
         Real64 CpAirZone = 0.0;      // Heat capacity of zone air (J/kg-K)
         Real64 InletAirHumRat = 0.0; // Humidity ratio of air from window gap entering fan
 
-        std::array<Real64, 2 * maxGlassLayers> hr; // Radiative conductance (W/m2-K)
-        std::array<Real64, 2> AbsRadShadeFace;     // Solar radiation, short-wave radiation from lights, and long-wave
-        std::array<Real64, 2> TGapNewBG;           // For between-glass shade/blind, average gas temp in gaps on either
+        std::array<Real64, maxArraySize> hr;   // Radiative conductance (W/m2-K)
+        std::array<Real64, 2> AbsRadShadeFace; // Solar radiation, short-wave radiation from lights, and long-wave
+        std::array<Real64, 2> TGapNewBG;       // For between-glass shade/blind, average gas temp in gaps on either
         //  side of shade/blind (K)
         std::array<Real64, 2> hcvBG; // For between-glass shade/blind, convection coefficient from gap glass or
         //  shade/blind to gap gas on either side of shade/blind (W/m2-K)
 
-        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Aface; // Coefficient in equation Aface*thetas = Bface
-        std::array<Real64, 2 * maxGlassLayers> Bface;                                 // Coefficient in equation Aface*thetas = Bface
-        std::array<int, 2 * maxGlassLayers> indx;                                     // Vector of row permutations in LU decomposition
+        std::array<std::array<Real64, maxArraySize>, maxArraySize> Aface; // Coefficient in equation Aface*thetas = Bface
+        std::array<Real64, maxArraySize> Bface;                           // Coefficient in equation Aface*thetas = Bface
+        std::array<int, maxArraySize> indx;                               // Vector of row permutations in LU decomposition
 
         auto &s_surf = state.dataSurface;
 
@@ -4242,10 +4242,10 @@ namespace Window {
     //****************************************************************************
 
     void LUdecomposition(EnergyPlusData &state,
-                         std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &ajac, // As input: matrix to be decomposed;
-                         int const n,                                                                  // Dimension of matrix
-                         std::array<int, 2 * maxGlassLayers> &indx,                                    // Vector of row permutations
-                         int &d // +1 if even number of row interchange is even, -1
+                         std::array<std::array<Real64, maxArraySize>, maxArraySize> &ajac, // As input: matrix to be decomposed;
+                         int const n,                                                      // Dimension of matrix
+                         std::array<int, maxArraySize> &indx,                              // Vector of row permutations
+                         int &d                                                            // +1 if even number of row interchange is even, -1
     )
     {
 
@@ -4280,7 +4280,7 @@ namespace Window {
             vv[i] = 1.0 / aamax;
         }
         for (int j = 0; j < n; ++j) {
-            for (int i = 0; i < j; ++i) { // should this be j-1?
+            for (int i = 0; i < j; ++i) {
                 Real64 sum = ajac[j][i];
                 for (int k = 0; k < i; ++k) {
                     sum -= ajac[k][i] * ajac[j][k];
@@ -4325,10 +4325,10 @@ namespace Window {
     //**************************************************************************
 
     void LUsolution([[maybe_unused]] EnergyPlusData &state,
-                    std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> const &a, // Matrix and vector in a.x = b;
-                    int const n,                                                                     // Dimension of a and b
-                    std::array<int, 2 * maxGlassLayers> const &indx,                                 // Vector of row permutations
-                    std::array<Real64, 2 * maxGlassLayers> &b                                        // Matrix and vector in a.x = b;
+                    std::array<std::array<Real64, maxArraySize>, maxArraySize> const &a, // Matrix and vector in a.x = b;
+                    int const n,                                                         // Dimension of a and b
+                    std::array<int, maxArraySize> const &indx,                           // Vector of row permutations
+                    std::array<Real64, maxArraySize> &b                                  // Matrix and vector in a.x = b;
     )
     {
 
@@ -6427,15 +6427,15 @@ namespace Window {
         Real64 constexpr errtemptol(0.02); // Tolerance on errtemp for convergence
         static constexpr std::string_view RoutineName("WindowTempsForNominalCond");
 
-        std::array<Real64, 2 * maxGlassLayers> hr; // Radiative conductance (W/m2-K)
-        Real64 hcinprev;                           // Value of hcin from previous iteration
-        int d;                                     // +1 if number of row interchanges is even,
+        std::array<Real64, maxArraySize> hr; // Radiative conductance (W/m2-K)
+        Real64 hcinprev;                     // Value of hcin from previous iteration
+        int d;                               // +1 if number of row interchanges is even,
         // -1 if odd (in LU decomposition)
-        std::array<int, 2 * maxGlassLayers> indx;                                     // Vector of row permutations in LU decomposition
-        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Aface; // Coefficient in equation Aface*thetas = Bface
-        std::array<Real64, 2 * maxGlassLayers> Bface;                                 // Coefficient in equation Aface*thetas = Bface
-        int iter;                                                                     // Iteration number
-        Real64 errtemp;                                                               // Absolute value of sum of face temperature differences
+        std::array<int, maxArraySize> indx;                               // Vector of row permutations in LU decomposition
+        std::array<std::array<Real64, maxArraySize>, maxArraySize> Aface; // Coefficient in equation Aface*thetas = Bface
+        std::array<Real64, maxArraySize> Bface;                           // Coefficient in equation Aface*thetas = Bface
+        int iter;                                                         // Iteration number
+        Real64 errtemp;                                                   // Absolute value of sum of face temperature differences
         //   between iterations, divided by number of faces
         Real64 TmeanFilm;       // mean film temperature
         Real64 TmeanFilmKelvin; // mean film temperature for property evaluation
@@ -7606,13 +7606,13 @@ namespace Window {
 
         std::array<Real64, 2> fEdgeA; // Average slat edge correction factor for upper and lower quadrants
         //  seen by window blind
-        std::array<Real64, 6> j;                                                     // Slat section radiosity vector
-        std::array<Real64, 6> G;                                                     // Slat section irradiance vector
-        std::array<Real64, 6> Q;                                                     // Slat section radiance vector
-        std::array<std::array<Real64, 6>, 6> F;                                      // View factor array
-        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> X;    // Exchange matrix
-        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Xinv; // Inverse of exchange matrix
-        std::array<int, 2 * maxGlassLayers> indx;                                    // LU decomposition indices
+        std::array<Real64, 6> j;                                         // Slat section radiosity vector
+        std::array<Real64, 6> G;                                         // Slat section irradiance vector
+        std::array<Real64, 6> Q;                                         // Slat section radiance vector
+        std::array<std::array<Real64, 6>, 6> F;                          // View factor array
+        std::array<std::array<Real64, maxArraySize>, maxArraySize> X;    // Exchange matrix
+        std::array<std::array<Real64, maxArraySize>, maxArraySize> Xinv; // Inverse of exchange matrix
+        std::array<int, maxArraySize> indx;                              // LU decomposition indices
 
         // The slat input properties are:
         // c(1)    0. (unused)
@@ -7995,9 +7995,9 @@ namespace Window {
         std::array<Real64, 6> Q;                // Slat surface section source vector
         std::array<std::array<Real64, 6>, 6> F; // View factor array
 
-        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> X;    // X*J = Q
-        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Xinv; // J = Xinv*Q
-        std::array<int, 2 * maxGlassLayers> indx;                                    // Indices for LU decomposition
+        std::array<std::array<Real64, maxArraySize>, maxArraySize> X;    // X*J = Q
+        std::array<std::array<Real64, maxArraySize>, maxArraySize> Xinv; // J = Xinv*Q
+        std::array<int, maxArraySize> indx;                              // Indices for LU decomposition
 
         Real64 fEdge; // Slat edge correction factor
         Real64 fEdge1;
@@ -8213,9 +8213,9 @@ namespace Window {
     //*****************************************************************************************
 
     void InvertMatrix(EnergyPlusData &state,
-                      std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &a, // Matrix to be inverted
-                      std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &y, // Inverse of matrix a
-                      std::array<int, 2 * maxGlassLayers> &indx,                                 // Index vector for LU decomposition
+                      std::array<std::array<Real64, maxArraySize>, maxArraySize> &a, // Matrix to be inverted
+                      std::array<std::array<Real64, maxArraySize>, maxArraySize> &y, // Inverse of matrix a
+                      std::array<int, maxArraySize> &indx,                           // Index vector for LU decomposition
                       int const n)
     {
 
@@ -8230,7 +8230,7 @@ namespace Window {
         // METHODOLOGY EMPLOYED:
         //     Uses LU decomposition.
 
-        std::array<Real64, 2 * maxGlassLayers> tmp;
+        std::array<Real64, maxArraySize> tmp;
 
         int d;
 
