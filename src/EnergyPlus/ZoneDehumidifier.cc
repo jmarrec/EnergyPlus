@@ -103,9 +103,6 @@ namespace ZoneDehumidifier {
     //   http://www.thermastor.com/HI-E-DRY-100/HI-E-DRY-100-Spec.pdf
     //   http://www.thermastor.com/HI-E-DRY-195/HI-E-DRY-195-Spec.pdf
 
-    // Using/Aliasing
-    using namespace DataLoopNode;
-
     void SimZoneDehumidifier(EnergyPlusData &state,
                              std::string const &CompName,                    // Name of the zone dehumidifier
                              int const ZoneNum,                              // Number of zone being served
@@ -195,7 +192,7 @@ namespace ZoneDehumidifier {
         // Standard EnergyPlus methodology using available utility routines where appropriate.
 
         // Using/Aliasing
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
         using WaterManager::SetupTankSupplyComponent;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
@@ -265,23 +262,23 @@ namespace ZoneDehumidifier {
             dehumid.AirInletNodeNum = GetOnlySingleNode(state,
                                                         Alphas(3),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::ZoneHVACDehumidifierDX,
+                                                        Node::ConnectionObjectType::ZoneHVACDehumidifierDX,
                                                         Alphas(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Inlet,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsNotParent);
 
             // A4 , \field Air Outlet Node Name
             dehumid.AirOutletNodeNum = GetOnlySingleNode(state,
                                                          Alphas(4),
                                                          ErrorsFound,
-                                                         DataLoopNode::ConnectionObjectType::ZoneHVACDehumidifierDX,
+                                                         Node::ConnectionObjectType::ZoneHVACDehumidifierDX,
                                                          Alphas(1),
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::Outlet,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         ObjectIsNotParent);
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::Outlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsNotParent);
 
             // N1,  \field Rated Water Removal
             dehumid.RatedWaterRemoval = Numbers(1);

@@ -271,34 +271,34 @@ namespace HVACSingleDuctInduc {
                 GetOnlySingleNode(state,
                                   Alphas(3),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeInduction,
+                                  Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeInduction,
                                   Alphas(1),
-                                  DataLoopNode::NodeFluidType::Air,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  DataLoopNode::ObjectIsParent,
+                                  Node::FluidType::Air,
+                                  Node::ConnectionType::Inlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsParent,
                                   cAlphaFields(3));
             indUnit.SecAirInNode =
                 GetOnlySingleNode(state,
                                   Alphas(4),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeInduction,
+                                  Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeInduction,
                                   Alphas(1),
-                                  DataLoopNode::NodeFluidType::Air,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  DataLoopNode::ObjectIsParent,
+                                  Node::FluidType::Air,
+                                  Node::ConnectionType::Inlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsParent,
                                   cAlphaFields(4));
             indUnit.OutAirNode =
                 GetOnlySingleNode(state,
                                   Alphas(5),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeInduction,
+                                  Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeInduction,
                                   Alphas(1),
-                                  DataLoopNode::NodeFluidType::Air,
-                                  DataLoopNode::ConnectionType::Outlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  DataLoopNode::ObjectIsParent,
+                                  Node::FluidType::Air,
+                                  Node::ConnectionType::Outlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsParent,
                                   cAlphaFields(5));
 
             indUnit.HCoilType = Alphas(6); // type (key) of heating coil
@@ -355,29 +355,29 @@ namespace HVACSingleDuctInduc {
             }
 
             // Add heating coil to component sets array
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 indUnit.UnitType,
-                                                 indUnit.Name,
-                                                 indUnit.HCoilType,
-                                                 indUnit.HCoil,
-                                                 Alphas(4),
-                                                 "UNDEFINED");
+            Node::SetUpCompSets(state,
+                                indUnit.UnitType,
+                                indUnit.Name,
+                                indUnit.HCoilType,
+                                indUnit.HCoil,
+                                Alphas(4),
+                                "UNDEFINED");
             // Add cooling coil to component sets array
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 indUnit.UnitType,
-                                                 indUnit.Name,
-                                                 indUnit.CCoilType,
-                                                 indUnit.CCoil,
-                                                 "UNDEFINED",
-                                                 "UNDEFINED");
+            Node::SetUpCompSets(state,
+                                indUnit.UnitType,
+                                indUnit.Name,
+                                indUnit.CCoilType,
+                                indUnit.CCoil,
+                                "UNDEFINED",
+                                "UNDEFINED");
 
             // Register component set data
-            BranchNodeConnections::TestCompSet(state,
-                                               indUnit.UnitType,
-                                               indUnit.Name,
-                                               state.dataLoopNodes->NodeID(indUnit.PriAirInNode),
-                                               state.dataLoopNodes->NodeID(indUnit.OutAirNode),
-                                               "Air Nodes");
+            Node::TestCompSet(state,
+                              indUnit.UnitType,
+                              indUnit.Name,
+                              state.dataLoopNodes->NodeID(indUnit.PriAirInNode),
+                              state.dataLoopNodes->NodeID(indUnit.OutAirNode),
+                              "Air Nodes");
 
             for (int ADUNum = 1; ADUNum <= (int)state.dataDefineEquipment->AirDistUnit.size(); ++ADUNum) {
                 if (indUnit.OutAirNode == state.dataDefineEquipment->AirDistUnit(ADUNum).OutletNodeNum) {

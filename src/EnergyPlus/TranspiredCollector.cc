@@ -237,11 +237,11 @@ namespace TranspiredCollector {
         static constexpr std::string_view routineName = "GetTranspiredCollectorInput";
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
-        using DataLoopNode::ObjectIsNotParent;
         using DataSurfaces::OtherSideCondModeledExt;
         using DataSurfaces::SurfaceData;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
+        using Node::ObjectIsNotParent;
+        using Node::TestCompSet;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
@@ -371,22 +371,22 @@ namespace TranspiredCollector {
                             GetOnlySingleNode(state,
                                               AlphasSplit(ACountBase),
                                               ErrorsFound,
-                                              DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                              Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              DataLoopNode::NodeFluidType::Air,
-                                              DataLoopNode::ConnectionType::Inlet,
-                                              static_cast<NodeInputManager::CompFluidStream>(NumOASys),
+                                              Node::FluidType::Air,
+                                              Node::ConnectionType::Inlet,
+                                              static_cast<Node::CompFluidStream>(NumOASys),
                                               ObjectIsNotParent);
 
                         state.dataTranspiredCollector->UTSC(Item).OutletNode(NumOASys) =
                             GetOnlySingleNode(state,
                                               AlphasSplit(ACountBase + 1),
                                               ErrorsFound,
-                                              DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                              Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              DataLoopNode::NodeFluidType::Air,
-                                              DataLoopNode::ConnectionType::Outlet,
-                                              static_cast<NodeInputManager::CompFluidStream>(NumOASys),
+                                              Node::FluidType::Air,
+                                              Node::ConnectionType::Outlet,
+                                              static_cast<Node::CompFluidStream>(NumOASys),
                                               ObjectIsNotParent);
                         TestCompSet(state,
                                     CurrentModuleObject,
@@ -398,22 +398,22 @@ namespace TranspiredCollector {
                             GetOnlySingleNode(state,
                                               AlphasSplit(ACountBase + 2),
                                               ErrorsFound,
-                                              DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                              Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              DataLoopNode::NodeFluidType::Air,
-                                              DataLoopNode::ConnectionType::Sensor,
-                                              NodeInputManager::CompFluidStream::Primary,
+                                              Node::FluidType::Air,
+                                              Node::ConnectionType::Sensor,
+                                              Node::CompFluidStream::Primary,
                                               ObjectIsNotParent);
 
                         state.dataTranspiredCollector->UTSC(Item).ZoneNode(NumOASys) =
                             GetOnlySingleNode(state,
                                               AlphasSplit(ACountBase + 3),
                                               ErrorsFound,
-                                              DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                              Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              DataLoopNode::NodeFluidType::Air,
-                                              DataLoopNode::ConnectionType::Sensor,
-                                              NodeInputManager::CompFluidStream::Primary,
+                                              Node::FluidType::Air,
+                                              Node::ConnectionType::Sensor,
+                                              Node::CompFluidStream::Primary,
                                               ObjectIsNotParent);
 
                     } // Each OA System in a Multisystem
@@ -457,21 +457,21 @@ namespace TranspiredCollector {
                     GetOnlySingleNode(state,
                                       Alphas(4),
                                       ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                      Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Inlet,
-                                      NodeInputManager::CompFluidStream::Primary,
+                                      Node::FluidType::Air,
+                                      Node::ConnectionType::Inlet,
+                                      Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);
                 state.dataTranspiredCollector->UTSC(Item).OutletNode(1) =
                     GetOnlySingleNode(state,
                                       Alphas(5),
                                       ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                      Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Primary,
+                                      Node::FluidType::Air,
+                                      Node::ConnectionType::Outlet,
+                                      Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);
                 TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(4), Alphas(5), "Transpired Collector Air Nodes");
 
@@ -479,21 +479,21 @@ namespace TranspiredCollector {
                     GetOnlySingleNode(state,
                                       Alphas(6),
                                       ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                      Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Sensor,
-                                      NodeInputManager::CompFluidStream::Primary,
+                                      Node::FluidType::Air,
+                                      Node::ConnectionType::Sensor,
+                                      Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);
                 state.dataTranspiredCollector->UTSC(Item).ZoneNode(1) =
                     GetOnlySingleNode(state,
                                       Alphas(7),
                                       ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired,
+                                      Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Sensor,
-                                      NodeInputManager::CompFluidStream::Primary,
+                                      Node::FluidType::Air,
+                                      Node::ConnectionType::Sensor,
+                                      Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);
             } // no splitter
 
@@ -889,7 +889,6 @@ namespace TranspiredCollector {
 
         // Using/Aliasing
         bool DoSetPointTest = state.dataHVACGlobal->DoSetPointTest;
-        using namespace DataLoopNode;
         using DataSurfaces::SurfaceData;
         using EMSManager::CheckIfNodeSetPointManagedByEMS;
 
@@ -938,7 +937,7 @@ namespace TranspiredCollector {
                 for (SplitBranch = 1; SplitBranch <= state.dataTranspiredCollector->UTSC(UTSCUnitNum).NumOASysAttached; ++SplitBranch) {
                     ControlNode = state.dataTranspiredCollector->UTSC(UTSCUnitNum).ControlNode(SplitBranch);
                     if (ControlNode > 0) {
-                        if (state.dataLoopNodes->Node(ControlNode).TempSetPoint == SensedNodeFlagValue) {
+                        if (state.dataLoopNodes->Node(ControlNode).TempSetPoint == Node::SensedNodeFlagValue) {
                             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                                 ShowSevereError(state,
                                                 EnergyPlus::format("Missing temperature setpoint for UTSC {}",
@@ -997,7 +996,7 @@ namespace TranspiredCollector {
         // Replaced by below
         state.dataTranspiredCollector->UTSC(UTSCNum).InletMDot =
             sum_sub(state.dataLoopNodes->Node,
-                    &DataLoopNode::NodeData::MassFlowRate,
+                    &Node::NodeData::MassFlowRate,
                     state.dataTranspiredCollector->UTSC(UTSCNum).InletNode); // Autodesk:F2C++ Functions handle array subscript usage
         state.dataTranspiredCollector->UTSC(UTSCNum).IsOn = false;           // initialize then turn on if appropriate
         state.dataTranspiredCollector->UTSC(UTSCNum).Tplen = state.dataTranspiredCollector->UTSC(UTSCNum).TplenLast;

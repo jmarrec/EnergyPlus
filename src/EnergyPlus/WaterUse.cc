@@ -405,32 +405,32 @@ namespace WaterUse {
                 waterConnection.Name = state.dataIPShortCut->cAlphaArgs(1);
 
                 if ((!state.dataIPShortCut->lAlphaFieldBlanks(2)) || (!state.dataIPShortCut->lAlphaFieldBlanks(3))) {
-                    waterConnection.InletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(2),
-                                                                                    ErrorsFound,
-                                                                                    DataLoopNode::ConnectionObjectType::WaterUseConnections,
-                                                                                    waterConnection.Name,
-                                                                                    DataLoopNode::NodeFluidType::Water,
-                                                                                    DataLoopNode::ConnectionType::Inlet,
-                                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                                    DataLoopNode::ObjectIsNotParent);
-                    waterConnection.OutletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                     state.dataIPShortCut->cAlphaArgs(3),
-                                                                                     ErrorsFound,
-                                                                                     DataLoopNode::ConnectionObjectType::WaterUseConnections,
-                                                                                     waterConnection.Name,
-                                                                                     DataLoopNode::NodeFluidType::Water,
-                                                                                     DataLoopNode::ConnectionType::Outlet,
-                                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                                     DataLoopNode::ObjectIsNotParent);
+                    waterConnection.InletNode = Node::GetOnlySingleNode(state,
+                                                                        state.dataIPShortCut->cAlphaArgs(2),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::WaterUseConnections,
+                                                                        waterConnection.Name,
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
+                    waterConnection.OutletNode = Node::GetOnlySingleNode(state,
+                                                                         state.dataIPShortCut->cAlphaArgs(3),
+                                                                         ErrorsFound,
+                                                                         Node::ConnectionObjectType::WaterUseConnections,
+                                                                         waterConnection.Name,
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
 
                     // Check plant connections
-                    BranchNodeConnections::TestCompSet(state,
-                                                       state.dataIPShortCut->cCurrentModuleObject,
-                                                       waterConnection.Name,
-                                                       state.dataIPShortCut->cAlphaArgs(2),
-                                                       state.dataIPShortCut->cAlphaArgs(3),
-                                                       "DHW Nodes");
+                    Node::TestCompSet(state,
+                                      state.dataIPShortCut->cCurrentModuleObject,
+                                      waterConnection.Name,
+                                      state.dataIPShortCut->cAlphaArgs(2),
+                                      state.dataIPShortCut->cAlphaArgs(3),
+                                      "DHW Nodes");
                 } else {
                     // If no plant nodes are connected, simulate in stand-alone mode.
                     waterConnection.StandAlone = true;

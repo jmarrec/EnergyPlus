@@ -312,45 +312,45 @@ namespace DesiccantDehumidifiers {
             // For node connections, this object is both a parent and a non-parent, because the
             // Desiccant wheel is not called out as a separate component, its nodes must be connected
             // as ObjectIsNotParent.  But for the Regen fan, the nodes are connected as ObjectIsParent
-            desicDehum.ProcAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                           Alphas(3),
-                                                                           ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::DehumidifierDesiccantNoFans,
-                                                                           Alphas(1),
-                                                                           DataLoopNode::NodeFluidType::Air,
-                                                                           DataLoopNode::ConnectionType::Inlet,
-                                                                           NodeInputManager::CompFluidStream::Primary,
-                                                                           DataLoopNode::ObjectIsNotParent);
+            desicDehum.ProcAirInNode = Node::GetOnlySingleNode(state,
+                                                               Alphas(3),
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
+                                                               Alphas(1),
+                                                               Node::FluidType::Air,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
 
-            desicDehum.ProcAirOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                            Alphas(4),
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::DehumidifierDesiccantNoFans,
-                                                                            Alphas(1),
-                                                                            DataLoopNode::NodeFluidType::Air,
-                                                                            DataLoopNode::ConnectionType::Outlet,
-                                                                            NodeInputManager::CompFluidStream::Primary,
-                                                                            DataLoopNode::ObjectIsNotParent);
+            desicDehum.ProcAirOutNode = Node::GetOnlySingleNode(state,
+                                                                Alphas(4),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
+                                                                Alphas(1),
+                                                                Node::FluidType::Air,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
 
-            desicDehum.RegenAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                            Alphas(5),
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::DehumidifierDesiccantNoFans,
-                                                                            Alphas(1),
-                                                                            DataLoopNode::NodeFluidType::Air,
-                                                                            DataLoopNode::ConnectionType::Inlet,
-                                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                                            DataLoopNode::ObjectIsNotParent);
+            desicDehum.RegenAirInNode = Node::GetOnlySingleNode(state,
+                                                                Alphas(5),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
+                                                                Alphas(1),
+                                                                Node::FluidType::Air,
+                                                                Node::ConnectionType::Inlet,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsNotParent);
 
-            desicDehum.RegenFanInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                            Alphas(6),
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::DehumidifierDesiccantNoFans,
-                                                                            Alphas(1),
-                                                                            DataLoopNode::NodeFluidType::Air,
-                                                                            DataLoopNode::ConnectionType::Internal,
-                                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                                            DataLoopNode::ObjectIsParent);
+            desicDehum.RegenFanInNode = Node::GetOnlySingleNode(state,
+                                                                Alphas(6),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
+                                                                Alphas(1),
+                                                                Node::FluidType::Air,
+                                                                Node::ConnectionType::Internal,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsParent);
 
             if (Util::SameString(Alphas(7), "LEAVING HUMRAT:BYPASS")) {
                 ShowWarningError(state, EnergyPlus::format("{}{} = {}", RoutineName, CurrentModuleObject, desicDehum.Name));
@@ -509,13 +509,13 @@ namespace DesiccantDehumidifiers {
             desicDehum.NomRotorPower = Numbers(4);
             desicDehum.RegenFanName = Alphas(11);
 
-            BranchNodeConnections::TestCompSet(state, desicDehum.DehumType, desicDehum.Name, Alphas(3), Alphas(4), "Process Air Nodes");
+            Node::TestCompSet(state, desicDehum.DehumType, desicDehum.Name, Alphas(3), Alphas(4), "Process Air Nodes");
 
             // Set up component set for regen coil
-            BranchNodeConnections::SetUpCompSets(state, desicDehum.DehumType, desicDehum.Name, Alphas(8), Alphas(9), "UNDEFINED", "UNDEFINED");
+            Node::SetUpCompSets(state, desicDehum.DehumType, desicDehum.Name, Alphas(8), Alphas(9), "UNDEFINED", "UNDEFINED");
 
             // Set up component set for regen fan
-            BranchNodeConnections::SetUpCompSets(state, desicDehum.DehumType, desicDehum.Name, Alphas(10), Alphas(11), Alphas(6), "UNDEFINED");
+            Node::SetUpCompSets(state, desicDehum.DehumType, desicDehum.Name, Alphas(10), Alphas(11), Alphas(6), "UNDEFINED");
 
             if (Util::SameString(Alphas(12), "UserCurves")) {
                 desicDehum.PerformanceModel_Num = PerformanceModel::UserCurves;
@@ -709,15 +709,15 @@ namespace DesiccantDehumidifiers {
 
             std::string ProcAirInlet = state.dataLoopNodes->NodeID(desicDehum.HXProcInNode);
 
-            desicDehum.ProcAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                           ProcAirInlet,
-                                                                           ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                           desicDehum.Name,
-                                                                           DataLoopNode::NodeFluidType::Air,
-                                                                           DataLoopNode::ConnectionType::Inlet,
-                                                                           NodeInputManager::CompFluidStream::Primary,
-                                                                           DataLoopNode::ObjectIsParent);
+            desicDehum.ProcAirInNode = Node::GetOnlySingleNode(state,
+                                                               ProcAirInlet,
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                               desicDehum.Name,
+                                                               Node::FluidType::Air,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsParent);
 
             ErrorsFound2 = false;
             desicDehum.HXProcOutNode = HeatRecovery::GetSecondaryOutletNode(state, desicDehum.HXName, ErrorsFound2);
@@ -728,17 +728,17 @@ namespace DesiccantDehumidifiers {
 
             std::string ProcAirOutlet = state.dataLoopNodes->NodeID(desicDehum.HXProcOutNode);
 
-            desicDehum.ProcAirOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                            ProcAirOutlet,
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                            desicDehum.Name,
-                                                                            DataLoopNode::NodeFluidType::Air,
-                                                                            DataLoopNode::ConnectionType::Outlet,
-                                                                            NodeInputManager::CompFluidStream::Primary,
-                                                                            DataLoopNode::ObjectIsParent);
+            desicDehum.ProcAirOutNode = Node::GetOnlySingleNode(state,
+                                                                ProcAirOutlet,
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                desicDehum.Name,
+                                                                Node::FluidType::Air,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsParent);
 
-            BranchNodeConnections::TestCompSet(state, desicDehum.DehumType, desicDehum.Name, ProcAirInlet, ProcAirOutlet, "Process Air Nodes");
+            Node::TestCompSet(state, desicDehum.DehumType, desicDehum.Name, ProcAirInlet, ProcAirOutlet, "Process Air Nodes");
 
             ErrorsFound2 = false;
             desicDehum.HXRegenInNode = HeatRecovery::GetSupplyInletNode(state, desicDehum.HXName, ErrorsFound2);
@@ -754,15 +754,15 @@ namespace DesiccantDehumidifiers {
                 ErrorsFoundGeneric = true;
             }
 
-            desicDehum.ControlNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                            Alphas(5),
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                            desicDehum.Name,
-                                                                            DataLoopNode::NodeFluidType::Air,
-                                                                            DataLoopNode::ConnectionType::Sensor,
-                                                                            NodeInputManager::CompFluidStream::Primary,
-                                                                            DataLoopNode::ObjectIsNotParent);
+            desicDehum.ControlNodeNum = Node::GetOnlySingleNode(state,
+                                                                Alphas(5),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                desicDehum.Name,
+                                                                Node::FluidType::Air,
+                                                                Node::ConnectionType::Sensor,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
 
             if (desicDehum.ControlNodeNum == 0) {
                 ShowSevereError(state, EnergyPlus::format("{} = \"{}\"", desicDehum.DehumType, desicDehum.Name));
@@ -1055,46 +1055,45 @@ namespace DesiccantDehumidifiers {
                 RegenCoilOutlet = state.dataLoopNodes->NodeID(desicDehum.RegenCoilOutletNode);
             }
 
-            BranchNodeConnections::SetUpCompSets(
-                state, desicDehum.DehumType, desicDehum.Name, desicDehum.HXType, desicDehum.HXName, ProcAirInlet, ProcAirOutlet);
+            Node::SetUpCompSets(state, desicDehum.DehumType, desicDehum.Name, desicDehum.HXType, desicDehum.HXName, ProcAirInlet, ProcAirOutlet);
 
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 desicDehum.DehumType,
-                                                 desicDehum.Name,
-                                                 HVAC::fanTypeNamesUC[(int)desicDehum.regenFanType],
-                                                 desicDehum.RegenFanName,
-                                                 RegenFanInlet,
-                                                 RegenFanOutlet);
+            Node::SetUpCompSets(state,
+                                desicDehum.DehumType,
+                                desicDehum.Name,
+                                HVAC::fanTypeNamesUC[(int)desicDehum.regenFanType],
+                                desicDehum.RegenFanName,
+                                RegenFanInlet,
+                                RegenFanOutlet);
 
             if (!lAlphaBlanks(10)) {
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     desicDehum.DehumType,
-                                                     desicDehum.Name,
-                                                     desicDehum.RegenCoilType,
-                                                     desicDehum.RegenCoilName,
-                                                     RegenCoilInlet,
-                                                     RegenCoilOutlet);
+                Node::SetUpCompSets(state,
+                                    desicDehum.DehumType,
+                                    desicDehum.Name,
+                                    desicDehum.RegenCoilType,
+                                    desicDehum.RegenCoilName,
+                                    RegenCoilInlet,
+                                    RegenCoilOutlet);
             }
 
             if (desicDehum.regenFanPlace == HVAC::FanPlace::BlowThru) {
-                desicDehum.RegenAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                RegenFanInlet,
-                                                                                ErrorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                                desicDehum.Name,
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                DataLoopNode::ObjectIsParent);
-                desicDehum.RegenAirOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                 RegenAirOutlet,
-                                                                                 ErrorsFound,
-                                                                                 DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                                 desicDehum.Name,
-                                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                                 DataLoopNode::ConnectionType::Outlet,
-                                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                                 DataLoopNode::ObjectIsParent);
+                desicDehum.RegenAirInNode = Node::GetOnlySingleNode(state,
+                                                                    RegenFanInlet,
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                    desicDehum.Name,
+                                                                    Node::FluidType::Air,
+                                                                    Node::ConnectionType::Inlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsParent);
+                desicDehum.RegenAirOutNode = Node::GetOnlySingleNode(state,
+                                                                     RegenAirOutlet,
+                                                                     ErrorsFound,
+                                                                     Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                     desicDehum.Name,
+                                                                     Node::FluidType::Air,
+                                                                     Node::ConnectionType::Outlet,
+                                                                     Node::CompFluidStream::Primary,
+                                                                     Node::ObjectIsParent);
                 if (!lAlphaBlanks(10)) {
                     if (desicDehum.RegenFanOutNode != desicDehum.RegenCoilInletNode) {
                         ShowSevereError(state, EnergyPlus::format("{} \"{}\"", desicDehum.DehumType, desicDehum.Name));
@@ -1132,25 +1131,25 @@ namespace DesiccantDehumidifiers {
                     }
                 }
             } else { // ELSE for IF (desicDehum%RegenFanPlacement == HVAC::BlowThru)THEN
-                desicDehum.RegenAirOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                 RegenFanOutlet,
-                                                                                 ErrorsFound,
-                                                                                 DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                                 desicDehum.Name,
-                                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                                 DataLoopNode::ConnectionType::Outlet,
-                                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                                 DataLoopNode::ObjectIsParent);
+                desicDehum.RegenAirOutNode = Node::GetOnlySingleNode(state,
+                                                                     RegenFanOutlet,
+                                                                     ErrorsFound,
+                                                                     Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                     desicDehum.Name,
+                                                                     Node::FluidType::Air,
+                                                                     Node::ConnectionType::Outlet,
+                                                                     Node::CompFluidStream::Primary,
+                                                                     Node::ObjectIsParent);
                 if (!lAlphaBlanks(10)) {
-                    desicDehum.RegenAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                    RegenCoilInlet,
-                                                                                    ErrorsFound,
-                                                                                    DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                                    desicDehum.Name,
-                                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                                    DataLoopNode::ConnectionType::Inlet,
-                                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                                    DataLoopNode::ObjectIsParent);
+                    desicDehum.RegenAirInNode = Node::GetOnlySingleNode(state,
+                                                                        RegenCoilInlet,
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                        desicDehum.Name,
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsParent);
                     if (desicDehum.RegenCoilOutletNode != desicDehum.HXRegenInNode) {
                         ShowSevereError(state, EnergyPlus::format("{} \"{}\"", desicDehum.DehumType, desicDehum.Name));
                         ShowContinueError(state,
@@ -1164,15 +1163,15 @@ namespace DesiccantDehumidifiers {
                         ErrorsFoundGeneric = true;
                     }
                 } else {
-                    desicDehum.RegenAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                    RegenAirInlet,
-                                                                                    ErrorsFound,
-                                                                                    DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                                                    desicDehum.Name,
-                                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                                    DataLoopNode::ConnectionType::Inlet,
-                                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                                    DataLoopNode::ObjectIsParent);
+                    desicDehum.RegenAirInNode = Node::GetOnlySingleNode(state,
+                                                                        RegenAirInlet,
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                        desicDehum.Name,
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsParent);
                 }
                 if (desicDehum.RegenFanInNode != desicDehum.HXRegenOutNode) {
                     ShowSevereError(state, EnergyPlus::format("{} \"{}\"", desicDehum.DehumType, desicDehum.Name));
@@ -1314,16 +1313,15 @@ namespace DesiccantDehumidifiers {
                     desicDehum.CondenserInletNode = VariableSpeedCoils::GetVSCoilCondenserInletNode(state, desicDehum.CoolingCoilName, ErrorsFound2);
                 }
                 if (desicDehum.CondenserInletNode == 0 && desicDehum.Preheat == Selection::Yes) {
-                    desicDehum.CondenserInletNode =
-                        NodeInputManager::GetOnlySingleNode(state,
-                                                            desicDehum.CoolingCoilName + " Condenser Inlet Node",
-                                                            ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::DehumidifierDesiccantSystem,
-                                                            desicDehum.Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::OutsideAirReference,
-                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                    desicDehum.CondenserInletNode = Node::GetOnlySingleNode(state,
+                                                                            desicDehum.CoolingCoilName + " Condenser Inlet Node",
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::DehumidifierDesiccantSystem,
+                                                                            desicDehum.Name,
+                                                                            Node::FluidType::Air,
+                                                                            Node::ConnectionType::OutsideAirReference,
+                                                                            Node::CompFluidStream::Secondary,
+                                                                            Node::ObjectIsNotParent);
                     OutAirNodeManager::CheckAndAddAirNodeNumber(state, desicDehum.CondenserInletNode, OANodeError);
                     if (!OANodeError) {
                         ShowWarningError(state, EnergyPlus::format("{} \"{}\"", desicDehum.DehumType, desicDehum.Name));
@@ -1733,7 +1731,7 @@ namespace DesiccantDehumidifiers {
                 if (desicDehum.controlType == DesicDehumCtrlType::NodeHumratBypass) {
                     int ControlNode = desicDehum.ProcAirOutNode;
                     if (ControlNode > 0) {
-                        if (state.dataLoopNodes->Node(ControlNode).HumRatMax == DataLoopNode::SensedNodeFlagValue) {
+                        if (state.dataLoopNodes->Node(ControlNode).HumRatMax == Node::SensedNodeFlagValue) {
                             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                                 ShowSevereError(state, "Missing humidity ratio setpoint (HumRatMax) for ");
                                 ShowContinueError(state, EnergyPlus::format("Dehumidifier:Desiccant:NoFans: {}", desicDehum.Name));
@@ -1828,7 +1826,7 @@ namespace DesiccantDehumidifiers {
             if (!state.dataGlobal->SysSizingCalc && state.dataDesiccantDehumidifiers->MySetPointCheckFlag && DoSetPointTest) {
                 int ControlNode = desicDehum.ControlNodeNum;
                 if (ControlNode > 0) {
-                    if (state.dataLoopNodes->Node(ControlNode).HumRatMax == DataLoopNode::SensedNodeFlagValue) {
+                    if (state.dataLoopNodes->Node(ControlNode).HumRatMax == Node::SensedNodeFlagValue) {
                         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                             ShowSevereError(state, "Missing maximum humidity ratio setpoint (MaxHumRat) for ");
                             ShowContinueError(state, EnergyPlus::format("{}: {}", desicDehum.DehumType, desicDehum.Name));

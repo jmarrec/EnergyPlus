@@ -195,15 +195,15 @@ namespace CTElectricGenerator {
 
             // Not sure what to do with electric nodes, so do not use optional arguments
             state.dataCTElectricGenerator->CTGenerator(genNum).ElectricCircuitNode =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    AlphArray(2),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                    AlphArray(1),
-                                                    DataLoopNode::NodeFluidType::Electric,
-                                                    DataLoopNode::ConnectionType::Electric,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        AlphArray(2),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                        AlphArray(1),
+                                        Node::FluidType::Electric,
+                                        Node::ConnectionType::Electric,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             state.dataCTElectricGenerator->CTGenerator(genNum).MinPartLoadRat = NumArray(2);
             state.dataCTElectricGenerator->CTGenerator(genNum).MaxPartLoadRat = NumArray(3);
@@ -259,15 +259,15 @@ namespace CTElectricGenerator {
             if (state.dataCTElectricGenerator->CTGenerator(genNum).DesignHeatRecVolFlowRate > 0.0) {
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecActive = true;
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecInletNodeNum =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(9),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            AlphArray(9),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                            AlphArray(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Inlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 if (state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecInletNodeNum == 0) {
                     ShowSevereError(state,
                                     EnergyPlus::format("Missing Node Name, Heat Recovery Inlet, for {}={}",
@@ -276,15 +276,15 @@ namespace CTElectricGenerator {
                     ErrorsFound = true;
                 }
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecOutletNodeNum =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(10),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            AlphArray(10),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                            AlphArray(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Outlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 if (state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecOutletNodeNum == 0) {
                     ShowSevereError(state,
                                     EnergyPlus::format("Missing Node Name, Heat Recovery Outlet, for {}={}",
@@ -292,7 +292,8 @@ namespace CTElectricGenerator {
                                                        AlphArray(1)));
                     ErrorsFound = true;
                 }
-                BranchNodeConnections::TestCompSet(
+
+                Node::TestCompSet(
                     state, state.dataIPShortCut->cCurrentModuleObject, AlphArray(1), AlphArray(9), AlphArray(10), "Heat Recovery Nodes");
                 PlantUtilities::RegisterPlantCompDesignFlow(state,
                                                             state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecInletNodeNum,
@@ -326,15 +327,15 @@ namespace CTElectricGenerator {
                 state.dataCTElectricGenerator->CTGenerator(genNum).OAInletNode = 0;
             } else {
                 state.dataCTElectricGenerator->CTGenerator(genNum).OAInletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(12),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::OutsideAirReference,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            AlphArray(12),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                            AlphArray(1),
+                                            Node::FluidType::Air,
+                                            Node::ConnectionType::OutsideAirReference,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, state.dataCTElectricGenerator->CTGenerator(genNum).OAInletNode)) {
                     ShowSevereError(state,
                                     EnergyPlus::format("{}, \"{}\" Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}",

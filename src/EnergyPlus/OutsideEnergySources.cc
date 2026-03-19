@@ -171,25 +171,25 @@ void GetOutsideEnergySourcesInput(EnergyPlusData &state)
 
         std::string nodeNames;
         DataPlant::PlantEquipmentType EnergyType;
-        DataLoopNode::ConnectionObjectType objType;
+        Node::ConnectionObjectType objType;
         int thisIndex;
         if (EnergySourceNum <= NumDistrictUnitsHeatWater) {
             state.dataIPShortCut->cCurrentModuleObject = "DistrictHeating:Water";
-            objType = DataLoopNode::ConnectionObjectType::DistrictHeatingWater;
+            objType = Node::ConnectionObjectType::DistrictHeatingWater;
             nodeNames = "Hot Water Nodes";
             EnergyType = DataPlant::PlantEquipmentType::PurchHotWater;
             heatWaterIndex++;
             thisIndex = heatWaterIndex;
         } else if (EnergySourceNum <= NumDistrictUnitsHeatWater + NumDistrictUnitsCool) {
             state.dataIPShortCut->cCurrentModuleObject = "DistrictCooling";
-            objType = DataLoopNode::ConnectionObjectType::DistrictCooling;
+            objType = Node::ConnectionObjectType::DistrictCooling;
             nodeNames = "Chilled Water Nodes";
             EnergyType = DataPlant::PlantEquipmentType::PurchChilledWater;
             coolIndex++;
             thisIndex = coolIndex;
         } else { // EnergySourceNum > NumDistrictUnitsHeatWater + NumDistrictUnitsCool
             state.dataIPShortCut->cCurrentModuleObject = "DistrictHeating:Steam";
-            objType = DataLoopNode::ConnectionObjectType::DistrictHeatingSteam;
+            objType = Node::ConnectionObjectType::DistrictHeatingSteam;
             nodeNames = "Steam Nodes";
             EnergyType = DataPlant::PlantEquipmentType::PurchSteam;
             heatSteamIndex++;
@@ -221,54 +221,50 @@ void GetOutsideEnergySourcesInput(EnergyPlusData &state)
         }
         state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).Name = state.dataIPShortCut->cAlphaArgs(1);
         if (EnergySourceNum <= NumDistrictUnitsHeatWater + NumDistrictUnitsCool) {
-            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).InletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(2),
-                                                    ErrorsFound,
-                                                    objType,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
-            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).OutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    objType,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).InletNodeNum = Node::GetOnlySingleNode(state,
+                                                                                                              state.dataIPShortCut->cAlphaArgs(2),
+                                                                                                              ErrorsFound,
+                                                                                                              objType,
+                                                                                                              state.dataIPShortCut->cAlphaArgs(1),
+                                                                                                              Node::FluidType::Water,
+                                                                                                              Node::ConnectionType::Inlet,
+                                                                                                              Node::CompFluidStream::Primary,
+                                                                                                              Node::ObjectIsNotParent);
+            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).OutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                                                               state.dataIPShortCut->cAlphaArgs(3),
+                                                                                                               ErrorsFound,
+                                                                                                               objType,
+                                                                                                               state.dataIPShortCut->cAlphaArgs(1),
+                                                                                                               Node::FluidType::Water,
+                                                                                                               Node::ConnectionType::Outlet,
+                                                                                                               Node::CompFluidStream::Primary,
+                                                                                                               Node::ObjectIsNotParent);
         } else {
-            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).InletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(2),
-                                                    ErrorsFound,
-                                                    objType,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Steam,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
-            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).OutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    objType,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Steam,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).InletNodeNum = Node::GetOnlySingleNode(state,
+                                                                                                              state.dataIPShortCut->cAlphaArgs(2),
+                                                                                                              ErrorsFound,
+                                                                                                              objType,
+                                                                                                              state.dataIPShortCut->cAlphaArgs(1),
+                                                                                                              Node::FluidType::Steam,
+                                                                                                              Node::ConnectionType::Inlet,
+                                                                                                              Node::CompFluidStream::Primary,
+                                                                                                              Node::ObjectIsNotParent);
+            state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).OutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                                                               state.dataIPShortCut->cAlphaArgs(3),
+                                                                                                               ErrorsFound,
+                                                                                                               objType,
+                                                                                                               state.dataIPShortCut->cAlphaArgs(1),
+                                                                                                               Node::FluidType::Steam,
+                                                                                                               Node::ConnectionType::Outlet,
+                                                                                                               Node::CompFluidStream::Primary,
+                                                                                                               Node::ObjectIsNotParent);
         }
-        BranchNodeConnections::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           nodeNames);
+        Node::TestCompSet(state,
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(2),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          nodeNames);
         state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).NomCap = state.dataIPShortCut->rNumericArgs(1);
         if (state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).NomCap == DataSizing::AutoSize) {
             state.dataOutsideEnergySrcs->EnergySource(EnergySourceNum).NomCapWasAutoSized = true;

@@ -558,8 +558,8 @@ TEST_F(EnergyPlusFixture, SimulationManager_ReportLoopConnectionsTest)
     // Unit Test for Defect #11061: Test Error Message (modified level of message)
     state->dataBranchNodeConnections->NumCompSets = 1;
     state->dataBranchNodeConnections->CompSets.allocate(1);
-    state->dataBranchNodeConnections->CompSets(1).ParentObjectType = DataLoopNode::ConnectionObjectType::WaterHeaterMixed;
-    state->dataBranchNodeConnections->CompSets(1).ComponentObjectType = DataLoopNode::ConnectionObjectType::WaterHeaterMixed;
+    state->dataBranchNodeConnections->CompSets(1).ParentObjectType = Node::ConnectionObjectType::WaterHeaterMixed;
+    state->dataBranchNodeConnections->CompSets(1).ComponentObjectType = Node::ConnectionObjectType::WaterHeaterMixed;
     state->dataBranchNodeConnections->CompSets(1).CName = "WaterHeaterMixed1";
     state->dataBranchNodeConnections->CompSets(1).InletNodeName = "MixedWaterHeater1Inlet";
     state->dataBranchNodeConnections->CompSets(1).OutletNodeName = "MixedWaterHeater1Outlet";

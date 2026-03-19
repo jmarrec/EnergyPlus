@@ -92,8 +92,6 @@ namespace HVACDXHeatPumpSystem {
 
     // USE STATEMENTS:
     // Use statements for data only modules
-    // Using/Aliasing
-    using namespace DataLoopNode;
 
     void SimDXHeatPumpSystem(EnergyPlusData &state,
                              std::string_view DXHeatPumpSystemName,            // Name of DXSystem:Airloop object
@@ -248,11 +246,11 @@ namespace HVACDXHeatPumpSystem {
         // Uses "Get" routines to read in data.
 
         // Using/Aliasing
-        using BranchNodeConnections::SetUpCompSets;
-        using BranchNodeConnections::TestCompSet;
         using DXCoils::GetCoilInletNode;
         using DXCoils::GetCoilOutletNode;
         using DXCoils::SetCoilSystemHeatingDXFlag;
+        using Node::SetUpCompSets;
+        using Node::TestCompSet;
         using VariableSpeedCoils::GetCoilInletNodeVariableSpeed;
         using VariableSpeedCoils::GetCoilOutletNodeVariableSpeed;
 
@@ -475,7 +473,7 @@ namespace HVACDXHeatPumpSystem {
                         state.dataLoopNodes->Node(ControlNode).TempSetPoint = OAUCoilOutletTemp; // Set the coil outlet temperature
                     } else {                                                                     // Not an outdoor air unit
 
-                        if (state.dataLoopNodes->Node(ControlNode).TempSetPoint == SensedNodeFlagValue) {
+                        if (state.dataLoopNodes->Node(ControlNode).TempSetPoint == Node::SensedNodeFlagValue) {
                             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                                 ShowSevereError(state,
                                                 EnergyPlus::format("{}: Missing temperature setpoint for DX unit= {}",
