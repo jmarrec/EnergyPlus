@@ -68,7 +68,6 @@
 using namespace EnergyPlus;
 using namespace EnergyPlus::VentilatedSlab;
 using namespace EnergyPlus::DataHeatBalance;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataSurfaces;
 using namespace EnergyPlus::DataSurfaceLists;
 using namespace EnergyPlus::HeatBalanceManager;

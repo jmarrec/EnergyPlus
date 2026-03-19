@@ -64,7 +64,6 @@
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::DataAirLoop;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::HVACControllers;
 using namespace EnergyPlus::MixedAir;
 using namespace EnergyPlus::OutputProcessor;

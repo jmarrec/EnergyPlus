@@ -62,7 +62,6 @@
 #include <EnergyPlus/Psychrometrics.hh>
 
 using namespace EnergyPlus;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::PlantChillers;
 
 TEST_F(EnergyPlusFixture, ChillerElectric_WaterCooled_Autosize)

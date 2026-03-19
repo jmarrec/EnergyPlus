@@ -2984,7 +2984,7 @@ namespace WindowComplexManager {
                 }
             } else {
                 ShowContinueError(state, "Illegal layer type in Construction:ComplexFenestrationState.");
-                ShowContinueError(state, "Allowed object are:");
+                ShowContinueError(state, "Allowed objects are:");
                 ShowContinueError(state, "   - WindowMaterial:Glazing");
                 ShowContinueError(state, "   - WindowMaterial:ComplexShade");
                 ShowContinueError(state, "   - WindowMaterial:Gap");

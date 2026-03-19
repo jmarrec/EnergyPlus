@@ -106,7 +106,7 @@ struct CoilCoolingDX
                             Real64 &normalModeRatedCapacity,
                             std::vector<Real64> &normalModeFlowRates,
                             std::vector<Real64> &normalModeRatedCapacities);
-    static void inline passThroughNodeData(DataLoopNode::NodeData &in, DataLoopNode::NodeData &out);
+    static void inline passThroughNodeData(Node::NodeData &in, Node::NodeData &out);
     void size(EnergyPlusData &state);
 
     int getNumModes();

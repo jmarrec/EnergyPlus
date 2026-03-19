@@ -59,6 +59,7 @@
 #include <EnergyPlus/DXCoils.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataAirSystems.hh>
+#include <EnergyPlus/DataBranchNodeConnections.hh>
 #include <EnergyPlus/DataContaminantBalance.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
@@ -306,50 +307,45 @@ namespace VariableSpeedCoils {
                 std::string airInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "indoor_air_inlet_node_name");
                 std::string airOutletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "indoor_air_outlet_node_name");
 
-                varSpeedCoil.WaterInletNodeNum =
-                    GetOnlySingleNode(state,
-                                      waterInletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Water,
-                                      DataLoopNode::ConnectionType::Inlet,
-                                      NodeInputManager::CompFluidStream::Secondary,
-                                      DataLoopNode::ObjectIsNotParent);
-                varSpeedCoil.WaterOutletNodeNum =
-                    GetOnlySingleNode(state,
-                                      waterOutletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Water,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Secondary,
-                                      DataLoopNode::ObjectIsNotParent);
-                varSpeedCoil.AirInletNodeNum =
-                    GetOnlySingleNode(state,
-                                      airInletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Inlet,
-                                      NodeInputManager::CompFluidStream::Primary,
-                                      DataLoopNode::ObjectIsNotParent);
-                varSpeedCoil.AirOutletNodeNum =
-                    GetOnlySingleNode(state,
-                                      airOutletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Primary,
-                                      DataLoopNode::ObjectIsNotParent);
+                varSpeedCoil.WaterInletNodeNum = GetOnlySingleNode(state,
+                                                                   waterInletNodeName,
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                   varSpeedCoil.Name,
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Secondary,
+                                                                   Node::ObjectIsNotParent);
+                varSpeedCoil.WaterOutletNodeNum = GetOnlySingleNode(state,
+                                                                    waterOutletNodeName,
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                    varSpeedCoil.Name,
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Secondary,
+                                                                    Node::ObjectIsNotParent);
+                varSpeedCoil.AirInletNodeNum = GetOnlySingleNode(state,
+                                                                 airInletNodeName,
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                 varSpeedCoil.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
+                varSpeedCoil.AirOutletNodeNum = GetOnlySingleNode(state,
+                                                                  airOutletNodeName,
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                  varSpeedCoil.Name,
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
 
-                BranchNodeConnections::TestCompSet(
-                    state, CurrentModuleObject, varSpeedCoil.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
@@ -754,23 +750,23 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.AirInletNodeNum = GetOnlySingleNode(state,
                                                                  airInletNodeName,
                                                                  ErrorsFound,
-                                                                 DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed,
+                                                                 Node::ConnectionObjectType::CoilCoolingDXVariableSpeed,
                                                                  varSpeedCoil.Name,
-                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                 DataLoopNode::ConnectionType::Inlet,
-                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                 DataLoopNode::ObjectIsNotParent);
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
                 varSpeedCoil.AirOutletNodeNum = GetOnlySingleNode(state,
                                                                   airOutletNodeName,
                                                                   ErrorsFound,
-                                                                  DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed,
+                                                                  Node::ConnectionObjectType::CoilCoolingDXVariableSpeed,
                                                                   varSpeedCoil.Name,
-                                                                  DataLoopNode::NodeFluidType::Air,
-                                                                  DataLoopNode::ConnectionType::Outlet,
-                                                                  NodeInputManager::CompFluidStream::Primary,
-                                                                  DataLoopNode::ObjectIsNotParent);
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
 
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
@@ -819,12 +815,12 @@ namespace VariableSpeedCoils {
                     varSpeedCoil.CondenserInletNodeNum = GetOnlySingleNode(state,
                                                                            condenserAirInletNodeName,
                                                                            ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed,
+                                                                           Node::ConnectionObjectType::CoilCoolingDXVariableSpeed,
                                                                            varSpeedCoil.Name,
-                                                                           DataLoopNode::NodeFluidType::Air,
-                                                                           DataLoopNode::ConnectionType::OutsideAirReference,
-                                                                           NodeInputManager::CompFluidStream::Primary,
-                                                                           DataLoopNode::ObjectIsNotParent);
+                                                                           Node::FluidType::Air,
+                                                                           Node::ConnectionType::OutsideAirReference,
+                                                                           Node::CompFluidStream::Primary,
+                                                                           Node::ObjectIsNotParent);
                     // std::string cAlphaField10 = "Basin Heater Operating Schedule Name";
                     if (!OutAirNodeManager::CheckOutAirNodeNumber(state, varSpeedCoil.CondenserInletNodeNum)) {
                         ShowWarningError(state,
@@ -1237,50 +1233,45 @@ namespace VariableSpeedCoils {
                 std::string airInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "indoor_air_inlet_node_name");
                 std::string airOutletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "indoor_air_outlet_node_name");
 
-                varSpeedCoil.WaterInletNodeNum =
-                    GetOnlySingleNode(state,
-                                      waterInletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Water,
-                                      DataLoopNode::ConnectionType::Inlet,
-                                      NodeInputManager::CompFluidStream::Secondary,
-                                      DataLoopNode::ObjectIsNotParent);
-                varSpeedCoil.WaterOutletNodeNum =
-                    GetOnlySingleNode(state,
-                                      waterOutletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Water,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Secondary,
-                                      DataLoopNode::ObjectIsNotParent);
-                varSpeedCoil.AirInletNodeNum =
-                    GetOnlySingleNode(state,
-                                      airInletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Inlet,
-                                      NodeInputManager::CompFluidStream::Primary,
-                                      DataLoopNode::ObjectIsNotParent);
-                varSpeedCoil.AirOutletNodeNum =
-                    GetOnlySingleNode(state,
-                                      airOutletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Primary,
-                                      DataLoopNode::ObjectIsNotParent);
+                varSpeedCoil.WaterInletNodeNum = GetOnlySingleNode(state,
+                                                                   waterInletNodeName,
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                   varSpeedCoil.Name,
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Secondary,
+                                                                   Node::ObjectIsNotParent);
+                varSpeedCoil.WaterOutletNodeNum = GetOnlySingleNode(state,
+                                                                    waterOutletNodeName,
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                    varSpeedCoil.Name,
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Secondary,
+                                                                    Node::ObjectIsNotParent);
+                varSpeedCoil.AirInletNodeNum = GetOnlySingleNode(state,
+                                                                 airInletNodeName,
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                 varSpeedCoil.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
+                varSpeedCoil.AirOutletNodeNum = GetOnlySingleNode(state,
+                                                                  airOutletNodeName,
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
+                                                                  varSpeedCoil.Name,
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
 
-                BranchNodeConnections::TestCompSet(
-                    state, CurrentModuleObject, varSpeedCoil.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
                 cFieldName = "Number of Speeds";
                 //       If (VarSpeedCoil(DXCoilNum)%NumOfSpeeds .LT. 2) Then
@@ -1659,23 +1650,23 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.AirInletNodeNum = GetOnlySingleNode(state,
                                                                  airInletNodeName,
                                                                  ErrorsFound,
-                                                                 DataLoopNode::ConnectionObjectType::CoilHeatingDXVariableSpeed,
+                                                                 Node::ConnectionObjectType::CoilHeatingDXVariableSpeed,
                                                                  varSpeedCoil.Name,
-                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                 DataLoopNode::ConnectionType::Inlet,
-                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                 DataLoopNode::ObjectIsNotParent);
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
                 varSpeedCoil.AirOutletNodeNum = GetOnlySingleNode(state,
                                                                   airOutletNodeName,
                                                                   ErrorsFound,
-                                                                  DataLoopNode::ConnectionObjectType::CoilHeatingDXVariableSpeed,
+                                                                  Node::ConnectionObjectType::CoilHeatingDXVariableSpeed,
                                                                   varSpeedCoil.Name,
-                                                                  DataLoopNode::NodeFluidType::Air,
-                                                                  DataLoopNode::ConnectionType::Outlet,
-                                                                  NodeInputManager::CompFluidStream::Primary,
-                                                                  DataLoopNode::ObjectIsNotParent);
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
 
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
                     ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
@@ -2164,25 +2155,24 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.AirInletNodeNum = GetOnlySingleNode(state,
                                                                  evapAirInletNodeName,
                                                                  ErrorsFound,
-                                                                 DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
+                                                                 Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
                                                                  varSpeedCoil.Name,
-                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                 DataLoopNode::ConnectionType::Inlet,
-                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                 DataLoopNode::ObjectIsNotParent);
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
 
                 varSpeedCoil.AirOutletNodeNum = GetOnlySingleNode(state,
                                                                   evapAirOutletNodeName,
                                                                   ErrorsFound,
-                                                                  DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
+                                                                  Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
                                                                   varSpeedCoil.Name,
-                                                                  DataLoopNode::NodeFluidType::Air,
-                                                                  DataLoopNode::ConnectionType::Outlet,
-                                                                  NodeInputManager::CompFluidStream::Primary,
-                                                                  DataLoopNode::ObjectIsNotParent);
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
 
-                BranchNodeConnections::TestCompSet(
-                    state, CurrentModuleObject, varSpeedCoil.Name, evapAirInletNodeName, evapAirOutletNodeName, "Air Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, evapAirInletNodeName, evapAirOutletNodeName, "Air Nodes");
 
                 // Check if the air inlet node is OA node, to justify whether the coil is placed in zone or not
                 varSpeedCoil.IsDXCoilInZone = !OutAirNodeManager::CheckOutAirNodeNumber(state, varSpeedCoil.AirInletNodeNum);
@@ -2190,30 +2180,27 @@ namespace VariableSpeedCoils {
                 std::string condWaterInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_water_inlet_node_name");
                 std::string condWaterOutletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_water_outlet_node_name");
                 // Water nodes
-                varSpeedCoil.WaterInletNodeNum =
-                    GetOnlySingleNode(state,
-                                      condWaterInletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Water,
-                                      DataLoopNode::ConnectionType::Inlet,
-                                      NodeInputManager::CompFluidStream::Secondary,
-                                      DataLoopNode::ObjectIsNotParent);
+                varSpeedCoil.WaterInletNodeNum = GetOnlySingleNode(state,
+                                                                   condWaterInletNodeName,
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
+                                                                   varSpeedCoil.Name,
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Secondary,
+                                                                   Node::ObjectIsNotParent);
 
-                varSpeedCoil.WaterOutletNodeNum =
-                    GetOnlySingleNode(state,
-                                      condWaterOutletNodeName,
-                                      ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
-                                      varSpeedCoil.Name,
-                                      DataLoopNode::NodeFluidType::Water,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Secondary,
-                                      DataLoopNode::ObjectIsNotParent);
+                varSpeedCoil.WaterOutletNodeNum = GetOnlySingleNode(state,
+                                                                    condWaterOutletNodeName,
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
+                                                                    varSpeedCoil.Name,
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Secondary,
+                                                                    Node::ObjectIsNotParent);
 
-                BranchNodeConnections::TestCompSet(
-                    state, CurrentModuleObject, varSpeedCoil.Name, condWaterInletNodeName, condWaterOutletNodeName, "Water Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, condWaterInletNodeName, condWaterOutletNodeName, "Water Nodes");
 
                 cFieldName = "Crankcase Heater Capacity";
                 varSpeedCoil.CrankcaseHeaterCapacity = s_ip->getRealFieldValue(fields, schemaProps, "crankcase_heater_capacity"); // NumArray(10);
@@ -2760,24 +2747,6 @@ namespace VariableSpeedCoils {
                                                 OutputProcessor::EndUseCat::Cooling);
                         }
                     }
-
-                    SetupOutputVariable(state,
-                                        "Cooling Coil Crankcase Heater Electricity Rate",
-                                        Constant::Units::W,
-                                        varSpeedCoil.CrankcaseHeaterPower,
-                                        OutputProcessor::TimeStepType::System,
-                                        OutputProcessor::StoreType::Average,
-                                        varSpeedCoil.Name);
-                    SetupOutputVariable(state,
-                                        "Cooling Coil Crankcase Heater Electricity Energy",
-                                        Constant::Units::J,
-                                        varSpeedCoil.CrankcaseHeaterConsumption,
-                                        OutputProcessor::TimeStepType::System,
-                                        OutputProcessor::StoreType::Sum,
-                                        varSpeedCoil.Name,
-                                        Constant::eResource::Electricity,
-                                        OutputProcessor::Group::HVAC,
-                                        OutputProcessor::EndUseCat::Cooling);
                 } else {
                     // air source heating coils
                     SetupOutputVariable(state,
@@ -3449,6 +3418,55 @@ namespace VariableSpeedCoils {
         } else {
             state.dataVariableSpeedCoils->MyPlantScanFlag(DXCoilNum) = false;
         }
+
+        // Find the companion upstream coil (DX cooling coil) that is used with DX heating coils (HP AC units only)
+        if (varSpeedCoil.FindCompanionUpStreamCoil) {
+            if (varSpeedCoil.VSCoilType == HVAC::Coil_HeatingAirToAirVariableSpeed) {
+                varSpeedCoil.CompanionUpstreamDXCoil = GetHPCoolingCoilIndex(state, varSpeedCoil.VarSpeedCoilType, varSpeedCoil.Name, DXCoilNum);
+                if (varSpeedCoil.CompanionUpstreamDXCoil > 0) {
+                    state.dataVariableSpeedCoils->VarSpeedCoil(varSpeedCoil.CompanionUpstreamDXCoil).ReportCoolingCoilCrankcasePower = false;
+                    varSpeedCoil.FindCompanionUpStreamCoil = false;
+                } else {
+                    varSpeedCoil.FindCompanionUpStreamCoil = false;
+                }
+            } else {
+                varSpeedCoil.FindCompanionUpStreamCoil = false;
+            }
+        }
+
+        // CR7308 - Wait for zone and air loop equipment to be simulated, then print out report variables
+        if (state.dataVariableSpeedCoils->CrankcaseHeaterReportVarFlag) {
+            if (state.dataAirLoop->AirLoopInputsFilled) {
+                // Set report variables for DX cooling coils that will have a crankcase heater (all DX coils not used in a HP AC unit)
+                int DXCoilNumTemp; // Counter for crankcase heater report variable DO loop
+                for (DXCoilNumTemp = 1; DXCoilNumTemp <= state.dataVariableSpeedCoils->NumVarSpeedCoils; ++DXCoilNumTemp) {
+                    auto &dXCoil_withCrankCase = state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNumTemp);
+                    if (dXCoil_withCrankCase.VSCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
+                        if (dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower) {
+                            SetupOutputVariable(state,
+                                                "Cooling Coil Crankcase Heater Electricity Rate",
+                                                Constant::Units::W,
+                                                dXCoil_withCrankCase.CrankcaseHeaterPower,
+                                                OutputProcessor::TimeStepType::System,
+                                                OutputProcessor::StoreType::Average,
+                                                dXCoil_withCrankCase.Name);
+                            SetupOutputVariable(state,
+                                                "Cooling Coil Crankcase Heater Electricity Energy",
+                                                Constant::Units::J,
+                                                dXCoil_withCrankCase.CrankcaseHeaterConsumption,
+                                                OutputProcessor::TimeStepType::System,
+                                                OutputProcessor::StoreType::Sum,
+                                                dXCoil_withCrankCase.Name,
+                                                Constant::eResource::Electricity,
+                                                OutputProcessor::Group::HVAC,
+                                                OutputProcessor::EndUseCat::Cooling);
+                            dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower = false;
+                        }
+                    }
+                }
+                state.dataVariableSpeedCoils->CrankcaseHeaterReportVarFlag = false;
+            } //(AirLoopInputsFilled)THEN
+        } //(CrankcaseHeaterReportVarFlag)THEN
 
         if (!state.dataGlobal->SysSizingCalc && state.dataVariableSpeedCoils->MySizeFlag(DXCoilNum) &&
             !state.dataVariableSpeedCoils->MyPlantScanFlag(DXCoilNum)) {
@@ -7309,6 +7327,128 @@ namespace VariableSpeedCoils {
             return -1000.0;
         }
         return state.dataVariableSpeedCoils->VarSpeedCoil(CoilIndex).MinOATCompressor;
+    }
+
+    int GetHPCoolingCoilIndex(EnergyPlusData &state,
+                              std::string const &HeatingCoilType, // Type of DX heating coil used in HP
+                              std::string const &HeatingCoilName, // Name of DX heating coil used in HP
+                              int const HeatingCoilIndex          // Index of DX heating coil used in HP
+    )
+    {
+
+        // FUNCTION INFORMATION:
+        //       AUTHOR         J. Robertson
+        //       DATE WRITTEN   March 2026
+
+        // PURPOSE OF THIS FUNCTION:
+        // A modified copy of DXCoils::GetHPCoolingCoilIndex.
+        // This function looks up the given DX heating coil and returns the companion DX cooling coil.
+
+        // Return value
+        int DXCoolingCoilIndex; // Index of HP DX cooling coil returned from this function
+
+        // FUNCTION LOCAL VARIABLE DECLARATIONS:
+        int WhichComp;          // DO loop counter to find correct comp set
+        int WhichCompanionComp; // DO loop counter to find companion coil comp set
+
+        DXCoolingCoilIndex = 0;
+
+        Node::ConnectionObjectType HeatingCoilTypeNum =
+            static_cast<Node::ConnectionObjectType>(getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(HeatingCoilType)));
+
+        Node::ConnectionObjectType CompSetsParentType; // Parent object type which uses DX heating coil pass into this function
+        std::string CompSetsParentName;
+        for (WhichComp = 1; WhichComp <= state.dataBranchNodeConnections->NumCompSets; ++WhichComp) {
+            if (HeatingCoilTypeNum != state.dataBranchNodeConnections->CompSets(WhichComp).ComponentObjectType ||
+                !Util::SameString(HeatingCoilName, state.dataBranchNodeConnections->CompSets(WhichComp).CName)) {
+                continue;
+            }
+            CompSetsParentType = state.dataBranchNodeConnections->CompSets(WhichComp).ParentObjectType;
+            CompSetsParentName = state.dataBranchNodeConnections->CompSets(WhichComp).ParentCName;
+            if ((CompSetsParentType == Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir) ||
+                (CompSetsParentType == Node::ConnectionObjectType::ZoneHVACPackagedTerminalHeatPump) ||
+                (CompSetsParentType == Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed) ||
+                (CompSetsParentType == Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass) ||
+                (CompSetsParentType == Node::ConnectionObjectType::AirLoopHVACUnitarySystem)) {
+                //       Search for DX cooling coils
+                for (WhichCompanionComp = 1; WhichCompanionComp <= state.dataBranchNodeConnections->NumCompSets; ++WhichCompanionComp) {
+                    if (!Util::SameString(state.dataBranchNodeConnections->CompSets(WhichCompanionComp).ParentCName, CompSetsParentName) ||
+                        (state.dataBranchNodeConnections->CompSets(WhichCompanionComp).ComponentObjectType !=
+                         Node::ConnectionObjectType::CoilCoolingDXVariableSpeed)) {
+                        continue;
+                    }
+                    DXCoolingCoilIndex = Util::FindItemInList(state.dataBranchNodeConnections->CompSets(WhichCompanionComp).CName,
+                                                              state.dataVariableSpeedCoils->VarSpeedCoil);
+                    break;
+                }
+            } else {
+                //     ErrorFound, Coil:Heating:DX:VariableSpeed is used in wrong type of parent object (should never get here)
+                ShowSevereError(state,
+                                EnergyPlus::format("Configuration error in {} \"{}\"",
+                                                   Node::ConnectionObjectTypeNames[static_cast<int>(CompSetsParentType)],
+                                                   CompSetsParentName));
+                ShowContinueError(state, "DX heating coil not allowed in this configuration.");
+                ShowFatalError(state, "Preceding condition(s) causes termination.");
+            }
+            break;
+        }
+
+        // Check and warn user is crankcase heater power or max OAT for crankcase heater differs in DX cooling and heating coils
+        if (DXCoolingCoilIndex > 0) {
+            auto &thisDXCoolingCoil = state.dataVariableSpeedCoils->VarSpeedCoil(DXCoolingCoilIndex);
+            auto &thisDXHeatingCoil = state.dataVariableSpeedCoils->VarSpeedCoil(HeatingCoilIndex);
+            if (thisDXCoolingCoil.CrankcaseHeaterCapacity != 0.0) {
+                if (thisDXCoolingCoil.CrankcaseHeaterCapacity != thisDXHeatingCoil.CrankcaseHeaterCapacity ||
+                    thisDXCoolingCoil.MaxOATCrankcaseHeater != thisDXHeatingCoil.MaxOATCrankcaseHeater) {
+                    ShowWarningError(state, "Crankcase heater capacity or max outdoor temp for crankcase heater operation specified in");
+                    ShowContinueError(state, EnergyPlus::format("{} = {}", thisDXCoolingCoil.VarSpeedCoilType, thisDXCoolingCoil.Name));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("is different than that specified in Coil:Heating:DX:SingleSpeed = {}.", HeatingCoilName));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("Both of these DX coils are part of {}={}.",
+                                                         Node::ConnectionObjectTypeNames[static_cast<int>(CompSetsParentType)],
+                                                         CompSetsParentName));
+                    ShowContinueError(state, "The value specified in the DX heating coil will be used and the simulation continues...");
+                }
+            }
+        }
+
+        return DXCoolingCoilIndex;
+    }
+
+    void SetCoilSystemHeatingDXFlag(EnergyPlusData &state,
+                                    std::string const &CoilType, // must match coil types in this module
+                                    std::string const &CoilName  // must match coil names for the coil type
+    )
+    {
+
+        // SUBROUTINE INFORMATION:
+        //       AUTHOR         J. Robertson
+        //       DATE WRITTEN   March 2026
+
+        // PURPOSE OF THIS SUBROUTINE:
+        // A modified copy of DXCoils::SetCoilSystemHeatingDXFlag.
+        // inform DX heating coil that is is part of a CoilSystem:Heating:DX
+        // and therefore it need not find its companion cooling coil
+
+        // METHODOLOGY EMPLOYED:
+        // set value of logical flag FindCompanionUpStreamCoil to true
+
+        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+        int WhichCoil;
+
+        // Obtains and Allocates DXCoils
+        if (state.dataVariableSpeedCoils->GetCoilsInputFlag) {
+            GetVarSpeedCoilInput(state);
+            state.dataVariableSpeedCoils->GetCoilsInputFlag = false;
+        }
+
+        WhichCoil = Util::FindItemInList(CoilName, state.dataVariableSpeedCoils->VarSpeedCoil);
+        if (WhichCoil != 0) {
+            state.dataVariableSpeedCoils->VarSpeedCoil(WhichCoil).FindCompanionUpStreamCoil = false;
+        } else {
+            ShowSevereError(state, EnergyPlus::format("SetCoilSystemHeatingDXFlag: Could not find Coil, Type=\"{}\"Name=\"{}\"", CoilType, CoilName));
+        }
     }
 
     int GetVSCoilNumOfSpeeds(EnergyPlusData &state,
