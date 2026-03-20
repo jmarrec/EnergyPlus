@@ -780,9 +780,7 @@ InputProcessor::MaxFields InputProcessor::findMaxFields(
                 auto const &legacy_idd_extensibles = legacy_idd_extensibles_iter.value();
                 auto const &epJSON_extensions_array = epJSON_extensions_array_itr.value();
 
-                for (auto const &exts : epJSON_extensions_array.items()) {
-                    maxFields.max_extensible_fields += legacy_idd_extensibles.size();
-                }
+                maxFields.max_extensible_fields += epJSON_extensions_array.size() * legacy_idd_extensibles.size();
             }
         }
     }
