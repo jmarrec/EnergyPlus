@@ -107,8 +107,6 @@ namespace WindowAC {
     // curves of the DX module.
 
     using namespace DataSizing;
-    using HVAC::CoilDX_CoolingHXAssisted;
-    using HVAC::CoilDX_CoolingSingleSpeed;
     using HVAC::SmallAirVolFlow;
     using HVAC::SmallLoad;
     using HVAC::SmallMassFlow;
@@ -402,15 +400,15 @@ namespace WindowAC {
                 state.dataWindowAC->WindAC(WindACNum).DXCoilType = Alphas(9);
                 CoilNodeErrFlag = false;
                 if (Util::SameString(Alphas(9), "Coil:Cooling:DX:SingleSpeed")) {
-                    state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num = CoilDX_CoolingSingleSpeed;
+                    state.dataWindowAC->WindAC(WindACNum).coilType = HVAC::CoilType::CoolingDXSingleSpeed;
                     state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum = GetDXCoilOutletNode(
                         state, state.dataWindowAC->WindAC(WindACNum).DXCoilType, state.dataWindowAC->WindAC(WindACNum).DXCoilName, CoilNodeErrFlag);
                 } else if (Util::SameString(Alphas(9), "CoilSystem:Cooling:DX:HeatExchangerAssisted")) {
-                    state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num = CoilDX_CoolingHXAssisted;
+                    state.dataWindowAC->WindAC(WindACNum).coilType = HVAC::CoilType::CoolingDXHXAssisted;
                     state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum = GetDXHXAsstdCoilOutletNode(
                         state, state.dataWindowAC->WindAC(WindACNum).DXCoilType, state.dataWindowAC->WindAC(WindACNum).DXCoilName, CoilNodeErrFlag);
                 } else if (Util::SameString(Alphas(9), "Coil:Cooling:DX:VariableSpeed")) {
-                    state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num = HVAC::Coil_CoolingAirToAirVariableSpeed;
+                    state.dataWindowAC->WindAC(WindACNum).coilType = HVAC::CoilType::CoolingDXVariableSpeed;
                     state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum = VariableSpeedCoils::GetCoilOutletNodeVariableSpeed(
                         state, state.dataWindowAC->WindAC(WindACNum).DXCoilType, state.dataWindowAC->WindAC(WindACNum).DXCoilName, CoilNodeErrFlag);
                     state.dataWindowAC->WindAC(WindACNum).DXCoilNumOfSpeeds =
@@ -1218,7 +1216,7 @@ namespace WindowAC {
             state.dataFans->fans(state.dataWindowAC->WindAC(WindACNum).FanIndex)->simulate(state, FirstHVACIteration, PartLoadFrac);
         }
 
-        if (state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num == CoilDX_CoolingHXAssisted) {
+        if (state.dataWindowAC->WindAC(WindACNum).coilType == HVAC::CoilType::CoolingDXHXAssisted) {
             HVACHXAssistedCoolingCoil::SimHXAssistedCoolingCoil(state,
                                                                 state.dataWindowAC->WindAC(WindACNum).DXCoilName,
                                                                 FirstHVACIteration,
@@ -1227,7 +1225,7 @@ namespace WindowAC {
                                                                 state.dataWindowAC->WindAC(WindACNum).DXCoilIndex,
                                                                 state.dataWindowAC->WindAC(WindACNum).fanOp,
                                                                 HXUnitOn);
-        } else if (state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num == HVAC::Coil_CoolingAirToAirVariableSpeed) {
+        } else if (state.dataWindowAC->WindAC(WindACNum).coilType == HVAC::CoilType::CoolingDXVariableSpeed) {
             Real64 QZnReq(-1.0);           // Zone load (W), input to variable-speed DX coil
             Real64 QLatReq(0.0);           // Zone latent load, input to variable-speed DX coil
             Real64 OnOffAirFlowRatio(1.0); // ratio of compressor on flow to average flow over time step
@@ -1292,7 +1290,7 @@ namespace WindowAC {
         Real64 ActualOutput; // output at current partloadfrac [W]
 
         // DX Cooling HX assisted coils can cycle the heat exchanger, see if coil ON, HX OFF can meet humidity setpoint if one exists
-        if (state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num == CoilDX_CoolingHXAssisted) {
+        if (state.dataWindowAC->WindAC(WindACNum).coilType == HVAC::CoilType::CoolingDXHXAssisted) {
             // Check for a setpoint at the HX outlet node, if it doesn't exist always run the HX
             if (state.dataLoopNodes->Node(state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum).HumRatMax == Node::SensedNodeFlagValue) {
                 HXUnitOn = true;
@@ -1328,14 +1326,14 @@ namespace WindowAC {
         }
 
         // If the QZnReq <= FullOutput the unit needs to run full out
-        if (QZnReq <= FullOutput && state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num != CoilDX_CoolingHXAssisted) {
+        if (QZnReq <= FullOutput && state.dataWindowAC->WindAC(WindACNum).coilType != HVAC::CoilType::CoolingDXHXAssisted) {
             PartLoadFrac = 1.0;
             return;
         }
 
         // If the QZnReq <= FullOutput and a HXAssisted coil is used, check the node setpoint for a maximum humidity ratio set point
         // HumRatMax will be equal to -999 if no setpoint exists or some set point managers may still use 0 as a no moisture load indicator
-        if (QZnReq <= FullOutput && state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num == CoilDX_CoolingHXAssisted &&
+        if (QZnReq <= FullOutput && state.dataWindowAC->WindAC(WindACNum).coilType == HVAC::CoilType::CoolingDXHXAssisted &&
             state.dataLoopNodes->Node(state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum).HumRatMax <= 0.0) {
             PartLoadFrac = 1.0;
             return;
@@ -1379,7 +1377,7 @@ namespace WindowAC {
         }
 
         // HX is off up until this point where the outlet air humidity ratio is tested to see if HX needs to be turned on
-        if (state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num == CoilDX_CoolingHXAssisted &&
+        if (state.dataWindowAC->WindAC(WindACNum).coilType == HVAC::CoilType::CoolingDXHXAssisted &&
             state.dataLoopNodes->Node(state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum).HumRatMax <
                 state.dataLoopNodes->Node(state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum).HumRat &&
             state.dataLoopNodes->Node(state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum).HumRatMax > 0.0) {

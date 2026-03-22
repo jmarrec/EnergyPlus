@@ -91,7 +91,7 @@ namespace VariableSpeedCoils {
         Real64 LatentCapacityTimeConstant; // Latent capacity time constant [s]
         int PLFFPLR;                       // index of part load curve as a function of part load ratio
         std::string CoolHeatType;          // Type of WatertoAirHP ie. Heating or Cooling
-        int VSCoilType;                    // type of component in plant
+        HVAC::CoilType coilType = HVAC::CoilType::Invalid;// type of component in plant
         bool SimFlag;                      // Heat Pump Simulation Flag
         Real64 DesignWaterMassFlowRate;    // design water mass flow rate [kg/s]
         Real64 DesignWaterVolFlowRate;     // design water volumetric flow rate [m3/s]
@@ -296,7 +296,7 @@ namespace VariableSpeedCoils {
             : NumOfSpeeds(2), NormSpedLevel(HVAC::MaxSpeedLevels), RatedWaterVolFlowRate(DataSizing::AutoSize),
               RatedWaterMassFlowRate(DataSizing::AutoSize), RatedAirVolFlowRate(DataSizing::AutoSize), RatedCapHeat(DataSizing::AutoSize),
               RatedCapCoolTotal(DataSizing::AutoSize), MaxONOFFCyclesperHour(0.0), Twet_Rated(0.0), Gamma_Rated(0.0), HOTGASREHEATFLG(0),
-              LatentCapacityTimeConstant(0.0), PLFFPLR(0), VSCoilType(0), SimFlag(false), DesignWaterMassFlowRate(0.0), DesignWaterVolFlowRate(0.0),
+              LatentCapacityTimeConstant(0.0), PLFFPLR(0), SimFlag(false), DesignWaterMassFlowRate(0.0), DesignWaterVolFlowRate(0.0),
               DesignAirMassFlowRate(0.0), DesignAirVolFlowRate(0.0), AirVolFlowRate(0.0), AirMassFlowRate(0.0), InletAirPressure(0.0),
               InletAirDBTemp(0.0), InletAirHumRat(0.0), InletAirEnthalpy(0.0), OutletAirDBTemp(0.0), OutletAirHumRat(0.0), OutletAirEnthalpy(0.0),
               WaterVolFlowRate(0.0), WaterMassFlowRate(0.0), InletWaterTemp(0.0), InletWaterEnthalpy(0.0), OutletWaterTemp(0.0),
@@ -413,13 +413,13 @@ namespace VariableSpeedCoils {
     );
 
     Real64 GetCoilCapacityVariableSpeed(EnergyPlusData &state,
-                                        std::string const &CoilType, // must match coil types in this module
+                                        std::string_view const CoilType, // must match coil types in this module
                                         std::string const &CoilName, // must match coil names for the coil type
                                         bool &ErrorsFound            // set to true if problem
     );
 
     int GetCoilIndexVariableSpeed(EnergyPlusData &state,
-                                  std::string const &CoilType, // must match coil types in this module
+                                  std::string_view const CoilType, // must match coil types in this module
                                   std::string const &CoilName, // must match coil names for the coil type
                                   bool &ErrorsFound            // set to true if problem
     );
@@ -431,13 +431,13 @@ namespace VariableSpeedCoils {
     );
 
     int GetCoilInletNodeVariableSpeed(EnergyPlusData &state,
-                                      std::string const &CoilType, // must match coil types in this module
+                                      std::string_view const CoilType, // must match coil types in this module
                                       std::string const &CoilName, // must match coil names for the coil type
                                       bool &ErrorsFound            // set to true if problem
     );
 
     int GetCoilOutletNodeVariableSpeed(EnergyPlusData &state,
-                                       std::string const &CoilType, // must match coil types in this module
+                                       std::string_view const CoilType, // must match coil types in this module
                                        std::string const &CoilName, // must match coil names for the coil type
                                        bool &ErrorsFound            // set to true if problem
     );
@@ -464,7 +464,7 @@ namespace VariableSpeedCoils {
     );
 
     void SetCoilSystemHeatingDXFlag(EnergyPlusData &state,
-                                    std::string const &CoilType, // must match coil types in this module
+                                    std::string_view const CoilType, // must match coil types in this module
                                     std::string const &CoilName  // must match coil names for the coil type
     );
 

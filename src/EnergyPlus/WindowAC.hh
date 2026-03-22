@@ -92,7 +92,7 @@ namespace WindowAC {
         std::string DXCoilName; // name of cooling coil
         std::string DXCoilType; // type of cooling coil,Coil:DX:CoolingBypassFactorEmpirical or
         // 'CoilSystem:Cooling:DX:HeatExchangerAssisted'
-        int DXCoilType_Num;                       // Numeric Equivalent for DXCoil Type
+        HVAC::CoilType coilType = HVAC::CoilType::Invalid;                       // Numeric Equivalent for DXCoil Type
         int DXCoilIndex;                          // Index to DX cooling coil
         int DXCoilNumOfSpeeds;                    // number of speed levels for variable speed DX coil
         int CoilOutletNodeNum;                    // Outlet node number of DX cooling coil
@@ -126,7 +126,7 @@ namespace WindowAC {
         // Default Constructor
         WindACData()
             : UnitType(0), MaxAirVolFlow(0.0), MaxAirMassFlow(0.0), OutAirVolFlow(0.0), OutAirMassFlow(0.0), AirInNode(0), AirOutNode(0),
-              OutsideAirNode(0), AirReliefNode(0), MixedAirNode(0), OAMixIndex(0), fanType(HVAC::FanType::Invalid), FanIndex(0), DXCoilType_Num(0),
+              OutsideAirNode(0), AirReliefNode(0), MixedAirNode(0), OAMixIndex(0), fanType(HVAC::FanType::Invalid), FanIndex(0), 
               DXCoilIndex(0), DXCoilNumOfSpeeds(0), CoilOutletNodeNum(0), fanPlace(HVAC::FanPlace::Invalid), MaxIterIndex1(0), MaxIterIndex2(0),
               ConvergenceTol(0.0), PartLoadFrac(0.0), EMSOverridePartLoadFrac(false), EMSValueForPartLoadFrac(0.0), TotCoolEnergyRate(0.0),
               TotCoolEnergy(0.0), SensCoolEnergyRate(0.0), SensCoolEnergy(0.0), LatCoolEnergyRate(0.0), LatCoolEnergy(0.0), ElecPower(0.0),

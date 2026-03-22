@@ -7694,8 +7694,8 @@ bool CheckWaterCoilSystemOnAirLoopOrOASystem(EnergyPlusData &state, SimAirServin
     if (state.dataHVACAssistedCC->TotalNumHXAssistedCoils > 0) {
         // check if the water coil is placed on 'CoilSystem:Cooling:Water:HeatExchangerAssisted' object
         for (int HXASSCoilNum = 1; HXASSCoilNum <= state.dataHVACAssistedCC->TotalNumHXAssistedCoils; ++HXASSCoilNum) {
-            std::string CompType = state.dataHVACAssistedCC->HXAssistedCoil(HXASSCoilNum).CoolingCoilType;
-            if ((Util::SameString(CompType, "Coil:Cooling:Water") || Util::SameString(CompType, "Coil:Cooling:Water:DetailedGeometry")) &&
+            HVAC::CoilType CompType = state.dataHVACAssistedCC->HXAssistedCoil(HXASSCoilNum).coolCoilType;
+            if ((CompType == HVAC::CoilType::CoolingWater || CompType == HVAC::CoilType::CoolingWaterDetailed) &&
                 Util::SameString(CompName, state.dataHVACAssistedCC->HXAssistedCoil(HXASSCoilNum).CoolingCoilName)) {
                 CoilSystemName = state.dataHVACAssistedCC->HXAssistedCoil(HXASSCoilNum).Name;
                 CoilSystemTypeNum = SimAirServingZones::CompType::WaterCoil_CoolingHXAsst;

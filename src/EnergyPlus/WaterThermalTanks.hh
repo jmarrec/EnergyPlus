@@ -331,10 +331,10 @@ namespace WaterThermalTanks {
         int WHUseInletNode;                                         // Water heater tank use side inlet node
         int WHUseOutletNode;                                        // Water heater tank use side outlet node
         int WHUseSidePlantLoopNum;                                  // if not zero, then this water heater is on plant loop #
-        std::string DXCoilType;                                     // Type of DX coil (Coil:DX:HeatPumpWaterHeater)
         std::string DXCoilName;                                     // Name of DX coil
         int DXCoilNum;                                              // Index of DX coil
-        int DXCoilTypeNum;                                          // Type Number of DX coil
+        std::string DXCoilType;
+        HVAC::CoilType coilType = HVAC::CoilType::Invalid;          // Type Number of DX coil
         int DXCoilAirInletNode;                                     // Inlet air node number of DX coil
         int DXCoilPLFFPLR;                                          // Index to HPWH's DX Coil PLF as a function of PLR curve
         HVAC::FanType fanType;                                      // Integer type of fan (3 = Fan:OnOff)
@@ -434,7 +434,7 @@ namespace WaterThermalTanks {
               OperatingAirMassFlowRate(0.0), OperatingWaterFlowRate(0.0), COP(0.0), SHR(0.0), RatedInletDBTemp(0.0), RatedInletWBTemp(0.0),
               RatedInletWaterTemp(0.0), FoundTank(false), HeatPumpAirInletNode(0), HeatPumpAirOutletNode(0), OutsideAirNode(0), ExhaustAirNode(0),
               CondWaterInletNode(0), CondWaterOutletNode(0), WHUseInletNode(0), WHUseOutletNode(0), WHUseSidePlantLoopNum(0), DXCoilNum(0),
-              DXCoilTypeNum(0), DXCoilAirInletNode(0), DXCoilPLFFPLR(0), fanType(HVAC::FanType::Invalid), FanNum(0),
+              DXCoilAirInletNode(0), DXCoilPLFFPLR(0), fanType(HVAC::FanType::Invalid), FanNum(0),
               fanPlace(HVAC::FanPlace::Invalid), FanOutletNode(0), WaterHeaterTankNum(0), Power(0.0), Energy(0.0), HeatingPLR(0.0), SetPointTemp(0.0),
               MinAirTempForHPOperation(5.0), MaxAirTempForHPOperation(48.8888888889), InletAirMixerNode(0), OutletAirSplitterNode(0),
               SourceMassFlowRate(0.0), InletAirConfiguration(WTTAmbientTemp::OutsideAir), AmbientTempZone(0),

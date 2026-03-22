@@ -510,9 +510,9 @@ TEST_F(AirloopUnitarySysTest, MultipleWaterCoolingCoilSizing)
     mySys->m_HeatingSAFMethod = DataSizing::SupplyAirFlowRate;
     mySys->m_DesignCoolingCapacity = DataSizing::AutoSize;
     mySys->m_DesignHeatingCapacity = DataSizing::AutoSize;
-    mySys->m_CoolingCoilType_Num = HVAC::Coil_CoolingWater;
+    mySys->m_coolCoilType = HVAC::CoilType::CoolingWater;
     mySys->m_CoolingCoilName = "Test Water Cooling Coil";
-    mySys->m_HeatingCoilType_Num = HVAC::Coil_HeatingWater;
+    mySys->m_heatCoilType = HVAC::CoilType::HeatingWater;
     mySys->m_HeatingCoilName = "Test Water Heating Coil";
     state->dataWaterCoils->GetWaterCoilsInputFlag = false;             // don't overwrite these coil data
     state->dataWaterCoils->MySizeFlag = true;                          // need to size again for UnitarySystem
@@ -8327,7 +8327,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_CalcUnitaryHeatingSystem)
     HotWaterMassFlowRate = 1.0;
     thisSys.MaxHeatCoilFluidFlow = HotWaterMassFlowRate;
     thisSys.m_DiscreteSpeedCoolingCoil = true;
-    thisSys.m_HeatingCoilType_Num = HVAC::Coil_HeatingWater;
+    thisSys.m_heatCoilType = HVAC::CoilType::HeatingWater;
     thisSys.m_HeatingSpeedRatio = 1.0;
     thisSys.m_HeatingCycRatio = 1.0;
     thisSys.m_HeatingSpeedNum = 3;
@@ -8468,7 +8468,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_CalcUnitaryCoolingSystem)
 
     thisSys.MaxCoolCoilFluidFlow = ColdWaterMassFlowRate;
     thisSys.m_DiscreteSpeedCoolingCoil = true;
-    thisSys.m_CoolingCoilType_Num = HVAC::Coil_CoolingWater;
+    thisSys.m_coolCoilType = HVAC::CoilType::CoolingWater;
     thisSys.m_CoolingSpeedRatio = 1.0;
     thisSys.m_CoolingCycRatio = 1.0;
     thisSys.m_CoolingSpeedNum = 3;
@@ -17120,7 +17120,7 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_getUnitarySystemInputDataTest)
     EXPECT_EQ("COIL:HEATING:WATER", thisSys->m_HeatingCoilTypeName);     // checks heating coil object type
     EXPECT_EQ("WATER HEATING COIL", thisSys->m_HeatingCoilName);         // checks heating coil object type
     EXPECT_EQ(1, thisSys->m_HeatingSizingRatio);                         // checks dx heating coil sizing ratio
-    EXPECT_EQ(HVAC::Coil_CoolingWater, thisSys->m_CoolingCoilType_Num);  // checks cooling coil object type
+    EXPECT_ENUM_EQ(HVAC::CoilType::CoolingWater, thisSys->m_coolCoilType);  // checks cooling coil object type
     EXPECT_EQ("WATER COOLING COIL", thisSys->m_CoolingCoilName);         // checks cooling coil name
     EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);                 // checks DX Coil is for DOAS use
     EXPECT_EQ(7.0, thisSys->DesignMinOutletTemp);                        // checks minimum supply air temperature
@@ -20734,8 +20734,8 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_reportUnitarySystemAncillaryPowerTe
     Real64 onElectricEnergy = thisSys.m_AncillaryOnPower * state->dataHVACGlobal->TimeStepSysSec;
     Real64 offElectricEnergy = thisSys.m_AncillaryOffPower * state->dataHVACGlobal->TimeStepSysSec;
 
-    thisSys.m_CoolingCoilType_Num = HVAC::CoilDX_CoolingTwoSpeed;
-    thisSys.m_HeatingCoilType_Num = HVAC::CoilDX_HeatingEmpirical;
+    thisSys.m_coolCoilType = HVAC::CoilType::CoolingDXTwoSpeed;
+    thisSys.m_heatCoilType = HVAC::CoilType::HeatingDXSingleSpeed;
     thisSys.m_LastMode = UnitarySystems::CoolingMode;
     state->dataUnitarySystems->CoolingLoad = true;
     thisSys.reportUnitarySystem(*state, 0);
@@ -20789,8 +20789,8 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_reportUnitarySystemAncillaryPowerTe
     EXPECT_NEAR(thisSys.m_ElecPowerConsumption, ancillaryAvgEnergy, 0.000001);
 
     // test with discrete speed water coils
-    thisSys.m_CoolingCoilType_Num = HVAC::Coil_CoolingWater;
-    thisSys.m_HeatingCoilType_Num = HVAC::Coil_HeatingWater;
+    thisSys.m_coolCoilType = HVAC::CoilType::CoolingWater;
+    thisSys.m_heatCoilType = HVAC::CoilType::HeatingWater;
     // coil cycles on and off just like DX coils
     thisSys.m_DiscreteSpeedCoolingCoil = true;
     // switch on-off power values, should have opposite results but uses same code
@@ -21964,7 +21964,7 @@ TEST_F(EnergyPlusFixture, WaterCoil_getCoilWaterSystemInputDataTest)
     EXPECT_EQ(thisSys.m_minAirToWaterTempOffset, 2.0);
     EXPECT_ENUM_EQ(thisSys.m_DehumidControlType_Num, UnitarySys::DehumCtrlType::None);
     EXPECT_ENUM_EQ(thisSys.m_ControlType, UnitarySys::UnitarySysCtrlType::Setpoint);
-    EXPECT_EQ(thisSys.m_CoolingCoilType_Num, HVAC::Coil_CoolingWater);
+    EXPECT_EQ(thisSys.m_coolCoilType, HVAC::CoilType::CoolingWater);
     EXPECT_EQ(thisSys.m_CoolingCoilName, "WATER COOLING COIL");
     EXPECT_TRUE(thisSys.m_CoolCoilExists);
     EXPECT_TRUE(thisSys.m_TemperatureOffsetControlActive);
@@ -22051,7 +22051,7 @@ TEST_F(EnergyPlusFixture, DetailedWaterCoil_getCoilWaterSystemInputDataTest)
     EXPECT_EQ(thisSys.m_minAirToWaterTempOffset, 2.0);
     EXPECT_ENUM_EQ(thisSys.m_DehumidControlType_Num, UnitarySys::DehumCtrlType::CoolReheat);
     EXPECT_ENUM_EQ(thisSys.m_ControlType, UnitarySys::UnitarySysCtrlType::Setpoint);
-    EXPECT_EQ(thisSys.m_CoolingCoilType_Num, HVAC::Coil_CoolingWaterDetailed);
+    EXPECT_ENUM_EQ(thisSys.m_coolCoilType, HVAC::CoilType::CoolingWaterDetailed);
     EXPECT_EQ(thisSys.m_CoolingCoilName, "WATER COOLING COIL");
     EXPECT_TRUE(thisSys.m_CoolCoilExists);
     EXPECT_TRUE(thisSys.m_TemperatureOffsetControlActive);
@@ -22154,7 +22154,7 @@ TEST_F(EnergyPlusFixture, HXAssistedWaterCoil_getCoilWaterSystemInputDataTest)
     EXPECT_EQ(thisSys.m_minAirToWaterTempOffset, 2.0);
     EXPECT_ENUM_EQ(thisSys.m_DehumidControlType_Num, UnitarySys::DehumCtrlType::CoolReheat);
     EXPECT_ENUM_EQ(thisSys.m_ControlType, UnitarySys::UnitarySysCtrlType::Setpoint);
-    EXPECT_EQ(thisSys.m_CoolingCoilType_Num, HVAC::Coil_CoolingWater);
+    EXPECT_ENUM_EQ(thisSys.m_coolCoilType, HVAC::CoilType::CoolingWater);
     EXPECT_EQ(thisSys.m_CoolingCoilName, "WATER COOLING COIL");
     EXPECT_TRUE(thisSys.m_CoolCoilExists);
     EXPECT_TRUE(thisSys.m_TemperatureOffsetControlActive);
@@ -22256,7 +22256,7 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingWater_ControlStatusTest)
 
     thisSys.MaxCoolCoilFluidFlow = ColdWaterMassFlowRate;
     thisSys.MaxCoolAirMassFlow = AirMassFlowRate;
-    thisSys.m_CoolingCoilType_Num = HVAC::Coil_CoolingWater;
+    thisSys.m_coolCoilType = HVAC::CoilType::CoolingWater;
     thisSys.m_CoolingSpeedRatio = 1.0;
     thisSys.m_CoolingCycRatio = 1.0;
     thisSys.m_CoolingSpeedNum = 1;
@@ -22346,7 +22346,7 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingWater_ControlStatusTest)
     EXPECT_EQ(thisSys.m_minAirToWaterTempOffset, 2.0);
     EXPECT_ENUM_EQ(thisSys.m_DehumidControlType_Num, UnitarySys::DehumCtrlType::None);
     EXPECT_ENUM_EQ(thisSys.m_ControlType, UnitarySys::UnitarySysCtrlType::Setpoint);
-    EXPECT_EQ(thisSys.m_CoolingCoilType_Num, HVAC::Coil_CoolingWater);
+    EXPECT_ENUM_EQ(thisSys.m_coolCoilType, HVAC::CoilType::CoolingWater);
     EXPECT_EQ(thisSys.m_CoolingCoilName, "WATER COOLING COIL");
     EXPECT_TRUE(thisSys.m_CoolCoilExists);
     EXPECT_TRUE(thisSys.m_TemperatureOffsetControlActive);
@@ -22506,7 +22506,7 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingWater_CalcTest)
 
     thisSys.MaxCoolCoilFluidFlow = ColdWaterMassFlowRate;
     thisSys.MaxCoolAirMassFlow = AirMassFlowRate;
-    thisSys.m_CoolingCoilType_Num = HVAC::Coil_CoolingWater;
+    thisSys.m_coolCoilType = HVAC::CoilType::CoolingWater;
     thisSys.m_CoolingSpeedRatio = 1.0;
     thisSys.m_CoolingCycRatio = 1.0;
     thisSys.m_CoolingSpeedNum = 1;
@@ -22596,7 +22596,7 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingWater_CalcTest)
     EXPECT_EQ(thisSys.m_minAirToWaterTempOffset, 2.0);
     EXPECT_ENUM_EQ(thisSys.m_DehumidControlType_Num, UnitarySys::DehumCtrlType::None);
     EXPECT_ENUM_EQ(thisSys.m_ControlType, UnitarySys::UnitarySysCtrlType::Setpoint);
-    EXPECT_EQ(thisSys.m_CoolingCoilType_Num, HVAC::Coil_CoolingWater);
+    EXPECT_ENUM_EQ(thisSys.m_coolCoilType, HVAC::CoilType::CoolingWater);
     EXPECT_EQ(thisSys.m_CoolingCoilName, "WATER COOLING COIL");
     EXPECT_TRUE(thisSys.m_CoolCoilExists);
     EXPECT_TRUE(thisSys.m_TemperatureOffsetControlActive);
@@ -22772,7 +22772,7 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingWater_HeatRecoveryLoop)
 
     thisSys.MaxCoolCoilFluidFlow = ColdWaterMassFlowRate;
     thisSys.MaxCoolAirMassFlow = AirMassFlowRate;
-    thisSys.m_CoolingCoilType_Num = HVAC::Coil_CoolingWater;
+    thisSys.m_coolCoilType = HVAC::CoilType::CoolingWater;
     thisSys.m_CoolingSpeedRatio = 1.0;
     thisSys.m_CoolingCycRatio = 1.0;
     thisSys.m_CoolingSpeedNum = 1;
@@ -22877,7 +22877,7 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingWater_HeatRecoveryLoop)
     EXPECT_EQ(thisSys.m_minAirToWaterTempOffset, 2.0);
     EXPECT_ENUM_EQ(thisSys.m_DehumidControlType_Num, UnitarySys::DehumCtrlType::None);
     EXPECT_ENUM_EQ(thisSys.m_ControlType, UnitarySys::UnitarySysCtrlType::Setpoint);
-    EXPECT_EQ(thisSys.m_CoolingCoilType_Num, HVAC::Coil_CoolingWater);
+    EXPECT_ENUM_EQ(thisSys.m_coolCoilType, HVAC::CoilType::CoolingWater);
     EXPECT_EQ(thisSys.m_CoolingCoilName, "WATER COOLING COIL");
     EXPECT_TRUE(thisSys.m_CoolCoilExists);
     EXPECT_TRUE(thisSys.m_TemperatureOffsetControlActive);
@@ -23000,7 +23000,7 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
     int CoilNum1 = 1;
     state->dataVariableSpeedCoils->GetCoilsInputFlag = false;
     state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).Name = "WSHPVSCooling";
-    state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).VSCoilType = HVAC::Coil_CoolingWaterToAirHPVSEquationFit;
+    state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).coilType = HVAC::CoilType::CoolingWAHPVariableSpeedEquationFit;
     state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).NumOfSpeeds = 10;
     state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).NormSpedLevel = 10;
     state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).VarSpeedCoilType = "Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit";
@@ -23066,7 +23066,7 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
     thisSys.Name = compName;
     thisSys.m_CoolCoilExists = true;
     thisSys.m_CoolingCoilName = state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).Name;
-    thisSys.m_CoolingCoilType_Num = HVAC::Coil_CoolingWaterToAirHPVSEquationFit;
+    thisSys.m_coolCoilType = HVAC::CoilType::CoolingWAHPVariableSpeedEquationFit;
     thisSys.m_CoolingCoilIndex = CoilNum1;
     thisSys.m_CoolingSAFMethod = DataSizing::SupplyAirFlowRate;
     thisSys.m_MaxCoolAirVolFlow = DataSizing::AutoSize;

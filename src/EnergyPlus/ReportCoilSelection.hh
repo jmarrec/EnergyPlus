@@ -232,7 +232,7 @@ public: // methods
 
     void setCoilFinalSizes(EnergyPlusData &state,
                            std::string const &coilName,    // user-defined name of the coil
-                           std::string const &coilObjName, //  coil object name, e.g., Coil:Cooling:Water
+                           std::string_view const coilObjName, //  coil object name, e.g., Coil:Cooling:Water
                            Real64 const totGrossCap,       // total capacity [W]
                            Real64 const sensGrossCap,      // sensible capacity [W]
                            Real64 const airFlowRate,       // design or reference or rated air flow rate [m3/s]
@@ -241,7 +241,7 @@ public: // methods
 
     void setRatedCoilConditions(EnergyPlusData &state,
                                 std::string const &coilName,     // ! user-defined name of the coil
-                                std::string const &coilObjName,  //  coil object name, e.g., Coil:Cooling:Water
+                                std::string_view const coilObjName,  //  coil object name, e.g., Coil:Cooling:Water
                                 Real64 const RatedCoilTotCap,    // ! rated coil total capacity [W]
                                 Real64 const RatedCoilSensCap,   // rated coil sensible capacity [W]
                                 Real64 const RatedAirMassFlow,   // rated coil design air mass flow rate [m3/s]
@@ -401,7 +401,7 @@ public: // methods
 
     void setCoilSupplyFanInfo(EnergyPlusData &state,
                               std::string const &coilName, // user-defined name of the coil
-                              std::string const &coilType, // idf input object class name of coil
+                              std::string_view const coilType, // idf input object class name of coil
                               std::string const &fanName,
                               HVAC::FanType fanType,
                               int fanIndex);
@@ -438,7 +438,7 @@ private: // methods
 
     int getIndexForOrCreateDataObjFromCoilName(EnergyPlusData &state,
                                                std::string const &coilName, // user-defined name of the coil
-                                               std::string const &coilType  // idf input object class name of coil
+                                               std::string_view const coilType  // idf input object class name of coil
     );
 
     void associateZoneCoilWithParent(EnergyPlusData &state, std::unique_ptr<CoilSelectionData> &c);

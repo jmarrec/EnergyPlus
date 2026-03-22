@@ -108,8 +108,7 @@ namespace DXCoils {
         //          Some variables in this type are arrays (dimension=MaxModes) to support coil type
         //          COIL:DX:MultiMode:CoolingEmpirical.  Other coil types only use the first element.
         std::string Name;                      // Name of the DX Coil
-        std::string DXCoilType;                // type of coil
-        int DXCoilType_Num;                    // Integer equivalent to DXCoilType
+        HVAC::CoilType coilType = HVAC::CoilType::Invalid; // Integer equivalent to DXCoilType
         Sched::Schedule *availSched = nullptr; // availability schedule
         //          RatedCoolCap, RatedSHR and RatedCOP do not include the thermal or electrical
         //          effects due to the supply air fan
@@ -456,7 +455,7 @@ namespace DXCoils {
 
         // Default Constructor
         DXCoilData()
-            : DXCoilType_Num(0), RatedTotCap(MaxModes, 0.0), HeatSizeRatio(1.0), RatedTotCapEMSOverrideOn(MaxModes, false),
+            : RatedTotCap(MaxModes, 0.0), HeatSizeRatio(1.0), RatedTotCapEMSOverrideOn(MaxModes, false),
               RatedTotCapEMSOverrideValue(MaxModes, 0.0), FrostHeatingCapacityMultiplierEMSOverrideOn(false),
               FrostHeatingCapacityMultiplierEMSOverrideValue(0.0), FrostHeatingInputPowerMultiplierEMSOverrideOn(false),
               FrostHeatingInputPowerMultiplierEMSOverrideValue(0.0), RatedSHR(MaxModes, 0.0), RatedSHREMSOverrideOn(MaxModes, false),
@@ -629,7 +628,7 @@ namespace DXCoils {
     );
 
     Real64 CalcCBF(EnergyPlusData &state,
-                   std::string const &UnitType,
+                   std::string_view const coilTypeName, 
                    std::string const &UnitName,
                    Real64 const InletAirTemp,   // inlet air temperature [C]
                    Real64 const InletAirHumRat, // inlet air humidity ratio [kg water / kg dry air]
@@ -640,7 +639,7 @@ namespace DXCoils {
     );
 
     Real64 ValidateADP(EnergyPlusData &state,
-                       std::string const &UnitType,      // component name
+                       std::string_view const UnitType,      // component name
                        std::string const &UnitName,      // component type
                        Real64 const RatedInletAirTemp,   // coil inlet air temperature [C]
                        Real64 const RatedInletAirHumRat, // coil inlet air humidity ratio [kg/kg]
@@ -719,19 +718,19 @@ namespace DXCoils {
         EnergyPlusData &state, int &DXCoilIndex, bool &ErrorsFound, std::string_view const ThisObjectType = {}, bool const SuppressWarning = false);
 
     Real64 GetCoilCapacity(EnergyPlusData &state,
-                           std::string const &CoilType, // must match coil types in this module
+                           std::string_view const CoilType, // must match coil types in this module
                            std::string const &CoilName, // must match coil names for the coil type
                            bool &ErrorsFound            // set to true if problem
     );
 
     Real64 GetCoilCapacityByIndexType(EnergyPlusData &state,
                                       int const CoilIndex,    // must match coil index for the coil type
-                                      int const CoilType_Num, // must match coil types in this module
+                                      HVAC::CoilType const coilType, // must match coil types in this module
                                       bool &ErrorsFound       // set to true if problem
     );
 
-    int GetCoilTypeNum(EnergyPlusData &state,
-                       std::string const &CoilType,                    // must match coil types in this module
+    HVAC::CoilType GetCoilTypeNum(EnergyPlusData &state,
+                       std::string_view const CoilType,                    // must match coil types in this module
                        std::string const &CoilName,                    // must match coil names for the coil type
                        bool &ErrorsFound,                              // set to true if problem
                        ObjexxFCL::Optional_bool_const PrintWarning = _ // prints warning when true
@@ -743,13 +742,13 @@ namespace DXCoils {
     );
 
     int GetCoilInletNode(EnergyPlusData &state,
-                         std::string const &CoilType, // must match coil types in this module
+                         std::string_view const coilType, // must match coil types in this module
                          std::string const &CoilName, // must match coil names for the coil type
                          bool &ErrorsFound            // set to true if problem
     );
 
     int GetCoilOutletNode(EnergyPlusData &state,
-                          std::string const &CoilType, // must match coil types in this module
+                          std::string_view const coilType, // must match coil types in this module
                           std::string const &CoilName, // must match coil names for the coil type
                           bool &ErrorsFound            // set to true if problem
     );
@@ -777,7 +776,7 @@ namespace DXCoils {
     );
 
     int GetHPCoolingCoilIndex(EnergyPlusData &state,
-                              std::string const &HeatingCoilType, // Type of DX heating coil used in HP
+                              std::string_view const HeatingCoilType, // Type of DX heating coil used in HP
                               std::string const &HeatingCoilName, // Name of DX heating coil used in HP
                               int const HeatingCoilIndex          // Index of DX heating coil used in HP
     );
@@ -834,7 +833,7 @@ namespace DXCoils {
         ObjexxFCL::Optional<HVAC::FanType> supplyFanType = _);
 
     void SetCoilSystemHeatingDXFlag(EnergyPlusData &state,
-                                    std::string const &CoilType, // must match coil types in this module
+                                    std::string_view const coilType, // must match coil types in this module
                                     std::string const &CoilName  // must match coil names for the coil type
     );
 

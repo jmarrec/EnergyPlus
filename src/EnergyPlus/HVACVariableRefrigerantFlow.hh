@@ -698,9 +698,9 @@ namespace HVACVariableRefrigerantFlow {
         int CoolCoilIndex = 0;                             // index to terminal unit cooling coil
         int HeatCoilIndex = 0;                             // index to terminal unit heating coil
         int SuppHeatCoilIndex = 0;                         // index to terminal unit supplemental heating coil
-        int DXCoolCoilType_Num = 0;                        // type of VRF cooling coil
-        int DXHeatCoilType_Num = 0;                        // type of VRF heating coil
-        int SuppHeatCoilType_Num = 0;                      // type of VRF supplemental heating coil
+        HVAC::CoilType coolCoilType = HVAC::CoilType::Invalid;// type of VRF cooling coil
+        HVAC::CoilType heatCoilType = HVAC::CoilType::Invalid;// type of VRF heating coil
+        HVAC::CoilType suppHeatCoilType = HVAC::CoilType::Invalid;// type of VRF supplemental heating coil
         Real64 ParasiticElec = 0.0;                        // parasitic electric for VRF terminal unit
         Real64 ParasiticOffElec = 0.0;                     // parasitic electric for VRF terminal unit when off
         Real64 HeatingSpeedRatio = 1.0;                    // Fan speed ratio in heating mode
