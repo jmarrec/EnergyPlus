@@ -1065,7 +1065,7 @@ namespace Furnaces {
                     ShowContinueError(state, EnergyPlus::format("...occurs in {} = {}", CurrentModuleObject, Alphas(1)));
                     ErrorsFound = true;
                 } else {
-                    ValidateComponent(state, HVAC::coilTypeNames[(int)thisFurnace.heatCoilType], Alphas(10), HeatingCoilName, IsNotOK, CurrentModuleObject);
+                    ValidateComponent(state, Alphas(10), HeatingCoilName, IsNotOK, CurrentModuleObject);
                     if (IsNotOK) {
                         ShowContinueError(state, EnergyPlus::format("...occurs in {} = {}", CurrentModuleObject, Alphas(1)));
                         ErrorsFound = true;
