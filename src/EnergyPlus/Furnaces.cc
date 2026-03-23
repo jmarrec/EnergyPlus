@@ -3984,7 +3984,7 @@ namespace Furnaces {
             }
 
             // Get supplemental heating coil information
-
+            SuppHeatCoilType = Alphas(12);
             SuppHeatCoilName = Alphas(13);
             thisFurnace.SuppHeatCoilName = SuppHeatCoilName;
             errFlag = false;
@@ -3996,7 +3996,7 @@ namespace Furnaces {
                     ErrorsFound = true;
                 } else {
                     IsNotOK = false;
-                    ValidateComponent(state, SuppHeatCoilType, SuppHeatCoilName, IsNotOK, CurrentModuleObject);
+                    ValidateComponent(state, Alphas(12), SuppHeatCoilName, IsNotOK, CurrentModuleObject);
                     if (IsNotOK) {
                         ShowContinueError(state, EnergyPlus::format("In {} \"{}\"", CurrentModuleObject, Alphas(1)));
                         ErrorsFound = true;
@@ -4011,7 +4011,7 @@ namespace Furnaces {
 
                         // Get the Supplemental Heating Coil Inlet Node Number
                         errFlag = false;
-                        SupHeatCoilInletNode = HeatingCoils::GetCoilInletNode(state, SuppHeatCoilType, SuppHeatCoilName, errFlag);
+                        SupHeatCoilInletNode = HeatingCoils::GetCoilInletNode(state, Alphas(12), SuppHeatCoilName, errFlag);
                         if (errFlag) {
                             ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", CurrentModuleObject, Alphas(1)));
                             ErrorsFound = true;
@@ -4019,7 +4019,7 @@ namespace Furnaces {
 
                         // Get the Supplemental Heating Coil Outlet Node Number
                         errFlag = false;
-                        SupHeatCoilOutletNode = HeatingCoils::GetCoilOutletNode(state, SuppHeatCoilType, SuppHeatCoilName, errFlag);
+                        SupHeatCoilOutletNode = HeatingCoils::GetCoilOutletNode(state, Alphas(12), SuppHeatCoilName, errFlag);
                         if (errFlag) {
                             ShowContinueError(state, EnergyPlus::format("...occurs in {} = {}", CurrentModuleObject, Alphas(1)));
                             ErrorsFound = true;
@@ -4027,7 +4027,7 @@ namespace Furnaces {
 
                         // Get the supplemental heating coil design capacity
                         errFlag = false;
-                        thisFurnace.DesignSuppHeatingCapacity = HeatingCoils::GetCoilCapacity(state, SuppHeatCoilType, SuppHeatCoilName, errFlag);
+                        thisFurnace.DesignSuppHeatingCapacity = HeatingCoils::GetCoilCapacity(state, Alphas(12), SuppHeatCoilName, errFlag);
                         if (errFlag) {
                             ShowContinueError(state, EnergyPlus::format("...occurs in {} = {}", CurrentModuleObject, Alphas(1)));
                             ErrorsFound = true;
@@ -4035,9 +4035,9 @@ namespace Furnaces {
 
                     } // IF (IsNotOK) THEN
                 }
-            } else if (Util::SameString(SuppHeatCoilType, "Coil:Heating:Water")) {
+            } else if (Util::SameString(Alphas(12), "Coil:Heating:Water")) {
                 thisFurnace.suppHeatCoilType = HVAC::CoilType::HeatingWater;
-                ValidateComponent(state, SuppHeatCoilType, SuppHeatCoilName, IsNotOK, CurrentModuleObject);
+                ValidateComponent(state, Alphas(12), SuppHeatCoilName, IsNotOK, CurrentModuleObject);
                 if (IsNotOK) {
                     ShowContinueError(state, EnergyPlus::format("...occurs in {} = {}", CurrentModuleObject, Alphas(1)));
                     ErrorsFound = true;
@@ -4045,7 +4045,7 @@ namespace Furnaces {
 
                     // Get the Heating Coil water Inlet or control Node number
                     errFlag = false;
-                    thisFurnace.SuppCoilControlNode = WaterCoils::GetCoilWaterInletNode(state, "Coil:Heating:Water", SuppHeatCoilName, errFlag);
+                    thisFurnace.SuppCoilControlNode = WaterCoils::GetCoilWaterInletNode(state, Alphas(12), SuppHeatCoilName, errFlag);
                     if (errFlag) {
                         ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, thisFurnace.Name));
                         ErrorsFound = true;
@@ -4053,7 +4053,7 @@ namespace Furnaces {
 
                     // Get the ReHeat Coil hot water max volume flow rate
                     errFlag = false;
-                    thisFurnace.MaxSuppCoilFluidFlow = WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", SuppHeatCoilName, errFlag);
+                    thisFurnace.MaxSuppCoilFluidFlow = WaterCoils::GetCoilMaxWaterFlowRate(state, Alphas(12), SuppHeatCoilName, errFlag);
                     if (errFlag) {
                         ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, thisFurnace.Name));
                         ErrorsFound = true;
@@ -4061,7 +4061,7 @@ namespace Furnaces {
 
                     // Get the ReHeat Coil Inlet Node
                     errFlag = false;
-                    SupHeatCoilInletNode = WaterCoils::GetCoilInletNode(state, "Coil:Heating:Water", SuppHeatCoilName, errFlag);
+                    SupHeatCoilInletNode = WaterCoils::GetCoilInletNode(state, Alphas(12), SuppHeatCoilName, errFlag);
                     thisFurnace.SuppCoilAirInletNode = SupHeatCoilInletNode;
                     if (errFlag) {
                         ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, thisFurnace.Name));
@@ -4070,7 +4070,7 @@ namespace Furnaces {
 
                     // Get the ReHeat Coil Outlet Node
                     errFlag = false;
-                    SupHeatCoilOutletNode = WaterCoils::GetCoilOutletNode(state, "Coil:Heating:Water", SuppHeatCoilName, errFlag);
+                    SupHeatCoilOutletNode = WaterCoils::GetCoilOutletNode(state, Alphas(12), SuppHeatCoilName, errFlag);
                     thisFurnace.SuppCoilAirOutletNode = SupHeatCoilOutletNode;
                     if (errFlag) {
                         ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, thisFurnace.Name));
@@ -4089,7 +4089,7 @@ namespace Furnaces {
                     }
                 }
 
-            } else if (Util::SameString(SuppHeatCoilType, "Coil:Heating:Steam")) {
+            } else if (Util::SameString(Alphas(12), "Coil:Heating:Steam")) {
                 thisFurnace.suppHeatCoilType = HVAC::CoilType::HeatingSteam;
                 ValidateComponent(state, SuppHeatCoilType, SuppHeatCoilName, IsNotOK, CurrentModuleObject);
                 if (IsNotOK) {
