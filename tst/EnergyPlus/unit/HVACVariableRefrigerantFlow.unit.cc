@@ -2904,7 +2904,7 @@ TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_GetCoilInput)
 
     // Check the results
     ASSERT_EQ(1, state->dataDXCoils->NumDXCoils);
-    EXPECT_ENUM_EQ(state->dataDXCoils->DXCoil(1).coilType, HVAC::CoilType::HeatingVRF);
+    EXPECT_ENUM_EQ(state->dataDXCoils->DXCoil(1).coilType, HVAC::CoilType::CoolingVRFFluidTCtrl);
     EXPECT_EQ(state->dataDXCoils->DXCoil(1).RatedTotCap(1), 2200);
     EXPECT_EQ(state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.865);
     EXPECT_EQ(state->dataDXCoils->DXCoil(1).C1Te, 0);

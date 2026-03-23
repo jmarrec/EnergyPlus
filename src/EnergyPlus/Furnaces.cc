@@ -1609,6 +1609,7 @@ namespace Furnaces {
             assert(thisFurnace.fanPlace != HVAC::FanPlace::Invalid);
 
             // Get coil data
+            HeatingCoilType = Alphas(10);
             HeatingCoilName = Alphas(11);
             HeatingCoilPLFCurveIndex = 0;
             thisFurnace.HeatingCoilName = HeatingCoilName;

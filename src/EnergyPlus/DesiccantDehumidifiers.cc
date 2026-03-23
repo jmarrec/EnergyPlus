@@ -245,7 +245,6 @@ namespace DesiccantDehumidifiers {
         Array1D_bool lAlphaBlanks;      // Logical array, alpha field input BLANK = .TRUE.
         Array1D_bool lNumericBlanks;    // Logical array, numeric field input BLANK = .TRUE.
         bool errFlag;                   // local error flag
-        std::string RegenCoilType;      // Regen heating coil type
         std::string RegenCoilName;      // Regen heating coil name
         bool RegairHeatingCoilFlag;     // local error flag
 
@@ -821,7 +820,7 @@ namespace DesiccantDehumidifiers {
                         desicDehum.regenCoilType = HVAC::CoilType::HeatingGasOrOtherFuel;
                     }
                     ErrorsFound2 = false;
-                    ValidateComponent(state, RegenCoilType, RegenCoilName, ErrorsFound2, desicDehum.DehumType + " \"" + desicDehum.Name + "\"");
+                    ValidateComponent(state, Alphas(9), RegenCoilName, ErrorsFound2, desicDehum.DehumType + " \"" + desicDehum.Name + "\"");
                     if (ErrorsFound2) {
                         ErrorsFoundGeneric = true;
                     }
@@ -833,14 +832,14 @@ namespace DesiccantDehumidifiers {
                     }
 
                     ErrorsFound2 = false;
-                    desicDehum.RegenCoilInletNode = HeatingCoils::GetCoilInletNode(state, RegenCoilType, RegenCoilName, ErrorsFound2);
+                    desicDehum.RegenCoilInletNode = HeatingCoils::GetCoilInletNode(state, Alphas(9), RegenCoilName, ErrorsFound2);
                     if (ErrorsFound2) {
                         ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", desicDehum.DehumType, desicDehum.Name));
                         ErrorsFoundGeneric = true;
                     }
 
                     ErrorsFound2 = false;
-                    desicDehum.RegenCoilOutletNode = HeatingCoils::GetCoilOutletNode(state, RegenCoilType, RegenCoilName, ErrorsFound2);
+                    desicDehum.RegenCoilOutletNode = HeatingCoils::GetCoilOutletNode(state, Alphas(9), RegenCoilName, ErrorsFound2);
                     if (ErrorsFound2) {
                         ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", desicDehum.DehumType, desicDehum.Name));
                         ErrorsFoundGeneric = true;
@@ -854,7 +853,7 @@ namespace DesiccantDehumidifiers {
                     }
 
                     ErrorsFound2 = false;
-                    RegenCoilControlNodeNum = HeatingCoils::GetCoilControlNodeNum(state, RegenCoilType, RegenCoilName, ErrorsFound2);
+                    RegenCoilControlNodeNum = HeatingCoils::GetCoilControlNodeNum(state, Alphas(9), RegenCoilName, ErrorsFound2);
                     if (ErrorsFound2) {
                         ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", desicDehum.DehumType, desicDehum.Name));
                         ErrorsFoundGeneric = true;
@@ -884,7 +883,7 @@ namespace DesiccantDehumidifiers {
 
                 } else if (Util::SameString(Alphas(9), "Coil:Heating:Water")) {
                     desicDehum.regenCoilType = HVAC::CoilType::HeatingWater;
-                    ValidateComponent(state, RegenCoilType, RegenCoilName, IsNotOK, CurrentModuleObject);
+                    ValidateComponent(state, Alphas(9), RegenCoilName, IsNotOK, CurrentModuleObject);
                     if (IsNotOK) {
                         ShowContinueError(state, EnergyPlus::format("...occurs in {} = {}", CurrentModuleObject, Alphas(1)));
                         ErrorsFound = true;
@@ -946,7 +945,7 @@ namespace DesiccantDehumidifiers {
                     }
                 } else if (Util::SameString(Alphas(9), "Coil:Heating:Steam")) {
                     desicDehum.regenCoilType = HVAC::CoilType::HeatingSteam;
-                    ValidateComponent(state, RegenCoilType, RegenCoilName, IsNotOK, CurrentModuleObject);
+                    ValidateComponent(state, Alphas(9), RegenCoilName, IsNotOK, CurrentModuleObject);
                     if (IsNotOK) {
                         ShowContinueError(state, EnergyPlus::format("...occurs in {} = {}", CurrentModuleObject, Alphas(1)));
                         ErrorsFound = true;
@@ -1000,7 +999,7 @@ namespace DesiccantDehumidifiers {
                     }
 
                     ErrorsFound2 = false;
-                    RegenCoilControlNodeNum = SteamCoils::GetSteamCoilControlNodeNum(state, RegenCoilType, RegenCoilName, ErrorsFound2);
+                    RegenCoilControlNodeNum = SteamCoils::GetSteamCoilControlNodeNum(state, Alphas(9), RegenCoilName, ErrorsFound2);
 
                     if (ErrorsFound2) {
                         ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", desicDehum.DehumType, desicDehum.Name));

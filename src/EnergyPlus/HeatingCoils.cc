@@ -2948,7 +2948,7 @@ namespace HeatingCoils {
             state.dataHeatingCoils->GetCoilsInputFlag = false;
         }
 
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
@@ -3011,7 +3011,7 @@ namespace HeatingCoils {
 
         int WhichCoil = 0;
 
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel || FoundType == HVAC::CoilType::HeatingGasMultiStage ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
@@ -3055,7 +3055,7 @@ namespace HeatingCoils {
 
         int WhichCoil = 0;
         int NodeNumber = 0;
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel || FoundType == HVAC::CoilType::HeatingGasMultiStage ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
@@ -3100,7 +3100,7 @@ namespace HeatingCoils {
 
         int WhichCoil = 0;
         int NodeNumber = 0;
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel || FoundType == HVAC::CoilType::HeatingGasMultiStage ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
@@ -3206,7 +3206,7 @@ namespace HeatingCoils {
             state.dataHeatingCoils->GetCoilsInputFlag = false;
         }
 
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel || FoundType == HVAC::CoilType::HeatingGasMultiStage ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
@@ -3243,7 +3243,7 @@ namespace HeatingCoils {
             state.dataHeatingCoils->GetCoilsInputFlag = false;
         }
 
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel || FoundType == HVAC::CoilType::HeatingGasMultiStage ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
@@ -3281,7 +3281,7 @@ namespace HeatingCoils {
         }
 
         int WhichCoil = 0;
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel || FoundType == HVAC::CoilType::HeatingGasMultiStage ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
@@ -3319,7 +3319,7 @@ namespace HeatingCoils {
             state.dataHeatingCoils->GetCoilsInputFlag = false;
         }
 
-        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, CoilType));
+        HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
         if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
             FoundType == HVAC::CoilType::HeatingGasOrOtherFuel || FoundType == HVAC::CoilType::HeatingGasMultiStage ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
