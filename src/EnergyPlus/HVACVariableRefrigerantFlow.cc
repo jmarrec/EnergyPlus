@@ -5780,6 +5780,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 AirLoopFound = false; // reset for next TU
                 ctrlZoneNum = 0;      // reset for next TU
                 TUIndex = vrfTUList.ZoneTUPtr(NumTULoop);
+                auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(VRFTUNum);
                 std::string const thisObjectName = vrfTU.Name;
                 if (vrfTU.isInZone) {
                     goto EquipList_exit; // already found previously

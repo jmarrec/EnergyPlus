@@ -308,8 +308,7 @@ namespace HVACSingleDuctInduc {
 
             indUnit.HCoil = Alphas(7); // name of heating coil object
             bool IsNotOK = false;
-            indUnit.HWControlNode = WaterCoils::GetCoilWaterInletNode(
-                state, indUnit.HCoilType, indUnit.HCoil, IsNotOK);
+            indUnit.HWControlNode = WaterCoils::GetCoilWaterInletNode(state, indUnit.HCoilType, indUnit.HCoil, IsNotOK);
             if (IsNotOK) {
                 ShowContinueError(state, EnergyPlus::format("In {} = {}", CurrentModuleObject, indUnit.Name));
                 ShowContinueError(state, "..Only Coil:Heating:Water is allowed.");

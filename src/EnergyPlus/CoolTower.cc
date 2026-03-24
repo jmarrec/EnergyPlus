@@ -201,23 +201,14 @@ namespace CoolTower {
                 ErrorsFound = true;
             }
 
-            coolTower.ZonePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->Zone);
-            coolTower.spacePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->space);
-            if ((coolTower.ZonePtr == 0) && (coolTower.spacePtr == 0)) {
-                if (lAlphaBlanks(3)) {
-                    ShowSevereError(
-                        state,
-                        EnergyPlus::format(
-                            "{}=\"{}\" invalid {} is required but input is blank.", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cAlphaFields(3)));
-                } else {
-                    ShowSevereError(state,
-                                    EnergyPlus::format("{}=\"{}\" invalid {}=\"{}\" not found.",
-                                                       CurrentModuleObject,
-                                                       s_ipsc->cAlphaArgs(1),
-                                                       cAlphaFields(3),
-                                                       s_ipsc->cAlphaArgs(3)));
-                }
+
+            if (lAlphaBlanks(3)) {
+                ShowSevereEmptyField(state, eoh, cAlphaFields(3));
                 ErrorsFound = true;
+            } else if ((coolTower.ZonePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->Zone)) == 0 &&
+                       (coolTower.spacePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->space)) == 0) { 
+              ShowSevereItemNotFound(state, eoh, cAlphaFields(3), s_ipsc->cAlphaArgs(3));
+              ErrorsFound = true;
             } else if (coolTower.ZonePtr == 0) {
                 coolTower.ZonePtr = state.dataHeatBal->space(coolTower.spacePtr).zoneNum;
             }
@@ -235,15 +226,10 @@ namespace CoolTower {
                                                        coolTower.CoolTWaterTankDemandARRID);
             }
 
-            {
-                coolTower.FlowCtrlType = static_cast<FlowCtrl>(getEnumValue(FlowCtrlNamesUC, s_ipsc->cAlphaArgs(5))); // Type of flow control
-                if (coolTower.FlowCtrlType == FlowCtrl::Invalid) {
-                    ShowSevereError(
-                        state,
-                        EnergyPlus::format(
-                            "{}=\"{}\" invalid {}=\"{}\".", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cAlphaFields(5), s_ipsc->cAlphaArgs(5)));
-                    ErrorsFound = true;
-                }
+            coolTower.FlowCtrlType = static_cast<FlowCtrl>(getEnumValue(FlowCtrlNamesUC, s_ipsc->cAlphaArgs(5))); // Type of flow control
+            if (coolTower.FlowCtrlType == FlowCtrl::Invalid) {
+                ShowSevereInvalidKey(state, eoh, cAlphaFields(5), s_ipsc->cAlphaArgs(5));
+                ErrorsFound = true;
             }
 
             if ((coolTower.pumpSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(6))) == nullptr) {
@@ -254,128 +240,72 @@ namespace CoolTower {
             coolTower.MaxWaterFlowRate = s_ipsc->rNumericArgs(1); // Maximum limit of water supply
             if (coolTower.MaxWaterFlowRate > MaximumWaterFlowRate) {
                 coolTower.MaxWaterFlowRate = MaximumWaterFlowRate;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(1), s_ipsc->rNumericArgs(1)));
-                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaximumWaterFlowRate));
+                ShowWarningBadMax(state, eoh, cNumericFields(1), s_ipsc->rNumericArgs(1), Clusive::In, MaximumWaterFlowRate);
             }
             if (coolTower.MaxWaterFlowRate < MinimumWaterFlowRate) {
                 coolTower.MaxWaterFlowRate = MinimumWaterFlowRate;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(1), s_ipsc->rNumericArgs(1)));
-                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinimumWaterFlowRate));
+                ShowWarningBadMin(state, eoh, cNumericFields(1), s_ipsc->rNumericArgs(1), Clusive::In, MinimumWaterFlowRate);
             }
 
             coolTower.TowerHeight = s_ipsc->rNumericArgs(2); // Get effective tower height
             if (coolTower.TowerHeight > MaxHeight) {
                 coolTower.TowerHeight = MaxHeight;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(2), s_ipsc->rNumericArgs(2)));
-                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxHeight));
+                ShowWarningBadMax(state, eoh, cNumericFields(2), s_ipsc->rNumericArgs(2), Clusive::In, MaxHeight);
             }
+  
             if (coolTower.TowerHeight < MinHeight) {
                 coolTower.TowerHeight = MinHeight;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(2), s_ipsc->rNumericArgs(2)));
-                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinHeight));
+                ShowWarningBadMin(state, eoh, cNumericFields(2), s_ipsc->rNumericArgs(2), Clusive::In, MinHeight);
             }
 
             coolTower.OutletArea = s_ipsc->rNumericArgs(3); // Get outlet area
             if (coolTower.OutletArea > MaxValue) {
                 coolTower.OutletArea = MaxValue;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(3), s_ipsc->rNumericArgs(3)));
-                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxValue));
+                ShowWarningBadMax(state, eoh, cNumericFields(3), s_ipsc->rNumericArgs(3), Clusive::In, MaxValue);
             }
             if (coolTower.OutletArea < MinValue) {
                 coolTower.OutletArea = MinValue;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(3), s_ipsc->rNumericArgs(3)));
-                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinValue));
+                ShowWarningBadMin(state, eoh, cNumericFields(3), s_ipsc->rNumericArgs(3), Clusive::In, MinValue);
             }
 
             coolTower.MaxAirVolFlowRate = s_ipsc->rNumericArgs(4); // Maximum limit of air flow to the space
             if (coolTower.MaxAirVolFlowRate > MaxValue) {
                 coolTower.MaxAirVolFlowRate = MaxValue;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(4), s_ipsc->rNumericArgs(4)));
-                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxValue));
+                ShowWarningBadMax(state, eoh, cNumericFields(4), s_ipsc->rNumericArgs(4), Clusive::In, MaxValue);
             }
             if (coolTower.MaxAirVolFlowRate < MinValue) {
                 coolTower.MaxAirVolFlowRate = MinValue;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(4), s_ipsc->rNumericArgs(4)));
-                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinValue));
+                ShowWarningBadMin(state, eoh, cNumericFields(4), s_ipsc->rNumericArgs(4), Clusive::In, MinValue);
             }
 
-            coolTower.MinZoneTemp =
-                s_ipsc->rNumericArgs(5); // Get minimum temp limit which gets this cooltower off
+            coolTower.MinZoneTemp = s_ipsc->rNumericArgs(5); // Get minimum temp limit which gets this cooltower off
             if (coolTower.MinZoneTemp > MaxValue) {
                 coolTower.MinZoneTemp = MaxValue;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(5), s_ipsc->rNumericArgs(5)));
-                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxValue));
+                ShowWarningBadMax(state, eoh, cNumericFields(5), s_ipsc->rNumericArgs(5), Clusive::In, MaxValue);
             }
             if (coolTower.MinZoneTemp < MinValue) {
                 coolTower.MinZoneTemp = MinValue;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(5), s_ipsc->rNumericArgs(5)));
-                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinValue));
+                ShowWarningBadMin(state, eoh, cNumericFields(5), s_ipsc->rNumericArgs(5), Clusive::In, MinValue);
             }
 
             coolTower.FracWaterLoss = s_ipsc->rNumericArgs(6); // Fraction of water loss
             if (coolTower.FracWaterLoss > MaxFrac) {
                 coolTower.FracWaterLoss = MaxFrac;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(6), s_ipsc->rNumericArgs(6)));
-                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxFrac));
+                ShowWarningBadMax(state, eoh, cNumericFields(6), s_ipsc->rNumericArgs(6), Clusive::In, MaxFrac);
             }
             if (coolTower.FracWaterLoss < MinFrac) {
                 coolTower.FracWaterLoss = MinFrac;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(6), s_ipsc->rNumericArgs(6)));
-                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinFrac));
+                ShowWarningBadMin(state, eoh, cNumericFields(6), s_ipsc->rNumericArgs(6), Clusive::In, MinFrac);
             }
 
             coolTower.FracFlowSched = s_ipsc->rNumericArgs(7); // Fraction of loss of air flow
             if (coolTower.FracFlowSched > MaxFrac) {
                 coolTower.FracFlowSched = MaxFrac;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(7), s_ipsc->rNumericArgs(7)));
-                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxFrac));
+                ShowWarningBadMax(state, eoh, cNumericFields(7), s_ipsc->rNumericArgs(7), Clusive::In, MaxFrac);
             }
             if (coolTower.FracFlowSched < MinFrac) {
                 coolTower.FracFlowSched = MinFrac;
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format(
-                        "{}=\"{}\" invalid {}=[{:.5R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(7), s_ipsc->rNumericArgs(7)));
-                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinFrac));
+                ShowWarningBadMin(state, eoh, cNumericFields(7), s_ipsc->rNumericArgs(7), Clusive::In, MinFrac);
             }
 
             coolTower.RatedPumpPower = s_ipsc->rNumericArgs(8); // Get rated pump power

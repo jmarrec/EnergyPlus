@@ -197,27 +197,28 @@ void GetFluidCoolerInput(EnergyPlusData &state)
     state.dataFluidCoolers->UniqueSimpleFluidCoolerNames.reserve(state.dataFluidCoolers->NumSimpleFluidCoolers);
 
     // Load data structures with fluid cooler input data
-    auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
-    cCurrentModuleObject = cFluidCooler_SingleSpeed;
+    auto &s_ipsc = state.dataIPShortCut;
+    
+    s_ipsc->cCurrentModuleObject = cFluidCooler_SingleSpeed;
     for (int SingleSpeedFluidCoolerNumber = 1; SingleSpeedFluidCoolerNumber <= NumSingleSpeedFluidCoolers; ++SingleSpeedFluidCoolerNumber) {
         int FluidCoolerNum = SingleSpeedFluidCoolerNumber;
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
-                                                                 cCurrentModuleObject,
+                                                                 s_ipsc->cCurrentModuleObject,
                                                                  SingleSpeedFluidCoolerNumber,
                                                                  AlphArray,
                                                                  NumAlphas,
                                                                  NumArray,
                                                                  NumNums,
                                                                  IOStat,
-                                                                 state.dataIPShortCut->lNumericFieldBlanks,
-                                                                 state.dataIPShortCut->lAlphaFieldBlanks,
-                                                                 state.dataIPShortCut->cAlphaFieldNames,
-                                                                 state.dataIPShortCut->cNumericFieldNames);
+                                                                 s_ipsc->lNumericFieldBlanks,
+                                                                 s_ipsc->lAlphaFieldBlanks,
+                                                                 s_ipsc->cAlphaFieldNames,
+                                                                 s_ipsc->cNumericFieldNames);
         GlobalNames::VerifyUniqueInterObjectName(state,
                                                  state.dataFluidCoolers->UniqueSimpleFluidCoolerNames,
                                                  AlphArray(1),
                                                  cCurrentModuleObject,
-                                                 state.dataIPShortCut->cAlphaFieldNames(1),
+                                                 s_ipsc->cAlphaFieldNames(1),
                                                  ErrorsFound);
 
         auto &fluidCooler = state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum);
@@ -282,12 +283,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                         Node::CompFluidStream::Primary,
                                         Node::ObjectIsNotParent);
             if (!OutAirNodeManager::CheckOutAirNodeNumber(state, fluidCooler.OutdoorAirInletNodeNum)) {
-                ShowSevereError(state,
-                                EnergyPlus::format("{}= \"{}\" {}= \"{}\" not valid.",
-                                                   cCurrentModuleObject,
-                                                   fluidCooler.Name,
-                                                   state.dataIPShortCut->cAlphaFieldNames(5),
-                                                   AlphArray(5)));
+                ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(5), AlphArray(5));
                 ShowContinueError(state, "...does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.");
                 ErrorsFound = true;
             }
@@ -296,7 +292,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         ErrorsFound |=
             state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum)
                 .validateSingleSpeedInputs(
-                    state, cCurrentModuleObject, AlphArray, state.dataIPShortCut->cNumericFieldNames, state.dataIPShortCut->cAlphaFieldNames);
+                    state, cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
 
     } // End Single-Speed fluid cooler Loop
 
@@ -311,15 +307,15 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                                  NumArray,
                                                                  NumNums,
                                                                  IOStat,
-                                                                 state.dataIPShortCut->lNumericFieldBlanks,
-                                                                 state.dataIPShortCut->lAlphaFieldBlanks,
-                                                                 state.dataIPShortCut->cAlphaFieldNames,
-                                                                 state.dataIPShortCut->cNumericFieldNames);
+                                                                 s_ipsc->lNumericFieldBlanks,
+                                                                 s_ipsc->lAlphaFieldBlanks,
+                                                                 s_ipsc->cAlphaFieldNames,
+                                                                 s_ipsc->cNumericFieldNames);
         GlobalNames::VerifyUniqueInterObjectName(state,
                                                  state.dataFluidCoolers->UniqueSimpleFluidCoolerNames,
                                                  AlphArray(1),
                                                  cCurrentModuleObject,
-                                                 state.dataIPShortCut->cAlphaFieldNames(1),
+                                                 s_ipsc->cAlphaFieldNames(1),
                                                  ErrorsFound);
 
         auto &fluidCooler = state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum);
@@ -405,22 +401,16 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                         Node::ConnectionType::OutsideAirReference,
                                         Node::CompFluidStream::Primary,
                                         Node::ObjectIsNotParent);
+
             if (!OutAirNodeManager::CheckOutAirNodeNumber(state, fluidCooler.OutdoorAirInletNodeNum)) {
-                ShowSevereError(state,
-                                EnergyPlus::format("{}= \"{}\" {}= \"{}\" not valid.",
-                                                   cCurrentModuleObject,
-                                                   fluidCooler.Name,
-                                                   state.dataIPShortCut->cAlphaFieldNames(5),
-                                                   AlphArray(5)));
+                ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(5), AlphArray(5));
                 ShowContinueError(state, "...does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.");
                 ErrorsFound = true;
             }
         }
 
         ErrorsFound |=
-            fluidCooler
-                .validateTwoSpeedInputs(
-                    state, cCurrentModuleObject, AlphArray, state.dataIPShortCut->cNumericFieldNames, state.dataIPShortCut->cAlphaFieldNames);
+            fluidCooler.validateTwoSpeedInputs(state, cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
     }
 
     if (ErrorsFound) {
