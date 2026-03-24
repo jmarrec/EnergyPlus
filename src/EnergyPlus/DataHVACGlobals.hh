@@ -258,9 +258,12 @@ namespace HVAC {
         CoolingDX,
         DXSubcoolReheat,
         CoolingDXCurveFit,
+#ifdef GET_OUT
+        // Leaving these out for now
         IHPAirSource,
         CoolingSystemDX,
         HeatingSystemDX,
+#endif // GET_OUT
         Num
     };
 

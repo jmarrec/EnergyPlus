@@ -127,10 +127,14 @@ namespace HVAC {
         "Coil:Heating:DX:VariableRefrigerantFlow:FluidTemperatureControl",
         "Coil:Cooling:DX",
         "Coil:Cooling:DX:SubcoolReheat",
-        "Coil:Cooling:DX:CurveFit:Speed",
+        "Coil:Cooling:DX:CurveFit:Speed"
+#ifdef GET_OUT
+        ,
         "CoilSystem:IntegratedHeatPump:AirSource",
         "CoilSystem:Cooling:DX",
-        "CoilSystem:Heating:DX"};
+        "CoilSystem:Heating:DX"
+#endif // GET_OUT
+    };
   
     constexpr std::array<std::string_view, (int)CoilType::Num> coilTypeNamesUC = {
         "COIL:COOLING:DX:SINGLESPEED",
@@ -169,10 +173,14 @@ namespace HVAC {
         "COIL:HEATING:DX:VARIABLEREFRIGERANTFLOW:FLUIDTEMPERATURECONTROL",
         "COIL:COOLING:DX",
         "COIL:COOLING:DX:SUBCOOLREHEAT",
-        "COIL:COOLING:DX:CURVEFIT:SPEED",
+        "COIL:COOLING:DX:CURVEFIT:SPEED"
+#ifdef GET_OUT
+        ,
         "COILSYSTEM:INTEGRATEDHEATPUMP:AIRSOURCE",
         "COILSYSTEM:COOLING:DX",
-        "COILSYSTEM:HEATING:DX"};
+        "COILSYSTEM:HEATING:DX"
+#endif // GET_OUT
+    };
 
     constexpr std::array<bool, (int)CoilType::Num> coilTypeIsCooling = {
         true, // DXCoolingSingleSpeed,
@@ -212,9 +220,11 @@ namespace HVAC {
         true, // CoolingDX,
         true, // DXSubcoolReheat,
         true, // CoolingDXCurveFit,
+#ifdef GET_OUT
         true, // IHPAirSource,
         true, // CoolingSystemDX,
         false // HeatingSystemDX
+#endif // GET_OUT        
     };
   
     constexpr std::array<bool, (int)CoilType::Num> coilTypeIsHeating = {
@@ -255,9 +265,11 @@ namespace HVAC {
         false, // CoolingDX,
         false, // DXSubcoolReheat,
         false, // CoolingDXCurveFit
+#ifdef GET_OUT
         true, // IHP air source
         false, // CoolingSystemDX
         true // HeatingSystemDX
+#endif // GET_OUT
     };
 
     constexpr std::array<bool, (int)CoilType::Num> coilTypeIsHeatPump = {
@@ -298,9 +310,11 @@ namespace HVAC {
         false, // CoolingDX,
         false, // DXSubcoolReheat,
         false, // DXCurveFitSpeed
+#ifdef GET_OUT
         true, // IHPAirSource
         true, // CoolingSystemDX
         true, // HeatingSystemDX
+#endif // GET_OUT        
     };
   
 #ifdef GET_OUT

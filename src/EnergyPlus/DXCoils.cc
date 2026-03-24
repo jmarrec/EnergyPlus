@@ -9546,7 +9546,7 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
                                   "   3) is used as part of a HX assisted cooling coil which uses a high sensible effectiveness. Check inputs.");
             }
             ShowRecurringWarningErrorAtEnd(state,
-                                           EnergyPlus::format("{}{}=\" - Full load outlet temperature indicates a possibility of frost/freeze error continues. "
+                                           EnergyPlus::format("{}{}=\"{}\" - Full load outlet temperature indicates a possibility of frost/freeze error continues. "
                                                               "Outlet air temperature statistics follow:",
                                                               RoutineName, HVAC::coilTypeNames[(int)thisDXCoil.coilType], thisDXCoil.Name),
                                            thisDXCoil.LowOutletTempIndex,
