@@ -175,6 +175,8 @@ void GetFluidCoolerInput(EnergyPlusData &state)
     Array1D<Real64> NumArray(16); // Numeric input data array
     Array1D_string AlphArray(5);  // Character string input data array
 
+    static constexpr std::string_view routineName = "GetFluidCoolerInput";
+    
     // Get number of all Fluid Coolers specified in the input data file (idf)
     int const NumSingleSpeedFluidCoolers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "FluidCooler:SingleSpeed");
     int const NumTwoSpeedFluidCoolers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "FluidCooler:TwoSpeed");
@@ -214,14 +216,18 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                                  s_ipsc->lAlphaFieldBlanks,
                                                                  s_ipsc->cAlphaFieldNames,
                                                                  s_ipsc->cNumericFieldNames);
+
+        ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, AlphArray(1)};
+        
         GlobalNames::VerifyUniqueInterObjectName(state,
                                                  state.dataFluidCoolers->UniqueSimpleFluidCoolerNames,
                                                  AlphArray(1),
-                                                 cCurrentModuleObject,
+                                                 s_ipsc->cCurrentModuleObject,
                                                  s_ipsc->cAlphaFieldNames(1),
                                                  ErrorsFound);
 
         auto &fluidCooler = state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum);
+        
         fluidCooler.Name = AlphArray(1);
         fluidCooler.FluidCoolerType = DataPlant::PlantEquipmentType::FluidCooler_SingleSpd;
         fluidCooler.indexInArray = FluidCoolerNum;
@@ -246,7 +252,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                     Node::ConnectionType::Outlet,
                                     Node::CompFluidStream::Primary,
                                     Node::ObjectIsNotParent);
-        Node::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
+        Node::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
         fluidCooler.HighSpeedFluidCoolerUA = NumArray(1);
         if (fluidCooler.HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
             fluidCooler.HighSpeedFluidCoolerUAWasAutoSized = true;
@@ -290,17 +296,15 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         }
 
         ErrorsFound |=
-            state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum)
-                .validateSingleSpeedInputs(
-                    state, cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
+            fluidCooler.validateSingleSpeedInputs(state, s_ipsc->cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
 
     } // End Single-Speed fluid cooler Loop
 
-    cCurrentModuleObject = cFluidCooler_TwoSpeed;
+    s_ipsc->cCurrentModuleObject = cFluidCooler_TwoSpeed;
     for (int TwoSpeedFluidCoolerNumber = 1; TwoSpeedFluidCoolerNumber <= NumTwoSpeedFluidCoolers; ++TwoSpeedFluidCoolerNumber) {
         int FluidCoolerNum = NumSingleSpeedFluidCoolers + TwoSpeedFluidCoolerNumber;
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
-                                                                 cCurrentModuleObject,
+                                                                 s_ipsc->cCurrentModuleObject,
                                                                  TwoSpeedFluidCoolerNumber,
                                                                  AlphArray,
                                                                  NumAlphas,
@@ -311,10 +315,13 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                                  s_ipsc->lAlphaFieldBlanks,
                                                                  s_ipsc->cAlphaFieldNames,
                                                                  s_ipsc->cNumericFieldNames);
+
+        ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, AlphArray(1)};
+        
         GlobalNames::VerifyUniqueInterObjectName(state,
                                                  state.dataFluidCoolers->UniqueSimpleFluidCoolerNames,
                                                  AlphArray(1),
-                                                 cCurrentModuleObject,
+                                                 s_ipsc->cCurrentModuleObject,
                                                  s_ipsc->cAlphaFieldNames(1),
                                                  ErrorsFound);
 
@@ -344,7 +351,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                     Node::ConnectionType::Outlet,
                                     Node::CompFluidStream::Primary,
                                     Node::ObjectIsNotParent);
-        Node::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
+        Node::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
 
         fluidCooler.HighSpeedFluidCoolerUA = NumArray(1);
         if (fluidCooler.HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
@@ -410,7 +417,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         }
 
         ErrorsFound |=
-            fluidCooler.validateTwoSpeedInputs(state, cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
+            fluidCooler.validateTwoSpeedInputs(state, s_ipsc->cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
     }
 
     if (ErrorsFound) {

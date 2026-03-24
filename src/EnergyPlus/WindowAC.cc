@@ -309,37 +309,32 @@ namespace WindowAC {
             windAC.OutAirVolFlow = Numbers(2);
 
             windAC.AirInNode = GetOnlySingleNode(state,
-                                                                                Alphas(3),
-                                                                                ErrorsFound,
-                                                                                Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
-                                                                                Alphas(1),
-                                                                                Node::FluidType::Air,
-                                                                                Node::ConnectionType::Inlet,
-                                                                                Node::CompFluidStream::Primary,
-                                                                                Node::ObjectIsParent);
-
+                                                 Alphas(3),
+                                                 ErrorsFound,
+                                                 Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
+                                                 Alphas(1),
+                                                 Node::FluidType::Air,
+                                                 Node::ConnectionType::Inlet,
+                                                 Node::CompFluidStream::Primary,
+                                                 Node::ObjectIsParent);
+            
             windAC.AirOutNode = GetOnlySingleNode(state,
-                                                                                 Alphas(4),
-                                                                                 ErrorsFound,
-                                                                                 Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
-                                                                                 Alphas(1),
-                                                                                 Node::FluidType::Air,
-                                                                                 Node::ConnectionType::Outlet,
-                                                                                 Node::CompFluidStream::Primary,
-                                                                                 Node::ObjectIsParent);
+                                                  Alphas(4),
+                                                  ErrorsFound,
+                                                  Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
+                                                  Alphas(1),
+                                                  Node::FluidType::Air,
+                                                  Node::ConnectionType::Outlet,
+                                                  Node::CompFluidStream::Primary,
+                                                  Node::ObjectIsParent);
 
             windAC.OAMixType = Alphas(5);
             windAC.OAMixName = Alphas(6);
             // Get outdoor air mixer node numbers
             bool errFlag = false;
-            ValidateComponent(state,
-                              windAC.OAMixType,
-                              windAC.OAMixName,
-                              errFlag,
-                              CurrentModuleObject);
+            ValidateComponent(state, windAC.OAMixType, windAC.OAMixName, errFlag, CurrentModuleObject);
             if (errFlag) {
-                ShowContinueError(state,
-                                  EnergyPlus::format("specified in {} = \"{}\".", CurrentModuleObject, windAC.Name));
+                ShowContinueError(state, EnergyPlus::format("specified in {} = \"{}\".", CurrentModuleObject, windAC.Name));
                 ErrorsFound = true;
             } else {
                 // Get outdoor air mixer node numbers
@@ -422,8 +417,7 @@ namespace WindowAC {
                     ErrorsFound = true;
                 }
             } else {
-                ShowWarningError(state, EnergyPlus::format("Invalid {} = {}", cAlphaFields(9), Alphas(9)));
-                ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, windAC.Name));
+                ShowSevereInvalidKey(state, eoh, cAlphaFields(9), Alphas(9));
                 ErrorsFound = true;
             }
 
@@ -447,9 +441,7 @@ namespace WindowAC {
             if (!lAlphaBlanks(14)) {
                 windAC.HVACSizingIndex = Util::FindItemInList(Alphas(14), state.dataSize->ZoneHVACSizing);
                 if (windAC.HVACSizingIndex == 0) {
-                    ShowSevereError(state, EnergyPlus::format("{} = {} not found.", cAlphaFields(14), Alphas(14)));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, windAC.Name));
+                    ShowSevereItemNotFound(state, eoh, cAlphaFields(14), Alphas(14));
                     ErrorsFound = true;
                 }
             }

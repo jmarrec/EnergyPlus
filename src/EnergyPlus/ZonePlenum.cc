@@ -248,6 +248,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
     bool NodeListError; // Flag for node list error
     bool UniqueNodeError;
     static constexpr std::string_view RoutineName("GetZonePlenumInput: "); // include trailing blank space
+    static constexpr std::string_view routineName("GetZonePlenumInput"); // include trailing blank space
     std::string InducedNodeListName;
 
     state.dataInputProcessing->inputProcessor->getObjectDefMaxArgs(state, "AirLoopHVAC:ReturnPlenum", NumArgs, NumAlphas, NumNums);
@@ -278,9 +279,9 @@ void GetZonePlenumInput(EnergyPlusData &state)
     }
 
     InitUniqueNodeCheck(state, "AirLoopHVAC:ReturnPlenum");
-    for (int ZonePlenumNum = 1; ZonePlenumNum <= state.dataZonePlenum->NumZoneReturnPlenums; ++ZonePlenumNum) {
+    CurrentModuleObject = "AirLoopHVAC:ReturnPlenum";
 
-        CurrentModuleObject = "AirLoopHVAC:ReturnPlenum";
+    for (int ZonePlenumNum = 1; ZonePlenumNum <= state.dataZonePlenum->NumZoneReturnPlenums; ++ZonePlenumNum) {
 
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                  CurrentModuleObject,
@@ -298,6 +299,8 @@ void GetZonePlenumInput(EnergyPlusData &state)
         auto &retPlenum = state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum);
         retPlenum.ZonePlenumName = AlphArray(1);
 
+        ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphArray(1)};
+        
         // Check if this zone is also used in another return plenum
         IOStat = Util::FindItemInList(AlphArray(2), state.dataZonePlenum->ZoneRetPlenCond, &ZoneReturnPlenumConditions::ZoneName, ZonePlenumNum - 1);
         if (IOStat != 0) {
@@ -312,11 +315,11 @@ void GetZonePlenumInput(EnergyPlusData &state)
         // put the X-Ref to the zone heat balance data structure
         retPlenum.ActualZoneNum = Util::FindItemInList(AlphArray(2), state.dataHeatBal->Zone);
         if (retPlenum.ActualZoneNum == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("For {} = {}, {} = {} not found.", CurrentModuleObject, AlphArray(1), cAlphaFields(2), AlphArray(2)));
+            ShowSevereItemNotFound(state, eoh, cAlphaFields(2), AlphArray(2));
             ErrorsFound = true;
             continue;
         }
+        
         state.dataHeatBal->Zone(retPlenum.ActualZoneNum).IsReturnPlenum = true;
         state.dataHeatBal->Zone(retPlenum.ActualZoneNum).PlenumCondNum = ZonePlenumNum;
 
@@ -463,10 +466,11 @@ void GetZonePlenumInput(EnergyPlusData &state)
         }
 
     } // end AirLoopHVAC:ReturnPlenum Loop
+
     EndUniqueNodeCheck(state, "AirLoopHVAC:ReturnPlenum");
+    CurrentModuleObject = "AirLoopHVAC:SupplyPlenum";
 
     for (int ZonePlenumNum = 1; ZonePlenumNum <= state.dataZonePlenum->NumZoneSupplyPlenums; ++ZonePlenumNum) {
-        CurrentModuleObject = "AirLoopHVAC:SupplyPlenum";
 
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                  CurrentModuleObject,
@@ -481,6 +485,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                                  cAlphaFields,
                                                                  cNumericFields);
 
+        ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphArray(1)};
         auto &supPlenum = state.dataZonePlenum->ZoneSupPlenCond(ZonePlenumNum);
         supPlenum.ZonePlenumName = AlphArray(1);
 
@@ -514,8 +519,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
         // put the X-Ref to the zone heat balance data structure
         supPlenum.ActualZoneNum = Util::FindItemInList(AlphArray(2), state.dataHeatBal->Zone);
         if (supPlenum.ActualZoneNum == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("For {} = {}, {} = {} not found.", CurrentModuleObject, AlphArray(1), cAlphaFields(2), AlphArray(2)));
+            ShowSevereItemNotFound(state, eoh, cAlphaFields(2), AlphArray(2));
             ErrorsFound = true;
             continue;
         }
@@ -553,14 +557,14 @@ void GetZonePlenumInput(EnergyPlusData &state)
 
         supPlenum.ZoneNodeName = AlphArray(3);
         supPlenum.ZoneNodeNum = GetOnlySingleNode(state,
-                                                      AlphArray(3),
-                                                      ErrorsFound,
-                                                      Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
-                                                      AlphArray(1),
-                                                      Node::FluidType::Air,
-                                                      Node::ConnectionType::ZoneNode,
-                                                      Node::CompFluidStream::Primary,
-                                                      Node::ObjectIsNotParent);
+                                                  AlphArray(3),
+                                                  ErrorsFound,
+                                                  Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
+                                                  AlphArray(1),
+                                                  Node::FluidType::Air,
+                                                  Node::ConnectionType::ZoneNode,
+                                                  Node::CompFluidStream::Primary,
+                                                  Node::ObjectIsNotParent);
         // Insert the Plenum Zone Number into the Zone Heat Balance data structure for later reference
         state.dataHeatBal->Zone(supPlenum.ActualZoneNum).SystemZoneNodeNumber = supPlenum.ZoneNodeNum;
         // SpaceHB TODO: For now, assign the same system node to the spaces in the zone
@@ -569,14 +573,14 @@ void GetZonePlenumInput(EnergyPlusData &state)
         }
 
         supPlenum.InletNode = GetOnlySingleNode(state,
-                                                    AlphArray(4),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
-                                                    AlphArray(1),
-                                                    Node::FluidType::Air,
-                                                    Node::ConnectionType::Inlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsNotParent);
+                                                AlphArray(4),
+                                                ErrorsFound,
+                                                Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
+                                                AlphArray(1),
+                                                Node::FluidType::Air,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
 
         supPlenum.NumOutletNodes = NumAlphas - 4;
 
@@ -615,14 +619,14 @@ void GetZonePlenumInput(EnergyPlusData &state)
         for (NodeNum = 1; NodeNum <= supPlenum.NumOutletNodes; ++NodeNum) {
 
             supPlenum.OutletNode(NodeNum) = GetOnlySingleNode(state,
-                                                                  AlphArray(4 + NodeNum),
-                                                                  ErrorsFound,
-                                                                  Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
-                                                                  AlphArray(1),
-                                                                  Node::FluidType::Air,
-                                                                  Node::ConnectionType::Outlet,
-                                                                  Node::CompFluidStream::Primary,
-                                                                  Node::ObjectIsNotParent);
+                                                              AlphArray(4 + NodeNum),
+                                                              ErrorsFound,
+                                                              Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
+                                                              AlphArray(1),
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Outlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
         }
 
     } // end AirLoopHVAC:SupplyPlenum Loop
