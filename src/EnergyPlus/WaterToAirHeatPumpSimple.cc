@@ -1825,7 +1825,6 @@ namespace WaterToAirHeatPumpSimple {
                     }
                 }
             } else if (state.dataSize->CurZoneEqNum > 0) {
-                auto const &finalZoneSizing = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum);
                 if (!RatedCapCoolSensAutoSized && !SizingDesRunThisZone) { // Simulation continue
                     HardSizeNoDesRun = true;
                     if (simpleWAHP.RatedCapCoolSens > 0.0) {
@@ -1841,6 +1840,7 @@ namespace WaterToAirHeatPumpSimple {
                                     EnergyPlus::format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT",
                                                        WatertoAirHPNamesUC[static_cast<int>(simpleWAHP.WAHPType)]),
                                     simpleWAHP.Name);
+                    auto const &finalZoneSizing = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum);
                     if (CoolingAirVolFlowRateDes > 0.0) {
                         VolFlowRate = CoolingAirVolFlowRateDes;
                     } else {

@@ -521,7 +521,7 @@ namespace CoolTower {
             thisZoneHB.MCPC = 0.0;
             thisZoneHB.CTMFL = 0.0;
             if ((state.dataHeatBal->doSpaceHeatBalance) && (coolTower.spacePtr > 0)) {
-                auto &thisSpaceHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(coolTower.spacePtr);
+                auto &thisSpaceHB = state.dataZoneTempPredictorCorrector->spaceHeatBalance(coolTower.spacePtr);
                 thisSpaceHB.MCPTC = 0.0;
                 thisSpaceHB.MCPC = 0.0;
                 thisSpaceHB.CTMFL = 0.0;
@@ -614,7 +614,7 @@ namespace CoolTower {
                 thisZoneHB.MCPTC = thisMCPTC;
                 thisZoneHB.CTMFL = thisCTMFL;
                 if ((state.dataHeatBal->doSpaceHeatBalance) && (coolTower.spacePtr > 0)) {
-                    auto &thisSpaceHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(coolTower.spacePtr);
+                    auto &thisSpaceHB = state.dataZoneTempPredictorCorrector->spaceHeatBalance(coolTower.spacePtr);
                     thisSpaceHB.MCPC = thisMCPC;
                     thisSpaceHB.MCPTC = thisMCPTC;
                     thisSpaceHB.CTMFL = thisCTMFL;
