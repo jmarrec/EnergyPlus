@@ -108,7 +108,8 @@ APIDataEntry *getAPIData(EnergyPlusState state, unsigned int *resultingSize)
         if (meter->Name.empty()) {
             break;
         }
-        localDataEntries.emplace_back("OutputMeter", "", "", meter->Name, format("{}", EnergyPlus::Constant::unitNames[(int)meter->units]));
+        localDataEntries.emplace_back(
+            "OutputMeter", "", "", meter->Name, EnergyPlus::format("{}", EnergyPlus::Constant::unitNames[(int)meter->units]));
     }
     for (auto const *variable : thisState->dataOutputProcessor->outVars) {
         if (variable->varType != EnergyPlus::OutputProcessor::VariableType::Real) {
@@ -123,7 +124,7 @@ APIDataEntry *getAPIData(EnergyPlusState state, unsigned int *resultingSize)
                                       variable->keyUC,
                                       variable->units == EnergyPlus::Constant::Units::customEMS
                                           ? variable->unitNameCustomEMS
-                                          : format("{}", EnergyPlus::Constant::unitNames[(int)variable->units]));
+                                          : EnergyPlus::format("{}", EnergyPlus::Constant::unitNames[(int)variable->units]));
     }
     *resultingSize = localDataEntries.size();
     auto *data = new APIDataEntry[*resultingSize];
@@ -195,7 +196,7 @@ char *listAllAPIDataCSV(EnergyPlusState state)
         }
         output.append("OutputMeter").append(","); // This multiple append thing is not good
         output.append(meter->Name).append(",");
-        output.append(format("{}\n", EnergyPlus::Constant::unitNames[(int)meter->units]));
+        output.append(EnergyPlus::format("{}\n", EnergyPlus::Constant::unitNames[(int)meter->units]));
     }
     output.append("**VARIABLES**\n");
     for (auto const *variable : thisState->dataOutputProcessor->outVars) {
@@ -208,9 +209,10 @@ char *listAllAPIDataCSV(EnergyPlusState state)
         output.append("OutputVariable,");
         output.append(variable->name).append(",");
         output.append(variable->keyUC).append(",");
-        output.append(format("{}\n",
-                             variable->units == EnergyPlus::Constant::Units::customEMS ? variable->unitNameCustomEMS
-                                                                                       : EnergyPlus::Constant::unitNames[(int)variable->units]));
+        output.append(EnergyPlus::format("{}\n",
+                                         variable->units == EnergyPlus::Constant::Units::customEMS
+                                             ? variable->unitNameCustomEMS
+                                             : EnergyPlus::Constant::unitNames[(int)variable->units]));
     }
     // note that we cannot just return a c_str to the local string, as the string will be destructed upon leaving
     // this function, and undefined behavior will occur.

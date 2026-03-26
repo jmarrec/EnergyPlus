@@ -90,7 +90,6 @@ using namespace EnergyPlus::DataSizing;
 using namespace EnergyPlus::HeatBalanceManager;
 using namespace EnergyPlus::ZonePlenum;
 using namespace EnergyPlus::ZoneTempPredictorCorrector;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataSurfaces;
 using namespace EnergyPlus::DataEnvironment;
 using namespace EnergyPlus::Psychrometrics;
@@ -1872,7 +1871,7 @@ TEST_F(EnergyPlusFixture, HybridModel_processInverseModelMultpHMTest)
     EXPECT_NE(state->dataZoneTempPredictorCorrector->zoneHeatBalance(numZones).hmThermalMassMultErrIndex,
               0); // This is now set, won't be zero anymore
     std::string const error_string = delimited_string(
-        {format("   ** Warning ** Version: missing in IDF, processing for EnergyPlus version=\"{}\"", DataStringGlobals::MatchVersion),
+        {EnergyPlus::format("   ** Warning ** Version: missing in IDF, processing for EnergyPlus version=\"{}\"", DataStringGlobals::MatchVersion),
          "   ** Warning ** Hybrid model thermal mass multiplier higher than the limit for Hybrid Zone",
          "   **   ~~~   ** This means that the ratio of the zone air heat capacity for the current time step to the",
          "   **   ~~~   ** zone air heat storage is higher than the maximum limit of 30.0."});

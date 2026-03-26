@@ -103,8 +103,9 @@ namespace PlantComponentTemperatureSources {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(state,
-                       format("LocalTemperatureSourceFactory: Error getting inputs for temperature source named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(
+            state,
+            EnergyPlus::format("LocalTemperatureSourceFactory: Error getting inputs for temperature source named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -270,7 +271,7 @@ namespace PlantComponentTemperatureSources {
         bool ErrorsFound(false);   // If errors detected in input
         Real64 DesVolFlowRateUser; // Hardsized design volume flow rate for reporting
         Real64 tmpVolFlowRate = this->DesVolFlowRate;
-        int PltSizNum = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum;
+        int PltSizNum = this->plantLoc.loop->PlantSizNum;
 
         if (PltSizNum > 0) {
             if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
@@ -311,12 +312,14 @@ namespace PlantComponentTemperatureSources {
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(tmpVolFlowRate - DesVolFlowRateUser) / DesVolFlowRateUser) >
                                     state.dataSize->AutoVsHardSizingThreshold) {
-                                    ShowMessage(
+                                    ShowMessage(state,
+                                                EnergyPlus::format(
+                                                    "SizePlantComponentTemperatureSource: Potential issue with equipment sizing for {}", this->Name));
+                                    ShowContinueError(
+                                        state, EnergyPlus::format("User-Specified Design Fluid Flow Rate of {:.5R} [m3/s]", DesVolFlowRateUser));
+                                    ShowContinueError(
                                         state,
-                                        format("SizePlantComponentTemperatureSource: Potential issue with equipment sizing for {}", this->Name));
-                                    ShowContinueError(state, format("User-Specified Design Fluid Flow Rate of {:.5R} [m3/s]", DesVolFlowRateUser));
-                                    ShowContinueError(state,
-                                                      format("differs from Design Size Design Fluid Flow Rate of {:.5R} [m3/s]", tmpVolFlowRate));
+                                        EnergyPlus::format("differs from Design Size Design Fluid Flow Rate of {:.5R} [m3/s]", tmpVolFlowRate));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }
@@ -329,7 +332,7 @@ namespace PlantComponentTemperatureSources {
         } else {
             if (this->DesVolFlowRateWasAutoSized && state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                 ShowSevereError(state, "Autosizing of plant component temperature source flow rate requires a loop Sizing:Plant object");
-                ShowContinueError(state, format("Occurs in PlantComponent:TemperatureSource object={}", this->Name));
+                ShowContinueError(state, EnergyPlus::format("Occurs in PlantComponent:TemperatureSource object={}", this->Name));
                 ErrorsFound = true;
             }
             if (!this->DesVolFlowRateWasAutoSized && state.dataPlnt->PlantFinalSizesOkayToReport) {
@@ -418,7 +421,7 @@ namespace PlantComponentTemperatureSources {
             PlantUtilities::ScanPlantLoopsForObject(
                 state, this->Name, DataPlant::PlantEquipmentType::WaterSource, this->plantLoc, errFlag, _, _, _, this->InletNodeNum, _);
             if (errFlag) {
-                ShowFatalError(state, format("{}: Program terminated due to previous condition(s).", RoutineName));
+                ShowFatalError(state, EnergyPlus::format("{}: Program terminated due to previous condition(s).", RoutineName));
             }
             this->MyFlag = false;
         }
@@ -461,7 +464,7 @@ namespace PlantComponentTemperatureSources {
         state.dataPlantCompTempSrc->NumSources = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
 
         if (state.dataPlantCompTempSrc->NumSources <= 0) {
-            ShowSevereError(state, format("No {} equipment specified in input file", cCurrentModuleObject));
+            ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", cCurrentModuleObject));
             ErrorsFound = true;
         }
 
@@ -488,36 +491,34 @@ namespace PlantComponentTemperatureSources {
 
             ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-
             state.dataPlantCompTempSrc->WaterSource(SourceNum).Name = state.dataIPShortCut->cAlphaArgs(1);
 
             state.dataPlantCompTempSrc->WaterSource(SourceNum).InletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(2),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::PlantComponentTemperatureSource,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(2),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::PlantComponentTemperatureSource,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
             state.dataPlantCompTempSrc->WaterSource(SourceNum).OutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::PlantComponentTemperatureSource,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
-            BranchNodeConnections::TestCompSet(state,
-                                               cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(2),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               "Chilled Water Nodes");
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(3),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::PlantComponentTemperatureSource,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
+            Node::TestCompSet(state,
+                              cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(2),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              "Chilled Water Nodes");
 
             state.dataPlantCompTempSrc->WaterSource(SourceNum).DesVolFlowRate = state.dataIPShortCut->rNumericArgs(1);
             if (state.dataPlantCompTempSrc->WaterSource(SourceNum).DesVolFlowRate == DataSizing::AutoSize) {
@@ -535,16 +536,17 @@ namespace PlantComponentTemperatureSources {
                     ErrorsFound = true;
                 }
             } else {
-                ShowSevereError(state, format("Input error for {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  format(R"(Invalid temperature specification type.  Expected either "Constant" or "Scheduled". Encountered {})",
-                                         state.dataIPShortCut->cAlphaArgs(4)));
+                ShowSevereError(state, EnergyPlus::format("Input error for {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format(R"(Invalid temperature specification type.  Expected either "Constant" or "Scheduled". Encountered {})",
+                                       state.dataIPShortCut->cAlphaArgs(4)));
                 ErrorsFound = true;
             }
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, format("Errors found in processing input for {}", cCurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", cCurrentModuleObject));
         }
     }
 

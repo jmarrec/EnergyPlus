@@ -62,12 +62,12 @@
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/WaterToAirHeatPumpSimple.hh>
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::DataEnvironment;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataPlant;
 using namespace EnergyPlus::DataSizing;
 using namespace EnergyPlus::Psychrometrics;
@@ -196,7 +196,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAir)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).WaterInletNodeNum;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).plantLoc.loopNum = 1;
-    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).plantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).plantLoc);
 
     // plant loop design leaving water temperature (design entering water temperature for WAHP coil)
     state->dataSize->PlantSizData.allocate(1);
@@ -1275,14 +1275,14 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     branch.Comp(1).Type = wahpSimple1.WAHPPlantType;
     branch.Comp(1).NodeNumIn = wahpSimple1.WaterInletNodeNum;
     wahpSimple1.plantLoc.loopNum = 1;
-    wahpSimple1.plantLoc.loop = &loop;
+    PlantUtilities::SetPlantLocationLinks(*state, wahpSimple1.plantLoc);
 
     auto &wahpSimple2 = state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2);
     branch.Comp(2).Name = wahpSimple2.Name;
     branch.Comp(2).Type = wahpSimple2.WAHPPlantType;
     branch.Comp(2).NodeNumIn = wahpSimple2.WaterInletNodeNum;
     wahpSimple2.plantLoc.loopNum = 1;
-    wahpSimple2.plantLoc.loop = &loop;
+    PlantUtilities::SetPlantLocationLinks(*state, wahpSimple2.plantLoc);
 
     // plant loop design leaving water temperature (design entering water temperature for WAHP coil)
     state->dataSize->NumPltSizInput = 1;
@@ -1491,7 +1491,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     branch.Comp(1).Type = wahpSimple1.WAHPPlantType;
     branch.Comp(1).NodeNumIn = wahpSimple1.WaterInletNodeNum;
     wahpSimple1.plantLoc.loopNum = 1;
-    wahpSimple1.plantLoc.loop = &loop;
+    PlantUtilities::SetPlantLocationLinks(*state, wahpSimple1.plantLoc);
 
     branch.Comp(2).Name = wahpSimple2.Name;
     branch.Comp(2).Type = wahpSimple2.WAHPPlantType;

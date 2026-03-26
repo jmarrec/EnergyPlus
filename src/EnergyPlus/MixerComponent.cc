@@ -79,9 +79,6 @@ namespace EnergyPlus::MixerComponent {
 // and sets that to the outlet conditions.  For the State Properties
 // it just takes the flow weighted averages of them.
 
-// Using/Aliasing
-using namespace DataLoopNode;
-
 void SimAirMixer(EnergyPlusData &state, std::string_view CompName, int &CompIndex)
 {
 
@@ -109,25 +106,25 @@ void SimAirMixer(EnergyPlusData &state, std::string_view CompName, int &CompInde
     if (CompIndex == 0) {
         MixerNum = Util::FindItemInList(CompName, state.dataMixerComponent->MixerCond, &MixerConditions::MixerName);
         if (MixerNum == 0) {
-            ShowFatalError(state, format("SimAirLoopMixer: Mixer not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("SimAirLoopMixer: Mixer not found={}", CompName));
         }
         CompIndex = MixerNum;
     } else {
         MixerNum = CompIndex;
         if (MixerNum > state.dataMixerComponent->NumMixers || MixerNum < 1) {
             ShowFatalError(state,
-                           format("SimAirLoopMixer: Invalid CompIndex passed={}, Number of Mixers={}, Mixer name={}",
-                                  MixerNum,
-                                  state.dataMixerComponent->NumMixers,
-                                  CompName));
+                           EnergyPlus::format("SimAirLoopMixer: Invalid CompIndex passed={}, Number of Mixers={}, Mixer name={}",
+                                              MixerNum,
+                                              state.dataMixerComponent->NumMixers,
+                                              CompName));
         }
         if (state.dataMixerComponent->CheckEquipName(MixerNum)) {
             if (CompName != state.dataMixerComponent->MixerCond(MixerNum).MixerName) {
                 ShowFatalError(state,
-                               format("SimAirLoopMixer: Invalid CompIndex passed={}, Mixer name={}, stored Mixer Name for that index={}",
-                                      MixerNum,
-                                      CompName,
-                                      state.dataMixerComponent->MixerCond(MixerNum).MixerName));
+                               EnergyPlus::format("SimAirLoopMixer: Invalid CompIndex passed={}, Mixer name={}, stored Mixer Name for that index={}",
+                                                  MixerNum,
+                                                  CompName,
+                                                  state.dataMixerComponent->MixerCond(MixerNum).MixerName));
             }
             state.dataMixerComponent->CheckEquipName(MixerNum) = false;
         }
@@ -164,7 +161,7 @@ void GetMixerInput(EnergyPlusData &state)
     // Uses the status flags to trigger events.
 
     // Using/Aliasing
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetOnlySingleNode;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     static constexpr std::string_view RoutineName("GetMixerInput: "); // include trailing blank space
@@ -216,19 +213,18 @@ void GetMixerInput(EnergyPlusData &state)
                                                                  lAlphaBlanks,
                                                                  cAlphaFields,
                                                                  cNumericFields);
-        Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
 
         state.dataMixerComponent->MixerCond(MixerNum).MixerName = AlphArray(1);
 
         state.dataMixerComponent->MixerCond(MixerNum).OutletNode = GetOnlySingleNode(state,
                                                                                      AlphArray(2),
                                                                                      ErrorsFound,
-                                                                                     DataLoopNode::ConnectionObjectType::AirLoopHVACZoneMixer,
+                                                                                     Node::ConnectionObjectType::AirLoopHVACZoneMixer,
                                                                                      AlphArray(1),
-                                                                                     DataLoopNode::NodeFluidType::Air,
-                                                                                     DataLoopNode::ConnectionType::Outlet,
-                                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                                     ObjectIsNotParent);
+                                                                                     Node::FluidType::Air,
+                                                                                     Node::ConnectionType::Outlet,
+                                                                                     Node::CompFluidStream::Primary,
+                                                                                     Node::ObjectIsNotParent);
         state.dataMixerComponent->MixerCond(MixerNum).NumInletNodes = NumAlphas - 2;
 
         for (auto &e : state.dataMixerComponent->MixerCond) {
@@ -262,18 +258,17 @@ void GetMixerInput(EnergyPlusData &state)
 
         for (NodeNum = 1; NodeNum <= state.dataMixerComponent->MixerCond(MixerNum).NumInletNodes; ++NodeNum) {
 
-            state.dataMixerComponent->MixerCond(MixerNum).InletNode(NodeNum) =
-                GetOnlySingleNode(state,
-                                  AlphArray(2 + NodeNum),
-                                  ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::AirLoopHVACZoneMixer,
-                                  AlphArray(1),
-                                  DataLoopNode::NodeFluidType::Air,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  ObjectIsNotParent);
+            state.dataMixerComponent->MixerCond(MixerNum).InletNode(NodeNum) = GetOnlySingleNode(state,
+                                                                                                 AlphArray(2 + NodeNum),
+                                                                                                 ErrorsFound,
+                                                                                                 Node::ConnectionObjectType::AirLoopHVACZoneMixer,
+                                                                                                 AlphArray(1),
+                                                                                                 Node::FluidType::Air,
+                                                                                                 Node::ConnectionType::Inlet,
+                                                                                                 Node::CompFluidStream::Primary,
+                                                                                                 Node::ObjectIsNotParent);
             if (lAlphaBlanks(2 + NodeNum)) {
-                ShowSevereError(state, format("{} is Blank, {} = {}", cAlphaFields(2 + NodeNum), CurrentModuleObject, AlphArray(1)));
+                ShowSevereError(state, EnergyPlus::format("{} is Blank, {} = {}", cAlphaFields(2 + NodeNum), CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
         }
@@ -288,11 +283,11 @@ void GetMixerInput(EnergyPlusData &state)
                 continue;
             }
             ShowSevereError(state,
-                            format("{} = {} specifies an inlet node name the same as the outlet node.",
-                                   CurrentModuleObject,
-                                   state.dataMixerComponent->MixerCond(MixerNum).MixerName));
-            ShowContinueError(state, format("..{} = {}", cAlphaFields(2), state.dataLoopNodes->NodeID(NodeNum)));
-            ShowContinueError(state, format("..Inlet Node #{} is duplicate.", InNodeNum1));
+                            EnergyPlus::format("{} = {} specifies an inlet node name the same as the outlet node.",
+                                               CurrentModuleObject,
+                                               state.dataMixerComponent->MixerCond(MixerNum).MixerName));
+            ShowContinueError(state, EnergyPlus::format("..{} = {}", cAlphaFields(2), state.dataLoopNodes->NodeID(NodeNum)));
+            ShowContinueError(state, EnergyPlus::format("..Inlet Node #{} is duplicate.", InNodeNum1));
             ErrorsFound = true;
         }
         for (InNodeNum1 = 1; InNodeNum1 <= state.dataMixerComponent->MixerCond(MixerNum).NumInletNodes; ++InNodeNum1) {
@@ -302,11 +297,11 @@ void GetMixerInput(EnergyPlusData &state)
                     continue;
                 }
                 ShowSevereError(state,
-                                format("{} = {} specifies duplicate inlet nodes in its inlet node list.",
-                                       CurrentModuleObject,
-                                       state.dataMixerComponent->MixerCond(MixerNum).MixerName));
-                ShowContinueError(state, format("..Inlet Node #{} Name={}", InNodeNum1, state.dataLoopNodes->NodeID(InNodeNum1)));
-                ShowContinueError(state, format("..Inlet Node #{} is duplicate.", InNodeNum2));
+                                EnergyPlus::format("{} = {} specifies duplicate inlet nodes in its inlet node list.",
+                                                   CurrentModuleObject,
+                                                   state.dataMixerComponent->MixerCond(MixerNum).MixerName));
+                ShowContinueError(state, EnergyPlus::format("..Inlet Node #{} Name={}", InNodeNum1, state.dataLoopNodes->NodeID(InNodeNum1)));
+                ShowContinueError(state, EnergyPlus::format("..Inlet Node #{} is duplicate.", InNodeNum2));
                 ErrorsFound = true;
             }
         }
@@ -320,7 +315,7 @@ void GetMixerInput(EnergyPlusData &state)
     lNumericBlanks.deallocate();
 
     if (ErrorsFound) {
-        ShowFatalError(state, format("{}Errors found in getting input.", RoutineName));
+        ShowFatalError(state, EnergyPlus::format("{}Errors found in getting input.", RoutineName));
     }
 }
 
@@ -695,9 +690,9 @@ void GetZoneMixerIndex(EnergyPlusData &state, std::string const &MixerName, int 
     MixerIndex = Util::FindItemInList(MixerName, state.dataMixerComponent->MixerCond, &MixerConditions::MixerName);
     if (MixerIndex == 0) {
         if (!ThisObjectType.empty()) {
-            ShowSevereError(state, format("{}, GetZoneMixerIndex: Zone Mixer not found={}", ThisObjectType, MixerName));
+            ShowSevereError(state, EnergyPlus::format("{}, GetZoneMixerIndex: Zone Mixer not found={}", ThisObjectType, MixerName));
         } else {
-            ShowSevereError(state, format("GetZoneMixerIndex: Zone Mixer not found={}", MixerName));
+            ShowSevereError(state, EnergyPlus::format("GetZoneMixerIndex: Zone Mixer not found={}", MixerName));
         }
         ErrorsFound = true;
     }

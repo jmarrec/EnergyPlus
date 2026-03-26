@@ -320,7 +320,7 @@ OutputControl:Files,
         bool extshd = (i == 30);
         bool tarcog = (i == 31);
 
-        std::string const idf_objects = fmt::format(idf_objects_fmt,
+        std::string const idf_objects = fmt::format(fmt::runtime(idf_objects_fmt),
                                                     fmt::arg("csv", boolToString(csv)),
                                                     fmt::arg("mtr", boolToString(mtr)),
                                                     fmt::arg("eso", boolToString(eso)),

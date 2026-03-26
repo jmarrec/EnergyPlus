@@ -98,7 +98,6 @@ using namespace EnergyPlus;
 using namespace AirflowNetwork;
 using namespace DataSurfaces;
 using namespace DataHeatBalance;
-using namespace EnergyPlus::DataLoopNode;
 using namespace OutAirNodeManager;
 using namespace EnergyPlus::Fans;
 using namespace EnergyPlus::HVACStandAloneERV;

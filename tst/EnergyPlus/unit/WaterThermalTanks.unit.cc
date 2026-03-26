@@ -70,6 +70,7 @@
 #include <EnergyPlus/PhotovoltaicThermalCollectors.hh>
 #include <EnergyPlus/Photovoltaics.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/SolarShading.hh>
@@ -3958,7 +3959,7 @@ TEST_F(EnergyPlusFixture, Desuperheater_WAHP_VSEQ_Coil_Test)
     state->dataPlnt->PlantLoop.allocate(PlantLoopNum);
 
     state->dataVariableSpeedCoils->VarSpeedCoil(1).plantLoc.loopNum = PlantLoopNum;
-    state->dataVariableSpeedCoils->VarSpeedCoil(1).plantLoc.loop = &state->dataPlnt->PlantLoop(PlantLoopNum);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataVariableSpeedCoils->VarSpeedCoil(1).plantLoc);
 
     state->dataPlnt->PlantLoop(PlantLoopNum).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(PlantLoopNum).FluidName = "WATER";

@@ -58,6 +58,7 @@
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/Plant/PlantManager.hh>
 #include <EnergyPlus/PlantCondLoopOperation.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/SetPointManager.hh>
 
 using namespace EnergyPlus;
@@ -794,6 +795,8 @@ TEST_F(DistributePlantLoadTest, DistributePlantLoadSequentialDryBulbRB)
     thisOpScheme.Available = true;
 
     PlantLocation this_plantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, this_plantLoc);
+
     DistributePlantLoadTest::ResetLoads();
     Real64 loopDemand = 550.0;
     Real64 remainingLoopDemand = 0.0;
@@ -849,6 +852,8 @@ TEST_F(DistributePlantLoadTest, DistributePlantLoadSequentialDryBulbTDB)
     thisOpScheme.Available = true;
 
     PlantLocation this_plantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, this_plantLoc);
+
     DistributePlantLoadTest::ResetLoads();
     Real64 loopDemand = 550.0;
     Real64 remainingLoopDemand = 0.0;
