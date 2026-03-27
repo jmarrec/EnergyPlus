@@ -288,6 +288,7 @@ struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
     Real64 QLatActual;         // Actual Latent Capacity [W]
     Real64 Winput;             // Power Consumption [W]
     bool MyOneTimeFlag = true; // one time allocation flag
+    bool LowFlowFlag = true;
 
     Array1D<WaterToAirHeatPumpSimple::SimpleWatertoAirHPConditions> SimpleWatertoAirHP;
 

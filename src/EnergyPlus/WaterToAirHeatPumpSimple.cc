@@ -911,7 +911,7 @@ namespace WaterToAirHeatPumpSimple {
                                 int const HPNum,                                 // Current HPNum under simulation
                                 Real64 const SensLoad,                           // Control zone sensible load[W]
                                 Real64 const LatentLoad,                         // Control zone latent load[W]
-                                [[maybe_unused]] HVAC::FanOp const fanOp,        // fan operating mode
+                                HVAC::FanOp const fanOp,                         // fan operating mode
                                 [[maybe_unused]] Real64 const OnOffAirFlowRatio, // ratio of compressor on flow to average flow over time step
                                 bool const FirstHVACIteration                    // Iteration flag
     )
@@ -1107,12 +1107,24 @@ namespace WaterToAirHeatPumpSimple {
                                                                                            state.dataLoopNodes->Node(AirInletNode).Temp,
                                                                                            state.dataLoopNodes->Node(AirInletNode).HumRat,
                                                                                            RoutineName);
-            if (simpleWatertoAirHP.AirMassFlowRate < 0.25 * RatedAirMassFlowRate) {
-                ShowRecurringWarningErrorAtEnd(state,
-                                               "Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil rated air flow rate.",
-                                               state.dataWaterToAirHeatPumpSimple->AirflowErrPointer,
-                                               simpleWatertoAirHP.AirMassFlowRate,
-                                               simpleWatertoAirHP.AirMassFlowRate);
+            if (fanOp != HVAC::FanOp::Cycling) {
+                if (simpleWatertoAirHP.AirMassFlowRate < 0.25 * RatedAirMassFlowRate) {
+                    ShowRecurringWarningErrorAtEnd(state,
+                                                   "Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil rated air flow rate.",
+                                                   state.dataWaterToAirHeatPumpSimple->AirflowErrPointer,
+                                                   simpleWatertoAirHP.AirMassFlowRate,
+                                                   simpleWatertoAirHP.AirMassFlowRate);
+                }
+            } else {
+                if ((simpleWatertoAirHP.AirMassFlowRate / simpleWatertoAirHP.PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
+                    if (state.dataWaterToAirHeatPumpSimple->LowFlowFlag) {
+                        ShowWarningError(state,
+                                         EnergyPlus::format("{}: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil ({}) rated air flow rate.",
+                                                            RoutineName,
+                                                            simpleWatertoAirHP.Name));
+                        state.dataWaterToAirHeatPumpSimple->LowFlowFlag = false;
+                    }
+                }
             }
             simpleWatertoAirHP.WaterFlowMode = true;
         } else { // heat pump is off
