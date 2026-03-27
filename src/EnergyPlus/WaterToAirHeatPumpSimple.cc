@@ -1109,19 +1109,22 @@ namespace WaterToAirHeatPumpSimple {
                                                                                            RoutineName);
             if (fanOp != HVAC::FanOp::Cycling) {
                 if (simpleWatertoAirHP.AirMassFlowRate < 0.25 * RatedAirMassFlowRate) {
-                    ShowRecurringWarningErrorAtEnd(state,
-                                                   "Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil rated air flow rate.",
-                                                   state.dataWaterToAirHeatPumpSimple->AirflowErrPointer,
-                                                   simpleWatertoAirHP.AirMassFlowRate,
-                                                   simpleWatertoAirHP.AirMassFlowRate);
+                    ShowRecurringWarningErrorAtEnd(
+                        state,
+                        "Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil rated air flow rate.",
+                        state.dataWaterToAirHeatPumpSimple->AirflowErrPointer,
+                        simpleWatertoAirHP.AirMassFlowRate,
+                        simpleWatertoAirHP.AirMassFlowRate);
                 }
             } else {
                 if ((simpleWatertoAirHP.AirMassFlowRate / simpleWatertoAirHP.PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
                     if (state.dataWaterToAirHeatPumpSimple->LowFlowFlag) {
-                        ShowWarningError(state,
-                                         EnergyPlus::format("{}: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil ({}) rated air flow rate.",
-                                                            RoutineName,
-                                                            simpleWatertoAirHP.Name));
+                        ShowWarningError(
+                            state,
+                            EnergyPlus::format(
+                                "{}: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil ({}) rated air flow rate.",
+                                RoutineName,
+                                simpleWatertoAirHP.Name));
                         state.dataWaterToAirHeatPumpSimple->LowFlowFlag = false;
                     }
                 }
