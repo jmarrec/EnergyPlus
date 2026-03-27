@@ -181,12 +181,12 @@ namespace WaterToAirHeatPumpSimple {
 
         if (simpleWAHP.WAHPPlantType == DataPlant::PlantEquipmentType::CoilWAHPCoolingEquationFit) {
             // Cooling mode
-            InitSimpleWatertoAirHP(state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration);
+            InitSimpleWatertoAirHP(state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
             CalcHPCoolingSimple(state, HPNum, fanOp, SensLoad, LatentLoad, compressorOp, PartLoadRatio, OnOffAirFlowRatio);
             UpdateSimpleWatertoAirHP(state, HPNum);
         } else if (simpleWAHP.WAHPPlantType == DataPlant::PlantEquipmentType::CoilWAHPHeatingEquationFit) {
             // Heating mode
-            InitSimpleWatertoAirHP(state, HPNum, SensLoad, DataPrecisionGlobals::constant_zero, fanOp, OnOffAirFlowRatio, FirstHVACIteration);
+            InitSimpleWatertoAirHP(state, HPNum, SensLoad, DataPrecisionGlobals::constant_zero, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
             CalcHPHeatingSimple(state, HPNum, fanOp, SensLoad, compressorOp, PartLoadRatio, OnOffAirFlowRatio);
             UpdateSimpleWatertoAirHP(state, HPNum);
         } else {
@@ -913,7 +913,8 @@ namespace WaterToAirHeatPumpSimple {
                                 Real64 const LatentLoad,                         // Control zone latent load[W]
                                 HVAC::FanOp const fanOp,                         // fan operating mode
                                 [[maybe_unused]] Real64 const OnOffAirFlowRatio, // ratio of compressor on flow to average flow over time step
-                                bool const FirstHVACIteration                    // Iteration flag
+                                bool const FirstHVACIteration,                   // Iteration flag
+                                Real64 const PartLoadRatio                       // compressor part load ratio
     )
     {
 
@@ -1117,7 +1118,7 @@ namespace WaterToAirHeatPumpSimple {
                         simpleWatertoAirHP.AirMassFlowRate);
                 }
             } else {
-                if ((simpleWatertoAirHP.AirMassFlowRate / simpleWatertoAirHP.PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
+                if ((simpleWatertoAirHP.AirMassFlowRate / PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
                     if (state.dataWaterToAirHeatPumpSimple->LowFlowFlag) {
                         ShowWarningError(
                             state,

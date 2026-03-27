@@ -190,7 +190,8 @@ namespace WaterToAirHeatPumpSimple {
                                 Real64 const LatentLoad,        // Control zone latent load[W]
                                 HVAC::FanOp const fanOp,        // fan operating mode
                                 Real64 const OnOffAirFlowRatio, // ratio of compressor on flow to average flow over time step
-                                bool const FirstHVACIteration   // Iteration flag
+                                bool const FirstHVACIteration,  // Iteration flag
+                                Real64 const PartLoadRatio      // compressor part load ratio
     );
 
     void SizeHVACWaterToAir(EnergyPlusData &state, int const HPNum);
