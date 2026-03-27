@@ -1250,15 +1250,28 @@ void CalcVRFCondenser(EnergyPlusData &state, int const VRFCond)
 
     // calculate crankcase heater power
     if (vrf.MaxOATCCHeater > OutdoorDryBulb) {
-        // calculate crankcase heater power
-        vrf.CrankCaseHeaterPower = vrf.CCHeaterPower * (1.0 - VRFRTF);
         if (vrf.NumCompressors > 1) {
+            Real64 previousCompCompressorRatio = 0.0;
+            // the first compressor uses vrf.CompressorSizeRatio, the remaining compressor capcity is split equally
+            // UpperStageCompressorRatio is the compressor capacity ratio for each compressor where Stage > 1
             UpperStageCompressorRatio = (1.0 - vrf.CompressorSizeRatio) / (vrf.NumCompressors - 1);
-            for (int Stage = 1; Stage <= vrf.NumCompressors - 2; ++Stage) {
-                if (vrf.VRFCondPLR < (vrf.CompressorSizeRatio + Stage * UpperStageCompressorRatio)) {
-                    vrf.CrankCaseHeaterPower += vrf.CCHeaterPower;
+            for (int Stage = 1; Stage <= vrf.NumCompressors; ++Stage) {
+                Real64 thisCompCapacityRange = (Stage == 1) ? vrf.CompressorSizeRatio : UpperStageCompressorRatio;
+                Real64 thisCompCapacityRatio = vrf.CompressorSizeRatio + (Stage - 1) * UpperStageCompressorRatio;
+                if (VRFRTF < thisCompCapacityRatio) {
+                    // divide the proportion of RTF that is attributed to this compressor (thisCompRTF is 0 - 1)
+                    Real64 thisCompRTF = (VRFRTF - previousCompCompressorRatio) / thisCompCapacityRange;
+                    vrf.CrankCaseHeaterPower += vrf.CCHeaterPower * (1.0 - thisCompRTF);
+                    if (Stage < vrf.NumCompressors) {
+                        // if there are stages left then those compressors are also off
+                        vrf.CrankCaseHeaterPower += (vrf.NumCompressors - Stage) * vrf.CCHeaterPower;
+                        break;
+                    }
                 }
+                previousCompCompressorRatio += thisCompCapacityRange;
             }
+        } else {
+            vrf.CrankCaseHeaterPower = vrf.CCHeaterPower * (1.0 - VRFRTF);
         }
     } else {
         vrf.CrankCaseHeaterPower = 0.0;
@@ -12424,14 +12437,28 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     // Calculate CrankCaseHeaterPower: VRF Heat Pump Crankcase Heater Electric Power [W]
     if (this->MaxOATCCHeater > OutdoorDryBulb) {
         // calculate crankcase heater power
-        this->CrankCaseHeaterPower = this->CCHeaterPower * (1.0 - VRFRTF);
         if (this->NumCompressors > 1) {
+            Real64 previousCompCompressorRatio = 0.0;
+            // the first compressor uses vrf.CompressorSizeRatio, the remaining compressor capcity is split equally
+            // UpperStageCompressorRatio is the compressor capacity ratio for each compressor where Stage > 1
             UpperStageCompressorRatio = (1.0 - this->CompressorSizeRatio) / (this->NumCompressors - 1);
-            for (int Stage = 1; Stage <= this->NumCompressors - 2; ++Stage) {
-                if (this->VRFCondPLR < (this->CompressorSizeRatio + Stage * UpperStageCompressorRatio)) {
-                    this->CrankCaseHeaterPower += this->CCHeaterPower;
+            for (int Stage = 1; Stage <= this->NumCompressors; ++Stage) {
+                Real64 thisCompCapacityRange = (Stage == 1) ? this->CompressorSizeRatio : UpperStageCompressorRatio;
+                Real64 thisCompCapacityRatio = this->CompressorSizeRatio + (Stage - 1) * UpperStageCompressorRatio;
+                if (VRFRTF < thisCompCapacityRatio) {
+                    // divide the proportion of RTF that is attributed to this compressor (thisCompRTF is 0 - 1)
+                    Real64 thisCompRTF = (VRFRTF - previousCompCompressorRatio) / thisCompCapacityRange;
+                    this->CrankCaseHeaterPower += this->CCHeaterPower * (1.0 - thisCompRTF);
+                    if (Stage < this->NumCompressors) {
+                        // if there are stages left then those compressors are also off
+                        this->CrankCaseHeaterPower += (this->NumCompressors - Stage) * this->CCHeaterPower;
+                        break;
+                    }
                 }
+                previousCompCompressorRatio += thisCompCapacityRange;
             }
+        } else {
+            this->CrankCaseHeaterPower = this->CCHeaterPower * (1.0 - VRFRTF);
         }
     } else {
         this->CrankCaseHeaterPower = 0.0;
