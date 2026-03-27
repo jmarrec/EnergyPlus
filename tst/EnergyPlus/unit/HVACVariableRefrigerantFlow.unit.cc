@@ -3944,6 +3944,12 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve)
     DefrostWatts = state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF * (state->dataHVACVarRefFlow->VRF(VRFCond).HeatingCapacity / 1.01667) *
                    state->dataHVACVarRefFlow->VRF(VRFCond).DefrostFraction;
     ASSERT_EQ(DefrostWatts, state->dataHVACVarRefFlow->VRF(VRFCond).DefrostPower); // defrost power calculation check
+    // check crankcase heater operation
+    EXPECT_EQ(1.0, state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF);
+    EXPECT_EQ(0.0, state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower);
+    // Crankcase heater could have turned on since OAT is less than Max OAT for crankcase heater - AirCooled condenser
+    EXPECT_LT(state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRF(VRFCond).CondenserNodeNum).Temp,
+              state->dataHVACVarRefFlow->VRF(VRFCond).MaxOATCCHeater);
 
     // test that correct performance curve is used (i.e., lo or hi performance curves based on OAT)
     int DXHeatingCoilIndex = 2;
@@ -6024,6 +6030,67 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve_WaterCooled)
               0.0); // flow should be > 0 at no load flow rate for constant fan mode in this example
     EXPECT_GT(state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRFTU(VRFTUNum).VRFTUOutletNodeNum).MassFlowRate,
               0.0); // flow should be > 0 at no load flow rate for constant fan mode in this example
+
+    // set zone load to heating
+    state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).RemainingOutputRequired =
+        state->dataHVACVarRefFlow->VRF(VRFCond).HeatingCapacity / 10.0; // set load equal to fraction of the VRF heating capacity
+    state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).RemainingOutputReqToCoolSP =
+        state->dataHVACVarRefFlow->VRF(VRFCond).HeatingCapacity / 10.0 +
+        1000.0; // simulates a dual Tstat with load to cooling SP > load to heating SP
+    state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).RemainingOutputReqToHeatSP =
+        state->dataHVACVarRefFlow->VRF(VRFCond).HeatingCapacity / 10.0;
+    state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).OutputRequiredToCoolingSP =
+        state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).RemainingOutputReqToCoolSP;
+    state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).OutputRequiredToHeatingSP =
+        state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).RemainingOutputReqToHeatSP;
+
+    state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRF(VRFCond).CondenserNodeNum).Temp = 7.0;             // water inlet temperature
+    state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRFTU(VRFTUNum).VRFTUInletNodeNum).Temp = 20.0;        // TU inlet air temp
+    state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRFTU(VRFTUNum).VRFTUInletNodeNum).HumRat = 0.0056;    // TU inlet air humrat
+    state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRFTU(VRFTUNum).VRFTUInletNodeNum).Enthalpy = 34823.5; // TU inlet air enthalpy
+    state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRFTU(VRFTUNum).ZoneAirNode).Temp = 20.0;              // also set zone conditions
+    state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRFTU(VRFTUNum).ZoneAirNode).HumRat = 0.0056;
+    state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRFTU(VRFTUNum).ZoneAirNode).Enthalpy = 34823.5;
+    state->dataEnvrn->OutDryBulbTemp = 5.0;
+    state->dataEnvrn->OutHumRat = 0.00269; // 50% RH
+    state->dataEnvrn->OutBaroPress = 101325.0;
+    state->dataEnvrn->OutWetBulbTemp = 1.34678;
+    SimulateVRF(*state,
+                state->dataHVACVarRefFlow->VRFTU(VRFTUNum).Name,
+                FirstHVACIteration,
+                CurZoneNum,
+                state->dataZoneEquip->ZoneEquipList(state->dataSize->CurZoneEqNum).EquipIndex(EquipPtr),
+                HeatingActive,
+                CoolingActive,
+                OAUnitNum,
+                OAUCoilOutTemp,
+                ZoneEquipment,
+                SysOutputProvided,
+                LatOutputProvided);
+    EXPECT_TRUE(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondPLR > 0.0);
+    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF, 0.127, 0.001);
+    // RTF is less than 1/3 capacity so 2 compressors are off and 1 is cycling, 15 W + 15 W + 15 * (1 - (0.12726/0.33)) = 39.125 W
+    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower, 39.215, 0.001);
+
+    // same conditions as above except OAT is higher than maximum OAT for crankcase heater operation
+    state->dataEnvrn->OutDryBulbTemp = 8.0;
+    SimulateVRF(*state,
+                state->dataHVACVarRefFlow->VRFTU(VRFTUNum).Name,
+                FirstHVACIteration,
+                CurZoneNum,
+                state->dataZoneEquip->ZoneEquipList(state->dataSize->CurZoneEqNum).EquipIndex(EquipPtr),
+                HeatingActive,
+                CoolingActive,
+                OAUnitNum,
+                OAUCoilOutTemp,
+                ZoneEquipment,
+                SysOutputProvided,
+                LatOutputProvided);
+    EXPECT_TRUE(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondPLR > 0.0);
+    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF, 0.127, 0.001);
+    // Outdoor temperature is greater than max crankcase heater limit so CCH of off
+    EXPECT_GT(state->dataEnvrn->OutDryBulbTemp, state->dataHVACVarRefFlow->VRF(VRFCond).MaxOATCCHeater);
+    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower, 0.0, 0.001);
 }
 
 TEST_F(EnergyPlusFixture, VRFTest_TU_NoLoad_OAMassFlowRateTest)
