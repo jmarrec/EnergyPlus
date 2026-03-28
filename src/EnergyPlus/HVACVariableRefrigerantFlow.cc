@@ -11240,7 +11240,6 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     int NumTUInHeatingMode; // number of terminal units actually heating
     Real64 OATForCCHeater;  // actual outdoor temperature for crankcase heater calculation
 
-
     Real64 TUParasiticPower;          // total terminal unit parasitic power (W)
     Real64 TUFanPower;                // total terminal unit fan power (W)
     Real64 InletAirWetBulbC;          // coil inlet air wet-bulb temperature (C)
