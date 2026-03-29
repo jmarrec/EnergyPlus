@@ -3926,6 +3926,7 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve)
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).RemainingOutputReqToCoolSP =
         state->dataHVACVarRefFlow->VRF(VRFCond).HeatingCapacity + 1000.0; // simulates a dual Tstat with load to cooling SP > load to heating SP
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(CurZoneNum).RemainingOutputReqToHeatSP = state->dataHVACVarRefFlow->VRF(VRFCond).HeatingCapacity;
+    state->dataEnvrn->OutDryBulbTemp = 5.0;
 
     SimulateVRF(*state,
                 state->dataHVACVarRefFlow->VRFTU(VRFTUNum).Name,
@@ -3946,10 +3947,10 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve)
     ASSERT_EQ(DefrostWatts, state->dataHVACVarRefFlow->VRF(VRFCond).DefrostPower); // defrost power calculation check
     // check crankcase heater operation
     EXPECT_EQ(1.0, state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF);
+    // OAT is low enough to allow CCH operation
+    EXPECT_LT(state->dataEnvrn->OutDryBulbTemp, state->dataHVACVarRefFlow->VRF(VRFCond).MaxOATCCHeater);
+    // CCH is off when RTF = 1 even though OAT is less than maximum OAT for crankcase heater operation
     EXPECT_EQ(0.0, state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower);
-    // Crankcase heater could have turned on since OAT is less than Max OAT for crankcase heater - AirCooled condenser
-    EXPECT_LT(state->dataLoopNodes->Node(state->dataHVACVarRefFlow->VRF(VRFCond).CondenserNodeNum).Temp,
-              state->dataHVACVarRefFlow->VRF(VRFCond).MaxOATCCHeater);
 
     // test that correct performance curve is used (i.e., lo or hi performance curves based on OAT)
     int DXHeatingCoilIndex = 2;
@@ -6069,7 +6070,7 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve_WaterCooled)
                 LatOutputProvided);
     EXPECT_TRUE(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondPLR > 0.0);
     EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF, 0.127, 0.001);
-    // RTF is less than 1/3 capacity so 2 compressors are off and 1 is cycling, 15 W + 15 W + 15 * (1 - (0.12726/0.33)) = 39.125 W
+    // RTF is less than 1/3 capacity so 2 compressors are off and 1 is cycling, 15 W + 15 W + 15 * (1 - (0.12726/0.33)) = 39.215 W
     EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower, 39.215, 0.001);
 
     // same conditions as above except OAT is higher than maximum OAT for crankcase heater operation
