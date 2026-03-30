@@ -6070,8 +6070,8 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve_WaterCooled)
                 LatOutputProvided);
     EXPECT_TRUE(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondPLR > 0.0);
     EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF, 0.127, 0.001);
-    // RTF is less than 1/3 capacity so 2 compressors are off (15 W each) and 1 is cycling, 0.12726 * 45 = 39.273 W
-    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower, 39.273, 0.001);
+    // RTF is less than 1/3 capacity so 2 compressors are off and 1 is cycling, 15 W + 15 W + 15 * (1 - (0.12726/0.13)) = 30.316 W
+    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower, 30.316, 0.001);
 
     // same conditions as above except OAT is higher than maximum OAT for crankcase heater operation
     state->dataEnvrn->OutDryBulbTemp = 8.0;
