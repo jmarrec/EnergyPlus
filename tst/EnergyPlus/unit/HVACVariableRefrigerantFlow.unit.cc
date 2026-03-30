@@ -5065,7 +5065,7 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve_WaterCooled)
         "  ,                        !- Piping Correction Factor for Height in Heating Mode Coefficient {1/m}",
         "  15,                      !- Crankcase Heater Power per Compressor {W}",
         "  3,                       !- Number of Compressors {dimensionless}",
-        "  0.33,                    !- Ratio of Compressor Size to Total Compressor Capacity {W/W}",
+        "  0.13,                    !- Ratio of Compressor Size to Total Compressor Capacity {W/W}",
         "  7,                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater {C}",
         "  ReverseCycle,            !- Defrost Strategy",
         "  Timed,                   !- Defrost Control",
@@ -6070,8 +6070,8 @@ TEST_F(EnergyPlusFixture, VRFTest_SysCurve_WaterCooled)
                 LatOutputProvided);
     EXPECT_TRUE(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondPLR > 0.0);
     EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).VRFCondRTF, 0.127, 0.001);
-    // RTF is less than 1/3 capacity so 2 compressors are off and 1 is cycling, 15 W + 15 W + 15 * (1 - (0.12726/0.33)) = 39.215 W
-    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower, 39.215, 0.001);
+    // RTF is less than 1/3 capacity so 2 compressors are off (15 W each) and 1 is cycling, 0.12726 * 45 = 39.273 W
+    EXPECT_NEAR(state->dataHVACVarRefFlow->VRF(VRFCond).CrankCaseHeaterPower, 39.273, 0.001);
 
     // same conditions as above except OAT is higher than maximum OAT for crankcase heater operation
     state->dataEnvrn->OutDryBulbTemp = 8.0;
