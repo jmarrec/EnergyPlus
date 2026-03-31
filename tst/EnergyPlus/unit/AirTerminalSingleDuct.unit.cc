@@ -84,7 +84,6 @@ using namespace EnergyPlus::DataEnvironment;
 using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::HeatBalanceManager;
 using namespace EnergyPlus::HVACSingleDuctInduc;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::MixedAir;
 using namespace EnergyPlus::Psychrometrics;
 using namespace EnergyPlus::SingleDuct;

@@ -101,7 +101,6 @@ namespace Humidifiers {
     // REFERENCES: ASHRAE HVAC 2 Toolkit, page 4-112
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using HVAC::SmallMassFlow;
 
     void SimHumidifier(EnergyPlusData &state,
@@ -206,9 +205,9 @@ namespace Humidifiers {
         // Uses InputProcessor "Get" routines to obtain data.
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
         using Curve::GetCurveIndex;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
         using WaterManager::SetupTankDemandComponent;
         using WaterManager::SetupTankSupplyComponent;
 
@@ -298,21 +297,21 @@ namespace Humidifiers {
             Humidifier.AirInNode = GetOnlySingleNode(state,
                                                      Alphas(3),
                                                      ErrorsFound,
-                                                     DataLoopNode::ConnectionObjectType::HumidifierSteamElectric,
+                                                     Node::ConnectionObjectType::HumidifierSteamElectric,
                                                      Alphas(1),
-                                                     DataLoopNode::NodeFluidType::Air,
-                                                     DataLoopNode::ConnectionType::Inlet,
-                                                     NodeInputManager::CompFluidStream::Primary,
-                                                     ObjectIsNotParent);
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Inlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent);
             Humidifier.AirOutNode = GetOnlySingleNode(state,
                                                       Alphas(4),
                                                       ErrorsFound,
-                                                      DataLoopNode::ConnectionObjectType::HumidifierSteamElectric,
+                                                      Node::ConnectionObjectType::HumidifierSteamElectric,
                                                       Alphas(1),
-                                                      DataLoopNode::NodeFluidType::Air,
-                                                      DataLoopNode::ConnectionType::Outlet,
-                                                      NodeInputManager::CompFluidStream::Primary,
-                                                      ObjectIsNotParent);
+                                                      Node::FluidType::Air,
+                                                      Node::ConnectionType::Outlet,
+                                                      Node::CompFluidStream::Primary,
+                                                      Node::ObjectIsNotParent);
             TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
 
             //  A5; \field Name of Water Storage Tank
@@ -364,21 +363,21 @@ namespace Humidifiers {
             Humidifier.AirInNode = GetOnlySingleNode(state,
                                                      Alphas(4),
                                                      ErrorsFound,
-                                                     DataLoopNode::ConnectionObjectType::HumidifierSteamGas,
+                                                     Node::ConnectionObjectType::HumidifierSteamGas,
                                                      Alphas(1),
-                                                     DataLoopNode::NodeFluidType::Air,
-                                                     DataLoopNode::ConnectionType::Inlet,
-                                                     NodeInputManager::CompFluidStream::Primary,
-                                                     ObjectIsNotParent);
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Inlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent);
             Humidifier.AirOutNode = GetOnlySingleNode(state,
                                                       Alphas(5),
                                                       ErrorsFound,
-                                                      DataLoopNode::ConnectionObjectType::HumidifierSteamGas,
+                                                      Node::ConnectionObjectType::HumidifierSteamGas,
                                                       Alphas(1),
-                                                      DataLoopNode::NodeFluidType::Air,
-                                                      DataLoopNode::ConnectionType::Outlet,
-                                                      NodeInputManager::CompFluidStream::Primary,
-                                                      ObjectIsNotParent);
+                                                      Node::FluidType::Air,
+                                                      Node::ConnectionType::Outlet,
+                                                      Node::CompFluidStream::Primary,
+                                                      Node::ObjectIsNotParent);
             TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(4), Alphas(5), "Air Nodes");
 
             Humidifier.EfficiencyCurvePtr = GetCurveIndex(state, Alphas(3));
@@ -615,7 +614,7 @@ namespace Humidifiers {
 
         if (!state.dataGlobal->SysSizingCalc && MySetPointCheckFlag && state.dataHVACGlobal->DoSetPointTest) {
             if (AirOutNode > 0) {
-                if (state.dataLoopNodes->Node(AirOutNode).HumRatMin == SensedNodeFlagValue) {
+                if (state.dataLoopNodes->Node(AirOutNode).HumRatMin == Node::SensedNodeFlagValue) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowSevereError(state,
                                         EnergyPlus::format("Humidifiers: Missing humidity setpoint for {} = {}",

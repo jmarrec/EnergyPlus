@@ -89,7 +89,6 @@ namespace OutAirNodeManager {
     // USE STATEMENTS:
     // Use statements for data only modules
     // Using/Aliasing
-    using namespace DataLoopNode;
     using namespace DataEnvironment;
 
     void SetOutAirNodes(EnergyPlusData &state)
@@ -128,9 +127,6 @@ namespace OutAirNodeManager {
 
         // METHODOLOGY EMPLOYED:
         // Use the Get routines from the InputProcessor module.
-
-        // Using/Aliasing
-        using namespace NodeInputManager;
 
         // Locals
         // SUBROUTINE PARAMETER DEFINITIONS:
@@ -218,13 +214,13 @@ namespace OutAirNodeManager {
                                 NumNodes,
                                 NodeNums,
                                 ErrInList,
-                                DataLoopNode::NodeFluidType::Air,
-                                DataLoopNode::ConnectionObjectType::OutdoorAirNodeList,
+                                Node::FluidType::Air,
+                                Node::ConnectionObjectType::OutdoorAirNodeList,
                                 CurrentModuleObject,
-                                DataLoopNode::ConnectionType::OutsideAir,
-                                static_cast<NodeInputManager::CompFluidStream>(NextFluidStreamNum),
-                                ObjectIsNotParent,
-                                IncrementFluidStreamYes,
+                                Node::ConnectionType::OutsideAir,
+                                static_cast<Node::CompFluidStream>(NextFluidStreamNum),
+                                Node::ObjectIsNotParent,
+                                Node::IncrementFluidStreamYes,
                                 cAlphaFields(AlphaNum));
                     NextFluidStreamNum += NumNodes;
                     if (ErrInList) {
@@ -278,13 +274,13 @@ namespace OutAirNodeManager {
                             NumNodes,
                             NodeNums,
                             ErrInList,
-                            DataLoopNode::NodeFluidType::Air,
-                            DataLoopNode::ConnectionObjectType::OutdoorAirNode,
+                            Node::FluidType::Air,
+                            Node::ConnectionObjectType::OutdoorAirNode,
                             CurrentModuleObject,
-                            DataLoopNode::ConnectionType::OutsideAir,
-                            static_cast<NodeInputManager::CompFluidStream>(NextFluidStreamNum),
-                            ObjectIsNotParent,
-                            IncrementFluidStreamYes,
+                            Node::ConnectionType::OutsideAir,
+                            static_cast<Node::CompFluidStream>(NextFluidStreamNum),
+                            Node::ObjectIsNotParent,
+                            Node::IncrementFluidStreamYes,
                             cAlphaFields(1));
                 NextFluidStreamNum += NumNodes;
                 if (ErrInList) {
@@ -464,9 +460,6 @@ namespace OutAirNodeManager {
         // REFERENCES:
         // na
 
-        // Using/Aliasing
-        using namespace NodeInputManager;
-
         // Locals
         // SUBROUTINE ARGUMENT DEFINITIONS:
 
@@ -513,13 +506,13 @@ namespace OutAirNodeManager {
                             DummyNumber,
                             TmpNums,
                             errFlag,
-                            DataLoopNode::NodeFluidType::Air,
-                            DataLoopNode::ConnectionObjectType::OutdoorAirNode,
+                            Node::FluidType::Air,
+                            Node::ConnectionObjectType::OutdoorAirNode,
                             "OutdoorAir:Node",
-                            DataLoopNode::ConnectionType::OutsideAir,
-                            static_cast<NodeInputManager::CompFluidStream>(state.dataOutAirNodeMgr->NumOutsideAirNodes),
-                            ObjectIsNotParent,
-                            IncrementFluidStreamYes);
+                            Node::ConnectionType::OutsideAir,
+                            static_cast<Node::CompFluidStream>(state.dataOutAirNodeMgr->NumOutsideAirNodes),
+                            Node::ObjectIsNotParent,
+                            Node::IncrementFluidStreamYes);
                 SetOANodeValues(state, NodeNumber, false);
             }
         }

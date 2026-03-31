@@ -101,7 +101,6 @@ namespace HVACCooledBeam {
     // method in DOE-2.1E.
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using HVAC::SmallAirVolFlow;
     using HVAC::SmallLoad;
     using HVAC::SmallMassFlow;
@@ -202,8 +201,8 @@ namespace HVACCooledBeam {
         // Uses "Get" routines to read in data.
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
         using namespace DataSizing;
         using WaterCoils::GetCoilWaterInletNode;
 
@@ -295,42 +294,42 @@ namespace HVACCooledBeam {
             CoolBeam(CBNum).AirInNode = GetOnlySingleNode(state,
                                                           Alphas(4),
                                                           ErrorsFound,
-                                                          DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
+                                                          Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
                                                           Alphas(1),
-                                                          DataLoopNode::NodeFluidType::Air,
-                                                          DataLoopNode::ConnectionType::Inlet,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          ObjectIsNotParent,
+                                                          Node::FluidType::Air,
+                                                          Node::ConnectionType::Inlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent,
                                                           cAlphaFields(4));
             CoolBeam(CBNum).AirOutNode = GetOnlySingleNode(state,
                                                            Alphas(5),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
+                                                           Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
                                                            Alphas(1),
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Outlet,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           ObjectIsNotParent,
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Outlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent,
                                                            cAlphaFields(5));
             CoolBeam(CBNum).CWInNode = GetOnlySingleNode(state,
                                                          Alphas(6),
                                                          ErrorsFound,
-                                                         DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
+                                                         Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
                                                          Alphas(1),
-                                                         DataLoopNode::NodeFluidType::Water,
-                                                         DataLoopNode::ConnectionType::Inlet,
-                                                         NodeInputManager::CompFluidStream::Secondary,
-                                                         ObjectIsNotParent,
+                                                         Node::FluidType::Water,
+                                                         Node::ConnectionType::Inlet,
+                                                         Node::CompFluidStream::Secondary,
+                                                         Node::ObjectIsNotParent,
                                                          cAlphaFields(6));
             CoolBeam(CBNum).CWOutNode = GetOnlySingleNode(state,
                                                           Alphas(7),
                                                           ErrorsFound,
-                                                          DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
+                                                          Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeCooledBeam,
                                                           Alphas(1),
-                                                          DataLoopNode::NodeFluidType::Water,
-                                                          DataLoopNode::ConnectionType::Outlet,
-                                                          NodeInputManager::CompFluidStream::Secondary,
-                                                          ObjectIsNotParent,
+                                                          Node::FluidType::Water,
+                                                          Node::ConnectionType::Outlet,
+                                                          Node::CompFluidStream::Secondary,
+                                                          Node::ObjectIsNotParent,
                                                           cAlphaFields(7));
             CoolBeam(CBNum).MaxAirVolFlow = Numbers(1);
             CoolBeam(CBNum).MaxCoolWaterVolFlow = Numbers(2);

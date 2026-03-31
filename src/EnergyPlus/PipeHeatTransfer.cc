@@ -200,10 +200,9 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
     // needed to define and simulate the surface.
 
     // Using/Aliasing
-    using BranchNodeConnections::TestCompSet;
+    using Node::TestCompSet;
 
-    using NodeInputManager::GetOnlySingleNode;
-    using namespace DataLoopNode;
+    using Node::GetOnlySingleNode;
     using OutAirNodeManager::CheckOutAirNodeNumber;
 
     static constexpr std::string_view routineName = "GetPipeHeatTransfer";
@@ -284,12 +283,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         state.dataPipeHT->PipeHT(Item).InletNodeNum = GetOnlySingleNode(state,
                                                                         s_ipsc->cAlphaArgs(3),
                                                                         ErrorsFound,
-                                                                        DataLoopNode::ConnectionObjectType::PipeIndoor,
+                                                                        Node::ConnectionObjectType::PipeIndoor,
                                                                         s_ipsc->cAlphaArgs(1),
-                                                                        DataLoopNode::NodeFluidType::Water,
-                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                        NodeInputManager::CompFluidStream::Primary,
-                                                                        ObjectIsNotParent);
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
         if (state.dataPipeHT->PipeHT(Item).InletNodeNum == 0) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
@@ -301,12 +300,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         state.dataPipeHT->PipeHT(Item).OutletNodeNum = GetOnlySingleNode(state,
                                                                          s_ipsc->cAlphaArgs(4),
                                                                          ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::PipeIndoor,
+                                                                         Node::ConnectionObjectType::PipeIndoor,
                                                                          s_ipsc->cAlphaArgs(1),
-                                                                         DataLoopNode::NodeFluidType::Water,
-                                                                         DataLoopNode::ConnectionType::Outlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         ObjectIsNotParent);
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
         if (state.dataPipeHT->PipeHT(Item).OutletNodeNum == 0) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
@@ -429,12 +428,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         state.dataPipeHT->PipeHT(Item).InletNodeNum = GetOnlySingleNode(state,
                                                                         s_ipsc->cAlphaArgs(3),
                                                                         ErrorsFound,
-                                                                        DataLoopNode::ConnectionObjectType::PipeOutdoor,
+                                                                        Node::ConnectionObjectType::PipeOutdoor,
                                                                         s_ipsc->cAlphaArgs(1),
-                                                                        DataLoopNode::NodeFluidType::Water,
-                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                        NodeInputManager::CompFluidStream::Primary,
-                                                                        ObjectIsNotParent);
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
         if (state.dataPipeHT->PipeHT(Item).InletNodeNum == 0) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
@@ -446,12 +445,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         state.dataPipeHT->PipeHT(Item).OutletNodeNum = GetOnlySingleNode(state,
                                                                          s_ipsc->cAlphaArgs(4),
                                                                          ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::PipeOutdoor,
+                                                                         Node::ConnectionObjectType::PipeOutdoor,
                                                                          s_ipsc->cAlphaArgs(1),
-                                                                         DataLoopNode::NodeFluidType::Water,
-                                                                         DataLoopNode::ConnectionType::Outlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         ObjectIsNotParent);
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
         if (state.dataPipeHT->PipeHT(Item).OutletNodeNum == 0) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
@@ -468,12 +467,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         state.dataPipeHT->PipeHT(Item).EnvrAirNodeNum = GetOnlySingleNode(state,
                                                                           s_ipsc->cAlphaArgs(5),
                                                                           ErrorsFound,
-                                                                          DataLoopNode::ConnectionObjectType::PipeOutdoor,
+                                                                          Node::ConnectionObjectType::PipeOutdoor,
                                                                           s_ipsc->cAlphaArgs(1),
-                                                                          DataLoopNode::NodeFluidType::Air,
-                                                                          DataLoopNode::ConnectionType::OutsideAirReference,
-                                                                          NodeInputManager::CompFluidStream::Primary,
-                                                                          ObjectIsNotParent);
+                                                                          Node::FluidType::Air,
+                                                                          Node::ConnectionType::OutsideAirReference,
+                                                                          Node::CompFluidStream::Primary,
+                                                                          Node::ObjectIsNotParent);
         if (!s_ipsc->lAlphaFieldBlanks(5)) {
             if (!CheckOutAirNodeNumber(state, state.dataPipeHT->PipeHT(Item).EnvrAirNodeNum)) {
                 ShowSevereError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(5), s_ipsc->cAlphaArgs(5)));
@@ -559,12 +558,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         state.dataPipeHT->PipeHT(Item).InletNodeNum = GetOnlySingleNode(state,
                                                                         s_ipsc->cAlphaArgs(3),
                                                                         ErrorsFound,
-                                                                        DataLoopNode::ConnectionObjectType::PipeUnderground,
+                                                                        Node::ConnectionObjectType::PipeUnderground,
                                                                         s_ipsc->cAlphaArgs(1),
-                                                                        DataLoopNode::NodeFluidType::Water,
-                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                        NodeInputManager::CompFluidStream::Primary,
-                                                                        ObjectIsNotParent);
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
         if (state.dataPipeHT->PipeHT(Item).InletNodeNum == 0) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
@@ -576,12 +575,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         state.dataPipeHT->PipeHT(Item).OutletNodeNum = GetOnlySingleNode(state,
                                                                          s_ipsc->cAlphaArgs(4),
                                                                          ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::PipeUnderground,
+                                                                         Node::ConnectionObjectType::PipeUnderground,
                                                                          s_ipsc->cAlphaArgs(1),
-                                                                         DataLoopNode::NodeFluidType::Water,
-                                                                         DataLoopNode::ConnectionType::Outlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         ObjectIsNotParent);
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
         if (state.dataPipeHT->PipeHT(Item).OutletNodeNum == 0) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));

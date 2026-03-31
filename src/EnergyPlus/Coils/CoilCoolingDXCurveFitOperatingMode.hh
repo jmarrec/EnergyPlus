@@ -91,13 +91,13 @@ struct CoilCoolingDXCurveFitOperatingMode
     explicit CoilCoolingDXCurveFitOperatingMode(EnergyPlusData &state, const std::string &name_to_find);
     Real64 getCurrentEvapCondPumpPower(int speedNum);
     void CalcOperatingMode(EnergyPlusData &state,
-                           const DataLoopNode::NodeData &inletNode,
-                           DataLoopNode::NodeData &outletNode,
+                           const Node::NodeData &inletNode,
+                           Node::NodeData &outletNode,
                            int speedNum,
                            Real64 speedRatio,
                            HVAC::FanOp const fanOp,
-                           DataLoopNode::NodeData &condInletNode,
-                           DataLoopNode::NodeData &condOutletNode,
+                           Node::NodeData &condInletNode,
+                           Node::NodeData &condOutletNode,
                            bool singleMode);
 
     std::string name;

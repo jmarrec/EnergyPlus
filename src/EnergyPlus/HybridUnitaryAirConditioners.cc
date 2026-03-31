@@ -182,7 +182,6 @@ void InitZoneHybridUnitaryAirConditioners(EnergyPlusData &state,
     // na
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using namespace Psychrometrics;
     using DataZoneEquipment::CheckZoneEquipmentList;
 
@@ -339,7 +338,6 @@ void CalcZoneHybridUnitaryAirConditioners(EnergyPlusData &state,
     //       MODIFIED
     //       RE-ENGINEERED  na
 
-    using namespace DataLoopNode;
     using namespace Psychrometrics;
 
     Real64 EnvDryBulbT, AirTempRoom, EnvRelHumm, RoomRelHum, DesignMinVR;
@@ -394,7 +392,6 @@ void ReportZoneHybridUnitaryAirConditioners(EnergyPlusData &state, int const Uni
     //       RE-ENGINEERED  na
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using namespace Psychrometrics;
 
     state.dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(UnitNum).PrimaryMode =
@@ -446,10 +443,9 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
     //       RE-ENGINEERED  na
 
     // Using/Aliasing
-    using BranchNodeConnections::SetUpCompSets;
-    using BranchNodeConnections::TestCompSet;
-    using NodeInputManager::GetOnlySingleNode;
-    using namespace DataLoopNode;
+    using Node::GetOnlySingleNode;
+    using Node::SetUpCompSets;
+    using Node::TestCompSet;
     std::string cCurrentModuleObject; // Object type for getting and error messages
     Array1D_string Alphas;            // Alpha items for object
     Array1D<Real64> Numbers;          // Numeric items for object
@@ -551,39 +547,39 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
             hybridUnitaryAC.InletNode = GetOnlySingleNode(state,
                                                           Alphas(9),
                                                           ErrorsFound,
-                                                          DataLoopNode::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
+                                                          Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                           Alphas(1),
-                                                          DataLoopNode::NodeFluidType::Air,
-                                                          DataLoopNode::ConnectionType::Inlet,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          ObjectIsNotParent);
+                                                          Node::FluidType::Air,
+                                                          Node::ConnectionType::Inlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent);
             hybridUnitaryAC.SecondaryInletNode = GetOnlySingleNode(state,
                                                                    Alphas(10),
                                                                    ErrorsFound,
-                                                                   DataLoopNode::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
+                                                                   Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                                    Alphas(1),
-                                                                   DataLoopNode::NodeFluidType::Air,
-                                                                   DataLoopNode::ConnectionType::OutsideAir,
-                                                                   NodeInputManager::CompFluidStream::Primary,
-                                                                   ObjectIsNotParent);
+                                                                   Node::FluidType::Air,
+                                                                   Node::ConnectionType::OutsideAir,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
             hybridUnitaryAC.OutletNode = GetOnlySingleNode(state,
                                                            Alphas(11),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
+                                                           Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                            Alphas(1),
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Outlet,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Outlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
             hybridUnitaryAC.SecondaryOutletNode = GetOnlySingleNode(state,
                                                                     Alphas(12),
                                                                     ErrorsFound,
-                                                                    DataLoopNode::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
+                                                                    Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                                     Alphas(1),
-                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                    DataLoopNode::ConnectionType::ReliefAir,
-                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                    ObjectIsNotParent);
+                                                                    Node::FluidType::Air,
+                                                                    Node::ConnectionType::ReliefAir,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
             TestCompSet(state, cCurrentModuleObject, Alphas(1), Alphas(9), Alphas(11), "Hybrid Evap Air Zone Nodes");
             TestCompSet(state, cCurrentModuleObject, Alphas(1), Alphas(10), Alphas(12), "Hybrid Evap Air Zone Secondary Nodes");
 

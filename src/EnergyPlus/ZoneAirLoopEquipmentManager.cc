@@ -209,10 +209,9 @@ namespace ZoneAirLoopEquipmentManager {
         // na
 
         // Using/Aliasing
-        using NodeInputManager::GetOnlySingleNode;
-        using namespace DataLoopNode;
-        using BranchNodeConnections::SetUpCompSets;
         using DualDuct::GetDualDuctOutdoorAirRecircUse;
+        using Node::GetOnlySingleNode;
+        using Node::SetUpCompSets;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetZoneAirLoopEquipment: ");   // include trailing blank space
@@ -257,12 +256,12 @@ namespace ZoneAirLoopEquipmentManager {
                 airDistUnit.OutletNodeNum = GetOnlySingleNode(state,
                                                               AlphArray(2),
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::ZoneHVACAirDistributionUnit,
+                                                              Node::ConnectionObjectType::ZoneHVACAirDistributionUnit,
                                                               AlphArray(1),
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              ObjectIsParent);
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Outlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsParent);
                 airDistUnit.InletNodeNum = 0;
                 airDistUnit.NumComponents = 1;
                 int AirDistCompUnitNum = 1;
