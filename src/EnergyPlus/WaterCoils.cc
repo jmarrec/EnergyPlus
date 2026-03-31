@@ -2547,25 +2547,22 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
             } else {
                 TempSize = DataSizing::AutoSize;
             }
+            FieldNum = 3; //  N3 , \field Rated Capacity
+            SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W]";
+            ErrorsFound = false;
             if (state.dataSize->CurSysNum > 0) {
-                FieldNum = 3; //  N3 , \field Rated Capacity
-                SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W]";
-                ErrorsFound = false;
                 HeatingCapacitySizer sizerHeatingCapacity;
                 sizerHeatingCapacity.overrideSizingString(SizingString);
                 sizerHeatingCapacity.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
-                TempSize = sizerHeatingCapacity.size(state, TempSize, ErrorsFound);
-                waterCoil.DesWaterHeatingCoilRate = TempSize;
-                waterCoil.DesTotWaterCoilLoad = TempSize;
-                state.dataSize->DataCapacityUsedForSizing = waterCoil.DesWaterHeatingCoilRate;
+                waterCoil.DesWaterHeatingCoilRate = sizerHeatingCapacity.size(state, TempSize, ErrorsFound);
             } else {
                 WaterHeatingCapacitySizer sizerWaterHeatingCapacity;
-                ErrorsFound = false;
+                sizerWaterHeatingCapacity.overrideSizingString(SizingString);
                 sizerWaterHeatingCapacity.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
                 waterCoil.DesWaterHeatingCoilRate = sizerWaterHeatingCapacity.size(state, TempSize, ErrorsFound);
-                waterCoil.DesTotWaterCoilLoad = waterCoil.DesWaterHeatingCoilRate;
-                state.dataSize->DataCapacityUsedForSizing = waterCoil.DesWaterHeatingCoilRate;
             }
+            waterCoil.DesTotWaterCoilLoad = waterCoil.DesWaterHeatingCoilRate;
+            state.dataSize->DataCapacityUsedForSizing = waterCoil.DesWaterHeatingCoilRate;
 
             // We now have the design load if it was autosized. For the case of CoilPerfInpMeth == NomCap, calculate the air flow rate
             // specified by the NomCap inputs. This overrides all previous values
