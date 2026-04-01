@@ -624,9 +624,11 @@ state.dataStrGlobals->inputFilePath='{:g}',
             //       Get directories from ini file
             std::string programPathStr;
             ReadINIFile(iniFile, "program", "dir", programPathStr);
-            state.dataStrGlobals->ProgramPath = fs::path(programPathStr);
 
-            state.dataStrGlobals->inputIddFilePath = state.dataStrGlobals->ProgramPath / "Energy+.idd";
+            if (!programPathStr.empty()) {
+                state.dataStrGlobals->ProgramPath = fs::path(programPathStr);
+                state.dataStrGlobals->inputIddFilePath = state.dataStrGlobals->ProgramPath / "Energy+.idd";
+            }
         }
 
         // Check if specified files exist

@@ -348,23 +348,25 @@ void CoilCoolingDX::oneTimeInit(EnergyPlusData &state)
                         OutputProcessor::TimeStepType::System,
                         OutputProcessor::StoreType::Average,
                         this->name);
-    SetupOutputVariable(state,
-                        "Cooling Coil Crankcase Heater Electricity Rate",
-                        Constant::Units::W,
-                        this->performance->crankcaseHeaterPower,
-                        OutputProcessor::TimeStepType::System,
-                        OutputProcessor::StoreType::Average,
-                        this->name);
-    SetupOutputVariable(state,
-                        "Cooling Coil Crankcase Heater Electricity Energy",
-                        Constant::Units::J,
-                        this->performance->crankcaseHeaterElectricityConsumption,
-                        OutputProcessor::TimeStepType::System,
-                        OutputProcessor::StoreType::Sum,
-                        this->name,
-                        Constant::eResource::Electricity,
-                        OutputProcessor::Group::HVAC,
-                        OutputProcessor::EndUseCat::Cooling);
+    if (this->performance->ReportCoolingCoilCrankcasePower) {
+        SetupOutputVariable(state,
+                            "Cooling Coil Crankcase Heater Electricity Rate",
+                            Constant::Units::W,
+                            this->performance->crankcaseHeaterPower,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
+                            this->name);
+        SetupOutputVariable(state,
+                            "Cooling Coil Crankcase Heater Electricity Energy",
+                            Constant::Units::J,
+                            this->performance->crankcaseHeaterElectricityConsumption,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Sum,
+                            this->name,
+                            Constant::eResource::Electricity,
+                            OutputProcessor::Group::HVAC,
+                            OutputProcessor::EndUseCat::Cooling);
+    }
     // Ported from variable speed coil
     SetupOutputVariable(state,
                         "Cooling Coil Air Mass Flow Rate",

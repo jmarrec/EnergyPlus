@@ -391,6 +391,9 @@ namespace HVACDXHeatPumpSystem {
 
             if (dxhpSys.HeatPumpCoilType_Num != HVAC::Coil_HeatingAirToAirVariableSpeed) {
                 SetCoilSystemHeatingDXFlag(state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName);
+            } else {
+                VariableSpeedCoils::SetCoilSystemHeatingDXFlag(
+                    state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName);
             }
 
         } // End of the DX System Loop
