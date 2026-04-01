@@ -336,26 +336,16 @@ namespace HVACDXHeatPumpSystem {
             }
 
             if (dxhpSys.HeatPumpCoilType_Num == HVAC::Coil_HeatingAirToAirVariableSpeed) {
-                dxhpSys.DXHeatPumpCoilInletNodeNum =
-                    GetCoilInletNodeVariableSpeed(state,
-                                                  dxhpSys.HeatPumpCoilType,
-                                                  dxhpSys.HeatPumpCoilName,
-                                                  state.dataHVACDXHeatPumpSys->ErrorsFound);
-                dxhpSys.DXHeatPumpCoilOutletNodeNum =
-                    GetCoilOutletNodeVariableSpeed(state,
-                                                   dxhpSys.HeatPumpCoilType,
-                                                   dxhpSys.HeatPumpCoilName,
-                                                   state.dataHVACDXHeatPumpSys->ErrorsFound);
+                dxhpSys.DXHeatPumpCoilInletNodeNum = GetCoilInletNodeVariableSpeed(
+                    state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName, state.dataHVACDXHeatPumpSys->ErrorsFound);
+                dxhpSys.DXHeatPumpCoilOutletNodeNum = GetCoilOutletNodeVariableSpeed(
+                    state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName, state.dataHVACDXHeatPumpSys->ErrorsFound);
             } else {
-                dxhpSys.DXHeatPumpCoilInletNodeNum = GetCoilInletNode(state,
-                                                                                             dxhpSys.HeatPumpCoilType,
-                                                                                             dxhpSys.HeatPumpCoilName,
-                                                                                             state.dataHVACDXHeatPumpSys->ErrorsFound);
+                dxhpSys.DXHeatPumpCoilInletNodeNum =
+                    GetCoilInletNode(state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName, state.dataHVACDXHeatPumpSys->ErrorsFound);
 
-                dxhpSys.DXHeatPumpCoilOutletNodeNum = GetCoilOutletNode(state,
-                                                                                               dxhpSys.HeatPumpCoilType,
-                                                                                               dxhpSys.HeatPumpCoilName,
-                                                                                               state.dataHVACDXHeatPumpSys->ErrorsFound);
+                dxhpSys.DXHeatPumpCoilOutletNodeNum =
+                    GetCoilOutletNode(state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName, state.dataHVACDXHeatPumpSys->ErrorsFound);
             }
 
             // Coil air-side outlet node is the control node
@@ -368,11 +358,7 @@ namespace HVACDXHeatPumpSystem {
                         state.dataLoopNodes->NodeID(dxhpSys.DXHeatPumpCoilOutletNodeNum),
                         "Air Nodes");
 
-            ValidateComponent(state,
-                              dxhpSys.HeatPumpCoilType,
-                              dxhpSys.HeatPumpCoilName,
-                              IsNotOK,
-                              CurrentModuleObject);
+            ValidateComponent(state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName, IsNotOK, CurrentModuleObject);
             if (IsNotOK) {
                 ShowContinueError(state, EnergyPlus::format("In {} = \"{}\".", CurrentModuleObject, dxhpSys.Name));
                 state.dataHVACDXHeatPumpSys->ErrorsFound = true;
@@ -392,8 +378,7 @@ namespace HVACDXHeatPumpSystem {
             if (dxhpSys.HeatPumpCoilType_Num != HVAC::Coil_HeatingAirToAirVariableSpeed) {
                 SetCoilSystemHeatingDXFlag(state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName);
             } else {
-                VariableSpeedCoils::SetCoilSystemHeatingDXFlag(
-                    state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName);
+                VariableSpeedCoils::SetCoilSystemHeatingDXFlag(state, dxhpSys.HeatPumpCoilType, dxhpSys.HeatPumpCoilName);
             }
 
         } // End of the DX System Loop

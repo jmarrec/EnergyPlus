@@ -192,7 +192,7 @@ namespace CoolTower {
             ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
             auto &coolTower = state.dataCoolTower->CoolTowerSys(CoolTowerNum);
-            
+
             coolTower.Name = s_ipsc->cAlphaArgs(1); // Name of cooltower
             if (lAlphaBlanks(2)) {
                 coolTower.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -201,14 +201,13 @@ namespace CoolTower {
                 ErrorsFound = true;
             }
 
-
             if (lAlphaBlanks(3)) {
                 ShowSevereEmptyField(state, eoh, cAlphaFields(3));
                 ErrorsFound = true;
             } else if ((coolTower.ZonePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->Zone)) == 0 &&
-                       (coolTower.spacePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->space)) == 0) { 
-              ShowSevereItemNotFound(state, eoh, cAlphaFields(3), s_ipsc->cAlphaArgs(3));
-              ErrorsFound = true;
+                       (coolTower.spacePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->space)) == 0) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFields(3), s_ipsc->cAlphaArgs(3));
+                ErrorsFound = true;
             } else if (coolTower.ZonePtr == 0) {
                 coolTower.ZonePtr = state.dataHeatBal->space(coolTower.spacePtr).zoneNum;
             }
@@ -252,7 +251,7 @@ namespace CoolTower {
                 coolTower.TowerHeight = MaxHeight;
                 ShowWarningBadMax(state, eoh, cNumericFields(2), s_ipsc->rNumericArgs(2), Clusive::In, MaxHeight);
             }
-  
+
             if (coolTower.TowerHeight < MinHeight) {
                 coolTower.TowerHeight = MinHeight;
                 ShowWarningBadMin(state, eoh, cNumericFields(2), s_ipsc->rNumericArgs(2), Clusive::In, MinHeight);
@@ -325,7 +324,7 @@ namespace CoolTower {
         for (int CoolTowerNum = 1; CoolTowerNum <= NumCoolTowers; ++CoolTowerNum) {
             auto &coolTower = state.dataCoolTower->CoolTowerSys(CoolTowerNum);
             auto &zone = state.dataHeatBal->Zone(coolTower.ZonePtr);
-            
+
             SetupOutputVariable(state,
                                 "Zone Cooltower Sensible Heat Loss Energy",
                                 Constant::Units::J,
@@ -532,8 +531,7 @@ namespace CoolTower {
                 if (state.dataEnvrn->WindSpeed < MinWindSpeed || state.dataEnvrn->WindSpeed > MaxWindSpeed) {
                     continue;
                 }
-                if (state.dataZoneTempPredictorCorrector->zoneHeatBalance(ZoneNum).MAT <
-                    coolTower.MinZoneTemp) {
+                if (state.dataZoneTempPredictorCorrector->zoneHeatBalance(ZoneNum).MAT < coolTower.MinZoneTemp) {
                     continue;
                 }
 
@@ -551,18 +549,16 @@ namespace CoolTower {
                         AirVolFlowRate = min(AirVolFlowRate, coolTower.MaxAirVolFlowRate);
                     }
                     WaterFlowRate = min(WaterFlowRate, (coolTower.MaxWaterFlowRate * UCFactor));
-                    OutletTemp =
-                        state.dataEnvrn->OutDryBulbTemp - (state.dataEnvrn->OutDryBulbTemp - state.dataEnvrn->OutWetBulbTemp) *
-                                                              (1.0 - std::exp(-0.8 * coolTower.TowerHeight)) *
-                                                              (1.0 - std::exp(-0.15 * WaterFlowRate));
+                    OutletTemp = state.dataEnvrn->OutDryBulbTemp - (state.dataEnvrn->OutDryBulbTemp - state.dataEnvrn->OutWetBulbTemp) *
+                                                                       (1.0 - std::exp(-0.8 * coolTower.TowerHeight)) *
+                                                                       (1.0 - std::exp(-0.15 * WaterFlowRate));
                 } else if (coolTower.FlowCtrlType == FlowCtrl::FlowSchedule) {
                     WaterFlowRate = coolTower.MaxWaterFlowRate * UCFactor;
                     AirVolFlowRate = 0.0125 * WaterFlowRate * std::sqrt(coolTower.TowerHeight);
                     AirVolFlowRate = min(AirVolFlowRate, coolTower.MaxAirVolFlowRate);
-                    OutletTemp =
-                        state.dataEnvrn->OutDryBulbTemp - (state.dataEnvrn->OutDryBulbTemp - state.dataEnvrn->OutWetBulbTemp) *
-                                                              (1.0 - std::exp(-0.8 * coolTower.TowerHeight)) *
-                                                              (1.0 - std::exp(-0.15 * WaterFlowRate));
+                    OutletTemp = state.dataEnvrn->OutDryBulbTemp - (state.dataEnvrn->OutDryBulbTemp - state.dataEnvrn->OutWetBulbTemp) *
+                                                                       (1.0 - std::exp(-0.8 * coolTower.TowerHeight)) *
+                                                                       (1.0 - std::exp(-0.15 * WaterFlowRate));
                 }
 
                 if (OutletTemp < state.dataEnvrn->OutWetBulbTemp) {
@@ -665,14 +661,14 @@ namespace CoolTower {
             auto &coolTower = state.dataCoolTower->CoolTowerSys(CoolTowerNum);
             // Set the demand request for supply water from water storage tank (if needed)
             if (coolTower.CoolTWaterSupplyMode == WaterSupplyMode::FromTank) {
-                state.dataWaterData->WaterStorage(coolTower.CoolTWaterSupTankID)
-                    .VdotRequestDemand(coolTower.CoolTWaterTankDemandARRID) = coolTower.CoolTWaterConsumpRate;
+                state.dataWaterData->WaterStorage(coolTower.CoolTWaterSupTankID).VdotRequestDemand(coolTower.CoolTWaterTankDemandARRID) =
+                    coolTower.CoolTWaterConsumpRate;
             }
 
             // check if should be starved by restricted flow from tank
             if (coolTower.CoolTWaterSupplyMode == WaterSupplyMode::FromTank) {
-                Real64 AvailWaterRate = state.dataWaterData->WaterStorage(coolTower.CoolTWaterSupTankID)
-                                            .VdotAvailDemand(coolTower.CoolTWaterTankDemandARRID);
+                Real64 AvailWaterRate =
+                    state.dataWaterData->WaterStorage(coolTower.CoolTWaterSupTankID).VdotAvailDemand(coolTower.CoolTWaterTankDemandARRID);
                 if (AvailWaterRate < coolTower.CoolTWaterConsumpRate) {
                     coolTower.CoolTWaterStarvMakeupRate = coolTower.CoolTWaterConsumpRate - AvailWaterRate;
                     coolTower.CoolTWaterConsumpRate = AvailWaterRate;

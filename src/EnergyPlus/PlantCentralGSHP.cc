@@ -226,7 +226,7 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
             //}
 
             auto &chillerHeater = this->ChillerHeater(NumChillerHeater);
-            
+
             Real64 tmpNomCap = chillerHeater.RefCapCooling;
             Real64 tmpEvapVolFlowRate = chillerHeater.EvapVolFlowRate;
             Real64 tmpCondVolFlowRate = chillerHeater.CondVolFlowRate;
@@ -264,8 +264,8 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                                                          tmpEvapVolFlowRate);
                         }
                     } else {
-                        if (chillerHeater.EvapVolFlowRate > 0.0 && tmpEvapVolFlowRate > 0.0 &&
-                            state.dataPlnt->PlantFinalSizesOkayToReport && !this->mySizesReported) {
+                        if (chillerHeater.EvapVolFlowRate > 0.0 && tmpEvapVolFlowRate > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport &&
+                            !this->mySizesReported) {
 
                             // Hardsized evaporator design volume flow rate for reporting
                             Real64 EvapVolFlowRateUser = chillerHeater.EvapVolFlowRate;
@@ -302,14 +302,11 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                 if (chillerHeater.EvapVolFlowRateWasAutoSized) {
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         ShowSevereError(state, "Autosizing of CGSHP Chiller Heater evap flow rate requires a loop Sizing:Plant object");
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("Occurs in CGSHP Chiller Heater Performance object={}", chillerHeater.Name));
+                        ShowContinueError(state, EnergyPlus::format("Occurs in CGSHP Chiller Heater Performance object={}", chillerHeater.Name));
                         ErrorsFound = true;
                     }
                 } else {
-                    if (chillerHeater.EvapVolFlowRate > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport &&
-                        !this->mySizesReported) {
+                    if (chillerHeater.EvapVolFlowRate > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport && !this->mySizesReported) {
                         BaseSizer::reportSizerOutput(state,
                                                      "ChillerHeaterPerformance:Electric:EIR",
                                                      chillerHeater.Name,
@@ -341,22 +338,16 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
 
                         // Now that we have the Reference Cooling Capacity, we need to also initialize the Heating side
                         // given the ratios
-                        chillerHeater.RefCapClgHtg =
-                            chillerHeater.RefCapCooling * chillerHeater.ClgHtgToCoolingCapRatio;
+                        chillerHeater.RefCapClgHtg = chillerHeater.RefCapCooling * chillerHeater.ClgHtgToCoolingCapRatio;
 
                         chillerHeater.RefPowerClgHtg =
-                            (chillerHeater.RefCapCooling / chillerHeater.RefCOPCooling) *
-                            chillerHeater.ClgHtgtoCogPowerRatio;
+                            (chillerHeater.RefCapCooling / chillerHeater.RefCOPCooling) * chillerHeater.ClgHtgtoCogPowerRatio;
 
-                        chillerHeater.RefCOPClgHtg =
-                            chillerHeater.RefCapClgHtg / chillerHeater.RefPowerClgHtg;
+                        chillerHeater.RefCOPClgHtg = chillerHeater.RefCapClgHtg / chillerHeater.RefPowerClgHtg;
 
                         if (state.dataPlnt->PlantFinalSizesOkayToReport && !this->mySizesReported) {
-                            BaseSizer::reportSizerOutput(state,
-                                                         "ChillerHeaterPerformance:Electric:EIR",
-                                                         chillerHeater.Name,
-                                                         "Design Size Reference Capacity [W]",
-                                                         tmpNomCap);
+                            BaseSizer::reportSizerOutput(
+                                state, "ChillerHeaterPerformance:Electric:EIR", chillerHeater.Name, "Design Size Reference Capacity [W]", tmpNomCap);
                         }
                         if (state.dataPlnt->PlantFirstSizesOkayToReport) {
                             BaseSizer::reportSizerOutput(state,
@@ -366,8 +357,8 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                                                          tmpNomCap);
                         }
                     } else {
-                        if (chillerHeater.RefCapCooling > 0.0 && tmpNomCap > 0.0 &&
-                            state.dataPlnt->PlantFinalSizesOkayToReport && !this->mySizesReported) {
+                        if (chillerHeater.RefCapCooling > 0.0 && tmpNomCap > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport &&
+                            !this->mySizesReported) {
 
                             // Hardsized nominal capacity cooling power for reporting
                             Real64 NomCapUser = chillerHeater.RefCapCooling;
@@ -399,15 +390,13 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                 if (chillerHeater.RefCapCoolingWasAutoSized) {
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         ShowSevereError(state,
-                                        EnergyPlus::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.",
-                                                           chillerHeater.Name));
+                                        EnergyPlus::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.", chillerHeater.Name));
                         ShowContinueError(state, "Autosizing of CGSHP Chiller Heater reference capacity requires");
                         ShowContinueError(state, "a cooling loop Sizing:Plant object.");
                         ErrorsFound = true;
                     }
                 } else {
-                    if (chillerHeater.RefCapCooling > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport &&
-                        !this->mySizesReported) {
+                    if (chillerHeater.RefCapCooling > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport && !this->mySizesReported) {
                         BaseSizer::reportSizerOutput(state,
                                                      "ChillerHeaterPerformance:Electric:EIR",
                                                      chillerHeater.Name,
@@ -423,12 +412,9 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                 if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
                     Real64 rho = this->GLHEPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
                     // TODO: JM 2018-12-06 I wonder why Cp isn't calculated at the same temp as rho...
-                    Real64 Cp = this->GLHEPlantLoc.loop->glycol->getSpecificHeat(
-                        state, chillerHeater.TempRefCondInCooling, RoutineName);
-                    tmpCondVolFlowRate =
-                        tmpNomCap *
-                        (1.0 + (1.0 / chillerHeater.RefCOPCooling) * chillerHeater.OpenMotorEff) /
-                        (state.dataSize->PlantSizData(PltSizCondNum).DeltaT * Cp * rho);
+                    Real64 Cp = this->GLHEPlantLoc.loop->glycol->getSpecificHeat(state, chillerHeater.TempRefCondInCooling, RoutineName);
+                    tmpCondVolFlowRate = tmpNomCap * (1.0 + (1.0 / chillerHeater.RefCOPCooling) * chillerHeater.OpenMotorEff) /
+                                         (state.dataSize->PlantSizData(PltSizCondNum).DeltaT * Cp * rho);
                     chillerHeater.tmpCondVolFlowRate = tmpCondVolFlowRate;
                     if (!chillerHeater.CondVolFlowRateWasAutoSized) {
                         tmpCondVolFlowRate = chillerHeater.CondVolFlowRate;
@@ -458,8 +444,8 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                                                          tmpCondVolFlowRate);
                         }
                     } else {
-                        if (chillerHeater.CondVolFlowRate > 0.0 && tmpCondVolFlowRate > 0.0 &&
-                            state.dataPlnt->PlantFinalSizesOkayToReport && !this->mySizesReported) {
+                        if (chillerHeater.CondVolFlowRate > 0.0 && tmpCondVolFlowRate > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport &&
+                            !this->mySizesReported) {
 
                             // Hardsized condenser design volume flow rate for reporting
                             Real64 CondVolFlowRateUser = chillerHeater.CondVolFlowRate;
@@ -495,15 +481,13 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                 if (chillerHeater.CondVolFlowRateWasAutoSized) {
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         ShowSevereError(state,
-                                        EnergyPlus::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.",
-                                                           chillerHeater.Name));
+                                        EnergyPlus::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.", chillerHeater.Name));
                         ShowContinueError(state, "Autosizing of CGSHP Chiller Heater condenser flow rate requires");
                         ShowContinueError(state, "a condenser loop Sizing:Plant object.");
                         ErrorsFound = true;
                     }
                 } else {
-                    if (chillerHeater.CondVolFlowRate > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport &&
-                        !this->mySizesReported) {
+                    if (chillerHeater.CondVolFlowRate > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport && !this->mySizesReported) {
                         BaseSizer::reportSizerOutput(state,
                                                      "ChillerHeaterPerformance:Electric:EIR",
                                                      chillerHeater.Name,
@@ -518,10 +502,8 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                 std::string equipName = chillerHeater.Name;
                 OutputReportPredefined::PreDefTableEntry(
                     state, state.dataOutRptPredefined->pdchMechType, equipName, "ChillerHeaterPerformance:Electric:EIR");
-                OutputReportPredefined::PreDefTableEntry(
-                    state, state.dataOutRptPredefined->pdchMechNomEff, equipName, chillerHeater.RefCOPCooling);
-                OutputReportPredefined::PreDefTableEntry(
-                    state, state.dataOutRptPredefined->pdchMechNomCap, equipName, chillerHeater.RefCapCooling);
+                OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchMechNomEff, equipName, chillerHeater.RefCOPCooling);
+                OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchMechNomCap, equipName, chillerHeater.RefCapCooling);
             }
 
             if (ErrorsFound) {
@@ -604,16 +586,15 @@ void GetWrapperInput(EnergyPlusData &state)
             wrapper.ControlMode = CondenserType::SmartMixing;
         }
 
-        wrapper.CHWInletNodeNum =
-            Node::GetOnlySingleNode(state,
-                                    state.dataIPShortCut->cAlphaArgs(3),
-                                    ErrorsFound,
-                                    Node::ConnectionObjectType::CentralHeatPumpSystem,
-                                    state.dataIPShortCut->cAlphaArgs(1),
-                                    Node::FluidType::Water,
-                                    Node::ConnectionType::Inlet,
-                                    Node::CompFluidStream::Primary,
-                                    Node::ObjectIsNotParent); // node name : connection should be careful!
+        wrapper.CHWInletNodeNum = Node::GetOnlySingleNode(state,
+                                                          state.dataIPShortCut->cAlphaArgs(3),
+                                                          ErrorsFound,
+                                                          Node::ConnectionObjectType::CentralHeatPumpSystem,
+                                                          state.dataIPShortCut->cAlphaArgs(1),
+                                                          Node::FluidType::Water,
+                                                          Node::ConnectionType::Inlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent); // node name : connection should be careful!
         wrapper.CHWOutletNodeNum = Node::GetOnlySingleNode(state,
                                                            state.dataIPShortCut->cAlphaArgs(4),
                                                            ErrorsFound,
@@ -630,16 +611,15 @@ void GetWrapperInput(EnergyPlusData &state)
                           state.dataIPShortCut->cAlphaArgs(4),
                           "Chilled Water Nodes");
 
-        wrapper.GLHEInletNodeNum =
-            Node::GetOnlySingleNode(state,
-                                    state.dataIPShortCut->cAlphaArgs(5),
-                                    ErrorsFound,
-                                    Node::ConnectionObjectType::CentralHeatPumpSystem,
-                                    state.dataIPShortCut->cAlphaArgs(1),
-                                    Node::FluidType::Water,
-                                    Node::ConnectionType::Inlet,
-                                    Node::CompFluidStream::Secondary,
-                                    Node::ObjectIsNotParent); // node name : connection should be careful!
+        wrapper.GLHEInletNodeNum = Node::GetOnlySingleNode(state,
+                                                           state.dataIPShortCut->cAlphaArgs(5),
+                                                           ErrorsFound,
+                                                           Node::ConnectionObjectType::CentralHeatPumpSystem,
+                                                           state.dataIPShortCut->cAlphaArgs(1),
+                                                           Node::FluidType::Water,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Secondary,
+                                                           Node::ObjectIsNotParent); // node name : connection should be careful!
         wrapper.GLHEOutletNodeNum = Node::GetOnlySingleNode(state,
                                                             state.dataIPShortCut->cAlphaArgs(6),
                                                             ErrorsFound,
@@ -656,16 +636,15 @@ void GetWrapperInput(EnergyPlusData &state)
                           state.dataIPShortCut->cAlphaArgs(6),
                           "GLHE Nodes");
 
-        wrapper.HWInletNodeNum =
-            Node::GetOnlySingleNode(state,
-                                    state.dataIPShortCut->cAlphaArgs(7),
-                                    ErrorsFound,
-                                    Node::ConnectionObjectType::CentralHeatPumpSystem,
-                                    state.dataIPShortCut->cAlphaArgs(1),
-                                    Node::FluidType::Water,
-                                    Node::ConnectionType::Inlet,
-                                    Node::CompFluidStream::Tertiary,
-                                    Node::ObjectIsNotParent); // node name : connection should be careful!
+        wrapper.HWInletNodeNum = Node::GetOnlySingleNode(state,
+                                                         state.dataIPShortCut->cAlphaArgs(7),
+                                                         ErrorsFound,
+                                                         Node::ConnectionObjectType::CentralHeatPumpSystem,
+                                                         state.dataIPShortCut->cAlphaArgs(1),
+                                                         Node::FluidType::Water,
+                                                         Node::ConnectionType::Inlet,
+                                                         Node::CompFluidStream::Tertiary,
+                                                         Node::ObjectIsNotParent); // node name : connection should be careful!
         wrapper.HWOutletNodeNum = Node::GetOnlySingleNode(state,
                                                           state.dataIPShortCut->cAlphaArgs(8),
                                                           ErrorsFound,
@@ -694,10 +673,8 @@ void GetWrapperInput(EnergyPlusData &state)
         wrapper.WrapperComp.allocate(NumberOfComp);
 
         if (wrapper.NumOfComp == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("GetWrapperInput: No component names on {}={}",
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               wrapper.Name));
+            ShowSevereError(
+                state, EnergyPlus::format("GetWrapperInput: No component names on {}={}", state.dataIPShortCut->cCurrentModuleObject, wrapper.Name));
             ErrorsFound = true;
         } else {
             int Comp = 0;
@@ -745,8 +722,7 @@ void GetWrapperInput(EnergyPlusData &state)
         }
 
         // ALLOCATE ARRAYS
-        if ((state.dataPlantCentralGSHP->numChillerHeaters == 0) &&
-            (wrapper.ControlMode == CondenserType::SmartMixing)) {
+        if ((state.dataPlantCentralGSHP->numChillerHeaters == 0) && (wrapper.ControlMode == CondenserType::SmartMixing)) {
             ShowFatalError(
                 state,
                 EnergyPlus::format("SmartMixing Control Mode in object {} : {} need to apply to ChillerHeaterPerformance:Electric:EIR object(s).",
@@ -2027,8 +2003,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
             EvapOutletTempSetPoint = state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
 
             // Minimum capacity of the evaporator
-            Real64 EvaporatorCapMin =
-                chillerHeater.MinPartLoadRatCooling * chillerHeater.RefCapCooling;
+            Real64 EvaporatorCapMin = chillerHeater.MinPartLoadRatCooling * chillerHeater.RefCapCooling;
 
             // Remaining cooling load the other chiller heaters should meet
             Real64 CoolingLoadToMeet = min(chillerHeater.RefCapCooling, max(std::abs(EvaporatorLoad), EvaporatorCapMin));
@@ -2091,8 +2066,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
             // Determine chiller compressor power and transfer heat calculation
             state.dataPlantCentralGSHP->ChillerEIRFT =
                 max(0.0, Curve::CurveValue(state, chillerHeater.ChillerEIRFTIDX, EvapOutletTemp, CondTempforCurve));
-            state.dataPlantCentralGSHP->ChillerEIRFPLR =
-                max(0.0, Curve::CurveValue(state, chillerHeater.ChillerEIRFPLRIDX, PartLoadRat));
+            state.dataPlantCentralGSHP->ChillerEIRFPLR = max(0.0, Curve::CurveValue(state, chillerHeater.ChillerEIRFPLRIDX, PartLoadRat));
 
             if (ReferenceCOP <= 0.0) {
                 CHPower = 0.0;
@@ -2101,8 +2075,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
                     (AvailChillerCap / ReferenceCOP) * state.dataPlantCentralGSHP->ChillerEIRFPLR * state.dataPlantCentralGSHP->ChillerEIRFT * FRAC;
             }
 
-            QCondenser =
-                CHPower * chillerHeater.OpenMotorEff + QEvaporator + state.dataPlantCentralGSHP->ChillerFalseLoadRate;
+            QCondenser = CHPower * chillerHeater.OpenMotorEff + QEvaporator + state.dataPlantCentralGSHP->ChillerFalseLoadRate;
 
             if (CHPower == 0.0) {
                 ActualCOP = 0.0;
@@ -2114,9 +2087,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
                 Cp = this->GLHEPlantLoc.loop->glycol->getSpecificHeat(state, CondInletTemp, RoutineNameElecEIRChiller);
                 CondOutletTemp = QCondenser / CondMassFlowRate / Cp + CondInletTemp;
             } else {
-                ShowSevereError(state,
-                                EnergyPlus::format("CalcChillerheaterModel: Condenser flow = 0, for Chillerheater={}",
-                                                   chillerHeater.Name));
+                ShowSevereError(state, EnergyPlus::format("CalcChillerheaterModel: Condenser flow = 0, for Chillerheater={}", chillerHeater.Name));
                 ShowContinueErrorTimeStamp(state, "");
             }
 
@@ -2226,7 +2197,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
     for (int ChillerHeaterNum = 1; ChillerHeaterNum <= this->ChillerHeaterNums; ++ChillerHeaterNum) {
 
         auto &chillerHeater = this->ChillerHeater(ChillerHeaterNum);
-        
+
         // Set module level inlet and outlet nodes and initialize other local variables
         int CurrentMode = 0;
         state.dataPlantCentralGSHP->ChillerPartLoadRatio = 0.0;
@@ -2406,8 +2377,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
 
                 // Reference condenser temperature for the performance curve reading: set to entering or leaving condenser temperature based on user
                 // input
-                Real64 CondTempforCurve = this->setChillerHeaterCondTemp(
-                    state, ChillerHeaterNum, CondInletTemp, chillerHeater.TempRefCondOutClgHtg);
+                Real64 CondTempforCurve = this->setChillerHeaterCondTemp(state, ChillerHeaterNum, CondInletTemp, chillerHeater.TempRefCondOutClgHtg);
 
                 Real64 ChillerRefCap = chillerHeater.RefCap;
                 Real64 ReferenceCOP = chillerHeater.RefCOP;
@@ -2433,8 +2403,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                     PartLoadRat = 0.0;
                 }
 
-                Real64 Cp =
-                    this->HWPlantLoc.loop->glycol->getSpecificHeat(state, chillerHeater.EvapInletNode.Temp, RoutineName);
+                Real64 Cp = this->HWPlantLoc.loop->glycol->getSpecificHeat(state, chillerHeater.EvapInletNode.Temp, RoutineName);
 
                 // Calculate evaporator heat transfer
                 if (EvapMassFlowRate > DataBranchAirLoopPlant::MassFlowTolerance) {
@@ -2444,21 +2413,14 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                 }
 
                 // Run evaporator checks and adjust outlet temp and QEvaporator if necessary
-                WrapperSpecs::checkEvapOutletTemp(state,
-                                                  ChillerHeaterNum,
-                                                  EvapOutletTemp,
-                                                  TempLowLimitEout,
-                                                  chillerHeater.EvapInletNode.Temp,
-                                                  QEvaporator,
-                                                  EvapMassFlowRate,
-                                                  Cp);
+                WrapperSpecs::checkEvapOutletTemp(
+                    state, ChillerHeaterNum, EvapOutletTemp, TempLowLimitEout, chillerHeater.EvapInletNode.Temp, QEvaporator, EvapMassFlowRate, Cp);
 
                 WrapperSpecs::calcPLRAndCyclingRatio(state, AvailChillerCap, PartLoadRat, MinPartLoadRat, MaxPartLoadRat, QEvaporator, FRAC);
 
                 state.dataPlantCentralGSHP->ChillerEIRFT =
                     max(0.0, Curve::CurveValue(state, chillerHeater.ChillerEIRFTIDX, EvapOutletTemp, CondTempforCurve));
-                state.dataPlantCentralGSHP->ChillerEIRFPLR =
-                    max(0.0, Curve::CurveValue(state, chillerHeater.ChillerEIRFPLRIDX, PartLoadRat));
+                state.dataPlantCentralGSHP->ChillerEIRFPLR = max(0.0, Curve::CurveValue(state, chillerHeater.ChillerEIRFPLRIDX, PartLoadRat));
                 CHPower =
                     (AvailChillerCap / ReferenceCOP) * state.dataPlantCentralGSHP->ChillerEIRFPLR * state.dataPlantCentralGSHP->ChillerEIRFT * FRAC;
 
@@ -2468,8 +2430,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                     ActualCOP = (QEvaporator + state.dataPlantCentralGSHP->ChillerFalseLoadRate) / CHPower;
                 }
 
-                QCondenser =
-                    CHPower * chillerHeater.OpenMotorEff + QEvaporator + state.dataPlantCentralGSHP->ChillerFalseLoadRate;
+                QCondenser = CHPower * chillerHeater.OpenMotorEff + QEvaporator + state.dataPlantCentralGSHP->ChillerFalseLoadRate;
                 Real64 qCondenserFullLoad = QCondenser;
 
                 // Determine heating load for this heater and pass the remaining load to the next chiller heater
@@ -3024,11 +2985,13 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
 
                             if (CurrentMode != 0) {     // This chiller heater unit is on
                                 if (CurrentMode == 3) { // Heat recovery mode. Both chilled water and hot water connections
-                                    CHWOutletMassFlowRate += chillerHeater.Report.EvapmdotSimul; // Wrapper evaporator side to plant chilled water loop
+                                    CHWOutletMassFlowRate +=
+                                        chillerHeater.Report.EvapmdotSimul;                // Wrapper evaporator side to plant chilled water loop
                                     HWOutletMassFlowRate += chillerHeater.Report.Condmdot; // Wrapper condenser side to plant hot water loop
                                     if (HWInletMassFlowRate > 0.0) {
-                                        HWOutletTemp += chillerHeater.Report.CondOutletTemp *
-                                                        (chillerHeater.Report.Condmdot / HWInletMassFlowRate); // Only calculate in the heat recovery mode
+                                        HWOutletTemp +=
+                                            chillerHeater.Report.CondOutletTemp *
+                                            (chillerHeater.Report.Condmdot / HWInletMassFlowRate); // Only calculate in the heat recovery mode
                                     } else {
                                         HWOutletTemp = HWInletTemp;
                                     }
@@ -3041,8 +3004,8 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                                         if (GLHEOutletMassFlowRate > GLHEInletMassFlowRate) {
                                             GLHEOutletMassFlowRate = GLHEInletMassFlowRate;
                                         }
-                                        GLHEOutletTemp += chillerHeater.Report.CondOutletTempSimul *
-                                                          (chillerHeater.Report.CondmdotSimul / GLHEInletMassFlowRate);
+                                        GLHEOutletTemp +=
+                                            chillerHeater.Report.CondOutletTempSimul * (chillerHeater.Report.CondmdotSimul / GLHEInletMassFlowRate);
                                         WrapperGLHERate += chillerHeater.Report.QCondSimul;
                                         WrapperGLHEEnergy += chillerHeater.Report.CondEnergySimul;
                                     } else {
@@ -3066,8 +3029,8 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                             }
                             // Calculate mass weighed chilled water temperatures
                             if (CHWInletMassFlowRate > 0.0) {
-                                CHWOutletTemp += chillerHeater.Report.EvapOutletTempSimul *
-                                                 (chillerHeater.Report.EvapmdotSimul / CHWInletMassFlowRate);
+                                CHWOutletTemp +=
+                                    chillerHeater.Report.EvapOutletTempSimul * (chillerHeater.Report.EvapmdotSimul / CHWInletMassFlowRate);
                             } else {
                                 CHWOutletTemp = CHWInletTemp;
                             }
@@ -3136,9 +3099,8 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                             if (CurrentMode != 0) {     // This chiller heater unit is on
                                 if (CurrentMode == 3) { // Heat recovery mode. Both chilled water and hot water connections
                                     CHWOutletMassFlowRate += this->ChillerHeater(ChillerHeaterNum)
-                                                                 .Report.EvapmdotSimul; // Wrapper evaporator side to plant chilled water loop
-                                    HWOutletMassFlowRate +=
-                                        chillerHeater.Report.Condmdot; // Wrapper condenser side to plant hot water loop
+                                                                 .Report.EvapmdotSimul;    // Wrapper evaporator side to plant chilled water loop
+                                    HWOutletMassFlowRate += chillerHeater.Report.Condmdot; // Wrapper condenser side to plant hot water loop
                                     if (CHWInletMassFlowRate > 0.0) {
                                         CHWOutletTemp += chillerHeater.Report.EvapOutletTempSimul *
                                                          (chillerHeater.Report.EvapmdotSimul /
@@ -3146,17 +3108,15 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                                     } else {
                                         CHWOutletTemp = CHWInletTemp;
                                     }
-                                } else { // Mode 5. Heating only mode with other heat recovery units
-                                    HWOutletMassFlowRate +=
-                                        chillerHeater.Report.Condmdot; // Wrapper condenser side to plant hot water loop
+                                } else {                                                   // Mode 5. Heating only mode with other heat recovery units
+                                    HWOutletMassFlowRate += chillerHeater.Report.Condmdot; // Wrapper condenser side to plant hot water loop
                                     if (GLHEInletMassFlowRate > 0.0) {
-                                        GLHEOutletMassFlowRate +=
-                                            chillerHeater.Report.Evapmdot; // Wrapper evaporator side to plant condenser loop
+                                        GLHEOutletMassFlowRate += chillerHeater.Report.Evapmdot; // Wrapper evaporator side to plant condenser loop
                                         if (GLHEOutletMassFlowRate > GLHEInletMassFlowRate) {
                                             GLHEOutletMassFlowRate = GLHEInletMassFlowRate;
                                         }
-                                        GLHEOutletTemp += chillerHeater.Report.EvapOutletTemp *
-                                                          (chillerHeater.Report.Evapmdot / GLHEInletMassFlowRate);
+                                        GLHEOutletTemp +=
+                                            chillerHeater.Report.EvapOutletTemp * (chillerHeater.Report.Evapmdot / GLHEInletMassFlowRate);
                                         WrapperGLHERate += chillerHeater.Report.QEvap;
                                         WrapperGLHEEnergy += chillerHeater.Report.EvapEnergy;
                                     } else {
@@ -3183,9 +3143,9 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
 
                             // Calculate mass weighed hot water temperatures
                             if (HWInletMassFlowRate > 0.0) {
-                                HWOutletTemp += chillerHeater.Report.CondOutletTemp *
-                                                (chillerHeater.Report.Condmdot /
-                                                 HWInletMassFlowRate); // Always heating as long as heating load remains
+                                HWOutletTemp +=
+                                    chillerHeater.Report.CondOutletTemp *
+                                    (chillerHeater.Report.Condmdot / HWInletMassFlowRate); // Always heating as long as heating load remains
                             } else {
                                 HWOutletTemp = HWInletTemp;
                             }
@@ -3259,8 +3219,7 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                             if (GLHEOutletMassFlowRate > GLHEInletMassFlowRate) {
                                 GLHEOutletMassFlowRate = GLHEInletMassFlowRate;
                             }
-                            GLHEOutletTemp += chillerHeater.Report.EvapOutletTemp *
-                                              (chillerHeater.Report.Evapmdot / GLHEInletMassFlowRate);
+                            GLHEOutletTemp += chillerHeater.Report.EvapOutletTemp * (chillerHeater.Report.Evapmdot / GLHEInletMassFlowRate);
                             WrapperGLHERate += chillerHeater.Report.QEvap;
                             WrapperGLHEEnergy += chillerHeater.Report.EvapEnergy;
                         } else { // No source water flow

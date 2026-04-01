@@ -385,7 +385,6 @@ void ShowWarningBadMin(EnergyPlusData &state,
                        Real64 minVal,
                        std::string_view msg = "");
 
-
 namespace Util {
 
     static constexpr std::array<std::string_view, 12> MonthNamesCC{
