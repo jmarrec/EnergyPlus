@@ -56,23 +56,70 @@
 import argparse
 import platform
 from pathlib import Path
+from shutil import rmtree
 from subprocess import run
-from sys import argv, executable
+from sys import executable
 
 PKGS = {
     "energyplus_launch": "3.7.4",
     "energyplus_transition_tools": "2.1.4",
-    "ghedesigner": "2.0",
+    "ghedesigner": "2.1",
 }
+
+LINUX_X86_64_GHEDESIGNER_PKGS = {
+    # NumPy 2.4+ wheels require x86-64-v2, which breaks older Ubuntu GitHub Actions runners.
+    "numpy": "2.3.5",
+}
+
+
+def normalized_package_name(package_name: str) -> str:
+    return package_name.replace("-", "_")
+
+
+def package_is_installed(python_lib_dir: Path, package_name: str, package_version: str) -> bool:
+    normalized_name = normalized_package_name(package_name)
+    return (python_lib_dir / f"{normalized_name}-{package_version}.dist-info").exists()
+
+
+def remove_existing_package(python_lib_dir: Path, package_name: str) -> None:
+    normalized_name = normalized_package_name(package_name)
+    removable_paths = [
+        python_lib_dir / normalized_name,
+        python_lib_dir / f"{normalized_name}.libs",
+    ]
+    removable_paths.extend(python_lib_dir.glob(f"{normalized_name}-*.dist-info"))
+    removable_paths.extend(python_lib_dir.glob(f"{normalized_name}-*.data"))
+    for path in removable_paths:
+        if not path.exists():
+            continue
+        if path.is_dir():
+            rmtree(path)
+        else:
+            path.unlink()
+
+
+def platform_pinned_packages() -> dict[str, str]:
+    is_linux = platform.system() == "Linux"
+    machine = platform.machine().lower()
+    if is_linux and machine in ("amd64", "x86_64"):
+        return dict(LINUX_X86_64_GHEDESIGNER_PKGS)
+    return {}
 
 
 def install_packages(python_lib_dir: Path):
     # expecting one command line argument - the path to the python_lib folder to place the pip package
-    pkgs_to_install = {k: v for k, v in PKGS.items() if not (python_lib_dir / f"{k}-{v}.dist-info").exists()}
+    desired_pkgs = dict(PKGS)
+    pinned_pkgs = platform_pinned_packages()
+    desired_pkgs.update(pinned_pkgs)
+    pkgs_to_install = {k: v for k, v in desired_pkgs.items() if not package_is_installed(python_lib_dir, k, v)}
 
     if not pkgs_to_install:
         print("PYTHON: All CLI packages found and up to date, no pip install needed")
         return
+
+    for package_name in pinned_pkgs:
+        if package_name in pkgs_to_install:
+            remove_existing_package(python_lib_dir, package_name)
 
     to_install = [f"{n}=={v}" for n, v in pkgs_to_install.items()]
 
