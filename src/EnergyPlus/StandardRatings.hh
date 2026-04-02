@@ -682,8 +682,8 @@ namespace StandardRatings {
                                                std::string const &CompType,           // Type of component
                                                std::string_view CompName,             // Name of component
                                                int const CompTypeNum,                 // TypeNum of component
-                                               Array1D<Real64> &NetCoolingCapRated,   // net cooling capacity of single speed DX cooling coil
-                                               Array1D<Real64> &TotElectricPowerRated // total electric power including supply fan
+                                               Array1D<Real64> const &NetCoolingCapRated,   // net cooling capacity of single speed DX cooling coil
+                                               Array1D<Real64> const &TotElectricPowerRated // total electric power including supply fan
     );
 
     void CheckCurveLimitsForStandardRatings(EnergyPlusData &state,
