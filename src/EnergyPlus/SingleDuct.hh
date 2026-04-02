@@ -92,16 +92,7 @@ namespace SingleDuct {
         SingleDuctCBVAVNoReheat,
         Num,
     };
-    enum class HeatingCoilType : int
-    {
-        Invalid = -1,
-        None,
-        Gas,
-        Electric,
-        SimpleHeating,
-        SteamAirHeating,
-        Num,
-    };
+
     enum class MinFlowFraction
     {
         Invalid = -1,
@@ -138,7 +129,7 @@ namespace SingleDuct {
         SysType SysType_Num;                                // Numeric Equivalent for System type
         Sched::Schedule *availSched = nullptr;              // availability schedule
         std::string ReheatComp;                             // Type of the Reheat Coil Object
-        HeatingCoilType ReheatComp_Num;                     // Numeric Equivalent in this module for Coil type
+        HVAC::CoilType reheatCoilType = HVAC::CoilType::Invalid;// Numeric Equivalent in this module for Coil type
         int ReheatComp_Index;                               // Returned Index number from other routines
         std::string ReheatName;                             // name of reheat coil
         DataPlant::PlantEquipmentType ReheatComp_PlantType; // typeOf_ number for plant type of heating coil
@@ -222,7 +213,7 @@ namespace SingleDuct {
         General::SolveRootStats solveRootStats;
         // Default Constructor
         SingleDuctAirTerminal()
-            : SysNum(-1), SysType_Num(SysType::Invalid), ReheatComp_Num(HeatingCoilType::None), ReheatComp_Index(0),
+            : SysNum(-1), SysType_Num(SysType::Invalid), ReheatComp_Index(0),
               ReheatComp_PlantType(DataPlant::PlantEquipmentType::Invalid), fanType(HVAC::FanType::Invalid), Fan_Index(0), ControlCompTypeNum(0),
               CompErrIndex(0), MaxAirVolFlowRate(0.0), AirMassFlowRateMax(0.0), MaxHeatAirVolFlowRate(0.0), HeatAirMassFlowRateMax(0.0),
               ZoneMinAirFracMethod(MinFlowFraction::Constant), ZoneMinAirFracDes(0.0), ZoneMinAirFrac(0.0), ZoneMinAirFracReport(0.0),
