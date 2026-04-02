@@ -9929,7 +9929,7 @@ void InitSurfacePropertyViewFactors(EnergyPlusData &state)
                     GroundSurfsViewFactor = SrdSurfsProperty.GroundViewFactor;
                     IsGroundViewFactorSet = SrdSurfsProperty.IsGroundViewFactorSet;
                     if (GroundSurfsViewFactor != DataSizing::AutoSize) {
-                      SrdSurfsViewFactor += GroundSurfsViewFactor;
+                        SrdSurfsViewFactor += GroundSurfsViewFactor;
                     }
                 }
                 for (int SrdSurfNum = 1; SrdSurfNum <= SrdSurfsProperty.TotSurroundingSurface; SrdSurfNum++) {

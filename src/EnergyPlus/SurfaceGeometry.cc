@@ -8185,7 +8185,7 @@ namespace SurfaceGeometry {
                 // N1: sky view factor
                 SrdSurfsProp.SkyViewFactor = s_ipsc->rNumericArgs(1);
                 if (SrdSurfsProp.SkyViewFactor != DataSizing::AutoSize) {
-                  SrdSurfsProp.IsSkyViewFactorSet = true;
+                    SrdSurfsProp.IsSkyViewFactorSet = true;
                 }
 
                 // A2: sky temp sch name
@@ -8197,7 +8197,7 @@ namespace SurfaceGeometry {
                 // N2: ground view factor
                 SrdSurfsProp.GroundViewFactor = s_ipsc->rNumericArgs(2);
                 if (SrdSurfsProp.GroundViewFactor != DataSizing::AutoSize) {
-                  SrdSurfsProp.IsGroundViewFactorSet = true;
+                    SrdSurfsProp.IsGroundViewFactorSet = true;
                 }
 
                 // A3: ground temp sch name
