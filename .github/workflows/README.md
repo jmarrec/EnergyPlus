@@ -15,9 +15,12 @@ This README is really just a place to drop current status while I figure out wha
   - Linux takes 5 minutes and Windows takes 9 minutes
 - build_wheels.yml
   - Runs on demand, on Linux only for now
-- release_*.yml
+- release_documentation.yml
   - Only works on tags
-  - Runs on all three platforms
+  - Runs on Ubuntu 24.04 and uploads a versioned documentation zip artifact with the PDFs and `index.html`
+- release_linux.yml, release_mac.yml, release_windows.yml
+  - Only work on tags
+  - Build and publish the platform-specific release packages for Linux, macOS, and Windows
 - test_code_integrity.yml
   - Runs on Linux, about 22 minutes
 - test_debug_builds.yml
