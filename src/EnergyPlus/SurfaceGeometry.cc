@@ -12070,6 +12070,14 @@ namespace SurfaceGeometry {
                     continue;
                 }
 
+                // Same-zone surface pairs partition spaces within the zone, but they do not contribute to the
+                // outer boundary used to calculate whole-zone volume or enclosure.
+                if (thisSurface.ExtBoundCond > 0 && state.dataSurface->Surface(thisSurface.ExtBoundCond).Zone == thisSurface.Zone) {
+                    ++notused;
+                    surfacenotused(notused) = SurfNum;
+                    continue;
+                }
+
                 ++NActFaces;
                 auto &thisFace = ZoneStruct.SurfaceFace(NActFaces);
                 thisFace.FacePoints.allocate(thisSurface.Sides);
