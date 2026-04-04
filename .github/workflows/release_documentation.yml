@@ -10,6 +10,7 @@ defaults:
     shell: bash
 
 env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PYTHON_VERSION: '3.12'
 
 jobs:
@@ -17,11 +18,15 @@ jobs:
     name: Build and Package Documentation
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
+      contents: write
 
     steps:
     - name: Checkout EnergyPlus
       uses: actions/checkout@v6
+
+    - name: Derive abbreviated SHA
+      id: short-sha
+      run: echo "value=$(git rev-parse --short \"$GITHUB_SHA\")" >> "$GITHUB_OUTPUT"
 
     - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v6
@@ -42,7 +47,7 @@ jobs:
     - name: Package documentation
       env:
         ARTIFACT_ROOT: ${{ github.workspace }}/release-documentation-artifact
-        PACKAGE_ROOT: EnergyPlus-Documentation-${{ github.ref_name }}
+        PACKAGE_ROOT: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}
       run: |
         rm -rf "$ARTIFACT_ROOT"
         mkdir -p "$ARTIFACT_ROOT/$PACKAGE_ROOT"
@@ -51,13 +56,22 @@ jobs:
         test -f "$ARTIFACT_ROOT/$PACKAGE_ROOT/EngineeringReference.pdf"
         (
           cd "$ARTIFACT_ROOT"
-          zip -r "${PACKAGE_ROOT}-x86_64.zip" "$PACKAGE_ROOT"
+          zip -r "${PACKAGE_ROOT}.zip" "$PACKAGE_ROOT"
         )
 
     - name: Upload documentation artifact
       uses: actions/upload-artifact@v7
       with:
-        name: energyplus-documentation-${{ github.ref_name }}
-        path: ${{ github.workspace }}/release-documentation-artifact/EnergyPlus-Documentation-${{ github.ref_name }}-x86_64.zip
+        name: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}
+        path: ${{ github.workspace }}/release-documentation-artifact/PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}.zip
         if-no-files-found: error
         retention-days: 7
+
+    - name: Upload documentation zip to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ github.workspace }}/release-documentation-artifact/PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}.zip
+        tag: ${{ github.ref }}
+        asset_name: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}.zip
+        overwrite: true

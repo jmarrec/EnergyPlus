@@ -17,7 +17,7 @@ This README is really just a place to drop current status while I figure out wha
   - Runs on demand, on Linux only for now
 - release_documentation.yml
   - Only works on tags
-  - Runs on Ubuntu 24.04 and uploads a versioned documentation zip artifact with the PDFs and `index.html`
+  - Build and publish the PDF documentation.
 - release_linux.yml, release_mac.yml, release_windows.yml
   - Only work on tags
   - Build and publish the platform-specific release packages for Linux, macOS, and Windows
