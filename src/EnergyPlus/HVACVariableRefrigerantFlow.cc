@@ -152,7 +152,7 @@ void SimulateVRF(EnergyPlusData &state,
     // Once all terminal units have been simulated, simulate VRF condenser
 
     int VRFTUNum;             // current VRF system terminal unit index
-    int VRFCondenserNum;         // index to VRF AC system object - AirConditioner:VariableRefrigerantFlow
+    int VRFCondenserNum;      // index to VRF AC system object - AirConditioner:VariableRefrigerantFlow
     int TUListNum;            // index to VRF AC system terminal unit list
     int IndexToTUInTUList;    // index to pointer in VRF AC system terminal unit list
     Real64 OnOffAirFlowRatio; // ratio of compressor ON airflow to average airflow over timestep
@@ -202,21 +202,12 @@ void SimulateVRF(EnergyPlusData &state,
     // the VRF condenser index
     VRFCondenserNum = vrfTU.VRFSysNum;
     auto &vrfCond = state.dataHVACVarRefFlow->VRF(VRFCondenserNum);
-    
-    if ((vrfCond.CondenserType == DataHeatBalance::RefrigCondenserType::Water) &&
-        (vrfCond.checkPlantCondTypeOneTime)) {
+
+    if ((vrfCond.CondenserType == DataHeatBalance::RefrigCondenserType::Water) && (vrfCond.checkPlantCondTypeOneTime)) {
         // scan for loop connection data
         bool errFlag = false;
-        PlantUtilities::ScanPlantLoopsForObject(state,
-                                                vrfCond.Name,
-                                                vrfCond.VRFType,
-                                                vrfCond.SourcePlantLoc,
-                                                errFlag,
-                                                _,
-                                                _,
-                                                _,
-                                                vrfCond.CondenserNodeNum,
-                                                _);
+        PlantUtilities::ScanPlantLoopsForObject(
+            state, vrfCond.Name, vrfCond.VRFType, vrfCond.SourcePlantLoc, errFlag, _, _, _, vrfCond.CondenserNodeNum, _);
 
         if (errFlag) {
             ShowSevereError(state, "GetVRFInput: Error scanning for plant loop data");
@@ -566,10 +557,8 @@ void CalcVRFCondenser(EnergyPlusData &state, int const VRFCond)
             ++NumTUInCoolingMode;
         }
         if (vrfTUList.TotalHeatLoad(NumTU) > 0.0) {
-            SumHeatInletDB += state.dataDXCoils->DXCoilHeatInletAirDBTemp(HeatCoilIndex) *
-                              vrfTUList.TotalHeatLoad(NumTU) / TUHeatingLoad;
-            SumHeatInletWB += state.dataDXCoils->DXCoilHeatInletAirWBTemp(HeatCoilIndex) *
-                              vrfTUList.TotalHeatLoad(NumTU) / TUHeatingLoad;
+            SumHeatInletDB += state.dataDXCoils->DXCoilHeatInletAirDBTemp(HeatCoilIndex) * vrfTUList.TotalHeatLoad(NumTU) / TUHeatingLoad;
+            SumHeatInletWB += state.dataDXCoils->DXCoilHeatInletAirWBTemp(HeatCoilIndex) * vrfTUList.TotalHeatLoad(NumTU) / TUHeatingLoad;
             ++NumTUInHeatingMode;
         }
     }
@@ -5712,6 +5701,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
             if (errFlag) {
                 ShowFatalError(state, EnergyPlus::format("{}: Program terminated for previous conditions.", RoutineName));
             }
+
             vrfTU1.SuppHeatCoilFluidMaxFlow = WaterCoils::GetCoilMaxWaterFlowRate(
                 state, "Coil:Heating:Water", vrfTU1.SuppHeatCoilName, ErrorsFound);
 
@@ -5728,6 +5718,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
         } else if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingSteam) {
             // steam supplemental heating coil
             errFlag = false;
+
             PlantUtilities::ScanPlantLoopsForObject(state,
                                                     vrfTU1.SuppHeatCoilName,
                                                     PlantEquipmentType::CoilSteamAirHeating,
@@ -5787,12 +5778,10 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                         continue; // dimensioned by NumOfZones.  Only valid ones have names.
                     }
                     for (ListLoop = 1; ListLoop <= state.dataZoneEquip->ZoneEquipList(ELLoop).NumOfEquipTypes; ++ListLoop) {
-                        if (!Util::SameString(state.dataZoneEquip->ZoneEquipList(ELLoop).EquipTypeName(ListLoop),
-                                              tuTypeNames[(int)vrfTU.type])) {
+                        if (!Util::SameString(state.dataZoneEquip->ZoneEquipList(ELLoop).EquipTypeName(ListLoop), tuTypeNames[(int)vrfTU.type])) {
                             continue;
                         }
-                        if (!Util::SameString(state.dataZoneEquip->ZoneEquipList(ELLoop).EquipName(ListLoop),
-                                              vrfTU.Name)) {
+                        if (!Util::SameString(state.dataZoneEquip->ZoneEquipList(ELLoop).EquipName(ListLoop), vrfTU.Name)) {
                             continue;
                         }
                         vrfTU.ZoneNum = ELLoop;
@@ -5807,19 +5796,15 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                     continue;
                                 }
                                 for (int NodeNum = 1; NodeNum <= state.dataZoneEquip->ZoneEquipConfig(CtrlZone).NumExhaustNodes; ++NodeNum) {
-                                    if (vrfTU.VRFTUInletNodeNum ==
-                                        state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ExhaustNode(NodeNum)) {
-                                        vrfTU.ZoneAirNode =
-                                            state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ZoneNode;
+                                    if (vrfTU.VRFTUInletNodeNum == state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ExhaustNode(NodeNum)) {
+                                        vrfTU.ZoneAirNode = state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ZoneNode;
                                         ZoneNodeNotFound = false;
                                         break;
                                     }
                                 }
                                 for (int NodeNum = 1; NodeNum <= state.dataZoneEquip->ZoneEquipConfig(CtrlZone).NumInletNodes; ++NodeNum) {
-                                    if (vrfTU.VRFTUOutletNodeNum ==
-                                        state.dataZoneEquip->ZoneEquipConfig(CtrlZone).InletNode(NodeNum)) {
-                                        vrfTU.ZoneAirNode =
-                                            state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ZoneNode;
+                                    if (vrfTU.VRFTUOutletNodeNum == state.dataZoneEquip->ZoneEquipConfig(CtrlZone).InletNode(NodeNum)) {
+                                        vrfTU.ZoneAirNode = state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ZoneNode;
                                         ZoneNodeNotFound = false;
                                         break;
                                     }
@@ -5836,14 +5821,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                                        vrfTU.Name));
                                 ShowContinueError(state,
                                                   "... Zone inlet and exhaust node name is specified in ZoneHVAC:EquipmentConnections object.");
-                                ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("... Zone terminal unit inlet node name  = {}",
-                                                       state.dataLoopNodes->NodeID(vrfTU.VRFTUInletNodeNum)));
-                                ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("... Zone terminal unit outlet node name = {}",
-                                                       state.dataLoopNodes->NodeID(vrfTU.VRFTUOutletNodeNum)));
+                                ShowContinueError(state,
+                                                  EnergyPlus::format("... Zone terminal unit inlet node name  = {}",
+                                                                     state.dataLoopNodes->NodeID(vrfTU.VRFTUInletNodeNum)));
+                                ShowContinueError(state,
+                                                  EnergyPlus::format("... Zone terminal unit outlet node name = {}",
+                                                                     state.dataLoopNodes->NodeID(vrfTU.VRFTUOutletNodeNum)));
                             }
                         }
                         goto EquipList_exit;
@@ -5864,36 +5847,30 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                     AirLoopFound = true;
 
                                     vrfTU.isInAirLoop = true;
-                                    Node::TestCompSet(
-                                        state,
-                                        cCurrentModuleObject,
-                                        thisObjectName,
-                                        state.dataLoopNodes->NodeID(vrfTU.VRFTUInletNodeNum),
-                                        state.dataLoopNodes->NodeID(vrfTU.VRFTUOutletNodeNum),
-                                        "Air Nodes");
+                                    Node::TestCompSet(state,
+                                                      cCurrentModuleObject,
+                                                      thisObjectName,
+                                                      state.dataLoopNodes->NodeID(vrfTU.VRFTUInletNodeNum),
+                                                      state.dataLoopNodes->NodeID(vrfTU.VRFTUOutletNodeNum),
+                                                      "Air Nodes");
                                     if (vrfTU.ZoneNum > 0) {
-                                        vrfTU.ZoneAirNode =
-                                            state.dataZoneEquip->ZoneEquipConfig(vrfTU.ZoneNum).ZoneNode;
+                                        vrfTU.ZoneAirNode = state.dataZoneEquip->ZoneEquipConfig(vrfTU.ZoneNum).ZoneNode;
                                         int ControlledZoneNum = vrfTU.ZoneNum;
 
                                         for (int TstatZoneNum = 1; TstatZoneNum <= state.dataZoneCtrls->NumTempControlledZones; ++TstatZoneNum) {
-                                            if (state.dataZoneCtrls->TempControlledZone(TstatZoneNum).ActualZoneNum !=
-                                                vrfTU.ZoneNum) {
+                                            if (state.dataZoneCtrls->TempControlledZone(TstatZoneNum).ActualZoneNum != vrfTU.ZoneNum) {
                                                 continue;
                                             }
-                                            state.dataHVACVarRefFlow->VRF(vrfTU.VRFSysNum).MasterZoneTUIndex =
-                                                TUIndex;
+                                            state.dataHVACVarRefFlow->VRF(vrfTU.VRFSysNum).MasterZoneTUIndex = TUIndex;
                                             AirNodeFound = true;
                                             ctrlZoneNum = ControlledZoneNum;
                                             goto EquipList_exit;
                                         }
                                         for (int TstatZoneNum = 1; TstatZoneNum <= state.dataZoneCtrls->NumComfortControlledZones; ++TstatZoneNum) {
-                                            if (state.dataZoneCtrls->ComfortControlledZone(TstatZoneNum).ActualZoneNum !=
-                                                vrfTU.ZoneNum) {
+                                            if (state.dataZoneCtrls->ComfortControlledZone(TstatZoneNum).ActualZoneNum != vrfTU.ZoneNum) {
                                                 continue;
                                             }
-                                            state.dataHVACVarRefFlow->VRF(vrfTU.VRFSysNum).MasterZoneTUIndex =
-                                                TUIndex;
+                                            state.dataHVACVarRefFlow->VRF(vrfTU.VRFSysNum).MasterZoneTUIndex = TUIndex;
                                             AirNodeFound = true;
                                             ctrlZoneNum = ControlledZoneNum;
                                             goto EquipList_exit;
@@ -5928,8 +5905,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 if (!AirLoopFound && !vrfTU.isInOASys) {
                     for (int OASysNum = 1; OASysNum <= state.dataAirLoop->NumOASystems; ++OASysNum) {
                         for (int OACompNum = 1; OACompNum <= state.dataAirLoop->OutsideAirSys(OASysNum).NumComponents; ++OACompNum) {
-                            if (!Util::SameString(state.dataAirLoop->OutsideAirSys(OASysNum).ComponentName(OACompNum),
-                                                  vrfTU.Name) ||
+                            if (!Util::SameString(state.dataAirLoop->OutsideAirSys(OASysNum).ComponentName(OACompNum), vrfTU.Name) ||
                                 !Util::SameString(state.dataAirLoop->OutsideAirSys(OASysNum).ComponentType(OACompNum), cCurrentModuleObject)) {
                                 continue;
                             }
@@ -5941,13 +5917,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
 
                             vrfTU.ZoneNum = 0;
                             vrfTU.ZoneAirNode = 0;
-                            Node::TestCompSet(
-                                state,
-                                cCurrentModuleObject,
-                                thisObjectName,
-                                state.dataLoopNodes->NodeID(vrfTU.VRFTUInletNodeNum),
-                                state.dataLoopNodes->NodeID(vrfTU.VRFTUOutletNodeNum),
-                                "Air Nodes");
+                            Node::TestCompSet(state,
+                                              cCurrentModuleObject,
+                                              thisObjectName,
+                                              state.dataLoopNodes->NodeID(vrfTU.VRFTUInletNodeNum),
+                                              state.dataLoopNodes->NodeID(vrfTU.VRFTUOutletNodeNum),
+                                              "Air Nodes");
                             goto EquipList_exit;
                         }
                     }
@@ -5958,8 +5933,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     DataZoneEquipment::ZoneEquipType sysType_Num = DataZoneEquipment::ZoneEquipType::Invalid;
                     std::string sysName;
                     for (int inletNode = 1; inletNode <= state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).NumInletNodes; inletNode++) {
-                        if (state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).InletNodeAirLoopNum(inletNode) !=
-                            vrfTU.airLoopNum) {
+                        if (state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).InletNodeAirLoopNum(inletNode) != vrfTU.airLoopNum) {
                             continue;
                         }
                         inletNodeADUNum = state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).InletNodeADUNum(inletNode);
@@ -6011,13 +5985,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                         for (int ZoneInSysIndex = 1; ZoneInSysIndex <= NumAirLoopZones; ++ZoneInSysIndex) {
                             // zone inlet nodes for cooling
                             if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).NumZonesCooled > 0) {
-                                if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum)
-                                        .TermUnitCoolInletNodes(ZoneInSysIndex) == -999) {
+                                if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).TermUnitCoolInletNodes(ZoneInSysIndex) == -999) {
                                     // the data structure for the zones inlet nodes has not been filled
                                     initLoadBasedControlFlowFracFlagReady = false;
                                 } else {
-                                    int ZoneInletNodeNum = state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum)
-                                                               .TermUnitCoolInletNodes(ZoneInSysIndex);
+                                    int ZoneInletNodeNum =
+                                        state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).TermUnitCoolInletNodes(ZoneInSysIndex);
                                     if (state.dataLoopNodes->Node(ZoneInletNodeNum).MassFlowRateMax == -999.0) {
                                         // the node mass flow rate has not been set
                                         initLoadBasedControlFlowFracFlagReady = false;
@@ -6026,13 +5999,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                             }
                             // zone inlet nodes for heating
                             if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).NumZonesHeated > 0) {
-                                if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum)
-                                        .TermUnitHeatInletNodes(ZoneInSysIndex) == -999) {
+                                if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).TermUnitHeatInletNodes(ZoneInSysIndex) == -999) {
                                     // the data structure for the zones inlet nodes has not been filled
                                     initLoadBasedControlFlowFracFlagReady = false;
                                 } else {
-                                    int ZoneInletNodeNum = state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum)
-                                                               .TermUnitHeatInletNodes(ZoneInSysIndex);
+                                    int ZoneInletNodeNum =
+                                        state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).TermUnitHeatInletNodes(ZoneInSysIndex);
                                     if (state.dataLoopNodes->Node(ZoneInletNodeNum).MassFlowRateMax == -999.0) {
                                         // the node mass flow rate has not been set
                                         initLoadBasedControlFlowFracFlagReady = false;
@@ -6044,19 +6016,16 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     if (allocated(state.dataAirLoop->AirToZoneNodeInfo) && initLoadBasedControlFlowFracFlagReady) {
                         Real64 SumOfMassFlowRateMax = 0.0; // initialize the sum of the maximum flows
                         for (int ZoneInSysIndex = 1; ZoneInSysIndex <= NumAirLoopZones; ++ZoneInSysIndex) {
-                            int ZoneInletNodeNum = state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum)
-                                                       .TermUnitCoolInletNodes(ZoneInSysIndex);
+                            int ZoneInletNodeNum = state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).TermUnitCoolInletNodes(ZoneInSysIndex);
                             SumOfMassFlowRateMax += state.dataLoopNodes->Node(ZoneInletNodeNum).MassFlowRateMax;
-                            if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum)
-                                    .CoolCtrlZoneNums(ZoneInSysIndex) == vrfTU.ZoneNum) {
+                            if (state.dataAirLoop->AirToZoneNodeInfo(vrfTU.airLoopNum).CoolCtrlZoneNums(ZoneInSysIndex) == vrfTU.ZoneNum) {
                                 initLoadBasedControlCntrlZoneTerminalUnitMassFlowRateMax =
                                     state.dataLoopNodes->Node(ZoneInletNodeNum).MassFlowRateMax;
                             }
                         }
                         if (SumOfMassFlowRateMax != 0.0 && state.dataAirLoop->AirLoopInputsFilled) {
                             if (initLoadBasedControlCntrlZoneTerminalUnitMassFlowRateMax >= HVAC::SmallAirVolFlow) {
-                                vrfTU.controlZoneMassFlowFrac =
-                                    initLoadBasedControlCntrlZoneTerminalUnitMassFlowRateMax / SumOfMassFlowRateMax;
+                                vrfTU.controlZoneMassFlowFrac = initLoadBasedControlCntrlZoneTerminalUnitMassFlowRateMax / SumOfMassFlowRateMax;
                                 BaseSizer::reportSizerOutput(state,
                                                              tuTypeNames[(int)vrfTU.type],
                                                              vrfTU.Name,
@@ -6064,16 +6033,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                                              vrfTU.controlZoneMassFlowFrac);
                                 vrfTU.isSetPointControlled = false; // redundant
                             } else {
-                                if (vrfTU.isInAirLoop && vrfTU.ZoneNum == 0 &&
-                                    vrfTU.ZoneAirNode == 0) {
+                                if (vrfTU.isInAirLoop && vrfTU.ZoneNum == 0 && vrfTU.ZoneAirNode == 0) {
                                     // TU must be set point controlled and use constant fan mode (or coil out T won't change with PLR/air flow)
                                     vrfTU.isSetPointControlled = true;
                                     if (vrfTU.fanOpModeSched != nullptr) {
                                         if (vrfTU.fanOpModeSched->getCurrentVal() == 0.0) {
-                                            ShowSevereError(state,
-                                                            EnergyPlus::format("{} = {}",
-                                                                               tuTypeNames[(int)vrfTU.type],
-                                                                               vrfTU.Name));
+                                            ShowSevereError(state, EnergyPlus::format("{} = {}", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                                             ShowContinueError(state,
                                                               "When using set point control, fan operating mode must be continuous (fan "
                                                               "operating mode schedule values > 0).");
@@ -6085,10 +6050,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                         }
                                     }
                                 } else {
-                                    ShowSevereError(state,
-                                                    EnergyPlus::format("{} = {}",
-                                                                       tuTypeNames[(int)vrfTU.type],
-                                                                       vrfTU.Name));
+                                    ShowSevereError(state, EnergyPlus::format("{} = {}", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                                     ShowContinueError(state, " The Fraction of Supply Air Flow That Goes Through the Controlling Zone is set to 1.");
                                     vrfTU.controlZoneMassFlowFrac = 1.0;
                                     BaseSizer::reportSizerOutput(state,
@@ -6108,16 +6070,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
 
                 if (vrfTU.isInZone && state.dataAirLoop->AirLoopInputsFilled) {
                     if (vrfTU.fanPlace == HVAC::FanPlace::Invalid) {
-                        ShowSevereError(
-                            state,
-                            EnergyPlus::format("ZoneHVAC:TerminalUnit:VariableRefrigerantFlow = {}", vrfTU.Name));
+                        ShowSevereError(state, EnergyPlus::format("ZoneHVAC:TerminalUnit:VariableRefrigerantFlow = {}", vrfTU.Name));
                         ShowContinueError(state, "Illegal Supply Air Fan Placement.");
                         ErrorsFound = true;
                     }
                     if (vrfTU.FanIndex == 0) {
-                        ShowSevereError(
-                            state,
-                            EnergyPlus::format("ZoneHVAC:TerminalUnit:VariableRefrigerantFlow = {}", vrfTU.Name));
+                        ShowSevereError(state, EnergyPlus::format("ZoneHVAC:TerminalUnit:VariableRefrigerantFlow = {}", vrfTU.Name));
                         ShowContinueError(state, "VRF Terminal Unit fan is required when used as zone equipment.");
                         ErrorsFound = true;
                     }
@@ -6155,32 +6113,26 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     }
                     if (missingSetPoint) {
                         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
-                            ShowSevereError(state,
-                                            EnergyPlus::format("ZoneHVAC:TerminalUnit:VariableRefrigerantFlow: Missing temperature setpoint for {}",
-                                                               vrfTU.Name));
+                            ShowSevereError(
+                                state,
+                                EnergyPlus::format("ZoneHVAC:TerminalUnit:VariableRefrigerantFlow: Missing temperature setpoint for {}", vrfTU.Name));
                             ShowContinueError(state, "...use a Setpoint Manager to establish a setpoint at the TU or coil(s) outlet node.");
                             ErrorsFound = true;
                         } else if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                             bool SPNotFound = false;
-                            EMSManager::CheckIfNodeSetPointManagedByEMS(
-                                state, vrfTU.VRFTUOutletNodeNum, HVAC::CtrlVarType::Temp, SetPointErrorFlag);
+                            EMSManager::CheckIfNodeSetPointManagedByEMS(state, vrfTU.VRFTUOutletNodeNum, HVAC::CtrlVarType::Temp, SetPointErrorFlag);
                             SPNotFound = SPNotFound || SetPointErrorFlag;
-                            EMSManager::CheckIfNodeSetPointManagedByEMS(
-                                state, vrfTU.coolCoilAirOutNode, HVAC::CtrlVarType::Temp, SetPointErrorFlag);
+                            EMSManager::CheckIfNodeSetPointManagedByEMS(state, vrfTU.coolCoilAirOutNode, HVAC::CtrlVarType::Temp, SetPointErrorFlag);
                             SPNotFound = SPNotFound || SetPointErrorFlag;
-                            EMSManager::CheckIfNodeSetPointManagedByEMS(
-                                state, vrfTU.heatCoilAirOutNode, HVAC::CtrlVarType::Temp, SetPointErrorFlag);
+                            EMSManager::CheckIfNodeSetPointManagedByEMS(state, vrfTU.heatCoilAirOutNode, HVAC::CtrlVarType::Temp, SetPointErrorFlag);
                             SPNotFound = SPNotFound || SetPointErrorFlag;
 
                             // We disable the check at end (if API), because one of the nodes is enough, so there's an almost certainty
                             // that it will throw as you're unlikely going to actuate all three nodes
                             // It's not ideal, but it's better to let slide a bad condition rather than throw false positives...
-                            state.dataLoopNodes->NodeSetpointCheck(vrfTU.VRFTUOutletNodeNum)
-                                .needsSetpointChecking = false;
-                            state.dataLoopNodes->NodeSetpointCheck(vrfTU.coolCoilAirOutNode)
-                                .needsSetpointChecking = false;
-                            state.dataLoopNodes->NodeSetpointCheck(vrfTU.heatCoilAirOutNode)
-                                .needsSetpointChecking = false;
+                            state.dataLoopNodes->NodeSetpointCheck(vrfTU.VRFTUOutletNodeNum).needsSetpointChecking = false;
+                            state.dataLoopNodes->NodeSetpointCheck(vrfTU.coolCoilAirOutNode).needsSetpointChecking = false;
+                            state.dataLoopNodes->NodeSetpointCheck(vrfTU.heatCoilAirOutNode).needsSetpointChecking = false;
 
                             if (SPNotFound && state.dataAirLoop->AirLoopInputsFilled) {
                                 ShowSevereError(
@@ -6196,8 +6148,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     }
                 }
 
-                if (vrfTU.isInAirLoop || vrfTU.isInOASys ||
-                    vrfTU.isInZone) {
+                if (vrfTU.isInAirLoop || vrfTU.isInOASys || vrfTU.isInZone) {
                     continue;
                 }
                 if (!state.dataAirLoop->AirLoopInputsFilled) {
@@ -6223,6 +6174,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     continue;
                 }
                 for (int NodeNum = 1; NodeNum <= state.dataZoneEquip->ZoneEquipConfig(CtrlZone).NumExhaustNodes; ++NodeNum) {
+
                     if (vrfTU1.VRFTUInletNodeNum ==
                         state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ExhaustNode(NodeNum)) {
                         vrfTU1.ZoneAirNode = state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ZoneNode;
@@ -6265,6 +6217,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
             }
         }
         // check that TU outlet node is a zone inlet node.
+
         if ((vrfTU1.isInZone &&
              (!vrfTU1.ATMixerExists ||
               vrfTU1.ATMixerType == HVAC::MixerType::InletSide))) {
@@ -6274,6 +6227,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     continue;
                 }
                 for (int NodeNum = 1; NodeNum <= state.dataZoneEquip->ZoneEquipConfig(CtrlZone).NumInletNodes; ++NodeNum) {
+
                     if (vrfTU1.VRFTUOutletNodeNum ==
                         state.dataZoneEquip->ZoneEquipConfig(CtrlZone).InletNode(NodeNum)) {
                         vrfTU1.ZoneAirNode = state.dataZoneEquip->ZoneEquipConfig(CtrlZone).ZoneNode;
@@ -6342,6 +6296,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
 
         RhoAir = state.dataEnvrn->StdRhoAir;
         // set the mass flow rates from the input volume flow rates
+
         vrfTU1.MaxCoolAirMassFlow = RhoAir * vrfTU1.MaxCoolAirVolFlow;
         vrfTU1.CoolOutAirMassFlow = RhoAir * vrfTU1.CoolOutAirVolFlow;
         vrfTU1.MaxHeatAirMassFlow = RhoAir * vrfTU1.MaxHeatAirVolFlow;
@@ -6385,6 +6340,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
         state.dataHVACVarRefFlow->MyVRFCondFlag(VRFCond) = false;
         //    END IF
 
+
         if (vrfTU1.SuppHeatCoilFluidInletNode > 0) {
             if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
                 if (vrfTU1.SuppHeatCoilFluidMaxFlow == DataSizing::AutoSize) {
@@ -6412,11 +6368,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 }
             }
             // init water/steam coils min and max flow rates
-            InitComponentNodes(state,
-                               0.0,
-                               vrfTU1.SuppHeatCoilFluidMaxFlow,
-                               vrfTU1.SuppHeatCoilFluidInletNode,
-                               vrfTU1.SuppHeatCoilFluidOutletNode);
+            InitComponentNodes(state, 0.0, vrfTU1.SuppHeatCoilFluidMaxFlow, vrfTU1.SuppHeatCoilFluidInletNode, vrfTU1.SuppHeatCoilFluidOutletNode);
         }
 
         // the first time an air loop VRF TU is simulated set isSimulated = true so that the TU initialization
@@ -6465,6 +6417,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
         if (vrfTU1.SuppHeatCoilFluidInletNode > 0) {
             if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
                 //     set hot water full flow rate for sizing
+
                 Real64 mdot = vrfTU1.SuppHeatCoilFluidMaxFlow;
                 PlantUtilities::SetComponentFlowRate(state,
                                                      mdot,
@@ -6482,6 +6435,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
             } // from iF VRFTU(VRFTUNum).SuppHeatCoilType_Num == HVAC::Coil_HeatingWater
             if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingSteam) {
                 //     set hot water full flow rate for sizing
+
                 Real64 mdot = vrfTU1.SuppHeatCoilFluidMaxFlow;
                 PlantUtilities::SetComponentFlowRate(state,
                                                      mdot,
@@ -6496,6 +6450,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                                         vrfTU1.SuppHeatCoilIndex,
                                                         1.0,
                                                         ErrorsFound); // QCoilReq, simulate any load > 0 to get max capacity of steam coil
+
                 SuppHeatCoilCapacity = SteamCoils::GetCoilCapacity(state, "Coil:Heating:Steam", vrfTU1.SuppHeatCoilName, ErrorsFound);
 
                 vrfTU1.DesignSuppHeatingCapacity = SuppHeatCoilCapacity;
@@ -6521,8 +6476,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
 
                     if (vrfTU.fanType == HVAC::FanType::SystemModel) {
                         auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(vrfTU.FanIndex));
-                        if (fanSystem->speedControl == Fans::SpeedControl::Discrete &&
-                            vrfTU.DesignSpecMSHPIndex < 0) {
+                        if (fanSystem->speedControl == Fans::SpeedControl::Discrete && vrfTU.DesignSpecMSHPIndex < 0) {
                             if (fanSystem->numSpeeds > 1) {
                                 if (vrfTU.DXCoolCoilType_Num == HVAC::CoilVRF_Cooling) {
                                     if (vrfTU.MaxCoolAirVolFlow != DataSizing::AutoSize) {
@@ -6542,122 +6496,91 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                         }
                     }
 
-                    if (vrfTU.MaxCoolAirVolFlow >
-                        vrfTU.ActualFanVolFlowRate) {
+                    if (vrfTU.MaxCoolAirVolFlow > vrfTU.ActualFanVolFlowRate) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]",
-                                                            tuTypeNames[(int)vrfTU.type],
-                                                            vrfTU.Name));
+                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                         ShowContinueError(state, "... has Supply Air Flow Rate During Cooling Operation > Max Fan Volume Flow Rate, should be <=");
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Supply Air Flow Rate During Cooling Operation = {:.4R} m3/s",
-                                                             vrfTU.MaxCoolAirVolFlow));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Max Fan Volume Flow Rate                      = {:.4R} m3/s",
-                                                             vrfTU.ActualFanVolFlowRate));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Supply Air Flow Rate During Cooling Operation = {:.4R} m3/s", vrfTU.MaxCoolAirVolFlow));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Max Fan Volume Flow Rate                      = {:.4R} m3/s", vrfTU.ActualFanVolFlowRate));
                         ShowContinueError(
                             state, "...the supply air flow rate during cooling operation will be reduced to match and the simulation continues.");
                         vrfTU.MaxCoolAirVolFlow = vrfTU.ActualFanVolFlowRate;
                     }
 
-                    if (vrfTU.MaxNoCoolAirVolFlow >
-                        vrfTU.ActualFanVolFlowRate) {
+                    if (vrfTU.MaxNoCoolAirVolFlow > vrfTU.ActualFanVolFlowRate) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]",
-                                                            tuTypeNames[(int)vrfTU.type],
-                                                            vrfTU.Name));
+                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                         ShowContinueError(state, "... has Supply Air Flow Rate When No Cooling is Needed > Max Fan Volume Flow Rate, should be <=");
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Supply Air Flow Rate When No Cooling is Needed = {:.4R} m3/s",
-                                                             vrfTU.MaxNoCoolAirVolFlow));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Max Fan Volume Flow Rate                       = {:.4R} m3/s",
-                                                             vrfTU.ActualFanVolFlowRate));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Supply Air Flow Rate When No Cooling is Needed = {:.4R} m3/s", vrfTU.MaxNoCoolAirVolFlow));
+                        ShowContinueError(
+                            state,
+                            EnergyPlus::format("... Max Fan Volume Flow Rate                       = {:.4R} m3/s", vrfTU.ActualFanVolFlowRate));
                         ShowContinueError(
                             state, "...the supply air flow rate when no cooling is needed will be reduced to match and the simulation continues.");
-                        vrfTU.MaxNoCoolAirVolFlow =
-                            vrfTU.ActualFanVolFlowRate;
+                        vrfTU.MaxNoCoolAirVolFlow = vrfTU.ActualFanVolFlowRate;
                     }
 
                     if (vrfTU.CoolOutAirVolFlow > vrfTU.MaxCoolAirVolFlow) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]",
-                                                            tuTypeNames[(int)vrfTU.type],
-                                                            vrfTU.Name));
+                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                         ShowContinueError(
                             state,
                             "...The Outdoor Air Flow Rate During Cooling Operation exceeds the Supply Air Flow Rate During Cooling Operation.");
-                        ShowContinueError(state,
-                                          EnergyPlus::format("...Outdoor Air Flow Rate During Cooling Operation = {:.4R} m3/s",
-                                                             vrfTU.CoolOutAirVolFlow));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Supply Air Flow Rate During Cooling Operation = {:.4R} m3/s",
-                                                             vrfTU.MaxCoolAirVolFlow));
+                        ShowContinueError(
+                            state, EnergyPlus::format("...Outdoor Air Flow Rate During Cooling Operation = {:.4R} m3/s", vrfTU.CoolOutAirVolFlow));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Supply Air Flow Rate During Cooling Operation = {:.4R} m3/s", vrfTU.MaxCoolAirVolFlow));
                         ShowContinueError(state, "...the outdoor air flow rate will be reduced to match and the simulation continues.");
                         vrfTU.CoolOutAirVolFlow = vrfTU.MaxCoolAirVolFlow;
                     }
 
-                    if (vrfTU.MaxHeatAirVolFlow >
-                        vrfTU.ActualFanVolFlowRate) {
+                    if (vrfTU.MaxHeatAirVolFlow > vrfTU.ActualFanVolFlowRate) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]",
-                                                            tuTypeNames[(int)vrfTU.type],
-                                                            vrfTU.Name));
+                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                         ShowContinueError(state, "... has Supply Air Flow Rate During Heating Operation > Max Fan Volume Flow Rate, should be <=");
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Supply Air Flow Rate During Heating Operation = {:.4R} m3/s",
-                                                             vrfTU.MaxHeatAirVolFlow));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Max Fan Volume Flow Rate                      = {:.4R} m3/s",
-                                                             vrfTU.ActualFanVolFlowRate));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Supply Air Flow Rate During Heating Operation = {:.4R} m3/s", vrfTU.MaxHeatAirVolFlow));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Max Fan Volume Flow Rate                      = {:.4R} m3/s", vrfTU.ActualFanVolFlowRate));
                         ShowContinueError(
                             state, "...the supply air flow rate during cooling operation will be reduced to match and the simulation continues.");
                         vrfTU.MaxHeatAirVolFlow = vrfTU.ActualFanVolFlowRate;
                     }
 
-                    if (vrfTU.MaxNoHeatAirVolFlow >
-                        vrfTU.ActualFanVolFlowRate) {
+                    if (vrfTU.MaxNoHeatAirVolFlow > vrfTU.ActualFanVolFlowRate) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]",
-                                                            tuTypeNames[(int)vrfTU.type],
-                                                            vrfTU.Name));
+                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                         ShowContinueError(state, "... has Supply Air Flow Rate When No Heating is Needed > Max Fan Volume Flow Rate, should be <=");
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Supply Air Flow Rate When No Heating is Needed = {:.4R} m3/s",
-                                                             vrfTU.MaxNoHeatAirVolFlow));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Max Fan Volume Flow Rate                       = {:.4R} m3/s",
-                                                             vrfTU.ActualFanVolFlowRate));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Supply Air Flow Rate When No Heating is Needed = {:.4R} m3/s", vrfTU.MaxNoHeatAirVolFlow));
+                        ShowContinueError(
+                            state,
+                            EnergyPlus::format("... Max Fan Volume Flow Rate                       = {:.4R} m3/s", vrfTU.ActualFanVolFlowRate));
                         ShowContinueError(
                             state, "...the supply air flow rate when no cooling is needed will be reduced to match and the simulation continues.");
-                        vrfTU.MaxNoHeatAirVolFlow =
-                            vrfTU.ActualFanVolFlowRate;
+                        vrfTU.MaxNoHeatAirVolFlow = vrfTU.ActualFanVolFlowRate;
                     }
 
                     if (vrfTU.HeatOutAirVolFlow > vrfTU.MaxHeatAirVolFlow) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]",
-                                                            tuTypeNames[(int)vrfTU.type],
-                                                            vrfTU.Name));
+                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                         ShowContinueError(
                             state,
                             "...The Outdoor Air Flow Rate During Heating Operation exceeds the Supply Air Flow Rate During Heating Operation.");
-                        ShowContinueError(state,
-                                          EnergyPlus::format("...Outdoor Air Flow Rate During Heating Operation = {:.4R} m3/s",
-                                                             vrfTU.HeatOutAirVolFlow));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("... Supply Air Flow Rate During Heating Operation = {:.4R} m3/s",
-                                                             vrfTU.MaxHeatAirVolFlow));
+                        ShowContinueError(
+                            state, EnergyPlus::format("...Outdoor Air Flow Rate During Heating Operation = {:.4R} m3/s", vrfTU.HeatOutAirVolFlow));
+                        ShowContinueError(
+                            state, EnergyPlus::format("... Supply Air Flow Rate During Heating Operation = {:.4R} m3/s", vrfTU.MaxHeatAirVolFlow));
                         ShowContinueError(state, "...the outdoor air flow rate will be reduced to match and the simulation continues.");
                         vrfTU.HeatOutAirVolFlow = vrfTU.MaxHeatAirVolFlow;
                     }
 
-                    if (vrfTU.NoCoolHeatOutAirVolFlow >
-                        vrfTU.ActualFanVolFlowRate) {
+                    if (vrfTU.NoCoolHeatOutAirVolFlow > vrfTU.ActualFanVolFlowRate) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]",
-                                                            tuTypeNames[(int)vrfTU.type],
-                                                            vrfTU.Name));
+                                         EnergyPlus::format("InitVRF: VRF Terminal Unit = [{}, \"{}\"]", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                         ShowContinueError(
                             state, "... has a Outdoor Air Flow Rate When No Cooling or Heating is Needed > Max Fan Volume Flow Rate, should be <=");
                         ShowContinueError(state,
@@ -6669,27 +6592,19 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                         ShowContinueError(state,
                                           "...the outdoor air flow rate when no cooling or heating is needed will be reduced to match and the "
                                           "simulation continues.");
-                        vrfTU.NoCoolHeatOutAirVolFlow =
-                            vrfTU.ActualFanVolFlowRate;
+                        vrfTU.NoCoolHeatOutAirVolFlow = vrfTU.ActualFanVolFlowRate;
                     }
 
                     if (vrfTU.ActualFanVolFlowRate > 0.0) {
-                        vrfTU.HeatingSpeedRatio = vrfTU.MaxHeatAirVolFlow /
-                                                                                      vrfTU.ActualFanVolFlowRate;
-                        vrfTU.CoolingSpeedRatio = vrfTU.MaxCoolAirVolFlow /
-                                                                                      vrfTU.ActualFanVolFlowRate;
-                        vrfTU.NoHeatingSpeedRatio =
-                            vrfTU.MaxNoHeatAirVolFlow /
-                            vrfTU.ActualFanVolFlowRate;
-                        vrfTU.NoCoolingSpeedRatio =
-                            vrfTU.MaxNoCoolAirVolFlow /
-                            vrfTU.ActualFanVolFlowRate;
+                        vrfTU.HeatingSpeedRatio = vrfTU.MaxHeatAirVolFlow / vrfTU.ActualFanVolFlowRate;
+                        vrfTU.CoolingSpeedRatio = vrfTU.MaxCoolAirVolFlow / vrfTU.ActualFanVolFlowRate;
+                        vrfTU.NoHeatingSpeedRatio = vrfTU.MaxNoHeatAirVolFlow / vrfTU.ActualFanVolFlowRate;
+                        vrfTU.NoCoolingSpeedRatio = vrfTU.MaxNoCoolAirVolFlow / vrfTU.ActualFanVolFlowRate;
                     }
 
                     state.dataHVACVarRefFlow->MyVRFFlag(VRFTUNum) = false;
                 } else {
-                    vrfTU.ActualFanVolFlowRate =
-                        state.dataFans->fans(vrfTU.FanIndex)->maxAirFlowRate;
+                    vrfTU.ActualFanVolFlowRate = state.dataFans->fans(vrfTU.FanIndex)->maxAirFlowRate;
                 }
             } else {
                 state.dataHVACVarRefFlow->MyVRFFlag(VRFTUNum) = false;
@@ -7088,6 +7003,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     state.dataHeatBalFanSys->TempControlType(vrfTU1.ZoneNum) != HVAC::SetptType::Uncontrolled) {
                     if (!state.dataHVACVarRefFlow->LastModeHeating(VRFCond)) {
                         // system last operated in cooling mode, change air flows and repeat coil off capacity test
+
                         if (vrfTU1.OAMixerUsed) {
                             state.dataLoopNodes->Node(vrfTU1.VRFTUOAMixerRetNodeNum).MassFlowRate = vrfTU1.MaxHeatAirMassFlow;
                             state.dataLoopNodes->Node(vrfTU1.VRFTUOAMixerOANodeNum).MassFlowRate = vrfTU1.HeatOutAirMassFlow;
@@ -7184,6 +7100,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
 
                         if (state.dataHVACVarRefFlow->VRF(VRFCond).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
                             // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
+
                             vrfTU1.CalcVRF_FluidTCtrl(
                                 state, VRFTUNum, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                         } else {
@@ -7233,6 +7150,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
 
                     if (state.dataHVACVarRefFlow->VRF(VRFCond).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
                         // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
+
                         vrfTU1.CalcVRF_FluidTCtrl(
                             state, VRFTUNum, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                     } else {
@@ -7263,6 +7181,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 state.dataHeatBalFanSys->TempControlType(vrfTU1.ZoneNum) != HVAC::SetptType::Uncontrolled) {
                 if (!state.dataHVACVarRefFlow->LastModeHeating(VRFCond)) {
                     // system last operated in cooling mode, change air flows and repeat coil off capacity test
+
                     if (vrfTU1.OAMixerUsed) {
                         state.dataLoopNodes->Node(vrfTU1.VRFTUOAMixerRetNodeNum).MassFlowRate = vrfTU1.MaxHeatAirMassFlow;
                         state.dataLoopNodes->Node(vrfTU1.VRFTUOAMixerOANodeNum).MassFlowRate = vrfTU1.HeatOutAirMassFlow;
@@ -7273,6 +7192,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
 
                     if (state.dataHVACVarRefFlow->VRF(VRFCond).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
                         // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
+
                         vrfTU1.CalcVRF_FluidTCtrl(
                             state, VRFTUNum, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                     } else {
@@ -7731,12 +7651,9 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             state.dataSize->DataFanIndex = vrfTU.FanIndex;
             state.dataSize->DataFanPlacement = vrfTU.fanPlace;
         } else if (vrfTU.isInAirLoop) {
-            state.dataAirSystemsData->PrimaryAirSystems(vrfTU.airLoopNum).supFanType =
-                vrfTU.fanType;
-            state.dataAirSystemsData->PrimaryAirSystems(vrfTU.airLoopNum).supFanNum =
-                vrfTU.FanIndex;
-            state.dataAirSystemsData->PrimaryAirSystems(vrfTU.airLoopNum).supFanPlace =
-                vrfTU.fanPlace;
+            state.dataAirSystemsData->PrimaryAirSystems(vrfTU.airLoopNum).supFanType = vrfTU.fanType;
+            state.dataAirSystemsData->PrimaryAirSystems(vrfTU.airLoopNum).supFanNum = vrfTU.FanIndex;
+            state.dataAirSystemsData->PrimaryAirSystems(vrfTU.airLoopNum).supFanPlace = vrfTU.fanPlace;
         }
     }
 
@@ -7750,13 +7667,9 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         if (vrfTU.HeatOutAirVolFlow != AutoSize) {
             EqSizing.OAVolFlow = max(EqSizing.OAVolFlow, vrfTU.HeatOutAirVolFlow);
         }
-        if (vrfTU.ATMixerExists &&
-            vrfTU.isInZone) { // set up ATMixer conditions for scalable capacity sizing
-            EqSizing.OAVolFlow = 0.0;                             // Equipment OA flow should always be 0 when ATMixer is used
-            SingleDuct::setATMixerSizingProperties(state,
-                                                   vrfTU.ATMixerIndex,
-                                                   vrfTU.ZoneNum,
-                                                   state.dataSize->CurZoneEqNum);
+        if (vrfTU.ATMixerExists && vrfTU.isInZone) { // set up ATMixer conditions for scalable capacity sizing
+            EqSizing.OAVolFlow = 0.0;                // Equipment OA flow should always be 0 when ATMixer is used
+            SingleDuct::setATMixerSizingProperties(state, vrfTU.ATMixerIndex, vrfTU.ZoneNum, state.dataSize->CurZoneEqNum);
         }
 
         int zoneHVACIndex = vrfTU.HVACSizingIndex;
@@ -7831,25 +7744,19 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             Real64 AirFlowRate = vrfTU.MaxCoolAirVolFlow;
             for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
                 if (vrfTU.DesignSpecMSHPIndex > -1) {
-                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                            .coolingVolFlowRatio[i] == DataSizing::AutoSize) {
-                        vrfTU.CoolVolumeFlowRate[i] =
-                            double(i) / double(vrfTU.NumOfSpeedCooling) * AirFlowRate;
+                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].coolingVolFlowRatio[i] == DataSizing::AutoSize) {
+                        vrfTU.CoolVolumeFlowRate[i] = double(i) / double(vrfTU.NumOfSpeedCooling) * AirFlowRate;
                     } else {
                         vrfTU.CoolVolumeFlowRate[i] =
-                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                                .coolingVolFlowRatio[i] *
-                            AirFlowRate;
+                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].coolingVolFlowRatio[i] * AirFlowRate;
                     }
-                    vrfTU.CoolMassFlowRate[i] =
-                        vrfTU.CoolVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
+                    vrfTU.CoolMassFlowRate[i] = vrfTU.CoolVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(vrfTU.FanIndex));
                     assert(fanSystem != nullptr);
                     if (vrfTU.CoolMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         vrfTU.CoolMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
-                        vrfTU.CoolVolumeFlowRate[i] =
-                            vrfTU.CoolMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
+                        vrfTU.CoolVolumeFlowRate[i] = vrfTU.CoolMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
                     }
                 }
             }
@@ -7916,25 +7823,19 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             Real64 AirFlowRate = vrfTU.MaxHeatAirVolFlow;
             for (int i = 1; i <= vrfTU.NumOfSpeedHeating; ++i) {
                 if (vrfTU.DesignSpecMSHPIndex > -1) {
-                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                            .heatingVolFlowRatio[i] == DataSizing::AutoSize) {
-                        vrfTU.HeatVolumeFlowRate[i] =
-                            double(i) / double(vrfTU.NumOfSpeedHeating) * AirFlowRate;
+                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].heatingVolFlowRatio[i] == DataSizing::AutoSize) {
+                        vrfTU.HeatVolumeFlowRate[i] = double(i) / double(vrfTU.NumOfSpeedHeating) * AirFlowRate;
                     } else {
                         vrfTU.HeatVolumeFlowRate[i] =
-                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                                .heatingVolFlowRatio[i] *
-                            AirFlowRate;
+                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].heatingVolFlowRatio[i] * AirFlowRate;
                     }
-                    vrfTU.HeatMassFlowRate[i] =
-                        vrfTU.HeatVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
+                    vrfTU.HeatMassFlowRate[i] = vrfTU.HeatVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(vrfTU.FanIndex));
                     assert(fanSystem != nullptr);
                     if (vrfTU.HeatMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         vrfTU.HeatMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
-                        vrfTU.HeatVolumeFlowRate[i] =
-                            vrfTU.HeatMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
+                        vrfTU.HeatVolumeFlowRate[i] = vrfTU.HeatMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
                     }
                 }
             }
@@ -7980,11 +7881,8 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
             if (vrfTU.NumOfSpeedCooling > 0) {
                 vrfTU.MaxNoCoolAirVolFlow = vrfTU.CoolVolumeFlowRate[1];
-                sizingCoolingAirFlow.reportSizerOutput(state,
-                                                       sizingCoolingAirFlow.compType,
-                                                       sizingCoolingAirFlow.compName,
-                                                       "Design Size " + stringOverride,
-                                                       vrfTU.MaxNoCoolAirVolFlow);
+                sizingCoolingAirFlow.reportSizerOutput(
+                    state, sizingCoolingAirFlow.compType, sizingCoolingAirFlow.compName, "Design Size " + stringOverride, vrfTU.MaxNoCoolAirVolFlow);
             } else {
                 vrfTU.MaxNoCoolAirVolFlow = sizingCoolingAirFlow.size(state, TempSize, errorsFound);
             }
@@ -8084,25 +7982,19 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             Real64 AirFlowRate = vrfTU.MaxCoolAirVolFlow;
             for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
                 if (vrfTU.DesignSpecMSHPIndex > -1) {
-                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                            .coolingVolFlowRatio[i] == DataSizing::AutoSize) {
-                        vrfTU.CoolVolumeFlowRate[i] =
-                            double(i) / double(vrfTU.NumOfSpeedCooling) * AirFlowRate;
+                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].coolingVolFlowRatio[i] == DataSizing::AutoSize) {
+                        vrfTU.CoolVolumeFlowRate[i] = double(i) / double(vrfTU.NumOfSpeedCooling) * AirFlowRate;
                     } else {
                         vrfTU.CoolVolumeFlowRate[i] =
-                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                                .coolingVolFlowRatio[i] *
-                            AirFlowRate;
+                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].coolingVolFlowRatio[i] * AirFlowRate;
                     }
-                    vrfTU.CoolMassFlowRate[i] =
-                        vrfTU.CoolVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
+                    vrfTU.CoolMassFlowRate[i] = vrfTU.CoolVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(vrfTU.FanIndex));
                     assert(fanSystem != nullptr);
                     if (vrfTU.CoolMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         vrfTU.CoolMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
-                        vrfTU.CoolVolumeFlowRate[i] =
-                            vrfTU.CoolMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
+                        vrfTU.CoolVolumeFlowRate[i] = vrfTU.CoolMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
                     }
                 }
             }
@@ -8122,25 +8014,19 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             Real64 AirFlowRate = vrfTU.MaxHeatAirVolFlow;
             for (int i = 1; i <= vrfTU.NumOfSpeedHeating; ++i) {
                 if (vrfTU.DesignSpecMSHPIndex > -1) {
-                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                            .heatingVolFlowRatio[i] == DataSizing::AutoSize) {
-                        vrfTU.HeatVolumeFlowRate[i] =
-                            double(i) / double(vrfTU.NumOfSpeedHeating) * AirFlowRate;
+                    if (state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].heatingVolFlowRatio[i] == DataSizing::AutoSize) {
+                        vrfTU.HeatVolumeFlowRate[i] = double(i) / double(vrfTU.NumOfSpeedHeating) * AirFlowRate;
                     } else {
                         vrfTU.HeatVolumeFlowRate[i] =
-                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex]
-                                .heatingVolFlowRatio[i] *
-                            AirFlowRate;
+                            state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex].heatingVolFlowRatio[i] * AirFlowRate;
                     }
-                    vrfTU.HeatMassFlowRate[i] =
-                        vrfTU.HeatVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
+                    vrfTU.HeatMassFlowRate[i] = vrfTU.HeatVolumeFlowRate[i] * state.dataEnvrn->StdRhoAir;
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(vrfTU.FanIndex));
                     assert(fanSystem != nullptr);
                     if (vrfTU.HeatMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         vrfTU.HeatMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
-                        vrfTU.HeatVolumeFlowRate[i] =
-                            vrfTU.HeatMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
+                        vrfTU.HeatVolumeFlowRate[i] = vrfTU.HeatMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
                     }
                 }
             }
@@ -8153,14 +8039,10 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         sizerSystemAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
         if (vrfTU.NumOfSpeedCooling > 0) {
             vrfTU.MaxNoCoolAirVolFlow = vrfTU.CoolVolumeFlowRate[1];
-            sizerSystemAirFlow.reportSizerOutput(state,
-                                                 sizerSystemAirFlow.compType,
-                                                 sizerSystemAirFlow.compName,
-                                                 "Design Size " + sizingString,
-                                                 vrfTU.MaxNoCoolAirVolFlow);
+            sizerSystemAirFlow.reportSizerOutput(
+                state, sizerSystemAirFlow.compType, sizerSystemAirFlow.compName, "Design Size " + sizingString, vrfTU.MaxNoCoolAirVolFlow);
         } else {
-            vrfTU.MaxNoCoolAirVolFlow =
-                sizerSystemAirFlow.size(state, vrfTU.MaxNoCoolAirVolFlow, errorsFound);
+            vrfTU.MaxNoCoolAirVolFlow = sizerSystemAirFlow.size(state, vrfTU.MaxNoCoolAirVolFlow, errorsFound);
         }
 
         SystemAirFlowSizer sizerSystemAirFlow2;
@@ -8169,14 +8051,10 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         sizerSystemAirFlow2.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
         if (vrfTU.NumOfSpeedHeating > 0) {
             vrfTU.MaxNoHeatAirVolFlow = vrfTU.HeatVolumeFlowRate[1];
-            sizerSystemAirFlow.reportSizerOutput(state,
-                                                 sizerSystemAirFlow.compType,
-                                                 sizerSystemAirFlow.compName,
-                                                 "Design Size " + sizingString,
-                                                 vrfTU.MaxNoHeatAirVolFlow);
+            sizerSystemAirFlow.reportSizerOutput(
+                state, sizerSystemAirFlow.compType, sizerSystemAirFlow.compName, "Design Size " + sizingString, vrfTU.MaxNoHeatAirVolFlow);
         } else {
-            vrfTU.MaxNoHeatAirVolFlow =
-                sizerSystemAirFlow2.size(state, vrfTU.MaxNoHeatAirVolFlow, errorsFound);
+            vrfTU.MaxNoHeatAirVolFlow = sizerSystemAirFlow2.size(state, vrfTU.MaxNoHeatAirVolFlow, errorsFound);
         }
     }
     IsAutoSize = false;
@@ -8194,8 +8072,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             }
         } else {
             CheckZoneSizing(state, tuTypeNames[(int)vrfTU.type], vrfTU.Name);
-            CoolOutAirVolFlowDes =
-                min(state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA, vrfTU.MaxCoolAirVolFlow);
+            CoolOutAirVolFlowDes = min(state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA, vrfTU.MaxCoolAirVolFlow);
             if (CoolOutAirVolFlowDes < HVAC::SmallAirVolFlow) {
                 CoolOutAirVolFlowDes = 0.0;
             }
@@ -8221,9 +8098,8 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                         if ((std::abs(CoolOutAirVolFlowDes - CoolOutAirVolFlowUser) / CoolOutAirVolFlowUser) >
                             state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(state,
-                                        EnergyPlus::format("SizeVRF: Potential issue with equipment sizing for {} {}",
-                                                           tuTypeNames[(int)vrfTU.type],
-                                                           vrfTU.Name));
+                                        EnergyPlus::format(
+                                            "SizeVRF: Potential issue with equipment sizing for {} {}", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                             ShowContinueError(state,
                                               EnergyPlus::format("User-Specified Outdoor Air Flow Rate During Cooling Operation of {:.5R} [m3/s]",
                                                                  CoolOutAirVolFlowUser));
@@ -8243,9 +8119,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             if (state.dataAirSystemsData->PrimaryAirSystems(state.dataSize->CurSysNum).OASysExists) {
                 vrfTU.CoolOutAirVolFlow = 0.0;
             } else {
-                vrfTU.CoolOutAirVolFlow =
-                    min(state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).DesOutAirVolFlow,
-                        vrfTU.MaxCoolAirVolFlow);
+                vrfTU.CoolOutAirVolFlow = min(state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).DesOutAirVolFlow, vrfTU.MaxCoolAirVolFlow);
             }
             BaseSizer::reportSizerOutput(state,
                                          tuTypeNames[(int)vrfTU.type],
@@ -8270,8 +8144,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             }
         } else {
             CheckZoneSizing(state, tuTypeNames[(int)vrfTU.type], vrfTU.Name);
-            HeatOutAirVolFlowDes =
-                min(state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA, vrfTU.MaxHeatAirVolFlow);
+            HeatOutAirVolFlowDes = min(state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA, vrfTU.MaxHeatAirVolFlow);
             if (HeatOutAirVolFlowDes < HVAC::SmallAirVolFlow) {
                 HeatOutAirVolFlowDes = 0.0;
             }
@@ -8297,9 +8170,8 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                         if ((std::abs(HeatOutAirVolFlowDes - HeatOutAirVolFlowUser) / HeatOutAirVolFlowUser) >
                             state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(state,
-                                        EnergyPlus::format("SizeVRF: Potential issue with equipment sizing for {} {}",
-                                                           tuTypeNames[(int)vrfTU.type],
-                                                           vrfTU.Name));
+                                        EnergyPlus::format(
+                                            "SizeVRF: Potential issue with equipment sizing for {} {}", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                             ShowContinueError(state,
                                               EnergyPlus::format("User-Specified Outdoor Air Flow Rate During Heating Operation of {:.5R} [m3/s]",
                                                                  HeatOutAirVolFlowUser));
@@ -8319,9 +8191,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             if (state.dataAirSystemsData->PrimaryAirSystems(state.dataSize->CurSysNum).OASysExists) {
                 vrfTU.HeatOutAirVolFlow = 0.0;
             } else {
-                vrfTU.HeatOutAirVolFlow =
-                    min(state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).DesOutAirVolFlow,
-                        vrfTU.MaxHeatAirVolFlow);
+                vrfTU.HeatOutAirVolFlow = min(state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).DesOutAirVolFlow, vrfTU.MaxHeatAirVolFlow);
             }
             BaseSizer::reportSizerOutput(state,
                                          tuTypeNames[(int)vrfTU.type],
@@ -8330,16 +8200,11 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                                          vrfTU.HeatOutAirVolFlow);
         }
     }
-    EqSizing.OAVolFlow =
-        max(vrfTU.CoolOutAirVolFlow, vrfTU.HeatOutAirVolFlow);
+    EqSizing.OAVolFlow = max(vrfTU.CoolOutAirVolFlow, vrfTU.HeatOutAirVolFlow);
 
-    if (vrfTU.ATMixerExists &&
-        vrfTU.isInZone) { // set up ATMixer conditions for use in component sizing
-        EqSizing.OAVolFlow = 0.0;                             // Equipment OA flow should always be 0 when ATMixer is used
-        SingleDuct::setATMixerSizingProperties(state,
-                                               vrfTU.ATMixerIndex,
-                                               vrfTU.ZoneNum,
-                                               state.dataSize->CurZoneEqNum);
+    if (vrfTU.ATMixerExists && vrfTU.isInZone) { // set up ATMixer conditions for use in component sizing
+        EqSizing.OAVolFlow = 0.0;                // Equipment OA flow should always be 0 when ATMixer is used
+        SingleDuct::setATMixerSizingProperties(state, vrfTU.ATMixerIndex, vrfTU.ZoneNum, state.dataSize->CurZoneEqNum);
     }
 
     IsAutoSize = false;
@@ -8357,9 +8222,8 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             }
         } else {
             CheckZoneSizing(state, tuTypeNames[(int)vrfTU.type], vrfTU.Name);
-            NoCoolHeatOutAirVolFlowDes = min(state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA,
-                                             vrfTU.HeatOutAirVolFlow,
-                                             vrfTU.CoolOutAirVolFlow);
+            NoCoolHeatOutAirVolFlowDes =
+                min(state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA, vrfTU.HeatOutAirVolFlow, vrfTU.CoolOutAirVolFlow);
             if (NoCoolHeatOutAirVolFlowDes < HVAC::SmallAirVolFlow) {
                 NoCoolHeatOutAirVolFlowDes = 0.0;
             }
@@ -8385,9 +8249,8 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                         if ((std::abs(NoCoolHeatOutAirVolFlowDes - NoCoolHeatOutAirVolFlowUser) / NoCoolHeatOutAirVolFlowUser) >
                             state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(state,
-                                        EnergyPlus::format("SizeVRF: Potential issue with equipment sizing for {} {}",
-                                                           tuTypeNames[(int)vrfTU.type],
-                                                           vrfTU.Name));
+                                        EnergyPlus::format(
+                                            "SizeVRF: Potential issue with equipment sizing for {} {}", tuTypeNames[(int)vrfTU.type], vrfTU.Name));
                             ShowContinueError(
                                 state,
                                 EnergyPlus::format("User-Specified Outdoor Air Flow Rate When No Cooling or Heating is Needed of {:.5R} [m3/s]",
@@ -8409,15 +8272,11 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             if (state.dataAirSystemsData->PrimaryAirSystems(state.dataSize->CurSysNum).OASysExists) {
                 vrfTU.NoCoolHeatOutAirVolFlow = 0.0;
             } else {
-                if (!(vrfTU.NumOfSpeedCooling > 0 &&
-                      vrfTU.NumOfSpeedHeating > 0)) {
-                    vrfTU.NoCoolHeatOutAirVolFlow =
-                        min(vrfTU.MaxCoolAirVolFlow, vrfTU.MaxHeatAirVolFlow);
+                if (!(vrfTU.NumOfSpeedCooling > 0 && vrfTU.NumOfSpeedHeating > 0)) {
+                    vrfTU.NoCoolHeatOutAirVolFlow = min(vrfTU.MaxCoolAirVolFlow, vrfTU.MaxHeatAirVolFlow);
                 } else {
                     if (vrfTU.DesignSpecMSHPIndex > -1) {
-                        vrfTU.NoCoolHeatOutAirVolFlow =
-                            min(vrfTU.HeatVolumeFlowRate[1],
-                                vrfTU.CoolVolumeFlowRate[1]);
+                        vrfTU.NoCoolHeatOutAirVolFlow = min(vrfTU.HeatVolumeFlowRate[1], vrfTU.CoolVolumeFlowRate[1]);
                     }
                 }
             }
@@ -8444,11 +8303,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
 
     if (vrfTU.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
         bool ErrorsFound = false;
-        WaterCoils::SetCoilDesFlow(state,
-                                   vrfTU.SuppHeatCoilType,
-                                   vrfTU.SuppHeatCoilName,
-                                   vrfTU.MaxHeatAirVolFlow,
-                                   ErrorsFound);
+        WaterCoils::SetCoilDesFlow(state, vrfTU.SuppHeatCoilType, vrfTU.SuppHeatCoilName, vrfTU.MaxHeatAirVolFlow, ErrorsFound);
     }
 
     if (vrfTU.SuppHeatingCoilPresent) {
@@ -8493,10 +8348,8 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             state.dataSize->ZoneEqDXCoil = true;
         }
         if (state.dataSize->CurZoneEqNum > 0) {
-            if (vrfTU.CoolOutAirVolFlow > 0.0 ||
-                vrfTU.HeatOutAirVolFlow > 0.0) {
-                EqSizing.OAVolFlow =
-                    max(vrfTU.CoolOutAirVolFlow, vrfTU.HeatOutAirVolFlow);
+            if (vrfTU.CoolOutAirVolFlow > 0.0 || vrfTU.HeatOutAirVolFlow > 0.0) {
+                EqSizing.OAVolFlow = max(vrfTU.CoolOutAirVolFlow, vrfTU.HeatOutAirVolFlow);
             } else {
                 EqSizing.OAVolFlow = 0.0;
             }
@@ -8508,8 +8361,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         // simulate the TU to size the coils
         if (state.dataHVACVarRefFlow->VRF(VRFCond).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
             // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
-            vrfTU.CalcVRF_FluidTCtrl(
-                state, VRFTUNum, true, 0.0, TUCoolingCapacity, OnOffAirFlowRat, SuppHeatCoilLoad);
+            vrfTU.CalcVRF_FluidTCtrl(state, VRFTUNum, true, 0.0, TUCoolingCapacity, OnOffAirFlowRat, SuppHeatCoilLoad);
         } else {
             // Algorithm Type: VRF model based on system curve
             vrfTU.CalcVRF(state, VRFTUNum, true, 0.0, TUCoolingCapacity, OnOffAirFlowRat, SuppHeatCoilLoad);
@@ -8526,10 +8378,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
             int TUIndex = vrfTUList.ZoneTUPtr(NumTU);
             auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(TUIndex);
             if (vrfTU.CoolCoilIndex > 0) {
-                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state,
-                                                                vrfTU.CoolCoilIndex,
-                                                                vrfTU.DXCoolCoilType_Num,
-                                                                errFlag);
+                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.CoolCoilIndex, vrfTU.DXCoolCoilType_Num, errFlag);
                 TUCoolingCapacity += DXCoilCap;
                 if (DXCoilCap == AutoSize) {
                     FoundAll = false;
@@ -8537,10 +8386,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                 }
             }
             if (vrfTU.HeatCoilIndex > 0) {
-                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state,
-                                                                vrfTU.HeatCoilIndex,
-                                                                vrfTU.DXHeatCoilType_Num,
-                                                                errFlag);
+                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.HeatCoilIndex, vrfTU.DXHeatCoilType_Num, errFlag);
                 TUHeatingCapacity += DXCoilCap;
                 if (DXCoilCap == AutoSize) {
                     FoundAll = false;
@@ -9101,11 +8947,12 @@ void SimVRF(EnergyPlusData &state,
     Real64 SuppHeatCoilLoad(0.0); // supplemental heating coil load (W)
 
     auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(VRFTUNum);
-    
+
     if (state.dataHVACVarRefFlow->VRF(vrfTU.VRFSysNum).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
         // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
         vrfTU.ControlVRF_FluidTCtrl(state, VRFTUNum, QZnReq, FirstHVACIteration, PartLoadRatio, OnOffAirFlowRatio, SuppHeatCoilLoad);
-        vrfTU.CalcVRF_FluidTCtrl(state, VRFTUNum, FirstHVACIteration, PartLoadRatio, SysOutputProvided, OnOffAirFlowRatio, SuppHeatCoilLoad, LatOutputProvided);
+        vrfTU.CalcVRF_FluidTCtrl(
+            state, VRFTUNum, FirstHVACIteration, PartLoadRatio, SysOutputProvided, OnOffAirFlowRatio, SuppHeatCoilLoad, LatOutputProvided);
         if (PartLoadRatio ==
             0.0) { // set coil inlet conditions when coil does not operate. Inlet conditions are set in ControlVRF_FluidTCtrl when PLR=1
             if (vrfTU.CoolingCoilPresent) {
@@ -9408,8 +9255,7 @@ void VRFTerminalUnitEquipment::ControlVRFToLoad(EnergyPlusData &state,
                         state, VRFTUNum, FirstHVACIteration, PartLoadRatio, ActualOutput, nonConstOnOffAirFlowRatio, SuppHeatCoilLoad);
                 } else {
                     // Algorithm Type: VRF model based on system curve
-                    vrfTU.CalcVRF(
-                        state, VRFTUNum, FirstHVACIteration, PartLoadRatio, ActualOutput, nonConstOnOffAirFlowRatio, SuppHeatCoilLoad);
+                    vrfTU.CalcVRF(state, VRFTUNum, FirstHVACIteration, PartLoadRatio, ActualOutput, nonConstOnOffAirFlowRatio, SuppHeatCoilLoad);
                 }
 
                 if (setPointControlled) {
@@ -9421,7 +9267,7 @@ void VRFTerminalUnitEquipment::ControlVRFToLoad(EnergyPlusData &state,
                 }
                 return (ActualOutput - QZnReq) / QZnReqTemp;
             };
-            
+
             General::SolveRoot(state, ErrorTol, MaxIte, SolFla, PartLoadRatio, f, 0.0, 1.0);
             if (SpeedNum == 1) {
                 if (this->NumOfSpeedCooling > 1 || this->NumOfSpeedHeating > 1) {
@@ -9809,88 +9655,70 @@ void ReportVRFTerminalUnit(EnergyPlusData &state, int const VRFTUNum) // index t
 
     if (HRCoolRequestFlag) {
         if (vrfTU.CoolingCoilPresent) {
-            vrfTU.ParasiticCoolElecPower =
-                vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXCoolCoilRTF +
-                vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXCoolCoilRTF);
-            vrfTU.ParasiticElecCoolConsumption =
-                vrfTU.ParasiticCoolElecPower * ReportingConstant;
+            vrfTU.ParasiticCoolElecPower = vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXCoolCoilRTF +
+                                           vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXCoolCoilRTF);
+            vrfTU.ParasiticElecCoolConsumption = vrfTU.ParasiticCoolElecPower * ReportingConstant;
             vrfTU.ParasiticHeatElecPower = 0.0;
             vrfTU.ParasiticElecHeatConsumption = 0.0;
         } else {
             // cooling parasitic power report variable is not even available when there is no cooling coil, report for heating
             vrfTU.ParasiticHeatElecPower = vrfTU.ParasiticOffElec;
-            vrfTU.ParasiticElecHeatConsumption =
-                vrfTU.ParasiticHeatElecPower * ReportingConstant;
+            vrfTU.ParasiticElecHeatConsumption = vrfTU.ParasiticHeatElecPower * ReportingConstant;
         }
     } else if (HRHeatRequestFlag) {
         if (vrfTU.HeatingCoilPresent) {
             vrfTU.ParasiticCoolElecPower = 0.0;
             vrfTU.ParasiticElecCoolConsumption = 0.0;
-            vrfTU.ParasiticHeatElecPower =
-                vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXHeatCoilRTF +
-                vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXHeatCoilRTF);
-            vrfTU.ParasiticElecHeatConsumption =
-                vrfTU.ParasiticHeatElecPower * ReportingConstant;
+            vrfTU.ParasiticHeatElecPower = vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXHeatCoilRTF +
+                                           vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXHeatCoilRTF);
+            vrfTU.ParasiticElecHeatConsumption = vrfTU.ParasiticHeatElecPower * ReportingConstant;
         } else {
             // heating parasitic power report variable is not even available when there is no heating coil, report for cooling
             vrfTU.ParasiticCoolElecPower = vrfTU.ParasiticOffElec;
-            vrfTU.ParasiticElecCoolConsumption =
-                vrfTU.ParasiticCoolElecPower * ReportingConstant;
+            vrfTU.ParasiticElecCoolConsumption = vrfTU.ParasiticCoolElecPower * ReportingConstant;
         }
     } else if (state.dataHVACVarRefFlow->CoolingLoad(VRFCond) ||
-               (!state.dataHVACVarRefFlow->HeatingLoad(VRFCond) &&
-                state.dataHVACVarRefFlow->LastModeCooling(vrfTU.VRFSysNum))) {
+               (!state.dataHVACVarRefFlow->HeatingLoad(VRFCond) && state.dataHVACVarRefFlow->LastModeCooling(vrfTU.VRFSysNum))) {
         if (vrfTU.CoolingCoilPresent) {
-            vrfTU.ParasiticCoolElecPower =
-                vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXCoolCoilRTF +
-                vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXCoolCoilRTF);
-            vrfTU.ParasiticElecCoolConsumption =
-                vrfTU.ParasiticCoolElecPower * ReportingConstant;
+            vrfTU.ParasiticCoolElecPower = vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXCoolCoilRTF +
+                                           vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXCoolCoilRTF);
+            vrfTU.ParasiticElecCoolConsumption = vrfTU.ParasiticCoolElecPower * ReportingConstant;
             vrfTU.ParasiticHeatElecPower = 0.0;
             vrfTU.ParasiticElecHeatConsumption = 0.0;
         } else {
             // cooling parasitic power report variable is not even available when there is no cooling coil, report for heating
             vrfTU.ParasiticHeatElecPower = vrfTU.ParasiticOffElec;
-            vrfTU.ParasiticElecHeatConsumption =
-                vrfTU.ParasiticHeatElecPower * ReportingConstant;
+            vrfTU.ParasiticElecHeatConsumption = vrfTU.ParasiticHeatElecPower * ReportingConstant;
         }
     } else if (state.dataHVACVarRefFlow->HeatingLoad(VRFCond) ||
-               (!state.dataHVACVarRefFlow->CoolingLoad(VRFCond) &&
-                state.dataHVACVarRefFlow->LastModeHeating(vrfTU.VRFSysNum))) {
+               (!state.dataHVACVarRefFlow->CoolingLoad(VRFCond) && state.dataHVACVarRefFlow->LastModeHeating(vrfTU.VRFSysNum))) {
         if (vrfTU.HeatingCoilPresent) {
             vrfTU.ParasiticCoolElecPower = 0.0;
             vrfTU.ParasiticElecCoolConsumption = 0.0;
-            vrfTU.ParasiticHeatElecPower =
-                vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXHeatCoilRTF +
-                vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXHeatCoilRTF);
-            vrfTU.ParasiticElecHeatConsumption =
-                vrfTU.ParasiticHeatElecPower * ReportingConstant;
+            vrfTU.ParasiticHeatElecPower = vrfTU.ParasiticElec * state.dataHVACVarRefFlow->LoopDXHeatCoilRTF +
+                                           vrfTU.ParasiticOffElec * (1.0 - state.dataHVACVarRefFlow->LoopDXHeatCoilRTF);
+            vrfTU.ParasiticElecHeatConsumption = vrfTU.ParasiticHeatElecPower * ReportingConstant;
         } else {
             // heating parasitic power report variable is not even available when there is no heating coil, report for cooling
             vrfTU.ParasiticCoolElecPower = vrfTU.ParasiticOffElec;
-            vrfTU.ParasiticElecCoolConsumption =
-                vrfTU.ParasiticCoolElecPower * ReportingConstant;
+            vrfTU.ParasiticElecCoolConsumption = vrfTU.ParasiticCoolElecPower * ReportingConstant;
         }
     } else {
         // happens when there is no cooling or heating load
         if (!vrfTU.CoolingCoilPresent) {
             // report all for heating
             vrfTU.ParasiticHeatElecPower = vrfTU.ParasiticOffElec;
-            vrfTU.ParasiticElecHeatConsumption =
-                vrfTU.ParasiticHeatElecPower * ReportingConstant;
+            vrfTU.ParasiticElecHeatConsumption = vrfTU.ParasiticHeatElecPower * ReportingConstant;
         } else if (!vrfTU.HeatingCoilPresent) {
             // report all for cooling
             vrfTU.ParasiticCoolElecPower = vrfTU.ParasiticOffElec;
-            vrfTU.ParasiticElecCoolConsumption =
-                vrfTU.ParasiticCoolElecPower * ReportingConstant;
+            vrfTU.ParasiticElecCoolConsumption = vrfTU.ParasiticCoolElecPower * ReportingConstant;
         } else {
             // split parasitic between both reporting variables
             vrfTU.ParasiticCoolElecPower = vrfTU.ParasiticOffElec / 2.0;
-            vrfTU.ParasiticElecCoolConsumption =
-                vrfTU.ParasiticCoolElecPower * ReportingConstant;
+            vrfTU.ParasiticElecCoolConsumption = vrfTU.ParasiticCoolElecPower * ReportingConstant;
             vrfTU.ParasiticHeatElecPower = vrfTU.ParasiticOffElec / 2.0;
-            vrfTU.ParasiticElecHeatConsumption =
-                vrfTU.ParasiticHeatElecPower * ReportingConstant;
+            vrfTU.ParasiticElecHeatConsumption = vrfTU.ParasiticHeatElecPower * ReportingConstant;
         }
     }
 
@@ -9936,12 +9764,10 @@ void ReportVRFTerminalUnit(EnergyPlusData &state, int const VRFTUNum) // index t
         vrfTU.LatentHeatingRate = LatentConditioning;
     }
     vrfTU.TotalCoolingEnergy = vrfTU.TotalCoolingRate * ReportingConstant;
-    vrfTU.SensibleCoolingEnergy =
-        vrfTU.SensibleCoolingRate * ReportingConstant;
+    vrfTU.SensibleCoolingEnergy = vrfTU.SensibleCoolingRate * ReportingConstant;
     vrfTU.LatentCoolingEnergy = vrfTU.LatentCoolingRate * ReportingConstant;
     vrfTU.TotalHeatingEnergy = vrfTU.TotalHeatingRate * ReportingConstant;
-    vrfTU.SensibleHeatingEnergy =
-        vrfTU.SensibleHeatingRate * ReportingConstant;
+    vrfTU.SensibleHeatingEnergy = vrfTU.SensibleHeatingRate * ReportingConstant;
     vrfTU.LatentHeatingEnergy = vrfTU.LatentHeatingRate * ReportingConstant;
 
     if (vrfTU.firstPass) {
@@ -10219,8 +10045,7 @@ void InitializeOperatingMode(EnergyPlusData &state,
             Real64 heatfanDeltaT = 0.0;
             if (vrfTU.fanPlace == HVAC::FanPlace::DrawThru) {
                 if (vrfTU.fanOutletNode > 0) {
-                    coolfanDeltaT = state.dataLoopNodes->Node(vrfTU.fanOutletNode).Temp -
-                                    state.dataLoopNodes->Node(vrfTU.fanInletNode).Temp;
+                    coolfanDeltaT = state.dataLoopNodes->Node(vrfTU.fanOutletNode).Temp - state.dataLoopNodes->Node(vrfTU.fanInletNode).Temp;
                 }
             }
             heatfanDeltaT = coolfanDeltaT;
@@ -10245,38 +10070,29 @@ void InitializeOperatingMode(EnergyPlusData &state,
                 SetAverageAirFlow(state, TUIndex, 1.0, OnOffAirFlowRatio);
                 if (vrfTU.ATMixerExists) {
                     // There is an air terminal mixer
-                    if (vrfTU.ATMixerType ==
-                        HVAC::MixerType::InletSide) { // if there is an inlet side air terminal mixer
-                                                      // set the primary air inlet mass flow rate
+                    if (vrfTU.ATMixerType == HVAC::MixerType::InletSide) { // if there is an inlet side air terminal mixer
+                                                                           // set the primary air inlet mass flow rate
                         state.dataLoopNodes->Node(vrfTU.ATMixerPriNode).MassFlowRate =
                             min(state.dataLoopNodes->Node(vrfTU.ATMixerPriNode).MassFlowRateMaxAvail,
                                 state.dataLoopNodes->Node(vrfTU.VRFTUInletNodeNum).MassFlowRate);
                         // now calculate the the mixer outlet air conditions (and the secondary air inlet flow rate). The mixer outlet flow rate
                         // has already been set above (it is the "inlet" node flow rate)
-                        SingleDuct::SimATMixer(state,
-                                               vrfTU.ATMixerName,
-                                               FirstHVACIteration,
-                                               vrfTU.ATMixerIndex);
+                        SingleDuct::SimATMixer(state, vrfTU.ATMixerName, FirstHVACIteration, vrfTU.ATMixerIndex);
                     }
                 } else {
                     // simulate OA Mixer
                     if (vrfTU.OAMixerUsed) {
-                        MixedAir::SimOAMixer(
-                            state, vrfTU.OAMixerName, vrfTU.OAMixerIndex);
+                        MixedAir::SimOAMixer(state, vrfTU.OAMixerName, vrfTU.OAMixerIndex);
                     }
                 }
             }
             // identify a coil inlet temperature
             if (vrfTU.CoolingCoilPresent) {
-                vrfTU.coilInNodeT =
-                    state.dataLoopNodes->Node(vrfTU.coolCoilAirInNode).Temp;
-                vrfTU.coilInNodeW =
-                    state.dataLoopNodes->Node(vrfTU.coolCoilAirInNode).HumRat;
+                vrfTU.coilInNodeT = state.dataLoopNodes->Node(vrfTU.coolCoilAirInNode).Temp;
+                vrfTU.coilInNodeW = state.dataLoopNodes->Node(vrfTU.coolCoilAirInNode).HumRat;
             } else {
-                vrfTU.coilInNodeT =
-                    state.dataLoopNodes->Node(vrfTU.heatCoilAirInNode).Temp;
-                vrfTU.coilInNodeW =
-                    state.dataLoopNodes->Node(vrfTU.heatCoilAirInNode).HumRat;
+                vrfTU.coilInNodeT = state.dataLoopNodes->Node(vrfTU.heatCoilAirInNode).Temp;
+                vrfTU.coilInNodeW = state.dataLoopNodes->Node(vrfTU.heatCoilAirInNode).HumRat;
             }
             Real64 coilInletTemp = vrfTU.coilInNodeT;
             Real64 coilInletHumRat = vrfTU.coilInNodeW;
@@ -10360,12 +10176,10 @@ void InitializeOperatingMode(EnergyPlusData &state,
 
                     if (state.dataHVACVarRefFlow->VRF(VRFCond).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
                         // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
-                        vrfTU.CalcVRF_FluidTCtrl(
-                            state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
+                        vrfTU.CalcVRF_FluidTCtrl(state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                     } else {
                         // Algorithm Type: VRF model based on system curve
-                        vrfTU.CalcVRF(
-                            state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
+                        vrfTU.CalcVRF(state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                     }
 
                     //           If the Terminal Unit has a net cooling capacity (NoCompOutput < 0) and
@@ -10379,16 +10193,11 @@ void InitializeOperatingMode(EnergyPlusData &state,
                                 if (!state.dataHVACVarRefFlow->LastModeHeating(VRFCond)) {
                                     // if last mode was cooling, make sure heating flow rate is used
                                     if (vrfTU.OAMixerUsed) {
-                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerRetNodeNum).MassFlowRate =
-                                            vrfTU.MaxHeatAirMassFlow;
-                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerOANodeNum).MassFlowRate =
-                                            vrfTU.HeatOutAirMassFlow;
-                                        MixedAir::SimOAMixer(state,
-                                                             vrfTU.OAMixerName,
-                                                             vrfTU.OAMixerIndex);
+                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerRetNodeNum).MassFlowRate = vrfTU.MaxHeatAirMassFlow;
+                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerOANodeNum).MassFlowRate = vrfTU.HeatOutAirMassFlow;
+                                        MixedAir::SimOAMixer(state, vrfTU.OAMixerName, vrfTU.OAMixerIndex);
                                     } else {
-                                        state.dataLoopNodes->Node(vrfTU.VRFTUInletNodeNum).MassFlowRate =
-                                            vrfTU.MaxHeatAirMassFlow;
+                                        state.dataLoopNodes->Node(vrfTU.VRFTUInletNodeNum).MassFlowRate = vrfTU.MaxHeatAirMassFlow;
                                     }
 
                                     // recalculate using correct flow rate
@@ -10398,8 +10207,7 @@ void InitializeOperatingMode(EnergyPlusData &state,
                                             state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                                     } else {
                                         // Algorithm Type: VRF model based on system curve
-                                        vrfTU.CalcVRF(
-                                            state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
+                                        vrfTU.CalcVRF(state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                                     }
 
                                     if (TempOutput < LoadToHeatingSP) {
@@ -10432,16 +10240,11 @@ void InitializeOperatingMode(EnergyPlusData &state,
                                 state.dataHeatBalFanSys->TempControlType(ThisZoneNum) != HVAC::SetptType::Uncontrolled) {
                                 if (!state.dataHVACVarRefFlow->LastModeCooling(VRFCond)) {
                                     if (vrfTU.OAMixerUsed) {
-                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerRetNodeNum).MassFlowRate =
-                                            vrfTU.MaxCoolAirMassFlow;
-                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerOANodeNum).MassFlowRate =
-                                            vrfTU.CoolOutAirMassFlow;
-                                        MixedAir::SimOAMixer(state,
-                                                             vrfTU.OAMixerName,
-                                                             vrfTU.OAMixerIndex);
+                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerRetNodeNum).MassFlowRate = vrfTU.MaxCoolAirMassFlow;
+                                        state.dataLoopNodes->Node(vrfTU.VRFTUOAMixerOANodeNum).MassFlowRate = vrfTU.CoolOutAirMassFlow;
+                                        MixedAir::SimOAMixer(state, vrfTU.OAMixerName, vrfTU.OAMixerIndex);
                                     } else {
-                                        state.dataLoopNodes->Node(vrfTU.VRFTUInletNodeNum).MassFlowRate =
-                                            vrfTU.MaxCoolAirMassFlow;
+                                        state.dataLoopNodes->Node(vrfTU.VRFTUInletNodeNum).MassFlowRate = vrfTU.MaxCoolAirMassFlow;
                                     }
 
                                     if (state.dataHVACVarRefFlow->VRF(VRFCond).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
@@ -10450,8 +10253,7 @@ void InitializeOperatingMode(EnergyPlusData &state,
                                             state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                                     } else {
                                         // Algorithm Type: VRF model based on system curve
-                                        vrfTU.CalcVRF(
-                                            state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
+                                        vrfTU.CalcVRF(state, TUIndex, FirstHVACIteration, 0.0, TempOutput, OnOffAirFlowRatio, SuppHeatCoilLoad);
                                     }
 
                                     if (TempOutput > LoadToCoolingSP) {
@@ -10904,15 +10706,14 @@ void getVRFTUZoneLoad(
 {
 
     auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(VRFTUNum);
-    if (vrfTU.zoneSequenceCoolingNum > 0 &&
-        vrfTU.zoneSequenceHeatingNum > 0 && vrfTU.isInAirLoop) {
+    if (vrfTU.zoneSequenceCoolingNum > 0 && vrfTU.zoneSequenceHeatingNum > 0 && vrfTU.isInAirLoop) {
         // air loop equipment uses sequenced variables
-        LoadToCoolingSP = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum)
-                              .SequencedOutputRequiredToCoolingSP(vrfTU.zoneSequenceCoolingNum) /
-                          vrfTU.controlZoneMassFlowFrac;
-        LoadToHeatingSP = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum)
-                              .SequencedOutputRequiredToHeatingSP(vrfTU.zoneSequenceHeatingNum) /
-                          vrfTU.controlZoneMassFlowFrac;
+        LoadToCoolingSP =
+            state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).SequencedOutputRequiredToCoolingSP(vrfTU.zoneSequenceCoolingNum) /
+            vrfTU.controlZoneMassFlowFrac;
+        LoadToHeatingSP =
+            state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).SequencedOutputRequiredToHeatingSP(vrfTU.zoneSequenceHeatingNum) /
+            vrfTU.controlZoneMassFlowFrac;
         if (LoadToHeatingSP > 0.0 && LoadToCoolingSP > 0.0 &&
             state.dataHeatBalFanSys->TempControlType(vrfTU.ZoneNum) != HVAC::SetptType::SingleCool) {
             zoneLoad = LoadToHeatingSP;
@@ -10934,23 +10735,17 @@ void getVRFTUZoneLoad(
             // this will need more investigation. Using Remaining* variable during the initial load calculation seems wrong.
             // This may also have implications when VRF TUs are in the air loop or if SP control is used
             // another question is whether initialization of the operating mode should look at TotalOutputRequired or RemainingOutputRequired
-            zoneLoad = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputRequired /
-                       vrfTU.controlZoneMassFlowFrac;
+            zoneLoad = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputRequired / vrfTU.controlZoneMassFlowFrac;
             LoadToCoolingSP =
-                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).OutputRequiredToCoolingSP /
-                vrfTU.controlZoneMassFlowFrac;
+                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).OutputRequiredToCoolingSP / vrfTU.controlZoneMassFlowFrac;
             LoadToHeatingSP =
-                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).OutputRequiredToHeatingSP /
-                vrfTU.controlZoneMassFlowFrac;
+                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).OutputRequiredToHeatingSP / vrfTU.controlZoneMassFlowFrac;
         } else {
-            zoneLoad = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputRequired /
-                       vrfTU.controlZoneMassFlowFrac;
+            zoneLoad = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputRequired / vrfTU.controlZoneMassFlowFrac;
             LoadToCoolingSP =
-                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputReqToCoolSP /
-                vrfTU.controlZoneMassFlowFrac;
+                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputReqToCoolSP / vrfTU.controlZoneMassFlowFrac;
             LoadToHeatingSP =
-                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputReqToHeatSP /
-                vrfTU.controlZoneMassFlowFrac;
+                state.dataZoneEnergyDemand->ZoneSysEnergyDemand(vrfTU.ZoneNum).RemainingOutputReqToHeatSP / vrfTU.controlZoneMassFlowFrac;
         }
     } else if (vrfTU.isSetPointControlled) {
         if (vrfTU.coolSPActive) {
@@ -11331,7 +11126,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     // variable initializations
     TUListNum = this->ZoneTUListPtr;
     auto &vrfTUList = state.dataHVACVarRefFlow->TerminalUnitList(TUListNum);
-    
+
     NumTUInList = vrfTUList.NumTUInList;
     VRFCond = state.dataHVACVarRefFlow->VRFTU(vrfTUList.ZoneTUPtr(1)).VRFSysNum;
     TU_CoolingLoad = 0.0;
@@ -11378,9 +11173,8 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     for (NumTU = 1; NumTU <= NumTUInList; ++NumTU) {
         TU_CoolingLoad += vrfTUList.TotalCoolLoad(NumTU);
         TU_HeatingLoad += vrfTUList.TotalHeatLoad(NumTU);
-        TUParasiticPower +=
-            state.dataHVACVarRefFlow->VRFTU(vrfTUList.ZoneTUPtr(NumTU)).ParasiticCoolElecPower +
-            state.dataHVACVarRefFlow->VRFTU(vrfTUList.ZoneTUPtr(NumTU)).ParasiticHeatElecPower;
+        TUParasiticPower += state.dataHVACVarRefFlow->VRFTU(vrfTUList.ZoneTUPtr(NumTU)).ParasiticCoolElecPower +
+                            state.dataHVACVarRefFlow->VRFTU(vrfTUList.ZoneTUPtr(NumTU)).ParasiticHeatElecPower;
         TUFanPower += state.dataHVACVarRefFlow->VRFTU(vrfTUList.ZoneTUPtr(NumTU)).FanPower;
     }
     this->TUCoolingLoad = TU_CoolingLoad; // this is cooling coil load, not terminal unit load
@@ -11536,10 +11330,10 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
                             RoutineName);
 
                         if (h_IU_evap_out_i > h_IU_evap_in) {
-                            m_ref_IU_evap_i = (vrfTUList.TotalCoolLoad(NumTU) <= 0.0)
-                                                  ? 0.0
-                                                  : (vrfTUList.TotalCoolLoad(NumTU) /
-                                                     (h_IU_evap_out_i - h_IU_evap_in)); // Ref Flow Rate in the IU( kg/s )
+                            m_ref_IU_evap_i =
+                                (vrfTUList.TotalCoolLoad(NumTU) <= 0.0)
+                                    ? 0.0
+                                    : (vrfTUList.TotalCoolLoad(NumTU) / (h_IU_evap_out_i - h_IU_evap_in)); // Ref Flow Rate in the IU( kg/s )
                             m_ref_IU_evap = m_ref_IU_evap + m_ref_IU_evap_i;
                             h_IU_evap_out = h_IU_evap_out + m_ref_IU_evap_i * h_IU_evap_out_i;
                             SH_IU_merged = SH_IU_merged + m_ref_IU_evap_i * state.dataDXCoils->DXCoil(CoolCoilIndex).ActualSH;
@@ -11721,9 +11515,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
                                                          0.0,
                                                          RoutineName); // Quality=0
                         m_ref_IU_cond_i =
-                            (vrfTUList.TotalHeatLoad(NumTU) <= 0.0)
-                                ? 0.0
-                                : (vrfTUList.TotalHeatLoad(NumTU) / (h_IU_cond_in - h_IU_cond_out_i));
+                            (vrfTUList.TotalHeatLoad(NumTU) <= 0.0) ? 0.0 : (vrfTUList.TotalHeatLoad(NumTU) / (h_IU_cond_in - h_IU_cond_out_i));
                         m_ref_IU_cond = m_ref_IU_cond + m_ref_IU_cond_i;
                         h_IU_cond_out_ave = h_IU_cond_out_ave + m_ref_IU_cond_i * h_IU_cond_out_i;
                         SC_IU_merged = SC_IU_merged + m_ref_IU_cond_i * state.dataDXCoils->DXCoil(HeatCoilIndex).ActualSC;
@@ -11945,9 +11737,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
                                                      0.0,
                                                      RoutineName); // Quality=0
                     m_ref_IU_cond_i =
-                        (vrfTUList.TotalHeatLoad(NumTU) <= 0.0)
-                            ? 0.0
-                            : (vrfTUList.TotalHeatLoad(NumTU) / (h_IU_cond_in - h_IU_cond_out_i));
+                        (vrfTUList.TotalHeatLoad(NumTU) <= 0.0) ? 0.0 : (vrfTUList.TotalHeatLoad(NumTU) / (h_IU_cond_in - h_IU_cond_out_i));
                     m_ref_IU_cond = m_ref_IU_cond + m_ref_IU_cond_i;
                     h_IU_cond_out_ave = h_IU_cond_out_ave + m_ref_IU_cond_i * h_IU_cond_out_i;
                     SC_IU_merged = SC_IU_merged + m_ref_IU_cond_i * state.dataDXCoils->DXCoil(HeatCoilIndex).ActualSC;
@@ -11992,10 +11782,10 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
                                                          RoutineName);
 
                     if (h_IU_evap_out_i > h_IU_evap_in) {
-                        m_ref_IU_evap_i = (vrfTUList.TotalCoolLoad(NumTU) <= 0.0)
-                                              ? 0.0
-                                              : (vrfTUList.TotalCoolLoad(NumTU) /
-                                                 (h_IU_evap_out_i - h_IU_evap_in)); // Ref Flow Rate in the IU( kg/s )
+                        m_ref_IU_evap_i =
+                            (vrfTUList.TotalCoolLoad(NumTU) <= 0.0)
+                                ? 0.0
+                                : (vrfTUList.TotalCoolLoad(NumTU) / (h_IU_evap_out_i - h_IU_evap_in)); // Ref Flow Rate in the IU( kg/s )
                         m_ref_IU_evap = m_ref_IU_evap + m_ref_IU_evap_i;
                         h_IU_evap_out = h_IU_evap_out + m_ref_IU_evap_i * h_IU_evap_out_i;
                         SH_IU_merged = SH_IU_merged + m_ref_IU_evap_i * state.dataDXCoils->DXCoil(CoolCoilIndex).ActualSH;
@@ -12768,8 +12558,7 @@ void VRFTerminalUnitEquipment::ControlVRF_FluidTCtrl(EnergyPlusData &state,
                     state, VRFTUNum, FirstHVACIteration, PartLoadRatio, ActualOutput, nonConstOnOffAirFlowRatio, SuppHeatCoilLoad);
             } else {
                 // Algorithm Type: VRF model based on system curve
-                vrfTU.CalcVRF(
-                    state, VRFTUNum, FirstHVACIteration, PartLoadRatio, ActualOutput, nonConstOnOffAirFlowRatio, SuppHeatCoilLoad);
+                vrfTU.CalcVRF(state, VRFTUNum, FirstHVACIteration, PartLoadRatio, ActualOutput, nonConstOnOffAirFlowRatio, SuppHeatCoilLoad);
             }
 
             if (setPointControlled) {
@@ -13222,8 +13011,7 @@ Real64 VRFTerminalUnitEquipment::CalVRFTUAirFlowRate_FluidTCtrl(EnergyPlusData &
 
         // Simulation the OAMixer if there is any
         if (vrfTU.OAMixerUsed) {
-            MixedAir::SimOAMixer(
-                state, vrfTU.OAMixerName, vrfTU.OAMixerIndex);
+            MixedAir::SimOAMixer(state, vrfTU.OAMixerName, vrfTU.OAMixerIndex);
             int OAMixNode = state.dataMixedAir->OAMixer(vrfTU.OAMixerIndex).MixNode;
             Tin = state.dataLoopNodes->Node(OAMixNode).Temp;
             Win = state.dataLoopNodes->Node(OAMixNode).HumRat;
@@ -13797,9 +13585,7 @@ void VRFCondenserEquipment::VRFOU_TeModification(
 
                 if (Pipe_h_IU_out_i > Pipe_h_IU_in) {
                     Pipe_m_ref_i =
-                        (vrfTUList.TotalCoolLoad(NumTU) <= 0.0)
-                            ? 0.0
-                            : (vrfTUList.TotalCoolLoad(NumTU) / (Pipe_h_IU_out_i - Pipe_h_IU_in));
+                        (vrfTUList.TotalCoolLoad(NumTU) <= 0.0) ? 0.0 : (vrfTUList.TotalCoolLoad(NumTU) / (Pipe_h_IU_out_i - Pipe_h_IU_in));
                     Pipe_m_ref = Pipe_m_ref + Pipe_m_ref_i;
                     Pipe_SH_merged = Pipe_SH_merged + Pipe_m_ref_i * SH_IU_update;
                     Pipe_h_IU_out = Pipe_h_IU_out + Pipe_m_ref_i * Pipe_h_IU_out_i;
@@ -14410,9 +14196,7 @@ void VRFCondenserEquipment::VRFOU_CalcCompC(EnergyPlusData &state,
                                     Pipe_m_ref_i = (vrfTUList.TotalCoolLoad(NumTU) <= 0.0)
                                                        ? 0.0
                                                        // refrigerant flow rate do not get smaller when the compressor needs to cycle.
-                                                       : max(min_speed_capacity,
-                                                             (vrfTUList.TotalCoolLoad(NumTU)) /
-                                                                 (Pipe_h_IU_out_i - Pipe_h_IU_in));
+                                                       : max(min_speed_capacity, (vrfTUList.TotalCoolLoad(NumTU)) / (Pipe_h_IU_out_i - Pipe_h_IU_in));
                                     Pipe_m_ref = Pipe_m_ref + Pipe_m_ref_i;
                                     Pipe_SH_merged = Pipe_SH_merged + Pipe_m_ref_i * Modifi_SHin;
                                     Pipe_h_IU_out = Pipe_h_IU_out + Pipe_m_ref_i * Pipe_h_IU_out_i;
@@ -15523,13 +15307,8 @@ void VRFTerminalUnitEquipment::CalcVRFSuppHeatingCoil(EnergyPlusData &state,
                     auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(VRFTUNum);
                     Real64 mdot = vrfTU.SuppHeatCoilFluidMaxFlow * PartLoadFrac;
                     state.dataLoopNodes->Node(vrfTU.SuppHeatCoilFluidInletNode).MassFlowRate = mdot;
-                    WaterCoils::SimulateWaterCoilComponents(state,
-                                                            vrfTU.SuppHeatCoilName,
-                                                            FirstHVACIteration,
-                                                            vrfTU.SuppHeatCoilIndex,
-                                                            QActual,
-                                                            vrfTU.fanOp,
-                                                            PartLoadFrac);
+                    WaterCoils::SimulateWaterCoilComponents(
+                        state, vrfTU.SuppHeatCoilName, FirstHVACIteration, vrfTU.SuppHeatCoilIndex, QActual, vrfTU.fanOp, PartLoadFrac);
                     if (std::abs(SuppHeatCoilLoad) == 0.0) {
                         return (QActual - SuppHeatCoilLoad) / 100.0;
                     }
@@ -15597,13 +15376,8 @@ Real64 VRFTerminalUnitEquipment::HotWaterHeatingCoilResidual(EnergyPlusData &sta
     auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(VRFTUNum);
     Real64 mdot = vrfTU.SuppHeatCoilFluidMaxFlow * PartLoadFrac;
     state.dataLoopNodes->Node(vrfTU.SuppHeatCoilFluidInletNode).MassFlowRate = mdot;
-    WaterCoils::SimulateWaterCoilComponents(state,
-                                            vrfTU.SuppHeatCoilName,
-                                            FirstHVACIteration,
-                                            vrfTU.SuppHeatCoilIndex,
-                                            QActual,
-                                            vrfTU.fanOp,
-                                            PartLoadFrac);
+    WaterCoils::SimulateWaterCoilComponents(
+        state, vrfTU.SuppHeatCoilName, FirstHVACIteration, vrfTU.SuppHeatCoilIndex, QActual, vrfTU.fanOp, PartLoadFrac);
 
     if (std::abs(SuppHeatCoilLoad) == 0.0) {
         Residuum = (QActual - SuppHeatCoilLoad) / 100.0;

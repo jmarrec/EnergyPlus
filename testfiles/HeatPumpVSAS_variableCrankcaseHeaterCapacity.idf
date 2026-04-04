@@ -1761,8 +1761,6 @@
 
   Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;
 
-  Output:Variable,*,Cooling Coil Crankcase Heater Electricity Rate,timestep;
-
   Output:Variable,*,Heating Coil Crankcase Heater Electricity Rate,timestep;
 
   Output:Variable,*,Cooling Coil Runtime Fraction,timestep;

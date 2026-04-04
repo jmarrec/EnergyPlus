@@ -176,7 +176,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
     Array1D_string AlphArray(5);  // Character string input data array
 
     static constexpr std::string_view routineName = "GetFluidCoolerInput";
-    
+
     // Get number of all Fluid Coolers specified in the input data file (idf)
     int const NumSingleSpeedFluidCoolers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "FluidCooler:SingleSpeed");
     int const NumTwoSpeedFluidCoolers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "FluidCooler:TwoSpeed");
@@ -200,7 +200,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
 
     // Load data structures with fluid cooler input data
     auto &s_ipsc = state.dataIPShortCut;
-    
+
     s_ipsc->cCurrentModuleObject = cFluidCooler_SingleSpeed;
     for (int SingleSpeedFluidCoolerNumber = 1; SingleSpeedFluidCoolerNumber <= NumSingleSpeedFluidCoolers; ++SingleSpeedFluidCoolerNumber) {
         int FluidCoolerNum = SingleSpeedFluidCoolerNumber;
@@ -218,7 +218,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                                  s_ipsc->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, AlphArray(1)};
-        
+
         GlobalNames::VerifyUniqueInterObjectName(state,
                                                  state.dataFluidCoolers->UniqueSimpleFluidCoolerNames,
                                                  AlphArray(1),
@@ -227,31 +227,29 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                  ErrorsFound);
 
         auto &fluidCooler = state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum);
-        
+
         fluidCooler.Name = AlphArray(1);
         fluidCooler.FluidCoolerType = DataPlant::PlantEquipmentType::FluidCooler_SingleSpd;
         fluidCooler.indexInArray = FluidCoolerNum;
         fluidCooler.FluidCoolerMassFlowRateMultiplier = 2.5;
-        fluidCooler.WaterInletNodeNum =
-            Node::GetOnlySingleNode(state,
-                                    AlphArray(2),
-                                    ErrorsFound,
-                                    Node::ConnectionObjectType::FluidCoolerSingleSpeed,
-                                    AlphArray(1),
-                                    Node::FluidType::Water,
-                                    Node::ConnectionType::Inlet,
-                                    Node::CompFluidStream::Primary,
-                                    Node::ObjectIsNotParent);
-        fluidCooler.WaterOutletNodeNum =
-            Node::GetOnlySingleNode(state,
-                                    AlphArray(3),
-                                    ErrorsFound,
-                                    Node::ConnectionObjectType::FluidCoolerSingleSpeed,
-                                    AlphArray(1),
-                                    Node::FluidType::Water,
-                                    Node::ConnectionType::Outlet,
-                                    Node::CompFluidStream::Primary,
-                                    Node::ObjectIsNotParent);
+        fluidCooler.WaterInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                AlphArray(2),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::FluidCoolerSingleSpeed,
+                                                                AlphArray(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Inlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
+        fluidCooler.WaterOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                 AlphArray(3),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::FluidCoolerSingleSpeed,
+                                                                 AlphArray(1),
+                                                                 Node::FluidType::Water,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
         Node::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
         fluidCooler.HighSpeedFluidCoolerUA = NumArray(1);
         if (fluidCooler.HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
@@ -278,16 +276,15 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         if (AlphArray(5).empty()) {
             fluidCooler.OutdoorAirInletNodeNum = 0;
         } else {
-            fluidCooler.OutdoorAirInletNodeNum =
-                Node::GetOnlySingleNode(state,
-                                        AlphArray(5),
-                                        ErrorsFound,
-                                        Node::ConnectionObjectType::FluidCoolerSingleSpeed,
-                                        fluidCooler.Name,
-                                        Node::FluidType::Air,
-                                        Node::ConnectionType::OutsideAirReference,
-                                        Node::CompFluidStream::Primary,
-                                        Node::ObjectIsNotParent);
+            fluidCooler.OutdoorAirInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                         AlphArray(5),
+                                                                         ErrorsFound,
+                                                                         Node::ConnectionObjectType::FluidCoolerSingleSpeed,
+                                                                         fluidCooler.Name,
+                                                                         Node::FluidType::Air,
+                                                                         Node::ConnectionType::OutsideAirReference,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
             if (!OutAirNodeManager::CheckOutAirNodeNumber(state, fluidCooler.OutdoorAirInletNodeNum)) {
                 ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(5), AlphArray(5));
                 ShowContinueError(state, "...does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.");
@@ -295,8 +292,8 @@ void GetFluidCoolerInput(EnergyPlusData &state)
             }
         }
 
-        ErrorsFound |=
-            fluidCooler.validateSingleSpeedInputs(state, s_ipsc->cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
+        ErrorsFound |= fluidCooler.validateSingleSpeedInputs(
+            state, s_ipsc->cCurrentModuleObject, AlphArray, s_ipsc->cNumericFieldNames, s_ipsc->cAlphaFieldNames);
 
     } // End Single-Speed fluid cooler Loop
 
@@ -317,7 +314,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                                  s_ipsc->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, AlphArray(1)};
-        
+
         GlobalNames::VerifyUniqueInterObjectName(state,
                                                  state.dataFluidCoolers->UniqueSimpleFluidCoolerNames,
                                                  AlphArray(1),
@@ -326,31 +323,29 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                  ErrorsFound);
 
         auto &fluidCooler = state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum);
-        
+
         fluidCooler.Name = AlphArray(1);
         fluidCooler.FluidCoolerType = DataPlant::PlantEquipmentType::FluidCooler_TwoSpd;
         fluidCooler.indexInArray = FluidCoolerNum;
         fluidCooler.FluidCoolerMassFlowRateMultiplier = 2.5;
-        fluidCooler.WaterInletNodeNum =
-            Node::GetOnlySingleNode(state,
-                                    AlphArray(2),
-                                    ErrorsFound,
-                                    Node::ConnectionObjectType::FluidCoolerTwoSpeed,
-                                    AlphArray(1),
-                                    Node::FluidType::Water,
-                                    Node::ConnectionType::Inlet,
-                                    Node::CompFluidStream::Primary,
-                                    Node::ObjectIsNotParent);
-        fluidCooler.WaterOutletNodeNum =
-            Node::GetOnlySingleNode(state,
-                                    AlphArray(3),
-                                    ErrorsFound,
-                                    Node::ConnectionObjectType::FluidCoolerTwoSpeed,
-                                    AlphArray(1),
-                                    Node::FluidType::Water,
-                                    Node::ConnectionType::Outlet,
-                                    Node::CompFluidStream::Primary,
-                                    Node::ObjectIsNotParent);
+        fluidCooler.WaterInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                AlphArray(2),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::FluidCoolerTwoSpeed,
+                                                                AlphArray(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Inlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
+        fluidCooler.WaterOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                 AlphArray(3),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::FluidCoolerTwoSpeed,
+                                                                 AlphArray(1),
+                                                                 Node::FluidType::Water,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
         Node::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
 
         fluidCooler.HighSpeedFluidCoolerUA = NumArray(1);
@@ -398,16 +393,15 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         if (AlphArray(5).empty()) {
             fluidCooler.OutdoorAirInletNodeNum = 0;
         } else {
-            fluidCooler.OutdoorAirInletNodeNum =
-                Node::GetOnlySingleNode(state,
-                                        AlphArray(5),
-                                        ErrorsFound,
-                                        Node::ConnectionObjectType::FluidCoolerTwoSpeed,
-                                        fluidCooler.Name,
-                                        Node::FluidType::Air,
-                                        Node::ConnectionType::OutsideAirReference,
-                                        Node::CompFluidStream::Primary,
-                                        Node::ObjectIsNotParent);
+            fluidCooler.OutdoorAirInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                         AlphArray(5),
+                                                                         ErrorsFound,
+                                                                         Node::ConnectionObjectType::FluidCoolerTwoSpeed,
+                                                                         fluidCooler.Name,
+                                                                         Node::FluidType::Air,
+                                                                         Node::ConnectionType::OutsideAirReference,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
 
             if (!OutAirNodeManager::CheckOutAirNodeNumber(state, fluidCooler.OutdoorAirInletNodeNum)) {
                 ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(5), AlphArray(5));

@@ -215,7 +215,7 @@ void GetMixerInput(EnergyPlusData &state)
                                                                  cNumericFields);
 
         auto &mixer = state.dataMixerComponent->MixerCond(MixerNum);
-        
+
         mixer.MixerName = AlphArray(1);
 
         mixer.OutletNode = GetOnlySingleNode(state,
@@ -285,10 +285,8 @@ void GetMixerInput(EnergyPlusData &state)
             if (NodeNum != mixer.InletNode(InNodeNum1)) {
                 continue;
             }
-            ShowSevereError(state,
-                            EnergyPlus::format("{} = {} specifies an inlet node name the same as the outlet node.",
-                                               CurrentModuleObject,
-                                               mixer.MixerName));
+            ShowSevereError(
+                state, EnergyPlus::format("{} = {} specifies an inlet node name the same as the outlet node.", CurrentModuleObject, mixer.MixerName));
             ShowContinueError(state, EnergyPlus::format("..{} = {}", cAlphaFields(2), state.dataLoopNodes->NodeID(NodeNum)));
             ShowContinueError(state, EnergyPlus::format("..Inlet Node #{} is duplicate.", InNodeNum1));
             ErrorsFound = true;
@@ -298,10 +296,9 @@ void GetMixerInput(EnergyPlusData &state)
                 if (mixer.InletNode(InNodeNum1) != mixer.InletNode(InNodeNum2)) {
                     continue;
                 }
-                ShowSevereError(state,
-                                EnergyPlus::format("{} = {} specifies duplicate inlet nodes in its inlet node list.",
-                                                   CurrentModuleObject,
-                                                   mixer.MixerName));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("{} = {} specifies duplicate inlet nodes in its inlet node list.", CurrentModuleObject, mixer.MixerName));
                 ShowContinueError(state, EnergyPlus::format("..Inlet Node #{} Name={}", InNodeNum1, state.dataLoopNodes->NodeID(InNodeNum1)));
                 ShowContinueError(state, EnergyPlus::format("..Inlet Node #{} is duplicate.", InNodeNum2));
                 ErrorsFound = true;
@@ -579,9 +576,7 @@ void UpdateAirMixer(EnergyPlusData &state, int const MixerNum)
             outletNode.CO2 = 0.0;
             for (InletNodeNum = 1; InletNodeNum <= mixer.NumInletNodes; ++InletNodeNum) {
                 outletNode.CO2 +=
-                    state.dataLoopNodes->Node(mixer.InletNode(InletNodeNum)).CO2 *
-                    mixer.InletMassFlowRate(InletNodeNum) /
-                    mixer.OutletMassFlowRate;
+                    state.dataLoopNodes->Node(mixer.InletNode(InletNodeNum)).CO2 * mixer.InletMassFlowRate(InletNodeNum) / mixer.OutletMassFlowRate;
             }
         } else {
             outletNode.CO2 = inletNode.CO2;
@@ -593,10 +588,8 @@ void UpdateAirMixer(EnergyPlusData &state, int const MixerNum)
             // Generic contaminant balance to get outlet air CO2
             outletNode.GenContam = 0.0;
             for (InletNodeNum = 1; InletNodeNum <= mixer.NumInletNodes; ++InletNodeNum) {
-                outletNode.GenContam +=
-                    state.dataLoopNodes->Node(mixer.InletNode(InletNodeNum)).GenContam *
-                    mixer.InletMassFlowRate(InletNodeNum) /
-                    mixer.OutletMassFlowRate;
+                outletNode.GenContam += state.dataLoopNodes->Node(mixer.InletNode(InletNodeNum)).GenContam * mixer.InletMassFlowRate(InletNodeNum) /
+                                        mixer.OutletMassFlowRate;
             }
         } else {
             outletNode.GenContam = inletNode.GenContam;

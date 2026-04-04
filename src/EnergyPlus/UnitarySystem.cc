@@ -4924,6 +4924,12 @@ namespace UnitarySystems {
                             this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
                             this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
                             this->m_HeatPump = true;
+                            if (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingAirToAirVariableSpeed ||
+                                this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
+                                this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
+                                auto &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex];
+                                newCoil.performance->ReportCoolingCoilCrankcasePower = false;
+                            }
                         }
                     }
                 }
@@ -11702,7 +11708,7 @@ namespace UnitarySystems {
                                              bool HXUnitOn,                 // Flag to control HX for HXAssisted Cooling Coil
                                              Real64 HeatCoilLoad,           // Adjusted load to heating coil when SAT exceeds max limit (W)
                                              Real64 SuppCoilLoad,           // Adjusted load to supp heating coil when SAT exceeds max limit (W)
-                                             HVAC::CompressorOp const CompressorOn // Determines if compressor is on or off
+                                             HVAC::CompressorOp const CompressorOn // Determines if the compressor is on or off
     )
     {
 
