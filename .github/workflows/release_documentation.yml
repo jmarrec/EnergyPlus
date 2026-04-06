@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v6
 
     - name: Derive abbreviated SHA
-      id: short-sha
+      id: short_sha
       run: echo "value=$(git rev-parse --short \"$GITHUB_SHA\")" >> "$GITHUB_OUTPUT"
 
     - name: Set up Python ${{ env.PYTHON_VERSION }}
@@ -46,8 +46,9 @@ jobs:
 
     - name: Package documentation
       env:
-        ARTIFACT_ROOT: ${{ github.workspace }}/release-documentation-artifact
-        PACKAGE_ROOT: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}
+        ARTIFACT_ROOT: ${{ github.workspace }}/release-documentation
+        PACKAGE_ROOT: documentation
+        ARCHIVE_NAME: documentation.zip
       run: |
         rm -rf "$ARTIFACT_ROOT"
         mkdir -p "$ARTIFACT_ROOT/$PACKAGE_ROOT"
@@ -56,14 +57,14 @@ jobs:
         test -f "$ARTIFACT_ROOT/$PACKAGE_ROOT/EngineeringReference.pdf"
         (
           cd "$ARTIFACT_ROOT"
-          zip -r "${PACKAGE_ROOT}.zip" "$PACKAGE_ROOT"
+          zip -r "$ARCHIVE_NAME" "$PACKAGE_ROOT"
         )
 
     - name: Upload documentation artifact
       uses: actions/upload-artifact@v7
       with:
-        name: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}
-        path: ${{ github.workspace }}/release-documentation-artifact/PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}.zip
+        name: documentation
+        path: ${{ github.workspace }}/release-documentation/documentation.zip
         if-no-files-found: error
         retention-days: 7
 
@@ -71,7 +72,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}/release-documentation-artifact/PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}.zip
+        file: ${{ github.workspace }}/release-documentation/documentation.zip
         tag: ${{ github.ref }}
-        asset_name: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short-sha.outputs.value }}.zip
+        asset_name: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short_sha.outputs.value }}.zip
         overwrite: true
