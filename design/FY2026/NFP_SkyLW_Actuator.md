@@ -187,3 +187,54 @@ None required. The actuator is registered programmatically via `SetupEMSActuator
 - `testfiles/1ZoneCondFD_Enet_Test.idf` — baseline CondFD test
 - `testfiles/1ZoneCondFD_Enet_EMS.idf` — EMS actuator with Enet=-200
 - `scripts/CondFD_Enet_Override.ipynb` — Jupyter notebook for interactive use with any IDF/EPW
+
+## Possible Enhancements
+
+### Branch Hoist / Equation Unification in `ExteriorBCEqns`
+
+Pure refactor — no behavior change.
+
+**Problem.** `ExteriorBCEqns` in `src/EnergyPlus/HeatBalFiniteDiffManager.cc` contains 6 `if (enetAct.isActuated)` sites (R-layer, Crank-Nicolson 2nd-order, Fully-Implicit 1st-order, MovInsul `TInsulOut`, `QNetSurfFromOutside`, `SurfQdotRadOutRepPerArea`). Each duplicates the surrounding equation. Introduced in commit 2487d34a39.
+
+**Performance.** Not a real concern.
+- `enetAct.isActuated` is a single bool, hoisted once per call via `auto const &enetAct = ...`.
+- Called per exterior CondFD surface × outer-face node × CondFD sub-iter × HVAC timestep. High, not innermost.
+- Branch predictor ~100% accurate: value is constant across all sub-iterations of a timestep. EMS can flip at most once per zone timestep, so at worst one mispredict (~10-20 cycles) amortized over thousands of calls.
+- Both arms are straight-line arithmetic, in I-cache. Cost is in the noise vs. divides / `pow_2` / property lookups / reporting around them.
+- Mid-run EMS toggling does not change this analysis — the bool is re-read every call.
+
+**Real cost: maintenance.** 4 duplicated equations + 2 duplicated report lines. Risk of silent drift if someone fixes the sky term in one arm but not the other.
+
+**Recommended refactor.** Hoist the branch once at the top of the `CondFD` block in `ExteriorBCEqns`, compute effective locals, then use unified equations:
+
+```cpp
+Real64 const hsky_eff    = enetAct.isActuated ? 0.0                    : hsky;
+Real64 const QskyTerm    = enetAct.isActuated ? enetAct.actuatedValue  : hsky * Tsky;
+// Form used by QNet / report lines, which need (Tsky - TDT_i):
+Real64 const QskyNetTerm = enetAct.isActuated ? enetAct.actuatedValue  : hsky * (Tsky - TDT_i);
+```
+
+Then every site collapses. R-layer example:
+
+```cpp
+TDT_i = (TDT_p + (QRadSWOutFD + hgnd*Tgnd + (hconvo+hrad)*Toa + QskyTerm + hsurr*Tsurr) * Rlayer)
+      / (1.0 + (hconvo + hgnd + hrad + hsky_eff + hsurr) * Rlayer);
+```
+
+Works identically for CN 2nd-order, FI 1st-order, `TInsulOut`. For `QNetSurfFromOutside` / `SurfQdotRadOutRepPerArea`, replace `hsky*(Tsky-TDT_i)` (resp. `hsky*(TDT_i-Tsky)`) with `QskyNetTerm` (resp. `-QskyNetTerm`).
+
+**Properties.**
+- Bit-for-bit identical when not actuated (same operand order, same linearization).
+- Correct under arbitrary mid-run EMS toggling — locals recomputed every call from current bool.
+- Removes all 6 duplicated sites; 4 equations shrink to 1 form each.
+- Same or slightly faster: compiler gets straight-line code; ternaries typically lower to `cmov`.
+
+**Rejected alternatives.**
+- *Function-pointer / template dispatch per surface* — indirect call overhead, I-cache pressure, zero upside.
+- *Partition surfaces into actuated / not-actuated lists at init* — over-engineered, and wrong if EMS can flip mid-run.
+- *Always treat sky as a flux (drop `hsky` from denominator universally)* — changes the implicit linearization in the non-actuated path; likely worse convergence. Do not do.
+- *Hoist the branch outside `ExteriorBCEqns` scope* — breaks mid-run toggling.
+
+**Open questions.**
+- Extend same pattern to CTF / HAMT / Kiva, or CondFD-only?
+- Land as part of the SkyLW actuator PR, or separate follow-up?
