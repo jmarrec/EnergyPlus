@@ -35261,15 +35261,19 @@ ZoneControl:Humidistat,
        \required-field
        \type object-list
        \object-list ZoneNames
-  A3 , \field Humidifying Relative Humidity Setpoint Schedule Name
+  A3 , \field Humidifying Setpoint Schedule Name
        \required-field
-       \note hourly schedule values should be in Relative Humidity (percent)
        \type object-list
        \object-list ScheduleNames
-  A4 ; \field Dehumidifying Relative Humidity Setpoint Schedule Name
-       \note hourly schedule values should be in Relative Humidity (percent)
+  A4 , \field Dehumidifying Setpoint Schedule Name
        \type object-list
        \object-list ScheduleNames
+  A5 ; \field Control Variable
+       \note When using RelativeHumidity, the schedule values should be in percentages.
+       \type choice
+       \key RelativeHumidity
+       \key Dewpoint
+       \default RelativeHumidity
 
 ZoneControl:Thermostat,
    \memo Define the Thermostat settings for a zone or list of zones.
