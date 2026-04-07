@@ -124,6 +124,27 @@ def translate_file_parallelizable(
         print(r.stdout)
         print(r.stderr)
 
+    # https://github.com/NatLabRockies/EnergyPlus/issues/9590
+    # Remove weird extra comments. E.g.,
+    #
+    #      !- Field 4
+    #      !- Field 6
+    #      !- Field 8
+    #
+    # or
+    #
+    #          !- X,Y,Z  1 {m}
+    #          !- X,Y,Z  2 {m}
+    #          !- X,Y,Z  3 {m}
+
+    with open(idf_path, "r") as f:
+        lines = f.readlines()
+
+    with open(idf_path, "w") as f:
+        for line in lines:
+            if not (line.strip().startswith("!-") and (len(line) - len(line.lstrip()) > 2)):
+                f.write(line)
+
     return r.returncode
 
 
@@ -142,7 +163,7 @@ if __name__ == "__main__":
 
     idf_paths = []
     for ext in ["idf", "imf"]:
-        idf_paths.extend(root_dir.glob(f"**/*.{ext}"))
+        idf_paths.extend(root_dir.glob(f"**/*ASHRAE*.{ext}"))
     print(f"Found {len(idf_paths)} IDF files in {root_dir}")
 
     # Something like '/path/to/Formatter_only-V25-2-0'
