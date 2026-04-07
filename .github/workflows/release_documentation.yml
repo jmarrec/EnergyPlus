@@ -10,7 +10,6 @@ defaults:
     shell: bash
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PYTHON_VERSION: '3.12'
 
 jobs:
@@ -23,10 +22,6 @@ jobs:
     steps:
     - name: Checkout EnergyPlus
       uses: actions/checkout@v6
-
-    - name: Derive abbreviated SHA
-      id: short_sha
-      run: echo "value=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_OUTPUT
 
     - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v6
@@ -42,29 +37,13 @@ jobs:
       run: cmake -S doc -B build/doc-release -DTEX_INTERACTION:STRING=batchmode
 
     - name: Build documentation
-      run: cmake --build build/doc-release --target docs -j 4
-
-    - name: Package documentation
-      env:
-        ARTIFACT_ROOT: ${{ github.workspace }}/release-documentation
-        PACKAGE_ROOT: documentation
-        ARCHIVE_NAME: documentation.zip
-      run: |
-        rm -rf "$ARTIFACT_ROOT"
-        mkdir -p "$ARTIFACT_ROOT/$PACKAGE_ROOT"
-        cp -r build/doc-release/pdf/. "$ARTIFACT_ROOT/$PACKAGE_ROOT/"
-        test -f "$ARTIFACT_ROOT/$PACKAGE_ROOT/index.html"
-        test -f "$ARTIFACT_ROOT/$PACKAGE_ROOT/EngineeringReference.pdf"
-        (
-          cd "$ARTIFACT_ROOT"
-          zip -r "$ARCHIVE_NAME" "$PACKAGE_ROOT"
-        )
+      run: cmake --build build/doc-release --target package -j $(nproc)
 
     - name: Upload documentation artifact
       uses: actions/upload-artifact@v7
       with:
         name: documentation
-        path: ${{ github.workspace }}/release-documentation/documentation.zip
+        path: build/doc-release/EnergyPlus-PDFDocumentation-*.tar.gz
         if-no-files-found: error
         retention-days: 7
 
@@ -72,7 +51,8 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}/release-documentation/documentation.zip
+        file: build/doc-release/EnergyPlus-PDFDocumentation-*.tar.gz
         tag: ${{ github.ref }}
-        asset_name: PDFDocumentation-EnergyPlus-${{ github.ref_name }}-${{ steps.short_sha.outputs.value }}.zip
         overwrite: true
+        file_glob: true
+
