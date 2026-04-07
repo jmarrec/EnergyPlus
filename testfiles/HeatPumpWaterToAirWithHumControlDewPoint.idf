@@ -1,4 +1,4 @@
-! HeatPumpWaterToAirWithRHControl.idf
+! HeatPumpWaterToAirWithHumControlDewPoint.idf
 ! Basic file description:  1 story building divided into 4 exterior and one interior conditioned zones and return plenum.
 !
 ! Highlights:              High humidity Control using Water To Air Heat Pumps with pond heat exchanger.  Five water source
@@ -15,7 +15,7 @@
 ! Design Days:             Miami Intl Ap Ann Htg Wind 99% Condns WS=>MCDB
 !                          Miami Intl Ap Ann Clg 1% Condns DB=>MWB
 !
-! Run Period (Weather File): full annual, CHICAGO_IL_USA TMY2-94846
+! Run Period (Weather File): full annual, USA_FL_Miami.Intl.AP.722020_TMY3
 !
 ! Run Control:             Zone sizing with weather file run control
 !
