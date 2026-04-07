@@ -1002,26 +1002,6 @@
     For: SummerDesignDay CustomDay1 CustomDay2, !- Field 41
     Until: 24:00,1.0;        !- Field 42
 
-                             !- Field 4
-                             !- Field 6
-                             !- Field 8
-                             !- Field 10
-                             !- Field 12
-                             !- Field 14
-                             !- Field 16
-                             !- Field 18
-                             !- Field 20
-                             !- Field 22
-                             !- Field 25
-                             !- Field 27
-                             !- Field 29
-                             !- Field 31
-                             !- Field 33
-                             !- Field 35
-                             !- Field 37
-                             !- Field 39
-                             !- Field 41
-                             !- Field 43
 
   Schedule:Compact,
     EmployeeLounge_Eqp_Sch,  !- Name
@@ -3091,7 +3071,6 @@
     52.47428442,18.33742922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr1_2_0_0,  !- Name
@@ -3110,8 +3089,6 @@
     54.9132684242,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,10.1078292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr1_3_0_0,  !- Name
@@ -3130,7 +3107,6 @@
     52.4742844242,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_RearStairsFlr1_4_0_0,  !- Name
@@ -3301,7 +3277,6 @@
     23.82308442,8.27902922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     26.87108442,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr1_2_0_0,    !- Name
@@ -3320,7 +3295,6 @@
     54.9132684242,10.1078292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,8.2790292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr1_4_0_0,    !- Name
@@ -3526,7 +3500,6 @@
     26.8710844241,10.10782922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr1_10_0_0,   !- Name
@@ -3545,7 +3518,6 @@
     23.8230844241,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr1_11_0_0,   !- Name
@@ -3836,7 +3808,6 @@
     23.8230844241,8.27902922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,0.04884522,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr1_20_0_0,   !- Name
@@ -3855,7 +3826,6 @@
     26.8710844241,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr1_21_0_0,   !- Name
@@ -4146,7 +4116,6 @@
     52.47428442,8.27902922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr1_2_0_0, !- Name
@@ -4165,7 +4134,6 @@
     54.9132684242,8.2790292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_RearStorageFlr1_4_0_0, !- Name
@@ -4201,7 +4169,6 @@
     52.4742844242,8.27902922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,0.04884522,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr1_5_0_0, !- Name
@@ -4220,7 +4187,6 @@
     54.9132684242,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_FrontLoungeFlr1_0_0_0, !- Name
@@ -4358,7 +4324,6 @@
     0.048684424,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     0.048684424,8.2790292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_FrontLoungeFlr1_5_0_0, !- Name
@@ -4428,7 +4393,6 @@
     19.86068442,8.27902922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     23.82308442,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RestroomFlr1_5_0_0,    !- Name
@@ -4447,7 +4411,6 @@
     23.8230844241,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_MeetingRoomFlr1_0_0_0, !- Name
@@ -4568,7 +4531,6 @@
     36.6246844241,0.04884522,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     36.6246844241,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_MeetingRoomFlr1_5_0_0, !- Name
@@ -4587,7 +4549,6 @@
     36.6246844241,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_MechanicalRoomFlr1_0_0_0,  !- Name
@@ -4674,7 +4635,6 @@
     40.5870844242,0.04884522,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     40.5870844242,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_MechanicalRoomFlr1_5_0_0,  !- Name
@@ -4693,7 +4653,6 @@
     40.5870844242,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     36.6246844241,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_GuestRoom101_0_0_0,    !- Name
@@ -4780,7 +4739,6 @@
     44.5494844242,0.04884522,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     44.5494844242,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom101_5_0_0,    !- Name
@@ -4799,7 +4757,6 @@
     44.5494844242,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     40.5870844242,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_GuestRoom102_0_0_0,    !- Name
@@ -4886,7 +4843,6 @@
     48.5118844242,0.04884522,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom102_5_0_0,    !- Name
@@ -4905,7 +4861,6 @@
     48.5118844242,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     44.5494844242,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_GuestRoom103_0_0_0,    !- Name
@@ -4958,7 +4913,6 @@
     48.51188442,8.27902922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,8.27902922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom103_5_0_0,    !- Name
@@ -4977,7 +4931,6 @@
     52.4742844242,0.0488452197,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,0.0488452197,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_GuestRoom104_0_0_0,    !- Name
@@ -5030,7 +4983,6 @@
     48.51188442,18.33742922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom104_3_0_0,    !- Name
@@ -5049,7 +5001,6 @@
     48.5118844242,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom104_4_0_0,    !- Name
@@ -5136,7 +5087,6 @@
     44.54948442,18.33742922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     48.51188442,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom105_3_0_0,    !- Name
@@ -5155,7 +5105,6 @@
     44.5494844242,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom105_4_0_0,    !- Name
@@ -5242,7 +5191,6 @@
     40.58708442,18.33742922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     44.54948442,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_EmployeeLoungeFlr1_3_0_0,  !- Name
@@ -5261,7 +5209,6 @@
     40.5870844242,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     44.5494844242,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_EmployeeLoungeFlr1_4_0_0,  !- Name
@@ -5382,7 +5329,6 @@
     28.69988442,18.33742922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     32.66228442,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_LaundryRoomFlr1_3_0_0, !- Name
@@ -5401,7 +5347,6 @@
     28.6998844241,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     40.5870844242,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_LaundryRoomFlr1_4_0_0, !- Name
@@ -5488,7 +5433,6 @@
     26.87108442,18.33742922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     28.69988442,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_ElevatorCoreFlr1_3_0_0,!- Name
@@ -5507,7 +5451,6 @@
     26.8710844241,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     S_ExerciseCenterFlr1_0_0_0,  !- Name
@@ -5560,7 +5503,6 @@
     19.86068442,18.33742922,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     23.82308442,18.33742922,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_ExerciseCenterFlr1_3_0_0,  !- Name
@@ -5579,7 +5521,6 @@
     19.8606844241,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_ExerciseCenterFlr1_4_0_0,  !- Name
@@ -5717,7 +5658,6 @@
     4.011084424,18.3374292198,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,18.3374292198,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_FrontOfficeFlr1_4_0_0, !- Name
@@ -5974,9 +5914,6 @@
     52.47428442,18.33742922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,18.33742922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr2_2_0_0,  !- Name
@@ -5995,10 +5932,6 @@
     54.9132684242,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,10.1078292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr2_3_0_0,  !- Name
@@ -6017,7 +5950,6 @@
     52.4742844242,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,18.3374292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_RearStairsFlr2_4_0_0,  !- Name
@@ -6129,9 +6061,6 @@
     26.87108442,10.10782922,6.096,  !- X,Y,Z ==> Vertex 7 {m}
     54.91326842,10.10782922,6.096;  !- X,Y,Z ==> Vertex 8 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr2_2_0_0,    !- Name
@@ -6320,9 +6249,6 @@
     26.8710844241,10.10782922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.33742922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr2_9_0_0,    !- Name
@@ -6341,7 +6267,6 @@
     23.8230844241,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.3374292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr2_10_0_0,   !- Name
@@ -6768,8 +6693,6 @@
     52.47428442,8.27902922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,8.27902922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr2_2_0_0, !- Name
@@ -6822,8 +6745,6 @@
     52.4742844242,8.27902922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,0.04884522,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr2_5_0_0, !- Name
@@ -7012,7 +6933,6 @@
     19.8606844241,0.04884522,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,8.27902922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  2 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom202_205_5_0_0,!- Name
@@ -7099,8 +7019,6 @@
     32.6622844241,0.04884522,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,8.27902922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom206_208_5_0_0,!- Name
@@ -7187,8 +7105,6 @@
     48.5118844242,0.04884522,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,8.27902922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom209_212_5_0_0,!- Name
@@ -7241,8 +7157,6 @@
     48.51188442,8.27902922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,8.27902922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom213_5_0_0,    !- Name
@@ -7295,9 +7209,6 @@
     48.51188442,18.33742922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,18.33742922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom214_3_0_0,    !- Name
@@ -7316,7 +7227,6 @@
     48.5118844242,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,18.3374292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom214_4_0_0,    !- Name
@@ -7386,9 +7296,6 @@
     32.66228442,18.33742922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     48.51188442,18.33742922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom215_218_3_0_0,!- Name
@@ -7407,7 +7314,6 @@
     32.6622844241,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,18.3374292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom215_218_4_0_0,!- Name
@@ -7511,9 +7417,6 @@
     28.6998844241,10.10782922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.33742922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_ElevatorCoreFlr2_3_0_0,!- Name
@@ -7532,7 +7435,6 @@
     26.8710844241,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.3374292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom219_1_0_0,    !- Name
@@ -7568,9 +7470,6 @@
     28.69988442,18.33742922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     32.66228442,18.33742922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom219_3_0_0,    !- Name
@@ -7589,7 +7488,6 @@
     28.6998844241,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,18.3374292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom220_223_1_0_0,!- Name
@@ -7625,7 +7523,6 @@
     7.97348442,18.33742922,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     23.82308442,18.33742922,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom220_223_3_0_0,!- Name
@@ -7644,7 +7541,6 @@
     7.973484424,18.3374292198,6.096,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,18.3374292198,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom220_223_4_0_0,!- Name
@@ -7952,9 +7848,6 @@
     52.47428442,18.33742922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,18.33742922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr3_2_0_0,  !- Name
@@ -7973,10 +7866,6 @@
     54.9132684242,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,10.1078292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr3_3_0_0,  !- Name
@@ -7995,7 +7884,6 @@
     52.4742844242,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_RearStairsFlr3_4_0_0,  !- Name
@@ -8107,8 +7995,6 @@
     26.87108442,10.10782922,8.8392,  !- X,Y,Z ==> Vertex 7 {m}
     54.91326842,10.10782922,8.8392;  !- X,Y,Z ==> Vertex 8 {m}
 
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr3_2_0_0,    !- Name
@@ -8127,7 +8013,6 @@
     54.9132684242,10.1078292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,8.2790292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr3_4_0_0,    !- Name
@@ -8299,9 +8184,6 @@
     26.8710844241,10.10782922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.33742922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr3_9_0_0,    !- Name
@@ -8320,7 +8202,6 @@
     23.8230844241,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr3_10_0_0,   !- Name
@@ -8747,7 +8628,6 @@
     52.47428442,8.27902922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,8.27902922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr3_2_0_0, !- Name
@@ -8766,7 +8646,6 @@
     54.9132684242,8.2790292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,0.0488452197,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_RearStorageFlr3_4_0_0, !- Name
@@ -8802,7 +8681,6 @@
     52.4742844242,8.27902922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,0.04884522,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr3_5_0_0, !- Name
@@ -8821,7 +8699,6 @@
     54.9132684242,0.0488452197,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,0.0488452197,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom301_1_0_0,    !- Name
@@ -8993,7 +8870,6 @@
     19.8606844241,0.04884522,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,8.27902922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom302_305_5_0_0,!- Name
@@ -9080,7 +8956,6 @@
     32.6622844241,0.04884522,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,8.27902922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom306_308_5_0_0,!- Name
@@ -9099,7 +8974,6 @@
     32.6622844241,0.0488452197,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,0.0488452197,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom309_312_1_0_0,!- Name
@@ -9169,7 +9043,6 @@
     48.5118844242,0.04884522,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,8.27902922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom309_312_5_0_0,!- Name
@@ -9188,7 +9061,6 @@
     48.5118844242,0.0488452197,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,0.0488452197,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom313_1_0_0,    !- Name
@@ -9224,7 +9096,6 @@
     48.51188442,8.27902922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,8.27902922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom313_5_0_0,    !- Name
@@ -9243,7 +9114,6 @@
     52.4742844242,0.0488452197,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,0.0488452197,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom314_1_0_0,    !- Name
@@ -9279,9 +9149,6 @@
     48.51188442,18.33742922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,18.33742922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom314_3_0_0,    !- Name
@@ -9300,7 +9167,6 @@
     48.5118844242,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom314_4_0_0,    !- Name
@@ -9370,9 +9236,6 @@
     32.66228442,18.33742922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     48.51188442,18.33742922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom315_318_3_0_0,!- Name
@@ -9391,7 +9254,6 @@
     32.6622844241,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom315_318_4_0_0,!- Name
@@ -9495,9 +9357,6 @@
     28.6998844241,10.10782922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.33742922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_ElevatorCoreFlr3_3_0_0,!- Name
@@ -9516,7 +9375,6 @@
     26.8710844241,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom319_1_0_0,    !- Name
@@ -9552,9 +9410,6 @@
     28.69988442,18.33742922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     32.66228442,18.33742922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom319_3_0_0,    !- Name
@@ -9573,7 +9428,6 @@
     28.6998844241,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     C_GuestRoom320_323_1_0_0,!- Name
@@ -9609,7 +9463,6 @@
     7.97348442,18.33742922,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     23.82308442,18.33742922,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom320_323_3_0_0,!- Name
@@ -9628,7 +9481,6 @@
     7.973484424,18.3374292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom320_323_4_0_0,!- Name
@@ -9902,9 +9754,6 @@
     0.048684424,10.1078292198,8.8392,  !- X,Y,Z ==> Vertex 3 {m}
     0.048684424,18.3374292198,8.8392;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_RearStairsFlr4_1_0_0,  !- Name
@@ -9923,10 +9772,6 @@
     54.9132684242,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr4_2_0_0,  !- Name
@@ -9945,10 +9790,6 @@
     54.9132684242,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStairsFlr4_3_0_0,  !- Name
@@ -9967,8 +9808,6 @@
     52.4742844242,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_RearStairsFlr4_4_0_0,  !- Name
@@ -9987,8 +9826,6 @@
     52.4742844242,10.10782922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,18.33742922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom414_10286_0_10150,  !- Name
@@ -10007,8 +9844,6 @@
     52.4742844242,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_RearStairsFlr4_5_0_0,  !- Name
@@ -10027,8 +9862,6 @@
     54.91326842,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_10287_0_10151,  !- Name
@@ -10047,13 +9880,6 @@
     52.47428442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  5 {m}
-                                        !- X,Y,Z  6 {m}
-                                        !- X,Y,Z  7 {m}
 
   BuildingSurface:Detailed,
     R_CorridorFlr4_1_0_0,    !- Name
@@ -10076,10 +9902,6 @@
     23.8230844241,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 7 {m}
     0.048684424,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 8 {m}
 
-                                        !- X,Y,Z  8 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr4_2_0_0,    !- Name
@@ -10098,8 +9920,6 @@
     54.9132684242,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,8.2790292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_4_0_0,    !- Name
@@ -10118,8 +9938,6 @@
     48.51188442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.47428442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom414_10290_0_10152,  !- Name
@@ -10138,8 +9956,6 @@
     52.47428442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.51188442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_5_0_0,    !- Name
@@ -10158,8 +9974,6 @@
     32.66228442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.51188442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom415_418_10291_0_10153,  !- Name
@@ -10178,8 +9992,6 @@
     48.51188442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.66228442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_6_0_0,    !- Name
@@ -10198,8 +10010,6 @@
     28.69988442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.66228442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom419_10292_0_10154,  !- Name
@@ -10218,8 +10028,6 @@
     32.66228442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     28.69988442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_7_0_0,    !- Name
@@ -10238,8 +10046,6 @@
     26.87108442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     28.69988442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_ElevatorCoreFlr4_10293_0_10155,  !- Name
@@ -10258,8 +10064,6 @@
     28.69988442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     26.87108442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_8_0_0,    !- Name
@@ -10278,8 +10082,6 @@
     26.8710844241,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_ElevatorCoreFlr4_10294_0_10156,  !- Name
@@ -10298,10 +10100,6 @@
     26.8710844241,10.10782922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.33742922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_CorridorFlr4_9_0_0,    !- Name
@@ -10320,8 +10118,6 @@
     23.8230844241,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_10_0_0,   !- Name
@@ -10340,8 +10136,6 @@
     23.8230844241,10.10782922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,18.33742922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom420_423_10295_0_10157,  !- Name
@@ -10360,7 +10154,6 @@
     23.8230844241,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_11_0_0,   !- Name
@@ -10379,8 +10172,6 @@
     7.97348442,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     23.82308442,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom420_423_10296_0_10158,  !- Name
@@ -10518,7 +10309,6 @@
     0.048684424,8.2790292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     0.048684424,10.1078292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_CorridorFlr4_16_0_0,   !- Name
@@ -10724,9 +10514,6 @@
     52.47428442,8.2790292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     54.91326842,8.2790292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_RearStorageFlr4_1_0_0, !- Name
@@ -10745,10 +10532,6 @@
     54.9132684242,8.2790292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,8.2790292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr4_2_0_0, !- Name
@@ -10767,7 +10550,6 @@
     54.9132684242,8.2790292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,0.0488452197,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_RearStorageFlr4_4_0_0, !- Name
@@ -10803,9 +10585,6 @@
     52.4742844242,8.27902922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,0.04884522,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_RearStorageFlr4_5_0_0, !- Name
@@ -10824,7 +10603,6 @@
     54.9132684242,0.0488452197,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,0.0488452197,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom401_1_0_0,    !- Name
@@ -10911,8 +10689,6 @@
     4.011084424,0.0488452197,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     0.048684424,0.0488452197,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom402_405_1_0_0,!- Name
@@ -10965,8 +10741,6 @@
     19.8606844241,0.04884522,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,8.27902922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom402_405_5_0_0,!- Name
@@ -10985,9 +10759,6 @@
     19.8606844241,0.0488452197,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     4.011084424,0.0488452197,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom406_408_1_0_0,!- Name
@@ -11006,7 +10777,6 @@
     32.6622844241,8.2790292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,8.2790292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom406_408_2_0_0,!- Name
@@ -11042,9 +10812,6 @@
     32.6622844241,0.04884522,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,8.27902922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom406_408_5_0_0,!- Name
@@ -11063,10 +10830,6 @@
     32.6622844241,0.0488452197,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     19.8606844241,0.0488452197,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom409_412_1_0_0,!- Name
@@ -11085,7 +10848,6 @@
     48.5118844242,8.2790292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,8.2790292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom409_412_2_0_0,!- Name
@@ -11121,9 +10883,6 @@
     48.5118844242,0.04884522,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,8.27902922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom409_412_5_0_0,!- Name
@@ -11142,10 +10901,6 @@
     48.5118844242,0.0488452197,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,0.0488452197,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom413_1_0_0,    !- Name
@@ -11164,10 +10919,6 @@
     52.4742844242,8.2790292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,8.2790292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom413_5_0_0,    !- Name
@@ -11186,10 +10937,6 @@
     52.4742844242,0.0488452197,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,0.0488452197,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom414_1_0_0,    !- Name
@@ -11208,10 +10955,6 @@
     52.4742844242,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom414_3_0_0,    !- Name
@@ -11230,8 +10973,6 @@
     48.5118844242,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     52.4742844242,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom414_4_0_0,    !- Name
@@ -11250,8 +10991,6 @@
     48.5118844242,10.10782922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,18.33742922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom415_418_10330_0_10173,  !- Name
@@ -11270,10 +11009,6 @@
     48.5118844242,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom415_418_1_0_0,!- Name
@@ -11292,10 +11027,6 @@
     48.5118844242,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom415_418_3_0_0,!- Name
@@ -11314,8 +11045,6 @@
     32.6622844241,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     48.5118844242,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom415_418_4_0_0,!- Name
@@ -11334,8 +11063,6 @@
     32.6622844241,10.10782922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,18.33742922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom419_10334_0_10174,  !- Name
@@ -11354,10 +11081,6 @@
     32.6622844241,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_ElevatorCoreFlr4_1_0_0,!- Name
@@ -11376,8 +11099,6 @@
     28.6998844241,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     26.8710844241,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_ElevatorCoreFlr4_2_0_0,!- Name
@@ -11396,8 +11117,6 @@
     28.6998844241,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom419_10337_0_10175,  !- Name
@@ -11416,10 +11135,6 @@
     28.6998844241,10.10782922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.33742922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_ElevatorCoreFlr4_3_0_0,!- Name
@@ -11438,10 +11153,6 @@
     26.8710844241,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom419_1_0_0,    !- Name
@@ -11460,10 +11171,6 @@
     32.6622844241,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     28.6998844241,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom419_3_0_0,    !- Name
@@ -11482,10 +11189,6 @@
     28.6998844241,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     32.6622844241,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom420_423_1_0_0,!- Name
@@ -11504,9 +11207,6 @@
     23.8230844241,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     7.973484424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom420_423_3_0_0,!- Name
@@ -11525,7 +11225,6 @@
     7.973484424,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     23.8230844241,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom420_423_4_0_0,!- Name
@@ -11561,9 +11260,6 @@
     7.973484424,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     7.973484424,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_GuestRoom424_1_0_0,    !- Name
@@ -11582,8 +11278,6 @@
     7.973484424,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     4.011084424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_GuestRoom424_3_0_0,    !- Name
@@ -11602,7 +11296,6 @@
     4.011084424,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     7.973484424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_GuestRoom424_4_0_0,    !- Name
@@ -11638,9 +11331,6 @@
     4.011084424,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     4.011084424,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_FrontStorageFlr4_1_0_0,!- Name
@@ -11659,8 +11349,6 @@
     4.011084424,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     2.487084424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_FrontStorageFlr4_3_0_0,!- Name
@@ -11679,7 +11367,6 @@
     2.487084424,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     4.011084424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   BuildingSurface:Detailed,
     P_FrontStorageFlr4_4_0_0,!- Name
@@ -11715,9 +11402,6 @@
     2.487084424,18.33742922,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     2.487084424,10.10782922,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     R_FrontStairsFlr4_1_0_0, !- Name
@@ -11736,8 +11420,6 @@
     2.487084424,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     0.048684424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_FrontStairsFlr4_3_0_0, !- Name
@@ -11756,8 +11438,6 @@
     0.048684424,18.3374292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     2.487084424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   BuildingSurface:Detailed,
     W_FrontStairsFlr4_4_0_0, !- Name
@@ -11776,11 +11456,7 @@
     0.048684424,10.1078292198,11.5824,  !- X,Y,Z ==> Vertex 3 {m}
     0.048684424,18.3374292198,11.5824;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 !-   ===========  ALL OBJECTS IN CLASS: FENESTRATIONSURFACE:DETAILED ===========
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_CorridorFlr1_2_0_0_0_0,!- Name
@@ -11797,7 +11473,6 @@
     54.9132684242,9.7630292198,2.5508,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,8.6238292198,2.5508;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   FenestrationSurface:Detailed,
     D_CorridorFlr1_16_0_0_0_0,  !- Name
@@ -11814,9 +11489,6 @@
     0.048684424,8.28102922,2.4364,  !- X,Y,Z ==> Vertex 3 {m}
     0.048684424,10.10582922,2.4364;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_CorridorFlr1_20_0_0_0_0,  !- Name
@@ -11833,7 +11505,6 @@
     25.9166844241,0.0488452197,2.5508,  !- X,Y,Z ==> Vertex 3 {m}
     24.7774844241,0.0488452197,2.5508;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   FenestrationSurface:Detailed,
     W_FrontLoungeFlr1_5_0_0_0_0,  !- Name
@@ -11895,9 +11566,6 @@
     14.943884424,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     12.890284424,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_FrontLoungeFlr1_5_0_0_0_4,  !- Name
@@ -11914,10 +11582,6 @@
     18.9062844241,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     16.8526844241,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_MeetingRoomFlr1_5_0_0_0_0,  !- Name
@@ -11934,10 +11598,6 @@
     29.4218844241,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     28.2826844241,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_MeetingRoomFlr1_5_0_0_0_1,  !- Name
@@ -11954,10 +11614,6 @@
     35.2130844241,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     34.0738844241,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_MeetingRoomFlr1_5_0_0_0_2,  !- Name
@@ -11974,10 +11630,6 @@
     32.3174844241,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     31.1782844241,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom101_5_0_0_0_0,!- Name
@@ -11994,10 +11646,6 @@
     43.1378844242,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     41.9986844242,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom102_5_0_0_0_0,!- Name
@@ -12014,10 +11662,6 @@
     47.1002844242,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     45.9610844242,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom103_5_0_0_0_0,!- Name
@@ -12034,10 +11678,6 @@
     51.0626844242,0.0488452197,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     49.9234844242,0.0488452197,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom104_3_0_0_0_0,!- Name
@@ -12054,10 +11694,6 @@
     49.9234844242,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     51.0626844242,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom105_3_0_0_0_0,!- Name
@@ -12074,10 +11710,6 @@
     45.9610844242,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     47.1002844242,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_EmployeeLoungeFlr1_3_0_0_0_0,  !- Name
@@ -12094,10 +11726,6 @@
     41.9986844242,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     43.1378844242,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_LaundryRoomFlr1_3_0_0_0_0,  !- Name
@@ -12114,10 +11742,6 @@
     38.0362844241,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     39.1754844241,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_LaundryRoomFlr1_3_0_0_0_1,  !- Name
@@ -12134,10 +11758,6 @@
     34.0738844241,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     35.2130844241,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_LaundryRoomFlr1_3_0_0_0_2,  !- Name
@@ -12154,10 +11774,6 @@
     30.1114844241,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     31.2506844241,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_ExerciseCenterFlr1_3_0_0_0_0,  !- Name
@@ -12174,10 +11790,6 @@
     21.2722844241,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     22.4114844241,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_FrontOfficeFlr1_3_0_0_0_0,  !- Name
@@ -12194,10 +11806,6 @@
     17.3098844241,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     18.4490844241,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_FrontOfficeFlr1_3_0_0_0_1,  !- Name
@@ -12214,8 +11822,6 @@
     13.347484424,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     14.486684424,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     W_FrontOfficeFlr1_3_0_0_0_2,  !- Name
@@ -12232,7 +11838,6 @@
     9.385084424,18.3374292198,2.3984,  !- X,Y,Z ==> Vertex 3 {m}
     10.524284424,18.3374292198,2.3984;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   FenestrationSurface:Detailed,
     W_FrontOfficeFlr1_3_0_0_0_3,  !- Name
@@ -12339,9 +11944,6 @@
     14.486684424,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     13.347484424,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom202_205_5_0_0_0_3,  !- Name
@@ -12358,10 +11960,6 @@
     18.4490844241,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     17.3098844241,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom206_208_5_0_0_0_0,  !- Name
@@ -12378,10 +11976,6 @@
     22.4114844241,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     21.2722844241,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom206_208_5_0_0_0_1,  !- Name
@@ -12398,10 +11992,6 @@
     27.4406844241,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     25.0822844241,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom206_208_5_0_0_0_2,  !- Name
@@ -12418,10 +12008,6 @@
     31.2506844241,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     30.1114844241,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom209_212_5_0_0_0_0,  !- Name
@@ -12438,10 +12024,6 @@
     35.2130844241,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     34.0738844241,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom209_212_5_0_0_0_1,  !- Name
@@ -12458,10 +12040,6 @@
     39.1754844241,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     38.0362844241,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom209_212_5_0_0_0_2,  !- Name
@@ -12478,10 +12056,6 @@
     43.1378844242,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     41.9986844242,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom209_212_5_0_0_0_3,  !- Name
@@ -12498,10 +12072,6 @@
     47.1002844242,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     45.9610844242,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom213_5_0_0_0_0,!- Name
@@ -12518,10 +12088,6 @@
     51.0626844242,0.0488452197,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     49.9234844242,0.0488452197,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom214_3_0_0_0_0,!- Name
@@ -12538,10 +12104,6 @@
     49.9234844242,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     51.0626844242,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom215_218_3_0_0_0_0,  !- Name
@@ -12558,10 +12120,6 @@
     45.9610844242,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     47.1002844242,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom215_218_3_0_0_0_1,  !- Name
@@ -12578,10 +12136,6 @@
     41.9986844242,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     43.1378844242,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom215_218_3_0_0_0_2,  !- Name
@@ -12598,10 +12152,6 @@
     38.0362844241,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     39.1754844241,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom215_218_3_0_0_0_3,  !- Name
@@ -12618,10 +12168,6 @@
     34.0738844241,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     35.2130844241,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom219_3_0_0_0_0,!- Name
@@ -12638,10 +12184,6 @@
     30.1114844241,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     31.2506844241,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom220_223_3_0_0_0_0,  !- Name
@@ -12658,10 +12200,6 @@
     21.2722844241,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     22.4114844241,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom220_223_3_0_0_0_1,  !- Name
@@ -12678,10 +12216,6 @@
     17.3098844241,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     18.4490844241,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom220_223_3_0_0_0_2,  !- Name
@@ -12698,8 +12232,6 @@
     13.347484424,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     14.486684424,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom220_223_3_0_0_0_3,  !- Name
@@ -12716,7 +12248,6 @@
     9.385084424,18.3374292198,5.4464,  !- X,Y,Z ==> Vertex 3 {m}
     10.524284424,18.3374292198,5.4464;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom224_3_0_0_0_0,!- Name
@@ -12823,9 +12354,6 @@
     14.486684424,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     13.347484424,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom302_305_5_0_0_0_3,  !- Name
@@ -12842,10 +12370,6 @@
     18.4490844241,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     17.3098844241,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom306_308_5_0_0_0_0,  !- Name
@@ -12862,10 +12386,6 @@
     22.4114844241,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     21.2722844241,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom306_308_5_0_0_0_1,  !- Name
@@ -12882,10 +12402,6 @@
     27.4406844241,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     25.0822844241,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom306_308_5_0_0_0_2,  !- Name
@@ -12902,10 +12418,6 @@
     31.2506844241,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     30.1114844241,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom309_312_5_0_0_0_0,  !- Name
@@ -12922,10 +12434,6 @@
     35.2130844241,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     34.0738844241,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom309_312_5_0_0_0_1,  !- Name
@@ -12942,10 +12450,6 @@
     39.1754844241,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     38.0362844241,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom309_312_5_0_0_0_2,  !- Name
@@ -12962,10 +12466,6 @@
     43.1378844242,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     41.9986844242,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom309_312_5_0_0_0_3,  !- Name
@@ -12982,10 +12482,6 @@
     47.1002844242,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     45.9610844242,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom313_5_0_0_0_0,!- Name
@@ -13002,10 +12498,6 @@
     51.0626844242,0.0488452197,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     49.9234844242,0.0488452197,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom314_3_0_0_0_0,!- Name
@@ -13022,10 +12514,6 @@
     49.9234844242,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     51.0626844242,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom315_318_3_0_0_0_0,  !- Name
@@ -13042,10 +12530,6 @@
     45.9610844242,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     47.1002844242,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom315_318_3_0_0_0_1,  !- Name
@@ -13062,10 +12546,6 @@
     41.9986844242,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     43.1378844242,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom315_318_3_0_0_0_2,  !- Name
@@ -13082,10 +12562,6 @@
     38.0362844241,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     39.1754844241,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom315_318_3_0_0_0_3,  !- Name
@@ -13102,10 +12578,6 @@
     34.0738844241,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     35.2130844241,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom319_3_0_0_0_0,!- Name
@@ -13122,10 +12594,6 @@
     30.1114844241,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     31.2506844241,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom320_323_3_0_0_0_0,  !- Name
@@ -13142,10 +12610,6 @@
     21.2722844241,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     22.4114844241,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom320_323_3_0_0_0_1,  !- Name
@@ -13162,10 +12626,6 @@
     17.3098844241,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     18.4490844241,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom320_323_3_0_0_0_2,  !- Name
@@ -13182,8 +12642,6 @@
     13.347484424,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     14.486684424,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom320_323_3_0_0_0_3,  !- Name
@@ -13200,7 +12658,6 @@
     9.385084424,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     10.524284424,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom324_3_0_0_0_0,!- Name
@@ -13217,7 +12674,6 @@
     5.422684424,18.3374292198,8.1896,  !- X,Y,Z ==> Vertex 3 {m}
     6.561884424,18.3374292198,8.1896;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_CorridorFlr4_2_0_0_0_0,!- Name
@@ -13234,7 +12690,6 @@
     54.9132684242,9.655105636,11.0992,  !- X,Y,Z ==> Vertex 3 {m}
     54.9132684242,8.731752804,11.0992;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   FenestrationSurface:Detailed,
     W_CorridorFlr4_15_0_0_0_0,  !- Name
@@ -13281,7 +12736,6 @@
     6.561884424,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     5.422684424,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom402_405_5_0_0_0_1,  !- Name
@@ -13298,7 +12752,6 @@
     10.524284424,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     9.385084424,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom402_405_5_0_0_0_2,  !- Name
@@ -13315,10 +12768,6 @@
     14.486684424,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     13.347484424,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom402_405_5_0_0_0_3,  !- Name
@@ -13335,10 +12784,6 @@
     18.4490844241,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     17.3098844241,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom406_408_5_0_0_0_0,  !- Name
@@ -13355,10 +12800,6 @@
     22.4114844241,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     21.2722844241,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom406_408_5_0_0_0_1,  !- Name
@@ -13375,10 +12816,6 @@
     31.2506844241,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     30.1114844241,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom406_408_5_0_0_0_2,  !- Name
@@ -13395,10 +12832,6 @@
     27.4406844241,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     25.0822844241,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom409_412_5_0_0_0_0,  !- Name
@@ -13415,10 +12848,6 @@
     35.2130844241,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     34.0738844241,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom409_412_5_0_0_0_1,  !- Name
@@ -13435,10 +12864,6 @@
     39.1754844241,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     38.0362844241,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom409_412_5_0_0_0_2,  !- Name
@@ -13455,10 +12880,6 @@
     43.1378844242,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     41.9986844242,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom409_412_5_0_0_0_3,  !- Name
@@ -13475,10 +12896,6 @@
     47.1002844242,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     45.9610844242,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom413_5_0_0_0_0,!- Name
@@ -13495,10 +12912,6 @@
     51.0626844242,0.0488452197,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     49.9234844242,0.0488452197,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom414_3_0_0_0_0,!- Name
@@ -13515,10 +12928,6 @@
     49.9234844242,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     51.0626844242,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom415_418_3_0_0_0_0,  !- Name
@@ -13535,10 +12944,6 @@
     45.9610844242,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     47.1002844242,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom415_418_3_0_0_0_1,  !- Name
@@ -13555,10 +12960,6 @@
     41.9986844242,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     43.1378844242,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom415_418_3_0_0_0_2,  !- Name
@@ -13575,10 +12976,6 @@
     38.0362844241,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     39.1754844241,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom415_418_3_0_0_0_3,  !- Name
@@ -13595,10 +12992,6 @@
     34.0738844241,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     35.2130844241,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom419_3_0_0_0_0,!- Name
@@ -13615,10 +13008,6 @@
     30.1114844241,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     31.2506844241,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom420_423_3_0_0_0_0,  !- Name
@@ -13635,10 +13024,6 @@
     21.2722844241,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     22.4114844241,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom420_423_3_0_0_0_1,  !- Name
@@ -13655,10 +13040,6 @@
     17.3098844241,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     18.4490844241,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom420_423_3_0_0_0_2,  !- Name
@@ -13675,9 +13056,6 @@
     13.347484424,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     14.486684424,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom420_423_3_0_0_0_3,  !- Name
@@ -13694,8 +13072,6 @@
     9.385084424,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     10.524284424,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_GuestRoom424_3_0_0_0_0,!- Name
@@ -13712,10 +13088,6 @@
     5.422684424,18.3374292198,10.9328,  !- X,Y,Z ==> Vertex 3 {m}
     6.561884424,18.3374292198,10.9328;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_RearStairsFlr1_3_0_0_Door,  !- Name
@@ -13732,10 +13104,6 @@
     53.544510571864,18.337429219927,2.133600000000,  !- X,Y,Z ==> Vertex 3 {m}
     54.458910571864,18.337429219927,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_CorridorFlr1_10_0_0_Door,  !- Name
@@ -13752,10 +13120,6 @@
     25.100339009222,18.337429219927,2.133600000000,  !- X,Y,Z ==> Vertex 3 {m}
     26.014739009222,18.337429219927,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     W_FrontStairsFlr1_3_0_0_Door,  !- Name
@@ -13772,11 +13136,7 @@
     0.980406091479,18.337429219927,2.133600000000,  !- X,Y,Z ==> Vertex 3 {m}
     1.894806091479,18.337429219927,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 !-   ===========  ALL OBJECTS IN CLASS: SHADING:ZONE:DETAILED ===========
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   Shading:Zone:Detailed,
     Entry Canopy,            !- Name
@@ -13788,7 +13148,6 @@
     -9.14355407629293,13.7153311144394,3.35263649464074,  !- X,Y,Z ==> Vertex 3 {m}
     -9.14355407629293,4.57177703814647,3.35263649464074;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 !-   ===========  ALL OBJECTS IN CLASS: PEOPLE ===========
 
   People,

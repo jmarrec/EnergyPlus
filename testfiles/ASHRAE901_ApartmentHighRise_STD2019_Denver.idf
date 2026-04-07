@@ -368,14 +368,6 @@
     Until: 23:00,0,          !- Field 96
     Until: 24:00,0;          !- Field 98
 
-                             !- Field 16
-                             !- Field 18
-                             !- Field 20
-                             !- Field 22
-                             !- Field 24
-                             !- Field 26
-                             !- Field 28
-                             !- Field 30
 
   Schedule:Compact,
     LTG_APT_SCH,             !- Name
@@ -398,7 +390,6 @@
     Until: 23:00,0.067896184,!- Field 29
     Until: 24:00,0.028290077;!- Field 31
 
-                             !- Field 32
 
   Schedule:Compact,
     LTG_COR_SCH,             !- Name
@@ -596,8 +587,6 @@
     FOR: AllOtherDays,       !- Field 26
     UNTIL: 24:00,15.6;       !- Field 27
 
-                             !- Field 28
-                             !- Field 32
 
   Schedule:Compact,
     HTGSETP_OFF_SCH_Yes_Optimum_w_SB,  !- Name
@@ -696,8 +685,6 @@
     FOR: AllOtherDays,       !- Field 26
     UNTIL: 24:00,29.4;       !- Field 27
 
-                             !- Field 28
-                             !- Field 32
 
   Schedule:Compact,
     CLGSETP_OFF_SCH_Yes_Optimum_w_SB,  !- Name

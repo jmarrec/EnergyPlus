@@ -437,21 +437,6 @@
     Until: 18:00,0.04311628, !- Field 45
     Until: 24:00,0.05;       !- Field 47
 
-                             !- Field 4
-                             !- Field 6
-                             !- Field 8
-                             !- Field 10
-                             !- Field 12
-                             !- Field 14
-                             !- Field 16
-                             !- Field 22
-                             !- Field 24
-                             !- Field 26
-                             !- Field 28
-                             !- Field 30
-                             !- Field 32
-                             !- Field 38
-                             !- Field 40
 
   Schedule:Compact,
     BLDG_EQUIP_SCH,          !- Name
@@ -481,8 +466,6 @@
     Until: 18:00,0.285926097,!- Field 39
     Until: 24:00,0.2307553806; !- Field 41
 
-                             !- Field 42
-                             !- Field 23
 
   Schedule:Compact,
     BLDG_OCC_SCH,            !- Name
@@ -516,7 +499,6 @@
     Until: 18:00,0.05,       !- Field 47
     Until: 24:00,0.0;        !- Field 49
 
-                             !- Field 102
 
   Schedule:Compact,
     BLDG_OCC_SCH_w_SB,       !- Name
@@ -583,13 +565,6 @@
     Until: 18:00,0.05,       !- Field 113
     Until: 24:00,0.0;        !- Field 115
 
-                             !- Field 24
-                             !- Field 28
-                             !- Field 32
-                             !- Field 73
-                             !- Field 77
-                             !- Field 81
-                             !- Field 102
 
   Schedule:Compact,
     BLDG_OCC_SCH_wo_SB,      !- Name
@@ -895,12 +870,6 @@
     For:Sunday Holidays AllOtherDays, !- Field 38
     Until: 24:00,15.6;       !- Field 39
 
-                             !- Field 24
-                             !- Field 28
-                             !- Field 32
-                             !- Field 73
-                             !- Field 77
-                             !- Field 81
 
   Schedule:Compact,
     HTGSETP_SCH_YES_OPTIMUM_w_SB,  !- Name
@@ -1156,12 +1125,6 @@
     For:Sunday Holidays AllOtherDays, !- Field 38
     Until: 24:00,26.7;       !- Field 39
 
-                             !- Field 24
-                             !- Field 28
-                             !- Field 32
-                             !- Field 73
-                             !- Field 77
-                             !- Field 81
 
   Schedule:Compact,
     CLGSETP_SCH_YES_OPTIMUM_w_SB,  !- Name
@@ -4001,7 +3964,6 @@
     0.0000,0.0000,11.8872;  !- X,Y,Z ==> Vertex 4 {m}
 
 !-   ===========  ALL OBJECTS IN CLASS: FENESTRATIONSURFACE:DETAILED ===========
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_1_Wall_South_Window1,  !- Name
@@ -4018,8 +3980,6 @@
     15.8242,0.0000,0.95455007488,  !- X,Y,Z ==> Vertex 3 {m}
     15.824200000000,0.000000000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_1_Wall_South_Window2,  !- Name
@@ -4036,8 +3996,6 @@
     32.8676,0.0000,0.95455007488,  !- X,Y,Z ==> Vertex 3 {m}
     32.867600000000,0.000000000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_1_Wall_South_Window3,  !- Name
@@ -4054,10 +4012,6 @@
     49.9100,0.0000,0.95455007488,  !- X,Y,Z ==> Vertex 3 {m}
     49.910000000000,0.000000000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_1_Wall_South_Door1,  !- Name
@@ -4074,10 +4028,6 @@
     16.896994238416,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     16.896994238416,0.000000000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_1_Wall_South_Door2,  !- Name
@@ -4094,8 +4044,6 @@
     33.925703488322,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     33.925703488322,0.000000000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_3_Wall_North_Window1,  !- Name
@@ -4112,8 +4060,6 @@
     34.0868,33.2738,0.95455007488,  !- X,Y,Z ==> Vertex 3 {m}
     34.086800000000,33.273800000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_3_Wall_North_Window2,  !- Name
@@ -4130,8 +4076,6 @@
     17.0434,33.2738,0.95455007488,  !- X,Y,Z ==> Vertex 3 {m}
     17.043400000000,33.273800000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_3_Wall_North_Window3,  !- Name
@@ -4148,10 +4092,6 @@
     0.0000,33.2738,0.95455007488,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,33.273800000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_3_Wall_North_Door1,  !- Name
@@ -4168,10 +4108,6 @@
     33.030287903038,33.273800000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     33.030287903038,33.273800000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_3_Wall_North_Door2,  !- Name
@@ -4188,8 +4124,6 @@
     15.928941472948,33.273800000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     15.928941472948,33.273800000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_2_Wall_East_Window1,  !- Name
@@ -4206,8 +4140,6 @@
     49.9110,30.8353,0.97196720032,  !- X,Y,Z ==> Vertex 3 {m}
     49.911000000000,30.835300000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_2_Wall_East_Window2,  !- Name
@@ -4224,10 +4156,6 @@
     49.9110,33.2737,0.97196720032,  !- X,Y,Z ==> Vertex 3 {m}
     49.911000000000,33.273700000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_2_Wall_East_Door,  !- Name
@@ -4244,8 +4172,6 @@
     49.911000000000,31.899598503573,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     49.911000000000,31.899598503573,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_4_Wall_West_Window1,  !- Name
@@ -4262,8 +4188,6 @@
     0.0000,2.4384,0.97196720032,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,2.438400000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_4_Wall_West_Window2,  !- Name
@@ -4280,10 +4204,6 @@
     0.0000,0.0000,0.97196720032,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,0.000000000000,2.329300000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
-                                        !- X,Y,Z  1 {m}
-                                        !- X,Y,Z  2 {m}
-                                        !- X,Y,Z  3 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_bot_ZN_4_Wall_West_Door,  !- Name
@@ -4300,7 +4220,6 @@
     0.000000000000,1.365191323208,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,1.365191323208,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-                                        !- X,Y,Z  4 {m}
 
   FenestrationSurface:Detailed,
     Perimeter_mid_ZN_1_Wall_South_Window,  !- Name
