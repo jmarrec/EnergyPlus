@@ -126,24 +126,29 @@ def translate_file_parallelizable(
 
     # https://github.com/NatLabRockies/EnergyPlus/issues/9590
     # Remove weird extra comments. E.g.,
-    #
     #      !- Field 4
     #      !- Field 6
     #      !- Field 8
-    #
-    # or
-    #
+    # ---
     #          !- X,Y,Z  1 {m}
     #          !- X,Y,Z  2 {m}
     #          !- X,Y,Z  3 {m}
-
     with open(idf_path, "r") as f:
         lines = f.readlines()
 
     with open(idf_path, "w") as f:
+        prev_line_blank = False
         for line in lines:
-            if not (line.strip().startswith("!-") and (len(line) - len(line.lstrip()) > 2)):
+            line_strip = line.strip()
+            line_lstrip = line.lstrip()
+            this_line_blank = not line_strip
+
+            # Assume any line starting with "!-" and more than 4 spaces indented can be removed.
+            if not (prev_line_blank and this_line_blank) and \
+               not (line_strip.startswith("!-") and (len(line) - len(line_lstrip) > 4)):
                 f.write(line)
+
+            prev_line_blank = this_line_blank
 
     return r.returncode
 

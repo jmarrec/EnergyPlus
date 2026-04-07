@@ -1630,7 +1630,6 @@
     For: AllOtherDays,       !- Field 25
     Until: 24:00,0.2456865339; !- Field 26
 
-
   Schedule:Compact,
     BLDG_LIGHT_OFFICE_SCH,   !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -1669,7 +1668,6 @@
     Until: 24:00,0,          !- Field 21
     For: Sunday Holidays AllOtherDays, !- Field 23
     Until: 24:00,0.1;        !- Field 24
-
 
   Schedule:Compact,
     BLDG_OCC_SCH,            !- Name
@@ -2955,7 +2953,6 @@
     7.31484326103434,0,0.914355407629293,  !- X,Y,Z ==> Vertex 3 {m}
     7.31484326103434,0,2.43929602151392;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Office Front Wall Window2,  !- Name
     Window,                  !- Surface Type
@@ -2970,7 +2967,6 @@
     18.5918932884623,0,0.914355407629293,  !- X,Y,Z ==> Vertex 2 {m}
     22.2493149189795,0,0.914355407629293,  !- X,Y,Z ==> Vertex 3 {m}
     22.2493149189795,0,2.43929602151392;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Office Front Door,       !- Name
@@ -2987,7 +2983,6 @@
     12.953323682378,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     12.953323682378,0.000000000000,2.133495951135;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Office Left Wall Window1,!- Name
     Window,                  !- Surface Type
@@ -3002,7 +2997,6 @@
     0,7.51904930207155,0.914355407629293,  !- X,Y,Z ==> Vertex 2 {m}
     0,5.38555335093654,0.914355407629293,  !- X,Y,Z ==> Vertex 3 {m}
     0,5.38555335093654,2.43929602151392;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Office Left Wall Window2,!- Name
@@ -3019,7 +3013,6 @@
     0,1.62450477422138,0.914355407629293,  !- X,Y,Z ==> Vertex 3 {m}
     0,1.62450477422138,2.43929602151392;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Office Left Wall Door,   !- Name
     Door,                    !- Surface Type
@@ -3034,7 +3027,6 @@
     0,5.02895474196111,0,  !- X,Y,Z ==> Vertex 2 {m}
     0,4.11459933433182,0,  !- X,Y,Z ==> Vertex 3 {m}
     0,4.11459933433182,2.13349595113502;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Fine Storage Overhead Door1,  !- Name
@@ -3051,7 +3043,6 @@
     36.527540398794,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     36.527540398794,0.000000000000,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Fine Storage Overhead Door2,  !- Name
     Door,                    !- Surface Type
@@ -3066,7 +3057,6 @@
     45.717770381465,4.941667349700,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     45.717770381465,7.989548436712,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     45.717770381465,7.989548436712,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Fine Storage Overhead Door3,  !- Name
@@ -3083,7 +3073,6 @@
     45.717770381465,26.135355129652,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     45.717770381465,26.135355129652,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Fine Storage Overhead Door4,  !- Name
     Door,                    !- Surface Type
@@ -3098,7 +3087,6 @@
     0.000000000000,28.015580613846,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     0.000000000000,24.967699526834,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,24.967699526834,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door1,  !- Name
@@ -3115,7 +3103,6 @@
     0.000000000000,90.902137046898,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,90.902137046898,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door2,  !- Name
     Door,                    !- Surface Type
@@ -3130,7 +3117,6 @@
     0.000000000000,84.882660341586,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     0.000000000000,81.834779254575,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,81.834779254575,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door3,  !- Name
@@ -3147,7 +3133,6 @@
     0.000000000000,72.767421462251,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,72.767421462251,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door4,  !- Name
     Door,                    !- Surface Type
@@ -3162,7 +3147,6 @@
     0.000000000000,66.747944756938,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     0.000000000000,63.700063669927,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,63.700063669927,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door5,  !- Name
@@ -3179,7 +3163,6 @@
     0.000000000000,54.632705877603,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,54.632705877603,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door6,  !- Name
     Door,                    !- Surface Type
@@ -3194,7 +3177,6 @@
     0.000000000000,48.613229172291,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     0.000000000000,45.565348085279,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,45.565348085279,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door7,  !- Name
@@ -3211,7 +3193,6 @@
     0.000000000000,36.497990292956,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,36.497990292956,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door8,  !- Name
     Door,                    !- Surface Type
@@ -3226,7 +3207,6 @@
     45.717770381465,37.093047145699,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     45.717770381465,39.531328232711,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     45.717770381465,39.531328232711,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door9,  !- Name
@@ -3243,7 +3223,6 @@
     45.717770381465,57.712040532863,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     45.717770381465,57.712040532863,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door10,  !- Name
     Door,                    !- Surface Type
@@ -3258,7 +3237,6 @@
     45.717770381465,73.315058536411,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     45.717770381465,75.753339623423,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     45.717770381465,75.753339623423,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door11,  !- Name
@@ -3275,7 +3253,6 @@
     45.717770381465,92.326045659193,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     45.717770381465,92.326045659193,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door12,  !- Name
     Door,                    !- Surface Type
@@ -3290,7 +3267,6 @@
     40.439074862717,100.579094839222,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     37.391193775705,100.579094839222,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     37.391193775705,100.579094839222,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door13,  !- Name
@@ -3307,7 +3283,6 @@
     27.723558056466,100.579094839222,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     27.723558056466,100.579094839222,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door14,  !- Name
     Door,                    !- Surface Type
@@ -3322,7 +3297,6 @@
     16.687766818731,100.579094839222,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     13.639885731719,100.579094839222,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     13.639885731719,100.579094839222,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Overhead Door15,  !- Name
@@ -3339,7 +3313,6 @@
     4.274503431524,100.579094839222,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     4.274503431524,100.579094839222,2.438251358764;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Door1,      !- Name
     Door,                    !- Surface Type
@@ -3354,7 +3327,6 @@
     45.7177703814647,47.5464811967232,0,  !- X,Y,Z ==> Vertex 2 {m}
     45.7177703814647,48.4608366043525,0,  !- X,Y,Z ==> Vertex 3 {m}
     45.7177703814647,48.4608366043525,2.13349595113502;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Door2,      !- Name
@@ -3371,7 +3343,6 @@
     45.7177703814647,65.9859819172473,0,  !- X,Y,Z ==> Vertex 3 {m}
     45.7177703814647,65.9859819172473,2.13349595113502;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Door3,      !- Name
     Door,                    !- Surface Type
@@ -3386,7 +3357,6 @@
     45.7177703814647,82.5967718225128,0,  !- X,Y,Z ==> Vertex 2 {m}
     45.7177703814647,83.5111272301421,0,  !- X,Y,Z ==> Vertex 3 {m}
     45.7177703814647,83.5111272301421,2.13349595113502;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Bulk Storage Door4,      !- Name
@@ -3403,7 +3373,6 @@
     22.437825726850,100.579094839222,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     22.437825726850,100.579094839222,2.133495951135;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Bulk Storage Door5,      !- Name
     Door,                    !- Surface Type
@@ -3418,7 +3387,6 @@
     0.000000000000,70.345058109595,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     0.000000000000,69.430702701966,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000000000000,69.430702701966,2.133495951135;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Fine Storage Left Door,  !- Name
@@ -3435,7 +3403,6 @@
     0,20.2682115357827,0,  !- X,Y,Z ==> Vertex 3 {m}
     0,19.3538561281534,0;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Fine Storage Right Door, !- Name
     Door,                    !- Surface Type
@@ -3450,7 +3417,6 @@
     45.7177703814647,14.7820790900069,0,  !- X,Y,Z ==> Vertex 2 {m}
     45.7177703814647,15.6964344976362,0,  !- X,Y,Z ==> Vertex 3 {m}
     45.7177703814647,15.6964344976362,2.13349595113502;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Skylight_r8c1,           !- Name

@@ -475,7 +475,6 @@
     Until: 23:00,0.5,        !- Field 79
     Until: 24:00,0.3;        !- Field 81
 
-
   Schedule:Compact,
     BLDG_LIGHT_OFFICE_BSMT_SCH,  !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -677,7 +676,6 @@
     Until: 19:00,0.0,        !- Field 5
     Until: 24:00,1.0;        !- Field 7
 
-
   Schedule:Compact,
     BASEMENT_EQUIP_SCH,      !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -725,7 +723,6 @@
     Until: 22:00,0.6666900548, !- Field 77
     Until: 23:00,0.5714486184, !- Field 79
     Until: 24:00,0.3809657456; !- Field 81
-
 
   Schedule:Compact,
     BLDG_EQUIP_SCH,          !- Name
@@ -6550,7 +6547,6 @@
     80.4980,5.7910,17.2640,  !- X,Y,Z ==> Vertex 3 {m}
     80.4980,5.7910,18.4840;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Cafe_Flr_1_Wall_East_Door,  !- Name
     Door,                    !- Surface Type
@@ -6565,7 +6561,6 @@
     86.563000000000,2.895500000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     86.563000000000,3.809900000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     86.563000000000,3.809900000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Laundry_Flr_1_Wall_East_Door,  !- Name
@@ -6582,7 +6577,6 @@
     86.563000000000,9.275418257503,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     86.563000000000,9.275418257503,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Lobby_Flr_1_Wall_1_North_Door1,  !- Name
     Door,                    !- Surface Type
@@ -6597,7 +6591,6 @@
     49.003221567010,22.860000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     48.088821567010,22.860000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     48.088821567010,22.860000000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Lobby_Flr_1_Wall_1_North_Door2,  !- Name
@@ -6614,7 +6607,6 @@
     8.080491299472,22.860000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     8.080491299472,22.860000000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Storage_Flr_1_Wall_North_RollDoor,  !- Name
     Door,                    !- Surface Type
@@ -6629,7 +6621,6 @@
     76.371820451682,22.860000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     73.323820451682,22.860000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     73.323820451682,22.860000000000,2.438400000000;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Retail_2_Flr_1_Wall_West_Door,  !- Name

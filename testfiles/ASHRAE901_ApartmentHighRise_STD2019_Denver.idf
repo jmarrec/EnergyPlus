@@ -368,7 +368,6 @@
     Until: 23:00,0,          !- Field 96
     Until: 24:00,0;          !- Field 98
 
-
   Schedule:Compact,
     LTG_APT_SCH,             !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -389,7 +388,6 @@
     Until: 22:00,0.124476338,!- Field 27
     Until: 23:00,0.067896184,!- Field 29
     Until: 24:00,0.028290077;!- Field 31
-
 
   Schedule:Compact,
     LTG_COR_SCH,             !- Name
@@ -587,7 +585,6 @@
     FOR: AllOtherDays,       !- Field 26
     UNTIL: 24:00,15.6;       !- Field 27
 
-
   Schedule:Compact,
     HTGSETP_OFF_SCH_Yes_Optimum_w_SB,  !- Name
     Temperature,             !- Schedule Type Limits Name
@@ -684,7 +681,6 @@
     UNTIL: 24:00,29.4,       !- Field 24
     FOR: AllOtherDays,       !- Field 26
     UNTIL: 24:00,29.4;       !- Field 27
-
 
   Schedule:Compact,
     CLGSETP_OFF_SCH_Yes_Optimum_w_SB,  !- Name

@@ -328,7 +328,6 @@
     Until: 23:00,0.469281275,!- Field 55
     Until: 24:00,0.281568765;!- Field 57
 
-
   Schedule:Compact,
     BLDG_LIGHT_KITCHEN_SCH,  !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -400,7 +399,6 @@
     Until: 23:00,0.5,        !- Field 53
     Until: 24:00,0.3;        !- Field 55
 
-
   Schedule:Compact,
     BLDG_EQUIP_SCH,          !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -459,7 +457,6 @@
     Until: 22:00,0.17980058574, !- Field 100
     Until: 23:00,0.08990029287, !- Field 102
     Until: 24:00,0.02996676429; !- Field 104
-
 
   Schedule:Compact,
     Rest_GAS_EQUIP_SCH,      !- Name
@@ -1509,7 +1506,6 @@
     Until: 06:00,0.5,        !- Field 3
     Until: 24:00,1;          !- Field 5
 
-
   Schedule:Compact,
     Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule,  !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -2404,7 +2400,6 @@
     0.0000,15.8398,1.0671,  !- X,Y,Z ==> Vertex 2 {m}
     0.0000,0.6029,1.0671,  !- X,Y,Z ==> Vertex 3 {m}
     0.0000,0.6029,1.9817;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Kitchen_Wall_East_Door,  !- Name

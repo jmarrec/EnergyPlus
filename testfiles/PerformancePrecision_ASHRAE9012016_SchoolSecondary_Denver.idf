@@ -700,7 +700,6 @@
     0.9,                     !- Thermal Absorptance
     0.7;                     !- Solar Absorptance
 
-
   Material:NoMass,
     Nonres_Roof_Insulation,  !- Name
     MediumSmooth,            !- Roughness
@@ -708,7 +707,6 @@
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
-
 
   Material:NoMass,
     Res_Roof_Insulation,     !- Name
@@ -718,7 +716,6 @@
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
 
-
   Material:NoMass,
     Semiheated_Roof_Insulation,  !- Name
     MediumSmooth,            !- Roughness
@@ -726,7 +723,6 @@
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
-
 
   Material:NoMass,
     Nonres_Exterior_Wall_Insulation,  !- Name
@@ -736,7 +732,6 @@
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
 
-
   Material:NoMass,
     Res_Exterior_Wall_Insulation,  !- Name
     MediumSmooth,            !- Roughness
@@ -744,7 +739,6 @@
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
-
 
   Material:NoMass,
     Semiheated_Exterior_Wall_Insulation,  !- Name
@@ -754,7 +748,6 @@
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
 
-
   Material:NoMass,
     Nonres_Floor_Insulation, !- Name
     MediumSmooth,            !- Roughness
@@ -763,7 +756,6 @@
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
 
-
   Material:NoMass,
     Res_Floor_Insulation,    !- Name
     MediumSmooth,            !- Roughness
@@ -771,7 +763,6 @@
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
-
 
   Material:NoMass,
     Semiheated_Floor_Insulation,  !- Name
@@ -25019,7 +25010,6 @@
     ,                        !- Minimum Fraction of Outdoor Air Schedule Name
     PSZ4_8_Timestep_Econ_Eff_SCH;  !- Maximum Fraction of Outdoor Air Schedule Name
 
-
   Controller:OutdoorAir,
     PSZ-AC_5:9_OA_Controller,!- Name
     PSZ-AC_5:9_OARelief Node,!- Relief Air Outlet Node Name
@@ -28924,6 +28914,7 @@
     0.19,                    !- Minimum Value of y
     1.03;                    !- Maximum Value of y
 
+!- 90.1-2010 Path A curves...
 
   Curve:Biquadratic,
     WC_Cent_2010_PA_CAPFT,   !- Name

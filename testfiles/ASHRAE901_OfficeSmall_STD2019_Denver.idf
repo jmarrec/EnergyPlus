@@ -322,7 +322,6 @@
     For: CustomDay2,         !- Field 42
     Until: 24:00,0;          !- Field 43
 
-
   Schedule:Compact,
     BLDG_EQUIP_SCH,          !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -441,7 +440,6 @@
     Until: 24:00,0.0,        !- Field 110
     For: CustomDay2,         !- Field 112
     Until: 24:00,0.0;        !- Field 113
-
 
   Schedule:Compact,
     BLDG_OCC_SCH_wo_SB,      !- Name
@@ -816,7 +814,6 @@
     For: CustomDay2,         !- Field 26
     Until: 24:00,15.56;      !- Field 27
 
-
   Schedule:Compact,
     HTGSETP_SCH_NO_OPTIMUM_w_SB,  !- Name
     Temperature,             !- Schedule Type Limits Name
@@ -926,7 +923,6 @@
     Until: 24:00,29.44,      !- Field 24
     For: CustomDay2,         !- Field 26
     Until: 24:00,29.44;      !- Field 27
-
 
   Schedule:Compact,
     CLGSETP_SCH_NO_OPTIMUM_w_SB,  !- Name
@@ -2861,7 +2857,6 @@
     0.000,15.2400,0.9000,  !- X,Y,Z ==> Vertex 3 {m}
     0.000,15.2400,2.4240;  !- X,Y,Z ==> Vertex 4 {m}
 
-
   FenestrationSurface:Detailed,
     Perimeter_ZN_3_wall_north_Door1,  !- Name
     Door,                    !- Surface Type
@@ -2876,7 +2871,6 @@
     14.911800279714,18.460000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
     13.997400279714,18.460000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
     13.997400279714,18.460000000000,2.133600000000;  !- X,Y,Z ==> Vertex 4 {m}
-
 
   FenestrationSurface:Detailed,
     Perimeter_ZN_3_wall_north_Door2,  !- Name
