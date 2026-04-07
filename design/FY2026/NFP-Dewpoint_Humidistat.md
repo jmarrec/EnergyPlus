@@ -9,7 +9,7 @@ Dew-point Temperature Humidistat
 
 ## Justification for New Feature ##
 
-Currently, EnergyPlus humidistats are used to control zone humidity using relative humidity (RH). However, in practice it is also common for thermostats/humidity controllers to control (or limit) humidity using dew-point temperature. In addition, standards such as ASHRAE 62.1 include requirements—under certain conditions—that the zone (space) dew-point temperature must not exceed a specified limit (see Addendum k to ASHRAE 62.1–2022). 
+Currently, EnergyPlus humidistats are used to control zone humidity using relative humidity (RH). However, in practice it is also common for thermostats/humidity controllers to control (or limit) humidity using dew-point temperature. In addition, standards such as ASHRAE 62.1 include requirements—under certain conditions—that the zone (space) dew-point temperature must not exceed a specified limit (see Addendum k to ASHRAE 62.1–2022).
 
 This feature will allow users to specify a maximum/minimum allowable space dew-point temperature (i.e., a dew-point setpoint) to trigger humidity control.
 
@@ -44,7 +44,7 @@ The following field description would be added to the input/output reference gui
 ```latex
 \paragraph{Field: Control Variable}\label{field-humidistat-control-variable}
 
-This fields describes if the schedules describe relative humidity or dew-point temperature values.
+This field describes if the schedules describe relative humidity or dew-point temperature values.
 ```
 
 ## Input Description ##
