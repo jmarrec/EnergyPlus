@@ -53,7 +53,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os
 import argparse
 import shutil
 import subprocess
@@ -64,6 +63,7 @@ from pathlib import Path
 from tqdm.auto import tqdm
 
 ROOT_DIR = Path(__file__).parent.parent.parent
+
 
 def stringify_cmd(cmd) -> list[str]:
     """Takes a list of arguments that may be Path or str or int and turns into a List[str].
@@ -144,8 +144,9 @@ def translate_file_parallelizable(
             this_line_blank = not line_strip
 
             # Assume any line starting with "!-" and more than 4 spaces indented can be removed.
-            if not (prev_line_blank and this_line_blank) and \
-               not (line_strip.startswith("!-") and (len(line) - len(line_lstrip) > 4)):
+            if not (prev_line_blank and this_line_blank) and not (
+                line_strip.startswith("!-") and (len(line) - len(line_lstrip) > 4)
+            ):
                 f.write(line)
                 prev_line_blank = this_line_blank
 
