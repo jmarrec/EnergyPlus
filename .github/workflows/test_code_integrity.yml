@@ -7,6 +7,9 @@ on:
     branches: [ develop ]
   workflow_dispatch:
 
+env:
+  Python_REQUIRED_VERSION: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+
 jobs:
   code_integrity_checks:
     name: Static Code Analysis
@@ -16,10 +19,15 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Set up Python ${{ env.Python_REQUIRED_VERSION }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.Python_REQUIRED_VERSION }}
+
       - name: Pip install dependencies
         if: always()
         run: |
-          pip install pre-commit tabulate
+          python -m pip install pre-commit tabulate
 
       - name: Run pre-commit
         id: pre_commit
