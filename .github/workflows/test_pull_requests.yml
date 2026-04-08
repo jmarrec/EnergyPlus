@@ -105,8 +105,6 @@ jobs:
         restore-keys: |
           ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ github.head_ref }}
           ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.DEVELOP_SHA }}
-          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
-          ccache-${{ matrix.os }}-
 
     - name: Did restoring the CCache-cache work?
       shell: bash
