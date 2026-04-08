@@ -28914,7 +28914,7 @@
     0.19,                    !- Minimum Value of y
     1.03;                    !- Maximum Value of y
 
-!- 90.1-2010 Path A curves...
+    !- 90.1-2010 Path A curves...
 
   Curve:Biquadratic,
     WC_Cent_2010_PA_CAPFT,   !- Name

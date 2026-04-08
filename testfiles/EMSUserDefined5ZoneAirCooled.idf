@@ -606,8 +606,6 @@
     For: AllDays,            !- Field 2
     Until: 24:00,117.239997864; !- Field 3
 
-                             !- Field 4
-
   Schedule:Compact,
     ShadeTransSch,           !- Name
     Fraction,                !- Schedule Type Limits Name
@@ -5278,10 +5276,8 @@
 
 !end terminal
   !
-      !- call hot water coil model
       !unload HW coil model results
     ! run at full damper open (for good zone air mixing) and
-      !- call hot water coil model
       !unload HW coil model results
       !unload HW coil model results
 
