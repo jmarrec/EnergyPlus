@@ -53,6 +53,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
 import argparse
 import shutil
 import subprocess
@@ -63,7 +64,6 @@ from pathlib import Path
 from tqdm.auto import tqdm
 
 ROOT_DIR = Path(__file__).parent.parent.parent
-
 
 def stringify_cmd(cmd) -> list[str]:
     """Takes a list of arguments that may be Path or str or int and turns into a List[str].
@@ -147,8 +147,7 @@ def translate_file_parallelizable(
             if not (prev_line_blank and this_line_blank) and \
                not (line_strip.startswith("!-") and (len(line) - len(line_lstrip) > 4)):
                 f.write(line)
-
-            prev_line_blank = this_line_blank
+                prev_line_blank = this_line_blank
 
     return r.returncode
 
@@ -168,7 +167,7 @@ if __name__ == "__main__":
 
     idf_paths = []
     for ext in ["idf", "imf"]:
-        idf_paths.extend(root_dir.glob(f"**/*ASHRAE*.{ext}"))
+        idf_paths.extend(root_dir.glob(f"**/*.{ext}"))
     print(f"Found {len(idf_paths)} IDF files in {root_dir}")
 
     # Something like '/path/to/Formatter_only-V25-2-0'
