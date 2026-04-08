@@ -12070,6 +12070,20 @@ namespace SurfaceGeometry {
                     continue;
                 }
 
+                // Same-zone paired surfaces that separate different spaces are interior partitions within a
+                // multi-space zone. Including both sides here would count partition edges four times in the
+                // enclosure check, which can falsely report that the zone is not fully enclosed even though
+                // the outer shell is valid. Exclude only these cross-space same-zone pairs from the volume shell.
+                if (thisZone.numSpaces > 1 && thisSurface.ExtBoundCond > 0 && thisSurface.ExtBoundCond != SurfNum) {
+                    auto const &adjacentSurface = state.dataSurface->Surface(thisSurface.ExtBoundCond);
+                    if ((adjacentSurface.Zone == thisSurface.Zone) && (adjacentSurface.spaceNum > 0) &&
+                        (adjacentSurface.spaceNum != thisSurface.spaceNum)) {
+                        ++notused;
+                        surfacenotused(notused) = SurfNum;
+                        continue;
+                    }
+                }
+
                 ++NActFaces;
                 auto &thisFace = ZoneStruct.SurfaceFace(NActFaces);
                 thisFace.FacePoints.allocate(thisSurface.Sides);
