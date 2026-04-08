@@ -23,16 +23,19 @@ jobs:
           macos_dev_target: 14.0
           arch: arm64
           python-arch: arm64
+          enable_pch: ON
           run_regressions: true
           pretty: "Mac arm64"
         - os: ubuntu-24.04
           arch: x86_64
           python-arch: x64
+          enable_pch: ON
           run_regressions: true
           pretty: "Ubuntu 24.04"
         - os: windows-2022
           arch: x86_64
           python-arch: x64
+          enable_pch: OFF
           run_regressions: false
           pretty: "Windows x64"
 
@@ -73,9 +76,8 @@ jobs:
 
         echo "GitHub synthetic merge commit SHA is '${GITHUB_SHA}'"
         echo "::endgroup::"
-        # We default to using PCH, in case we don't find the baseline reg tests,
-        # since it speeds up the build significantly and we'll build TWICE
-        echo "ENABLE_PCH=ON" >> $GITHUB_ENV
+        # Default PCH behavior is per-platform, then regression-cache hits may override it.
+        echo "ENABLE_PCH=${{ matrix.enable_pch }}" >> $GITHUB_ENV
 
     - name: Baseline Regression Testing caching
       uses: actions/cache@v5
