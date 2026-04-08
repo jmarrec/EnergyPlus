@@ -81,7 +81,7 @@ namespace GroundTemp {
 
         ModelType modelType = ModelType::SiteDeep;
 
-        std::string_view const cCurrentModuleObject = GroundTemp::modelTypeNamesUC[(int)modelType];
+        std::string_view const cCurrentModuleObject = GroundTemp::modelTypeNames[(int)modelType];
         std::string const currentModuleObject(cCurrentModuleObject);
         auto *inputProcessor = state.dataInputProcessing->inputProcessor.get();
         const int numCurrObjects = inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);

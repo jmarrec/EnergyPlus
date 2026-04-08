@@ -77,7 +77,7 @@ namespace GroundTemp {
 
         ModelType modelType = ModelType::Xing;
 
-        std::string_view const cCurrentModuleObject = GroundTemp::modelTypeNamesUC[(int)modelType];
+        std::string_view const cCurrentModuleObject = GroundTemp::modelTypeNames[(int)modelType];
         std::string const currentModuleObject(cCurrentModuleObject);
         auto *inputProcessor = state.dataInputProcessing->inputProcessor.get();
         auto const modelInstances = inputProcessor->epJSON.find(currentModuleObject);
