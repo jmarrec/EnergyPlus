@@ -35,7 +35,7 @@ jobs:
         - os: windows-2022
           arch: x86_64
           python-arch: x64
-          enable_pch: ON
+          enable_pch: OFF
           run_regressions: false
           pretty: "Windows x64"
 
