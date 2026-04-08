@@ -270,11 +270,11 @@ namespace HVAC {
     extern const std::array<std::string_view, (int)CoilType::Num> coilTypeNames;
     extern const std::array<std::string_view, (int)CoilType::Num> coilTypeNamesUC;
 
-    extern const std::array<bool, (int)CoilType::Num> coilTypeIsHeating; 
+    extern const std::array<bool, (int)CoilType::Num> coilTypeIsHeating;
     extern const std::array<bool, (int)CoilType::Num> coilTypeIsCooling;
 
     extern const std::array<bool, (int)CoilType::Num> coilTypeIsHeatPump;
-  
+
 #ifdef GET_OUT
     // parameters describing coil types
     int constexpr NumAllCoilTypes(37);
@@ -316,7 +316,7 @@ namespace HVAC {
     //    int constexpr CoilDX_SubcoolReheat(36);
     int constexpr CoilDX_CurveFit_Speed(37);
 #endif // GET_OUT
-  
+
     enum class CoilMode
     {
         Invalid = -1,
@@ -346,7 +346,7 @@ namespace HVAC {
 
     constexpr std::array<std::string_view, (int)HeatReclaimType::Num> heatReclaimTypeNames = {
         "Refrigeration:CompressorRack",
-        "Refrigeration:Condenser:AirCooled", 
+        "Refrigeration:Condenser:AirCooled",
         "Refrigeration:Condenser:EvaporativeCooled",
         "Refrigeration:Condenser:WaterCooled",
         "Coil:Cooling:DX:SingleSpeed",
@@ -355,13 +355,12 @@ namespace HVAC {
         "Coil:Cooling:DX:TwoStageWithHumidityControlMode",
         "Coil:Cooling:DX:VariableSpeed",
         "Coil:Cooling:DX",
-        "Coil:Cooling:WaterToAirHeatPump:EquationFit",        
-        "Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit"        
-    };
+        "Coil:Cooling:WaterToAirHeatPump:EquationFit",
+        "Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit"};
 
     constexpr std::array<std::string_view, (int)HeatReclaimType::Num> heatReclaimTypeNamesUC = {
         "REFRIGERATION:COMPRESSORRACK",
-        "REFRIGERATION:CONDENSER:AIRCOOLED", 
+        "REFRIGERATION:CONDENSER:AIRCOOLED",
         "REFRIGERATION:CONDENSER:EVAPORATIVECOOLED",
         "REFRIGERATION:CONDENSER:WATERCOOLED",
         "COIL:COOLING:DX:SINGLESPEED",
@@ -371,9 +370,8 @@ namespace HVAC {
         "COIL:COOLING:DX:VARIABLESPEED",
         "COIL:COOLING:DX",
         "COIL:COOLING:WATERTOAIRHEATPUMP:EQUATIONFIT",
-        "COIL:COOLING:WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT"
-    };
-  
+        "COIL:COOLING:WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT"};
+
     enum class WaterFlow
     {
         Invalid = -1,
@@ -461,12 +459,12 @@ namespace HVAC {
 
     int constexpr MaxSpeedLevels = 10;
 
-#ifdef GET_OUT  
+#ifdef GET_OUT
     extern Array1D_string const cAllCoilTypes;
     extern Array1D_string const cCoolingCoilTypes;
     extern Array1D_string const cHeatingCoilTypes;
 #endif // GET_OUT
-  
+
     struct ComponentSetPtData
     {
         // Members

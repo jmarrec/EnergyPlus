@@ -380,8 +380,7 @@ namespace DesiccantDehumidifiers {
 
             RegenCoilName = Alphas(9);
 
-            if (Util::SameString(Alphas(8), "Coil:Heating:Electric") ||
-                Util::SameString(Alphas(8), "Coil:Heating:Fuel")) {
+            if (Util::SameString(Alphas(8), "Coil:Heating:Electric") || Util::SameString(Alphas(8), "Coil:Heating:Fuel")) {
                 if (Util::SameString(Alphas(8), "Coil:Heating:Electric")) {
                     desicDehum.regenCoilType = HVAC::CoilType::HeatingElectric;
                 }
@@ -812,8 +811,7 @@ namespace DesiccantDehumidifiers {
             desicDehum.RegenSetPointTemp = Numbers(1);
 
             if (!lAlphaBlanks(10)) {
-                if (Util::SameString(Alphas(9), "Coil:Heating:Electric") ||
-                    Util::SameString(Alphas(9), "Coil:Heating:Fuel")) {
+                if (Util::SameString(Alphas(9), "Coil:Heating:Electric") || Util::SameString(Alphas(9), "Coil:Heating:Fuel")) {
                     if (Util::SameString(Alphas(9), "Coil:Heating:Electric")) {
                         desicDehum.regenCoilType = HVAC::CoilType::HeatingElectric;
                     } else {
@@ -2348,10 +2346,11 @@ namespace DesiccantDehumidifiers {
                 "Inadequate heat delivered by desiccant regen coil - RESULTS INVALID! Check regen coil capacity and schedule.",
                 desicDehum.RegenCapErrorIndex1);
             ShowRecurringContinueErrorAtEnd(state, desicDehum.DehumType + '=' + desicDehum.Name, desicDehum.RegenCapErrorIndex2);
-            ShowRecurringContinueErrorAtEnd(state,
-                                            EnergyPlus::format("Load requested [W] from {} = {}", HVAC::coilTypeNames[(int)desicDehum.regenCoilType], desicDehum.RegenCoilName),
-                                            desicDehum.RegenCapErrorIndex3,
-                                            QRegen);
+            ShowRecurringContinueErrorAtEnd(
+                state,
+                EnergyPlus::format("Load requested [W] from {} = {}", HVAC::coilTypeNames[(int)desicDehum.regenCoilType], desicDehum.RegenCoilName),
+                desicDehum.RegenCapErrorIndex3,
+                QRegen);
             ShowRecurringContinueErrorAtEnd(state, "Load request exceeded delivered by [W]", desicDehum.RegenCapErrorIndex4, (QRegen - QDelivered));
         }
 

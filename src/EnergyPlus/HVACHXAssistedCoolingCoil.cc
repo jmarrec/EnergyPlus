@@ -335,8 +335,11 @@ namespace HVACHXAssistedCoolingCoil {
                 thisHXCoil.coolCoilType = HVAC::CoilType::CoolingDXSingleSpeed;
                 thisHXCoil.hxAssistedCoilType = HVAC::CoilType::CoolingDXHXAssisted;
                 CoolingCoilErrFlag = false;
-                DXCoils::GetDXCoilIndex(
-                    state, thisHXCoil.CoolingCoilName, thisHXCoil.CoolingCoilIndex, CoolingCoilErrFlag, HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType]);
+                DXCoils::GetDXCoilIndex(state,
+                                        thisHXCoil.CoolingCoilName,
+                                        thisHXCoil.CoolingCoilIndex,
+                                        CoolingCoilErrFlag,
+                                        HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType]);
                 if (CoolingCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                     ErrorsFound = true;
@@ -431,8 +434,7 @@ namespace HVACHXAssistedCoolingCoil {
             } else if (Util::SameString(AlphArray(4), "Coil:Cooling:DX:SingleSpeed")) {
                 //         Check node names in heat exchanger and coil objects for consistency
                 CoolingCoilErrFlag = false;
-                CoolingCoilInletNodeNum =
-                    DXCoils::GetCoilInletNode(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
+                CoolingCoilInletNodeNum = DXCoils::GetCoilInletNode(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 if (CoolingCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                 }
@@ -455,8 +457,8 @@ namespace HVACHXAssistedCoolingCoil {
                     ErrorsFound = true;
                 }
                 CoolingCoilErrFlag = false;
-                CoolingCoilOutletNodeNum =
-                    DXCoils::GetCoilOutletNode(state, HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType], thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
+                CoolingCoilOutletNodeNum = DXCoils::GetCoilOutletNode(
+                    state, HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType], thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 if (CoolingCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                 }
@@ -483,8 +485,8 @@ namespace HVACHXAssistedCoolingCoil {
             } else if (Util::SameString(AlphArray(4), "Coil:Cooling:DX:VariableSpeed")) {
                 //         Check node names in heat exchanger and coil objects for consistency
                 CoolingCoilErrFlag = false;
-                CoolingCoilInletNodeNum = VariableSpeedCoils::GetCoilInletNodeVariableSpeed(
-                    state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
+                CoolingCoilInletNodeNum =
+                    VariableSpeedCoils::GetCoilInletNodeVariableSpeed(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 if (CoolingCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                 }
@@ -507,8 +509,8 @@ namespace HVACHXAssistedCoolingCoil {
                     ErrorsFound = true;
                 }
                 CoolingCoilErrFlag = false;
-                CoolingCoilOutletNodeNum = VariableSpeedCoils::GetCoilOutletNodeVariableSpeed(
-                    state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
+                CoolingCoilOutletNodeNum =
+                    VariableSpeedCoils::GetCoilOutletNodeVariableSpeed(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 if (CoolingCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                 }
@@ -667,8 +669,7 @@ namespace HVACHXAssistedCoolingCoil {
                 ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
             }
 
-            if (Util::SameString(AlphArray(4), "Coil:Cooling:Water") ||
-                Util::SameString(AlphArray(4), "Coil:Cooling:Water:DetailedGeometry")) {
+            if (Util::SameString(AlphArray(4), "Coil:Cooling:Water") || Util::SameString(AlphArray(4), "Coil:Cooling:Water:DetailedGeometry")) {
                 if (Util::SameString(AlphArray(4), "Coil:Cooling:Water:DetailedGeometry")) {
                     thisHXCoil.coolCoilType = HVAC::CoilType::CoolingWaterDetailed;
                 } else if (Util::SameString(AlphArray(4), "Coil:Cooling:Water")) {
@@ -679,10 +680,8 @@ namespace HVACHXAssistedCoolingCoil {
 
                 //         Check node names in heat exchanger and coil objects for consistency
                 CoolingCoilErrFlag = false;
-                CoolingCoilInletNodeNum =
-                    WaterCoils::GetCoilInletNode(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
-                CoolingCoilWaterInletNodeNum =
-                    WaterCoils::GetCoilWaterInletNode(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
+                CoolingCoilInletNodeNum = WaterCoils::GetCoilInletNode(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
+                CoolingCoilWaterInletNodeNum = WaterCoils::GetCoilWaterInletNode(state, AlphArray(4), thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 HVACControllers::GetControllerNameAndIndex(
                     state, CoolingCoilWaterInletNodeNum, thisHXCoil.ControllerName, thisHXCoil.ControllerIndex, CoolingCoilErrFlag);
                 if (CoolingCoilErrFlag) {
@@ -707,8 +706,8 @@ namespace HVACHXAssistedCoolingCoil {
                     ErrorsFound = true;
                 }
                 CoolingCoilErrFlag = false;
-                CoolingCoilOutletNodeNum =
-                    WaterCoils::GetCoilOutletNode(state, HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType], thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
+                CoolingCoilOutletNodeNum = WaterCoils::GetCoilOutletNode(
+                    state, HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType], thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 if (CoolingCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", CurrentModuleObject, thisHXCoil.Name));
                 }
@@ -1029,9 +1028,9 @@ namespace HVACHXAssistedCoolingCoil {
                 ShowContinueErrorTimeStamp(state, "");
             } else {
                 ShowRecurringWarningErrorAtEnd(state,
-                                               EnergyPlus::format(
-                                                   "{} \"{}\" -- Exceeded max iterations error continues...",
-                                                   HVAC::coilTypeNames[(int)thisHXCoil.hxAssistedCoilType], thisHXCoil.Name),
+                                               EnergyPlus::format("{} \"{}\" -- Exceeded max iterations error continues...",
+                                                                  HVAC::coilTypeNames[(int)thisHXCoil.hxAssistedCoilType],
+                                                                  thisHXCoil.Name),
                                                thisHXCoil.MaxIterIndex);
             }
         }
@@ -1186,16 +1185,17 @@ namespace HVACHXAssistedCoolingCoil {
                     int coolingCoilDXIndex = state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilIndex;
                     CoilCapacity = state.dataCoilCoolingDX->coilCoolingDXs[coolingCoilDXIndex].performance->ratedGrossTotalCap();
                 } else if (state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType == HVAC::CoilType::CoolingDXSingleSpeed) {
-                    CoilCapacity = DXCoils::GetCoilCapacity(state,
-                                                            HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
-                                                            state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
-                                                            errFlag);
-                } else if (state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType == HVAC::CoilType::CoolingDXVariableSpeed) {
                     CoilCapacity =
-                        VariableSpeedCoils::GetCoilCapacityVariableSpeed(state,
-                                                                         HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
-                                                                         state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
-                                                                         errFlag);
+                        DXCoils::GetCoilCapacity(state,
+                                                 HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
+                                                 state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
+                                                 errFlag);
+                } else if (state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType == HVAC::CoilType::CoolingDXVariableSpeed) {
+                    CoilCapacity = VariableSpeedCoils::GetCoilCapacityVariableSpeed(
+                        state,
+                        HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
+                        state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
+                        errFlag);
                 }
                 if (errFlag) {
                     ShowRecurringWarningErrorAtEnd(
@@ -1205,10 +1205,11 @@ namespace HVACHXAssistedCoolingCoil {
         } else if (Util::SameString(CoilType, "CoilSystem:Cooling:Water:HeatExchangerAssisted")) {
             if (WhichCoil != 0) {
                 // coil does not have capacity in input so mine information from DX cooling coil
-                CoilCapacity = WaterCoils::GetWaterCoilCapacity(state,
-                                                                HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
-                                                                state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
-                                                                errFlag);
+                CoilCapacity =
+                    WaterCoils::GetWaterCoilCapacity(state,
+                                                     HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
+                                                     state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
+                                                     errFlag);
                 if (errFlag) {
                     ShowRecurringWarningErrorAtEnd(
                         state, "Requested DX Coil from CoilSystem:Cooling:DX:HeatExchangerAssisted not found", state.dataHVACAssistedCC->ErrCount);
@@ -1233,10 +1234,10 @@ namespace HVACHXAssistedCoolingCoil {
     }
 
     HVAC::CoilType GetCoilGroupTypeNum(EnergyPlusData &state,
-                            std::string const &CoilType, // must match coil types in this module
-                            std::string const &CoilName, // must match coil names for the coil type
-                            bool &ErrorsFound,           // set to true if problem
-                            bool const PrintWarning      // prints warning message if true
+                                       std::string const &CoilType, // must match coil types in this module
+                                       std::string const &CoilName, // must match coil names for the coil type
+                                       bool &ErrorsFound,           // set to true if problem
+                                       bool const PrintWarning      // prints warning message if true
     )
     {
 
@@ -1277,10 +1278,10 @@ namespace HVACHXAssistedCoolingCoil {
     }
 
     HVAC::CoilType GetCoilObjectTypeNum(EnergyPlusData &state,
-                             std::string_view const CoilType, // must match coil types in this module
-                             std::string const &CoilName, // must match coil names for the coil type
-                             bool &ErrorsFound,           // set to true if problem
-                             bool const PrintWarning      // prints warning message if true
+                                        std::string_view const CoilType, // must match coil types in this module
+                                        std::string const &CoilName,     // must match coil names for the coil type
+                                        bool &ErrorsFound,               // set to true if problem
+                                        bool const PrintWarning          // prints warning message if true
     )
     {
 
@@ -1387,15 +1388,17 @@ namespace HVACHXAssistedCoolingCoil {
 
         if (WhichCoil != 0) {
             if (state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType == HVAC::CoilType::CoolingWater) {
-                NodeNumber = WaterCoils::GetCoilWaterInletNode(state,
-                                                               HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
-                                                               state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
-                                                               ErrorsFound);
+                NodeNumber =
+                    WaterCoils::GetCoilWaterInletNode(state,
+                                                      HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
+                                                      state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
+                                                      ErrorsFound);
             } else if (state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType == HVAC::CoilType::CoolingWaterDetailed) {
-                NodeNumber = WaterCoils::GetCoilWaterInletNode(state,
-                                                               HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
-                                                               state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
-                                                               ErrorsFound);
+                NodeNumber =
+                    WaterCoils::GetCoilWaterInletNode(state,
+                                                      HVAC::coilTypeNames[(int)state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).coolCoilType],
+                                                      state.dataHVACAssistedCC->HXAssistedCoil(WhichCoil).CoolingCoilName,
+                                                      ErrorsFound);
             } else { // even though validated in Get, still check.
                 ShowSevereError(state,
                                 EnergyPlus::format("GetCoilWaterInletNode: Invalid Cooling Coil for HX Assisted Coil, Type=\"{}\" Name=\"{}\"",

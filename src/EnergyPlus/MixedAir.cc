@@ -809,9 +809,9 @@ void SimOAController(EnergyPlusData &state, std::string const &CtrlName, int &Ct
                             if (state.dataUnitarySystems->unitarySys[unitarySystemNum - 1].m_ControlType ==
                                 UnitarySystems::UnitarySys::UnitarySysCtrlType::Load) {
                                 if (state.dataUnitarySystems->unitarySys[unitarySystemNum - 1].m_coolCoilType ==
-                                      HVAC::CoilType::CoolingDXMultiSpeed ||
+                                        HVAC::CoilType::CoolingDXMultiSpeed ||
                                     state.dataUnitarySystems->unitarySys[unitarySystemNum - 1].m_coolCoilType ==
-                                    HVAC::CoilType::CoolingDXVariableSpeed ||
+                                        HVAC::CoilType::CoolingDXVariableSpeed ||
                                     state.dataUnitarySystems->unitarySys[unitarySystemNum - 1].m_coolCoilType == HVAC::CoilType::CoolingDX) {
                                     sensLoadCtrlUnitarySystemFound = true;
                                     break;

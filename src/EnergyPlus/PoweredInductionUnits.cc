@@ -315,8 +315,8 @@ void GetPIUs(EnergyPlusData &state)
                 if (cCurrentModuleObject == "AirTerminal:SingleDuct:ParallelPIU:Reheat") {
                     thisPIU.FanOnFlowFrac = ip->getRealFieldValue(fields, objectSchemaProps, "fan_on_flow_fraction");
                 }
-                thisPIU.heatCoilType = static_cast<HVAC::CoilType>(
-                    getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"))));
+                thisPIU.heatCoilType = static_cast<HVAC::CoilType>(getEnumValue(
+                    HVAC::coilTypeNamesUC, Util::makeUPPER(ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"))));
                 switch (thisPIU.heatCoilType) {
                 case HVAC::CoilType::HeatingWater: {
                     thisPIU.HCoil_PlantType = DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -442,8 +442,11 @@ void GetPIUs(EnergyPlusData &state)
 
                 thisPIU.HCoil = ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name");
                 bool IsNotOK = false;
-                ValidateComponent(
-                    state, HVAC::coilTypeNamesUC[static_cast<int>(thisPIU.heatCoilType)], thisPIU.HCoil, IsNotOK, cCurrentModuleObject + " - Heating Coil");
+                ValidateComponent(state,
+                                  HVAC::coilTypeNamesUC[static_cast<int>(thisPIU.heatCoilType)],
+                                  thisPIU.HCoil,
+                                  IsNotOK,
+                                  cCurrentModuleObject + " - Heating Coil");
                 if (IsNotOK) {
                     ShowContinueError(state, EnergyPlus::format("In {} = {}", cCurrentModuleObject, thisPIU.Name));
                     ErrorsFound = true;
@@ -1465,11 +1468,8 @@ void SizePIU(EnergyPlusData &state, int const PIUNum)
         TermUnitSizing(CurTermUnitSizingNum).DesHeatingLoad = DesCoilLoad; // coil report
         TermUnitSizing(CurTermUnitSizingNum).InducesPlenumAir = thisPIU.InducesPlenumAir;
         if (thisPIU.heatCoilType == HVAC::CoilType::HeatingWater) {
-            SetCoilDesFlow(state,
-                           HVAC::coilTypeNamesUC[(int)thisPIU.heatCoilType],
-                           thisPIU.HCoil,
-                           TermUnitSizing(CurTermUnitSizingNum).AirVolFlow,
-                           ErrorsFound);
+            SetCoilDesFlow(
+                state, HVAC::coilTypeNamesUC[(int)thisPIU.heatCoilType], thisPIU.HCoil, TermUnitSizing(CurTermUnitSizingNum).AirVolFlow, ErrorsFound);
         }
     }
 

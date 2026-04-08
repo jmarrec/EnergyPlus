@@ -216,8 +216,8 @@ namespace HeatingCoils {
 
     Real64 GetCoilCapacity(EnergyPlusData &state,
                            std::string_view const CoilType, // must match coil types in this module
-                           std::string const &CoilName, // must match coil names for the coil type
-                           bool &ErrorsFound            // set to true if problem
+                           std::string const &CoilName,     // must match coil names for the coil type
+                           bool &ErrorsFound                // set to true if problem
     );
 
     Sched::Schedule *GetCoilAvailSched(EnergyPlusData &state,
@@ -252,8 +252,8 @@ namespace HeatingCoils {
 
     HVAC::CoilType GetHeatingCoilTypeNum(EnergyPlusData &state,
                                          std::string_view const CoilType, // must match coil types in this module
-                                         std::string const &CoilName, // must match coil names for the coil type
-                                         bool &ErrorsFound            // set to true if problem
+                                         std::string const &CoilName,     // must match coil names for the coil type
+                                         bool &ErrorsFound                // set to true if problem
     );
 
     int GetHeatingCoilIndex(EnergyPlusData &state,

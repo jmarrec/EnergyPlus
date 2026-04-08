@@ -1490,7 +1490,8 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
             if (!Util::SameString(HPWH.DXCoilType, HVAC::coilTypeNames[(int)Coil.coilType])) {
                 ShowSevereError(state, EnergyPlus::format("{}=\"{}\", ", state.dataIPShortCut->cCurrentModuleObject, HPWH.Name));
                 ShowContinueError(state, EnergyPlus::format("specifies the coil {}=\"{}\".", HPWH.DXCoilType, HPWH.DXCoilName));
-                ShowContinueError(state, EnergyPlus::format("However, {} is a coil of type {}.", HPWH.DXCoilName, HVAC::coilTypeNames[(int)Coil.coilType]));
+                ShowContinueError(state,
+                                  EnergyPlus::format("However, {} is a coil of type {}.", HPWH.DXCoilName, HVAC::coilTypeNames[(int)Coil.coilType]));
                 ErrorsFound = true;
             }
             HPWH.coilType = Coil.coilType;

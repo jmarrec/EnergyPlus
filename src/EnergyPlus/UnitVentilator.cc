@@ -564,7 +564,8 @@ namespace UnitVentilator {
                     cHeatingCoilType = Alphas(15);
                     unitVent.HCoilTypeCh = cHeatingCoilType;
                     unitVent.heatCoilType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, cHeatingCoilType));
-                    unitVent.HeatingCoilType = static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNamesUC, cHeatingCoilType));
+                    unitVent.HeatingCoilType =
+                        static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNamesUC, cHeatingCoilType));
 
                     unitVent.HCoilName = Alphas(16);
                     ValidateComponent(state, cHeatingCoilType, unitVent.HCoilName, IsNotOK, CurrentModuleObject);
@@ -573,9 +574,9 @@ namespace UnitVentilator {
                         ErrorsFound = true;
                     } else {
                         // The heating coil control node is necessary for a hot water coil, but not necessary for electric or gas.
-                      if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater || unitVent.heatCoilType == HVAC::CoilType::HeatingSteam) {
+                        if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater || unitVent.heatCoilType == HVAC::CoilType::HeatingSteam) {
                             // mine the hot water or steam node from the coil object
-                        if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater) {
+                            if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater) {
                                 unitVent.HCoil_Index = WaterCoils::GetCompIndex(state, WaterCoils::CoilModel::HeatingSimple, unitVent.HCoilName);
                                 unitVent.HotControlNode = state.dataWaterCoils->WaterCoil(unitVent.HCoil_Index).WaterInletNodeNum;
                                 unitVent.MaxVolHotWaterFlow = state.dataWaterCoils->WaterCoil(unitVent.HCoil_Index).MaxWaterVolFlowRate;
@@ -613,7 +614,8 @@ namespace UnitVentilator {
                     cCoolingCoilType = Alphas(17);
                     unitVent.CCoilTypeCh = cCoolingCoilType;
                     unitVent.coolCoilType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, cCoolingCoilType));
-                    unitVent.CoolingCoilType = static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNamesUC, cCoolingCoilType));
+                    unitVent.CoolingCoilType =
+                        static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNamesUC, cCoolingCoilType));
                     unitVent.CCoilPlantName = Alphas(18);
 
                     if (cCoolingCoilType == "COILSYSTEM:COOLING:WATER:HEATEXCHANGERASSISTED") {

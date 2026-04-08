@@ -939,7 +939,7 @@ TEST_F(EnergyPlusFixture, MultiSpeedHeatingCoil_HSPFValueTest_2Speed)
 
     StandardRatingsResult = MultiSpeedDXHeatingCoilStandardRatings(*state,
                                                                    Coil.Name,          // DXCoilName
-                                                                   Coil.coilType,    // DXCoilType,
+                                                                   Coil.coilType,      // DXCoilType,
                                                                    Coil.MSCCapFTemp,   // CapFTempCurveIndex,
                                                                    Coil.MSCCapFFlow,   // CapFFlowCurveIndex,
                                                                    Coil.MSEIRFTemp,    // EIRFTempCurveIndex,

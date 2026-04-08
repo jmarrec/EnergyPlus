@@ -17116,17 +17116,17 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_getUnitarySystemInputDataTest)
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)thisSys->m_FanType);                                   // checks fan object type "FAN:ONOFF"
     EXPECT_EQ("SUPPLY FAN", thisSys->m_FanName);                                                     // checks fan object name
     EXPECT_EQ((int)HVAC::FanPlace::DrawThru, (int)thisSys->m_FanPlace);                              // checks fan placement, "DrawThrough"
-    EXPECT_EQ(nullptr, thisSys->m_fanOpModeSched);                       // checks Supply Air Fan Operating Mode Schedule Name
-    EXPECT_EQ("COIL:HEATING:WATER", thisSys->m_HeatingCoilTypeName);     // checks heating coil object type
-    EXPECT_EQ("WATER HEATING COIL", thisSys->m_HeatingCoilName);         // checks heating coil object type
-    EXPECT_EQ(1, thisSys->m_HeatingSizingRatio);                         // checks dx heating coil sizing ratio
-    EXPECT_ENUM_EQ(HVAC::CoilType::CoolingWater, thisSys->m_coolCoilType);  // checks cooling coil object type
-    EXPECT_EQ("WATER COOLING COIL", thisSys->m_CoolingCoilName);         // checks cooling coil name
-    EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);                 // checks DX Coil is for DOAS use
-    EXPECT_EQ(7.0, thisSys->DesignMinOutletTemp);                        // checks minimum supply air temperature
-    EXPECT_TRUE(thisSys->m_RunOnSensibleLoad);                           // checks for "SENSIBLEONLYLOADCONTROL"
-    EXPECT_EQ("COIL:HEATING:FUEL", thisSys->m_SuppHeatCoilTypeName);     // checks supplemental heating coil object type
-    EXPECT_EQ("SUPPLEMENTAL HEATING COIL", thisSys->m_SuppHeatCoilName); // checks supplemental heating coil name
+    EXPECT_EQ(nullptr, thisSys->m_fanOpModeSched);                         // checks Supply Air Fan Operating Mode Schedule Name
+    EXPECT_EQ("COIL:HEATING:WATER", thisSys->m_HeatingCoilTypeName);       // checks heating coil object type
+    EXPECT_EQ("WATER HEATING COIL", thisSys->m_HeatingCoilName);           // checks heating coil object type
+    EXPECT_EQ(1, thisSys->m_HeatingSizingRatio);                           // checks dx heating coil sizing ratio
+    EXPECT_ENUM_EQ(HVAC::CoilType::CoolingWater, thisSys->m_coolCoilType); // checks cooling coil object type
+    EXPECT_EQ("WATER COOLING COIL", thisSys->m_CoolingCoilName);           // checks cooling coil name
+    EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);                   // checks DX Coil is for DOAS use
+    EXPECT_EQ(7.0, thisSys->DesignMinOutletTemp);                          // checks minimum supply air temperature
+    EXPECT_TRUE(thisSys->m_RunOnSensibleLoad);                             // checks for "SENSIBLEONLYLOADCONTROL"
+    EXPECT_EQ("COIL:HEATING:FUEL", thisSys->m_SuppHeatCoilTypeName);       // checks supplemental heating coil object type
+    EXPECT_EQ("SUPPLEMENTAL HEATING COIL", thisSys->m_SuppHeatCoilName);   // checks supplemental heating coil name
     EXPECT_EQ(4, thisSys->m_CoolingSAFMethod);    // checks cooling supply air flow rate sizing method, FractionOfAutosizedCoolingAirflow
     EXPECT_EQ(0.5, thisSys->m_MaxCoolAirVolFlow); // checks Cooling Fraction of Autosized Cooling Supply Air Flow Rate value
     EXPECT_EQ(5, thisSys->m_HeatingSAFMethod);    // checks cooling supply air flow rate sizing method, FractionOfAutosizedHeatingAirflow

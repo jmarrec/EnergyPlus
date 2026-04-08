@@ -256,11 +256,10 @@ namespace Furnaces {
         int ErrCountVar2 = 0; // Counter used to minimize the occurrence of output warnings
 
         FurnaceEquipConditions()
-            : FurnaceIndex(0), ControlZoneNum(0), airloopNum(0), ZoneSequenceCoolingNum(0), ZoneSequenceHeatingNum(0), 
-              CoolingCoilIndex(0), ActualDXCoilIndexForHXAssisted(0), CoolingCoilUpstream(true), HeatingCoilIndex(0),
-              ReheatingCoilIndex(0), CoilControlNode(0), HWCoilAirInletNode(0), HWCoilAirOutletNode(0),
-              SuppCoilAirInletNode(0), SuppCoilAirOutletNode(0), SuppHeatCoilIndex(0), SuppCoilControlNode(0),
-              fanType(HVAC::FanType::Invalid), FanIndex(0), FurnaceInletNodeNum(0), FurnaceOutletNodeNum(0),
+            : FurnaceIndex(0), ControlZoneNum(0), airloopNum(0), ZoneSequenceCoolingNum(0), ZoneSequenceHeatingNum(0), CoolingCoilIndex(0),
+              ActualDXCoilIndexForHXAssisted(0), CoolingCoilUpstream(true), HeatingCoilIndex(0), ReheatingCoilIndex(0), CoilControlNode(0),
+              HWCoilAirInletNode(0), HWCoilAirOutletNode(0), SuppCoilAirInletNode(0), SuppCoilAirOutletNode(0), SuppHeatCoilIndex(0),
+              SuppCoilControlNode(0), fanType(HVAC::FanType::Invalid), FanIndex(0), FurnaceInletNodeNum(0), FurnaceOutletNodeNum(0),
               LastMode(Furnaces::ModeOfOperation::Invalid), AirFlowControl(AirFlowControlConstFan::Invalid), fanPlace(HVAC::FanPlace::Invalid),
               NodeNumOfControlledZone(0), CoolingConvergenceTolerance(0.0), HeatingConvergenceTolerance(0.0), DesignHeatingCapacity(0.0),
               DesignCoolingCapacity(0.0), CoolingCoilSensDemand(0.0), HeatingCoilSensDemand(0.0), CoolingCoilLatentDemand(0.0),

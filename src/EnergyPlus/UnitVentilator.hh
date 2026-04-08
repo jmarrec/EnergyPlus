@@ -111,18 +111,18 @@ namespace UnitVentilator {
         Sched::Schedule *minOASched = nullptr;
         Sched::Schedule *maxOASched = nullptr;
         Sched::Schedule *tempSched = nullptr;
-        int OutsideAirNode = 0;                         // outside air node number
-        int AirReliefNode = 0;                          // relief air node number
-        int OAMixerOutNode = 0;                         // outlet node after the outside air mixer (inlet to coils if present)
-        Real64 OutAirVolFlow = 0.0;                     // m3/s
-        Real64 OutAirMassFlow = 0.0;                    // kg/s
-        Real64 MinOutAirVolFlow = 0.0;                  // m3/s
-        Real64 MinOutAirMassFlow = 0.0;                 // kg/s
-        CoilsUsed CoilOption = CoilsUsed::Invalid;      // type of coil option; options are BOTH, HEATING, COOLING, AND NONE
-        bool HCoilPresent = false;                      // .TRUE. if unit ventilator has a heating coil
+        int OutsideAirNode = 0;                                // outside air node number
+        int AirReliefNode = 0;                                 // relief air node number
+        int OAMixerOutNode = 0;                                // outlet node after the outside air mixer (inlet to coils if present)
+        Real64 OutAirVolFlow = 0.0;                            // m3/s
+        Real64 OutAirMassFlow = 0.0;                           // kg/s
+        Real64 MinOutAirVolFlow = 0.0;                         // m3/s
+        Real64 MinOutAirMassFlow = 0.0;                        // kg/s
+        CoilsUsed CoilOption = CoilsUsed::Invalid;             // type of coil option; options are BOTH, HEATING, COOLING, AND NONE
+        bool HCoilPresent = false;                             // .TRUE. if unit ventilator has a heating coil
         HVAC::CoilType heatCoilType = HVAC::CoilType::Invalid; // type of heating coil (water, gas, electric, etc.)
-        std::string HCoilName;                          // name of heating coil
-        std::string HCoilTypeCh;                        // type of heating coil character string (same as type on idf file).
+        std::string HCoilName;                                 // name of heating coil
+        std::string HCoilTypeCh;                               // type of heating coil character string (same as type on idf file).
         int HCoil_Index = 0;
         DataPlant::PlantEquipmentType HeatingCoilType = DataPlant::PlantEquipmentType::Invalid;
 

@@ -836,11 +836,8 @@ namespace HVACUnitaryBypassVAV {
 
             DXCoilErrFlag = false;
             if (cbvav.heatCoilType == HVAC::CoilType::HeatingDXSingleSpeed) {
-                DXCoils::GetDXCoilIndex(state,
-                                        cbvav.HeatCoilName,
-                                        cbvav.DXHeatCoilIndexNum,
-                                        DXCoilErrFlag,
-                                        HVAC::coilTypeNamesUC[static_cast<int>(cbvav.heatCoilType)]);
+                DXCoils::GetDXCoilIndex(
+                    state, cbvav.HeatCoilName, cbvav.DXHeatCoilIndexNum, DXCoilErrFlag, HVAC::coilTypeNamesUC[static_cast<int>(cbvav.heatCoilType)]);
                 if (DXCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", cbvav.UnitType, cbvav.Name));
                     ErrorsFound = true;
@@ -851,7 +848,7 @@ namespace HVACUnitaryBypassVAV {
                 }
             } else if (cbvav.heatCoilType == HVAC::CoilType::HeatingDXVariableSpeed) {
                 cbvav.DXHeatCoilIndexNum = VariableSpeedCoils::GetCoilIndexVariableSpeed(
-                                                                                             state, HVAC::coilTypeNames[(int)cbvav.heatCoilType], cbvav.HeatCoilName, DXCoilErrFlag);
+                    state, HVAC::coilTypeNames[(int)cbvav.heatCoilType], cbvav.HeatCoilName, DXCoilErrFlag);
                 if (DXCoilErrFlag) {
                     ShowContinueError(state, EnergyPlus::format("...occurs in {} \"{}\"", cbvav.UnitType, cbvav.Name));
                     ErrorsFound = true;

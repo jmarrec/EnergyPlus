@@ -130,7 +130,7 @@ namespace FanCoilUnits {
         // 'Coil:Cooling:Water:DetailedGeometry' or
         // 'CoilSystem:Cooling:Water:HeatExchangerAssisted'
         HVAC::CoilType coolCoilType = HVAC::CoilType::Invalid; // Numeric equivalent for type of cooling coil
-        std::string CCoilPlantName;           // name of cooling coil (child<=CoilSystem:Cooling:Water:HeatExchangerAssisted)
+        std::string CCoilPlantName;                            // name of cooling coil (child<=CoilSystem:Cooling:Water:HeatExchangerAssisted)
         DataPlant::PlantEquipmentType CCoilPlantType = DataPlant::PlantEquipmentType::Invalid;
         int ControlCompTypeNum = 0;
         int CompErrIndex = 0;

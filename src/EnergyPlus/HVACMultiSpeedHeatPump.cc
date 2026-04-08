@@ -892,7 +892,7 @@ namespace HVACMultiSpeedHeatPump {
                                         state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
                 }
             } else if (Util::SameString(Alphas(10), "Coil:Heating:Steam")) {
-              thisMSHP.heatCoilType = HVAC::CoilType::HeatingSteam;
+                thisMSHP.heatCoilType = HVAC::CoilType::HeatingSteam;
                 ValidateComponent(state, Alphas(10), Alphas(11), IsNotOK, state.dataHVACMultiSpdHP->CurrentModuleObject);
                 if (IsNotOK) {
                     ShowContinueError(state,
@@ -1175,7 +1175,7 @@ namespace HVACMultiSpeedHeatPump {
                 }
             }
             if (Util::SameString(Alphas(14), "Coil:Heating:Steam")) {
-              thisMSHP.suppHeatCoilType = HVAC::CoilType::HeatingSteam;
+                thisMSHP.suppHeatCoilType = HVAC::CoilType::HeatingSteam;
                 ValidateComponent(state, Alphas(14), thisMSHP.SuppHeatCoilName, IsNotOK, state.dataHVACMultiSpdHP->CurrentModuleObject);
                 if (IsNotOK) {
                     ShowContinueError(state,

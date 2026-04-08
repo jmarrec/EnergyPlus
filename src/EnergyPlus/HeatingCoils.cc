@@ -1331,7 +1331,8 @@ namespace HeatingCoils {
         }
 
         if (QCoilRequired == Node::SensedLoadFlagValue && state.dataHeatingCoils->MySPTestFlag(CoilNum) &&
-            heatingCoil.heatCoilType != HVAC::CoilType::HeatingElectricMultiStage && heatingCoil.heatCoilType != HVAC::CoilType::HeatingGasMultiStage) {
+            heatingCoil.heatCoilType != HVAC::CoilType::HeatingElectricMultiStage &&
+            heatingCoil.heatCoilType != HVAC::CoilType::HeatingGasMultiStage) {
 
             //   If the coil is temperature controlled (QCoilReq == -999.0), both a control node and setpoint are required.
             if (!state.dataGlobal->SysSizingCalc && state.dataHVACGlobal->DoSetPointTest) {
@@ -1351,7 +1352,8 @@ namespace HeatingCoils {
                     auto const &controlNode = state.dataLoopNodes->Node(ControlNodeNum);
                     if (controlNode.TempSetPoint == Node::SensedNodeFlagValue) {
                         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
-                            ShowSevereError(state, EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.heatCoilType], heatingCoil.Name));
+                            ShowSevereError(state,
+                                            EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.heatCoilType], heatingCoil.Name));
                             ShowContinueError(state, "... Missing temperature setpoint for heating coil.");
                             ShowContinueError(state, "... use a Setpoint Manager to establish a setpoint at the coil temperature setpoint node.");
                             state.dataHeatingCoils->HeatingCoilFatalError = true;
@@ -1359,8 +1361,8 @@ namespace HeatingCoils {
                             EMSManager::CheckIfNodeSetPointManagedByEMS(
                                 state, ControlNodeNum, HVAC::CtrlVarType::Temp, state.dataHeatingCoils->HeatingCoilFatalError);
                             if (state.dataHeatingCoils->HeatingCoilFatalError) {
-                                ShowSevereError(state,
-                                                EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.heatCoilType], heatingCoil.Name));
+                                ShowSevereError(
+                                    state, EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.heatCoilType], heatingCoil.Name));
                                 ShowContinueError(state, "... Missing temperature setpoint for heating coil.");
                                 ShowContinueError(state, "... use a Setpoint Manager to establish a setpoint at the coil temperature setpoint node.");
                                 ShowContinueError(state, "... or use an EMS Actuator to establish a setpoint at the coil temperature setpoint node.");
@@ -1636,7 +1638,8 @@ namespace HeatingCoils {
         state.dataSize->DataDesInletAirTemp = 0.0;    // reset global data to zero so other heating coils are not
         state.dataSize->DataDesOutletAirTemp = 0.0;   // reset global data to zero so other heating coils are not affected
 
-        if (heatingCoil.heatCoilType == HVAC::CoilType::HeatingElectricMultiStage || heatingCoil.heatCoilType == HVAC::CoilType::HeatingGasMultiStage) {
+        if (heatingCoil.heatCoilType == HVAC::CoilType::HeatingElectricMultiStage ||
+            heatingCoil.heatCoilType == HVAC::CoilType::HeatingGasMultiStage) {
             heatingCoil.MSNominalCapacity(heatingCoil.NumOfStages) = TempCap;
             bool IsAutoSize = false;
             int NumOfStages; // total number of stages of multi-stage heating coil
@@ -2922,8 +2925,8 @@ namespace HeatingCoils {
 
     Real64 GetCoilCapacity(EnergyPlusData &state,
                            std::string_view const CoilType, // must match coil types in this module
-                           std::string const &CoilName, // must match coil names for the coil type
-                           bool &ErrorsFound            // set to true if problem
+                           std::string const &CoilName,     // must match coil names for the coil type
+                           bool &ErrorsFound                // set to true if problem
     )
     {
 
@@ -2949,15 +2952,13 @@ namespace HeatingCoils {
         }
 
         HVAC::CoilType FoundType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(CoilType)));
-        if (FoundType == HVAC::CoilType::HeatingElectric ||
-            FoundType == HVAC::CoilType::HeatingGasOrOtherFuel ||
+        if (FoundType == HVAC::CoilType::HeatingElectric || FoundType == HVAC::CoilType::HeatingGasOrOtherFuel ||
             FoundType == HVAC::CoilType::HeatingDesuperheater) {
             WhichCoil = Util::FindItem(CoilName, state.dataHeatingCoils->HeatingCoil);
             if (WhichCoil != 0) {
                 CoilCapacity = state.dataHeatingCoils->HeatingCoil(WhichCoil).NominalCapacity;
             }
-        } else if (FoundType == HVAC::CoilType::HeatingElectricMultiStage ||
-                   FoundType == HVAC::CoilType::HeatingGasMultiStage) {
+        } else if (FoundType == HVAC::CoilType::HeatingElectricMultiStage || FoundType == HVAC::CoilType::HeatingGasMultiStage) {
             WhichCoil = Util::FindItem(CoilName, state.dataHeatingCoils->HeatingCoil);
             if (WhichCoil != 0) {
                 CoilCapacity =
@@ -3222,9 +3223,9 @@ namespace HeatingCoils {
     }
 
     HVAC::CoilType GetHeatingCoilTypeNum(EnergyPlusData &state,
-                              std::string_view const CoilType, // must match coil types in this module
-                              std::string const &CoilName, // must match coil names for the coil type
-                              bool &ErrorsFound            // set to true if problem
+                                         std::string_view const CoilType, // must match coil types in this module
+                                         std::string const &CoilName,     // must match coil names for the coil type
+                                         bool &ErrorsFound                // set to true if problem
     )
     {
 
