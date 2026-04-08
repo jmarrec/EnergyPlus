@@ -870,10 +870,8 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
         }
 
         // Control variable
-        if (!s_ipsc->lAlphaFieldBlanks(5)) {
-            humidControlledZone.humidityControlVariableType =
-                static_cast<DataZoneControls::HumidityCtrlVarType>(getEnumValue(DataZoneControls::humidityCtrlVarTypeNamesUC, s_ipsc->cAlphaArgs(5)));
-        }
+        humidControlledZone.humidityControlVariableType =
+            static_cast<DataZoneControls::HumidityCtrlVarType>(getEnumValue(DataZoneControls::humidityCtrlVarTypeNamesUC, s_ipsc->cAlphaArgs(5)));
 
     } // HumidControlledZoneNum
 

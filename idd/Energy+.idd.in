@@ -35263,9 +35263,11 @@ ZoneControl:Humidistat,
        \object-list ZoneNames
   A3 , \field Humidifying Setpoint Schedule Name
        \required-field
+       \note Hourly schedule values should be in relative humidity (percent) or dew-point temperatures (deg. C).
        \type object-list
        \object-list ScheduleNames
   A4 , \field Dehumidifying Setpoint Schedule Name
+       \note Hourly schedule values should be in relative humidity (percent) or dew-point temperatures (deg. C).
        \type object-list
        \object-list ScheduleNames
   A5 ; \field Control Variable
