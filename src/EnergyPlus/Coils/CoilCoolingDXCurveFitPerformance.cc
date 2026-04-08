@@ -173,30 +173,23 @@ CoilCoolingDXCurveFitPerformance::CoilCoolingDXCurveFitPerformance(EnergyPlus::E
         CoilCoolingDXCurveFitPerformanceInputSpecification input_specs;
 
         input_specs.name = performanceName;
-        input_specs.crankcase_heater_capacity = inputProcessor->getRealFieldValue(performanceFields, performanceSchemaProps, "crankcase_heater_capacity");
-        input_specs.minimum_outdoor_dry_bulb_temperature_for_compressor_operation =
-            inputProcessor->getRealFieldValue(performanceFields,
-                                              performanceSchemaProps,
-                                              "minimum_outdoor_dry_bulb_temperature_for_compressor_operation");
-        input_specs.maximum_outdoor_dry_bulb_temperature_for_crankcase_heater_operation =
-            inputProcessor->getRealFieldValue(performanceFields,
-                                              performanceSchemaProps,
-                                              "maximum_outdoor_dry_bulb_temperature_for_crankcase_heater_operation");
+        input_specs.crankcase_heater_capacity =
+            inputProcessor->getRealFieldValue(performanceFields, performanceSchemaProps, "crankcase_heater_capacity");
+        input_specs.minimum_outdoor_dry_bulb_temperature_for_compressor_operation = inputProcessor->getRealFieldValue(
+            performanceFields, performanceSchemaProps, "minimum_outdoor_dry_bulb_temperature_for_compressor_operation");
+        input_specs.maximum_outdoor_dry_bulb_temperature_for_crankcase_heater_operation = inputProcessor->getRealFieldValue(
+            performanceFields, performanceSchemaProps, "maximum_outdoor_dry_bulb_temperature_for_crankcase_heater_operation");
         input_specs.unit_internal_static_air_pressure =
             inputProcessor->getRealFieldValue(performanceFields, performanceSchemaProps, "unit_internal_static_air_pressure");
-        input_specs.outdoor_temperature_dependent_crankcase_heater_capacity_curve_name =
-            inputProcessor->getAlphaFieldValue(performanceFields,
-                                               performanceSchemaProps,
-                                               "crankcase_heater_capacity_function_of_temperature_curve_name");
+        input_specs.outdoor_temperature_dependent_crankcase_heater_capacity_curve_name = inputProcessor->getAlphaFieldValue(
+            performanceFields, performanceSchemaProps, "crankcase_heater_capacity_function_of_temperature_curve_name");
         input_specs.capacity_control = inputProcessor->getAlphaFieldValue(performanceFields, performanceSchemaProps, "capacity_control_method");
         input_specs.basin_heater_capacity =
             inputProcessor->getRealFieldValue(performanceFields, performanceSchemaProps, "evaporative_condenser_basin_heater_capacity");
         input_specs.basin_heater_setpoint_temperature =
             inputProcessor->getRealFieldValue(performanceFields, performanceSchemaProps, "evaporative_condenser_basin_heater_setpoint_temperature");
-        input_specs.basin_heater_operating_schedule_name =
-            inputProcessor->getAlphaFieldValue(performanceFields,
-                                               performanceSchemaProps,
-                                               "evaporative_condenser_basin_heater_operating_schedule_name");
+        input_specs.basin_heater_operating_schedule_name = inputProcessor->getAlphaFieldValue(
+            performanceFields, performanceSchemaProps, "evaporative_condenser_basin_heater_operating_schedule_name");
         input_specs.compressor_fuel_type = inputProcessor->getAlphaFieldValue(performanceFields, performanceSchemaProps, "compressor_fuel_type");
         input_specs.base_operating_mode_name = inputProcessor->getAlphaFieldValue(performanceFields, performanceSchemaProps, "base_operating_mode");
         input_specs.alternate_operating_mode_name =

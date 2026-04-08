@@ -144,15 +144,11 @@ CoilCoolingDXCurveFitOperatingMode::CoilCoolingDXCurveFitOperatingMode(EnergyPlu
         input_specs.name = modeName;
         input_specs.gross_rated_total_cooling_capacity =
             inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "rated_gross_total_cooling_capacity");
-        input_specs.rated_evaporator_air_flow_rate =
-            inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "rated_evaporator_air_flow_rate");
-        input_specs.rated_condenser_air_flow_rate =
-            inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "rated_condenser_air_flow_rate");
+        input_specs.rated_evaporator_air_flow_rate = inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "rated_evaporator_air_flow_rate");
+        input_specs.rated_condenser_air_flow_rate = inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "rated_condenser_air_flow_rate");
         input_specs.maximum_cycling_rate = inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "maximum_cycling_rate");
-        input_specs.ratio_of_initial_moisture_evaporation_rate_and_steady_state_latent_capacity =
-            inputProcessor->getRealFieldValue(modeFields,
-                                              modeSchemaProps,
-                                              "ratio_of_initial_moisture_evaporation_rate_and_steady_state_latent_capacity");
+        input_specs.ratio_of_initial_moisture_evaporation_rate_and_steady_state_latent_capacity = inputProcessor->getRealFieldValue(
+            modeFields, modeSchemaProps, "ratio_of_initial_moisture_evaporation_rate_and_steady_state_latent_capacity");
         input_specs.latent_capacity_time_constant = inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "latent_capacity_time_constant");
         input_specs.nominal_time_for_condensate_removal_to_begin =
             inputProcessor->getRealFieldValue(modeFields, modeSchemaProps, "nominal_time_for_condensate_removal_to_begin");
@@ -170,7 +166,9 @@ CoilCoolingDXCurveFitOperatingMode::CoilCoolingDXCurveFitOperatingMode(EnergyPlu
             }
             input_specs.speed_data_names.push_back(speedName);
         }
-        if (input_specs.nominal_speed_number == 0) input_specs.nominal_speed_number = static_cast<int>(input_specs.speed_data_names.size());
+        if (input_specs.nominal_speed_number == 0) {
+            input_specs.nominal_speed_number = static_cast<int>(input_specs.speed_data_names.size());
+        }
 
         this->instantiateFromInputSpec(state, input_specs);
         break;

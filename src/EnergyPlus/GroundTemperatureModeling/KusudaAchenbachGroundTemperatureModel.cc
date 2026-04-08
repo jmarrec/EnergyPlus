@@ -101,10 +101,9 @@ namespace GroundTemp {
                 // Read input into object here
                 thisModel->Name = modelName;
                 thisModel->modelType = modelType;
-                thisModel->groundThermalDiffusivity =
-                    inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_thermal_conductivity") /
-                    (inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_density") *
-                     inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_specific_heat"));
+                thisModel->groundThermalDiffusivity = inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_thermal_conductivity") /
+                                                      (inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_density") *
+                                                       inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_specific_heat"));
 
                 std::array<Real64, 3> flags = {
                     inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "average_soil_surface_temperature"),

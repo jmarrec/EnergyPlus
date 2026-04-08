@@ -94,17 +94,17 @@ namespace GroundTemp {
             auto const &groundTempsFields = groundTempsInstances.begin().value();
             auto const &groundTempsSchemaProps = inputProcessor->getObjectSchemaProps(state, currentModuleObject);
             static constexpr std::array<std::string_view, numMonths> fieldNames = {"january_deep_ground_temperature",
-                                                                                    "february_deep_ground_temperature",
-                                                                                    "march_deep_ground_temperature",
-                                                                                    "april_deep_ground_temperature",
-                                                                                    "may_deep_ground_temperature",
-                                                                                    "june_deep_ground_temperature",
-                                                                                    "july_deep_ground_temperature",
-                                                                                    "august_deep_ground_temperature",
-                                                                                    "september_deep_ground_temperature",
-                                                                                    "october_deep_ground_temperature",
-                                                                                    "november_deep_ground_temperature",
-                                                                                    "december_deep_ground_temperature"};
+                                                                                   "february_deep_ground_temperature",
+                                                                                   "march_deep_ground_temperature",
+                                                                                   "april_deep_ground_temperature",
+                                                                                   "may_deep_ground_temperature",
+                                                                                   "june_deep_ground_temperature",
+                                                                                   "july_deep_ground_temperature",
+                                                                                   "august_deep_ground_temperature",
+                                                                                   "september_deep_ground_temperature",
+                                                                                   "october_deep_ground_temperature",
+                                                                                   "november_deep_ground_temperature",
+                                                                                   "december_deep_ground_temperature"};
 
             // overwrite values read from weather file for the 0.5m set ground temperatures
             for (int i = 0; i < numMonths; ++i) {

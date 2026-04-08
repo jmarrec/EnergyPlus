@@ -96,20 +96,17 @@ namespace GroundTemp {
             if (thisModel->Name == modelName) {
                 // Read remaining input into object here
                 thisModel->Name = modelName;
-                thisModel->groundThermalDiffusivity =
-                    inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_thermal_conductivity") /
-                    (inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_density") *
-                     inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_specific_heat")) *
-                    Constant::rSecsInDay;
+                thisModel->groundThermalDiffusivity = inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_thermal_conductivity") /
+                                                      (inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_density") *
+                                                       inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_specific_heat")) *
+                                                      Constant::rSecsInDay;
                 thisModel->aveGroundTemp = inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "average_soil_surface_temperature");
                 thisModel->surfTempAmplitude_1 =
                     inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_surface_temperature_amplitude_1");
                 thisModel->surfTempAmplitude_2 =
                     inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_surface_temperature_amplitude_2");
-                thisModel->phaseShift_1 =
-                    inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "phase_shift_of_temperature_amplitude_1");
-                thisModel->phaseShift_2 =
-                    inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "phase_shift_of_temperature_amplitude_2");
+                thisModel->phaseShift_1 = inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "phase_shift_of_temperature_amplitude_1");
+                thisModel->phaseShift_2 = inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "phase_shift_of_temperature_amplitude_2");
 
                 found = true;
                 break;

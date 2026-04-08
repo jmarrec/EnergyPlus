@@ -93,17 +93,17 @@ namespace GroundTemp {
             auto const &groundTempsFields = groundTempsInstances.begin().value();
             auto const &groundTempsSchemaProps = inputProcessor->getObjectSchemaProps(state, currentModuleObject);
             static constexpr std::array<std::string_view, numMonths> fieldNames = {"january_surface_ground_temperature",
-                                                                                    "february_surface_ground_temperature",
-                                                                                    "march_surface_ground_temperature",
-                                                                                    "april_surface_ground_temperature",
-                                                                                    "may_surface_ground_temperature",
-                                                                                    "june_surface_ground_temperature",
-                                                                                    "july_surface_ground_temperature",
-                                                                                    "august_surface_ground_temperature",
-                                                                                    "september_surface_ground_temperature",
-                                                                                    "october_surface_ground_temperature",
-                                                                                    "november_surface_ground_temperature",
-                                                                                    "december_surface_ground_temperature"};
+                                                                                   "february_surface_ground_temperature",
+                                                                                   "march_surface_ground_temperature",
+                                                                                   "april_surface_ground_temperature",
+                                                                                   "may_surface_ground_temperature",
+                                                                                   "june_surface_ground_temperature",
+                                                                                   "july_surface_ground_temperature",
+                                                                                   "august_surface_ground_temperature",
+                                                                                   "september_surface_ground_temperature",
+                                                                                   "october_surface_ground_temperature",
+                                                                                   "november_surface_ground_temperature",
+                                                                                   "december_surface_ground_temperature"};
 
             // Assign the ground temps to the variable
             for (int i = 0; i < numMonths; ++i) {

@@ -308,7 +308,8 @@ CoilCoolingDXCurveFitSpeed::CoilCoolingDXCurveFitSpeed(EnergyPlus::EnergyPlusDat
             inputProcessor->getRealFieldValue(speedFields, speedSchemaProps, "condenser_air_flow_rate_fraction");
         input_specs.gross_rated_sensible_heat_ratio = inputProcessor->getRealFieldValue(speedFields, speedSchemaProps, "gross_sensible_heat_ratio");
         input_specs.gross_rated_cooling_COP = inputProcessor->getRealFieldValue(speedFields, speedSchemaProps, "gross_cooling_cop");
-        input_specs.active_fraction_of_coil_face_area = inputProcessor->getRealFieldValue(speedFields, speedSchemaProps, "active_fraction_of_coil_face_area");
+        input_specs.active_fraction_of_coil_face_area =
+            inputProcessor->getRealFieldValue(speedFields, speedSchemaProps, "active_fraction_of_coil_face_area");
         input_specs.rated_evaporator_fan_power_per_volume_flow_rate =
             inputProcessor->getRealFieldValue(speedFields, speedSchemaProps, "2017_rated_evaporator_fan_power_per_volume_flow_rate");
         input_specs.rated_evaporator_fan_power_per_volume_flow_rate_2023 =
@@ -319,8 +320,8 @@ CoilCoolingDXCurveFitSpeed::CoilCoolingDXCurveFitSpeed(EnergyPlus::EnergyPlusDat
             inputProcessor->getRealFieldValue(speedFields, speedSchemaProps, "evaporative_condenser_effectiveness");
         input_specs.total_cooling_capacity_function_of_temperature_curve_name =
             inputProcessor->getAlphaFieldValue(speedFields, speedSchemaProps, "total_cooling_capacity_modifier_function_of_temperature_curve_name");
-        input_specs.total_cooling_capacity_function_of_air_flow_fraction_curve_name =
-            inputProcessor->getAlphaFieldValue(speedFields, speedSchemaProps, "total_cooling_capacity_modifier_function_of_air_flow_fraction_curve_name");
+        input_specs.total_cooling_capacity_function_of_air_flow_fraction_curve_name = inputProcessor->getAlphaFieldValue(
+            speedFields, speedSchemaProps, "total_cooling_capacity_modifier_function_of_air_flow_fraction_curve_name");
         input_specs.energy_input_ratio_function_of_temperature_curve_name =
             inputProcessor->getAlphaFieldValue(speedFields, speedSchemaProps, "energy_input_ratio_modifier_function_of_temperature_curve_name");
         input_specs.energy_input_ratio_function_of_air_flow_fraction_curve_name =
