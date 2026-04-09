@@ -437,7 +437,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_DOASDXCoilTest)
     EXPECT_EQ(thisSys->Name, "DX COOLING COIL SYSTEM");
     EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);
     EXPECT_EQ(thisSys->UnitType, "CoilSystem:Cooling:DX");
-    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, HVAC::Coil_CoolingAirToAirVariableSpeed);
+    EXPECT_ENUM_EQ(thisSys->m_coolCoilType, HVAC::CoilType::CoolingDXVariableSpeed);
 }
 
 TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
@@ -598,7 +598,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     EXPECT_EQ(thisSys->Name, "DX COOLING COIL SYSTEM");
     EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);
     EXPECT_EQ(thisSys->UnitType, "CoilSystem:Cooling:DX");
-    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, HVAC::Coil_CoolingAirToAirVariableSpeed);
+    EXPECT_EQ(thisSys->m_coolCoilType, HVAC::CoilType::CoolingDXVariableSpeed);
     EXPECT_EQ(2, thisSys->CoolCtrlNode);
 
     // set up outdoor environment
@@ -1091,7 +1091,7 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     EXPECT_EQ(thisSys->Name, "DX COOLING COIL SYSTEM");
     EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);
     EXPECT_EQ(thisSys->UnitType, "CoilSystem:Cooling:DX");
-    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, HVAC::CoilDX_Cooling);
+    EXPECT_ENUM_EQ(thisSys->m_coolCoilType, HVAC::CoilType::CoolingDX);
     EXPECT_EQ(2, thisSys->CoolCtrlNode);
 
     // set up outdoor environment

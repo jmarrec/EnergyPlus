@@ -607,16 +607,8 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
 
 bool BaseSizer::isValidCoilType(std::string const &_compType)
 {
-    int coilNum = 0;
-    for (auto const &coilType : HVAC::cAllCoilTypes) {
-        coilNum += 1;
-        if (Util::SameString(_compType, coilType)) {
-            this->coilType_Num = coilNum;
-            return true;
-        }
-    }
-    this->coilType_Num = 0;
-    return false;
+    this->coilType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(_compType)));
+    return this->coilType != HVAC::CoilType::Invalid;
 }
 
 bool BaseSizer::isValidFanType(std::string const &_compType)
@@ -939,7 +931,7 @@ void BaseSizer::clearState()
     sizingDesValueFromParent = false;
     airLoopSysFlag = false;
     oaSysFlag = false;
-    coilType_Num = 0;
+    coilType = HVAC::CoilType::Invalid;
     compType = "";
     compName = "";
     isEpJSON = false;

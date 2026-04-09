@@ -576,7 +576,8 @@ void CoilCoolingDXCurveFitPerformance::calcStandardRatings210240(EnergyPlus::Ene
             std::tie(this->standardRatingCoolingCapacity2023,
                      this->standardRatingSEER2_User,
                      this->standardRatingSEER2_Standard,
-                     this->standardRatingEER2) = StandardRatings::SEER2CalulcationCurveFit(state, "Coil:Cooling:DX:CurveFit", this->normalMode);
+                     this->standardRatingEER2) =
+                StandardRatings::SEER2CalculationCurveFit(state, HVAC::CoilType::CoolingDXCurveFit, this->normalMode);
         }
 
         // IEER calculations: Capacity of 65K Btu/h (19050 W) to less than 135K Btu/h (39565 W) - calculated as per AHRI Standard 340/360-2022.
@@ -618,7 +619,7 @@ void CoilCoolingDXCurveFitPerformance::calcStandardRatings210240(EnergyPlus::Ene
         // TODO: we can always decide and give precedence to Alternate Mode 1 or Alternate Mode 2 if present | Needs Discussion about the
         // applicability.
         std::tie(this->standardRatingIEER2, this->standardRatingCoolingCapacity2023, this->standardRatingEER2) =
-            StandardRatings::IEERCalulcationCurveFit(state, "Coil:Cooling:DX:CurveFit", this->normalMode);
+            StandardRatings::IEERCalculationCurveFit(state, HVAC::CoilType::CoolingDXCurveFit, this->normalMode);
 
     } else {
         ShowSevereError(
