@@ -1115,15 +1115,15 @@ namespace WaterToAirHeatPumpSimple {
                         simpleWAHP.AirMassFlowRate);
                 }
             } else {
-                if ((simpleWAHP.AirMassFlowRate / PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
-                    if (state.dataWaterToAirHeatPumpSimple->LowFlowFlag) {
+                if ((PartLoadRatio == 0.0) || (simpleWAHP.AirMassFlowRate / PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
+                    if (simpleWAHP.LowFlowFlag) {
                         ShowWarningError(
                             state,
                             EnergyPlus::format(
                                 "{}: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil ({}) rated air flow rate.",
                                 RoutineName,
                                 simpleWAHP.Name));
-                        state.dataWaterToAirHeatPumpSimple->LowFlowFlag = false;
+                        simpleWAHP.LowFlowFlag = false;
                     }
                 }
             }
