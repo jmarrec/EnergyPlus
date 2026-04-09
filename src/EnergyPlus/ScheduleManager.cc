@@ -274,8 +274,8 @@ namespace Sched {
 
     DaySchedule *AddDaySchedule(EnergyPlusData &state, std::string const &name)
     {
-        auto &s_glob = state.dataGlobal;
-        auto &s_sched = state.dataSched;
+        const auto &s_glob = state.dataGlobal;
+        const auto &s_sched = state.dataSched;
 
         auto *daySched = new DaySchedule;
         daySched->Name = name;
