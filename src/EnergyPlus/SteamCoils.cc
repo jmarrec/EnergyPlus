@@ -547,10 +547,7 @@ namespace SteamCoils {
             steamCoil.OutletSteamQuality = 0.0;
 
             // More Environment initializations
-            AirInletNode = steamCoil.AirInletNodeNum;
             SteamInletNode = steamCoil.SteamInletNodeNum;
-            ControlNode = steamCoil.TempSetPointNodeNum;
-            AirOutletNode = steamCoil.AirOutletNodeNum;
 
             state.dataLoopNodes->Node(SteamInletNode).Temp = 100.0;
             state.dataLoopNodes->Node(SteamInletNode).Press = 101325.0;

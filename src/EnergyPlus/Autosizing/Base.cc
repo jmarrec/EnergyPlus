@@ -790,13 +790,13 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
         tmpFlowData.resize(size_t(timeStepInDay));
         if (curZoneEqNum > 0) {
             if (heatingLoop) {
-                for (auto &heatFlowSeq : finalZoneSizing(curZoneEqNum).HeatFlowSeq) {
+                for (const auto &heatFlowSeq : finalZoneSizing(curZoneEqNum).HeatFlowSeq) {
                     if (heatFlowSeq > peakAirFlow) {
                         peakAirFlow = heatFlowSeq;
                     }
                 }
             } else {
-                for (auto &coolFlowSeq : finalZoneSizing(curZoneEqNum).CoolFlowSeq) {
+                for (const auto &coolFlowSeq : finalZoneSizing(curZoneEqNum).CoolFlowSeq) {
                     if (coolFlowSeq > peakAirFlow) {
                         peakAirFlow = coolFlowSeq;
                     }
@@ -816,14 +816,14 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
         } else if (curSysNum > state.dataHVACGlobal->NumPrimaryAirSys && curOASysNum > 0) {
             // DOAS is difficult to estimate time step data so for now use a ratio of system flow rate
             if (heatingLoop) {
-                for (auto &heatFlowSeq :
+                for (const auto &heatFlowSeq :
                      finalSysSizing(state.dataHVACGlobal->NumPrimaryAirSys).HeatFlowSeq) { // uses last primary air system, not ideal
                     if (heatFlowSeq > peakAirFlow) {
                         peakAirFlow = heatFlowSeq;
                     }
                 }
             } else {
-                for (auto &coolFlowSeq :
+                for (const auto &coolFlowSeq :
                      finalSysSizing(state.dataHVACGlobal->NumPrimaryAirSys).CoolFlowSeq) { // uses last primary air system, not ideal
                     if (coolFlowSeq > peakAirFlow) {
                         peakAirFlow = coolFlowSeq;
@@ -845,14 +845,14 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
             }
         } else if (curOASysNum > 0) {
             if (heatingLoop) {
-                for (auto &heatFlowSeq :
+                for (const auto &heatFlowSeq :
                      finalSysSizing(state.dataHVACGlobal->NumPrimaryAirSys).HeatFlowSeq) { // uses last primary air system, not ideal
                     if (heatFlowSeq > peakAirFlow) {
                         peakAirFlow = heatFlowSeq;
                     }
                 }
             } else {
-                for (auto &coolFlowSeq :
+                for (const auto &coolFlowSeq :
                      finalSysSizing(state.dataHVACGlobal->NumPrimaryAirSys).CoolFlowSeq) { // uses last primary air system, not ideal
                     if (coolFlowSeq > peakAirFlow) {
                         peakAirFlow = coolFlowSeq;
@@ -872,13 +872,13 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
             }
         } else if (curSysNum > 0) {
             if (heatingLoop) {
-                for (auto &heatFlowSeq : finalSysSizing(curSysNum).HeatFlowSeq) {
+                for (const auto &heatFlowSeq : finalSysSizing(curSysNum).HeatFlowSeq) {
                     if (heatFlowSeq > peakAirFlow) {
                         peakAirFlow = heatFlowSeq;
                     }
                 }
             } else {
-                for (auto &coolFlowSeq : finalSysSizing(curSysNum).CoolFlowSeq) {
+                for (const auto &coolFlowSeq : finalSysSizing(curSysNum).CoolFlowSeq) {
                     if (coolFlowSeq > peakAirFlow) {
                         peakAirFlow = coolFlowSeq;
                     }

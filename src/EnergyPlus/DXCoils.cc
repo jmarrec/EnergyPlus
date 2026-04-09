@@ -7699,18 +7699,19 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
             //                    DataEMSOverride = 0.0;
             //                    DataBypassFrac = 0.0;
             //                }
-            PrintFlag = true;
             state.dataSize->DataTotCapCurveIndex = thisDXCoil.CCapFTemp(Mode);
             if (thisDXCoil.coilType == HVAC::CoilType::CoolingDXTwoStageWHumControl) {
                 CompName = thisDXCoil.Name + ":" + thisDXCoil.CoilPerformanceName(Mode);
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
             } else if (thisDXCoil.coilType == HVAC::CoilType::HeatingDXSingleSpeed || thisDXCoil.coilType == HVAC::CoilType::HeatingVRF ||
                        thisDXCoil.coilType == HVAC::CoilType::HeatingVRFFluidTCtrl) {
                 CompName = thisDXCoil.Name;
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
                 state.dataSize->DataCoolCoilCap = state.dataSize->DXCoolCap;
             } else if (thisDXCoil.coilType == HVAC::CoilType::WaterHeatingDXPumped || thisDXCoil.coilType == HVAC::CoilType::WaterHeatingDXWrapped) {
@@ -7725,6 +7726,7 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 CompName = thisDXCoil.Name;
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
                 if (state.dataSize->CurZoneEqNum > 0) {
                     CoilInTemp =
@@ -7757,6 +7759,7 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 CompName = thisDXCoil.Name;
                 FieldNum = 1;
                 TempSize = thisDXCoil.RatedTotCap(Mode);
+                PrintFlag = true;
                 SizingString = state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(Mode).FieldNames(FieldNum) + " [W]";
             }
             CompType = HVAC::coilTypeNames[(int)thisDXCoil.coilType];
@@ -9480,7 +9483,7 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
             OutdoorWetBulb = state.dataEnvrn->OutWetBulbTemp;
         }
         if (thisDXCoil.IsSecondaryDXCoilInZone) {
-            auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+            const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
             OutdoorDryBulb = secZoneHB.ZT;
             OutdoorHumRat = secZoneHB.airHumRat;
             OutdoorWetBulb = thisDXCoil.EvapInletWetBulb;
@@ -9502,7 +9505,7 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
         CondInletTemp = OutdoorDryBulb; // Outdoor dry-bulb temp
         CompAmbTemp = OutdoorDryBulb;
         if (thisDXCoil.IsSecondaryDXCoilInZone) {
-            auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+            const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
             CondInletTemp = secZoneHB.ZT;
             CompAmbTemp = CondInletTemp; // assumes compressor is in same location as secondary coil
             OutdoorDryBulb = CondInletTemp;
@@ -11238,7 +11241,7 @@ void CalcDXHeatingCoil(EnergyPlusData &state,
                 OutdoorWetBulb = state.dataLoopNodes->Node(thisDXCoil.CondenserInletNodeNum(1)).OutAirWetBulb;
             }
             if (thisDXCoil.IsSecondaryDXCoilInZone) {
-                auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+                const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
                 OutdoorDryBulb = secZoneHB.ZT;
                 OutdoorHumRat = secZoneHB.airHumRat;
                 OutdoorWetBulb = thisDXCoil.EvapInletWetBulb;
@@ -11247,7 +11250,7 @@ void CalcDXHeatingCoil(EnergyPlusData &state,
             }
         }
     } else if (thisDXCoil.IsSecondaryDXCoilInZone) {
-        auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+        const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
         OutdoorDryBulb = secZoneHB.ZT;
         OutdoorHumRat = secZoneHB.airHumRat;
         OutdoorWetBulb = thisDXCoil.EvapInletWetBulb;
@@ -11759,7 +11762,7 @@ void CalcMultiSpeedDXCoil(EnergyPlusData &state,
         }
         CompAmbTemp = OutdoorDryBulb;
         if (thisDXCoil.IsSecondaryDXCoilInZone) {
-            auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+            const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
             OutdoorDryBulb = secZoneHB.ZT;
             OutdoorHumRat = secZoneHB.airHumRat;
             OutdoorWetBulb = thisDXCoil.EvapInletWetBulb;
@@ -11767,7 +11770,7 @@ void CalcMultiSpeedDXCoil(EnergyPlusData &state,
             CompAmbTemp = OutdoorDryBulb;
         }
     } else if (thisDXCoil.IsSecondaryDXCoilInZone) {
-        auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+        const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
         OutdoorDryBulb = secZoneHB.ZT;
         OutdoorHumRat = secZoneHB.airHumRat;
         OutdoorWetBulb = thisDXCoil.EvapInletWetBulb;
@@ -13055,14 +13058,14 @@ void CalcMultiSpeedDXCoilCooling(EnergyPlusData &state,
             OutdoorWetBulb = PsyTwbFnTdbWPb(state, OutdoorDryBulb, OutdoorHumRat, OutdoorPressure, RoutineName);
         }
         if (thisDXCoil.IsSecondaryDXCoilInZone) {
-            auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+            const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
             OutdoorDryBulb = secZoneHB.ZT;
             OutdoorHumRat = secZoneHB.airHumRat;
             OutdoorWetBulb = thisDXCoil.EvapInletWetBulb;
             OutdoorPressure = state.dataEnvrn->OutBaroPress;
         }
     } else if (thisDXCoil.IsSecondaryDXCoilInZone) {
-        auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+        const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
         OutdoorDryBulb = secZoneHB.ZT;
         OutdoorHumRat = secZoneHB.airHumRat;
         OutdoorWetBulb = thisDXCoil.EvapInletWetBulb;
@@ -13979,14 +13982,14 @@ void CalcMultiSpeedDXCoilHeating(EnergyPlusData &state,
             OutdoorHumRat = state.dataLoopNodes->Node(thisDXCoil.CondenserInletNodeNum(1)).HumRat;
         }
         if (thisDXCoil.IsSecondaryDXCoilInZone) {
-            auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+            const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
             OutdoorDryBulb = secZoneHB.ZT;
             OutdoorHumRat = secZoneHB.airHumRat;
             // OutdoorWetBulb = DXCoil( DXCoilNum ).EvapInletWetBulb;
             OutdoorPressure = state.dataEnvrn->OutBaroPress;
         }
     } else if (thisDXCoil.IsSecondaryDXCoilInZone) {
-        auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
+        const auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
         OutdoorDryBulb = secZoneHB.ZT;
         OutdoorHumRat = secZoneHB.airHumRat;
         // OutdoorWetBulb = DXCoil( DXCoilNum ).EvapInletWetBulb;
@@ -14647,7 +14650,7 @@ void UpdateDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the c
     int AirOutletNode; // air outlet node number
     int AirInletNode;  // air inlet node number
 
-    auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
+    const auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
 
     AirOutletNode = thisDXCoil.AirOutNode;
     AirInletNode = thisDXCoil.AirInNode;
@@ -15358,7 +15361,7 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
         // determine footnote content
         int countStaticInputs = 0;
         for (int index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
-            auto &dxCoil_temp = state.dataDXCoils->DXCoil(index);
+            const auto &dxCoil_temp = state.dataDXCoils->DXCoil(index);
             if (dxCoil_temp.RateWithInternalStaticAndFanObject && dxCoil_temp.coilType == HVAC::CoilType::CoolingDXTwoSpeed) {
                 ++countStaticInputs;
             }
@@ -15528,7 +15531,7 @@ void GetFanIndexForTwoSpeedCoil(
             if (FoundBranch > 0 && FoundAirSysNum > 0) {
                 auto &primaryAirSystem_BranchFound = state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch);
                 for (CompNum = 1; CompNum <= primaryAirSystem_BranchFound.TotalComponents; ++CompNum) {
-                    auto &comp = primaryAirSystem_BranchFound.Comp(CompNum);
+                    const auto &comp = primaryAirSystem_BranchFound.Comp(CompNum);
                     if (comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_VAV) {
                         SupplyFanName = comp.Name;
                         SupplyFanIndex = Fans::GetFanIndex(state, SupplyFanName);
