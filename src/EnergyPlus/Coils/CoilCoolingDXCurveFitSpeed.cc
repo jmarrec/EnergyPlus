@@ -338,6 +338,7 @@ CoilCoolingDXCurveFitSpeed::CoilCoolingDXCurveFitSpeed(EnergyPlus::EnergyPlusDat
             inputProcessor->getAlphaFieldValue(speedFields, speedSchemaProps, "sensible_heat_ratio_modifier_function_of_flow_fraction_curve_name");
 
         this->instantiateFromInputSpec(state, input_specs);
+        inputProcessor->markObjectAsUsed(CoilCoolingDXCurveFitSpeed::object_name, speedInstance.key());
         break;
     }
 

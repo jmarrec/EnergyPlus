@@ -171,6 +171,7 @@ CoilCoolingDXCurveFitOperatingMode::CoilCoolingDXCurveFitOperatingMode(EnergyPlu
         }
 
         this->instantiateFromInputSpec(state, input_specs);
+        inputProcessor->markObjectAsUsed(CoilCoolingDXCurveFitOperatingMode::object_name, modeInstance.key());
         break;
     }
 

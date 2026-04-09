@@ -198,6 +198,7 @@ CoilCoolingDXCurveFitPerformance::CoilCoolingDXCurveFitPerformance(EnergyPlus::E
             inputProcessor->getAlphaFieldValue(performanceFields, performanceSchemaProps, "alternative_operating_mode_2");
 
         this->instantiateFromInputSpec(state, input_specs);
+        inputProcessor->markObjectAsUsed(objectName, performanceInstance.key());
         break;
     }
 

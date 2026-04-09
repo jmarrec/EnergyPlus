@@ -140,6 +140,7 @@ void CoilCoolingDX::getInput(EnergyPlusData &state)
             inputProcessor->getAlphaFieldValue(coilFields, coilSchemaProps, "evaporative_condenser_supply_water_storage_tank_name");
         CoilCoolingDX thisCoil;
         thisCoil.instantiateFromInputSpec(state, input_specs);
+        inputProcessor->markObjectAsUsed(state.dataCoilCoolingDX->coilCoolingDXObjectName, coilInstance.key());
         state.dataCoilCoolingDX->coilCoolingDXs.push_back(thisCoil);
     }
 }
