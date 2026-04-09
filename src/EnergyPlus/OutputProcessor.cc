@@ -3763,7 +3763,7 @@ void GenOutputVariablesAuditReport(EnergyPlusData &state)
     using namespace OutputProcessor;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    auto &op = state.dataOutputProcessor;
+    const auto &op = state.dataOutputProcessor;
 
     static constexpr std::array<std::string_view, (int)ReportFreq::Num> localReportFreqNames = {
         "Detailed",  // EachCall  // For some reason, this is "Detailed" here and "Each Call" in other places
@@ -4584,7 +4584,7 @@ bool ReportingThisVariable(EnergyPlusData const &state, std::string const &RepVa
 
     std::string name = Util::makeUPPER(RepVarName);
 
-    for (auto &reqVar : op->reqVars) {
+    for (const auto &reqVar : op->reqVars) {
         if (reqVar->name == name) {
             return true;
         }
