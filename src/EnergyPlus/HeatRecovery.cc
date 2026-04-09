@@ -1713,7 +1713,7 @@ namespace HeatRecovery {
                 // no OAcontroller is directly applicable to HX in airLoopDOAS system
             } else {
                 if (oaSys.OAControllerIndex > 0) {
-                    auto &oaCntrlr = state.dataMixedAir->OAController(oaSys.OAControllerIndex);
+                    const auto &oaCntrlr = state.dataMixedAir->OAController(oaSys.OAControllerIndex);
                     if (oaCntrlr.Econo != MixedAir::EconoOp::NoEconomizer) {
                         hasEconomizerControl = true;
                         hxBypassControlType = oaCntrlr.HeatRecoveryBypassControlType;
