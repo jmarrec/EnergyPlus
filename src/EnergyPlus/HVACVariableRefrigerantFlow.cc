@@ -3535,8 +3535,8 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
         std::string DXCoolingCoilType = cAlphaArgs(11);
 
         errFlag = false;
-        thisVrfTU.DXCoolCoilType_Num = GetCoilTypeNum(state, DXCoolingCoilType, cAlphaArgs(12), errFlag, false);
-        if (thisVrfTU.DXCoolCoilType_Num == 0) {
+        thisVrfTU.coolCoilType = GetCoilTypeNum(state, cAlphaArgs(11), cAlphaArgs(12), errFlag, false);
+        if (thisVrfTU.coolCoilType == HVAC::CoilType::Invalid) {
             thisVrfTU.CoolingCoilPresent = false;
             if (thisVrfTU.TUListIndex > 0 && thisVrfTU.IndexToTUInTUList > 0) {
                 state.dataHVACVarRefFlow->TerminalUnitList(thisVrfTU.TUListIndex).CoolingCoilPresent(thisVrfTU.IndexToTUInTUList) = false;
@@ -3546,18 +3546,18 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                 if (state.dataHVACVarRefFlow->VRF(thisVrfTU.VRFSysNum).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
                     // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
 
-                    if (Util::SameString(HVAC::cAllCoilTypes(thisVrfTU.DXCoolCoilType_Num), HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Cooling))) {
+                    if (thisVrfTU.coolCoilType == HVAC::CoilType::CoolingVRFFluidTCtrl) {
                         errFlag = false;
                         if (thisVrfTU.TUListIndex > 0 && thisVrfTU.IndexToTUInTUList > 0) {
                             state.dataHVACVarRefFlow->TerminalUnitList(thisVrfTU.TUListIndex).coolingCoilAvailScheds(thisVrfTU.IndexToTUInTUList) =
                                 DXCoils::GetDXCoilAvailSched(state, DXCoolingCoilType, cAlphaArgs(12), errFlag);
                         }
                         GetDXCoilIndex(
-                            state, cAlphaArgs(12), thisVrfTU.CoolCoilIndex, errFlag, HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Cooling));
+                            state, cAlphaArgs(12), thisVrfTU.CoolCoilIndex, errFlag, HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingVRFFluidTCtrl]);
                         CCoilInletNodeNum =
-                            DXCoils::GetCoilInletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Cooling), cAlphaArgs(12), errFlag);
-                        CCoilOutletNodeNum =
-                            DXCoils::GetCoilOutletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Cooling), cAlphaArgs(12), errFlag);
+                            DXCoils::GetCoilInletNode(state, HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingVRFFluidTCtrl], cAlphaArgs(12), errFlag);
+                        CCoilOutletNodeNum = DXCoils::GetCoilOutletNode(
+                            state, HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingVRFFluidTCtrl], cAlphaArgs(12), errFlag);
                         thisVrfTU.coolCoilAirInNode = CCoilInletNodeNum;
                         thisVrfTU.coolCoilAirOutNode = CCoilOutletNodeNum;
 
@@ -3613,7 +3613,8 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                         } else {
                             ShowSevereError(state, cCurrentModuleObject + " \"" + thisVrfTU.Name + "\"");
                             ShowContinueError(
-                                state, "... when checking " + HVAC::cAllCoilTypes(thisVrfTU.DXCoolCoilType_Num) + " \"" + cAlphaArgs(12) + "\"");
+                                state,
+                                EnergyPlus::format("... when checking {} \"{}\"", HVAC::coilTypeNames[(int)thisVrfTU.coolCoilType], cAlphaArgs(12)));
                             ShowContinueError(state, "... terminal unit not connected to condenser.");
                             ShowContinueError(state, "... check that terminal unit is specified in a terminal unit list object.");
                             ShowContinueError(state,
@@ -3630,7 +3631,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                 } else {
                     // Algorithm Type: VRF model based on system curve
 
-                    if (Util::SameString(HVAC::cAllCoilTypes(thisVrfTU.DXCoolCoilType_Num), HVAC::cAllCoilTypes(HVAC::CoilVRF_Cooling))) {
+                    if (thisVrfTU.coolCoilType == HVAC::CoilType::CoolingVRF) {
                         if (thisVrfTU.TUListIndex > 0 && thisVrfTU.IndexToTUInTUList > 0) {
                             state.dataHVACVarRefFlow->TerminalUnitList(thisVrfTU.TUListIndex).coolingCoilAvailScheds(thisVrfTU.IndexToTUInTUList) =
                                 DXCoils::GetDXCoilAvailSched(state, DXCoolingCoilType, cAlphaArgs(12), errFlag);
@@ -3638,9 +3639,11 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                             thisVrfTU.CoolingCoilPresent = false;
                         }
                         errFlag = false;
-                        GetDXCoilIndex(state, cAlphaArgs(12), thisVrfTU.CoolCoilIndex, errFlag, HVAC::cAllCoilTypes(HVAC::CoilVRF_Cooling));
-                        CCoilInletNodeNum = DXCoils::GetCoilInletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_Cooling), cAlphaArgs(12), errFlag);
-                        CCoilOutletNodeNum = DXCoils::GetCoilOutletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_Cooling), cAlphaArgs(12), errFlag);
+                        GetDXCoilIndex(state, cAlphaArgs(12), thisVrfTU.CoolCoilIndex, errFlag, HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingVRF]);
+                        CCoilInletNodeNum =
+                            DXCoils::GetCoilInletNode(state, HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingVRF], cAlphaArgs(12), errFlag);
+                        CCoilOutletNodeNum =
+                            DXCoils::GetCoilOutletNode(state, HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingVRF], cAlphaArgs(12), errFlag);
                         thisVrfTU.coolCoilAirInNode = CCoilInletNodeNum;
                         thisVrfTU.coolCoilAirOutNode = CCoilOutletNodeNum;
 
@@ -3680,7 +3683,9 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                 }
             } else {
                 ShowSevereError(state, cCurrentModuleObject + " \"" + thisVrfTU.Name + "\"");
-                ShowContinueError(state, "... when checking " + HVAC::cAllCoilTypes(thisVrfTU.DXCoolCoilType_Num) + " \"" + cAlphaArgs(12) + "\"");
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("... when checking {} \"{}\"", HVAC::coilTypeNames[(int)thisVrfTU.coolCoilType], cAlphaArgs(12) + "\""));
                 ShowContinueError(state, "... terminal unit not connected to condenser.");
                 ShowContinueError(state, "... check that terminal unit is specified in a terminal unit list object.");
                 ShowContinueError(
@@ -3698,8 +3703,8 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
         }
 
         errFlag = false;
-        thisVrfTU.DXHeatCoilType_Num = GetCoilTypeNum(state, DXHeatingCoilType, cAlphaArgs(14), errFlag, false);
-        if (thisVrfTU.DXHeatCoilType_Num == 0) {
+        thisVrfTU.heatCoilType = GetCoilTypeNum(state, DXHeatingCoilType, cAlphaArgs(14), errFlag, false);
+        if (thisVrfTU.heatCoilType == HVAC::CoilType::Invalid) {
             thisVrfTU.HeatingCoilPresent = false;
             if (thisVrfTU.TUListIndex > 0 && thisVrfTU.IndexToTUInTUList > 0) {
                 state.dataHVACVarRefFlow->TerminalUnitList(thisVrfTU.TUListIndex).HeatingCoilPresent(thisVrfTU.IndexToTUInTUList) = false;
@@ -3709,18 +3714,18 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                 if (state.dataHVACVarRefFlow->VRF(thisVrfTU.VRFSysNum).VRFAlgorithmType == AlgorithmType::FluidTCtrl) {
                     // Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
 
-                    if (Util::SameString(HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num), HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Heating))) {
+                    if (thisVrfTU.heatCoilType == HVAC::CoilType::HeatingVRFFluidTCtrl) {
                         errFlag = false;
                         if (thisVrfTU.TUListIndex > 0 && thisVrfTU.IndexToTUInTUList > 0) {
                             state.dataHVACVarRefFlow->TerminalUnitList(thisVrfTU.TUListIndex).heatingCoilAvailScheds(thisVrfTU.IndexToTUInTUList) =
                                 DXCoils::GetDXCoilAvailSched(state, DXHeatingCoilType, cAlphaArgs(14), errFlag);
                         }
                         GetDXCoilIndex(
-                            state, cAlphaArgs(14), thisVrfTU.HeatCoilIndex, errFlag, HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Heating));
+                            state, cAlphaArgs(14), thisVrfTU.HeatCoilIndex, errFlag, HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingVRFFluidTCtrl]);
                         HCoilInletNodeNum =
-                            DXCoils::GetCoilInletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Heating), cAlphaArgs(14), errFlag);
-                        HCoilOutletNodeNum =
-                            DXCoils::GetCoilOutletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_FluidTCtrl_Heating), cAlphaArgs(14), errFlag);
+                            DXCoils::GetCoilInletNode(state, HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingVRFFluidTCtrl], cAlphaArgs(14), errFlag);
+                        HCoilOutletNodeNum = DXCoils::GetCoilOutletNode(
+                            state, HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingVRFFluidTCtrl], cAlphaArgs(14), errFlag);
                         thisVrfTU.heatCoilAirInNode = HCoilInletNodeNum;
                         thisVrfTU.heatCoilAirOutNode = HCoilOutletNodeNum;
 
@@ -3936,7 +3941,8 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                         } else {
                             ShowSevereError(state, cCurrentModuleObject + " \"" + thisVrfTU.Name + "\"");
                             ShowContinueError(
-                                state, "... when checking " + HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num) + " \"" + cAlphaArgs(14) + "\"");
+                                state,
+                                EnergyPlus::format("... when checking {} \"{}\"", HVAC::coilTypeNames[(int)thisVrfTU.heatCoilType], cAlphaArgs(14)));
                             ShowContinueError(state, "... terminal unit not connected to condenser.");
                             ShowContinueError(state, "... check that terminal unit is specified in a terminal unit list object.");
                             ShowContinueError(state,
@@ -3952,7 +3958,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
 
                 } else {
                     // Algorithm Type: VRF model based on system curve
-                    if (Util::SameString(HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num), HVAC::cAllCoilTypes(HVAC::CoilVRF_Heating))) {
+                    if (thisVrfTU.heatCoilType == HVAC::CoilType::HeatingVRF) {
                         if (thisVrfTU.TUListIndex > 0 && thisVrfTU.IndexToTUInTUList > 0) {
                             state.dataHVACVarRefFlow->TerminalUnitList(thisVrfTU.TUListIndex).heatingCoilAvailScheds(thisVrfTU.IndexToTUInTUList) =
                                 DXCoils::GetDXCoilAvailSched(state, DXHeatingCoilType, cAlphaArgs(14), errFlag);
@@ -3960,9 +3966,11 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                             thisVrfTU.HeatingCoilPresent = false;
                         }
                         errFlag = false;
-                        GetDXCoilIndex(state, cAlphaArgs(14), thisVrfTU.HeatCoilIndex, errFlag, HVAC::cAllCoilTypes(HVAC::CoilVRF_Heating));
-                        HCoilInletNodeNum = DXCoils::GetCoilInletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_Heating), cAlphaArgs(14), errFlag);
-                        HCoilOutletNodeNum = DXCoils::GetCoilOutletNode(state, HVAC::cAllCoilTypes(HVAC::CoilVRF_Heating), cAlphaArgs(14), errFlag);
+                        GetDXCoilIndex(state, cAlphaArgs(14), thisVrfTU.HeatCoilIndex, errFlag, HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingVRF]);
+                        HCoilInletNodeNum =
+                            DXCoils::GetCoilInletNode(state, HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingVRF], cAlphaArgs(14), errFlag);
+                        HCoilOutletNodeNum =
+                            DXCoils::GetCoilOutletNode(state, HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingVRF], cAlphaArgs(14), errFlag);
                         thisVrfTU.heatCoilAirInNode = HCoilInletNodeNum;
                         thisVrfTU.heatCoilAirOutNode = HCoilOutletNodeNum;
 
@@ -4149,9 +4157,9 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                             if (state.dataHVACVarRefFlow->VRF(thisVrfTU.VRFSysNum).HeatingPerformanceOATType == HVAC::OATType::WetBulb) {
                                 checkCurveIsNormalizedToOne(
                                     state,
-                                    "GetDXCoils: " + HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num),
+                                    EnergyPlus::format("GetDXCoils: {}", HVAC::coilTypeNames[(int)thisVrfTU.heatCoilType]),
                                     DXCoils::GetDXCoilName(
-                                        state, thisVrfTU.HeatCoilIndex, ErrorsFound, HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num)),
+                                        state, thisVrfTU.HeatCoilIndex, ErrorsFound, HVAC::coilTypeNames[(int)thisVrfTU.heatCoilType]),
                                     GetDXCoilCapFTCurveIndex(state, thisVrfTU.HeatCoilIndex, ErrorsFound),
                                     "Heating Capacity Ratio Modifier Function of Temperature Curve Name",
                                     Curve::GetCurveName(state, GetDXCoilCapFTCurveIndex(state, thisVrfTU.HeatCoilIndex, ErrorsFound)),
@@ -4160,9 +4168,9 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                             } else if (state.dataHVACVarRefFlow->VRF(thisVrfTU.VRFSysNum).HeatingPerformanceOATType == HVAC::OATType::DryBulb) {
                                 checkCurveIsNormalizedToOne(
                                     state,
-                                    "GetDXCoils: " + HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num),
+                                    EnergyPlus::format("GetDXCoils: {}", HVAC::coilTypeNames[(int)thisVrfTU.heatCoilType]),
                                     DXCoils::GetDXCoilName(
-                                        state, thisVrfTU.HeatCoilIndex, ErrorsFound, HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num)),
+                                        state, thisVrfTU.HeatCoilIndex, ErrorsFound, HVAC::coilTypeNames[(int)thisVrfTU.heatCoilType]),
                                     GetDXCoilCapFTCurveIndex(state, thisVrfTU.HeatCoilIndex, ErrorsFound),
                                     "Heating Capacity Ratio Modifier Function of Temperature Curve Name",
                                     Curve::GetCurveName(state, GetDXCoilCapFTCurveIndex(state, thisVrfTU.HeatCoilIndex, ErrorsFound)),
@@ -4179,7 +4187,8 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                 }
             } else {
                 ShowSevereError(state, cCurrentModuleObject + " \"" + thisVrfTU.Name + "\"");
-                ShowContinueError(state, "... when checking " + HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num) + " \"" + cAlphaArgs(14) + "\"");
+                ShowContinueError(
+                    state, EnergyPlus::format("... when checking {} \"{}\"", HVAC::coilTypeNames[(int)thisVrfTU.heatCoilType], cAlphaArgs(14)));
                 ShowContinueError(state, "... terminal unit not connected to condenser.");
                 ShowContinueError(state, "... check that terminal unit is specified in a terminal unit list object.");
                 ShowContinueError(
@@ -4188,8 +4197,8 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
             }
         }
 
-        if (!thisVrfTU.CoolingCoilPresent && thisVrfTU.DXCoolCoilType_Num == 0 && !thisVrfTU.HeatingCoilPresent &&
-            thisVrfTU.DXHeatCoilType_Num == 0) {
+        if (!thisVrfTU.CoolingCoilPresent && thisVrfTU.coolCoilType == HVAC::CoilType::Invalid && !thisVrfTU.HeatingCoilPresent &&
+            thisVrfTU.heatCoilType == HVAC::CoilType::Invalid) {
             ShowSevereError(state, cCurrentModuleObject + " \"" + thisVrfTU.Name + "\"");
             ShowContinueError(state, "... no valid coils entered for this terminal unit. Simulation will not proceed.");
             ErrorsFound = true;
@@ -4219,21 +4228,20 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
 
             errFlag = false;
             if (Util::SameString(thisVrfTU.SuppHeatCoilType, "Coil:Heating:Water")) {
-                thisVrfTU.SuppHeatCoilType_Num = HVAC::Coil_HeatingWater;
+                thisVrfTU.suppHeatCoilType = HVAC::CoilType::HeatingWater;
             } else if (Util::SameString(thisVrfTU.SuppHeatCoilType, "Coil:Heating:Steam")) {
-                thisVrfTU.SuppHeatCoilType_Num = HVAC::Coil_HeatingSteam;
+                thisVrfTU.suppHeatCoilType = HVAC::CoilType::HeatingSteam;
             } else if (Util::SameString(thisVrfTU.SuppHeatCoilType, "Coil:Heating:Fuel") ||
                        Util::SameString(thisVrfTU.SuppHeatCoilType, "Coil:Heating:Electric")) {
-                thisVrfTU.SuppHeatCoilType_Num =
+                thisVrfTU.suppHeatCoilType =
                     HeatingCoils::GetHeatingCoilTypeNum(state, thisVrfTU.SuppHeatCoilType, thisVrfTU.SuppHeatCoilName, errFlag);
             }
 
             thisVrfTU.SuppHeatingCoilPresent = true;
 
-            if (thisVrfTU.SuppHeatCoilType_Num == HVAC::Coil_HeatingGasOrOtherFuel || thisVrfTU.SuppHeatCoilType_Num == HVAC::Coil_HeatingElectric) {
+            if (thisVrfTU.suppHeatCoilType == HVAC::CoilType::HeatingGasOrOtherFuel ||
+                thisVrfTU.suppHeatCoilType == HVAC::CoilType::HeatingElectric) {
                 errFlag = false;
-                thisVrfTU.SuppHeatCoilType_Num =
-                    HeatingCoils::GetHeatingCoilTypeNum(state, thisVrfTU.SuppHeatCoilType, thisVrfTU.SuppHeatCoilName, errFlag);
                 if (errFlag) {
                     ShowContinueError(state, "Occurs in " + cCurrentModuleObject + " = " + thisVrfTU.Name);
                     ErrorsFound = true;
@@ -4277,7 +4285,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                     } // IF (IsNotOK) THEN
                 }
 
-            } else if (thisVrfTU.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
+            } else if (thisVrfTU.suppHeatCoilType == HVAC::CoilType::HeatingWater) {
 
                 ValidateComponent(state, thisVrfTU.SuppHeatCoilType, thisVrfTU.SuppHeatCoilName, IsNotOK, cCurrentModuleObject);
                 if (IsNotOK) {
@@ -4319,7 +4327,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                     }
                 }
 
-            } else if (thisVrfTU.SuppHeatCoilType_Num == HVAC::Coil_HeatingSteam) {
+            } else if (thisVrfTU.suppHeatCoilType == HVAC::CoilType::HeatingSteam) {
 
                 ValidateComponent(state, thisVrfTU.SuppHeatCoilType, thisVrfTU.SuppHeatCoilName, IsNotOK, cCurrentModuleObject);
                 if (IsNotOK) {
@@ -4396,7 +4404,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
             vrfTU.DesignSpecMultispeedHPName = cAlphaArgs(21);
             vrfTU.DesignSpecMSHPIndex = UnitarySystems::getDesignSpecMSHPIndex(state, cAlphaArgs(21));
             auto const &designSpecFan = state.dataUnitarySystems->designSpecMSHP[vrfTU.DesignSpecMSHPIndex];
-            if (vrfTU.DXCoolCoilType_Num == HVAC::CoilVRF_Cooling) {
+            if (vrfTU.coolCoilType == HVAC::CoilType::CoolingVRF) {
                 int NumSpeeds = designSpecFan.numOfSpeedCooling;
                 vrfTU.NumOfSpeedCooling = NumSpeeds;
                 vrfTU.CoolVolumeFlowRate.resize(NumSpeeds + 1);
@@ -4414,7 +4422,8 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                     }
                 }
             }
-            if (vrfTU.DXHeatCoilType_Num == HVAC::CoilVRF_Heating) {
+
+            if (vrfTU.heatCoilType == HVAC::CoilType::HeatingVRF) {
                 int NumSpeeds = designSpecFan.numOfSpeedHeating;
                 vrfTU.NumOfSpeedHeating = NumSpeeds;
                 vrfTU.HeatVolumeFlowRate.resize(NumSpeeds + 1);
@@ -4439,12 +4448,12 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
 
                 if (fanSystem->speedControl == Fans::SpeedControl::Discrete) {
                     if (fanSystem->numSpeeds > 1) {
-                        if (vrfTU.DXCoolCoilType_Num == HVAC::CoilVRF_Cooling) {
+                        if (vrfTU.coolCoilType == HVAC::CoilType::CoolingVRF) {
                             vrfTU.NumOfSpeedCooling = fanSystem->numSpeeds;
                             vrfTU.CoolVolumeFlowRate.resize(fanSystem->numSpeeds + 1);
                             vrfTU.CoolMassFlowRate.resize(fanSystem->numSpeeds + 1);
                         }
-                        if (vrfTU.DXHeatCoilType_Num == HVAC::CoilVRF_Heating) {
+                        if (vrfTU.heatCoilType == HVAC::CoilType::HeatingVRF) {
                             vrfTU.NumOfSpeedHeating = fanSystem->numSpeeds;
                             vrfTU.HeatVolumeFlowRate.resize(fanSystem->numSpeeds + 1);
                             vrfTU.HeatMassFlowRate.resize(fanSystem->numSpeeds + 1);
@@ -4480,7 +4489,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
             SetUpCompSets(state,
                           cCurrentModuleObject,
                           thisVrfTU.Name,
-                          HVAC::cAllCoilTypes(thisVrfTU.DXCoolCoilType_Num),
+                          HVAC::coilTypeNames[(int)thisVrfTU.coolCoilType],
                           cAlphaArgs(12),
                           state.dataLoopNodes->NodeID(CCoilInletNodeNum),
                           state.dataLoopNodes->NodeID(CCoilOutletNodeNum));
@@ -4517,7 +4526,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
             SetUpCompSets(state,
                           cCurrentModuleObject,
                           thisVrfTU.Name,
-                          HVAC::cAllCoilTypes(thisVrfTU.DXHeatCoilType_Num),
+                          HVAC::coilTypeNames[(int)thisVrfTU.heatCoilType],
                           cAlphaArgs(14),
                           state.dataLoopNodes->NodeID(HCoilInletNodeNum),
                           state.dataLoopNodes->NodeID(HCoilOutletNodeNum));
@@ -4588,7 +4597,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
             SetUpCompSets(state,
                           cCurrentModuleObject,
                           thisVrfTU.Name,
-                          HVAC::cAllCoilTypes(thisVrfTU.SuppHeatCoilType_Num),
+                          HVAC::coilTypeNames[(int)thisVrfTU.suppHeatCoilType],
                           thisVrfTU.SuppHeatCoilName,
                           state.dataLoopNodes->NodeID(thisVrfTU.SuppHeatCoilAirInletNode),
                           state.dataLoopNodes->NodeID(thisVrfTU.SuppHeatCoilAirOutletNode));
@@ -5678,14 +5687,13 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
     }
 
     if (vrfTU1.MySuppCoilPlantScanFlag && allocated(state.dataPlnt->PlantLoop)) {
-        if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
+        if (vrfTU1.suppHeatCoilType == HVAC::CoilType::HeatingWater) {
             // hot water supplemental heating coil
             errFlag = false;
             PlantUtilities::ScanPlantLoopsForObject(
                 state, vrfTU1.SuppHeatCoilName, PlantEquipmentType::CoilWaterSimpleHeating, vrfTU1.SuppHeatCoilPlantLoc, errFlag, _, _, _, _, _);
-
             WaterCoils::SetCoilDesFlow(
-                state, HVAC::cAllCoilTypes(vrfTU1.SuppHeatCoilType_Num), vrfTU1.SuppHeatCoilName, vrfTU1.MaxHeatAirVolFlow, errFlag);
+                state, HVAC::coilTypeNames[(int)vrfTU1.suppHeatCoilType], vrfTU1.SuppHeatCoilName, vrfTU1.MaxHeatAirVolFlow, errFlag);
 
             if (errFlag) {
                 ShowFatalError(state, EnergyPlus::format("{}: Program terminated for previous conditions.", RoutineName));
@@ -5702,7 +5710,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
             vrfTU1.SuppHeatCoilFluidOutletNode = DataPlant::CompData::getPlantComponent(state, vrfTU1.SuppHeatCoilPlantLoc).NodeNumOut;
             vrfTU1.MySuppCoilPlantScanFlag = false;
 
-        } else if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingSteam) {
+        } else if (vrfTU1.suppHeatCoilType == HVAC::CoilType::HeatingSteam) {
             // steam supplemental heating coil
             errFlag = false;
 
@@ -6310,7 +6318,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
         //    END IF
 
         if (vrfTU1.SuppHeatCoilFluidInletNode > 0) {
-            if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
+            if (vrfTU1.suppHeatCoilType == HVAC::CoilType::HeatingWater) {
                 if (vrfTU1.SuppHeatCoilFluidMaxFlow == DataSizing::AutoSize) {
                     WaterCoils::SimulateWaterCoilComponents(state, vrfTU1.SuppHeatCoilName, FirstHVACIteration, vrfTU1.SuppHeatCoilIndex);
                     // design hot water volume flow rate
@@ -6323,7 +6331,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 }
             }
 
-            if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingSteam) {
+            if (vrfTU1.suppHeatCoilType == HVAC::CoilType::HeatingSteam) {
                 if (vrfTU1.SuppHeatCoilFluidMaxFlow == DataSizing::AutoSize) {
                     SteamCoils::SimulateSteamCoilComponents(state, vrfTU1.SuppHeatCoilName, FirstHVACIteration, vrfTU1.SuppHeatCoilIndex, 1.0);
                     // design steam volume flow rate
@@ -6383,7 +6391,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
     // get operating capacity of water and steam coil
     if (FirstHVACIteration) {
         if (vrfTU1.SuppHeatCoilFluidInletNode > 0) {
-            if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
+            if (vrfTU1.suppHeatCoilType == HVAC::CoilType::HeatingWater) {
                 //     set hot water full flow rate for sizing
 
                 Real64 mdot = vrfTU1.SuppHeatCoilFluidMaxFlow;
@@ -6395,7 +6403,8 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     state, vrfTU1.SuppHeatCoilName, FirstHVACIteration, vrfTU1.SuppHeatCoilIndex, SuppHeatCoilCapacity);
                 vrfTU1.DesignSuppHeatingCapacity = SuppHeatCoilCapacity;
             } // from iF VRFTU(VRFTUNum).SuppHeatCoilType_Num == HVAC::Coil_HeatingWater
-            if (vrfTU1.SuppHeatCoilType_Num == HVAC::Coil_HeatingSteam) {
+
+            if (vrfTU1.suppHeatCoilType == HVAC::CoilType::HeatingSteam) {
                 //     set hot water full flow rate for sizing
 
                 Real64 mdot = vrfTU1.SuppHeatCoilFluidMaxFlow;
@@ -6434,14 +6443,14 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                         auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(vrfTU.FanIndex));
                         if (fanSystem->speedControl == Fans::SpeedControl::Discrete && vrfTU.DesignSpecMSHPIndex < 0) {
                             if (fanSystem->numSpeeds > 1) {
-                                if (vrfTU.DXCoolCoilType_Num == HVAC::CoilVRF_Cooling) {
+                                if (vrfTU.coolCoilType == HVAC::CoilType::CoolingVRF) {
                                     if (vrfTU.MaxCoolAirVolFlow != DataSizing::AutoSize) {
                                         for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
                                             vrfTU.CoolMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
                                         }
                                     }
                                 }
-                                if (vrfTU.DXHeatCoilType_Num == HVAC::CoilVRF_Heating) {
+                                if (vrfTU.heatCoilType == HVAC::CoilType::HeatingVRF) {
                                     if (vrfTU.MaxHeatAirVolFlow != DataSizing::AutoSize) {
                                         for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
                                             vrfTU.HeatMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
@@ -8240,7 +8249,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         vrfTU.MaxSATFromSuppHeatCoil = sizerMaxHeaterOutTemp.size(state, TempSize, ErrorsFound);
     }
 
-    if (vrfTU.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
+    if (vrfTU.suppHeatCoilType == HVAC::CoilType::HeatingWater) {
         bool ErrorsFound = false;
         WaterCoils::SetCoilDesFlow(state, vrfTU.SuppHeatCoilType, vrfTU.SuppHeatCoilName, vrfTU.MaxHeatAirVolFlow, ErrorsFound);
     }
@@ -8250,7 +8259,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         CompName = vrfTU.SuppHeatCoilName;
         PrintFlag = false; // why isn't this being reported?
         TempSize = vrfTU.DesignSuppHeatingCapacity;
-        if (vrfTU.SuppHeatCoilType_Num == HVAC::Coil_HeatingWater) {
+        if (vrfTU.suppHeatCoilType == HVAC::CoilType::HeatingWater) {
             // sizing result should always be reported
             if (TempSize == DataSizing::AutoSize) {
                 WaterHeatingCapacitySizer sizerWaterHeatingCapacity;
@@ -8311,21 +8320,23 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         TUHeatingCapacity = 0.0;
         bool FoundAll = true;
         bool errFlag; // temporary variable used for error checking
+
         int TUListNum = vrfTU.TUListIndex;
         auto &vrfTUList = state.dataHVACVarRefFlow->TerminalUnitList(TUListNum);
         for (int NumTU = 1; NumTU <= vrfTUList.NumTUInList; ++NumTU) {
             int TUIndex = vrfTUList.ZoneTUPtr(NumTU);
             auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(TUIndex);
             if (vrfTU.CoolCoilIndex > 0) {
-                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.CoolCoilIndex, vrfTU.DXCoolCoilType_Num, errFlag);
+                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.CoolCoilIndex, vrfTU.coolCoilType, errFlag);
                 TUCoolingCapacity += DXCoilCap;
                 if (DXCoilCap == AutoSize) {
                     FoundAll = false;
                     break;
                 }
             }
+
             if (vrfTU.HeatCoilIndex > 0) {
-                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.HeatCoilIndex, vrfTU.DXHeatCoilType_Num, errFlag);
+                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.HeatCoilIndex, vrfTU.heatCoilType, errFlag);
                 TUHeatingCapacity += DXCoilCap;
                 if (DXCoilCap == AutoSize) {
                     FoundAll = false;
@@ -15224,14 +15235,14 @@ void VRFTerminalUnitEquipment::CalcVRFSuppHeatingCoil(EnergyPlusData &state,
         SuppHeatCoilLoad = 0.0;
     }
 
-    switch (this->SuppHeatCoilType_Num) {
-    case HVAC::Coil_HeatingGasOrOtherFuel:
-    case HVAC::Coil_HeatingElectric: {
+    switch (this->suppHeatCoilType) {
+    case HVAC::CoilType::HeatingGasOrOtherFuel:
+    case HVAC::CoilType::HeatingElectric: {
         HeatingCoils::SimulateHeatingCoilComponents(
             state, this->SuppHeatCoilName, FirstHVACIteration, SuppHeatCoilLoad, this->SuppHeatCoilIndex, QActual, true, this->fanOp, PartLoadRatio);
         SuppHeatCoilLoad = QActual;
     } break;
-    case HVAC::Coil_HeatingWater: {
+    case HVAC::CoilType::HeatingWater: {
         if (SuppHeatCoilLoad > HVAC::SmallLoad) {
             //     see if HW coil has enough capacity to meet the load
             Real64 mdot = this->SuppHeatCoilFluidMaxFlow;
@@ -15270,7 +15281,7 @@ void VRFTerminalUnitEquipment::CalcVRFSuppHeatingCoil(EnergyPlusData &state,
         WaterCoils::SimulateWaterCoilComponents(
             state, this->SuppHeatCoilName, FirstHVACIteration, this->SuppHeatCoilIndex, SuppHeatCoilLoad, this->fanOp, this->SuppHeatPartLoadRatio);
     } break;
-    case HVAC::Coil_HeatingSteam: {
+    case HVAC::CoilType::HeatingSteam: {
         //     simulate steam heating coil
         Real64 mdot = this->SuppHeatCoilFluidMaxFlow * PartLoadRatio;
         state.dataLoopNodes->Node(this->SuppHeatCoilFluidInletNode).MassFlowRate = mdot;
