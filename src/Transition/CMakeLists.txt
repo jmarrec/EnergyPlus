@@ -118,6 +118,7 @@ install(FILES "InputRulesFiles/Rules24-1-0-to-24-2-0.md" DESTINATION "PreProcess
 install(FILES "InputRulesFiles/Rules24-2-0-to-25-1-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
 install(FILES "InputRulesFiles/Rules25-1-0-to-25-2-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
 install(FILES "InputRulesFiles/Rules25-2-0-to-26-1-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
+install(FILES "InputRulesFiles/Rules26-1-0-to-26-2-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
 
 install(FILES "OutputRulesFiles/OutputChanges9-0-0-to-9-1-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
 install(FILES "OutputRulesFiles/OutputChanges9-1-0-to-9-2-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
@@ -134,6 +135,7 @@ install(FILES "OutputRulesFiles/OutputChanges24-1-0-to-24-2-0.md" DESTINATION "P
 install(FILES "OutputRulesFiles/OutputChanges24-2-0-to-25-1-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
 install(FILES "OutputRulesFiles/OutputChanges25-1-0-to-25-2-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
 install(FILES "OutputRulesFiles/OutputChanges25-2-0-to-26-1-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
+install(FILES "OutputRulesFiles/OutputChanges26-1-0-to-26-2-0.md" DESTINATION "PreProcess/IDFVersionUpdater")
 
 install(FILES "SupportFiles/Report Variables 9-0-0 to 9-1-0.csv" DESTINATION "PreProcess/IDFVersionUpdater/")
 install(FILES "SupportFiles/Report Variables 9-1-0 to 9-2-0.csv" DESTINATION "PreProcess/IDFVersionUpdater/")
@@ -150,3 +152,4 @@ install(FILES "SupportFiles/Report Variables 24-1-0 to 24-2-0.csv" DESTINATION "
 install(FILES "SupportFiles/Report Variables 24-2-0 to 25-1-0.csv" DESTINATION "PreProcess/IDFVersionUpdater/")
 install(FILES "SupportFiles/Report Variables 25-1-0 to 25-2-0.csv" DESTINATION "PreProcess/IDFVersionUpdater/")
 install(FILES "SupportFiles/Report Variables 25-2-0 to 26-1-0.csv" DESTINATION "PreProcess/IDFVersionUpdater/")
+install(FILES "SupportFiles/Report Variables 26-1-0 to 26-2-0.csv" DESTINATION "PreProcess/IDFVersionUpdater/")
