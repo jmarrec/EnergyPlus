@@ -227,7 +227,6 @@ TEST_F(WaterCoilsTest, WaterCoolingCoilSizing)
     state->dataSize->FinalSysSizing(1).MassFlowAtCoolPeak = state->dataSize->FinalSysSizing(1).DesMainVolFlow * state->dataEnvrn->StdRhoAir;
     state->dataSize->DataWaterLoopNum = 1;
 
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
 
     EXPECT_DOUBLE_EQ(0.00159, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
@@ -468,7 +467,6 @@ TEST_F(WaterCoilsTest, CoilHeatingWaterUASizing)
     state->dataWaterCoils->MySizeFlag(1) = true;
 
     // run water coil sizing
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
 
@@ -621,7 +619,6 @@ TEST_F(WaterCoilsTest, CoilHeatingWaterLowAirFlowUASizing)
     state->dataWaterCoils->MySizeFlag(1) = true;
 
     // run water coil sizing
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
 
@@ -778,7 +775,6 @@ TEST_F(WaterCoilsTest, CoilHeatingWaterUASizingLowHwaterInletTemp)
     state->dataWaterCoils->MySizeFlag(1) = true;
 
     // run water coil sizing
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
 
@@ -889,7 +885,6 @@ TEST_F(WaterCoilsTest, CoilCoolingWaterSimpleSizing)
     state->dataSize->DataWaterLoopNum = 1;
 
     // run water coil sizing
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
 
@@ -1004,7 +999,6 @@ TEST_F(WaterCoilsTest, CoilCoolingWaterDetailedSizing)
     state->dataSize->DataWaterLoopNum = 1;
 
     // run water coil sizing
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
 
@@ -1129,7 +1123,6 @@ TEST_F(WaterCoilsTest, CoilCoolingWaterDetailed_WarningMath)
     OutputReportPredefined::SetPredefinedTables(*state);
 
     // run water coil sizing
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
 
@@ -1282,7 +1275,6 @@ TEST_F(WaterCoilsTest, CoilHeatingWaterSimpleSizing)
     state->dataSize->DataWaterLoopNum = 1;
 
     // run water coil sizing
-    createCoilSelectionReportObj(*state);
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, state->dataWaterCoils->WaterCoil(CoilNum).DesAirVolFlowRate);
 

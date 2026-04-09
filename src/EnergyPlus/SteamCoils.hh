@@ -81,6 +81,9 @@ namespace SteamCoils {
         std::string SteamCoilTypeA;            // Type of SteamCoil ie. Heating or Cooling
         int SteamCoilType;                     // Type of SteamCoil ie. Heating or Cooling
         int SteamCoilModel;                    // Type of SteamCoil ie. Simple, Detailed, etc.
+
+        int coilReportNum = -1;
+      
         Sched::Schedule *availSched = nullptr; // operating schedule
         Real64 InletAirMassFlowRate;           // MassFlow through the SteamCoil being Simulated [kg/s]
         Real64 OutletAirMassFlowRate;          // MassFlow throught the SteamCoil being Simulated[kg/s]

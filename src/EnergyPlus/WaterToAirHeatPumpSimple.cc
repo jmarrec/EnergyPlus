@@ -267,6 +267,9 @@ namespace WaterToAirHeatPumpSimple {
                     state, CurrentModuleObject, simpleWAHP.Name, ErrorsFound, EnergyPlus::format("{} Name", CurrentModuleObject));
                 simpleWAHP.WAHPType = WatertoAirHP::Cooling;
                 simpleWAHP.WAHPPlantType = DataPlant::PlantEquipmentType::CoilWAHPCoolingEquationFit;
+
+                // simpleWAHP.coilReportNum = ReportCoilSelection::getReportIndex(state, simpleWAHP.Name, simpleWAHP.coilType);
+                
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     simpleWAHP.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -502,8 +505,12 @@ namespace WaterToAirHeatPumpSimple {
                 // ErrorsFound will be set to True if problem was found, left untouched otherwise
                 GlobalNames::VerifyUniqueCoilName(
                     state, CurrentModuleObject, simpleWAHP.Name, ErrorsFound, EnergyPlus::format("{} Name", CurrentModuleObject));
+
                 simpleWAHP.WAHPType = WatertoAirHP::Heating;
                 simpleWAHP.WAHPPlantType = DataPlant::PlantEquipmentType::CoilWAHPHeatingEquationFit;
+
+                // simpleWAHP.coilReportNum = ReportCoilSelection::getReportIndex(state, simpleWAHP.Name, simpleWAHP.coilType);
+                
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     simpleWAHP.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -1560,11 +1567,11 @@ namespace WaterToAirHeatPumpSimple {
                         // conditions
                         RatedCapCoolTotalDes = (PeakTotCapTempModFac > 0.0) ? CoolCapAtPeak / PeakTotCapTempModFac : CoolCapAtPeak;
                         // reporting
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirTemp(
-                            state, simpleWatertoAirHP.Name, CompType, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirHumRat(state, simpleWatertoAirHP.Name, CompType, MixHumRat);
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgAirTemp(state, simpleWatertoAirHP.Name, CompType, SupTemp);
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgAirHumRat(state, simpleWatertoAirHP.Name, CompType, SupHumRat);
+                        ReportCoilSelection::setCoilEntAirTemp(
+                            state, simpleWatertoAirHP.coilReportNum, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
+                        ReportCoilSelection::setCoilEntAirHumRat(state, simpleWatertoAirHP.coilReportNum, MixHumRat);
+                        ReportCoilSelection::setCoilLvgAirTemp(state, simpleWatertoAirHP.coilReportNum, SupTemp);
+                        ReportCoilSelection::setCoilLvgAirHumRat(state, simpleWatertoAirHP.coilReportNum, SupHumRat);
                     } else {
                         RatedCapCoolTotalDes = 0.0;
                     }
@@ -1691,11 +1698,11 @@ namespace WaterToAirHeatPumpSimple {
                         // conditions
                         RatedCapCoolTotalDes = (PeakTotCapTempModFac > 0.0) ? CoolCapAtPeak / PeakTotCapTempModFac : CoolCapAtPeak;
                         // reporting
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirTemp(
-                            state, simpleWatertoAirHP.Name, CompType, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirHumRat(state, simpleWatertoAirHP.Name, CompType, MixHumRat);
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgAirTemp(state, simpleWatertoAirHP.Name, CompType, SupTemp);
-                        state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgAirHumRat(state, simpleWatertoAirHP.Name, CompType, SupHumRat);
+                        ReportCoilSelection::setCoilEntAirTemp(
+                            state, simpleWatertoAirHP.coilReportNum, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
+                        ReportCoilSelection::setCoilEntAirHumRat(state, simpleWatertoAirHP.coilReportNum, MixHumRat);
+                        ReportCoilSelection::setCoilLvgAirTemp(state, simpleWatertoAirHP.coilReportNum, SupTemp);
+                        ReportCoilSelection::setCoilLvgAirHumRat(state, simpleWatertoAirHP.coilReportNum, SupHumRat);
                     } else {
                         RatedCapCoolTotalDes = 0.0;
                     }
@@ -2116,18 +2123,17 @@ namespace WaterToAirHeatPumpSimple {
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoolCoilNomEff, simpleWatertoAirHP.Name, 0.0);
             }
             if (simpleWatertoAirHP.RatedCapCoolTotal != DataSizing::AutoSize) {
-                state.dataRptCoilSelection->coilSelectionReportObj->setCoilCoolingCapacity(state,
-                                                                                           simpleWatertoAirHP.Name,
-                                                                                           CompType,
-                                                                                           simpleWatertoAirHP.RatedCapCoolTotal,
-                                                                                           RatedCapCoolTotalAutoSized,
-                                                                                           state.dataSize->CurSysNum,
-                                                                                           state.dataSize->CurZoneEqNum,
-                                                                                           state.dataSize->CurOASysNum,
-                                                                                           FanCoolLoad,
-                                                                                           PeakTotCapTempModFac,
-                                                                                           -999.0,
-                                                                                           -999.0);
+                ReportCoilSelection::setCoilCoolingCapacity(state,
+                                                            simpleWatertoAirHP.coilReportNum,
+                                                            simpleWatertoAirHP.RatedCapCoolTotal,
+                                                            RatedCapCoolTotalAutoSized,
+                                                            state.dataSize->CurSysNum,
+                                                            state.dataSize->CurZoneEqNum,
+                                                            state.dataSize->CurOASysNum,
+                                                            FanCoolLoad,
+                                                            PeakTotCapTempModFac,
+                                                            -999.0,
+                                                            -999.0);
             }
             if (!HardSizeNoDesRun) {
                 if (RatedCapCoolSensAutoSized) {
@@ -2749,10 +2755,9 @@ namespace WaterToAirHeatPumpSimple {
                 }
             }
 
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilHeatingCapacity(
+            ReportCoilSelection::setCoilHeatingCapacity(
                 state,
-                simpleWatertoAirHP.Name,
-                EnergyPlus::format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                simpleWatertoAirHP.coilReportNum,
                 RatedCapHeatDes,
                 IsAutoSize,
                 state.dataSize->CurSysNum,
@@ -3600,21 +3605,17 @@ namespace WaterToAirHeatPumpSimple {
             if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingHVACSizingSimulations && !state.dataGlobal->DoingSizing) {
 
                 if (simpleWatertoAirHP.WAHPType == WatertoAirHP::Cooling) {
-                    state.dataRptCoilSelection->coilSelectionReportObj->setCoilFinalSizes(
+                    ReportCoilSelection::setCoilFinalSizes(
                         state,
-                        simpleWatertoAirHP.Name,
-                        EnergyPlus::format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT",
-                                           WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                        simpleWatertoAirHP.coilReportNum,
                         simpleWatertoAirHP.RatedCapCoolTotal,
                         simpleWatertoAirHP.RatedCapCoolSens,
                         simpleWatertoAirHP.RatedAirVolFlowRate,
                         simpleWatertoAirHP.RatedWaterVolFlowRate);
                 } else if (simpleWatertoAirHP.WAHPType == WatertoAirHP::Heating) {
-                    state.dataRptCoilSelection->coilSelectionReportObj->setCoilFinalSizes(
+                    ReportCoilSelection::setCoilFinalSizes(
                         state,
-                        simpleWatertoAirHP.Name,
-                        EnergyPlus::format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT",
-                                           WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                        simpleWatertoAirHP.coilReportNum,
                         simpleWatertoAirHP.RatedCapHeat,
                         simpleWatertoAirHP.RatedCapHeat,
                         simpleWatertoAirHP.RatedAirVolFlowRate,

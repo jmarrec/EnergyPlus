@@ -964,10 +964,10 @@ namespace FanCoilUnits {
                                 OutputProcessor::StoreType::Average,
                                 fanCoil.Name);
 
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                state, fanCoil.CCoilName, fanCoil.CCoilType, fanCoil.FanName, fanCoil.fanType, fanCoil.FanIndex);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                state, fanCoil.HCoilName, fanCoil.HCoilType, fanCoil.FanName, fanCoil.fanType, fanCoil.FanIndex);
+            // ReportCoilSelection::setCoilSupplyFanInfo(state, ReportCoilSelection::getReportIndex(fanCoil.CCoilName, fanCoil.CCoilType),
+            //                                       fanCoil.FanName, fanCoil.fanType, fanCoil.FanIndex);
+            // ReportCoilSelection::setCoilSupplyFanInfo(state, ReportCoilSelection::getReportIndex(fanCoil.HCoilName, fanCoil.HCoilType),
+            //                                       fanCoil.FanName, fanCoil.fanType, fanCoil.FanIndex);
         }
     }
 

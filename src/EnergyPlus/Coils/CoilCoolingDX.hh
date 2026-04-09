@@ -115,6 +115,7 @@ struct CoilCoolingDX
 
     CoilCoolingDXInputSpecification original_input_specs;
     std::string name;
+    int coilReportNum = -1;
     bool myOneTimeInitFlag = true;
     int evapInletNodeIndex = 0;
     int evapOutletNodeIndex = 0;

@@ -427,33 +427,30 @@ namespace UnitarySystems {
                 // associates an air loop fan on main branch with a coil on main branch where parent does not have a fan
                 if (!this->m_FanExists) {
                     if (state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).supFanType != HVAC::FanType::Invalid) {
-                        auto &primaryAirSystems = state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum);
+                        // auto &primaryAirSystems = state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum);
                         if (this->m_CoolCoilExists) {
-                            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                                state,
-                                this->m_CoolingCoilName,
-                                HVAC::cAllCoilTypes(this->m_CoolingCoilType_Num),
-                                state.dataFans->fans(primaryAirSystems.supFanNum)->Name,
-                                state.dataFans->fans(primaryAirSystems.supFanNum)->type,
-                                primaryAirSystems.supFanNum);
+                          // ReportCoilSelection::setCoilSupplyFanInfo(
+                          //      state,
+                          //      ReportCoilSelection::getReportIndex(this->m_CoolingCoilName, HVAC::cAllCoilTypes(this->m_CoolingCoilType_Num)),
+                          //      state.dataFans->fans(primaryAirSystems.supFanNum)->Name,
+                          //      state.dataFans->fans(primaryAirSystems.supFanNum)->type,
+                          //     primaryAirSystems.supFanNum);
                         }
                         if (this->m_HeatCoilExists) {
-                            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                                state,
-                                this->m_HeatingCoilName,
-                                HVAC::cAllCoilTypes(this->m_HeatingCoilType_Num),
-                                state.dataFans->fans(primaryAirSystems.supFanNum)->Name,
-                                state.dataFans->fans(primaryAirSystems.supFanNum)->type,
-                                primaryAirSystems.supFanNum);
+                          // ReportCoilSelection::setCoilSupplyFanInfo(
+                          //   state,
+                          //    ReportCoilSelection::getReportIndex(this->m_HeatingCoilName, HVAC::cAllCoilTypes(this->m_HeatingCoilType_Num)),
+                          //    state.dataFans->fans(primaryAirSystems.supFanNum)->Name,
+                          //    state.dataFans->fans(primaryAirSystems.supFanNum)->type,
+                          //    primaryAirSystems.supFanNum);
                         }
                         if (this->m_SuppCoilExists) {
-                            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                                state,
-                                this->m_SuppHeatCoilName,
-                                HVAC::cAllCoilTypes(this->m_SuppHeatCoilType_Num),
-                                state.dataFans->fans(primaryAirSystems.supFanNum)->Name,
-                                state.dataFans->fans(primaryAirSystems.supFanNum)->type,
-                                primaryAirSystems.supFanNum);
+                          //                        ReportCoilSelection::setCoilSupplyFanInfo(
+                          //      state,
+                          //      ReportCoilSelection::getReportIndex(this->m_SuppHeatCoilName, HVAC::cAllCoilTypes(this->m_SuppHeatCoilType_Num)),
+                          //    state.dataFans->fans(primaryAirSystems.supFanNum)->Name,
+                          //    state.dataFans->fans(primaryAirSystems.supFanNum)->type,
+                          //    primaryAirSystems.supFanNum);
                         }
                     }
                 }
@@ -4827,13 +4824,12 @@ namespace UnitarySystems {
                             thisCoolCoil.SupplyFanIndex = this->m_FanIndex;
                             thisCoolCoil.supplyFanType = this->m_FanType;
                             if (this->m_FanType != HVAC::FanType::Invalid) {
-                                state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                                    state,
-                                    thisCoolCoil.Name,
-                                    thisCoolCoil.DXCoilType,
-                                    state.dataFans->fans(thisCoolCoil.SupplyFanIndex)->Name,
-                                    this->m_FanType,
-                                    thisCoolCoil.SupplyFanIndex);
+                              //                              ReportCoilSelection::setCoilSupplyFanInfo(
+                              //    state,
+                              //    ReportCoilSelection::getReportIndex(thisCoolCoil.Name, thisCoolCoil.DXCoilType),
+                              //    state.dataFans->fans(thisCoolCoil.SupplyFanIndex)->Name,
+                              //    this->m_FanType,
+                              //    thisCoolCoil.SupplyFanIndex);
                             }
                         }
                         if (this->m_HeatCoilExists) {
@@ -5795,8 +5791,8 @@ namespace UnitarySystems {
 
         // set fan info for supplemental heating coils
         if (this->m_SuppCoilExists && this->m_FanExists) {
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                state, this->m_SuppHeatCoilName, this->m_SuppHeatCoilTypeName, this->m_FanName, this->m_FanType, this->m_FanIndex);
+          // ReportCoilSelection::setCoilSupplyFanInfo(
+          //                                       state, ReportCoilSelection::getReportIndex(this->m_SuppHeatCoilName, this->m_SuppHeatCoilTypeName), this->m_FanName, this->m_FanType, this->m_FanIndex);
         }
 
         // Users may not provide SA flow input fields (below) and leave them blank. Check if other coil is AutoSized first to
@@ -6418,8 +6414,8 @@ namespace UnitarySystems {
                     }
                 }
                 // set fan info for cooling coils
-                state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                    state, this->m_CoolingCoilName, input_data.cooling_coil_object_type, this->m_FanName, this->m_FanType, this->m_FanIndex);
+                // ReportCoilSelection::setCoilSupplyFanInfo(
+                //    state, ReportCoilSelection::getReportIndex(this->m_CoolingCoilName, input_data.cooling_coil_object_type), this->m_FanName, this->m_FanType, this->m_FanIndex);
             }
             if (this->m_HeatCoilExists) {
                 if (loc_m_HeatingSAFMethod.empty()) {
@@ -6440,8 +6436,8 @@ namespace UnitarySystems {
                     }
                 }
                 // set fan info for heating coils
-                state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-                    state, this->m_HeatingCoilName, this->m_HeatingCoilTypeName, this->m_FanName, this->m_FanType, this->m_FanIndex);
+                // ReportCoilSelection::setCoilSupplyFanInfo(
+                // state, ReportCoilSelection::getCoilIndex(this->m_HeatingCoilName, this->m_HeatingCoilTypeName), this->m_FanName, this->m_FanType, this->m_FanIndex);
             }
         }
 

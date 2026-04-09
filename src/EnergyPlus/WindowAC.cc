@@ -698,12 +698,12 @@ namespace WindowAC {
             }
         }
         for (WindACNum = 1; WindACNum <= state.dataWindowAC->NumWindAC; ++WindACNum) {
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(state,
-                                                                                     state.dataWindowAC->WindAC(WindACNum).DXCoilName,
-                                                                                     state.dataWindowAC->WindAC(WindACNum).DXCoilType,
-                                                                                     state.dataWindowAC->WindAC(WindACNum).FanName,
-                                                                                     state.dataWindowAC->WindAC(WindACNum).fanType,
-                                                                                     state.dataWindowAC->WindAC(WindACNum).FanIndex);
+          //            ReportCoilSelection::setCoilSupplyFanInfo(state,
+          //                                          ReportCoilSelection::getReportIndex(state.dataWindowAC->WindAC(WindACNum).DXCoilName,
+          //                                                                              state.dataWindowAC->WindAC(WindACNum).DXCoilType),
+          //                                          state.dataWindowAC->WindAC(WindACNum).FanName,
+          //                                          state.dataWindowAC->WindAC(WindACNum).fanType,
+          //                                          state.dataWindowAC->WindAC(WindACNum).FanIndex);
         }
     }
 

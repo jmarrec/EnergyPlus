@@ -89,6 +89,8 @@ namespace WaterCoils {
         std::string WaterCoilTypeA;                  // Type of WaterCoil ie. Heating or Cooling
         std::string WaterCoilModelA;                 // Type of WaterCoil ie. Simple, Detailed, etc.
         DataPlant::PlantEquipmentType WaterCoilType; // Type of WaterCoil ie. Heating or Cooling
+
+        int coilReportNum = -1;
         CoilModel WaterCoilModel;                    // Type of WaterCoil ie. Simple, Detailed, etc.
         Sched::Schedule *availSched = nullptr;       // availability schedule
         bool RequestingAutoSize;                     // True if this coil has appropriate autosize fields

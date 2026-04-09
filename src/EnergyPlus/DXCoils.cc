@@ -927,6 +927,9 @@ void GetDXCoils(EnergyPlusData &state)
         state.dataHeatBal->HeatReclaimDXCoil(DXCoilNum).SourceType = CurrentModuleObject;
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilDX_CoolingSingleSpeed;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+        
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -1415,6 +1418,9 @@ void GetDXCoils(EnergyPlusData &state)
         state.dataHeatBal->HeatReclaimDXCoil(DXCoilNum).SourceType = CurrentModuleObject;
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilDX_CoolingTwoStageWHumControl;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+        
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -1981,6 +1987,9 @@ void GetDXCoils(EnergyPlusData &state)
         thisDXCoil.Name = Alphas(1);
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilDX_HeatingEmpirical;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+        
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -2463,6 +2472,9 @@ void GetDXCoils(EnergyPlusData &state)
         state.dataHeatBal->HeatReclaimDXCoil(DXCoilNum).SourceType = CurrentModuleObject;
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilDX_CoolingTwoSpeed;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+        
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -3026,6 +3038,8 @@ void GetDXCoils(EnergyPlusData &state)
             thisDXCoil.DXCoilType = CurrentModuleObject;
             thisDXCoil.DXCoilType_Num = HVAC::CoilDX_HeatPumpWaterHeaterPumped;
 
+            // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, thisDXCoil.Name};
 
             std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
@@ -3566,6 +3580,8 @@ void GetDXCoils(EnergyPlusData &state)
             thisDXCoil.DXCoilType = CurrentModuleObject;
             thisDXCoil.DXCoilType_Num = HVAC::CoilDX_HeatPumpWaterHeaterWrapped;
 
+            // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, thisDXCoil.Name};
 
             std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
@@ -3998,6 +4014,9 @@ void GetDXCoils(EnergyPlusData &state)
         state.dataHeatBal->HeatReclaimDXCoil(DXCoilNum).SourceType = CurrentModuleObject;
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilDX_MultiSpeedCooling;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -4567,6 +4586,9 @@ void GetDXCoils(EnergyPlusData &state)
         state.dataHeatBal->HeatReclaimDXCoil(DXCoilNum).SourceType = CurrentModuleObject;
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilDX_MultiSpeedHeating;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -5075,6 +5097,8 @@ void GetDXCoils(EnergyPlusData &state)
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilVRF_Cooling;
 
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -5216,6 +5240,9 @@ void GetDXCoils(EnergyPlusData &state)
         thisDXCoil.Name = Alphas(1);
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilVRF_Heating;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -5346,6 +5373,9 @@ void GetDXCoils(EnergyPlusData &state)
         thisDXCoil.Name = Alphas(1);
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilVRF_FluidTCtrl_Cooling;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -5462,6 +5492,9 @@ void GetDXCoils(EnergyPlusData &state)
         thisDXCoil.Name = Alphas(1);
         thisDXCoil.DXCoilType = CurrentModuleObject;
         thisDXCoil.DXCoilType_Num = HVAC::CoilVRF_FluidTCtrl_Heating;
+
+        // thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
+
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -7080,10 +7113,9 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
             RatedOutletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(
                 state, thisDXCoil.OutletAirTemp, thisDXCoil.OutletAirHumRat, DataEnvironment::StdPressureSeaLevel, RoutineName);
 
-            state.dataRptCoilSelection->coilSelectionReportObj->setRatedCoilConditions(
+            ReportCoilSelection::setRatedCoilConditions(
                 state,
-                thisDXCoil.Name,
-                thisDXCoil.DXCoilType,
+                thisDXCoil.coilReportNum,
                 thisDXCoil.TotalCoolingEnergyRate, // this is the report variable
                 thisDXCoil.SensCoolingEnergyRate,  // this is the report variable
                 thisDXCoil.InletAirMassFlowRate,
@@ -7245,10 +7277,9 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
             RatedOutletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(
                 state, thisDXCoil.OutletAirTemp, thisDXCoil.OutletAirHumRat, DataEnvironment::StdPressureSeaLevel, RoutineName);
 
-            state.dataRptCoilSelection->coilSelectionReportObj->setRatedCoilConditions(
+            ReportCoilSelection::setRatedCoilConditions(
                 state,
-                thisDXCoil.Name,
-                thisDXCoil.DXCoilType,
+                thisDXCoil.coilReportNum,
                 thisDXCoil.TotalHeatingEnergyRate, // this is the report variable
                 thisDXCoil.TotalHeatingEnergyRate, // this is the report variable
                 thisDXCoil.InletAirMassFlowRate,
@@ -7391,8 +7422,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
         }
 
         // store fan info for coil
-        state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(
-            state, thisDXCoil.Name, thisDXCoil.DXCoilType, thisDXCoil.SupplyFanName, thisDXCoil.supplyFanType, thisDXCoil.SupplyFanIndex);
+        ReportCoilSelection::setCoilSupplyFanInfo(
+            state, thisDXCoil.coilReportNum, thisDXCoil.SupplyFanName, thisDXCoil.supplyFanType, thisDXCoil.SupplyFanIndex);
     }
 
     AirInletNode = thisDXCoil.AirInNode;
@@ -14610,8 +14641,8 @@ void ReportDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the c
         if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingHVACSizingSimulations && !state.dataGlobal->DoingSizing) {
             Real64 ratedSensCap(0.0);
             ratedSensCap = thisDXCoil.RatedTotCap(1) * thisDXCoil.RatedSHR(1);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilFinalSizes(
-                state, thisDXCoil.Name, thisDXCoil.DXCoilType, thisDXCoil.RatedTotCap(1), ratedSensCap, thisDXCoil.RatedAirVolFlowRate(1), -999.0);
+            ReportCoilSelection::setCoilFinalSizes(
+                state, thisDXCoil.coilReportNum, thisDXCoil.RatedTotCap(1), ratedSensCap, thisDXCoil.RatedAirVolFlowRate(1), -999.0);
             thisDXCoil.reportCoilFinalSizes = false;
         }
     }
@@ -16399,12 +16430,11 @@ void SetDXCoolingCoilData(
     if (present(supplyFanType)) {
         thisDXCoil.supplyFanType = supplyFanType;
         if (thisDXCoil.SupplyFanIndex > 0) {
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(state,
-                                                                                     thisDXCoil.Name,
-                                                                                     thisDXCoil.DXCoilType,
-                                                                                     state.dataFans->fans(thisDXCoil.SupplyFanIndex)->Name,
-                                                                                     state.dataFans->fans(thisDXCoil.SupplyFanIndex)->type,
-                                                                                     thisDXCoil.SupplyFanIndex);
+          ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                    thisDXCoil.coilReportNum,
+                                                    state.dataFans->fans(thisDXCoil.SupplyFanIndex)->Name,
+                                                    state.dataFans->fans(thisDXCoil.SupplyFanIndex)->type,
+                                                    thisDXCoil.SupplyFanIndex);
         }
     }
 }

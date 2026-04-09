@@ -75,6 +75,8 @@ namespace VariableSpeedCoils {
         std::string Name;                      // Name of the  Coil
         Sched::Schedule *availSched = nullptr; // availability schedule
         std::string VarSpeedCoilType;          // type of coil
+
+        int coilReportNum = -1;
         int NumOfSpeeds;                       // Number of speeds
         int NormSpedLevel;                     // Nominal speed level
         Real64 RatedWaterVolFlowRate;          // Rated/Ref Water Volumetric Flow Rate [m3/s]

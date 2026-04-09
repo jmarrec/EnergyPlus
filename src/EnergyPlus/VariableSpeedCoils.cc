@@ -279,6 +279,9 @@ namespace VariableSpeedCoils {
                 state.dataHeatBal->HeatReclaimVS_Coil(DXCoilNum).SourceType = CurrentModuleObject;
                 varSpeedCoil.VSCoilType = HVAC::Coil_CoolingWaterToAirHPVSEquationFit;
                 varSpeedCoil.VarSpeedCoilType = HVAC::cAllCoilTypes(varSpeedCoil.VSCoilType);
+
+                // varSpeedCoil.coilReportNum = ReportCoilSelection::getReportIndex(statate, varSpeedCoil.Name, varSpeedCoil.coilType);
+                
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -722,6 +725,9 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.CoolHeatType = "COOLING";
                 varSpeedCoil.VSCoilType = HVAC::Coil_CoolingAirToAirVariableSpeed;
                 varSpeedCoil.VarSpeedCoilType = HVAC::cAllCoilTypes(varSpeedCoil.VSCoilType);
+
+                // varSpeedCoil.coilReportNum = ReportCoilSelection::getReportIndex(statate, varSpeedCoil.Name, varSpeedCoil.coilType);
+                
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -1208,6 +1214,9 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.CoolHeatType = "HEATING";
                 varSpeedCoil.VSCoilType = HVAC::Coil_HeatingWaterToAirHPVSEquationFit;
                 varSpeedCoil.VarSpeedCoilType = HVAC::cAllCoilTypes(varSpeedCoil.VSCoilType);
+
+                // varSpeedCoil.coilReportNum = ReportCoilSelection::getReportIndex(statate, varSpeedCoil.Name, varSpeedCoil.coilType);
+
                 varSpeedCoil.CondenserType = DataHeatBalance::RefrigCondenserType::Water;
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
@@ -1622,6 +1631,9 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.CoolHeatType = "HEATING";
                 varSpeedCoil.VSCoilType = HVAC::Coil_HeatingAirToAirVariableSpeed;
                 varSpeedCoil.VarSpeedCoilType = HVAC::cAllCoilTypes(HVAC::Coil_HeatingAirToAirVariableSpeed);
+
+                // varSpeedCoil.coilReportNum = ReportCoilSelection::getReportIndex(statate, varSpeedCoil.Name, varSpeedCoil.coilType);
+
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -2037,6 +2049,8 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.VSCoilType = HVAC::CoilDX_HeatPumpWaterHeaterVariableSpeed;
                 varSpeedCoil.VarSpeedCoilType = HVAC::cAllCoilTypes(HVAC::CoilDX_HeatPumpWaterHeaterVariableSpeed);
 
+                // varSpeedCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, varSpeedCoil.Name, varSpeedCoil.coilType);
+                
                 ErrorObjectHeader eoh{routineName, CurrentModuleObject, varSpeedCoil.Name};
 
                 // ErrorsFound will be set to True if problem was found, left untouched otherwise
@@ -3556,22 +3570,21 @@ namespace VariableSpeedCoils {
                 Real64 RatedOutletWetBulb(0.0);
                 RatedOutletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(
                     state, varSpeedCoil.OutletAirDBTemp, varSpeedCoil.OutletAirHumRat, DataEnvironment::StdPressureSeaLevel, RoutineName);
-                state.dataRptCoilSelection->coilSelectionReportObj->setRatedCoilConditions(state,
-                                                                                           varSpeedCoil.Name,
-                                                                                           varSpeedCoil.VarSpeedCoilType,
-                                                                                           varSpeedCoil.QLoadTotal, // this is the report variable
-                                                                                           varSpeedCoil.QSensible,  // this is the report variable
-                                                                                           varSpeedCoil.AirMassFlowRate,
-                                                                                           varSpeedCoil.InletAirDBTemp,
-                                                                                           varSpeedCoil.InletAirHumRat,
-                                                                                           RatedInletWetBulbTemp,
-                                                                                           varSpeedCoil.OutletAirDBTemp,
-                                                                                           varSpeedCoil.OutletAirHumRat,
-                                                                                           RatedOutletWetBulb,
-                                                                                           RatedAmbAirTemp,
-                                                                                           ratedOutdoorAirWetBulb,
-                                                                                           varSpeedCoil.MSRatedCBF(varSpeedCoil.NumOfSpeeds),
-                                                                                           -999.0); // coil effectiveness not define for DX
+                ReportCoilSelection::setRatedCoilConditions(state,
+                                                            varSpeedCoil.coilReportNum,
+                                                            varSpeedCoil.QLoadTotal, // this is the report variable
+                                                            varSpeedCoil.QSensible,  // this is the report variable
+                                                            varSpeedCoil.AirMassFlowRate,
+                                                            varSpeedCoil.InletAirDBTemp,
+                                                            varSpeedCoil.InletAirHumRat,
+                                                            RatedInletWetBulbTemp,
+                                                            varSpeedCoil.OutletAirDBTemp,
+                                                            varSpeedCoil.OutletAirHumRat,
+                                                            RatedOutletWetBulb,
+                                                            RatedAmbAirTemp,
+                                                            ratedOutdoorAirWetBulb,
+                                                            varSpeedCoil.MSRatedCBF(varSpeedCoil.NumOfSpeeds),
+                                                            -999.0); // coil effectiveness not define for DX
 
                 // now replace the outdoor air conditions set above for one time rating point calc
                 state.dataEnvrn->OutDryBulbTemp = holdOutDryBulbTemp;
@@ -3642,22 +3655,21 @@ namespace VariableSpeedCoils {
                 Real64 RatedOutletWetBulb(0.0);
                 RatedOutletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(
                     state, varSpeedCoil.OutletAirDBTemp, varSpeedCoil.OutletAirHumRat, DataEnvironment::StdPressureSeaLevel, RoutineName);
-                state.dataRptCoilSelection->coilSelectionReportObj->setRatedCoilConditions(state,
-                                                                                           varSpeedCoil.Name,
-                                                                                           varSpeedCoil.VarSpeedCoilType,
-                                                                                           varSpeedCoil.QLoadTotal, // this is the report variable
-                                                                                           varSpeedCoil.QSensible,  // this is the report variable
-                                                                                           varSpeedCoil.AirMassFlowRate,
-                                                                                           varSpeedCoil.InletAirDBTemp,
-                                                                                           varSpeedCoil.InletAirHumRat,
-                                                                                           RatedInletWetBulbTemp,
-                                                                                           varSpeedCoil.OutletAirDBTemp,
-                                                                                           varSpeedCoil.OutletAirHumRat,
-                                                                                           RatedOutletWetBulb,
-                                                                                           RatedAmbAirTempHeat,
-                                                                                           RatedAmbAirWBHeat,
-                                                                                           varSpeedCoil.MSRatedCBF(varSpeedCoil.NumOfSpeeds),
-                                                                                           -999.0); // coil effectiveness not define for DX
+                ReportCoilSelection::setRatedCoilConditions(state,
+                                                            varSpeedCoil.coilReportNum,
+                                                            varSpeedCoil.QLoadTotal, // this is the report variable
+                                                            varSpeedCoil.QSensible,  // this is the report variable
+                                                            varSpeedCoil.AirMassFlowRate,
+                                                            varSpeedCoil.InletAirDBTemp,
+                                                            varSpeedCoil.InletAirHumRat,
+                                                            RatedInletWetBulbTemp,
+                                                            varSpeedCoil.OutletAirDBTemp,
+                                                            varSpeedCoil.OutletAirHumRat,
+                                                            RatedOutletWetBulb,
+                                                            RatedAmbAirTempHeat,
+                                                            RatedAmbAirWBHeat,
+                                                            varSpeedCoil.MSRatedCBF(varSpeedCoil.NumOfSpeeds),
+                                                            -999.0); // coil effectiveness not define for DX
 
                 // now replace the outdoor air conditions set above for one time rating point calc
                 state.dataEnvrn->OutDryBulbTemp = holdOutDryBulbTemp;
@@ -3668,12 +3680,11 @@ namespace VariableSpeedCoils {
 
             // store fan info for coil
             if (varSpeedCoil.SupplyFanIndex > 0) {
-                state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(state,
-                                                                                         varSpeedCoil.Name,
-                                                                                         varSpeedCoil.VarSpeedCoilType,
-                                                                                         varSpeedCoil.SupplyFanName,
-                                                                                         varSpeedCoil.supplyFanType,
-                                                                                         varSpeedCoil.SupplyFanIndex);
+              ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                        varSpeedCoil.coilReportNum,
+                                                        varSpeedCoil.SupplyFanName,
+                                                        varSpeedCoil.supplyFanType,
+                                                        varSpeedCoil.SupplyFanIndex);
             }
         }
 
@@ -3998,8 +4009,8 @@ namespace VariableSpeedCoils {
                     varSpeedCoil.RatedCapWH * varSpeedCoil.MSRatedAirVolFlowRate(NormSpeed) / varSpeedCoil.MSRatedTotCap(NormSpeed); // 0.00005035;
                 varSpeedCoil.AirVolFlowAutoSized = true;
             }
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilAirFlow(
-                state, varSpeedCoil.Name, varSpeedCoil.VarSpeedCoilType, varSpeedCoil.RatedAirVolFlowRate, varSpeedCoil.AirVolFlowAutoSized);
+            ReportCoilSelection::setCoilAirFlow(
+                state, varSpeedCoil.coilReportNum, varSpeedCoil.RatedAirVolFlowRate, varSpeedCoil.AirVolFlowAutoSized);
 
             if (varSpeedCoil.RatedWaterVolFlowRate == Constant::AutoCalculate) {
                 varSpeedCoil.RatedHPWHCondWaterFlow = varSpeedCoil.RatedCapWH * varSpeedCoil.MSRatedWaterVolFlowRate(NormSpeed) /
@@ -4007,13 +4018,12 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.RatedWaterVolFlowRate = varSpeedCoil.RatedHPWHCondWaterFlow;
                 varSpeedCoil.WaterVolFlowAutoSized = true;
             }
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilWaterFlowPltSizNum(state,
-                                                                                          varSpeedCoil.Name,
-                                                                                          varSpeedCoil.VarSpeedCoilType,
-                                                                                          varSpeedCoil.RatedWaterVolFlowRate,
-                                                                                          varSpeedCoil.WaterVolFlowAutoSized,
-                                                                                          -999,
-                                                                                          varSpeedCoil.plantLoc.loopNum);
+            ReportCoilSelection::setCoilWaterFlowPltSizNum(state,
+                                                           varSpeedCoil.coilReportNum,
+                                                           varSpeedCoil.RatedWaterVolFlowRate,
+                                                           varSpeedCoil.WaterVolFlowAutoSized,
+                                                           -999,
+                                                           varSpeedCoil.plantLoc.loopNum);
         }
 
         if (varSpeedCoil.RatedAirVolFlowRate == DataSizing::AutoSize) {
@@ -4339,27 +4349,22 @@ namespace VariableSpeedCoils {
                 }
             }
 
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirTemp(
-                state, varSpeedCoil.Name, varSpeedCoil.VarSpeedCoilType, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirHumRat(
-                state, varSpeedCoil.Name, varSpeedCoil.VarSpeedCoilType, MixHumRat);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgAirTemp(state, varSpeedCoil.Name, varSpeedCoil.VarSpeedCoilType, SupTemp);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgAirHumRat(
-                state, varSpeedCoil.Name, varSpeedCoil.VarSpeedCoilType, SupHumRat);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilAirFlow(
-                state, varSpeedCoil.Name, varSpeedCoil.VarSpeedCoilType, varSpeedCoil.RatedAirVolFlowRate, RatedAirFlowAutoSized);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilCoolingCapacity(state,
-                                                                                       varSpeedCoil.Name,
-                                                                                       varSpeedCoil.VarSpeedCoilType,
-                                                                                       RatedCapCoolTotalDes,
-                                                                                       RatedCapCoolTotalAutoSized,
-                                                                                       state.dataSize->CurSysNum,
-                                                                                       state.dataSize->CurZoneEqNum,
-                                                                                       state.dataSize->CurOASysNum,
-                                                                                       0.0, // no fan load included in sizing
-                                                                                       TotCapTempModFac,
-                                                                                       -999.0,
-                                                                                       -999.0); // VS model doesn't limit, double check
+            ReportCoilSelection::setCoilEntAirTemp(state, varSpeedCoil.coilReportNum, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
+            ReportCoilSelection::setCoilEntAirHumRat(state, varSpeedCoil.coilReportNum, MixHumRat);
+            ReportCoilSelection::setCoilLvgAirTemp(state, varSpeedCoil.coilReportNum, SupTemp);
+            ReportCoilSelection::setCoilLvgAirHumRat(state, varSpeedCoil.coilReportNum, SupHumRat);
+            ReportCoilSelection::setCoilAirFlow(state, varSpeedCoil.coilReportNum, varSpeedCoil.RatedAirVolFlowRate, RatedAirFlowAutoSized);
+            ReportCoilSelection::setCoilCoolingCapacity(state,
+                                                        varSpeedCoil.coilReportNum,
+                                                        RatedCapCoolTotalDes,
+                                                        RatedCapCoolTotalAutoSized,
+                                                        state.dataSize->CurSysNum,
+                                                        state.dataSize->CurZoneEqNum,
+                                                        state.dataSize->CurOASysNum,
+                                                        0.0, // no fan load included in sizing
+                                                        TotCapTempModFac,
+                                                        -999.0,
+                                                        -999.0); // VS model doesn't limit, double check
         }
 
         // Set the global DX cooling coil capacity variable for use by other objects
@@ -4410,18 +4415,17 @@ namespace VariableSpeedCoils {
             if (RatedCapHeatDes < HVAC::SmallLoad) {
                 RatedCapHeatDes = 0.0;
             }
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilHeatingCapacity(state,
-                                                                                       varSpeedCoil.Name,
-                                                                                       varSpeedCoil.VarSpeedCoilType,
-                                                                                       RatedCapHeatDes,
-                                                                                       RatedCapHeatAutoSized,
-                                                                                       state.dataSize->CurSysNum,
-                                                                                       state.dataSize->CurZoneEqNum,
-                                                                                       state.dataSize->CurOASysNum,
-                                                                                       0.0,
-                                                                                       1.0,
-                                                                                       -999.0,
-                                                                                       -999.0);
+            ReportCoilSelection::setCoilHeatingCapacity(state,
+                                                        varSpeedCoil.coilReportNum,
+                                                        RatedCapHeatDes,
+                                                        RatedCapHeatAutoSized,
+                                                        state.dataSize->CurSysNum,
+                                                        state.dataSize->CurZoneEqNum,
+                                                        state.dataSize->CurOASysNum,
+                                                        0.0,
+                                                        1.0,
+                                                        -999.0,
+                                                        -999.0);
         }
         if (RatedCapHeatAutoSized) {
             varSpeedCoil.RatedCapHeat = RatedCapHeatDes;
@@ -4513,8 +4517,8 @@ namespace VariableSpeedCoils {
                     }
                 }
             }
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilAirFlow(
-                state, varSpeedCoil.Name, varSpeedCoil.VarSpeedCoilType, RatedAirVolFlowRateDes, RatedAirFlowAutoSized);
+            ReportCoilSelection::setCoilAirFlow(
+                state, varSpeedCoil.coilReportNum, RatedAirVolFlowRateDes, RatedAirFlowAutoSized);
         }
 
         // Check that heat pump heating capacity is within 20% of cooling capacity. Check only for heating coil and report both.
@@ -4682,10 +4686,9 @@ namespace VariableSpeedCoils {
 
                     RatedWaterVolFlowRateDes = varSpeedCoil.RatedCapHeat / (state.dataSize->PlantSizData(PltSizNum).DeltaT * cp * rho);
 
-                    state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgWaterTemp(
+                    ReportCoilSelection::setCoilLvgWaterTemp(
                         state,
-                        varSpeedCoil.Name,
-                        varSpeedCoil.VarSpeedCoilType,
+                        varSpeedCoil.coilReportNum,
                         state.dataSize->PlantSizData(PltSizNum).ExitTemp +
                             state.dataSize->PlantSizData(PltSizNum).DeltaT); // TRACE 3D Plus coil selection report
 
@@ -4701,24 +4704,21 @@ namespace VariableSpeedCoils {
 
                     RatedWaterVolFlowRateDes = SystemCapacity / (state.dataSize->PlantSizData(PltSizNum).DeltaT * cp * rho);
 
-                    state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgWaterTemp(
+                    ReportCoilSelection::setCoilLvgWaterTemp(
                         state,
-                        varSpeedCoil.Name,
-                        varSpeedCoil.VarSpeedCoilType,
+                        varSpeedCoil.coilReportNum,
                         state.dataSize->PlantSizData(PltSizNum).ExitTemp -
                             state.dataSize->PlantSizData(PltSizNum).DeltaT); // TRACE 3D Plus coil selection report
                 }
 
-                state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntWaterTemp(
+                ReportCoilSelection::setCoilEntWaterTemp(
                     state,
-                    varSpeedCoil.Name,
-                    varSpeedCoil.VarSpeedCoilType,
+                    varSpeedCoil.coilReportNum,
                     state.dataSize->PlantSizData(PltSizNum).ExitTemp); // TRACE 3D Plus coil selection report
 
-                state.dataRptCoilSelection->coilSelectionReportObj->setCoilWaterDeltaT(
+                ReportCoilSelection::setCoilWaterDeltaT(
                     state,
-                    varSpeedCoil.Name,
-                    varSpeedCoil.VarSpeedCoilType,
+                    varSpeedCoil.coilReportNum,
                     state.dataSize->PlantSizData(PltSizNum).DeltaT); // TRACE 3D Plus coil selection report
             } else {
                 ShowSevereError(state, "Autosizing of water flow requires a loop Sizing:Plant object");
@@ -4735,14 +4735,13 @@ namespace VariableSpeedCoils {
             } else if (RatedCapHeatAutoSized) {
                 RatedWaterVolFlowRateDes = varSpeedCoil.RatedCapHeat * varSpeedCoil.MSRatedWaterVolFlowPerRatedTotCap(NormSpeed);
             }
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilWaterFlowNodeNums(state,
-                                                                                         varSpeedCoil.Name,
-                                                                                         varSpeedCoil.VarSpeedCoilType,
-                                                                                         RatedWaterVolFlowRateDes,
-                                                                                         RatedWaterFlowAutoSized,
-                                                                                         varSpeedCoil.WaterInletNodeNum,
-                                                                                         varSpeedCoil.WaterOutletNodeNum,
-                                                                                         varSpeedCoil.plantLoc.loopNum);
+            ReportCoilSelection::setCoilWaterFlowNodeNums(state,
+                                                          varSpeedCoil.coilReportNum,
+                                                          RatedWaterVolFlowRateDes,
+                                                          RatedWaterFlowAutoSized,
+                                                          varSpeedCoil.WaterInletNodeNum,
+                                                          varSpeedCoil.WaterOutletNodeNum,
+                                                          varSpeedCoil.plantLoc.loopNum);
             varSpeedCoil.RatedWaterVolFlowRate = RatedWaterVolFlowRateDes;
             BaseSizer::reportSizerOutput(state,
                                          EnergyPlus::format("COIL:{}{}", varSpeedCoil.CoolHeatType, CurrentObjSubfix),
@@ -7646,22 +7645,20 @@ namespace VariableSpeedCoils {
             if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingHVACSizingSimulations && !state.dataGlobal->DoingSizing) {
                 if (varSpeedCoil.VSCoilType == HVAC::Coil_CoolingWaterToAirHPVSEquationFit ||
                     varSpeedCoil.VSCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) { // cooling coil
-                    state.dataRptCoilSelection->coilSelectionReportObj->setCoilFinalSizes(state,
-                                                                                          varSpeedCoil.Name,
-                                                                                          varSpeedCoil.VarSpeedCoilType,
-                                                                                          varSpeedCoil.RatedCapCoolTotal,
-                                                                                          varSpeedCoil.RatedCapCoolSens,
-                                                                                          varSpeedCoil.RatedAirVolFlowRate,
-                                                                                          varSpeedCoil.RatedWaterMassFlowRate);
+                    ReportCoilSelection::setCoilFinalSizes(state,
+                                                           varSpeedCoil.coilReportNum,
+                                                           varSpeedCoil.RatedCapCoolTotal,
+                                                           varSpeedCoil.RatedCapCoolSens,
+                                                           varSpeedCoil.RatedAirVolFlowRate,
+                                                           varSpeedCoil.RatedWaterMassFlowRate);
                 } else if (varSpeedCoil.VSCoilType == HVAC::Coil_HeatingWaterToAirHPVSEquationFit ||
                            varSpeedCoil.VSCoilType == HVAC::Coil_HeatingAirToAirVariableSpeed) { // heating coil
-                    state.dataRptCoilSelection->coilSelectionReportObj->setCoilFinalSizes(state,
-                                                                                          varSpeedCoil.Name,
-                                                                                          varSpeedCoil.VarSpeedCoilType,
-                                                                                          varSpeedCoil.RatedCapHeat,
-                                                                                          varSpeedCoil.RatedCapHeat,
-                                                                                          varSpeedCoil.RatedAirVolFlowRate,
-                                                                                          varSpeedCoil.RatedWaterMassFlowRate);
+                    ReportCoilSelection::setCoilFinalSizes(state,
+                                                           varSpeedCoil.coilReportNum,
+                                                           varSpeedCoil.RatedCapHeat,
+                                                           varSpeedCoil.RatedCapHeat,
+                                                           varSpeedCoil.RatedAirVolFlowRate,
+                                                           varSpeedCoil.RatedWaterMassFlowRate);
                 }
                 varSpeedCoil.reportCoilFinalSizes = false;
             }

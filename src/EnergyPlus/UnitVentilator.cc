@@ -902,7 +902,6 @@ namespace UnitVentilator {
         for (int UnitVentNum = 1; UnitVentNum <= state.dataUnitVentilators->NumOfUnitVents; ++UnitVentNum) {
 
             auto &unitVent = state.dataUnitVentilators->UnitVent(UnitVentNum);
-            auto &coilReportObj = state.dataRptCoilSelection->coilSelectionReportObj;
 
             SetupOutputVariable(state,
                                 "Zone Unit Ventilator Heating Rate",
@@ -979,12 +978,12 @@ namespace UnitVentilator {
             }
 
             if (unitVent.HCoilPresent) {
-                coilReportObj->setCoilSupplyFanInfo(
-                    state, unitVent.HCoilName, unitVent.HCoilTypeCh, unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
+              //                ReportCoilSelection::setCoilSupplyFanInfo(
+              //    state, ReportCoilSelection::getReportIndex(unitVent.HCoilName, unitVent.HCoilTypeCh), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
             }
             if (unitVent.CCoilPresent) {
-                coilReportObj->setCoilSupplyFanInfo(
-                    state, unitVent.CCoilName, unitVent.CCoilTypeCh, unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
+              // ReportCoilSelection::setCoilSupplyFanInfo(
+              //    state, ReportCoilSelection::getReportIndex(unitVent.CCoilName, unitVent.CCoilTypeCh), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
             }
         }
     }

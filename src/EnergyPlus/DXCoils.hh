@@ -110,6 +110,8 @@ namespace DXCoils {
         std::string Name;                      // Name of the DX Coil
         std::string DXCoilType;                // type of coil
         int DXCoilType_Num;                    // Integer equivalent to DXCoilType
+        int coilReportNum = -1;
+
         Sched::Schedule *availSched = nullptr; // availability schedule
         //          RatedCoolCap, RatedSHR and RatedCOP do not include the thermal or electrical
         //          effects due to the supply air fan
