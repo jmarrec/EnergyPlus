@@ -95,6 +95,7 @@ namespace GroundTemp {
 
             if (thisModel->Name == modelName) {
                 // Read remaining input into object here
+                inputProcessor->markObjectAsUsed(currentModuleObject, modelInstance.key());
                 thisModel->Name = modelName;
                 thisModel->groundThermalDiffusivity = inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_thermal_conductivity") /
                                                       (inputProcessor->getRealFieldValue(modelFields, modelSchemaProps, "soil_density") *

@@ -101,6 +101,7 @@ namespace GroundTemp {
 
             if (objectName == modelName) {
                 // Read input into object here
+                inputProcessor->markObjectAsUsed(currentModuleObject, modelInstance.key());
 
                 thisModel->modelType = modelType;
                 thisModel->Name = modelName;

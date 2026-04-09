@@ -90,8 +90,10 @@ namespace GroundTemp {
 
         if (numCurrObjects == 1) {
             auto const &groundTempsInstances = inputProcessor->epJSON.at(currentModuleObject);
-            auto const &groundTempsFields = groundTempsInstances.begin().value();
+            auto const groundTempsInstance = groundTempsInstances.begin();
+            auto const &groundTempsFields = groundTempsInstance.value();
             auto const &groundTempsSchemaProps = inputProcessor->getObjectSchemaProps(state, currentModuleObject);
+            inputProcessor->markObjectAsUsed(currentModuleObject, groundTempsInstance.key());
             static constexpr std::array<std::string_view, numMonths> fieldNames = {"january_surface_ground_temperature",
                                                                                    "february_surface_ground_temperature",
                                                                                    "march_surface_ground_temperature",

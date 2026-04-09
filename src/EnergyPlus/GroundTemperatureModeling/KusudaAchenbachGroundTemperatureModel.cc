@@ -97,6 +97,7 @@ namespace GroundTemp {
             auto const &modelFields = modelInstance.value();
 
             if (lookingForName == modelName) {
+                inputProcessor->markObjectAsUsed(currentModuleObject, modelInstance.key());
 
                 // Read input into object here
                 thisModel->Name = modelName;
