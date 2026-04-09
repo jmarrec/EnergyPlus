@@ -56,6 +56,7 @@
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
+#include <EnergyPlus/DataErrorTracking.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataSizing.hh>
@@ -471,6 +472,8 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestAirFlow)
     EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).OutletAirEnthalpy, 43970.75 - (17156.275 / 1.0), 0.1);
     EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).OutletAirDBTemp, 26.0 - (14360.848 / 1.0 / CpAir), 0.0001);
 
+    EXPECT_EQ(state->dataErrTracking->NumRecurringErrors, 0);
+
     PartLoadRatio = 0.5;
     state->dataLoopNodes->Node(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).AirInletNodeNum).MassFlowRate = ActualAirflow;
     InitSimpleWatertoAirHP(*state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
@@ -565,6 +568,8 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestAirFlow)
     EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).OutletAirEnthalpy, PsyHFnTdbW(15.0, 0.004) + (19636.8798 / 1.0), 0.1);
     EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).OutletAirDBTemp, 15.0 + (19636.8798 / 1.0 / CpAir), 0.0001);
 
+    EXPECT_EQ(state->dataErrTracking->NumRecurringErrors, 0);
+
     PartLoadRatio = 0.5;
     state->dataLoopNodes->Node(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).AirInletNodeNum).MassFlowRate = ActualAirflow;
     InitSimpleWatertoAirHP(*state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
@@ -600,6 +605,24 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestAirFlow)
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).HeatCapCurve = nullptr;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).HeatPowCurve = nullptr;
     WaterToAirHeatPumpSimple::CheckSimpleWAHPRatedCurvesOutputs(*state, state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).Name);
+
+    // constant fan low flow
+    fanOp = HVAC::FanOp::Continuous;
+    auto &simpleWAHP = state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum);
+    int AirInletNode = simpleWAHP.AirInletNodeNum;
+    state->dataLoopNodes->Node(AirInletNode).MassFlowRate = 0.2;
+    InitSimpleWatertoAirHP(*state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
+    state->dataLoopNodes->Node(AirInletNode).MassFlowRate = 0.01;
+    InitSimpleWatertoAirHP(*state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
+    state->dataLoopNodes->Node(AirInletNode).MassFlowRate = 0.05;
+    InitSimpleWatertoAirHP(*state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
+
+    EXPECT_EQ(state->dataErrTracking->NumRecurringErrors, 1);
+    EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].MinValue, 0.01);
+    EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].MaxValue, 0.2);
+    EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].Count, 3);
+    EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].Message,
+              " ** Warning ** Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil rated air flow rate.");
 }
 
 TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestWaterFlowControl)
