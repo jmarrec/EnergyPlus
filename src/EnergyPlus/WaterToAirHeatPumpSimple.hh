@@ -162,6 +162,7 @@ namespace WaterToAirHeatPumpSimple {
         Real64 LatentCapacityTimeConstant = 0.0; // Latent capcacity time constant [s]
         Real64 FanDelayTime = 0.0;               // Fan delay time, time delay for the HP's fan to
         bool reportCoilFinalSizes = true;        // one time report of sizes to coil report
+        bool LowFlowFlag = true;                 // one time low flow warning for coil in cycling fan mode
     };
 
     void SimWatertoAirHPSimple(EnergyPlusData &state,
@@ -289,7 +290,6 @@ struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
     Real64 QLatActual;         // Actual Latent Capacity [W]
     Real64 Winput;             // Power Consumption [W]
     bool MyOneTimeFlag = true; // one time allocation flag
-    bool LowFlowFlag = true;
 
     Array1D<WaterToAirHeatPumpSimple::SimpleWatertoAirHPConditions> SimpleWatertoAirHP;
 
