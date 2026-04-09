@@ -389,7 +389,7 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                   CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
                   nodiff=.false.
                   OutArgs(1:8)=InArgs(1:8)
-                  OutArgs(9) = 'No'  ! new Apply Part Load Fraction to Speeds Greater than 1 field
+                  OutArgs(9) = ''  ! new Apply Part Load Fraction to Speeds Greater than 1 field
                   OutArgs(10:CurArgs+1)=InArgs(9:CurArgs)
                   CurArgs = CurArgs + 1
 
