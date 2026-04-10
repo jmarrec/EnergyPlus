@@ -5139,8 +5139,6 @@ void GetAirTerminalSizing(EnergyPlusData &state)
     // Obtains input data for the AirTerminal sizing methods object and stores it in
     // appropriate data structure.
 
-    static constexpr std::string_view RoutineName("GetAirTerminalSizing: "); // include trailing blank space
-
     int NumAlphas;  // Number of Alphas for each GetObjectItem call
     int NumNumbers; // Number of Numbers for each GetObjectItem call
     int TotalArgs;  // Total number of alpha and numeric arguments (max) for a
