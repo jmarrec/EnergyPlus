@@ -119,10 +119,6 @@ namespace UnitVentilator {
         "NONE", "HEATINGANDCOOLING", "HEATING", "COOLING"};
     static constexpr std::array<std::string_view, static_cast<int>(OAControl::Num)> OAControlNamesUC = {
         "VARIABLEPERCENT", "FIXEDTEMPERATURE", "FIXEDAMOUNT"};
-    static constexpr std::array<std::string_view, static_cast<int>(HeatCoilType::Num)> HeatCoilTypeNamesUC = {
-        "COIL:HEATING:ELECTRIC", "COIL:HEATING:FUEL", "COIL:HEATING:WATER", "COIL:HEATING:STEAM"};
-    static constexpr std::array<std::string_view, static_cast<int>(CoolCoilType::Num)> CoolCoilTypeNamesUC = {
-        "COIL:COOLING:WATER", "COIL:COOLING:WATER:DETAILEDGEOMETRY", "COILSYSTEM:COOLING:WATER:HEATEXCHANGERASSISTED"};
 
     void SimUnitVentilator(EnergyPlusData &state,
                            std::string_view CompName,     // name of the fan coil unit
@@ -567,8 +563,9 @@ namespace UnitVentilator {
                     unitVent.HCoilPresent = true;
                     cHeatingCoilType = Alphas(15);
                     unitVent.HCoilTypeCh = cHeatingCoilType;
-                    unitVent.HCoilType = (HeatCoilType)getEnumValue(HeatCoilTypeNamesUC, cHeatingCoilType);
-                    unitVent.HeatingCoilType = (DataPlant::PlantEquipmentType)getEnumValue(DataPlant::PlantEquipTypeNamesUC, cHeatingCoilType);
+                    unitVent.heatCoilType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, cHeatingCoilType));
+                    unitVent.HeatingCoilType =
+                        static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNamesUC, cHeatingCoilType));
 
                     unitVent.HCoilName = Alphas(16);
                     ValidateComponent(state, cHeatingCoilType, unitVent.HCoilName, IsNotOK, CurrentModuleObject);
@@ -577,9 +574,9 @@ namespace UnitVentilator {
                         ErrorsFound = true;
                     } else {
                         // The heating coil control node is necessary for a hot water coil, but not necessary for electric or gas.
-                        if (unitVent.HCoilType == HeatCoilType::Water || unitVent.HCoilType == HeatCoilType::Steam) {
+                        if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater || unitVent.heatCoilType == HVAC::CoilType::HeatingSteam) {
                             // mine the hot water or steam node from the coil object
-                            if (unitVent.HCoilType == HeatCoilType::Water) {
+                            if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater) {
                                 unitVent.HCoil_Index = WaterCoils::GetCompIndex(state, WaterCoils::CoilModel::HeatingSimple, unitVent.HCoilName);
                                 unitVent.HotControlNode = state.dataWaterCoils->WaterCoil(unitVent.HCoil_Index).WaterInletNodeNum;
                                 unitVent.MaxVolHotWaterFlow = state.dataWaterCoils->WaterCoil(unitVent.HCoil_Index).MaxWaterVolFlowRate;
@@ -616,12 +613,13 @@ namespace UnitVentilator {
 
                     cCoolingCoilType = Alphas(17);
                     unitVent.CCoilTypeCh = cCoolingCoilType;
-                    unitVent.CCoilType = (CoolCoilType)getEnumValue(CoolCoilTypeNamesUC, cCoolingCoilType);
-                    unitVent.CoolingCoilType = (DataPlant::PlantEquipmentType)getEnumValue(DataPlant::PlantEquipTypeNamesUC, cCoolingCoilType);
+                    unitVent.coolCoilType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, cCoolingCoilType));
+                    unitVent.CoolingCoilType =
+                        static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNamesUC, cCoolingCoilType));
                     unitVent.CCoilPlantName = Alphas(18);
 
                     if (cCoolingCoilType == "COILSYSTEM:COOLING:WATER:HEATEXCHANGERASSISTED") {
-                        unitVent.CCoilType = CoolCoilType::HXAssisted;
+                        unitVent.coolCoilType = HVAC::CoilType::CoolingWaterHXAssisted;
                         HVACHXAssistedCoolingCoil::GetHXCoilTypeAndName(
                             state, cCoolingCoilType, Alphas(18), ErrorsFound, unitVent.CCoilPlantType, unitVent.CCoilPlantName);
                         if (Util::SameString(unitVent.CCoilPlantType, "Coil:Cooling:Water")) {
@@ -648,9 +646,9 @@ namespace UnitVentilator {
                             ShowContinueError(state, EnergyPlus::format("...specified in {} = \"{}\".", CurrentModuleObject, unitVent.Name));
                             ErrorsFound = true;
                         } else {
-                            if (unitVent.CCoilType != CoolCoilType::HXAssisted) {
+                            if (unitVent.coolCoilType != HVAC::CoilType::CoolingWaterHXAssisted) {
                                 WaterCoils::CoilModel coilModel = WaterCoils::CoilModel::CoolingSimple;
-                                if (unitVent.CCoilType == CoolCoilType::Detailed) {
+                                if (unitVent.coolCoilType == HVAC::CoilType::CoolingWaterDetailed) {
                                     coilModel = WaterCoils::CoilModel::CoolingDetailed;
                                 }
                                 unitVent.CCoil_Index = WaterCoils::GetCompIndex(state, coilModel, unitVent.CCoilName);
@@ -978,12 +976,12 @@ namespace UnitVentilator {
             }
 
             if (unitVent.HCoilPresent) {
-              //                ReportCoilSelection::setCoilSupplyFanInfo(
-              //    state, ReportCoilSelection::getReportIndex(unitVent.HCoilName, unitVent.HCoilTypeCh), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
+                ReportCoilSelection::setCoilSupplyFanInfo(
+                    state, ReportCoilSelection::getReportIndex(state, unitVent.HCoilName, unitVent.heatCoilType), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
             }
             if (unitVent.CCoilPresent) {
-              // ReportCoilSelection::setCoilSupplyFanInfo(
-              //    state, ReportCoilSelection::getReportIndex(unitVent.CCoilName, unitVent.CCoilTypeCh), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
+                ReportCoilSelection::setCoilSupplyFanInfo(
+                    state, ReportCoilSelection::getReportIndex(state, unitVent.CCoilName, unitVent.coolCoilType), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
             }
         }
     }
@@ -1127,7 +1125,7 @@ namespace UnitVentilator {
 
             if (unitVent.HCoilPresent) { // Only initialize these if a heating coil is actually present
 
-                if (unitVent.HCoilType == HeatCoilType::Water) {
+                if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater) {
 
                     Real64 rho = unitVent.HWplantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
 
@@ -1137,7 +1135,7 @@ namespace UnitVentilator {
                     PlantUtilities::InitComponentNodes(
                         state, unitVent.MinHotWaterFlow, unitVent.MaxHotWaterFlow, unitVent.HotControlNode, unitVent.HotCoilOutNodeNum);
                 }
-                if (unitVent.HCoilType == HeatCoilType::Steam) {
+                if (unitVent.heatCoilType == HVAC::CoilType::HeatingSteam) {
                     Real64 TempSteamIn = 100.00;
                     Real64 SteamDensity = unitVent.HCoil_fluid->getSatDensity(state, TempSteamIn, 1.0, RoutineName);
                     unitVent.MaxHotSteamFlow = SteamDensity * unitVent.MaxVolHotSteamFlow;
@@ -1773,7 +1771,7 @@ namespace UnitVentilator {
         if (unitVent.MaxVolHotWaterFlow == DataSizing::AutoSize) {
             IsAutoSize = true;
         }
-        if (unitVent.HCoilType == HeatCoilType::Water) {
+        if (unitVent.heatCoilType == HVAC::CoilType::HeatingWater) {
             if (state.dataSize->CurZoneEqNum > 0) {
                 if (!IsAutoSize && !state.dataSize->ZoneSizingRunDone) { // Simulation continue
                     if (unitVent.MaxVolHotWaterFlow > 0.0) {
@@ -1918,7 +1916,7 @@ namespace UnitVentilator {
         if (unitVent.MaxVolHotSteamFlow == DataSizing::AutoSize) {
             IsAutoSize = true;
         }
-        if (unitVent.HCoilType == HeatCoilType::Steam) {
+        if (unitVent.heatCoilType == HVAC::CoilType::HeatingSteam) {
             if (state.dataSize->CurZoneEqNum > 0) {
                 if (!IsAutoSize && !state.dataSize->ZoneSizingRunDone) { // Simulation continue
                     if (unitVent.MaxVolHotSteamFlow > 0.0) {
@@ -2051,8 +2049,8 @@ namespace UnitVentilator {
         if (unitVent.MaxVolColdWaterFlow == DataSizing::AutoSize) {
             IsAutoSize = true;
         }
-        if (unitVent.CCoilType == CoolCoilType::Water || unitVent.CCoilType == CoolCoilType::Detailed ||
-            unitVent.CCoilType == CoolCoilType::HXAssisted) {
+        if (unitVent.coolCoilType == HVAC::CoilType::CoolingWater || unitVent.coolCoilType == HVAC::CoilType::CoolingWaterDetailed ||
+            unitVent.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
 
             if (state.dataSize->CurZoneEqNum > 0) {
                 if (!IsAutoSize && !state.dataSize->ZoneSizingRunDone) { // Simulation continue
@@ -2066,7 +2064,7 @@ namespace UnitVentilator {
                 } else {
                     CheckZoneSizing(state, state.dataUnitVentilators->cMO_UnitVentilator, unitVent.Name);
 
-                    if (unitVent.CCoilType == CoolCoilType::HXAssisted) {
+                    if (unitVent.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
                         CoolingCoilName = HVACHXAssistedCoolingCoil::GetHXDXCoilName(state, unitVent.CCoilTypeCh, unitVent.CCoilName, ErrorsFound);
                         CoolingCoilType = HVACHXAssistedCoolingCoil::GetHXCoilType(state, unitVent.CCoilTypeCh, unitVent.CCoilName, ErrorsFound);
                     } else {
@@ -2206,7 +2204,7 @@ namespace UnitVentilator {
         }
 
         // set the design air flow rates for the heating and cooling coils
-        if (unitVent.CCoilType == CoolCoilType::HXAssisted) {
+        if (unitVent.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
             CoolingCoilName = HVACHXAssistedCoolingCoil::GetHXDXCoilName(state, unitVent.CCoilTypeCh, unitVent.CCoilName, ErrorsFound);
             CoolingCoilType = HVACHXAssistedCoolingCoil::GetHXCoilType(state, unitVent.CCoilTypeCh, unitVent.CCoilName, ErrorsFound);
         } else {
@@ -2299,18 +2297,18 @@ namespace UnitVentilator {
         switch (unitVent.CoilOption) {
         case CoilsUsed::Both:
         case CoilsUsed::Heating: {
-            switch (unitVent.HCoilType) {
-            case HeatCoilType::Water: {
+            switch (unitVent.heatCoilType) {
+            case HVAC::CoilType::HeatingWater: {
                 WaterCoils::CheckWaterCoilSchedule(state, unitVent.HCoilName, unitVent.HCoilSchedValue, unitVent.HCoil_Index);
             } break;
-            case HeatCoilType::Steam: {
+            case HVAC::CoilType::HeatingSteam: {
                 SteamCoils::CheckSteamCoilSchedule(state, "Coil:Heating:Steam", unitVent.HCoilName, unitVent.HCoilSchedValue, unitVent.HCoil_Index);
             } break;
-            case HeatCoilType::Electric: {
+            case HVAC::CoilType::HeatingElectric: {
                 HeatingCoils::CheckHeatingCoilSchedule(
                     state, "Coil:Heating:Electric", unitVent.HCoilName, unitVent.HCoilSchedValue, unitVent.HCoil_Index);
             } break;
-            case HeatCoilType::Gas: {
+            case HVAC::CoilType::HeatingGasOrOtherFuel: {
                 HeatingCoils::CheckHeatingCoilSchedule(
                     state, "Coil:Heating:Fuel", unitVent.HCoilName, unitVent.HCoilSchedValue, unitVent.HCoil_Index);
             } break;
@@ -2325,14 +2323,14 @@ namespace UnitVentilator {
         switch (unitVent.CoilOption) {
         case CoilsUsed::Both:
         case CoilsUsed::Cooling: {
-            switch (unitVent.CCoilType) {
-            case CoolCoilType::Water: {
+            switch (unitVent.coolCoilType) {
+            case HVAC::CoilType::CoolingWater: {
                 WaterCoils::CheckWaterCoilSchedule(state, unitVent.CCoilName, unitVent.CCoilSchedValue, unitVent.CCoil_Index);
             } break;
-            case CoolCoilType::Detailed: {
+            case HVAC::CoilType::CoolingWaterDetailed: {
                 WaterCoils::CheckWaterCoilSchedule(state, unitVent.CCoilName, unitVent.CCoilSchedValue, unitVent.CCoil_Index);
             } break;
-            case CoolCoilType::HXAssisted: {
+            case HVAC::CoilType::CoolingWaterHXAssisted: {
                 HVACHXAssistedCoolingCoil::CheckHXAssistedCoolingCoilSchedule(
                     state, "CoilSystem:Cooling:Water:HeatExchangerAssisted", unitVent.CCoilName, unitVent.CCoilSchedValue, unitVent.CCoil_Index);
             } break;
@@ -2396,7 +2394,7 @@ namespace UnitVentilator {
                 MinWaterFlow = unitVent.MinHotWaterFlow;
                 // On the first HVAC iteration the system values are given to the controller, but after that
                 // the demand limits are in place and there needs to be feedback to the Zone Equipment
-                if (!FirstHVACIteration && unitVent.HCoilType == HeatCoilType::Water) {
+                if (!FirstHVACIteration && unitVent.heatCoilType == HVAC::CoilType::HeatingWater) {
                     MaxWaterFlow = state.dataLoopNodes->Node(ControlNode).MassFlowRateMaxAvail;
                     MinWaterFlow = state.dataLoopNodes->Node(ControlNode).MassFlowRateMinAvail;
                 }
@@ -2616,8 +2614,8 @@ namespace UnitVentilator {
                     } else { // Not a cycling operating mode
 
                         {
-                            switch (unitVent.HCoilType) {
-                            case HeatCoilType::Water: {
+                            switch (unitVent.heatCoilType) {
+                            case HVAC::CoilType::HeatingWater: {
                                 // control water flow to obtain output matching QZnReq
                                 ControlCompOutput(state,
                                                   unitVent.Name,
@@ -2638,9 +2636,9 @@ namespace UnitVentilator {
                                                   _,
                                                   unitVent.HWplantLoc);
                             } break;
-                            case HeatCoilType::Gas:
-                            case HeatCoilType::Electric:
-                            case HeatCoilType::Steam: {
+                            case HVAC::CoilType::HeatingGasOrOtherFuel:
+                            case HVAC::CoilType::HeatingElectric:
+                            case HVAC::CoilType::HeatingSteam: {
                                 CalcUnitVentilatorComponents(state, UnitVentNum, FirstHVACIteration, QUnitOut);
                             } break;
                             default: {
@@ -2955,7 +2953,7 @@ namespace UnitVentilator {
             }
 
             if (unitVent.CCoilPresent) {
-                if (unitVent.CCoilType == CoolCoilType::HXAssisted) {
+                if (unitVent.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
                     HVACHXAssistedCoolingCoil::SimHXAssistedCoolingCoil(
                         state, unitVent.CCoilName, FirstHVACIteration, HVAC::CompressorOp::On, 0.0, unitVent.CCoil_Index, HVAC::FanOp::Continuous);
                 } else {
@@ -2966,11 +2964,11 @@ namespace UnitVentilator {
             if (unitVent.HCoilPresent) {
 
                 {
-                    switch (unitVent.HCoilType) {
-                    case HeatCoilType::Water: {
+                    switch (unitVent.heatCoilType) {
+                    case HVAC::CoilType::HeatingWater: {
                         WaterCoils::SimulateWaterCoilComponents(state, unitVent.HCoilName, FirstHVACIteration, unitVent.HCoil_Index);
                     } break;
-                    case HeatCoilType::Steam: {
+                    case HVAC::CoilType::HeatingSteam: {
                         if (!state.dataUnitVentilators->HCoilOn) {
                             QCoilReq = 0.0;
                         } else {
@@ -2987,8 +2985,8 @@ namespace UnitVentilator {
 
                         SteamCoils::SimulateSteamCoilComponents(state, unitVent.HCoilName, FirstHVACIteration, unitVent.HCoil_Index, QCoilReq);
                     } break;
-                    case HeatCoilType::Electric:
-                    case HeatCoilType::Gas: {
+                    case HVAC::CoilType::HeatingElectric:
+                    case HVAC::CoilType::HeatingGasOrOtherFuel: {
                         if (!state.dataUnitVentilators->HCoilOn) {
                             QCoilReq = 0.0;
                         } else {
@@ -3043,7 +3041,7 @@ namespace UnitVentilator {
                 CalcMdotCCoilCycFan(state, mdot, QCoilReq, state.dataUnitVentilators->QZnReq, UnitVentNum, PartLoadFrac);
                 PlantUtilities::SetComponentFlowRate(state, mdot, unitVent.ColdControlNode, unitVent.ColdCoilOutNodeNum, unitVent.CWPlantLoc);
 
-                if (unitVent.CCoilType == CoolCoilType::HXAssisted) {
+                if (unitVent.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
                     HVACHXAssistedCoolingCoil::SimHXAssistedCoolingCoil(
                         state, unitVent.CCoilName, FirstHVACIteration, HVAC::CompressorOp::On, PartLoadFrac, unitVent.CCoil_Index, fanOp);
                 } else {
@@ -3055,8 +3053,8 @@ namespace UnitVentilator {
             if (unitVent.HCoilPresent) {
 
                 {
-                    switch (unitVent.HCoilType) {
-                    case HeatCoilType::Water: {
+                    switch (unitVent.heatCoilType) {
+                    case HVAC::CoilType::HeatingWater: {
                         if (!state.dataUnitVentilators->HCoilOn) {
                             QCoilReq = 0.0;
                             mdot = 0.0;
@@ -3076,7 +3074,7 @@ namespace UnitVentilator {
                         WaterCoils::SimulateWaterCoilComponents(
                             state, unitVent.HCoilName, FirstHVACIteration, unitVent.HCoil_Index, QCoilReq, fanOp, PartLoadFrac);
                     } break;
-                    case HeatCoilType::Steam: {
+                    case HVAC::CoilType::HeatingSteam: {
                         if (!state.dataUnitVentilators->HCoilOn) {
                             QCoilReq = 0.0;
                             mdot = 0.0;
@@ -3096,8 +3094,8 @@ namespace UnitVentilator {
                         SteamCoils::SimulateSteamCoilComponents(
                             state, unitVent.HCoilName, FirstHVACIteration, unitVent.HCoil_Index, QCoilReq, _, fanOp, PartLoadFrac);
                     } break;
-                    case HeatCoilType::Electric:
-                    case HeatCoilType::Gas: {
+                    case HVAC::CoilType::HeatingElectric:
+                    case HVAC::CoilType::HeatingGasOrOtherFuel: {
                         if (!state.dataUnitVentilators->HCoilOn) {
                             QCoilReq = 0.0;
                         } else {

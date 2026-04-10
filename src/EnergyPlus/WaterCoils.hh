@@ -90,6 +90,7 @@ namespace WaterCoils {
         std::string WaterCoilModelA;                 // Type of WaterCoil ie. Simple, Detailed, etc.
         DataPlant::PlantEquipmentType WaterCoilType; // Type of WaterCoil ie. Heating or Cooling
 
+        HVAC::CoilType coilType = HVAC::CoilType::Invalid; 
         int coilReportNum = -1;
         CoilModel WaterCoilModel;                    // Type of WaterCoil ie. Simple, Detailed, etc.
         Sched::Schedule *availSched = nullptr;       // availability schedule
@@ -490,9 +491,9 @@ namespace WaterCoils {
     int GetCompIndex(EnergyPlusData &state, CoilModel coilType, std::string_view const coilName);
 
     Real64 GetWaterCoilCapacity(EnergyPlusData &state,
-                                std::string const &CoilType, // must match coil types in this module
-                                std::string const &CoilName, // must match coil names for the coil type
-                                bool &ErrorsFound            // set to true if problem
+                                std::string_view const CoilType, // must match coil types in this module
+                                std::string const &CoilName,     // must match coil names for the coil type
+                                bool &ErrorsFound                // set to true if problem
     );
 
     void UpdateWaterToAirCoilPlantConnection(EnergyPlusData &state,
@@ -507,9 +508,9 @@ namespace WaterCoils {
     );
 
     Sched::Schedule *GetWaterCoilAvailSched(EnergyPlusData &state,
-                                            std::string const &CoilType, // must match coil types in this module
-                                            std::string const &CoilName, // must match coil names for the coil type
-                                            bool &ErrorsFound            // set to true if problem
+                                            std::string_view const coilType, // must match coil types in this module
+                                            std::string const &CoilName,     // must match coil names for the coil type
+                                            bool &ErrorsFound                // set to true if problem
     );
 
     // sets data to a coil that is used as a regeneration air heating coil in

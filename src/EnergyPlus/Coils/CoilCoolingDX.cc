@@ -153,12 +153,14 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
 {
     static constexpr std::string_view routineName = "CoilCoolingDX::instantiateFromInputSpec";
 
-    ErrorObjectHeader eoh{routineName, "CoilCoolingDX", input_data.name};
+    ErrorObjectHeader eoh{routineName, "Coil:Cooling:DX", input_data.name};
 
     this->original_input_specs = input_data;
     bool errorsFound = false;
     this->name = input_data.name;
-
+    this->coilType = HVAC::CoilType::CoolingDX;
+    this->coilReportNum = ReportCoilSelection::getReportIndex(state, this->name, this->coilType);
+    
     // initialize reclaim heat parameters
     this->reclaimHeat.Name = this->name;
     this->reclaimHeat.SourceType = state.dataCoilCoolingDX->coilCoolingDXObjectName;

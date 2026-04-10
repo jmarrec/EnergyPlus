@@ -508,7 +508,7 @@ namespace Fluid {
 
     void InitConstantFluidPropertiesData(EnergyPlusData &state)
     {
-        auto &df = state.dataFluid;
+        const auto &df = state.dataFluid;
         bool ErrorsFound = false;
 
         // Where are these things initialized?

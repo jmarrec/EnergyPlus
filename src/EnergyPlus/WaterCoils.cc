@@ -335,8 +335,8 @@ void GetWaterCoilInput(EnergyPlusData &state)
         auto &waterCoil = state.dataWaterCoils->WaterCoil(CoilNum);
 
         waterCoil.Name = AlphArray(1);
-
-        // waterCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, waterCoil.Name, waterCoil.coilType);
+        waterCoil.coilType = HVAC::CoilType::HeatingWater;
+        waterCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, waterCoil.Name, waterCoil.coilType);
 
         if (lAlphaBlanks(2)) {
             waterCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -507,8 +507,8 @@ void GetWaterCoilInput(EnergyPlusData &state)
 
         auto &waterCoil = state.dataWaterCoils->WaterCoil(CoilNum);
         waterCoil.Name = AlphArray(1);
-
-        // waterCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, waterCoil.Name, waterCoil.coilType);
+        waterCoil.coilType = HVAC::CoilType::CoolingWaterDetailed;
+        waterCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, waterCoil.Name, waterCoil.coilType);
 
         if (lAlphaBlanks(2)) {
             waterCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -735,8 +735,8 @@ void GetWaterCoilInput(EnergyPlusData &state)
 
         auto &waterCoil = state.dataWaterCoils->WaterCoil(CoilNum);
         waterCoil.Name = AlphArray(1);
-
-        // waterCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, waterCoil.Name, waterCoil.coilType);
+        waterCoil.coilType = HVAC::CoilType::CoolingWater;
+        waterCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, waterCoil.Name, waterCoil.coilType);
         
         if (lAlphaBlanks(2)) {
             waterCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -1046,14 +1046,14 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
                 std::string const &CompName = state.dataWaterCoils->WaterCoil(tempCoilNum).Name;
                 if (state.dataWaterCoils->WaterCoil(tempCoilNum).WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterCooling) {
                     CoilTypeNum = SimAirServingZones::CompType::WaterCoil_Cooling;
-                    CompType = HVAC::cAllCoilTypes(HVAC::Coil_CoolingWater);
+                    CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingWater];
                 } else if (state.dataWaterCoils->WaterCoil(tempCoilNum).WaterCoilType ==
                            DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling) {
                     CoilTypeNum = SimAirServingZones::CompType::WaterCoil_DetailedCool;
-                    CompType = HVAC::cAllCoilTypes(HVAC::Coil_CoolingWaterDetailed);
+                    CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingWaterDetailed];
                 } else if (state.dataWaterCoils->WaterCoil(tempCoilNum).WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterSimpleHeating) {
                     CoilTypeNum = SimAirServingZones::CompType::WaterCoil_SimpleHeat;
-                    CompType = HVAC::cAllCoilTypes(HVAC::Coil_HeatingWater);
+                    CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingWater];
                 }
                 WaterCoilOnAirLoop = true;
                 SimAirServingZones::CheckWaterCoilIsOnAirLoop(state, CoilTypeNum, CompType, CompName, WaterCoilOnAirLoop);
@@ -1292,9 +1292,9 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
                             // update outlet air conditions used for sizing
                             std::string CompType;
                             if (waterCoil.WaterCoilModel == CoilModel::CoolingDetailed) {
-                                CompType = HVAC::cAllCoilTypes(HVAC::Coil_CoolingWaterDetailed);
+                                CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingWaterDetailed];
                             } else {
-                                CompType = HVAC::cAllCoilTypes(HVAC::Coil_CoolingWater);
+                                CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingWater];
                             }
                             ReportCoilSelection::setCoilLvgAirTemp(state, waterCoil.coilReportNum, state.dataWaterCoils->TOutNew);
                             ReportCoilSelection::setCoilLvgAirHumRat(state, waterCoil.coilReportNum, state.dataWaterCoils->WOutNew);
@@ -2099,10 +2099,10 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
             state.dataSize->DataPltSizCoolNum = PltSizCoolNum;
             state.dataSize->DataWaterLoopNum = waterCoil.WaterPlantLoc.loopNum;
 
-            if (waterCoil.WaterCoilModel == CoilModel::CoolingDetailed) {        // 'DETAILED FLAT FIN'
-                CompType = HVAC::cAllCoilTypes(HVAC::Coil_CoolingWaterDetailed); // Coil:Cooling:Water:DetailedGeometry
+            if (waterCoil.WaterCoilModel == CoilModel::CoolingDetailed) {                  // 'DETAILED FLAT FIN'
+                CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingWaterDetailed]; // Coil:Cooling:Water:DetailedGeometry
             } else {
-                CompType = HVAC::cAllCoilTypes(HVAC::Coil_CoolingWater); // Coil:Cooling:Water
+                CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::CoolingWater]; // Coil:Cooling:Water
             }
 
             bool bPRINT = false; // do not print this sizing request since the autosized value is needed and this input may not be autosized (we
@@ -2499,10 +2499,10 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
             } else {
                 NomCapUserInp = false;
             }
-            bool bPRINT = false;                                     // do not print this sizing request
-            TempSize = DataSizing::AutoSize;                         // get the autosized air volume flow rate for use in other calculations
-            SizingString.clear();                                    // doesn't matter
-            CompType = HVAC::cAllCoilTypes(HVAC::Coil_HeatingWater); // "Coil:Heating:Water"
+            bool bPRINT = false;                                               // do not print this sizing request
+            TempSize = DataSizing::AutoSize;                                   // get the autosized air volume flow rate for use in other calculations
+            SizingString.clear();                                              // doesn't matter
+            CompType = HVAC::coilTypeNames[(int)HVAC::CoilType::HeatingWater]; // "Coil:Heating:Water"
             std::string const &CompName = waterCoil.Name;
             if (waterCoil.DesiccantRegenerationCoil) {
                 state.dataSize->DataDesicRegCoil = true;
@@ -6025,9 +6025,9 @@ int GetCompIndex(EnergyPlusData &state, CoilModel compType, std::string_view con
 }
 
 Real64 GetWaterCoilCapacity(EnergyPlusData &state,
-                            std::string const &CoilType, // must match coil types in this module
-                            std::string const &CoilName, // must match coil names for the coil type
-                            bool &ErrorsFound            // set to true if problem
+                            std::string_view const CoilType, // must match coil types in this module
+                            std::string const &CoilName,     // must match coil names for the coil type
+                            bool &ErrorsFound                // set to true if problem
 )
 {
 
@@ -6178,9 +6178,9 @@ void UpdateWaterToAirCoilPlantConnection(EnergyPlusData &state,
 }
 
 Sched::Schedule *GetWaterCoilAvailSched(EnergyPlusData &state,
-                                        std::string const &CoilType, // must match coil types in this module
-                                        std::string const &CoilName, // must match coil names for the coil type
-                                        bool &ErrorsFound            // set to true if problem
+                                        std::string_view const CoilType, // must match coil types in this module
+                                        std::string const &CoilName,     // must match coil names for the coil type
+                                        bool &ErrorsFound                // set to true if problem
 )
 {
 

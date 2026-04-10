@@ -521,16 +521,15 @@ void writeCoilSelectionOutput2(EnergyPlusData &state)
 }
 
 void setCoilFinalSizes(EnergyPlusData &state,
-                                            std::string const &coilName,    // user-defined name of the coil
-                                            HVAC::CoilType const coilType, //  coil object name, e.g., Coil:Cooling:Water
-                                            Real64 const totGrossCap,       // total capacity [W]
-                                            Real64 const sensGrossCap,      // sensible capacity [W]
-                                            Real64 const airFlowRate,       // design or reference or rated air flow rate [m3/s]
-                                            Real64 const waterFlowRate      // design or reference or rated water flow rate [m3/s]
+                       int const coilNum, 
+                       Real64 const totGrossCap,       // total capacity [W]
+                       Real64 const sensGrossCap,      // sensible capacity [W]
+                       Real64 const airFlowRate,       // design or reference or rated air flow rate [m3/s]
+                       Real64 const waterFlowRate      // design or reference or rated water flow rate [m3/s]
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    auto *c = state.dataRptCoilSelection->coils[index];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     if (c != nullptr) {
         c->coilTotCapFinal = totGrossCap;
         c->coilSensCapFinal = sensGrossCap;
@@ -539,22 +538,6 @@ void setCoilFinalSizes(EnergyPlusData &state,
     }
 }
 
-void setCoilFinalSizes(EnergyPlusData &state,
-                                            int const coilReportNum,
-                                            Real64 const totGrossCap,       // total capacity [W]
-                                            Real64 const sensGrossCap,      // sensible capacity [W]
-                                            Real64 const airFlowRate,       // design or reference or rated air flow rate [m3/s]
-                                            Real64 const waterFlowRate      // design or reference or rated water flow rate [m3/s]
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
-    if (c != nullptr) {
-        c->coilTotCapFinal = totGrossCap;
-        c->coilSensCapFinal = sensGrossCap;
-        c->coilRefAirVolFlowFinal = airFlowRate;
-        c->coilRefWaterVolFlowFinal = waterFlowRate;
-    }
-}
 
 void doAirLoopSetup(EnergyPlusData &state, int const coilVecIndex)
 {
@@ -605,9 +588,10 @@ void doAirLoopSetup(EnergyPlusData &state, int const coilVecIndex)
     }
 }
 
-void doZoneEqSetup(EnergyPlusData &state, int const coilVecIndex)
+void doZoneEqSetup(EnergyPlusData &state, int const coilNum)
 {
-    auto *c = state.dataRptCoilSelection->coils[coilVecIndex];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilLocation = "Zone";
     c->zoneNum.resize(1);
     c->zoneNum[0] = c->zoneEqNum;
@@ -635,7 +619,7 @@ void doZoneEqSetup(EnergyPlusData &state, int const coilVecIndex)
         // fill out supply fan info
         auto *fan = state.dataFans->fans(state.dataAirSystemsData->PrimaryAirSystems(c->airloopNum).supFanNum);
         setCoilSupplyFanInfo(
-            state, coilVecIndex, fan->Name, fan->type, state.dataAirSystemsData->PrimaryAirSystems(c->airloopNum).supFanNum);
+            state, coilNum, fan->Name, fan->type, state.dataAirSystemsData->PrimaryAirSystems(c->airloopNum).supFanNum);
     }
 
     if (c->zoneEqNum > 0) {
@@ -869,8 +853,8 @@ int getReportIndex(EnergyPlusData &state,
     
     state.dataRptCoilSelection->coils.push_back(c);
     c->coilType = coilType;
-    // c->isCooling = HVAC::coilTypeIsCooling[(int)coilType];
-    // c->isHeating = HVAC::coilTypeIsHeating[(int)coilType];
+    c->isCooling = HVAC::coilTypeIsCooling[(int)coilType];
+    c->isHeating = HVAC::coilTypeIsHeating[(int)coilType];
   
     return state.dataRptCoilSelection->coils.size() - 1;
 }
@@ -973,42 +957,6 @@ void associateZoneCoilWithParent(EnergyPlusData &state, CoilSelectionData *c)
 }
 
 void setRatedCoilConditions(EnergyPlusData &state,
-                            std::string const &coilName,     // ! user-defined name of the coil
-                            HVAC::CoilType const coilType,  //  coil object name, e.g., Coil:Cooling:Water
-                            Real64 const RatedCoilTotCap,    // ! rated coil total capacity [W]
-                            Real64 const RatedCoilSensCap,   // rated coil sensible capacity [W]
-                            Real64 const RatedAirMassFlow,   // rated coil design air mass flow rate [m3/s]
-                            Real64 const RatedCoilInDb,      // rated coil inlet air dry bulb at time of peak [C]
-                            Real64 const RatedCoilInHumRat,  // rated coil inlet air humidity ratio [kgWater/kgDryAir]
-                            Real64 const RatedCoilInWb,      // rated coil inlet air wet bulb [C]
-                            Real64 const RatedCoilOutDb,     // rated coil outlet air dry bulb [C]
-                            Real64 const RatedCoilOutHumRat, // rated coil outlet air humidity ratio, [kgWater/kgDryAir]
-                            Real64 const RatedCoilOutWb,     // rated coil outlet air wet bulb [C]
-                            Real64 const RatedCoilOadbRef,   // rated DX coil outside air dry bulb reference [C]
-                            Real64 const RatedCoilOawbRef,   // rated DX coil outside air wet bulb reference [C]
-                            Real64 const RatedCoilBpFactor,  // rated coil bypass factor
-                            Real64 const RatedCoilEff        // rated coil effectiveness
-                            )
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setRatedCoilConditions(state,
-                           index,
-                           RatedCoilTotCap,    // ! rated coil total capacity [W]
-                           RatedCoilSensCap,   // rated coil sensible capacity [W]
-                           RatedAirMassFlow,   // rated coil design air mass flow rate [m3/s]
-                           RatedCoilInDb,      // rated coil inlet air dry bulb at time of peak [C]
-                           RatedCoilInHumRat,  // rated coil inlet air humidity ratio [kgWater/kgDryAir]
-                           RatedCoilInWb,      // rated coil inlet air wet bulb [C]
-                           RatedCoilOutDb,     // rated coil outlet air dry bulb [C]
-                           RatedCoilOutHumRat, // rated coil outlet air humidity ratio, [kgWater/kgDryAir]
-                           RatedCoilOutWb,     // rated coil outlet air wet bulb [C]
-                           RatedCoilOadbRef,   // rated DX coil outside air dry bulb reference [C]
-                           RatedCoilOawbRef,   // rated DX coil outside air wet bulb reference [C]
-                           RatedCoilBpFactor,  // rated coil bypass factor
-                           RatedCoilEff);
-}
-
-void setRatedCoilConditions(EnergyPlusData &state,
                             int const coilNum,
                             Real64 const RatedCoilTotCap,    // ! rated coil total capacity [W]
                             Real64 const RatedCoilSensCap,   // rated coil sensible capacity [W]
@@ -1025,6 +973,7 @@ void setRatedCoilConditions(EnergyPlusData &state,
                             Real64 const RatedCoilEff        // rated coil effectiveness
 )
 {
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
     auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilRatedTotCap = RatedCoilTotCap;
     c->coilRatedSensCap = RatedCoilSensCap;
@@ -1054,49 +1003,20 @@ void setRatedCoilConditions(EnergyPlusData &state,
     c->ratedCoilOawbRef = RatedCoilOawbRef;
 }
 
-#ifdef OLD_API
 void setCoilAirFlow(EnergyPlusData &state,
-                    std::string const &coilName, // user-defined name of the coil
-                    HVAC::CoilType const coilType, // idf input object class name of coil
+                    int const coilNum, 
                     Real64 const airVdot,        // air flow rate in m3/s
                     bool const isAutoSized       // true if air flow was autosized
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilAirFlow(state, index, airVdot, isAutoSized);
-}
-#endif // OLD_API
-
-void setCoilAirFlow(EnergyPlusData &state,
-                    int const index, 
-                    Real64 const airVdot,        // air flow rate in m3/s
-                    bool const isAutoSized       // true if air flow was autosized
-)
-{
-    assert(index >= 0 && index < (int)state.dataRptCoilSelection->coils.size());
-    auto *c = state.dataRptCoilSelection->coils[index];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesVolFlow = airVdot;
     c->volFlowIsAutosized = isAutoSized;
 
     c->coilDesMassFlow = airVdot * state.dataEnvrn->StdRhoAir;
 }
 
-#ifdef OLD_API
-void setCoilWaterFlowNodeNums(EnergyPlusData &state,
-                              std::string const &coilName, // user-defined name of the coil
-                              HVAC::CoilType const coilType, // idf input object class name of coil
-                              Real64 const waterVdot,      // plant fluid flow rate in m3/s
-                              bool const isAutoSized,      // true if water flow was autosized
-                              int const inletNodeNum,      // coil chw inlet node num
-                              int const outletNodeNum,     // coil chw outlet node num
-                              int const plantLoopNum       // plant loop structure index
-)
-{
-    int const coilNum = getReportIndex(state, coilName, coilType);
-    setCoilWaterFlowNodeNums(state, coilNum, waterVdot, isAutosized, inletNodeNum, outletNodeNum, plantLoopNum);
-}
-#endif // OLD_API
-  
 void setCoilWaterFlowNodeNums(EnergyPlusData &state,
                               int const coilNum,
                               Real64 const waterVdot,      // plant fluid flow rate in m3/s
@@ -1117,28 +1037,12 @@ void setCoilWaterFlowNodeNums(EnergyPlusData &state,
     setCoilWaterFlowPltSizNum(state, coilNum, waterVdot, isAutoSized, plantSizNum, plantLoopNum);
 }
 
-#ifdef OLD_API
-void setCoilWaterFlowPltSizNum(EnergyPlusData &state,
-                               std::string const &coilName, // user-defined name of the coil
-                               HVAC::CoilType const coilType, // idf input object class name of coil
-                               Real64 const waterVdot,      // plant fluid flow rate in m3/s
-                               bool const isAutoSized,      // true if water flow was autosized
-                               int const plantSizNum,       // plant sizing structure index
-                               int const plantLoopNum       // plant loop structure index
-                               )
-{
-    int coilNum = getReportIndex(state, coilName, coilType);
-    setCoilWaterFlowPltSizNum(state, coilNum, waterVdot, isAutoSized, plantSizNum, plantLoopNum);
-}
-#endif // OLD_API
-
 void setCoilWaterFlowPltSizNum(EnergyPlusData &state,
                                int const coilNum,
                                Real64 const waterVdot,      // plant fluid flow rate in m3/s
                                bool const isAutoSized,      // true if water flow was autosized
                                int const plantSizNum,       // plant sizing structure index
-                               int const plantLoopNum       // plant loop structure index
-                               )
+                               int const plantLoopNum)       // plant loop structure index
 {
     assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
     auto *c = state.dataRptCoilSelection->coils[coilNum];
@@ -1171,153 +1075,77 @@ void setCoilWaterFlowPltSizNum(EnergyPlusData &state,
     }
 }
 
-#ifdef OLD_API
 void setCoilEntAirTemp(EnergyPlusData &state,
-                       std::string const &coilName,    // user-defined name of the coil
-                       HVAC::CoilType const coilType,    // idf input object class name of coil
+                       int const coilNum,
                        Real64 const entAirDryBulbTemp, // degree C air entering coil
                        int const curSysNum,            // airloop system number index, if non zero
                        int const curZoneEqNum          // zone equipment list index, if non-zero
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilEntAirTemp(state, index, entAirDryBulbTemp, curSysNum, curZoneEqNum);
-}
-#endif // OLD_API
-
-void setCoilEntAirTemp(EnergyPlusData &state,
-                       int const coilReportNum,
-                       Real64 const entAirDryBulbTemp, // degree C air entering coil
-                       int const curSysNum,            // airloop system number index, if non zero
-                       int const curZoneEqNum          // zone equipment list index, if non-zero
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesEntTemp = entAirDryBulbTemp;
     c->airloopNum = curSysNum;
-    doAirLoopSetup(state, coilReportNum);
+    doAirLoopSetup(state, coilNum);
     c->zoneEqNum = curZoneEqNum;
 }
 
 void setCoilEntAirHumRat(EnergyPlusData &state,
-                                              std::string const &coilName, // user-defined name of the coil
-                                              HVAC::CoilType const coilType, // idf input object class name of coil
-                                              Real64 const entAirHumrat    //
-)
+                         int const coilNum,
+                         Real64 const entAirHumrat)
 {
-    int index = getReportIndex(state, coilName, coilType);
-    auto *c = state.dataRptCoilSelection->coils[index];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesEntHumRat = entAirHumrat;
 }
 
-void setCoilEntAirHumRat(EnergyPlusData &state,
-                                              int const coilReportNum,
-                                              Real64 const entAirHumrat    //
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
-    c->coilDesEntHumRat = entAirHumrat;
-}
-
-
 void setCoilEntWaterTemp(EnergyPlusData &state,
-                                              std::string const &coilName, // user-defined name of the coil
-                                              HVAC::CoilType const coilType, // idf input object class name of coil
-                                              Real64 const entWaterTemp    //
+                         int const coilNum,
+                         Real64 const entWaterTemp    //
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    auto *c = state.dataRptCoilSelection->coils[index];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesWaterEntTemp = entWaterTemp;
 }
 
-void setCoilEntWaterTemp(EnergyPlusData &state,
-                                              int const coilReportNum,
-                                              Real64 const entWaterTemp    //
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
-    c->coilDesWaterEntTemp = entWaterTemp;
-}
-
-
 void setCoilLvgWaterTemp(EnergyPlusData &state,
-                                              std::string const &coilName, // user-defined name of the coil
-                                              HVAC::CoilType const coilType, // idf input object class name of coil
-                                              Real64 const lvgWaterTemp    //
+                         int const coilNum,
+                         Real64 const lvgWaterTemp    //
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    auto *c = state.dataRptCoilSelection->coils[index];
-    c->coilDesWaterLvgTemp = lvgWaterTemp;
-}
-
-void setCoilLvgWaterTemp(EnergyPlusData &state,
-                                              int const coilReportNum,
-                                              Real64 const lvgWaterTemp    //
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesWaterLvgTemp = lvgWaterTemp;
 }
 
 void setCoilWaterDeltaT(EnergyPlusData &state,
-                                             std::string const &coilName, // user-defined name of the coil
-                                             HVAC::CoilType const coilType, // idf input object class name of coil
-                                             Real64 const CoilWaterDeltaT // degree C temperature difference used to size coil
+                        int const coilNum,
+                        Real64 const CoilWaterDeltaT // degree C temperature difference used to size coil
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    auto *c = state.dataRptCoilSelection->coils[index];
-    c->coilDesWaterTempDiff = CoilWaterDeltaT;
-}
-
-void setCoilWaterDeltaT(EnergyPlusData &state,
-                                             int const coilReportNum,
-                                             Real64 const CoilWaterDeltaT // degree C temperature difference used to size coil
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesWaterTempDiff = CoilWaterDeltaT;
 }
 
 void setCoilLvgAirTemp(EnergyPlusData &state,
-                                            std::string const &coilName,   // user-defined name of the coil
-                                            HVAC::CoilType const coilType,   // idf input object class name of coil
-                                            Real64 const lvgAirDryBulbTemp //
+                       int const coilNum,
+                       Real64 const lvgAirDryBulbTemp //
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    auto *c = state.dataRptCoilSelection->coils[index];
-    c->coilDesLvgTemp = lvgAirDryBulbTemp;
-}
-
-void setCoilLvgAirTemp(EnergyPlusData &state,
-                                            int const coilReportNum,
-                                            Real64 const lvgAirDryBulbTemp //
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesLvgTemp = lvgAirDryBulbTemp;
 }
 
 void setCoilLvgAirHumRat(EnergyPlusData &state,
-                                              std::string const &coilName, // user-defined name of the coil
-                                              HVAC::CoilType const coilType, // idf input object class name of coil
-                                              Real64 const lvgAirHumRat    //
+                         int const coilNum,
+                         Real64 const lvgAirHumRat    //
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    auto *c = state.dataRptCoilSelection->coils[index];
-    c->coilDesLvgHumRat = lvgAirHumRat;
-}
-
-void setCoilLvgAirHumRat(EnergyPlusData &state,
-                                              int const coilReportNum,
-                                              Real64 const lvgAirHumRat    //
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->coilDesLvgHumRat = lvgAirHumRat;
 }
 
@@ -1331,36 +1159,7 @@ std::string PeakHrMinString(EnergyPlusData &state, const int designDay, const in
 
 void setCoilCoolingCapacity(
     EnergyPlusData &state,
-    std::string const &coilName,       // user-defined name of the coil
-    HVAC::CoilType const coilType,       // idf input object class name of coil
-    Real64 const TotalCoolingCap,      // {W} coil cooling capacity, sizing result
-    bool const isAutoSize,             // true if value was autosized
-    int const curSysNum,               // airloop system number index, if non zero
-    int const curZoneEqNum,            // zone equipment list index, if non-zero
-    int const curOASysNum,             // OA system equipment list index, if non-zero
-    Real64 const fanCoolLoad,          // {W} fan load used in ideal loads coil sizing
-    Real64 const coilCapFunTempFac,    // {W} curve result for modification factor for capacity as a function of temperature
-    Real64 const DXFlowPerCapMinRatio, // non dimensional ratio, capacity adjustment ratio min
-    Real64 const DXFlowPerCapMaxRatio  // non dimensional ratio, capacity adjustment ratio max
-)
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilCoolingCapacity(state,
-                           index,
-                           TotalCoolingCap,
-                           isAutoSize,
-                           curSysNum,
-                           curZoneEqNum,
-                           curOASysNum,
-                           fanCoolLoad,
-                           coilCapFunTempFac,
-                           DXFlowPerCapMinRatio,
-                           DXFlowPerCapMaxRatio);
-}
-
-void setCoilCoolingCapacity(
-    EnergyPlusData &state,
-    int const coilReportNum,
+    int const coilNum,
     Real64 const TotalCoolingCap,      // {W} coil cooling capacity, sizing result
     bool const isAutoSize,             // true if value was autosized
     int const curSysNum,               // airloop system number index, if non zero
@@ -1375,7 +1174,8 @@ void setCoilCoolingCapacity(
     auto &ZoneEqSizing(state.dataSize->ZoneEqSizing);
     auto &SysSizPeakDDNum(state.dataSize->SysSizPeakDDNum);
 
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     // no this is adjusted back to ratings    c->coilTotCapAtPeak = TotalCoolingCap;
     c->coilCapFTIdealPeak = coilCapFunTempFac;
     c->coilTotCapAtPeak = TotalCoolingCap * c->coilCapFTIdealPeak;
@@ -1385,7 +1185,7 @@ void setCoilCoolingCapacity(
 
     c->fanHeatGainIdealPeak = fanCoolLoad;
     c->airloopNum = curSysNum;
-    doAirLoopSetup(state, coilReportNum);
+    doAirLoopSetup(state, coilNum);
     c->zoneEqNum = curZoneEqNum;
     //    if ( c->zoneEqNum > 0 ) doZoneEqSetup( index );
     c->oASysNum = curOASysNum;
@@ -1662,8 +1462,7 @@ void setCoilCoolingCapacity(
 
 void setCoilHeatingCapacity(
     EnergyPlusData &state,
-    std::string const &coilName,       // user-defined name of the coil
-    HVAC::CoilType const coilType,       // idf input object class name of coil
+    int coilNum,
     Real64 const totalHeatingCap,      // {W} coil Heating capacity
     bool const isAutoSize,             // true if value was autosized
     int const curSysNum,               // airloop system number index, if non zero
@@ -1675,36 +1474,8 @@ void setCoilHeatingCapacity(
     Real64 const DXFlowPerCapMaxRatio  // non dimensional ratio, capacity adjustment ratio max
 )
 {
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilHeatingCapacity(
-        state,
-        index,
-        totalHeatingCap,
-        isAutoSize,
-        curSysNum,
-        curZoneEqNum,
-        curOASysNum,
-        fanHeatGain,
-        coilCapFunTempFac,
-        DXFlowPerCapMinRatio,
-        DXFlowPerCapMaxRatio);
-}
-
-void setCoilHeatingCapacity(
-    EnergyPlusData &state,
-    int coilReportNum,
-    Real64 const totalHeatingCap,      // {W} coil Heating capacity
-    bool const isAutoSize,             // true if value was autosized
-    int const curSysNum,               // airloop system number index, if non zero
-    int const curZoneEqNum,            // zone equipment list index, if non-zero
-    int const curOASysNum,             // OA system equipment list index, if non-zero
-    Real64 const fanHeatGain,          // {W} fan load used in ideal loads coil sizing
-    Real64 const coilCapFunTempFac,    // {W} curve result for modification factor for capacity as a function of temperature
-    Real64 const DXFlowPerCapMinRatio, // non dimensional ratio, capacity adjustment ratio min
-    Real64 const DXFlowPerCapMaxRatio  // non dimensional ratio, capacity adjustment ratio max
-)
-{
-    auto *c = state.dataRptCoilSelection->coils[coilReportNum];
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+    auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->capIsAutosized = isAutoSize;
     c->coilCapFTIdealPeak = coilCapFunTempFac;
     c->coilTotCapAtPeak = totalHeatingCap * c->coilCapFTIdealPeak;
@@ -1713,7 +1484,7 @@ void setCoilHeatingCapacity(
 
     c->fanHeatGainIdealPeak = fanHeatGain;
     c->airloopNum = curSysNum;
-    doAirLoopSetup(state, coilReportNum);
+    doAirLoopSetup(state, coilNum);
     c->zoneEqNum = curZoneEqNum;
     //    if ( c->zoneEqNum > 0 ) doZoneEqSetup( index );
     if (curSysNum > 0 && c->zoneEqNum == 0 && curSysNum <= int(state.dataSize->FinalSysSizing.size())) {
@@ -2066,22 +1837,6 @@ void setCoilHeatingCapacity(
     c->coilSensCapAtPeak = min(c->coilSensCapAtPeak, c->coilTotCapAtPeak);
 }
 
-#ifdef OLD_API
-void setCoilWaterCoolingCapacity(EnergyPlusData &state,
-                                 std::string const &coilName,  // user-defined name of the coil
-                                 HVAC::CoilType const coilType,  // idf input object class name of coil
-                                 Real64 const totalCoolingCap, // {W} coil cooling capacity
-                                 bool const isAutoSize,        // true if value was autosized
-                                 int const inletNodeNum,       // coil chw inlet node num
-                                 int const outletNodeNum,      // coil chw outlet node num
-                                 int const dataWaterLoopNum    // plant loop structure index
-                                 )
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilWaterCoolingCapacity(state, coilNum, totalCoolingCap, isAutoSize, inletNodeNum, outletNodeNum, dataWaterLoopNum);
-}
-#endif // OLD_API
-
 void setCoilWaterCoolingCapacity(EnergyPlusData &state,
                                  int const coilNum,
                                  Real64 const totalCoolingCap, // {W} coil cooling capacity
@@ -2103,21 +1858,6 @@ void setCoilWaterCoolingCapacity(EnergyPlusData &state,
     }
     c->waterLoopNum = dataWaterLoopNum;
 }
-#ifdef OLD_API
-void setCoilWaterHeaterCapacityNodeNums(EnergyPlusData &state,
-                                        std::string const &coilName,  // user-defined name of the coil
-                                        HVAC::CoilType const coilType,  // idf input object class name of coil
-                                        Real64 const totalHeatingCap, // {W} coil Heating capacity
-                                        bool const isAutoSize,        // true if value was autosized
-                                        int const inletNodeNum,       // coil chw inlet node num
-                                        int const outletNodeNum,      // coil chw outlet node num
-                                        int const dataWaterLoopNum    // plant loop structure index
-)
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilWaterHeaterCapacityNodeNums(state, index, totalHeatingCap, isAutoSize, inletNodeNum, outletNodeNum, dataWaterLoopNum);
-}
-#endif // OLD_API
 
 void setCoilWaterHeaterCapacityNodeNums(EnergyPlusData &state,
                                         int const coilNum,  // user-defined name of the coil
@@ -2141,21 +1881,6 @@ void setCoilWaterHeaterCapacityNodeNums(EnergyPlusData &state,
     c->waterLoopNum = dataWaterLoopNum;
 }
 
-#ifdef OLD_API
-void setCoilWaterHeaterCapacityPltSizNum(EnergyPlusData &state,
-                                         std::string const &coilName,  // user-defined name of the coil
-                                         HVAC::CoilType const coilType,  // idf input object class name of coil
-                                         Real64 const totalHeatingCap, // {W} coil Heating capacity
-                                         bool const isAutoSize,        // true if value was autosized
-                                         int const dataPltSizNum,      // plant sizing structure index
-                                         int const dataWaterLoopNum    // plant loop structure index
-                                         )
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilWaterHeaterCapacityPltSizNum(state, index, totalHeatingCap, isAutoSize, dataPltSizNum, dataWaterLoopNum);
-}
-#endif // OLD_API
-
 void setCoilWaterHeaterCapacityPltSizNum(EnergyPlusData &state,
                                          int const coilNum,
                                          Real64 const totalHeatingCap, // {W} coil Heating capacity
@@ -2172,21 +1897,6 @@ void setCoilWaterHeaterCapacityPltSizNum(EnergyPlusData &state,
     c->waterLoopNum = dataWaterLoopNum;
 }
 
-#ifdef OLD_API
-void setCoilUA(EnergyPlusData &state,
-               std::string const &coilName,            // user-defined name of the coil
-               HVAC::CoilType const coilType,            // idf input object class name of coil
-               Real64 const UAvalue,                   // [W/k] UA value for coil,
-               Real64 const dataCapacityUsedForSizing, // [W] sizing global
-               bool const isAutoSize,                  // true if value was autosized
-               int const curSysNum,                    // airloop system number index, if non zero
-               int const curZoneEqNum                  // zone equipment list index, if non-zero
-)
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilUA(state, coilNum, UAvalue, dataCapacityUsedForSizing, isAutoSize, curSysNum, curZoneEqNum);
-}
-#endif // OLD_API
 
 void setCoilUA(EnergyPlusData &state,
                int const coilNum,
@@ -2207,16 +1917,6 @@ void setCoilUA(EnergyPlusData &state,
     c->zoneEqNum = curZoneEqNum;
 }
 
-#ifdef OLD_API
-void setCoilReheatMultiplier(EnergyPlusData &state,
-                             std::string const &coilName, // user-defined name of the coil
-                             HVAC::CoilType const coilType, // idf input object class name of coil
-                             Real64 const multiplierReheatLoad)
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilReheatMultiplier(state, index, multiplierReheatLoad);
-}
-#endif // OLD_API
 
 void setCoilReheatMultiplier(EnergyPlusData &state,
                              int const coilNum,
@@ -2227,29 +1927,17 @@ void setCoilReheatMultiplier(EnergyPlusData &state,
     c->reheatLoadMult = multiplierReheatLoad;
 }
 
-#ifdef OLD_API
-void setCoilSupplyFanInfo(EnergyPlusData &state,
-                          std::string const &coilName, // user-defined name of the coil
-                          HVAC::CoilType const coilType, // idf input object class name of coil
-                          std::string const &fanName,
-                          HVAC::FanType fanType,
-                          int fanIndex)
-{
-    int index = getReportIndex(state, coilName, coilType);
-    setCoilSupplyFanInfo(state, index, fanName, fanType, fanIndex);
-}
-#endif // OLD_API
-
 void setCoilSupplyFanInfo(EnergyPlusData &state,
                           int const coilNum,
                           std::string const &fanName,
                           HVAC::FanType fanType,
                           int fanIndex)
 {
+    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
     if (fanName.empty()) {
         return;
     }
-    assert(coilNum >= 0 && coilNum < (int)state.dataRptCoilSelection->coils.size());
+
     auto *c = state.dataRptCoilSelection->coils[coilNum];
     c->fanAssociatedWithCoilName = fanName;
     c->supFanType = fanType;
@@ -2258,7 +1946,6 @@ void setCoilSupplyFanInfo(EnergyPlusData &state,
         c->supFanNum = Fans::GetFanIndex(state, fanName);
     }
 }
-
 
 void setCoilEqNum(EnergyPlusData &state,
                   std::string const &coilName,
@@ -2324,7 +2011,8 @@ bool isCompTypeFan(std::string const &compType // string component type, input o
 bool isCompTypeCoil(std::string const &compType // string component type, input object class name
 )
 {
-   return getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(compType)) != -1;
+    // if compType name is one of the coil objects, then return true
+    return getEnumValue(HVAC::coilTypeNamesUC, Util::makeUPPER(compType)) != -1;
 }
 
 void setZoneLatentLoadCoolingIdealPeak(EnergyPlusData &state, int const zoneIndex, Real64 const zoneCoolingLatentLoad)

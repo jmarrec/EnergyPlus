@@ -224,7 +224,7 @@ void UpdateUtilityBills(EnergyPlusData &state)
     //    Single routine used to call all get input
     //    routines for economics.
 
-    auto &s_econ = state.dataEconTariff;
+    const auto &s_econ = state.dataEconTariff;
 
     if (s_econ->Update_GetInput) {
         bool ErrorsFound = false;
@@ -3915,7 +3915,7 @@ void LEEDtariffReporting(EnergyPlusData &state)
         std::string distHeatSteamTariffNames;
         std::string othrTariffNames;
         for (int iTariff = 1; iTariff <= s_econ->numTariff; ++iTariff) {
-            auto &tariff = s_econ->tariff(iTariff);
+            const auto &tariff = s_econ->tariff(iTariff);
             if (tariff.isSelected) {
                 allTotalCost += tariff.totalAnnualCost;
                 if (tariff.kindMtr == MeterType::ElecSimple || tariff.kindMtr == MeterType::ElecProduced ||

@@ -558,7 +558,7 @@ TEST_F(EnergyPlusFixture, ReportCoilSelection_ZoneEqCoil)
 TEST_F(EnergyPlusFixture, ReportCoilSelection_ZoneEqCoolingCoil)
 {
     std::string coil1Name("Coil 1");          // user-defined name of the coil
-    HVAC::CoilType coil1Type = HVAC::CoilType::DXCooling; // idf input object class name of coil
+    HVAC::CoilType coil1Type = HVAC::CoilType::CoolingDX; // idf input object class name of coil
 
     state->dataGlobal->NumOfZones = 3;
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
