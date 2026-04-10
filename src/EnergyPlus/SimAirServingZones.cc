@@ -2415,9 +2415,6 @@ void ConnectReturnNodes(EnergyPlusData &state)
                             }
                             break; // leave zone return node loop
                         }
-                        if (returnFound) {
-                            break; // leave controlled zone loop
-                        }
                     }
                 }
             }
