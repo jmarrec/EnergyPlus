@@ -2402,10 +2402,8 @@ void ConnectReturnNodes(EnergyPlusData &state)
                         continue;
                     }
                     for (int zoneOutNum = 1; zoneOutNum <= thisZoneEquip.NumReturnNodes; ++zoneOutNum) {
-                        bool returnFound = false;
                         if (thisZoneEquip.ReturnNode(zoneOutNum) == zeqReturnNodeNum) {
                             thisZoneEquip.ReturnNodeAirLoopNum(zoneOutNum) = airLoopNum;
-                            returnFound = true;
                             // Find matching inlet node connected to the same air loop
                             for (int inletNum = 1; inletNum <= thisZoneEquip.NumInletNodes; ++inletNum) {
                                 if (thisZoneEquip.InletNodeAirLoopNum(inletNum) == airLoopNum) {
