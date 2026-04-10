@@ -5141,10 +5141,9 @@ void GetAirTerminalSizing(EnergyPlusData &state)
 
     static constexpr std::string_view RoutineName("GetAirTerminalSizing: "); // include trailing blank space
 
-    int NumAlphas;           // Number of Alphas for each GetObjectItem call
-    int NumNumbers;          // Number of Numbers for each GetObjectItem call
-    int TotalArgs;           // Total number of alpha and numeric arguments (max) for a
-    bool ErrorsFound(false); // If errors detected in input
+    int NumAlphas;  // Number of Alphas for each GetObjectItem call
+    int NumNumbers; // Number of Numbers for each GetObjectItem call
+    int TotalArgs;  // Total number of alpha and numeric arguments (max) for a
     auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     cCurrentModuleObject = "DesignSpecification:AirTerminal:Sizing";
     state.dataSize->NumAirTerminalSizingSpec = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
@@ -5178,10 +5177,6 @@ void GetAirTerminalSizing(EnergyPlusData &state)
             thisATSizing.DesHeatSATRatio = state.dataIPShortCut->rNumericArgs(4);
             thisATSizing.MinOAFrac = state.dataIPShortCut->rNumericArgs(5);
         }
-    }
-
-    if (ErrorsFound) {
-        ShowFatalError(state, EnergyPlus::format("{}Errors found in input.  Preceding condition(s) cause termination.", RoutineName));
     }
 }
 

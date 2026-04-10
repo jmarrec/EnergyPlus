@@ -6830,9 +6830,8 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             state.dataWaterThermalTanks->HPWaterHeater(HPNum).OperatingAirMassFlowRate =
                 state.dataWaterThermalTanks->HPWaterHeater(HPNum).OperatingAirFlowRate * state.dataEnvrn->StdRhoAir;
             if (state.dataSize->CurZoneEqNum > 0) {
-                auto &ZoneEqSizing = state.dataSize->ZoneEqSizing;
-                ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirFlow = true;
-                ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirVolFlow = state.dataSize->DataNonZoneNonAirloopValue;
+                state.dataSize->ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirFlow = true;
+                state.dataSize->ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirVolFlow = state.dataSize->DataNonZoneNonAirloopValue;
             }
             if (state.dataPlnt->PlantFirstSizesOkayToReport || !state.dataGlobal->AnyPlantInModel || this->AlreadyRated) {
                 this->MyHPSizeFlag = false;
