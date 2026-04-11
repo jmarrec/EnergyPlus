@@ -478,37 +478,42 @@ protected:
         // DX coil set up
         state->dataDXCoils->DXCoilNumericFields(1).PerfMode.allocate(5);
         state->dataDXCoils->DXCoilNumericFields(1).PerfMode(1).FieldNames.allocate(30);
-        state->dataDXCoils->DXCoil(1).Name = "VRFTUDXCOOLCOIL";
-        state->dataDXCoils->DXCoil(1).AirInNode = coolCoilAirInNode;
-        state->dataDXCoils->DXCoil(1).AirOutNode = coolCoilAirOutNode;
-        state->dataDXCoils->DXCoil(1).coilType = HVAC::CoilType::CoolingVRF;
-        state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate = DataSizing::AutoSize;
-        state->dataDXCoils->DXCoil(1).RatedTotCap = DataSizing::AutoSize;
-        state->dataDXCoils->DXCoil(1).RatedSHR = DataSizing::AutoSize;
-        state->dataDXCoils->DXCoil(1).availSched = sched1;
-        state->dataDXCoils->DXCoil(1).CCapFTemp.allocate(1);
-        state->dataDXCoils->DXCoil(1).CCapFTemp(1) = Sch1;
-        state->dataDXCoils->DXCoil(1).CCapFFlow.allocate(1);
-        state->dataDXCoils->DXCoil(1).CCapFFlow(1) = Sch1;
-        state->dataDXCoils->DXCoil(1).PLFFPLR.allocate(1);
-        state->dataDXCoils->DXCoil(1).PLFFPLR(1) = Sch1;
+        auto &dxCoil1 = state->dataDXCoils->DXCoil(1);
+        dxCoil1.Name = "VRFTUDXCOOLCOIL";
+        dxCoil1.AirInNode = coolCoilAirInNode;
+        dxCoil1.AirOutNode = coolCoilAirOutNode;
+        dxCoil1.coilType = HVAC::CoilType::CoolingVRF;
+        dxCoil1.coilReportNum = ReportCoilSelection::getReportIndex(*state, dxCoil1.Name, dxCoil1.coilType);
+        
+        dxCoil1.RatedAirVolFlowRate = DataSizing::AutoSize;
+        dxCoil1.RatedTotCap = DataSizing::AutoSize;
+        dxCoil1.RatedSHR = DataSizing::AutoSize;
+        dxCoil1.availSched = sched1;
+        dxCoil1.CCapFTemp.allocate(1);
+        dxCoil1.CCapFTemp(1) = Sch1;
+        dxCoil1.CCapFFlow.allocate(1);
+        dxCoil1.CCapFFlow(1) = Sch1;
+        dxCoil1.PLFFPLR.allocate(1);
+        dxCoil1.PLFFPLR(1) = Sch1;
 
         state->dataDXCoils->DXCoilNumericFields(2).PerfMode.allocate(5);
         state->dataDXCoils->DXCoilNumericFields(2).PerfMode(1).FieldNames.allocate(30);
-        state->dataDXCoils->DXCoil(2).Name = "VRFTUDXHEATCOIL";
-        state->dataDXCoils->DXCoil(2).coilType = HVAC::CoilType::HeatingVRF;
-        state->dataDXCoils->DXCoil(2).AirInNode = heatCoilAirInNode;
-        state->dataDXCoils->DXCoil(2).AirOutNode = heatCoilAirOutNode;
-        state->dataDXCoils->DXCoil(2).RatedAirVolFlowRate = DataSizing::AutoSize;
-        state->dataDXCoils->DXCoil(2).RatedTotCap = DataSizing::AutoSize;
-        state->dataDXCoils->DXCoil(2).RatedSHR = DataSizing::AutoSize;
-        state->dataDXCoils->DXCoil(2).availSched = sched1;
-        state->dataDXCoils->DXCoil(2).CCapFTemp.allocate(1);
-        state->dataDXCoils->DXCoil(2).CCapFTemp(1) = Sch1;
-        state->dataDXCoils->DXCoil(2).CCapFFlow.allocate(1);
-        state->dataDXCoils->DXCoil(2).CCapFFlow(1) = Sch1;
-        state->dataDXCoils->DXCoil(2).PLFFPLR.allocate(1);
-        state->dataDXCoils->DXCoil(2).PLFFPLR(1) = Sch1;
+        auto &dxCoil2 = state->dataDXCoils->DXCoil(2);
+        dxCoil2.Name = "VRFTUDXHEATCOIL";
+        dxCoil2.coilType = HVAC::CoilType::HeatingVRF;
+        dxCoil2.coilReportNum = ReportCoilSelection::getReportIndex(*state, dxCoil2.Name, dxCoil2.coilType);
+        dxCoil2.AirInNode = heatCoilAirInNode;
+        dxCoil2.AirOutNode = heatCoilAirOutNode;
+        dxCoil2.RatedAirVolFlowRate = DataSizing::AutoSize;
+        dxCoil2.RatedTotCap = DataSizing::AutoSize;
+        dxCoil2.RatedSHR = DataSizing::AutoSize;
+        dxCoil2.availSched = sched1;
+        dxCoil2.CCapFTemp.allocate(1);
+        dxCoil2.CCapFTemp(1) = Sch1;
+        dxCoil2.CCapFFlow.allocate(1);
+        dxCoil2.CCapFFlow(1) = Sch1;
+        dxCoil2.PLFFPLR.allocate(1);
+        dxCoil2.PLFFPLR(1) = Sch1;
     }
 
     virtual void TearDown()
