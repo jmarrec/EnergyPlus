@@ -123,10 +123,9 @@ void CoilCoolingDX::getInput(EnergyPlusData &state)
     auto const &coilSchemaProps = inputProcessor->getObjectSchemaProps(state, state.dataCoilCoolingDX->coilCoolingDXObjectName);
 
     for (auto const &coilInstance : coilInstances.value().items()) {
-        auto const &coilName = coilInstance.key();
         auto const &coilFields = coilInstance.value();
         CoilCoolingDXInputSpecification input_specs;
-        input_specs.name = Util::makeUPPER(coilName);
+        input_specs.name = Util::makeUPPER(coilInstance.key());
         input_specs.evaporator_inlet_node_name = inputProcessor->getAlphaFieldValue(coilFields, coilSchemaProps, "evaporator_inlet_node_name");
         input_specs.evaporator_outlet_node_name = inputProcessor->getAlphaFieldValue(coilFields, coilSchemaProps, "evaporator_outlet_node_name");
         input_specs.availability_schedule_name = inputProcessor->getAlphaFieldValue(coilFields, coilSchemaProps, "availability_schedule_name");
