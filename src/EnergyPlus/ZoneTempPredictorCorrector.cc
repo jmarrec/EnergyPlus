@@ -2292,7 +2292,7 @@ void CalculateAdaptiveComfortSetPointSchl(EnergyPlusData &state, Array1D<Real64>
     int constexpr summerDesignDayTypeIndex(9);
     Real64 GrossApproxAvgDryBulbDesignDay(0.0);
 
-    auto &s_ztpc = state.dataZoneTempPredictorCorrector;
+    const auto &s_ztpc = state.dataZoneTempPredictorCorrector;
 
     for (size_t i = 1; i <= state.dataWeather->DesDayInput.size(); i++) {
         // Summer design day
@@ -4117,7 +4117,7 @@ Real64 ZoneSpaceHeatBalanceData::correctAirTemp(
     // Hybrid modeling start
     // SpaceHB TODO: For now, hybrid model is only for zones
     if (spaceNum == 0 && state.dataHybridModel->FlagHybridModel) {
-        auto &hmZone = state.dataHybridModel->hybridModelZones(zoneNum);
+        const auto &hmZone = state.dataHybridModel->hybridModelZones(zoneNum);
         if ((hmZone.InfiltrationCalc_T || hmZone.InternalThermalMassCalc_T || hmZone.PeopleCountCalc_T) && (!state.dataGlobal->WarmupFlag) &&
             (!state.dataGlobal->DoingSizing)) {
             InverseModelTemperature(state,
@@ -4598,7 +4598,7 @@ void ZoneSpaceHeatBalanceData::correctHumRat(EnergyPlusData &state, int const zo
     // HybridModel with measured humidity ratio begins
     // SpaceHB TODO: For now, hybrid model is only for zones
     if (spaceNum == 0 && state.dataHybridModel->FlagHybridModel) {
-        auto &hmZone = state.dataHybridModel->hybridModelZones(zoneNum);
+        const auto &hmZone = state.dataHybridModel->hybridModelZones(zoneNum);
         if ((hmZone.InfiltrationCalc_H || hmZone.PeopleCountCalc_H) && (!state.dataGlobal->WarmupFlag) && (!state.dataGlobal->DoingSizing)) {
             Real64 LatentGainExceptPeople = 0.0;
             if (hmZone.PeopleCountCalc_H) {
@@ -5925,7 +5925,7 @@ void AdjustOperativeSetPointsforAdapComfort(EnergyPlusData &state, int const Tem
     // PURPOSE OF THIS SUBROUTINE:
     // This routine adjust the operative setpoints for each controlled adaptive thermal comfort models.
 
-    auto &s_ztpc = state.dataZoneTempPredictorCorrector;
+    const auto &s_ztpc = state.dataZoneTempPredictorCorrector;
     auto const &tempControlledZone = state.dataZoneCtrls->TempControlledZone(TempControlledZoneID);
     auto const &AdapComfortDailySetPointSchedule = s_ztpc->AdapComfortDailySetPointSchedule;
 
@@ -6579,7 +6579,7 @@ void FillPredefinedTableOnThermostatSetpoints(EnergyPlusData &state)
 {
     // J.Glazer - Aug 2017
     using namespace OutputReportPredefined;
-    auto &s_ztpc = state.dataZoneTempPredictorCorrector;
+    const auto &s_ztpc = state.dataZoneTempPredictorCorrector;
 
     std::vector<int> uniqSch;
     uniqSch.reserve(s_ztpc->NumTempControls[(int)HVAC::SetptType::SingleHeat] + s_ztpc->NumTempControls[(int)HVAC::SetptType::SingleCool] +
