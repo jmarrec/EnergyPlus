@@ -468,8 +468,8 @@ protected:
         VRFTU.HeatCoilIndex = heatCoilIndex;
         VRFTU.heatCoilAirInNode = heatCoilAirInNode;
         VRFTU.heatCoilAirOutNode = heatCoilAirOutNode;
-        VRFTU.DXCoolCoilType_Num = HVAC::CoilVRF_Cooling;
-        VRFTU.DXHeatCoilType_Num = HVAC::CoilVRF_Heating;
+        VRFTU.coolCoilType = HVAC::CoilType::CoolingVRF;
+        VRFTU.heatCoilType = HVAC::CoilType::HeatingVRF;
         VRFTU.CoolingCoilPresent = true;
         VRFTU.HeatingCoilPresent = true;
         VRFTU.HVACSizingIndex = 0;
@@ -478,10 +478,9 @@ protected:
         state->dataDXCoils->DXCoilNumericFields(1).PerfMode.allocate(5);
         state->dataDXCoils->DXCoilNumericFields(1).PerfMode(1).FieldNames.allocate(30);
         state->dataDXCoils->DXCoil(1).Name = "VRFTUDXCOOLCOIL";
-        state->dataDXCoils->DXCoil(1).DXCoilType = "Coil:Cooling:DX:VariableRefrigerantFlow";
         state->dataDXCoils->DXCoil(1).AirInNode = coolCoilAirInNode;
         state->dataDXCoils->DXCoil(1).AirOutNode = coolCoilAirOutNode;
-        state->dataDXCoils->DXCoil(1).DXCoilType_Num = HVAC::CoilVRF_Cooling;
+        state->dataDXCoils->DXCoil(1).coilType = HVAC::CoilType::CoolingVRF;
         state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate = DataSizing::AutoSize;
         state->dataDXCoils->DXCoil(1).RatedTotCap = DataSizing::AutoSize;
         state->dataDXCoils->DXCoil(1).RatedSHR = DataSizing::AutoSize;
@@ -496,10 +495,9 @@ protected:
         state->dataDXCoils->DXCoilNumericFields(2).PerfMode.allocate(5);
         state->dataDXCoils->DXCoilNumericFields(2).PerfMode(1).FieldNames.allocate(30);
         state->dataDXCoils->DXCoil(2).Name = "VRFTUDXHEATCOIL";
-        state->dataDXCoils->DXCoil(2).DXCoilType = "Coil:Heating:DX:VariableRefrigerantFlow";
+        state->dataDXCoils->DXCoil(2).coilType = HVAC::CoilType::HeatingVRF;
         state->dataDXCoils->DXCoil(2).AirInNode = heatCoilAirInNode;
         state->dataDXCoils->DXCoil(2).AirOutNode = heatCoilAirOutNode;
-        state->dataDXCoils->DXCoil(2).DXCoilType_Num = HVAC::CoilVRF_Heating;
         state->dataDXCoils->DXCoil(2).RatedAirVolFlowRate = DataSizing::AutoSize;
         state->dataDXCoils->DXCoil(2).RatedTotCap = DataSizing::AutoSize;
         state->dataDXCoils->DXCoil(2).RatedSHR = DataSizing::AutoSize;
@@ -2906,7 +2904,7 @@ TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_GetCoilInput)
 
     // Check the results
     ASSERT_EQ(1, state->dataDXCoils->NumDXCoils);
-    EXPECT_EQ(state->dataDXCoils->DXCoil(1).DXCoilType_Num, 33);
+    EXPECT_ENUM_EQ(state->dataDXCoils->DXCoil(1).coilType, HVAC::CoilType::CoolingVRFFluidTCtrl);
     EXPECT_EQ(state->dataDXCoils->DXCoil(1).RatedTotCap(1), 2200);
     EXPECT_EQ(state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.865);
     EXPECT_EQ(state->dataDXCoils->DXCoil(1).C1Te, 0);
@@ -8283,9 +8281,8 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilElectric)
 
     int VRFTUNum(1);
     thisVRFTU.Name = "TU1";
-    thisVRFTU.SuppHeatCoilType = "COIL:HEATING:ELECTRIC";
     thisVRFTU.SuppHeatCoilName = "TU1 SUPP HEATING COIL";
-    thisVRFTU.SuppHeatCoilType_Num = HVAC::Coil_HeatingElectric;
+    thisVRFTU.suppHeatCoilType = HVAC::CoilType::HeatingElectric;
     thisVRFTU.fanOp = HVAC::FanOp::Continuous;
     thisVRFTU.type = TUType::ConstantVolume;
     thisVRFTU.SuppHeatCoilAirInletNode = 1;
@@ -8304,7 +8301,7 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilElectric)
     state->dataHeatingCoils->HeatingCoil(CoilNum).Name = thisVRFTU.SuppHeatCoilName;
     state->dataHeatingCoils->HeatingCoil(CoilNum).HeatingCoilType = thisVRFTU.SuppHeatCoilType;
     state->dataHeatingCoils->HeatingCoil(CoilNum).FuelType = Constant::eFuel::Electricity;
-    state->dataHeatingCoils->HeatingCoil(CoilNum).HCoilType_Num = thisVRFTU.SuppHeatCoilType_Num;
+    state->dataHeatingCoils->HeatingCoil(CoilNum).heatCoilType = thisVRFTU.suppHeatCoilType;
     state->dataHeatingCoils->HeatingCoil(CoilNum).AirInletNodeNum = thisVRFTU.SuppHeatCoilAirInletNode;
     state->dataHeatingCoils->HeatingCoil(CoilNum).AirOutletNodeNum = thisVRFTU.SuppHeatCoilAirOutletNode;
     state->dataHeatingCoils->HeatingCoil(CoilNum).availSched = Sched::GetScheduleAlwaysOn(*state); // fan is always on
@@ -8348,9 +8345,8 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilFuel)
 
     int VRFTUNum(1);
     thisVRFTU.Name = "TU2";
-    thisVRFTU.SuppHeatCoilType = "COIL:HEATING:FUEL";
     thisVRFTU.SuppHeatCoilName = "TU2 SUPP HEATING COIL";
-    thisVRFTU.SuppHeatCoilType_Num = HVAC::Coil_HeatingGasOrOtherFuel;
+    thisVRFTU.suppHeatCoilType = HVAC::CoilType::HeatingGasOrOtherFuel;
     thisVRFTU.fanOp = HVAC::FanOp::Continuous;
     thisVRFTU.type = TUType::ConstantVolume;
     thisVRFTU.SuppHeatCoilAirInletNode = 1;
@@ -8369,7 +8365,7 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilFuel)
     state->dataHeatingCoils->HeatingCoil(CoilNum).Name = thisVRFTU.SuppHeatCoilName;
     state->dataHeatingCoils->HeatingCoil(CoilNum).HeatingCoilType = thisVRFTU.SuppHeatCoilType;
     state->dataHeatingCoils->HeatingCoil(CoilNum).FuelType = Constant::eFuel::NaturalGas;
-    state->dataHeatingCoils->HeatingCoil(CoilNum).HCoilType_Num = thisVRFTU.SuppHeatCoilType_Num;
+    state->dataHeatingCoils->HeatingCoil(CoilNum).heatCoilType = thisVRFTU.suppHeatCoilType;
     state->dataHeatingCoils->HeatingCoil(CoilNum).AirInletNodeNum = thisVRFTU.SuppHeatCoilAirInletNode;
     state->dataHeatingCoils->HeatingCoil(CoilNum).AirOutletNodeNum = thisVRFTU.SuppHeatCoilAirOutletNode;
     state->dataHeatingCoils->HeatingCoil(CoilNum).availSched = Sched::GetScheduleAlwaysOn(*state); // fan is always on
@@ -8413,9 +8409,8 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilWater)
 
     int VRFTUNum(1);
     thisVRFTU.Name = "TU3";
-    thisVRFTU.SuppHeatCoilType = "COIL:HEATING:WATER";
     thisVRFTU.SuppHeatCoilName = "TU3 SUPP HEATING COIL";
-    thisVRFTU.SuppHeatCoilType_Num = HVAC::Coil_HeatingWater;
+    thisVRFTU.suppHeatCoilType = HVAC::CoilType::HeatingWater;
     thisVRFTU.fanOp = HVAC::FanOp::Continuous;
     thisVRFTU.type = TUType::ConstantVolume;
     thisVRFTU.SuppHeatCoilAirInletNode = 1;
@@ -8534,9 +8529,8 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilSteam)
 
     int VRFTUNum(1);
     thisVRFTU.Name = "TU4";
-    thisVRFTU.SuppHeatCoilType = "COIL:HEATING:STEAM";
     thisVRFTU.SuppHeatCoilName = "TU4 SUPP HEATING COIL";
-    thisVRFTU.SuppHeatCoilType_Num = HVAC::Coil_HeatingSteam;
+    thisVRFTU.suppHeatCoilType = HVAC::CoilType::HeatingSteam;
     thisVRFTU.fanOp = HVAC::FanOp::Continuous;
     thisVRFTU.SuppHeatCoilAirInletNode = 1;
     thisVRFTU.SuppHeatCoilAirOutletNode = 2;
