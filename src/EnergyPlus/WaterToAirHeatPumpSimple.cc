@@ -1115,7 +1115,7 @@ namespace WaterToAirHeatPumpSimple {
                         simpleWAHP.AirMassFlowRate);
                 }
             } else {
-                if ((PartLoadRatio == 0.0) || (simpleWAHP.AirMassFlowRate / PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
+                if (PartLoadRatio > 0.0 && (simpleWAHP.AirMassFlowRate / PartLoadRatio) < 0.25 * RatedAirMassFlowRate) {
                     if (simpleWAHP.LowFlowFlag) {
                         ShowWarningError(
                             state,
