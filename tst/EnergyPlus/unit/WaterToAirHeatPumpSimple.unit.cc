@@ -437,7 +437,8 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestAirFlow)
     InitSimpleWatertoAirHP(*state, HPNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, FirstHVACIteration, PartLoadRatio);
 
     EXPECT_TRUE(compare_err_stream_substring(delimited_string({
-        "   ** Warning ** InitSimpleWatertoAirHP: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil (SYS 5 HEAT PUMP COOLING MODE) rated air flow rate.",
+        "   ** Warning ** InitSimpleWatertoAirHP: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil (SYS 5 HEAT PUMP "
+        "COOLING MODE) rated air flow rate.",
     })));
 
     // Introducing state variables (i.e., moving local temporary
