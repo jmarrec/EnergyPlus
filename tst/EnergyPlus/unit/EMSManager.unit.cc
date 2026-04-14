@@ -3019,3 +3019,50 @@ TEST_F(EnergyPlusFixture, EMSManager_Sensor_On_ScheduleConstant)
     EXPECT_FALSE(schedDirect->EMSActuatedOn);
     EXPECT_EQ(0.0, schedDirect->EMSVal);
 }
+
+TEST_F(EnergyPlusFixture, UnusedActuatorWarning)
+{
+    // Issue #10944: user declares actuator A1, typos it as Al in the program.
+    // Al becomes a fresh local Erl variable; A1 is never assigned.
+    // End-of-sim check must warn about unused actuator A1.
+    std::string const idf_objects = delimited_string({
+
+        "OutdoorAir:Node, Test node;",
+
+        "EnergyManagementSystem:Actuator,",
+        "A1,                              !- Name",
+        "Test node,                       !- Actuated Component Unique Name",
+        "System Node Setpoint,            !- Actuated Component Type",
+        "Temperature Setpoint;            !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "Typo Test Manager,               !- Name",
+        "BeginTimestepBeforePredictor,    !- EnergyPlus Model Calling Point",
+        "TypoProgram;                     !- Program Name 1",
+
+        "EnergyManagementSystem:Program,",
+        "TypoProgram,",
+        "Set Al = 2;",
+
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    OutAirNodeManager::SetOutAirNodes(*state);
+
+    EMSManager::CheckIfAnyEMS(*state);
+
+    state->dataEMSMgr->FinishProcessingUserInput = true;
+
+    bool anyRan;
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::SetupSimulation, anyRan, ObjexxFCL::Optional_int_const());
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, anyRan, ObjexxFCL::Optional_int_const());
+
+    compare_err_stream(""); // drop any setup chatter
+
+    EMSManager::checkForUnusedActuatorsAtEnd(*state);
+
+    EXPECT_TRUE(compare_err_stream_substring("Unused EMS Actuator detected", false));
+    EXPECT_TRUE(compare_err_stream_substring("A1", true));
+}
