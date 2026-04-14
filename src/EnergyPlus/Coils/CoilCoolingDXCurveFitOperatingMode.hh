@@ -115,7 +115,7 @@ struct CoilCoolingDXCurveFitOperatingMode
     Real64 maxCyclingRate = 0.0;
     Real64 latentTimeConst = 0.0;
     bool latentDegradationActive = false;
-    bool applyPartLoadFractionAllSpeeds = true;
+    bool applyPartLoadFractionAllSpeeds = false;
     bool applyLatentDegradationAllSpeeds = false;
 
     // results from coil model at speed
