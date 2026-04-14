@@ -6775,6 +6775,8 @@ void GetDXCoils(EnergyPlusData &state)
                              thisDXCoil.RatedTotCapEMSOverrideValue(1));
         }
         // setup EMS sizing actuators for single speed DX heating coils (issue #11301)
+        // GetDXCoils parses cooling single-speed first (indices [1..NumDoe2DXCoils]), then heating
+        // single-speed (indices [NumDoe2DXCoils+1..NumDoe2DXCoils+NumDXHeatingCoils]).
         for (DXCoilNum = state.dataDXCoils->NumDoe2DXCoils + 1; DXCoilNum <= state.dataDXCoils->NumDoe2DXCoils + state.dataDXCoils->NumDXHeatingCoils;
              ++DXCoilNum) {
             auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);

@@ -8337,4 +8337,176 @@ TEST_F(EnergyPlusFixture, CoilHeatingDXSingleSpeed_GrossCapacityActuator)
     }
 }
 
+TEST_F(EnergyPlusFixture, CoilHeatingDXSingleSpeed_GrossCapacityActuator_MultiCoilIndexing)
+{
+    // Issue #11301: verify the heating loop picks the correct slice of the shared DXCoil array
+    // when both cooling and heating single-speed coils are present (and multiple of each).
+    // If the heating loop started at the wrong index, a heating actuator would point at a
+    // cooling coil's name (or vice versa).
+    // IDF pattern (curves, coil field layout) mirrors TestReadingCoilCoolingHeatingDX which is a
+    // known-working multi-coil DX test.
+
+    std::string const idf_objects = delimited_string({
+
+        "Curve:Biquadratic,",
+        "  Biquadratic,             !- Name",
+        "  1.0, 1.0, 1.0, 1.0, 1.0, 1.0,",
+        "  5, 40, 5, 40, , ,",
+        "  Temperature, Temperature, Dimensionless;",
+
+        "Curve:Cubic,",
+        "  Cubic,                   !- Name",
+        "  1.0, 1.0, 1.0, 0, 5, 40, , ,",
+        "  Temperature, Temperature;",
+
+        "Coil:Cooling:DX:SingleSpeed,",
+        "  CoolA,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  32000,                   !- Gross Rated Total Cooling Capacity {W}",
+        "  0.75,                    !- Gross Rated Sensible Heat Ratio",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
+        "  1.7,                     !- Rated Air Flow Rate {m3/s}",
+        "  ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate",
+        "  934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate",
+        "  CoolA Inlet,             !- Air Inlet Node Name",
+        "  CoolA Outlet,            !- Air Outlet Node Name",
+        "  Biquadratic, Cubic, Biquadratic, Cubic, Cubic,",
+        "  ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation",
+        "  ,                        !- Nominal Time for Condensate Removal to Begin",
+        "  ,                        !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity",
+        "  ,                        !- Maximum Cycling Rate",
+        "  ,                        !- Latent Capacity Time Constant",
+        "  ,                        !- Condenser Air Inlet Node Name",
+        "  AirCooled,               !- Condenser Type",
+        "  ,                        !- Evaporative Condenser Effectiveness",
+        "  ,                        !- Evaporative Condenser Air Flow Rate",
+        "  ,                        !- Evaporative Condenser Pump Rated Power Consumption",
+        "  0,                       !- Crankcase Heater Capacity",
+        "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        "  ;                        !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation",
+
+        "Coil:Cooling:DX:SingleSpeed,",
+        "  CoolB,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  32000, 0.75, 3.0, 1.7, , 934.4,",
+        "  CoolB Inlet, CoolB Outlet,",
+        "  Biquadratic, Cubic, Biquadratic, Cubic, Cubic,",
+        "  , , , , ,",
+        "  , AirCooled, , , ,",
+        "  0, , ;",
+
+        "Coil:Cooling:DX:SingleSpeed,",
+        "  CoolC,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  32000, 0.75, 3.0, 1.7, , 934.4,",
+        "  CoolC Inlet, CoolC Outlet,",
+        "  Biquadratic, Cubic, Biquadratic, Cubic, Cubic,",
+        "  , , , , ,",
+        "  , AirCooled, , , ,",
+        "  0, , ;",
+
+        "Coil:Cooling:DX:SingleSpeed,",
+        "  CoolD,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  32000, 0.75, 3.0, 1.7, , 934.4,",
+        "  CoolD Inlet, CoolD Outlet,",
+        "  Biquadratic, Cubic, Biquadratic, Cubic, Cubic,",
+        "  , , , , ,",
+        "  , AirCooled, , , ,",
+        "  0, , ;",
+
+        "Coil:Heating:DX:SingleSpeed,",
+        "  HeatA,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  18584.26,                !- Gross Rated Heating Capacity {W}",
+        "  3.8,                     !- Gross Rated Heating COP {W/W}",
+        "  1.0,                     !- Rated Air Flow Rate {m3/s}",
+        "  673.3,                   !- 2017 Rated Supply Fan Power Per Volume Flow Rate",
+        "  673.3,                   !- 2023 Rated Supply Fan Power Per Volume Flow Rate",
+        "  HeatA Inlet,             !- Air Inlet Node Name",
+        "  HeatA Outlet,            !- Air Outlet Node Name",
+        "  Biquadratic, Cubic, Biquadratic, Cubic, Cubic,",
+        "  ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name",
+        "  -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation",
+        "  ,                        !- Outdoor Dry-Bulb Temperature to Turn On Compressor",
+        "  5,                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation",
+        "  0,                       !- Crankcase Heater Capacity",
+        "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        "  10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation",
+        "  Resistive, Timed, 0.166667, 2000, , , , , , , ;",
+
+        "Coil:Heating:DX:SingleSpeed,",
+        "  HeatB,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  18584.26, 3.8, 1.0, 673.3, 673.3,",
+        "  HeatB Inlet, HeatB Outlet,",
+        "  Biquadratic, Cubic, Biquadratic, Cubic, Cubic,",
+        "  , -8, , 5, 0, , 10,",
+        "  Resistive, Timed, 0.166667, 2000, , , , , , , ;",
+
+        "Coil:Heating:DX:SingleSpeed,",
+        "  HeatC,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  18584.26, 3.8, 1.0, 673.3, 673.3,",
+        "  HeatC Inlet, HeatC Outlet,",
+        "  Biquadratic, Cubic, Biquadratic, Cubic, Cubic,",
+        "  , -8, , 5, 0, , 10,",
+        "  Resistive, Timed, 0.166667, 2000, , , , , , , ;",
+
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    state->dataGlobal->AnyEnergyManagementSystemInModel = true;
+    GetDXCoils(*state);
+
+    ASSERT_EQ(4, state->dataDXCoils->NumDoe2DXCoils);
+    ASSERT_EQ(3, state->dataDXCoils->NumDXHeatingCoils);
+
+    // Parse order is cooling-single-speed first, then heating-single-speed; verify names land
+    // at the expected indices in the shared DXCoil array. Asymmetric count (4 vs 3) catches any
+    // off-by-one in the heating loop bounds (NumDoe2DXCoils+1 .. +NumDXHeatingCoils).
+    EXPECT_EQ("COOLA", state->dataDXCoils->DXCoil(1).Name);
+    EXPECT_EQ("COOLB", state->dataDXCoils->DXCoil(2).Name);
+    EXPECT_EQ("COOLC", state->dataDXCoils->DXCoil(3).Name);
+    EXPECT_EQ("COOLD", state->dataDXCoils->DXCoil(4).Name);
+    EXPECT_EQ("HEATA", state->dataDXCoils->DXCoil(5).Name);
+    EXPECT_EQ("HEATB", state->dataDXCoils->DXCoil(6).Name);
+    EXPECT_EQ("HEATC", state->dataDXCoils->DXCoil(7).Name);
+
+    // Collect every cooling/heating capacity actuator keyed by (UniqueIDName, ControlTypeName).
+    std::set<std::pair<std::string, std::string>> capActuators;
+    for (int i = 1; i <= state->dataRuntimeLang->numEMSActuatorsAvailable; ++i) {
+        auto const &act = state->dataRuntimeLang->EMSActuatorAvailable(i);
+        if (act.ControlTypeName == "Autosized Rated Total Cooling Capacity" || act.ControlTypeName == "Autosized Rated Total Heating Capacity") {
+            capActuators.insert({act.UniqueIDName, act.ControlTypeName});
+            // component type must match the coil category — no cross-wiring
+            if (act.ControlTypeName == "Autosized Rated Total Cooling Capacity") {
+                EXPECT_EQ(act.ComponentTypeName, "Coil:Cooling:DX:SingleSpeed") << "cooling cap actuator on " << act.UniqueIDName;
+            } else {
+                EXPECT_EQ(act.ComponentTypeName, "Coil:Heating:DX:SingleSpeed") << "heating cap actuator on " << act.UniqueIDName;
+            }
+        }
+    }
+
+    // One cooling cap actuator per cooling coil, one heating cap actuator per heating coil.
+    EXPECT_EQ(7u, capActuators.size());
+    EXPECT_TRUE(capActuators.count({"COOLA", "Autosized Rated Total Cooling Capacity"}));
+    EXPECT_TRUE(capActuators.count({"COOLB", "Autosized Rated Total Cooling Capacity"}));
+    EXPECT_TRUE(capActuators.count({"COOLC", "Autosized Rated Total Cooling Capacity"}));
+    EXPECT_TRUE(capActuators.count({"COOLD", "Autosized Rated Total Cooling Capacity"}));
+    EXPECT_TRUE(capActuators.count({"HEATA", "Autosized Rated Total Heating Capacity"}));
+    EXPECT_TRUE(capActuators.count({"HEATB", "Autosized Rated Total Heating Capacity"}));
+    EXPECT_TRUE(capActuators.count({"HEATC", "Autosized Rated Total Heating Capacity"}));
+
+    // Guard against off-by-one slicing: no heating actuator should carry a cooling coil name,
+    // and no cooling actuator should carry a heating coil name.
+    for (char const *coolName : {"COOLA", "COOLB", "COOLC", "COOLD"}) {
+        EXPECT_FALSE(capActuators.count({coolName, "Autosized Rated Total Heating Capacity"})) << coolName;
+    }
+    for (char const *heatName : {"HEATA", "HEATB", "HEATC"}) {
+        EXPECT_FALSE(capActuators.count({heatName, "Autosized Rated Total Cooling Capacity"})) << heatName;
+    }
+}
+
 } // namespace EnergyPlus
