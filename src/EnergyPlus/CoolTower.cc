@@ -160,7 +160,8 @@ namespace CoolTower {
             for (auto const &coolTowerInstance : coolTowerObjects.value().items()) {
                 auto const &coolTowerFields = coolTowerInstance.value();
                 auto const coolTowerName = Util::makeUPPER(coolTowerInstance.key());
-                auto const availabilityScheduleName = inputProcessor->getAlphaFieldValue(coolTowerFields, objectSchemaProps, "availability_schedule_name");
+                auto const availabilityScheduleName =
+                    inputProcessor->getAlphaFieldValue(coolTowerFields, objectSchemaProps, "availability_schedule_name");
                 auto const zoneOrSpaceName = inputProcessor->getAlphaFieldValue(coolTowerFields, objectSchemaProps, "zone_or_space_name");
                 auto const waterSupplyStorageTankName =
                     inputProcessor->getAlphaFieldValue(coolTowerFields, objectSchemaProps, "water_supply_storage_tank_name");
@@ -227,7 +228,8 @@ namespace CoolTower {
                     ShowWarningBadMin(state, eoh, "Maximum Water Flow Rate", coolTower.MaxWaterFlowRate, Clusive::In, MinimumWaterFlowRate);
                 }
 
-                coolTower.TowerHeight = inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "effective_tower_height"); // Get effective tower height
+                coolTower.TowerHeight =
+                    inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "effective_tower_height"); // Get effective tower height
                 if (coolTower.TowerHeight > MaxHeight) {
                     coolTower.TowerHeight = MaxHeight;
                     ShowWarningBadMax(state, eoh, "Effective Tower Height", coolTower.TowerHeight, Clusive::In, MaxHeight);
@@ -238,7 +240,8 @@ namespace CoolTower {
                     ShowWarningBadMin(state, eoh, "Effective Tower Height", coolTower.TowerHeight, Clusive::In, MinHeight);
                 }
 
-                coolTower.OutletArea = inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "airflow_outlet_area"); // Get outlet area
+                coolTower.OutletArea =
+                    inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "airflow_outlet_area"); // Get outlet area
                 if (coolTower.OutletArea > MaxValue) {
                     coolTower.OutletArea = MaxValue;
                     ShowWarningBadMax(state, eoh, "Airflow Outlet Area", coolTower.OutletArea, Clusive::In, MaxValue);
@@ -248,8 +251,8 @@ namespace CoolTower {
                     ShowWarningBadMin(state, eoh, "Airflow Outlet Area", coolTower.OutletArea, Clusive::In, MinValue);
                 }
 
-                coolTower.MaxAirVolFlowRate =
-                    inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "maximum_air_flow_rate"); // Maximum limit of air flow to the space
+                coolTower.MaxAirVolFlowRate = inputProcessor->getRealFieldValue(
+                    coolTowerFields, objectSchemaProps, "maximum_air_flow_rate"); // Maximum limit of air flow to the space
                 if (coolTower.MaxAirVolFlowRate > MaxValue) {
                     coolTower.MaxAirVolFlowRate = MaxValue;
                     ShowWarningBadMax(state, eoh, "Maximum Air Flow Rate", coolTower.MaxAirVolFlowRate, Clusive::In, MaxValue);
@@ -259,8 +262,8 @@ namespace CoolTower {
                     ShowWarningBadMin(state, eoh, "Maximum Air Flow Rate", coolTower.MaxAirVolFlowRate, Clusive::In, MinValue);
                 }
 
-                coolTower.MinZoneTemp =
-                    inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "minimum_indoor_temperature"); // Get minimum temp limit which gets this cooltower off
+                coolTower.MinZoneTemp = inputProcessor->getRealFieldValue(
+                    coolTowerFields, objectSchemaProps, "minimum_indoor_temperature"); // Get minimum temp limit which gets this cooltower off
                 if (coolTower.MinZoneTemp > MaxValue) {
                     coolTower.MinZoneTemp = MaxValue;
                     ShowWarningBadMax(state, eoh, "Minimum Indoor Temperature", coolTower.MinZoneTemp, Clusive::In, MaxValue);
@@ -281,8 +284,8 @@ namespace CoolTower {
                     ShowWarningBadMin(state, eoh, "Fraction of Water Loss", coolTower.FracWaterLoss, Clusive::In, MinFrac);
                 }
 
-                coolTower.FracFlowSched =
-                    inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "fraction_of_flow_schedule"); // Fraction of loss of air flow
+                coolTower.FracFlowSched = inputProcessor->getRealFieldValue(
+                    coolTowerFields, objectSchemaProps, "fraction_of_flow_schedule"); // Fraction of loss of air flow
                 if (coolTower.FracFlowSched > MaxFrac) {
                     coolTower.FracFlowSched = MaxFrac;
                     ShowWarningBadMax(state, eoh, "Fraction of Flow Schedule", coolTower.FracFlowSched, Clusive::In, MaxFrac);
@@ -292,7 +295,8 @@ namespace CoolTower {
                     ShowWarningBadMin(state, eoh, "Fraction of Flow Schedule", coolTower.FracFlowSched, Clusive::In, MinFrac);
                 }
 
-                coolTower.RatedPumpPower = inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "rated_power_consumption"); // Get rated pump power
+                coolTower.RatedPumpPower =
+                    inputProcessor->getRealFieldValue(coolTowerFields, objectSchemaProps, "rated_power_consumption"); // Get rated pump power
                 ++CoolTowerNum;
             }
         }

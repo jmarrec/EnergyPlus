@@ -184,11 +184,8 @@ namespace BoilerSteam {
                 inputProcessor->markObjectAsUsed(state.dataIPShortCut->cCurrentModuleObject, boilerInstance.key());
 
                 // ErrorsFound will be set to True if problem was found, left untouched otherwise
-                GlobalNames::VerifyUniqueBoilerName(state,
-                                                    state.dataIPShortCut->cCurrentModuleObject,
-                                                    boilerName,
-                                                    ErrorsFound,
-                                                    state.dataIPShortCut->cCurrentModuleObject + " Name");
+                GlobalNames::VerifyUniqueBoilerName(
+                    state, state.dataIPShortCut->cCurrentModuleObject, boilerName, ErrorsFound, state.dataIPShortCut->cCurrentModuleObject + " Name");
                 auto &thisBoiler = state.dataBoilerSteam->Boiler(BoilerNum);
                 thisBoiler.Name = boilerName;
 
@@ -202,7 +199,8 @@ namespace BoilerSteam {
                     ShowContinueError(state, "Field: Maximum Operation Pressure units are Pa. Verify units.");
                 }
                 thisBoiler.NomEffic = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "theoretical_efficiency");
-                thisBoiler.TempUpLimitBoilerOut = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "design_outlet_steam_temperature");
+                thisBoiler.TempUpLimitBoilerOut =
+                    inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "design_outlet_steam_temperature");
                 thisBoiler.NomCap = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "nominal_capacity");
                 if (thisBoiler.NomCap == DataSizing::AutoSize) {
                     thisBoiler.NomCapWasAutoSized = true;
@@ -210,39 +208,33 @@ namespace BoilerSteam {
                 thisBoiler.MinPartLoadRat = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "minimum_part_load_ratio");
                 thisBoiler.MaxPartLoadRat = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "maximum_part_load_ratio");
                 thisBoiler.OptPartLoadRat = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "optimum_part_load_ratio");
-                thisBoiler.FullLoadCoef[0] = inputProcessor->getRealFieldValue(
-                    boilerFields, boilerSchemaProps, "coefficient_1_of_fuel_use_function_of_part_load_ratio_curve");
-                thisBoiler.FullLoadCoef[1] = inputProcessor->getRealFieldValue(
-                    boilerFields, boilerSchemaProps, "coefficient_2_of_fuel_use_function_of_part_load_ratio_curve");
-                thisBoiler.FullLoadCoef[2] = inputProcessor->getRealFieldValue(
-                    boilerFields, boilerSchemaProps, "coefficient_3_of_fuel_use_function_of_part_load_ratio_curve");
+                thisBoiler.FullLoadCoef[0] =
+                    inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "coefficient_1_of_fuel_use_function_of_part_load_ratio_curve");
+                thisBoiler.FullLoadCoef[1] =
+                    inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "coefficient_2_of_fuel_use_function_of_part_load_ratio_curve");
+                thisBoiler.FullLoadCoef[2] =
+                    inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "coefficient_3_of_fuel_use_function_of_part_load_ratio_curve");
                 thisBoiler.SizFac = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "sizing_factor");
                 if (thisBoiler.SizFac <= 0.0) {
                     thisBoiler.SizFac = 1.0;
                 }
 
                 if ((thisBoiler.FullLoadCoef[0] + thisBoiler.FullLoadCoef[1] + thisBoiler.FullLoadCoef[2]) == 0.0) {
-                    ShowSevereError(
-                        state,
-                        EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
                     ShowContinueError(state, " Sum of fuel use curve coefficients = 0.0");
                     ErrorsFound = true;
                 }
 
                 if (thisBoiler.MinPartLoadRat < 0.0) {
-                    ShowSevereError(
-                        state,
-                        EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
                     ShowContinueError(state, EnergyPlus::format("Invalid {}={:.3R}", "Minimum Part Load Ratio", thisBoiler.MinPartLoadRat));
                     ErrorsFound = true;
                 }
 
                 if (thisBoiler.TempUpLimitBoilerOut == 0.0) {
-                    ShowSevereError(
-                        state,
-                        EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
-                    ShowContinueError(
-                        state, EnergyPlus::format("Invalid {}={:.3R}", "Design Outlet Steam Temperature", thisBoiler.TempUpLimitBoilerOut));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("Invalid {}={:.3R}", "Design Outlet Steam Temperature", thisBoiler.TempUpLimitBoilerOut));
                     ErrorsFound = true;
                 }
                 thisBoiler.BoilerInletNodeNum = Node::GetOnlySingleNode(state,
@@ -263,12 +255,8 @@ namespace BoilerSteam {
                                                                          Node::ConnectionType::Outlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
-                Node::TestCompSet(state,
-                                  state.dataIPShortCut->cCurrentModuleObject,
-                                  boilerName,
-                                  waterInletNodeName,
-                                  steamOutletNodeName,
-                                  "Hot Steam Nodes");
+                Node::TestCompSet(
+                    state, state.dataIPShortCut->cCurrentModuleObject, boilerName, waterInletNodeName, steamOutletNodeName, "Hot Steam Nodes");
 
                 thisBoiler.fluid = Fluid::GetSteam(state);
                 if (thisBoiler.fluid == nullptr && BoilerNum == 1) {

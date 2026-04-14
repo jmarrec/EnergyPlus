@@ -195,10 +195,8 @@ void GetBoilerInput(EnergyPlusData &state)
             inputProcessor->getAlphaFieldValue(boilerFields, boilerSchemaProps, "efficiency_curve_temperature_evaluation_variable");
         auto const normalizedBoilerEfficiencyCurveName =
             inputProcessor->getAlphaFieldValue(boilerFields, boilerSchemaProps, "normalized_boiler_efficiency_curve_name");
-        auto const boilerWaterInletNodeName =
-            inputProcessor->getAlphaFieldValue(boilerFields, boilerSchemaProps, "boiler_water_inlet_node_name");
-        auto const boilerWaterOutletNodeName =
-            inputProcessor->getAlphaFieldValue(boilerFields, boilerSchemaProps, "boiler_water_outlet_node_name");
+        auto const boilerWaterInletNodeName = inputProcessor->getAlphaFieldValue(boilerFields, boilerSchemaProps, "boiler_water_inlet_node_name");
+        auto const boilerWaterOutletNodeName = inputProcessor->getAlphaFieldValue(boilerFields, boilerSchemaProps, "boiler_water_outlet_node_name");
         auto const boilerFlowMode = inputProcessor->getAlphaFieldValue(boilerFields, boilerSchemaProps, "boiler_flow_mode");
 
         inputProcessor->markObjectAsUsed(s_ipsc->cCurrentModuleObject, boilerInstance.key());
@@ -255,8 +253,12 @@ void GetBoilerInput(EnergyPlusData &state)
             ShowSevereItemNotFound(state, eoh, "Normalized Boiler Efficiency Curve Name", normalizedBoilerEfficiencyCurveName);
             ErrorsFound = true;
         } else if (thisBoiler.EfficiencyCurve->numDims != 1 && thisBoiler.EfficiencyCurve->numDims != 2) {
-            Curve::ShowSevereCurveDims(
-                state, eoh, "Normalized Boiler Efficiency Curve Name", normalizedBoilerEfficiencyCurveName, "1 or 2", thisBoiler.EfficiencyCurve->numDims);
+            Curve::ShowSevereCurveDims(state,
+                                       eoh,
+                                       "Normalized Boiler Efficiency Curve Name",
+                                       normalizedBoilerEfficiencyCurveName,
+                                       "1 or 2",
+                                       thisBoiler.EfficiencyCurve->numDims);
             ErrorsFound = true;
         } else if (thisBoiler.EfficiencyCurve->numDims == 2) {
             if (thisBoiler.CurveTempMode == TempMode::NOTSET) {
@@ -295,11 +297,19 @@ void GetBoilerInput(EnergyPlusData &state)
 
         auto getOptionalNumericField = [&boilerFields](std::string_view fieldName, Real64 defaultValue = 0.0) {
             auto const it = boilerFields.find(std::string(fieldName));
-            if (it == boilerFields.end()) return defaultValue;
+            if (it == boilerFields.end()) {
+                return defaultValue;
+            }
             auto const &fieldValue = it.value();
-            if (fieldValue.is_number_integer()) return static_cast<Real64>(fieldValue.get<std::int64_t>());
-            if (fieldValue.is_number()) return fieldValue.get<Real64>();
-            if (fieldValue.is_string() && fieldValue.get<std::string>().empty()) return defaultValue;
+            if (fieldValue.is_number_integer()) {
+                return static_cast<Real64>(fieldValue.get<std::int64_t>());
+            }
+            if (fieldValue.is_number()) {
+                return fieldValue.get<Real64>();
+            }
+            if (fieldValue.is_string() && fieldValue.get<std::string>().empty()) {
+                return defaultValue;
+            }
             return defaultValue;
         };
 
