@@ -63,6 +63,7 @@
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataErrorTracking.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
+#include <EnergyPlus/DataRuntimeLanguage.hh>
 #include <EnergyPlus/DataSizing.hh>
 #include <EnergyPlus/DataWater.hh>
 #include <EnergyPlus/Fans.hh>
@@ -8217,6 +8218,123 @@ TEST_F(EnergyPlusFixture, InitDXCoil_GetHPCoolingCoilIndex)
     // be set to false and the CompanionUpstreamDXCoil index should be set to 0
     EXPECT_FALSE(state->dataDXCoils->DXCoil(1).FindCompanionUpStreamCoil);
     EXPECT_EQ(state->dataDXCoils->DXCoil(1).CompanionUpstreamDXCoil, 0);
+}
+
+TEST_F(EnergyPlusFixture, CoilHeatingDXSingleSpeed_GrossCapacityActuator)
+{
+    // Issue #11301: register EMS actuator for the Gross Rated Heating Capacity field on
+    // Coil:Heating:DX:SingleSpeed, mirroring the existing actuator on Coil:Cooling:DX:SingleSpeed.
+
+    std::string const idf_objects = delimited_string({
+
+        "  Schedule:Compact,",
+        "    FanAvailSched,           !- Name",
+        "    Fraction,                !- Schedule Type Limits Name",
+        "    Through: 12/31,          !- Field 1",
+        "    For: AllDays,            !- Field 2",
+        "    Until: 24:00,1.0;        !- Field 3",
+
+        "  Curve:Cubic,",
+        "    HPACHeatCapFT,           !- Name",
+        "    0.758746,                !- Coefficient1 Constant",
+        "    0.027626,                !- Coefficient2 x",
+        "    0.000148716,             !- Coefficient3 x**2",
+        "    0.0000034992,            !- Coefficient4 x**3",
+        "    -20.0,                   !- Minimum Value of x",
+        "    20.0,                    !- Maximum Value of x",
+        "    ,                        !- Minimum Curve Output",
+        "    ,                        !- Maximum Curve Output",
+        "    Temperature,             !- Input Unit Type for X",
+        "    Dimensionless;           !- Output Unit Type",
+
+        "  Curve:Cubic,",
+        "    HPACHeatCapFFF,          !- Name",
+        "    0.84,                    !- Coefficient1 Constant",
+        "    0.16,                    !- Coefficient2 x",
+        "    0.0,                     !- Coefficient3 x**2",
+        "    0.0,                     !- Coefficient4 x**3",
+        "    0.5,                     !- Minimum Value of x",
+        "    1.5;                     !- Maximum Value of x",
+
+        "  Curve:Cubic,",
+        "    HPACHeatEIRFT,           !- Name",
+        "    1.19248,                 !- Coefficient1 Constant",
+        "    -0.0300438,              !- Coefficient2 x",
+        "    0.00103745,              !- Coefficient3 x**2",
+        "    -0.000023328,            !- Coefficient4 x**3",
+        "    -20.0,                   !- Minimum Value of x",
+        "    20.0,                    !- Maximum Value of x",
+        "    ,                        !- Minimum Curve Output",
+        "    ,                        !- Maximum Curve Output",
+        "    Temperature,             !- Input Unit Type for X",
+        "    Dimensionless;           !- Output Unit Type",
+
+        "  Curve:Quadratic,",
+        "    HPACHeatEIRFFF,          !- Name",
+        "    1.3824,                  !- Coefficient1 Constant",
+        "    -0.4336,                 !- Coefficient2 x",
+        "    0.0512,                  !- Coefficient3 x**2",
+        "    0.0,                     !- Minimum Value of x",
+        "    1.0;                     !- Maximum Value of x",
+
+        "  Curve:Quadratic,",
+        "    HPACHeatPLFFPLR,         !- Name",
+        "    0.75,                    !- Coefficient1 Constant",
+        "    0.25,                    !- Coefficient2 x",
+        "    0.0,                     !- Coefficient3 x**2",
+        "    0.0,                     !- Minimum Value of x",
+        "    1.0;                     !- Maximum Value of x",
+
+        "  Coil:Heating:DX:SingleSpeed,",
+        "    Heating Coil SingleSpeed,!- Name",
+        "    FanAvailSched,           !- Availability Schedule Name",
+        "    Autosize,                !- Gross Rated Heating Capacity {W}",
+        "    3.75,                    !- Gross Rated Heating COP {W/W}",
+        "    Autosize,                !- Rated Air Flow Rate {m3/s}",
+        "    ,                        !- 2017 Rated Supply Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                        !- 2023 Rated Supply Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    SPACE1-1 Cooling Coil Outlet,  !- Air Inlet Node Name",
+        "    SPACE1-1 Heating Coil Outlet,  !- Air Outlet Node Name",
+        "    HPACHeatCapFT,           !- Heating Capacity Function of Temperature Curve Name",
+        "    HPACHeatCapFFF,          !- Heating Capacity Function of Flow Fraction Curve Name",
+        "    HPACHeatEIRFT,           !- Energy Input Ratio Function of Temperature Curve Name",
+        "    HPACHeatEIRFFF,          !- Energy Input Ratio Function of Flow Fraction Curve Name",
+        "    HPACHeatPLFFPLR,         !- Part Load Fraction Correlation Curve Name",
+        "    ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name",
+        "   -30.0,                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    ,                        !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}",
+        "    5.0,                     !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}",
+        "    200.0,                   !- Crankcase Heater Capacity {W}",
+        "    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        "    10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "    Resistive,               !- Defrost Strategy",
+        "    TIMED,                   !- Defrost Control",
+        "    0.166667,                !- Defrost Time Period Fraction",
+        "    Autosize;                !- Resistive Defrost Heater Capacity {W}",
+
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    state->dataGlobal->AnyEnergyManagementSystemInModel = true;
+    GetDXCoils(*state);
+    ASSERT_EQ(1, state->dataDXCoils->NumDXHeatingCoils);
+
+    bool found = false;
+    int foundIdx = 0;
+    for (int i = 1; i <= state->dataRuntimeLang->numEMSActuatorsAvailable; ++i) {
+        auto const &act = state->dataRuntimeLang->EMSActuatorAvailable(i);
+        if (act.ComponentTypeName == "Coil:Heating:DX:SingleSpeed" && act.ControlTypeName == "Autosized Rated Total Heating Capacity") {
+            found = true;
+            foundIdx = i;
+            break;
+        }
+    }
+    EXPECT_TRUE(found) << "EMS actuator for Coil:Heating:DX:SingleSpeed Gross Rated Heating Capacity not registered (issue #11301).";
+    if (found) {
+        EXPECT_EQ(state->dataRuntimeLang->EMSActuatorAvailable(foundIdx).Units, "[W]");
+        EXPECT_EQ(state->dataRuntimeLang->EMSActuatorAvailable(foundIdx).UniqueIDName, "Heating Coil SingleSpeed");
+    }
 }
 
 } // namespace EnergyPlus
