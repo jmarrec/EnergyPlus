@@ -6774,6 +6774,18 @@ void GetDXCoils(EnergyPlusData &state)
                              thisDXCoil.RatedTotCapEMSOverrideOn(1),
                              thisDXCoil.RatedTotCapEMSOverrideValue(1));
         }
+        // setup EMS sizing actuators for single speed DX heating coils (issue #11301)
+        for (DXCoilNum = state.dataDXCoils->NumDoe2DXCoils + 1; DXCoilNum <= state.dataDXCoils->NumDoe2DXCoils + state.dataDXCoils->NumDXHeatingCoils;
+             ++DXCoilNum) {
+            auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
+            SetupEMSActuator(state,
+                             "Coil:Heating:DX:SingleSpeed",
+                             thisDXCoil.Name,
+                             "Autosized Rated Total Heating Capacity",
+                             "[W]",
+                             thisDXCoil.RatedTotCapEMSOverrideOn(1),
+                             thisDXCoil.RatedTotCapEMSOverrideValue(1));
+        }
     }
     Alphas.deallocate();
     cAlphaFields.deallocate();

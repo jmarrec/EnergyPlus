@@ -8333,7 +8333,7 @@ TEST_F(EnergyPlusFixture, CoilHeatingDXSingleSpeed_GrossCapacityActuator)
     EXPECT_TRUE(found) << "EMS actuator for Coil:Heating:DX:SingleSpeed Gross Rated Heating Capacity not registered (issue #11301).";
     if (found) {
         EXPECT_EQ(state->dataRuntimeLang->EMSActuatorAvailable(foundIdx).Units, "[W]");
-        EXPECT_EQ(state->dataRuntimeLang->EMSActuatorAvailable(foundIdx).UniqueIDName, "Heating Coil SingleSpeed");
+        EXPECT_EQ(state->dataRuntimeLang->EMSActuatorAvailable(foundIdx).UniqueIDName, "HEATING COIL SINGLESPEED");
     }
 }
 
