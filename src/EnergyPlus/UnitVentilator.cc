@@ -976,12 +976,18 @@ namespace UnitVentilator {
             }
 
             if (unitVent.HCoilPresent) {
-                ReportCoilSelection::setCoilSupplyFanInfo(
-                    state, ReportCoilSelection::getReportIndex(state, unitVent.HCoilName, unitVent.heatCoilType), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
+                ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                          ReportCoilSelection::getReportIndex(state, unitVent.HCoilName, unitVent.heatCoilType),
+                                                          unitVent.FanName,
+                                                          unitVent.fanType,
+                                                          unitVent.Fan_Index);
             }
             if (unitVent.CCoilPresent) {
-                ReportCoilSelection::setCoilSupplyFanInfo(
-                    state, ReportCoilSelection::getReportIndex(state, unitVent.CCoilName, unitVent.coolCoilType), unitVent.FanName, unitVent.fanType, unitVent.Fan_Index);
+                ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                          ReportCoilSelection::getReportIndex(state, unitVent.CCoilName, unitVent.coolCoilType),
+                                                          unitVent.FanName,
+                                                          unitVent.fanType,
+                                                          unitVent.Fan_Index);
             }
         }
     }

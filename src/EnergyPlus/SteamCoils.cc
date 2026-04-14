@@ -279,7 +279,7 @@ namespace SteamCoils {
             auto &steamCoil = state.dataSteamCoils->SteamCoil(CoilNum);
             steamCoil.Name = AlphArray(1);
             steamCoil.coilType = HVAC::CoilType::HeatingSteam;
-            steamCoil.coilReportNum = ReportCoilSelection::getReportIndex(state,steamCoil.Name, steamCoil.coilType);
+            steamCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, steamCoil.Name, steamCoil.coilType);
 
             if (lAlphaBlanks(2)) {
                 steamCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -702,7 +702,7 @@ namespace SteamCoils {
                     if (steamCoil.DesiccantRegenerationCoil) {
                         state.dataSize->DataDesicRegCoil = true;
                         state.dataSize->DataDesicDehumNum = steamCoil.DesiccantDehumNum;
-                        CompType = HVAC::coilTypeNames[(int)steamCoil.coilType]; 
+                        CompType = HVAC::coilTypeNames[(int)steamCoil.coilType];
                         CompName = steamCoil.Name;
                         bPRINT = false;
                         HeatingCoilDesAirInletTempSizer sizerHeatingDesInletTemp;
@@ -900,10 +900,10 @@ namespace SteamCoils {
                                                                 steamCoil.SteamInletNodeNum,
                                                                 steamCoil.SteamOutletNodeNum,
                                                                 steamCoil.plantLoc.loopNum);
-        ReportCoilSelection::setCoilEntWaterTemp(state, steamCoil.coilReportNum, TempSteamIn); 
-        ReportCoilSelection::setCoilLvgWaterTemp(state, steamCoil.coilReportNum, TempSteamIn - steamCoil.DegOfSubcooling); 
+        ReportCoilSelection::setCoilEntWaterTemp(state, steamCoil.coilReportNum, TempSteamIn);
+        ReportCoilSelection::setCoilLvgWaterTemp(state, steamCoil.coilReportNum, TempSteamIn - steamCoil.DegOfSubcooling);
         ReportCoilSelection::setCoilWaterDeltaT(state, steamCoil.coilReportNum, steamCoil.DegOfSubcooling);
-        
+
         steamCoil.DesCoilCapacity = DesCoilLoad;
         steamCoil.DesAirVolFlow = DesVolFlow;
         if (ErrorsFound) {
@@ -911,21 +911,8 @@ namespace SteamCoils {
         }
 
         // There is no standard rating for heating coils at this point, so fill with dummy flag values
-        ReportCoilSelection::setRatedCoilConditions(state,
-                                                    steamCoil.coilReportNum,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0,
-                                                    -999.0);
+        ReportCoilSelection::setRatedCoilConditions(
+            state, steamCoil.coilReportNum, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0, -999.0);
     }
 
     // End Initialization Section of the Module

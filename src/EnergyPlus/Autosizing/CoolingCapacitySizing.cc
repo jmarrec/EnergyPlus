@@ -576,16 +576,16 @@ Real64 CoolingCapacitySizer::size(EnergyPlusData &state, Real64 _originalValue, 
             ReportCoilSelection::setCoilLvgAirHumRat(state, this->coilReportNum, CoilOutHumRat);
         }
         ReportCoilSelection::setCoilCoolingCapacity(state,
-                                                     this->coilReportNum,
-                                                     this->autoSizedValue,
-                                                     this->wasAutoSized,
-                                                     this->curSysNum,
-                                                     this->curZoneEqNum,
-                                                     this->curOASysNum,
-                                                     FanCoolLoad,
-                                                     TotCapTempModFac,
-                                                     DXFlowPerCapMinRatio,
-                                                     DXFlowPerCapMaxRatio);
+                                                    this->coilReportNum,
+                                                    this->autoSizedValue,
+                                                    this->wasAutoSized,
+                                                    this->curSysNum,
+                                                    this->curZoneEqNum,
+                                                    this->curOASysNum,
+                                                    FanCoolLoad,
+                                                    TotCapTempModFac,
+                                                    DXFlowPerCapMinRatio,
+                                                    DXFlowPerCapMaxRatio);
     }
     return this->autoSizedValue;
 }

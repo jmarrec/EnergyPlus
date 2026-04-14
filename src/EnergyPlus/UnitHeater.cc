@@ -563,8 +563,11 @@ namespace UnitHeater {
                                     OutputProcessor::StoreType::Average,
                                     unitHeat.Name);
             }
-            ReportCoilSelection::setCoilSupplyFanInfo(state, ReportCoilSelection::getReportIndex(state, unitHeat.HCoilName, unitHeat.heatCoilType),
-                                                      unitHeat.FanName, unitHeat.fanType, unitHeat.Fan_Index);
+            ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                      ReportCoilSelection::getReportIndex(state, unitHeat.HCoilName, unitHeat.heatCoilType),
+                                                      unitHeat.FanName,
+                                                      unitHeat.fanType,
+                                                      unitHeat.Fan_Index);
         }
     }
 

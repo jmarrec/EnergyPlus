@@ -5263,7 +5263,7 @@ void WriteTabularReports(EnergyPlusData &state)
         }
 
         ReportCoilSelection::finishCoilSummaryReportTable(state); // call to write out the coil selection summary table data
-        WritePredefinedTables(state); // moved to come after zone load components is finished
+        WritePredefinedTables(state);                             // moved to come after zone load components is finished
 
         if (state.dataGlobal->DoWeathSim) {
             WriteMonthlyTables(state);
@@ -15931,8 +15931,7 @@ void computeSpaceZoneCompLoads(EnergyPlusData &state,
                                    iSpace);
     CollectPeakZoneConditions(state, coolCompLoadTables, coolDesSelected, timeCoolMax, iZone, true, iSpace);
     // send latent load info to coil summary report
-    ReportCoilSelection::setZoneLatentLoadCoolingIdealPeak(state,
-        iZone, coolCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
+    ReportCoilSelection::setZoneLatentLoadCoolingIdealPeak(state, iZone, coolCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
 
     int heatDesSelected = calcFinalSizing.HeatDDNum;
     heatCompLoadTables.desDayNum = heatDesSelected;
@@ -15970,8 +15969,7 @@ void computeSpaceZoneCompLoads(EnergyPlusData &state,
     CollectPeakZoneConditions(state, heatCompLoadTables, heatDesSelected, timeHeatMax, iZone, false, iSpace);
 
     // send latent load info to coil summary report
-    ReportCoilSelection::setZoneLatentLoadHeatingIdealPeak(state,
-        iZone, heatCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
+    ReportCoilSelection::setZoneLatentLoadHeatingIdealPeak(state, iZone, heatCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
 
     AddAreaColumnForZone(componentAreas, coolCompLoadTables);
     AddAreaColumnForZone(componentAreas, heatCompLoadTables);

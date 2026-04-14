@@ -2709,18 +2709,17 @@ namespace WaterToAirHeatPumpSimple {
                 }
             }
 
-            ReportCoilSelection::setCoilHeatingCapacity(
-                state,
-                simpleWAHP.coilReportNum,
-                RatedCapHeatDes,
-                IsAutoSize,
-                state.dataSize->CurSysNum,
-                state.dataSize->CurZoneEqNum,
-                state.dataSize->CurOASysNum,
-                FanCoolLoad,
-                1.0, // RatedHeatCapTempModFac,
-                -999.0,
-                -999.0);
+            ReportCoilSelection::setCoilHeatingCapacity(state,
+                                                        simpleWAHP.coilReportNum,
+                                                        RatedCapHeatDes,
+                                                        IsAutoSize,
+                                                        state.dataSize->CurSysNum,
+                                                        state.dataSize->CurZoneEqNum,
+                                                        state.dataSize->CurOASysNum,
+                                                        FanCoolLoad,
+                                                        1.0, // RatedHeatCapTempModFac,
+                                                        -999.0,
+                                                        -999.0);
 
         } // Heating
 
@@ -3531,21 +3530,19 @@ namespace WaterToAirHeatPumpSimple {
             if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingHVACSizingSimulations && !state.dataGlobal->DoingSizing) {
 
                 if (simpleWAHP.WAHPType == WatertoAirHP::Cooling) {
-                    ReportCoilSelection::setCoilFinalSizes(
-                        state,
-                        simpleWAHP.coilReportNum,
-                        simpleWAHP.RatedCapCoolTotal,
-                        simpleWAHP.RatedCapCoolSens,
-                        simpleWAHP.RatedAirVolFlowRate,
-                        simpleWAHP.RatedWaterVolFlowRate);
+                    ReportCoilSelection::setCoilFinalSizes(state,
+                                                           simpleWAHP.coilReportNum,
+                                                           simpleWAHP.RatedCapCoolTotal,
+                                                           simpleWAHP.RatedCapCoolSens,
+                                                           simpleWAHP.RatedAirVolFlowRate,
+                                                           simpleWAHP.RatedWaterVolFlowRate);
                 } else if (simpleWAHP.WAHPType == WatertoAirHP::Heating) {
-                    ReportCoilSelection::setCoilFinalSizes(
-                        state,
-                        simpleWAHP.coilReportNum,
-                        simpleWAHP.RatedCapHeat,
-                        simpleWAHP.RatedCapHeat,
-                        simpleWAHP.RatedAirVolFlowRate,
-                        simpleWAHP.RatedWaterVolFlowRate);
+                    ReportCoilSelection::setCoilFinalSizes(state,
+                                                           simpleWAHP.coilReportNum,
+                                                           simpleWAHP.RatedCapHeat,
+                                                           simpleWAHP.RatedCapHeat,
+                                                           simpleWAHP.RatedAirVolFlowRate,
+                                                           simpleWAHP.RatedWaterVolFlowRate);
                 }
                 simpleWAHP.reportCoilFinalSizes = false;
             }

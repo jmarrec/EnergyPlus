@@ -100,7 +100,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAir)
     wahpSimple1.WAHPType = WatertoAirHP::Cooling;
     wahpSimple1.coilType = HVAC::CoilType::CoolingWAHPSimple;
     wahpSimple1.coilReportNum = ReportCoilSelection::getReportIndex(*state, wahpSimple1.Name, wahpSimple1.coilType);
-    
+
     wahpSimple1.RatedAirVolFlowRate = AutoSize;
     wahpSimple1.RatedCapCoolTotal = AutoSize;
     wahpSimple1.RatedCapCoolSens = AutoSize;
@@ -194,12 +194,9 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAir)
     auto &loopsidebranch(state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
     loopsidebranch.TotalComponents = 1;
     loopsidebranch.Comp.allocate(1);
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
-        wahpSimple1.Name;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
-        wahpSimple1.WAHPPlantType;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
-        wahpSimple1.WaterInletNodeNum;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = wahpSimple1.Name;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = wahpSimple1.WAHPPlantType;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = wahpSimple1.WaterInletNodeNum;
     wahpSimple1.plantLoc.loopNum = 1;
     PlantUtilities::SetPlantLocationLinks(*state, wahpSimple1.plantLoc);
 
@@ -213,14 +210,12 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAir)
     EXPECT_DOUBLE_EQ(0.0075, state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).CoolDesHumRat);
 
     // check that the total cooling capacity is >= the sensible cooling capacity
-    EXPECT_GE(wahpSimple1.RatedCapCoolTotal,
-              wahpSimple1.RatedCapCoolSens);
+    EXPECT_GE(wahpSimple1.RatedCapCoolTotal, wahpSimple1.RatedCapCoolSens);
 
     if (wahpSimple1.RatedCapCoolTotal != 0.0) {
-        ShowMessage(*state,
-                    format("SizeHVACWaterToAir: Rated Sensible Heat Ratio = {:.2R} [-]",
-                           wahpSimple1.RatedCapCoolSens /
-                               wahpSimple1.RatedCapCoolTotal));
+        ShowMessage(
+            *state,
+            format("SizeHVACWaterToAir: Rated Sensible Heat Ratio = {:.2R} [-]", wahpSimple1.RatedCapCoolSens / wahpSimple1.RatedCapCoolTotal));
     }
     EXPECT_TRUE(compare_eio_stream_substring("Design Size Rated Air Flow Rate", false));
     EXPECT_TRUE(compare_eio_stream_substring("Design Size Rated Total Cooling Capacity", false));
