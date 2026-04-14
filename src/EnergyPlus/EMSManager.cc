@@ -325,7 +325,7 @@ namespace EMSManager {
                                      state.dataRuntimeLang->NumExternalInterfaceFunctionalMockupUnitImportActuatorsUsed +
                                      state.dataRuntimeLang->NumExternalInterfaceFunctionalMockupUnitExportActuatorsUsed;
              ++ActuatorUsedLoop) {
-            auto const &thisActuatorUsed = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop);
+            auto &thisActuatorUsed = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop);
 
             int ErlVariableNum = thisActuatorUsed.ErlVariableNum;
             if (ErlVariableNum <= 0) {
@@ -343,6 +343,7 @@ namespace EMSManager {
             if (thisErlVar.Value.Type == DataRuntimeLanguage::Value::Null) {
                 *thisActuatorAvail.Actuated = false;
             } else {
+                thisActuatorUsed.wasActuated = true; // issue #10944
                 // Set the value and the actuated flag remotely on the actuated object via the pointer
                 switch (thisActuatorAvail.PntrVarTypeUsed) {
                 case DataRuntimeLanguage::PtrDataType::Real: {
@@ -1983,9 +1984,9 @@ namespace EMSManager {
     void checkForUnusedActuatorsAtEnd(EnergyPlusData &state)
     {
         // call at end of simulation to check if any of the user's actuators were never initialized.
-        // Could be a mistake we want to help users catch // Issue #4404.
+        // Could be a mistake we want to help users catch // Issues #4404, #10944.
         for (int actuatorUsedLoop = 1; actuatorUsedLoop <= state.dataRuntimeLang->numActuatorsUsed; ++actuatorUsedLoop) {
-            if (!state.dataRuntimeLang->ErlVariable(state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).ErlVariableNum).Value.initialized) {
+            if (!state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).wasActuated) {
                 ShowWarningError(state,
                                  "checkForUnusedActuatorsAtEnd: Unused EMS Actuator detected, suggesting possible unintended programming error or "
                                  "spelling mistake.");
