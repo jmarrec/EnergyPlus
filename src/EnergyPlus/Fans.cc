@@ -304,6 +304,9 @@ void GetFanInput(EnergyPlusData &state)
 
         fan->type = HVAC::FanType::Constant;
         fan->sizingPrefix = cNumericFieldNames(3);
+        if (state.dataGlobal->isEpJSON) {
+            fan->sizingPrefix = "Maximum Flow Rate";
+        }
 
         if (lAlphaFieldBlanks(2)) {
             fan->availSched = Sched::GetScheduleAlwaysOn(state);
@@ -384,6 +387,9 @@ void GetFanInput(EnergyPlusData &state)
 
         fan->type = HVAC::FanType::VAV;
         fan->sizingPrefix = cNumericFieldNames(3);
+        if (state.dataGlobal->isEpJSON) {
+            fan->sizingPrefix = "Maximum Flow Rate";
+        }
 
         if (lAlphaFieldBlanks(2)) {
             fan->availSched = Sched::GetScheduleAlwaysOn(state);
@@ -475,6 +481,9 @@ void GetFanInput(EnergyPlusData &state)
 
         fan->type = HVAC::FanType::Exhaust;
         fan->sizingPrefix = cNumericFieldNames(3);
+        if (state.dataGlobal->isEpJSON) {
+            fan->sizingPrefix = "Maximum Flow Rate";
+        }
 
         if (lAlphaFieldBlanks(2)) {
             fan->availSched = Sched::GetScheduleAlwaysOn(state); // Not an availability schedule, but defaults to constant-1.0
@@ -609,6 +618,9 @@ void GetFanInput(EnergyPlusData &state)
 
         fan->type = HVAC::FanType::OnOff;
         fan->sizingPrefix = cNumericFieldNames(3);
+        if (state.dataGlobal->isEpJSON) {
+            fan->sizingPrefix = "Maximum Flow Rate";
+        }
 
         if (lAlphaFieldBlanks(2)) {
             fan->availSched = Sched::GetScheduleAlwaysOn(state);
@@ -753,6 +765,9 @@ void GetFanInput(EnergyPlusData &state)
 
         fan->type = HVAC::FanType::ComponentModel;
         fan->sizingPrefix = cNumericFieldNames(1);
+        if (state.dataGlobal->isEpJSON) {
+            fan->sizingPrefix = "Maximum Flow Rate";
+        }
 
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
                                                     cAlphaArgs(2),

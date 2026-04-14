@@ -2305,9 +2305,6 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
             TempSize = waterCoil.DesAirVolFlowRate;
             CoolingAirFlowSizer sizingCoolingAirFlow2;
             std::string stringOverride = "Design Air Flow Rate [m3/s]";
-            if (state.dataGlobal->isEpJSON) {
-                stringOverride = "design_air_flow_rate [m3/s]";
-            }
             sizingCoolingAirFlow2.overrideSizingString(stringOverride);
             // sizingCoolingAirFlow2.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
             sizingCoolingAirFlow2.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
@@ -2324,7 +2321,11 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 int FieldNum = 16; //  N16, \field Number of Tubes per Row
                 bPRINT = true;
-                SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum);
+                if (state.dataGlobal->isEpJSON) {
+                    SizingString = "Number of Tubes per Row";
+                } else {
+                    SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum);
+                }
                 // Auto size detailed cooling coil number of tubes per row = int( 13750.0 * WaterCoil( CoilNum ).MaxWaterVolFlowRate ) + 1
                 state.dataSize->DataFlowUsedForSizing = waterCoil.MaxWaterVolFlowRate;
                 TempSize = float(waterCoil.NumOfTubesPerRow);
@@ -2339,9 +2340,6 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 AutoCalculateSizer sizerFinDiameter;
                 stringOverride = "Fin Diameter [m]";
-                if (state.dataGlobal->isEpJSON) {
-                    stringOverride = "fin_diameter [m]";
-                }
                 sizerFinDiameter.overrideSizingString(stringOverride);
                 sizerFinDiameter.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
                 waterCoil.FinDiam = sizerFinDiameter.size(state, TempSize, ErrorsFound);
@@ -2353,9 +2351,6 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 AutoCalculateSizer sizerMinAirFlowArea;
                 stringOverride = "Minimum Airflow Area [m2]";
-                if (state.dataGlobal->isEpJSON) {
-                    stringOverride = "minimum_airflow_area [m2]";
-                }
                 sizerMinAirFlowArea.overrideSizingString(stringOverride);
                 sizerMinAirFlowArea.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
                 waterCoil.MinAirFlowArea = sizerMinAirFlowArea.size(state, TempSize, ErrorsFound);
@@ -2375,9 +2370,6 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 AutoCalculateSizer sizerFinSurfaceArea;
                 stringOverride = "Fin Surface Area [m2]";
-                if (state.dataGlobal->isEpJSON) {
-                    stringOverride = "fin_surface_area [m2]";
-                }
                 sizerFinSurfaceArea.overrideSizingString(stringOverride);
                 sizerFinSurfaceArea.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
                 waterCoil.FinSurfArea = sizerFinSurfaceArea.size(state, TempSize, ErrorsFound);
@@ -2390,9 +2382,6 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 AutoCalculateSizer sizerTubeInsideArea;
                 stringOverride = "Total Tube Inside Area [m2]";
-                if (state.dataGlobal->isEpJSON) {
-                    stringOverride = "total_tube_inside_area [m2]";
-                }
                 sizerTubeInsideArea.overrideSizingString(stringOverride);
                 sizerTubeInsideArea.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
                 waterCoil.TotTubeInsideArea = sizerTubeInsideArea.size(state, TempSize, ErrorsFound);
@@ -2405,9 +2394,6 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 AutoCalculateSizer sizerTubeOutsideArea;
                 stringOverride = "Tube Outside Surface Area [m2]";
-                if (state.dataGlobal->isEpJSON) {
-                    stringOverride = "tube_outside_surface_area [m2]";
-                }
                 sizerTubeOutsideArea.overrideSizingString(stringOverride);
                 sizerTubeOutsideArea.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
                 waterCoil.TubeOutsideSurfArea = sizerTubeOutsideArea.size(state, TempSize, ErrorsFound);
@@ -2429,9 +2415,6 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 AutoCalculateSizer sizerCoilDepth;
                 stringOverride = "Coil Depth [m]";
-                if (state.dataGlobal->isEpJSON) {
-                    stringOverride = "coil_depth [m]";
-                }
                 sizerCoilDepth.overrideSizingString(stringOverride);
                 sizerCoilDepth.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
                 waterCoil.CoilDepth = sizerCoilDepth.size(state, TempSize, ErrorsFound);
@@ -2548,7 +2531,11 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
                 TempSize = DataSizing::AutoSize;
             }
             FieldNum = 3; //  N3 , \field Rated Capacity
-            SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W]";
+            if (state.dataGlobal->isEpJSON) {
+                SizingString = "Rated Capacity [W]";
+            } else {
+                SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W]";
+            }
             ErrorsFound = false;
             if (state.dataSize->CurSysNum > 0) {
                 HeatingCapacitySizer sizerHeatingCapacity;
@@ -2681,7 +2668,11 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
             }
             FieldNum = 1;  // N1 , \field U-Factor Times Area Value
             bPRINT = true; // report to eio the UA value
-            SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W/K]";
+            if (state.dataGlobal->isEpJSON) {
+                SizingString = "U-Factor Times Area Value [W/K]";
+            } else {
+                SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W/K]";
+            }
             state.dataSize->DataCoilNum = CoilNum;
             state.dataSize->DataFanOp = HVAC::FanOp::Continuous;
             if (waterCoil.CoilPerfInpMeth == state.dataWaterCoils->NomCap && NomCapUserInp) {
