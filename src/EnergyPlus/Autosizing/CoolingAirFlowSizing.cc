@@ -343,7 +343,7 @@ Real64 CoolingAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, b
                     this->sizingString = "Low Speed Rated Air Flow Rate [m3/s]";
                 }
             } else if (this->isEpJSON) {
-                this->sizingString = "Cooling Supply Air FlowRate [m3/s]";
+                this->sizingString = "Cooling Supply Air Flow Rate [m3/s]";
             }
         }
         if (this->dataScalableSizingON) {

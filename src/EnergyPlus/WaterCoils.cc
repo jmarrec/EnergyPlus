@@ -2321,11 +2321,7 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
                 int FieldNum = 16; //  N16, \field Number of Tubes per Row
                 bPRINT = true;
-                if (state.dataGlobal->isEpJSON) {
-                    SizingString = "Number of Tubes per Row";
-                } else {
-                    SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum);
-                }
+                SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum);
                 // Auto size detailed cooling coil number of tubes per row = int( 13750.0 * WaterCoil( CoilNum ).MaxWaterVolFlowRate ) + 1
                 state.dataSize->DataFlowUsedForSizing = waterCoil.MaxWaterVolFlowRate;
                 TempSize = float(waterCoil.NumOfTubesPerRow);
@@ -2531,11 +2527,7 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
                 TempSize = DataSizing::AutoSize;
             }
             FieldNum = 3; //  N3 , \field Rated Capacity
-            if (state.dataGlobal->isEpJSON) {
-                SizingString = "Rated Capacity [W]";
-            } else {
-                SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W]";
-            }
+            SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W]";
             ErrorsFound = false;
             if (state.dataSize->CurSysNum > 0) {
                 HeatingCapacitySizer sizerHeatingCapacity;
@@ -2668,11 +2660,7 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
             }
             FieldNum = 1;  // N1 , \field U-Factor Times Area Value
             bPRINT = true; // report to eio the UA value
-            if (state.dataGlobal->isEpJSON) {
-                SizingString = "U-Factor Times Area Value [W/K]";
-            } else {
-                SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W/K]";
-            }
+            SizingString = state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames(FieldNum) + " [W/K]";
             state.dataSize->DataCoilNum = CoilNum;
             state.dataSize->DataFanOp = HVAC::FanOp::Continuous;
             if (waterCoil.CoilPerfInpMeth == state.dataWaterCoils->NomCap && NomCapUserInp) {
