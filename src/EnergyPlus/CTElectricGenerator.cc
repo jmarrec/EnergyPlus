@@ -170,7 +170,7 @@ namespace CTElectricGenerator {
             int genNum = 1;
             for (auto const &generatorInstance : generatorObjects.value().items()) {
                 auto const &generatorFields = generatorInstance.value();
-                auto const generatorName = generatorInstance.key();
+                auto const generatorName = Util::makeUPPER(generatorInstance.key());
                 auto const electricCircuitNodeName =
                     inputProcessor->getAlphaFieldValue(generatorFields, objectSchemaProps, "electric_circuit_node_name");
                 auto const partLoadBasedFuelInputCurveName =
