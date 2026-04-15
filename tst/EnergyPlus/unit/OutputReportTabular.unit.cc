@@ -10380,7 +10380,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_PredefinedTable_Standard62_1_N
 
     // auto &reportNameArray = state->dataOutRptPredefined->reportName;
     // auto it =
-    //    std::find_if(reportNameArray.begin(), reportNameArray.end(), [](const auto &rN) { return Util::SameString("Standard62.1Summary", rN.name); });
+    //    std::find_if(reportNameArray.begin(), reportNameArray.end(), [](const auto &rN) { return Util::SameString("Standard62.1Summary", rN.name);
+    //    });
     // EXPECT_FALSE(it != reportNameArray.end()); // Not found
 
     // GetInputOutputTableSummaryReports(*state);

@@ -128,7 +128,7 @@ namespace OutputReportPredefined {
         std::string footnote;
 
         int numEntries;
-        int sizeEntries; 
+        int sizeEntries;
 
         Array1D<TableEntryType> entries;
         // Default Constructor

@@ -5295,7 +5295,7 @@ void WriteTabularReports(EnergyPlusData &state)
         sizeTableEntry += state.dataOutRptPredefined->subTable(i).sizeEntries;
         numTableEntry += state.dataOutRptPredefined->subTable(i).numEntries;
     }
-    
+
     print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeTableEntry", sizeTableEntry);
     print<variable_fmt_syntax>(state.files.audit, variable_fmt, "numTableEntry", numTableEntry);
     print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeCompSizeTableEntry", state.dataOutRptPredefined->sizeCompSizeTableEntry);
@@ -13997,12 +13997,12 @@ void WritePredefinedTables(EnergyPlusData &state)
                                        "Entire Facility",
                                        OutputProcessor::StoreType::Average);
                 }
-                
+
                 // loop through the subtables and include those that are associated with this report
                 for (int jSubTable = 1, jSubTable_end = state.dataOutRptPredefined->numSubTable; jSubTable <= jSubTable_end; ++jSubTable) {
                     auto &table = state.dataOutRptPredefined->subTable(jSubTable);
                     if (table.indexReportName == iReportName) {
-                      
+
                         // determine how many columns
                         int curNumColumns = 0;
                         for (int kColumnTag = 1; kColumnTag <= state.dataOutRptPredefined->numColumnTag; ++kColumnTag) {
@@ -14015,7 +14015,7 @@ void WritePredefinedTables(EnergyPlusData &state)
                         // flag in useUniqueObjectName to true, then count number of true's.
                         Array1D_string uniqueObjectNames(table.numEntries);
                         int numUniqueObjectNames = 0;
-                        
+
                         for (int lTableEntry = 1; lTableEntry <= table.numEntries; ++lTableEntry) {
                             auto &entry = table.entries(lTableEntry);
 
@@ -14029,14 +14029,14 @@ void WritePredefinedTables(EnergyPlusData &state)
                             // if found then point to the unique object
                             if (found > 0) {
                                 entry.uniqueObjName = found;
-                            // if not found add to the unique object list
+                                // if not found add to the unique object list
                             } else {
                                 ++numUniqueObjectNames;
                                 uniqueObjectNames(numUniqueObjectNames) = entry.objectName;
                                 entry.uniqueObjName = numUniqueObjectNames;
                             }
                         }
-                        
+
                         int curNumRows = numUniqueObjectNames;
                         if (curNumRows == 0) {
                             curNumRows = 1;
@@ -14090,7 +14090,7 @@ void WritePredefinedTables(EnergyPlusData &state)
                                 colHeadToColTag(countColumn) = kColumnTag;
                             }
                         }
-                                    
+
                         // fill the body of the table from the entries
                         // find the entries associated with the current subtable
                         for (int lTableEntry = 1; lTableEntry <= table.numEntries; ++lTableEntry) {
@@ -14123,8 +14123,7 @@ void WritePredefinedTables(EnergyPlusData &state)
                                         entry1.charEntry = repTableTag;
                                     }
                                 }
-                                if (entry.origEntryIsReal &&
-                                    ((columnUnitConv != 0) || !currentStyle.formatReals)) {
+                                if (entry.origEntryIsReal && ((columnUnitConv != 0) || !currentStyle.formatReals)) {
                                     Real64 value = entry.origRealEntry;
                                     if (columnUnitConv != 0) {
                                         value = ConvertIP(state, columnUnitConv, entry.origRealEntry);
@@ -14138,12 +14137,12 @@ void WritePredefinedTables(EnergyPlusData &state)
                                     tableBody(colCurrent, rowCurrent) = entry.charEntry;
                                 }
                             } else {
-                              tableBody(colCurrent, rowCurrent) = entry.charEntry;
+                                tableBody(colCurrent, rowCurrent) = entry.charEntry;
                             }
                         } // for (lTableEntry)
 
                         uniqueObjectNames.deallocate();
-                        
+
                         // create the actual output table
                         if (currentStyle.produceTabular) {
                             WriteSubtitle(state, state.dataOutRptPredefined->subTable(jSubTable).name);
