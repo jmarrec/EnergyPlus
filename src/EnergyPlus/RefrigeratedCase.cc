@@ -2535,8 +2535,8 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                        cAlphaFieldNames(AlphaNum)));
                 // Node identification reserved for future use.  Currently exchange energy directly with zone outside any air system
                 // AirChillerSet(SetID)%NodeNumInlet = &
-                //       NodeInputManager::GetOnlySingleNode(state, Alphas(AlphaNum),ErrorsFound,TRIM(CurrentModuleObject), &
-                //                    AirChillerSet(SetID)%Name,DataLoopNode::NodeFluidType::Air,DataLoopNode::NodeConnectionType::Inlet,1,DataLoopNode::ObjectIsNotParent)
+                //       Node::GetOnlySingleNode(state, Alphas(AlphaNum),ErrorsFound,TRIM(CurrentModuleObject), &
+                //                    AirChillerSet(SetID)%Name,Node::FluidType::Air,Node::NodeConnectionType::Inlet,1,Node::ObjectIsNotParent)
             }
 
             ++AlphaNum;
@@ -2551,8 +2551,8 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                        cAlphaFieldNames(AlphaNum)));
                 // Node identification reserved for future use.  Currently exchange energy directly with zone outside any air system
                 // AirChillerSet(SetID)%NodeNumOutlet = &
-                //         NodeInputManager::GetOnlySingleNode(state, Alphas(AlphaNum),ErrorsFound,TRIM(CurrentModuleObject), &
-                //                      AirChillerSet(SetID)%Name,DataLoopNode::NodeFluidType::Air,DataLoopNode::NodeConnectionType::Outlet,1,DataLoopNode::ObjectIsNotParent)
+                //         Node::GetOnlySingleNode(state, Alphas(AlphaNum),ErrorsFound,TRIM(CurrentModuleObject), &
+                //                      AirChillerSet(SetID)%Name,Node::FluidType::Air,Node::NodeConnectionType::Outlet,1,Node::ObjectIsNotParent)
             }
 
             // An extensible list is used to enter the individual names of each chiller in the set.
@@ -2803,26 +2803,26 @@ void GetRefrigerationInput(EnergyPlusData &state)
             }
             // Get water-cooled condenser input, if applicable
             if (RefrigRack(RackNum).CondenserType == DataHeatBalance::RefrigCondenserType::Water) {
-                RefrigRack(RackNum).InletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                    Alphas(6),
-                                                                                    ErrorsFound,
-                                                                                    DataLoopNode::ConnectionObjectType::RefrigerationCompressorRack,
-                                                                                    Alphas(1),
-                                                                                    DataLoopNode::NodeFluidType::Water,
-                                                                                    DataLoopNode::ConnectionType::Inlet,
-                                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                                    DataLoopNode::ObjectIsNotParent);
-                RefrigRack(RackNum).OutletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                     Alphas(7),
-                                                                                     ErrorsFound,
-                                                                                     DataLoopNode::ConnectionObjectType::RefrigerationCompressorRack,
-                                                                                     Alphas(1),
-                                                                                     DataLoopNode::NodeFluidType::Water,
-                                                                                     DataLoopNode::ConnectionType::Outlet,
-                                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                                     DataLoopNode::ObjectIsNotParent);
+                RefrigRack(RackNum).InletNode = Node::GetOnlySingleNode(state,
+                                                                        Alphas(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::RefrigerationCompressorRack,
+                                                                        Alphas(1),
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
+                RefrigRack(RackNum).OutletNode = Node::GetOnlySingleNode(state,
+                                                                         Alphas(7),
+                                                                         ErrorsFound,
+                                                                         Node::ConnectionObjectType::RefrigerationCompressorRack,
+                                                                         Alphas(1),
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
                 // Check node connections
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(6), Alphas(7), "RefrigRack Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(6), Alphas(7), "RefrigRack Nodes");
                 // Get loop flow type
                 if ((RefrigRack(RackNum).FlowType = static_cast<CndsrFlowType>(getEnumValue(cndsrFlowTypeNamesUC, Alphas(8)))) ==
                     CndsrFlowType::Invalid) {
@@ -2949,16 +2949,15 @@ void GetRefrigerationInput(EnergyPlusData &state)
             if (lAlphaBlanks(12)) {
                 RefrigRack(RackNum).OutsideAirNodeNum = 0;
             } else {
-                RefrigRack(RackNum).OutsideAirNodeNum =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        Alphas(12),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::RefrigerationCompressorRack,
-                                                        Alphas(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::OutsideAirReference,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsParent);
+                RefrigRack(RackNum).OutsideAirNodeNum = Node::GetOnlySingleNode(state,
+                                                                                Alphas(12),
+                                                                                ErrorsFound,
+                                                                                Node::ConnectionObjectType::RefrigerationCompressorRack,
+                                                                                Alphas(1),
+                                                                                Node::FluidType::Air,
+                                                                                Node::ConnectionType::OutsideAirReference,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsParent);
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, RefrigRack(RackNum).OutsideAirNodeNum)) {
                     ShowSevereError(state,
                                     EnergyPlus::format("{}{}=\"{}\", {} not found: {}",
@@ -3333,16 +3332,15 @@ void GetRefrigerationInput(EnergyPlusData &state)
                         Condenser(CondNum).CondenserRejectHeatToZone = true;
                         state.dataRefrigCase->RefrigPresentInZone(Condenser(CondNum).InletAirZoneNum) = true;
                     } else { // not in a conditioned zone, so see if it's outside
-                        Condenser(CondNum).InletAirNodeNum =
-                            NodeInputManager::GetOnlySingleNode(state,
-                                                                Alphas(4),
-                                                                ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::RefrigerationCondenserAirCooled,
-                                                                Alphas(1),
-                                                                DataLoopNode::NodeFluidType::Air,
-                                                                DataLoopNode::ConnectionType::OutsideAirReference,
-                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                DataLoopNode::ObjectIsParent);
+                        Condenser(CondNum).InletAirNodeNum = Node::GetOnlySingleNode(state,
+                                                                                     Alphas(4),
+                                                                                     ErrorsFound,
+                                                                                     Node::ConnectionObjectType::RefrigerationCondenserAirCooled,
+                                                                                     Alphas(1),
+                                                                                     Node::FluidType::Air,
+                                                                                     Node::ConnectionType::OutsideAirReference,
+                                                                                     Node::CompFluidStream::Primary,
+                                                                                     Node::ObjectIsParent);
                         if (!OutAirNodeManager::CheckOutAirNodeNumber(state, Condenser(CondNum).InletAirNodeNum)) {
                             // not outside and not a zone
                             ShowSevereError(state,
@@ -3545,16 +3543,15 @@ void GetRefrigerationInput(EnergyPlusData &state)
                 if (lAlphaBlanks(3)) {
                     Condenser(CondNum).InletAirNodeNum = 0;
                 } else {
-                    Condenser(CondNum).InletAirNodeNum =
-                        NodeInputManager::GetOnlySingleNode(state,
-                                                            Alphas(3),
-                                                            ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::RefrigerationCondenserEvaporativeCooled,
-                                                            Alphas(1),
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::OutsideAirReference,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            DataLoopNode::ObjectIsParent);
+                    Condenser(CondNum).InletAirNodeNum = Node::GetOnlySingleNode(state,
+                                                                                 Alphas(3),
+                                                                                 ErrorsFound,
+                                                                                 Node::ConnectionObjectType::RefrigerationCondenserEvaporativeCooled,
+                                                                                 Alphas(1),
+                                                                                 Node::FluidType::Air,
+                                                                                 Node::ConnectionType::OutsideAirReference,
+                                                                                 Node::CompFluidStream::Primary,
+                                                                                 Node::ObjectIsParent);
                     if (!OutAirNodeManager::CheckOutAirNodeNumber(state, Condenser(CondNum).InletAirNodeNum)) {
                         ShowSevereError(state,
                                         EnergyPlus::format("{}{}=\"{}\", {} not found: {}",
@@ -3738,28 +3735,26 @@ void GetRefrigerationInput(EnergyPlusData &state)
                     ErrorsFound = true;
                 }
 
-                Condenser(CondNum).InletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        Alphas(2),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::RefrigerationCondenserWaterCooled,
-                                                        Alphas(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
-                Condenser(CondNum).OutletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        Alphas(3),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::RefrigerationCondenserWaterCooled,
-                                                        Alphas(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                Condenser(CondNum).InletNode = Node::GetOnlySingleNode(state,
+                                                                       Alphas(2),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::RefrigerationCondenserWaterCooled,
+                                                                       Alphas(1),
+                                                                       Node::FluidType::Water,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsNotParent);
+                Condenser(CondNum).OutletNode = Node::GetOnlySingleNode(state,
+                                                                        Alphas(3),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::RefrigerationCondenserWaterCooled,
+                                                                        Alphas(1),
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
                 // Check node connections
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(2), Alphas(3), "Water Cooled Condenser Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(2), Alphas(3), "Water Cooled Condenser Nodes");
                 // Get loop flow type
                 if ((Condenser(CondNum).FlowType = static_cast<CndsrFlowType>(getEnumValue(cndsrFlowTypeNamesUC, Alphas(4)))) ==
                     CndsrFlowType::Invalid) {
@@ -4131,16 +4126,15 @@ void GetRefrigerationInput(EnergyPlusData &state)
                         GasCooler(GCNum).GasCoolerRejectHeatToZone = true;
                         state.dataRefrigCase->RefrigPresentInZone(GasCooler(GCNum).InletAirZoneNum) = true;
                     } else { // not in a conditioned zone, so see if it's outside
-                        GasCooler(GCNum).InletAirNodeNum =
-                            NodeInputManager::GetOnlySingleNode(state,
-                                                                Alphas(4),
-                                                                ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::RefrigerationGasCoolerAirCooled,
-                                                                Alphas(1),
-                                                                DataLoopNode::NodeFluidType::Air,
-                                                                DataLoopNode::ConnectionType::OutsideAirReference,
-                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                DataLoopNode::ObjectIsParent);
+                        GasCooler(GCNum).InletAirNodeNum = Node::GetOnlySingleNode(state,
+                                                                                   Alphas(4),
+                                                                                   ErrorsFound,
+                                                                                   Node::ConnectionObjectType::RefrigerationGasCoolerAirCooled,
+                                                                                   Alphas(1),
+                                                                                   Node::FluidType::Air,
+                                                                                   Node::ConnectionType::OutsideAirReference,
+                                                                                   Node::CompFluidStream::Primary,
+                                                                                   Node::ObjectIsParent);
                         if (!OutAirNodeManager::CheckOutAirNodeNumber(state, GasCooler(GCNum).InletAirNodeNum)) {
                             // not outside and not a zone
                             ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(4), Alphas(4));
@@ -10726,7 +10720,7 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     }
 
     if (this->NumCoils > 0) {
-        auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
+        const auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
         for (int CoilIndex = 1; CoilIndex <= this->NumCoils; ++CoilIndex) {
             int CoilID = this->CoilNum(CoilIndex);
             // already CALLed CalculateCoil(CoilID) in CoilSet specified order
@@ -15342,7 +15336,7 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
     } // Secondary(SecondaryNum)%NumWalkIns > 0
 
     if (this->NumCoils > 0) {
-        auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
+        const auto &WarehouseCoil = state.dataRefrigCase->WarehouseCoil;
         for (int CoilIndex = 1; CoilIndex <= this->NumCoils; ++CoilIndex) {
             int CoilID = this->CoilNum(CoilIndex);
             // already CALL CalculateCoil(CoilID) for each coil, dispatched in coilset order for each zone
@@ -16358,7 +16352,7 @@ void ZeroHVACValues(EnergyPlusData &state)
     if (state.dataRefrigCase->HaveRefrigRacks) {
         // HaveRefrigRacks is TRUE when NumRefrigeratedRAcks > 0
         // RefrigRack ALLOCATED to NumRefrigeratedRacks
-        auto &RefrigRack = state.dataRefrigCase->RefrigRack;
+        const auto &RefrigRack = state.dataRefrigCase->RefrigRack;
         for (int RackNum = 1; RackNum <= state.dataRefrigCase->NumRefrigeratedRacks; ++RackNum) {
             if (RefrigRack(RackNum).CondenserType == DataHeatBalance::RefrigCondenserType::Water) {
                 Real64 MassFlowRate = 0.0;
@@ -16377,7 +16371,7 @@ void ZeroHVACValues(EnergyPlusData &state)
 
     if (state.dataRefrigCase->NumRefrigCondensers > 0) {
         // Condenser ALLOCATED to DataHeatBalance::NumRefrigCondensers
-        auto &Condenser = state.dataRefrigCase->Condenser;
+        const auto &Condenser = state.dataRefrigCase->Condenser;
         for (int CondID = 1; CondID <= state.dataRefrigCase->NumRefrigCondensers; ++CondID) {
             if (Condenser(CondID).CondenserType == DataHeatBalance::RefrigCondenserType::Water) {
                 Real64 MassFlowRate = 0.0;

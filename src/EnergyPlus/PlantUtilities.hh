@@ -129,14 +129,14 @@ namespace PlantUtilities {
                                          bool FirstHVACIteration);
 
     void UpdateAbsorberChillerComponentGeneratorSide(EnergyPlusData &state,
-                                                     int LoopNum,                                // component's loop index
-                                                     DataPlant::LoopSideLocation LoopSide,       // component's loop side number
-                                                     DataPlant::PlantEquipmentType Type,         // Component's type index
-                                                     int InletNodeNum,                           // Component's inlet node pointer
-                                                     int OutletNodeNum,                          // Component's outlet node pointer
-                                                     DataLoopNode::NodeFluidType HeatSourceType, // Type of fluid in Generator loop
-                                                     Real64 ModelGeneratorHeatRate,              // model's generator heat rate (W)
-                                                     Real64 ModelMassFlowRate,                   // model's generator mass flow rate (kg/s)
+                                                     int LoopNum,                          // component's loop index
+                                                     DataPlant::LoopSideLocation LoopSide, // component's loop side number
+                                                     DataPlant::PlantEquipmentType Type,   // Component's type index
+                                                     int InletNodeNum,                     // Component's inlet node pointer
+                                                     int OutletNodeNum,                    // Component's outlet node pointer
+                                                     Node::FluidType HeatSourceType,       // Type of fluid in Generator loop
+                                                     Real64 ModelGeneratorHeatRate,        // model's generator heat rate (W)
+                                                     Real64 ModelMassFlowRate,             // model's generator mass flow rate (kg/s)
                                                      bool FirstHVACIteration);
 
     void InterConnectTwoPlantLoopSides(EnergyPlusData &state,

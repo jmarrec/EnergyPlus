@@ -98,7 +98,6 @@ using namespace EnergyPlus;
 using namespace AirflowNetwork;
 using namespace DataSurfaces;
 using namespace DataHeatBalance;
-using namespace EnergyPlus::DataLoopNode;
 using namespace OutAirNodeManager;
 using namespace EnergyPlus::Fans;
 using namespace EnergyPlus::HVACStandAloneERV;
@@ -110,7 +109,7 @@ TEST_F(EnergyPlusFixture, DuctLoss_test)
 
     std::string const idf_objects0 = R"IDF(
 
-  Version,26.1;
+  Version,26.2;
 
   Building,
     House with AirflowNetwork simulation,  !- Name

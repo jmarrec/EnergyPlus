@@ -92,7 +92,6 @@ using namespace EnergyPlus::ZoneEquipmentManager;
 using namespace EnergyPlus::HeatBalanceAirManager;
 using namespace EnergyPlus::DataHeatBalFanSys;
 using namespace EnergyPlus::DataZoneEquipment;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataAirLoop;
 using namespace EnergyPlus::DataAirSystems;
 using namespace nlohmann::literals;

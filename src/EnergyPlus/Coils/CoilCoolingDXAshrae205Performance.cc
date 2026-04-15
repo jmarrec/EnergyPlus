@@ -202,14 +202,14 @@ void CoilCoolingDX205Performance::size(EnergyPlusData &state)
 }
 
 void CoilCoolingDX205Performance::simulate(EnergyPlus::EnergyPlusData &state,
-                                           const DataLoopNode::NodeData &inletNode,
-                                           DataLoopNode::NodeData &outletNode,
+                                           const Node::NodeData &inletNode,
+                                           Node::NodeData &outletNode,
                                            HVAC::CoilMode,
                                            int const speedNum,
                                            Real64 const speedRatio,
                                            HVAC::FanOp const fanOpMode,
-                                           DataLoopNode::NodeData &condInletNode,
-                                           DataLoopNode::NodeData &condOutletNode,
+                                           Node::NodeData &condInletNode,
+                                           Node::NodeData &condOutletNode,
                                            bool const, // singleMode,
                                            Real64)     // LoadSHR)
 {
@@ -234,13 +234,13 @@ void CoilCoolingDX205Performance::simulate(EnergyPlus::EnergyPlusData &state,
 }
 
 void CoilCoolingDX205Performance::calculate(EnergyPlus::EnergyPlusData &state,
-                                            const DataLoopNode::NodeData &inletNode,
-                                            DataLoopNode::NodeData &outletNode,
+                                            const Node::NodeData &inletNode,
+                                            Node::NodeData &outletNode,
                                             int const speedNum,
                                             Real64 const ratio,
                                             HVAC::FanOp const fanOpMode,
-                                            DataLoopNode::NodeData &condInletNode,
-                                            DataLoopNode::NodeData &) // condOutletNode)
+                                            Node::NodeData &condInletNode,
+                                            Node::NodeData &) // condOutletNode)
 {
     // If cycling (discrete or continuous): compressor_sequence_number = 1
     // if not cycling (discrete): compressor_sequence_number = speed -1 & speed, MFR is different for each call to
@@ -364,8 +364,8 @@ void CoilCoolingDX205Performance::calculate(EnergyPlus::EnergyPlusData &state,
 }
 
 void CoilCoolingDX205Performance::calculate_cycling_capcacity(EnergyPlus::EnergyPlusData &state,
-                                                              const DataLoopNode::NodeData &inletNode,
-                                                              DataLoopNode::NodeData &outletNode,
+                                                              const Node::NodeData &inletNode,
+                                                              Node::NodeData &outletNode,
                                                               Real64 const gross_power,
                                                               Real64 const ratio,
                                                               HVAC::FanOp const fanOpMode)
@@ -390,8 +390,8 @@ void CoilCoolingDX205Performance::calculate_cycling_capcacity(EnergyPlus::Energy
 }
 
 void CoilCoolingDX205Performance::set_output_node_conditions(EnergyPlusData &state,
-                                                             const DataLoopNode::NodeData &inletNode,
-                                                             DataLoopNode::NodeData &outletNode,
+                                                             const Node::NodeData &inletNode,
+                                                             Node::NodeData &outletNode,
                                                              Real64 gross_total_capacity,
                                                              Real64 gross_sensible_capacity,
                                                              Real64 air_mass_flow_rate) const

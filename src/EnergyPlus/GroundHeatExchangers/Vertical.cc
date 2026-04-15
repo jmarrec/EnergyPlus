@@ -78,32 +78,32 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
     // get inlet node num
     std::string const inletNodeName = Util::makeUPPER(j["inlet_node_name"].get<std::string>());
 
-    this->inletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                             inletNodeName,
-                                                             errorsFound,
-                                                             DataLoopNode::ConnectionObjectType::GroundHeatExchangerSystem,
-                                                             objName,
-                                                             DataLoopNode::NodeFluidType::Water,
-                                                             DataLoopNode::ConnectionType::Inlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             DataLoopNode::ObjectIsNotParent);
+    this->inletNodeNum = Node::GetOnlySingleNode(state,
+                                                 inletNodeName,
+                                                 errorsFound,
+                                                 Node::ConnectionObjectType::GroundHeatExchangerSystem,
+                                                 objName,
+                                                 Node::FluidType::Water,
+                                                 Node::ConnectionType::Inlet,
+                                                 Node::CompFluidStream::Primary,
+                                                 Node::ObjectIsNotParent);
 
     // get outlet node num
     std::string const outletNodeName = Util::makeUPPER(j["outlet_node_name"].get<std::string>());
 
-    this->outletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                              outletNodeName,
-                                                              errorsFound,
-                                                              DataLoopNode::ConnectionObjectType::GroundHeatExchangerSystem,
-                                                              objName,
-                                                              DataLoopNode::NodeFluidType::Water,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              DataLoopNode::ObjectIsNotParent);
+    this->outletNodeNum = Node::GetOnlySingleNode(state,
+                                                  outletNodeName,
+                                                  errorsFound,
+                                                  Node::ConnectionObjectType::GroundHeatExchangerSystem,
+                                                  objName,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Outlet,
+                                                  Node::CompFluidStream::Primary,
+                                                  Node::ObjectIsNotParent);
     this->available = true;
     this->on = true;
 
-    BranchNodeConnections::TestCompSet(state, moduleName, objName, inletNodeName, outletNodeName, "Condenser Water Nodes");
+    Node::TestCompSet(state, moduleName, objName, inletNodeName, outletNodeName, "Condenser Water Nodes");
 
     this->designFlow = j["design_flow_rate"].get<Real64>();
     PlantUtilities::RegisterPlantCompDesignFlow(state, this->inletNodeNum, this->designFlow);
@@ -682,9 +682,8 @@ nlohmann::json GLHEVert::getCommonGHEDesignerInputs(EnergyPlusData &state) const
 
 fs::path GLHEVert::runGHEDesigner(EnergyPlusData &state, nlohmann::json const &inputs)
 {
-    // we'll drop the ghedesigner input file and output directory in the same folder as the input file
-    auto ghe_designer_input_file_path = state.dataStrGlobals->inputDirPath / "eplus_ghedesigner_input.json";
-    auto ghe_designer_output_directory = state.dataStrGlobals->inputDirPath / "eplus_ghedesigner_outputs";
+    auto ghe_designer_input_file_path = state.dataStrGlobals->outDirPath / "eplus_ghedesigner_input.json";
+    auto ghe_designer_output_directory = state.dataStrGlobals->outDirPath / "eplus_ghedesigner_outputs";
     try {
         // If file already exists, try removing it
         if (fs::exists(ghe_designer_input_file_path)) {

@@ -457,7 +457,7 @@ namespace DataZoneEquipment {
     struct ZoneEquipmentSplitterMixer
     {
         std::string Name;
-        DataLoopNode::ConnectionObjectType spaceEquipType = DataLoopNode::ConnectionObjectType::Invalid;
+        Node::ConnectionObjectType spaceEquipType = Node::ConnectionObjectType::Invalid;
         DataZoneEquipment::SpaceEquipSizingBasis spaceSizingBasis = DataZoneEquipment::SpaceEquipSizingBasis::Invalid;
         std::vector<ZoneEquipSplitterMixerSpace> spaces;
 

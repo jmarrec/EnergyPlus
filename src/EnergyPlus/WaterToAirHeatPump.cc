@@ -275,39 +275,39 @@ namespace WaterToAirHeatPump {
                 heatPump.WaterInletNodeNum = GetOnlySingleNode(state,
                                                                waterInletNodeName,
                                                                ErrorsFound,
-                                                               DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                               Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                                heatPump.Name,
-                                                               DataLoopNode::NodeFluidType::Water,
-                                                               DataLoopNode::ConnectionType::Inlet,
-                                                               NodeInputManager::CompFluidStream::Secondary,
-                                                               DataLoopNode::ObjectIsNotParent);
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
                 heatPump.WaterOutletNodeNum = GetOnlySingleNode(state,
                                                                 waterOutletNodeName,
                                                                 ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                                Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                                 heatPump.Name,
-                                                                DataLoopNode::NodeFluidType::Water,
-                                                                DataLoopNode::ConnectionType::Outlet,
-                                                                NodeInputManager::CompFluidStream::Secondary,
-                                                                DataLoopNode::ObjectIsNotParent);
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsNotParent);
                 heatPump.AirInletNodeNum = GetOnlySingleNode(state,
                                                              airInletNodeName,
                                                              ErrorsFound,
-                                                             DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                             Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                              heatPump.Name,
-                                                             DataLoopNode::NodeFluidType::Air,
-                                                             DataLoopNode::ConnectionType::Inlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             DataLoopNode::ObjectIsNotParent);
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
                 heatPump.AirOutletNodeNum = GetOnlySingleNode(state,
                                                               airOutletNodeName,
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                              Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                               heatPump.Name,
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              DataLoopNode::ObjectIsNotParent);
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Outlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
 
                 heatPump.LoadSideTotalUACoeff = s_ip->getRealFieldValue(fields, schemaProps, "load_side_total_heat_transfer_coefficient");
                 heatPump.LoadSideOutsideUACoeff = s_ip->getRealFieldValue(fields, schemaProps, "load_side_outside_surface_heat_transfer_coefficient");
@@ -396,8 +396,8 @@ namespace WaterToAirHeatPump {
                     }
                 }
 
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, heatPump.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, heatPump.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, heatPump.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, heatPump.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
                 heatPump.MaxONOFFCyclesperHour = s_ip->getRealFieldValue(fields, schemaProps, "maximum_cycling_rate");
                 heatPump.LatentCapacityTimeConstant = s_ip->getRealFieldValue(fields, schemaProps, "latent_capacity_time_constant");
@@ -514,39 +514,39 @@ namespace WaterToAirHeatPump {
                 heatPump.WaterInletNodeNum = GetOnlySingleNode(state,
                                                                waterInletNodeName,
                                                                ErrorsFound,
-                                                               DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                               Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                                heatPump.Name,
-                                                               DataLoopNode::NodeFluidType::Water,
-                                                               DataLoopNode::ConnectionType::Inlet,
-                                                               NodeInputManager::CompFluidStream::Secondary,
-                                                               DataLoopNode::ObjectIsNotParent);
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
                 heatPump.WaterOutletNodeNum = GetOnlySingleNode(state,
                                                                 waterOutletNodeName,
                                                                 ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                                Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                                 heatPump.Name,
-                                                                DataLoopNode::NodeFluidType::Water,
-                                                                DataLoopNode::ConnectionType::Outlet,
-                                                                NodeInputManager::CompFluidStream::Secondary,
-                                                                DataLoopNode::ObjectIsNotParent);
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsNotParent);
                 heatPump.AirInletNodeNum = GetOnlySingleNode(state,
                                                              airInletNodeName,
                                                              ErrorsFound,
-                                                             DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                             Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                              heatPump.Name,
-                                                             DataLoopNode::NodeFluidType::Air,
-                                                             DataLoopNode::ConnectionType::Inlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             DataLoopNode::ObjectIsNotParent);
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
                 heatPump.AirOutletNodeNum = GetOnlySingleNode(state,
                                                               airOutletNodeName,
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
+                                                              Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpParameterEstimation,
                                                               heatPump.Name,
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              DataLoopNode::ObjectIsNotParent);
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Outlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
 
                 heatPump.LoadSideTotalUACoeff = s_ip->getRealFieldValue(fields, schemaProps, "load_side_total_heat_transfer_coefficient");
                 if (heatPump.LoadSideTotalUACoeff < Constant::rTinyValue) {
@@ -634,8 +634,8 @@ namespace WaterToAirHeatPump {
                     }
                 }
 
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, heatPump.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
-                BranchNodeConnections::TestCompSet(state, CurrentModuleObject, heatPump.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, heatPump.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, heatPump.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
                 // CurrentModuleObject = "Coil:Heating:WaterToAirHeatPump:ParameterEstimation"
                 SetupOutputVariable(state,
@@ -2254,9 +2254,9 @@ namespace WaterToAirHeatPump {
     }
 
     Real64 GetCoilCapacity(EnergyPlusData &state,
-                           std::string const &CoilType, // must match coil types in this module
-                           std::string const &CoilName, // must match coil names for the coil type
-                           bool &ErrorsFound            // set to true if problem
+                           std::string_view const CoilType, // must match coil types in this module
+                           std::string const &CoilName,     // must match coil names for the coil type
+                           bool &ErrorsFound                // set to true if problem
     )
     {
 

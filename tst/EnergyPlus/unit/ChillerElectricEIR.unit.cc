@@ -69,7 +69,6 @@
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::ChillerElectricEIR;
-using namespace EnergyPlus::DataLoopNode;
 
 TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
 {

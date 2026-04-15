@@ -128,17 +128,17 @@ namespace HeatRecovery {
         "WhenFansOn", "Scheduled", "WhenOutsideEconomizerLimits", "WhenMinimumOutdoorAir"};
 
     void SimHeatRecovery(EnergyPlusData &state,
-                         std::string_view CompName,                          // name of the heat exchanger unit
-                         bool const FirstHVACIteration,                      // TRUE if 1st HVAC simulation of system timestep
-                         int &CompIndex,                                     // Pointer to Component
-                         HVAC::FanOp const fanOp,                            // Supply air fan operating mode
-                         ObjexxFCL::Optional<Real64 const> HXPartLoadRatio,  // Part load ratio requested of DX compressor
-                         ObjexxFCL::Optional_bool_const HXUnitEnable,        // Flag to operate heat exchanger
-                         ObjexxFCL::Optional_int_const CompanionCoilIndex,   // index of companion cooling coil
-                         ObjexxFCL::Optional_bool_const RegenInletIsOANode,  // flag to determine if supply inlet is OA node, if so air flow cycles
-                         ObjexxFCL::Optional_bool_const EconomizerFlag,      // economizer operation flag passed by airloop or OA sys
-                         ObjexxFCL::Optional_bool_const HighHumCtrlFlag,     // high humidity control flag passed by airloop or OA sys
-                         ObjexxFCL::Optional_int_const CompanionCoilType_Num // cooling coil type of coil
+                         std::string_view CompName,                         // name of the heat exchanger unit
+                         bool const FirstHVACIteration,                     // TRUE if 1st HVAC simulation of system timestep
+                         int &CompIndex,                                    // Pointer to Component
+                         HVAC::FanOp const fanOp,                           // Supply air fan operating mode
+                         ObjexxFCL::Optional<Real64 const> HXPartLoadRatio, // Part load ratio requested of DX compressor
+                         ObjexxFCL::Optional_bool_const HXUnitEnable,       // Flag to operate heat exchanger
+                         ObjexxFCL::Optional_int_const CompanionCoilIndex,  // index of companion cooling coil
+                         ObjexxFCL::Optional_bool_const RegenInletIsOANode, // flag to determine if supply inlet is OA node, if so air flow cycles
+                         ObjexxFCL::Optional_bool_const EconomizerFlag,     // economizer operation flag passed by airloop or OA sys
+                         ObjexxFCL::Optional_bool_const HighHumCtrlFlag,    // high humidity control flag passed by airloop or OA sys
+                         ObjexxFCL::Optional<HVAC::CoilType const> companionCoilTypeOpt // cooling coil type of coil
     )
     {
 
@@ -187,7 +187,8 @@ namespace HeatRecovery {
         }
 
         int CompanionCoilNum = present(CompanionCoilIndex) ? int(CompanionCoilIndex) : -1; // Index to companion cooling coil
-        int companionCoilType = present(CompanionCoilType_Num) ? int(CompanionCoilType_Num) : -1;
+        HVAC::CoilType companionCoilType =
+            present(companionCoilTypeOpt) ? static_cast<HVAC::CoilType>(companionCoilTypeOpt()) : HVAC::CoilType::Invalid;
 
         bool HXUnitOn; // flag to enable heat exchanger
         if (present(HXUnitEnable)) {
@@ -357,46 +358,46 @@ namespace HeatRecovery {
             thisExchanger.SupInletNode = GetOnlySingleNode(state,
                                                            state.dataIPShortCut->cAlphaArgs(5),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
+                                                           Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                            thisExchanger.Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           DataLoopNode::ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
             thisExchanger.SupOutletNode = GetOnlySingleNode(state,
                                                             state.dataIPShortCut->cAlphaArgs(6),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
+                                                            Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                             thisExchanger.Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
             thisExchanger.SecInletNode = GetOnlySingleNode(state,
                                                            state.dataIPShortCut->cAlphaArgs(7),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
+                                                           Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                            thisExchanger.Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                           DataLoopNode::ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Secondary,
+                                                           Node::ObjectIsNotParent);
             thisExchanger.SecOutletNode = GetOnlySingleNode(state,
                                                             state.dataIPShortCut->cAlphaArgs(8),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
+                                                            Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                             thisExchanger.Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Secondary,
+                                                            Node::ObjectIsNotParent);
 
-            BranchNodeConnections::TestCompSet(state,
-                                               HVAC::hxTypeNames[(int)thisExchanger.type],
-                                               thisExchanger.Name,
-                                               state.dataIPShortCut->cAlphaArgs(5),
-                                               state.dataIPShortCut->cAlphaArgs(6),
-                                               "Process Air Nodes");
+            Node::TestCompSet(state,
+                              HVAC::hxTypeNames[(int)thisExchanger.type],
+                              thisExchanger.Name,
+                              state.dataIPShortCut->cAlphaArgs(5),
+                              state.dataIPShortCut->cAlphaArgs(6),
+                              "Process Air Nodes");
 
         } // end of input loop over air to air plate heat exchangers
 
@@ -445,39 +446,39 @@ namespace HeatRecovery {
             thisExchanger.SupInletNode = GetOnlySingleNode(state,
                                                            state.dataIPShortCut->cAlphaArgs(3),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
+                                                           Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                            thisExchanger.Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           DataLoopNode::ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
             thisExchanger.SupOutletNode = GetOnlySingleNode(state,
                                                             state.dataIPShortCut->cAlphaArgs(4),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
+                                                            Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                             thisExchanger.Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
             thisExchanger.SecInletNode = GetOnlySingleNode(state,
                                                            state.dataIPShortCut->cAlphaArgs(5),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
+                                                           Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                            thisExchanger.Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                           DataLoopNode::ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Secondary,
+                                                           Node::ObjectIsNotParent);
             thisExchanger.SecOutletNode = GetOnlySingleNode(state,
                                                             state.dataIPShortCut->cAlphaArgs(6),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
+                                                            Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                             thisExchanger.Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Secondary,
+                                                            Node::ObjectIsNotParent);
 
             thisExchanger.NomElecPower = state.dataIPShortCut->rNumericArgs(6);
 
@@ -523,12 +524,12 @@ namespace HeatRecovery {
             thisExchanger.CoolEffectLatentCurveIndex =
                 Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(14)); // convert curve name to number
 
-            BranchNodeConnections::TestCompSet(state,
-                                               HVAC::hxTypeNames[(int)thisExchanger.type],
-                                               thisExchanger.Name,
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Process Air Nodes");
+            Node::TestCompSet(state,
+                              HVAC::hxTypeNames[(int)thisExchanger.type],
+                              thisExchanger.Name,
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Process Air Nodes");
         } // end of input loop over air to air generic heat exchangers
 
         // loop over the desiccant balanced heat exchangers and load their input data
@@ -576,48 +577,48 @@ namespace HeatRecovery {
             thisExchanger.SupInletNode = GetOnlySingleNode(state,
                                                            state.dataIPShortCut->cAlphaArgs(3),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
+                                                           Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                            thisExchanger.Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           DataLoopNode::ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
             thisExchanger.SupOutletNode = GetOnlySingleNode(state,
                                                             state.dataIPShortCut->cAlphaArgs(4),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
+                                                            Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                             thisExchanger.Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
             // process air inlet and outlet nodes
             thisExchanger.SecInletNode = GetOnlySingleNode(state,
                                                            state.dataIPShortCut->cAlphaArgs(5),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
+                                                           Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                            thisExchanger.Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                           DataLoopNode::ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Secondary,
+                                                           Node::ObjectIsNotParent);
             thisExchanger.SecOutletNode = GetOnlySingleNode(state,
                                                             state.dataIPShortCut->cAlphaArgs(6),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
+                                                            Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                             thisExchanger.Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Secondary,
+                                                            Node::ObjectIsNotParent);
 
             // Set up the component set for the process side of the HX (Sec = Process)
-            BranchNodeConnections::TestCompSet(state,
-                                               HVAC::hxTypeNames[(int)thisExchanger.type],
-                                               thisExchanger.Name,
-                                               state.dataLoopNodes->NodeID(thisExchanger.SecInletNode),
-                                               state.dataLoopNodes->NodeID(thisExchanger.SecOutletNode),
-                                               "Process Air Nodes");
+            Node::TestCompSet(state,
+                              HVAC::hxTypeNames[(int)thisExchanger.type],
+                              thisExchanger.Name,
+                              state.dataLoopNodes->NodeID(thisExchanger.SecInletNode),
+                              state.dataLoopNodes->NodeID(thisExchanger.SecOutletNode),
+                              "Process Air Nodes");
 
             // A7 is the heat exchanger performance object type
             // It currently only has one choice key, with a default value, so currently no logic is needed
@@ -1191,7 +1192,7 @@ namespace HeatRecovery {
         }
     }
 
-    void HeatExchCond::initialize(EnergyPlusData &state, int const CompanionCoilIndex, int const CompanionCoilType_Num)
+    void HeatExchCond::initialize(EnergyPlusData &state, int const CompanionCoilIndex, HVAC::CoilType const companionCoilType)
     {
 
         // SUBROUTINE INFORMATION:
@@ -1354,7 +1355,7 @@ namespace HeatRecovery {
 
             case HVAC::HXType::AirToAir_SensAndLatent:
                 if (this->SupOutletNode > 0 && this->ControlToTemperatureSetPoint) {
-                    if (state.dataLoopNodes->Node(this->SupOutletNode).TempSetPoint == DataLoopNode::SensedNodeFlagValue) {
+                    if (state.dataLoopNodes->Node(this->SupOutletNode).TempSetPoint == Node::SensedNodeFlagValue) {
                         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                             ShowSevereError(
                                 state,
@@ -1438,7 +1439,7 @@ namespace HeatRecovery {
             if (this->MySetPointTest) {
                 if (!state.dataGlobal->SysSizingCalc && state.dataHVACGlobal->DoSetPointTest) {
                     if (!state.dataHeatRecovery->CalledFromParentObject) {
-                        if (state.dataLoopNodes->Node(this->SecOutletNode).HumRatMax == DataLoopNode::SensedNodeFlagValue) {
+                        if (state.dataLoopNodes->Node(this->SecOutletNode).HumRatMax == Node::SensedNodeFlagValue) {
                             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                                 ShowWarningError(state,
                                                  EnergyPlus::format("Missing optional HumRatMax setpoint for {} \"{}\"",
@@ -1479,10 +1480,10 @@ namespace HeatRecovery {
             }
 
             if ((CompanionCoilIndex > -1) &&
-                ((CompanionCoilType_Num == HVAC::CoilDX_CoolingSingleSpeed) || (CompanionCoilType_Num == HVAC::Coil_CoolingAirToAirVariableSpeed) ||
-                 (CompanionCoilType_Num == HVAC::CoilDX_Cooling))) {
+                ((companionCoilType == HVAC::CoilType::CoolingDXSingleSpeed) || (companionCoilType == HVAC::CoilType::CoolingDXVariableSpeed) ||
+                 (companionCoilType == HVAC::CoilType::CoolingDX))) {
 
-                if (CompanionCoilType_Num == HVAC::CoilDX_CoolingSingleSpeed || CompanionCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) {
+                if (companionCoilType == HVAC::CoilType::CoolingDXSingleSpeed || companionCoilType == HVAC::CoilType::CoolingDXTwoStageWHumControl) {
                     if (state.dataDXCoils->DXCoilFullLoadOutAirTemp(CompanionCoilIndex) == 0.0 ||
                         state.dataDXCoils->DXCoilFullLoadOutAirHumRat(CompanionCoilIndex) == 0.0) {
                         //       DX Coil is OFF, read actual inlet conditions
@@ -1493,11 +1494,11 @@ namespace HeatRecovery {
                         state.dataHeatRecovery->FullLoadOutAirTemp = state.dataDXCoils->DXCoilFullLoadOutAirTemp(CompanionCoilIndex);
                         state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataDXCoils->DXCoilFullLoadOutAirHumRat(CompanionCoilIndex);
                     }
-                } else if (CompanionCoilType_Num == HVAC::Coil_CoolingAirToAirVariableSpeed) {
+                } else if (companionCoilType == HVAC::CoilType::CoolingDXVariableSpeed) {
                     // how to support VS dx coil here?
                     state.dataHeatRecovery->FullLoadOutAirTemp = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).OutletAirDBTemp;
                     state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).OutletAirHumRat;
-                } else if (CompanionCoilType_Num == HVAC::CoilDX_Cooling) {
+                } else if (companionCoilType == HVAC::CoilType::CoolingDX) {
                     // Use the new coil option:
                     state.dataHeatRecovery->FullLoadOutAirTemp = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].outletAirDryBulbTemp;
                     state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].outletAirHumRat;
@@ -1712,7 +1713,7 @@ namespace HeatRecovery {
                 // no OAcontroller is directly applicable to HX in airLoopDOAS system
             } else {
                 if (oaSys.OAControllerIndex > 0) {
-                    auto &oaCntrlr = state.dataMixedAir->OAController(oaSys.OAControllerIndex);
+                    const auto &oaCntrlr = state.dataMixedAir->OAController(oaSys.OAControllerIndex);
                     if (oaCntrlr.Econo != MixedAir::EconoOp::NoEconomizer) {
                         hasEconomizerControl = true;
                         hxBypassControlType = oaCntrlr.HeatRecoveryBypassControlType;
@@ -2490,7 +2491,7 @@ namespace HeatRecovery {
         HVAC::FanOp const fanOp,                       // Supply air fan operating mode (1=cycling, 2=constant)
         Real64 const PartLoadRatio,                    // Part load ratio requested of DX compressor
         int const CompanionCoilIndex,                  // index of companion cooling coil
-        int const CompanionCoilType,                   // type of cooling coil
+        HVAC::CoilType const companionCoilType,        // type of cooling coil
         bool const RegenInletIsOANode,                 // Flag to determine if regen side inlet is OANode, if so this air stream cycles
         ObjexxFCL::Optional_bool_const EconomizerFlag, // economizer flag pass by air loop or OA sys
         ObjexxFCL::Optional_bool_const HighHumCtrlFlag // high humidity control flag passed by airloop or OA sys
@@ -2514,7 +2515,7 @@ namespace HeatRecovery {
         //  Humidity control can enable/disable heat recovery through the use of the HXUnitOn Subroutine argument.
 
         // Using/Aliasing
-        using DataLoopNode::SensedNodeFlagValue;
+        using Node::SensedNodeFlagValue;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         bool UnitOn;                   // unit on flag
@@ -2729,10 +2730,10 @@ namespace HeatRecovery {
                 HXPartLoadRatio = max(0.0, HXPartLoadRatio);
                 HXPartLoadRatio = min(1.0, HXPartLoadRatio);
 
-            } else if (CompanionCoilType > 0 && CompanionCoilIndex > -1) {
-                if (CompanionCoilType == HVAC::CoilDX_Cooling) {
+            } else if (companionCoilType != HVAC::CoilType::Invalid && CompanionCoilIndex > -1) {
+                if (companionCoilType == HVAC::CoilType::CoolingDX) {
                     HXPartLoadRatio = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].partLoadRatioReport;
-                } else if (CompanionCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
+                } else if (companionCoilType == HVAC::CoilType::CoolingDXVariableSpeed) {
                     HXPartLoadRatio = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).PartLoadRatio;
                 } else {
                     HXPartLoadRatio = state.dataDXCoils->DXCoilPartLoadRatio(CompanionCoilIndex);

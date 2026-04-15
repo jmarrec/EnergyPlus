@@ -378,7 +378,7 @@ int AbortEnergyPlus(EnergyPlusData &state)
         state.dataErrTracking->AskForConnectionsReport = false; // Set false here in case any further fatal errors in below processing...
 
         ShowMessage(state, "Fatal error -- final processing.  More error messages may appear.");
-        NodeInputManager::SetupNodeVarsForReporting(state);
+        Node::SetupNodeVarsForReporting(state);
 
         bool ErrFound = false;
         bool TerminalError = false;
@@ -390,15 +390,15 @@ int AbortEnergyPlus(EnergyPlusData &state)
         if (ErrFound) {
             TerminalError = true;
         }
-        NodeInputManager::CheckMarkedNodes(state, ErrFound);
+        Node::CheckMarkedNodes(state, ErrFound);
         if (ErrFound) {
             TerminalError = true;
         }
-        BranchNodeConnections::CheckNodeConnections(state, ErrFound);
+        Node::CheckNodeConnections(state, ErrFound);
         if (ErrFound) {
             TerminalError = true;
         }
-        BranchNodeConnections::TestCompSetInletOutletNodes(state, ErrFound);
+        Node::TestCompSetInletOutletNodes(state, ErrFound);
         if (ErrFound) {
             TerminalError = true;
         }
@@ -1764,7 +1764,8 @@ void ShowWarningBadMin(EnergyPlusData &state,
                        std::string_view msg)
 {
     ShowWarningError(state, EnergyPlus::format("{}: {} = {}", eoh.routineName, eoh.objectType, eoh.objectName));
-    ShowContinueError(state, EnergyPlus::format("{} = {}, but must be {} {}", fieldName, fieldVal, cluMin == Clusive::In ? ">=" : ">", minVal));
+    ShowContinueError(state,
+                      EnergyPlus::format("{} = {:.2R}, but must be {} {:.2R}", fieldName, fieldVal, cluMin == Clusive::In ? ">=" : ">", minVal));
     if (!msg.empty()) {
         ShowContinueError(state, EnergyPlus::format("{}", msg));
     }
@@ -1779,8 +1780,8 @@ void ShowWarningBadMax(EnergyPlusData &state,
                        std::string_view msg)
 {
     ShowWarningError(state, EnergyPlus::format("{}: {} = {}", eoh.routineName, eoh.objectType, eoh.objectName));
-    ShowContinueError(state, EnergyPlus::format("{} = {}, but must be {} {}", fieldName, fieldVal, cluMax == Clusive::In ? "<=" : "<", maxVal));
-    ShowContinueError(state, EnergyPlus::format("{} = {}, but must be {} {}", fieldName, fieldVal, cluMax == Clusive::In ? "<=" : "<", maxVal));
+    ShowContinueError(state,
+                      EnergyPlus::format("{} = {:.2R}, but must be {} {:.2R}", fieldName, fieldVal, cluMax == Clusive::In ? "<=" : "<", maxVal));
     if (!msg.empty()) {
         ShowContinueError(state, EnergyPlus::format("{}", msg));
     }
