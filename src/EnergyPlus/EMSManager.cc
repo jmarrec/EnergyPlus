@@ -343,7 +343,6 @@ namespace EMSManager {
             if (thisErlVar.Value.Type == DataRuntimeLanguage::Value::Null) {
                 *thisActuatorAvail.Actuated = false;
             } else {
-                thisActuatorUsed.wasActuated = true; // issue #10944
                 // Set the value and the actuated flag remotely on the actuated object via the pointer
                 switch (thisActuatorAvail.PntrVarTypeUsed) {
                 case DataRuntimeLanguage::PtrDataType::Real: {

@@ -3066,3 +3066,95 @@ TEST_F(EnergyPlusFixture, UnusedActuatorWarning)
     EXPECT_TRUE(compare_err_stream_substring("Unused EMS Actuator detected", false));
     EXPECT_TRUE(compare_err_stream_substring("A1", true));
 }
+
+TEST_F(EnergyPlusFixture, UnusedActuatorWarning_ConditionalNullBranchNotFalsePositive)
+{
+    // Issue #10944: idiomatic `IF cond SET act = v ELSE SET act = NULL` pattern must NOT
+    // trigger the unused-actuator warning just because the condition branch never fires at runtime.
+    // Static parse-time reference check sees the SET target, flag flips even if only NULL branch runs.
+    std::string const idf_objects = delimited_string({
+
+        "OutdoorAir:Node, Test node;",
+
+        "EnergyManagementSystem:Actuator,",
+        "A1,                              !- Name",
+        "Test node,                       !- Actuated Component Unique Name",
+        "System Node Setpoint,            !- Actuated Component Type",
+        "Temperature Setpoint;            !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "Cond Null Manager,               !- Name",
+        "BeginTimestepBeforePredictor,    !- EnergyPlus Model Calling Point",
+        "CondNullProgram;                 !- Program Name 1",
+
+        // Condition always false at runtime -> only NULL branch fires -> old runtime flag would stay false.
+        // Static parse check sees `SET A1 = ...` in the IF branch -> flag flips at parse time regardless.
+        "EnergyManagementSystem:Program,",
+        "CondNullProgram,",
+        "IF 0 > 1,",
+        "SET A1 = 42,",
+        "ELSE,",
+        "SET A1 = NULL,",
+        "ENDIF;",
+
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    OutAirNodeManager::SetOutAirNodes(*state);
+
+    EMSManager::CheckIfAnyEMS(*state);
+
+    state->dataEMSMgr->FinishProcessingUserInput = true;
+
+    bool anyRan;
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::SetupSimulation, anyRan, ObjexxFCL::Optional_int_const());
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, anyRan, ObjexxFCL::Optional_int_const());
+
+    compare_err_stream(""); // drop any setup chatter
+
+    EMSManager::checkForUnusedActuatorsAtEnd(*state);
+
+    EXPECT_FALSE(compare_err_stream_substring("Unused EMS Actuator detected", false, false));
+}
+
+TEST_F(EnergyPlusFixture, UnusedActuatorWarning_PythonHandleMarksActuatorAsUsed)
+{
+    // Issue #10944: IDF-declared actuator + Python grabs handle but no Erl SET anywhere.
+    // Python API path must flip wasActuated on handle retrieval so the end-of-sim check
+    // doesn't false-positive on legitimate Python-driven actuators.
+    std::string const idf_objects = delimited_string({
+
+        "OutdoorAir:Node, Test node;",
+
+        "EnergyManagementSystem:Actuator,",
+        "TempSetpointLo,                  !- Name",
+        "Test node,                       !- Actuated Component Unique Name",
+        "System Node Setpoint,            !- Actuated Component Type",
+        "Temperature Minimum Setpoint;    !- Actuated Component Control Type",
+
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    OutAirNodeManager::SetOutAirNodes(*state);
+    EMSManager::CheckIfAnyEMS(*state);
+    state->dataEMSMgr->FinishProcessingUserInput = true;
+
+    bool anyRan;
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::SetupSimulation, anyRan, ObjexxFCL::Optional_int_const());
+    ASSERT_EQ(1, state->dataRuntimeLang->numActuatorsUsed);
+
+    EXPECT_FALSE(state->dataRuntimeLang->EMSActuatorUsed(1).wasActuated);
+
+    int hActuator = getActuatorHandle(state.get(), "System Node Setpoint", "Temperature Minimum Setpoint", "Test node");
+    EXPECT_GT(hActuator, -1);
+
+    EXPECT_TRUE(state->dataRuntimeLang->EMSActuatorUsed(1).wasActuated);
+
+    compare_err_stream("", true); // drop the expected duplicate-definition chatter
+    EMSManager::checkForUnusedActuatorsAtEnd(*state);
+    EXPECT_FALSE(compare_err_stream_substring("Unused EMS Actuator detected", false, false));
+}
