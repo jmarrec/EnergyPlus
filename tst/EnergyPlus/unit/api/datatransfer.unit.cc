@@ -739,7 +739,6 @@ TEST_F(DataExchangeAPIUnitTestFixture, DataTransfer_PythonHandle_MarksActuatorAs
     // getActuatorHandle should have flipped the flag
     EXPECT_TRUE(state->dataRuntimeLang->EMSActuatorUsed(1).wasActuated);
 
-    compare_err_stream("", true); // drop expected duplicate-definition warning
     EMSManager::checkForUnusedActuatorsAtEnd(*state);
     EXPECT_FALSE(compare_err_stream_substring("Unused EMS Actuator detected", false, false));
 }
