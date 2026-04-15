@@ -727,7 +727,7 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.coilType = HVAC::CoilType::CoolingDXVariableSpeed;
                 varSpeedCoil.VarSpeedCoilType = HVAC::coilTypeNames[(int)varSpeedCoil.coilType];
                 varSpeedCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, varSpeedCoil.Name, varSpeedCoil.coilType);
-                
+
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -2049,7 +2049,7 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.VarSpeedCoilType = HVAC::coilTypeNames[(int)HVAC::CoilType::WaterHeatingAWHPVariableSpeed];
 
                 varSpeedCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, varSpeedCoil.Name, varSpeedCoil.coilType);
-                
+
                 ErrorObjectHeader eoh{routineName, CurrentModuleObject, varSpeedCoil.Name};
 
                 // ErrorsFound will be set to True if problem was found, left untouched otherwise
@@ -3679,11 +3679,8 @@ namespace VariableSpeedCoils {
 
             // store fan info for coil
             if (varSpeedCoil.SupplyFanIndex > 0) {
-              ReportCoilSelection::setCoilSupplyFanInfo(state,
-                                                        varSpeedCoil.coilReportNum,
-                                                        varSpeedCoil.SupplyFanName,
-                                                        varSpeedCoil.supplyFanType,
-                                                        varSpeedCoil.SupplyFanIndex);
+                ReportCoilSelection::setCoilSupplyFanInfo(
+                    state, varSpeedCoil.coilReportNum, varSpeedCoil.SupplyFanName, varSpeedCoil.supplyFanType, varSpeedCoil.SupplyFanIndex);
             }
         }
 
@@ -4348,7 +4345,8 @@ namespace VariableSpeedCoils {
                 }
             }
 
-            ReportCoilSelection::setCoilEntAirTemp(state, varSpeedCoil.coilReportNum, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
+            ReportCoilSelection::setCoilEntAirTemp(
+                state, varSpeedCoil.coilReportNum, MixTemp, state.dataSize->CurSysNum, state.dataSize->CurZoneEqNum);
             ReportCoilSelection::setCoilEntAirHumRat(state, varSpeedCoil.coilReportNum, MixHumRat);
             ReportCoilSelection::setCoilLvgAirTemp(state, varSpeedCoil.coilReportNum, SupTemp);
             ReportCoilSelection::setCoilLvgAirHumRat(state, varSpeedCoil.coilReportNum, SupHumRat);
@@ -4516,8 +4514,7 @@ namespace VariableSpeedCoils {
                     }
                 }
             }
-            ReportCoilSelection::setCoilAirFlow(
-                state, varSpeedCoil.coilReportNum, RatedAirVolFlowRateDes, RatedAirFlowAutoSized);
+            ReportCoilSelection::setCoilAirFlow(state, varSpeedCoil.coilReportNum, RatedAirVolFlowRateDes, RatedAirFlowAutoSized);
         }
 
         // Check that heat pump heating capacity is within 20% of cooling capacity. Check only for heating coil and report both.
@@ -4714,15 +4711,13 @@ namespace VariableSpeedCoils {
                             state.dataSize->PlantSizData(PltSizNum).DeltaT); // TRACE 3D Plus coil selection report
                 }
 
-                ReportCoilSelection::setCoilEntWaterTemp(
-                    state,
-                    varSpeedCoil.coilReportNum,
-                    state.dataSize->PlantSizData(PltSizNum).ExitTemp); // TRACE 3D Plus coil selection report
+                ReportCoilSelection::setCoilEntWaterTemp(state,
+                                                         varSpeedCoil.coilReportNum,
+                                                         state.dataSize->PlantSizData(PltSizNum).ExitTemp); // TRACE 3D Plus coil selection report
 
-                ReportCoilSelection::setCoilWaterDeltaT(
-                    state,
-                    varSpeedCoil.coilReportNum,
-                    state.dataSize->PlantSizData(PltSizNum).DeltaT); // TRACE 3D Plus coil selection report
+                ReportCoilSelection::setCoilWaterDeltaT(state,
+                                                        varSpeedCoil.coilReportNum,
+                                                        state.dataSize->PlantSizData(PltSizNum).DeltaT); // TRACE 3D Plus coil selection report
             } else {
                 ShowSevereError(state, "Autosizing of water flow requires a loop Sizing:Plant object");
                 ShowContinueError(state, "Autosizing also requires physical connection to a plant or condenser loop.");

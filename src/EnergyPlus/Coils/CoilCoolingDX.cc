@@ -155,7 +155,7 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
     this->name = input_data.name;
     this->coilType = HVAC::CoilType::CoolingDX;
     this->coilReportNum = ReportCoilSelection::getReportIndex(state, this->name, this->coilType);
-    
+
     // initialize reclaim heat parameters
     this->reclaimHeat.Name = this->name;
     this->reclaimHeat.SourceType = state.dataCoilCoolingDX->coilCoolingDXObjectName;
@@ -810,11 +810,11 @@ void CoilCoolingDX::simulate(EnergyPlusData &state,
             // report out fan information
             // should work for all fan types
             if (this->supplyFanIndex > 0) {
-              ReportCoilSelection::setCoilSupplyFanInfo(state,
-                                                        this->coilReportNum,
-                                                        state.dataFans->fans(this->supplyFanIndex)->Name,
-                                                        state.dataFans->fans(this->supplyFanIndex)->type,
-                                                        this->supplyFanIndex);
+                ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                          this->coilReportNum,
+                                                          state.dataFans->fans(this->supplyFanIndex)->Name,
+                                                          state.dataFans->fans(this->supplyFanIndex)->type,
+                                                          this->supplyFanIndex);
             }
 
             // report out coil rating conditions, just create a set of dummy nodes and run calculate on them

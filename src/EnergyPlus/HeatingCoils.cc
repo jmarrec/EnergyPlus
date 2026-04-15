@@ -803,7 +803,7 @@ namespace HeatingCoils {
             heatingCoil.coilType = HVAC::CoilType::HeatingGasMultiStage;
 
             heatingCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, heatingCoil.Name, heatingCoil.coilType);
-            
+
             heatingCoil.ParasiticFuelCapacity = Numbers(1);
 
             heatingCoil.NumOfStages = static_cast<int>(Numbers(2));
@@ -1341,8 +1341,7 @@ namespace HeatingCoils {
         }
 
         if (QCoilRequired == Node::SensedLoadFlagValue && state.dataHeatingCoils->MySPTestFlag(CoilNum) &&
-            heatingCoil.coilType != HVAC::CoilType::HeatingElectricMultiStage &&
-            heatingCoil.coilType != HVAC::CoilType::HeatingGasMultiStage) {
+            heatingCoil.coilType != HVAC::CoilType::HeatingElectricMultiStage && heatingCoil.coilType != HVAC::CoilType::HeatingGasMultiStage) {
 
             //   If the coil is temperature controlled (QCoilReq == -999.0), both a control node and setpoint are required.
             if (!state.dataGlobal->SysSizingCalc && state.dataHVACGlobal->DoSetPointTest) {
@@ -1362,8 +1361,7 @@ namespace HeatingCoils {
                     auto const &controlNode = state.dataLoopNodes->Node(ControlNodeNum);
                     if (controlNode.TempSetPoint == Node::SensedNodeFlagValue) {
                         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
-                            ShowSevereError(state,
-                                            EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.coilType], heatingCoil.Name));
+                            ShowSevereError(state, EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.coilType], heatingCoil.Name));
                             ShowContinueError(state, "... Missing temperature setpoint for heating coil.");
                             ShowContinueError(state, "... use a Setpoint Manager to establish a setpoint at the coil temperature setpoint node.");
                             state.dataHeatingCoils->HeatingCoilFatalError = true;
@@ -1371,8 +1369,8 @@ namespace HeatingCoils {
                             EMSManager::CheckIfNodeSetPointManagedByEMS(
                                 state, ControlNodeNum, HVAC::CtrlVarType::Temp, state.dataHeatingCoils->HeatingCoilFatalError);
                             if (state.dataHeatingCoils->HeatingCoilFatalError) {
-                                ShowSevereError(
-                                    state, EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.coilType], heatingCoil.Name));
+                                ShowSevereError(state,
+                                                EnergyPlus::format("{} \"{}\"", HVAC::coilTypeNames[(int)heatingCoil.coilType], heatingCoil.Name));
                                 ShowContinueError(state, "... Missing temperature setpoint for heating coil.");
                                 ShowContinueError(state, "... use a Setpoint Manager to establish a setpoint at the coil temperature setpoint node.");
                                 ShowContinueError(state, "... or use an EMS Actuator to establish a setpoint at the coil temperature setpoint node.");
@@ -1648,8 +1646,7 @@ namespace HeatingCoils {
         state.dataSize->DataDesInletAirTemp = 0.0;    // reset global data to zero so other heating coils are not
         state.dataSize->DataDesOutletAirTemp = 0.0;   // reset global data to zero so other heating coils are not affected
 
-        if (heatingCoil.coilType == HVAC::CoilType::HeatingElectricMultiStage ||
-            heatingCoil.coilType == HVAC::CoilType::HeatingGasMultiStage) {
+        if (heatingCoil.coilType == HVAC::CoilType::HeatingElectricMultiStage || heatingCoil.coilType == HVAC::CoilType::HeatingGasMultiStage) {
             heatingCoil.MSNominalCapacity(heatingCoil.NumOfStages) = TempCap;
             bool IsAutoSize = false;
             int NumOfStages; // total number of stages of multi-stage heating coil
@@ -2837,7 +2834,7 @@ namespace HeatingCoils {
 
         if (heatingCoil.reportCoilFinalSizes) {
             if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingHVACSizingSimulations && !state.dataGlobal->DoingSizing) {
-              ReportCoilSelection::setCoilFinalSizes(
+                ReportCoilSelection::setCoilFinalSizes(
                     state, heatingCoil.coilReportNum, heatingCoil.NominalCapacity, heatingCoil.NominalCapacity, -999.0, -999.0);
                 heatingCoil.reportCoilFinalSizes = false;
             }

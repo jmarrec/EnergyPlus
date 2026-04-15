@@ -315,7 +315,6 @@ namespace HVAC {
 #endif        // GET_OUT
     };
 
-
     constexpr std::array<std::string_view, (int)HXType::Num> hxTypeNames = {
         "HeatExchanger:AirToAir:FlatPlate", "HeatExchanger:AirToAir:SensibleAndLatent", "HeatExchanger:Desiccant:BalancedFlow"};
 

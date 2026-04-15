@@ -321,8 +321,7 @@ Real64 HeatingCoilDesAirInletTempSizer::size(EnergyPlusData &state, Real64 _orig
     }
     this->selectSizerOutput(state, errorsFound);
     if (this->isCoilReportObject) {
-        ReportCoilSelection::setCoilEntAirTemp(
-            state, this->coilReportNum, this->autoSizedValue, this->curSysNum, this->curZoneEqNum);
+        ReportCoilSelection::setCoilEntAirTemp(state, this->coilReportNum, this->autoSizedValue, this->curSysNum, this->curZoneEqNum);
     }
     return this->autoSizedValue;
 }

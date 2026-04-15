@@ -484,7 +484,7 @@ protected:
         dxCoil1.AirOutNode = coolCoilAirOutNode;
         dxCoil1.coilType = HVAC::CoilType::CoolingVRF;
         dxCoil1.coilReportNum = ReportCoilSelection::getReportIndex(*state, dxCoil1.Name, dxCoil1.coilType);
-        
+
         dxCoil1.RatedAirVolFlowRate = DataSizing::AutoSize;
         dxCoil1.RatedTotCap = DataSizing::AutoSize;
         dxCoil1.RatedSHR = DataSizing::AutoSize;
@@ -8324,9 +8324,8 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilElectric)
     state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).MassFlowRate = 1.0;
     state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Temp = 15.0;
     state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).HumRat = 0.0070;
-    state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Enthalpy =
-        Psychrometrics::PsyHFnTdbW(state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Temp,
-                                   state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).HumRat);
+    state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Enthalpy = Psychrometrics::PsyHFnTdbW(
+        state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Temp, state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).HumRat);
 
     bool FirstHVACIteration(false);
     Real64 SuppHeatCoilLoad = 10000.0;
@@ -8390,9 +8389,8 @@ TEST_F(EnergyPlusFixture, VRFTU_CalcVRFSupplementalHeatingCoilFuel)
     state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).MassFlowRate = 1.0;
     state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Temp = 15.0;
     state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).HumRat = 0.0070;
-    state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Enthalpy =
-        Psychrometrics::PsyHFnTdbW(state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Temp,
-                                   state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).HumRat);
+    state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Enthalpy = Psychrometrics::PsyHFnTdbW(
+        state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).Temp, state->dataLoopNodes->Node(heatingCoil.AirInletNodeNum).HumRat);
 
     bool FirstHVACIteration(false);
     Real64 SuppHeatCoilLoad = 10000.0;

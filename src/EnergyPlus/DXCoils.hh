@@ -111,7 +111,7 @@ namespace DXCoils {
         std::string Name;                                  // Name of the DX Coil
         HVAC::CoilType coilType = HVAC::CoilType::Invalid; // Integer equivalent to DXCoilType
         int coilReportNum = -1;
-        Sched::Schedule *availSched = nullptr;             // availability schedule
+        Sched::Schedule *availSched = nullptr; // availability schedule
 
         //          RatedCoolCap, RatedSHR and RatedCOP do not include the thermal or electrical
         //          effects due to the supply air fan

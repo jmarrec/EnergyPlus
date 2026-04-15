@@ -1979,7 +1979,7 @@ void GetDXCoils(EnergyPlusData &state)
 
         thisDXCoil.coilType = HVAC::CoilType::HeatingDXSingleSpeed;
         thisDXCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, thisDXCoil.Name, thisDXCoil.coilType);
-        
+
         if (lAlphaBlanks(2)) {
             thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
@@ -7097,22 +7097,21 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
             RatedOutletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(
                 state, thisDXCoil.OutletAirTemp, thisDXCoil.OutletAirHumRat, DataEnvironment::StdPressureSeaLevel, RoutineName);
 
-            ReportCoilSelection::setRatedCoilConditions(
-                state,
-                thisDXCoil.coilReportNum,
-                thisDXCoil.TotalCoolingEnergyRate, // this is the report variable
-                thisDXCoil.SensCoolingEnergyRate,  // this is the report variable
-                thisDXCoil.InletAirMassFlowRate,
-                thisDXCoil.InletAirTemp,
-                thisDXCoil.InletAirHumRat,
-                RatedInletWetBulbTemp,
-                thisDXCoil.OutletAirTemp,
-                thisDXCoil.OutletAirHumRat,
-                RatedOutletWetBulb,
-                RatedOutdoorAirTemp,
-                ratedOutdoorAirWetBulb,
-                thisDXCoil.RatedCBF(Mode),
-                -999.0); // coil effectiveness not define for DX
+            ReportCoilSelection::setRatedCoilConditions(state,
+                                                        thisDXCoil.coilReportNum,
+                                                        thisDXCoil.TotalCoolingEnergyRate, // this is the report variable
+                                                        thisDXCoil.SensCoolingEnergyRate,  // this is the report variable
+                                                        thisDXCoil.InletAirMassFlowRate,
+                                                        thisDXCoil.InletAirTemp,
+                                                        thisDXCoil.InletAirHumRat,
+                                                        RatedInletWetBulbTemp,
+                                                        thisDXCoil.OutletAirTemp,
+                                                        thisDXCoil.OutletAirHumRat,
+                                                        RatedOutletWetBulb,
+                                                        RatedOutdoorAirTemp,
+                                                        ratedOutdoorAirWetBulb,
+                                                        thisDXCoil.RatedCBF(Mode),
+                                                        -999.0); // coil effectiveness not define for DX
 
             // now replace the outdoor air conditions set above for one time rating point calc
             state.dataEnvrn->OutDryBulbTemp = holdOutDryBulbTemp;
@@ -7269,22 +7268,21 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
             RatedOutletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(
                 state, thisDXCoil.OutletAirTemp, thisDXCoil.OutletAirHumRat, DataEnvironment::StdPressureSeaLevel, RoutineName);
 
-            ReportCoilSelection::setRatedCoilConditions(
-                state,
-                thisDXCoil.coilReportNum,
-                thisDXCoil.TotalHeatingEnergyRate, // this is the report variable
-                thisDXCoil.TotalHeatingEnergyRate, // this is the report variable
-                thisDXCoil.InletAirMassFlowRate,
-                thisDXCoil.InletAirTemp,
-                thisDXCoil.InletAirHumRat,
-                RatedInletWetBulbTempHeat,
-                thisDXCoil.OutletAirTemp,
-                thisDXCoil.OutletAirHumRat,
-                RatedOutletWetBulb,
-                RatedOutdoorAirTempHeat,
-                ratedOutdoorAirWetBulb,
-                thisDXCoil.RatedCBF(Mode),
-                -999.0); // coil effectiveness not define for DX
+            ReportCoilSelection::setRatedCoilConditions(state,
+                                                        thisDXCoil.coilReportNum,
+                                                        thisDXCoil.TotalHeatingEnergyRate, // this is the report variable
+                                                        thisDXCoil.TotalHeatingEnergyRate, // this is the report variable
+                                                        thisDXCoil.InletAirMassFlowRate,
+                                                        thisDXCoil.InletAirTemp,
+                                                        thisDXCoil.InletAirHumRat,
+                                                        RatedInletWetBulbTempHeat,
+                                                        thisDXCoil.OutletAirTemp,
+                                                        thisDXCoil.OutletAirHumRat,
+                                                        RatedOutletWetBulb,
+                                                        RatedOutdoorAirTempHeat,
+                                                        ratedOutdoorAirWetBulb,
+                                                        thisDXCoil.RatedCBF(Mode),
+                                                        -999.0); // coil effectiveness not define for DX
 
             // now replace the outdoor air conditions set above for one time rating point calc
             state.dataEnvrn->OutDryBulbTemp = holdOutDryBulbTemp;
@@ -16518,11 +16516,11 @@ void SetDXCoolingCoilData(
         thisDXCoil.supplyFanType = supplyFanType;
         if (thisDXCoil.SupplyFanIndex > 0) {
 
-          ReportCoilSelection::setCoilSupplyFanInfo(state,
-                                                    thisDXCoil.coilReportNum,
-                                                    state.dataFans->fans(thisDXCoil.SupplyFanIndex)->Name,
-                                                    state.dataFans->fans(thisDXCoil.SupplyFanIndex)->type,
-                                                    thisDXCoil.SupplyFanIndex);
+            ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                      thisDXCoil.coilReportNum,
+                                                      state.dataFans->fans(thisDXCoil.SupplyFanIndex)->Name,
+                                                      state.dataFans->fans(thisDXCoil.SupplyFanIndex)->type,
+                                                      thisDXCoil.SupplyFanIndex);
         }
     }
 }

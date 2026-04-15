@@ -23023,8 +23023,7 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
         // all speeds have same flow per capacity ratio
         vsCoil1.MSRatedAirVolFlowPerRatedTotCap(spdNum) = 0.000036791;
         // each speed as a percentage of total capacity, spd 1 = 0.1, spd 2 = 0.2, spd 10 = 1.0
-        vsCoil1.MSRatedPercentTotCap(spdNum) =
-            spdNum / Real64(vsCoil1.NumOfSpeeds);
+        vsCoil1.MSRatedPercentTotCap(spdNum) = spdNum / Real64(vsCoil1.NumOfSpeeds);
         // all speeds have same parameters
         vsCoil1.MSRatedCOP(spdNum) = 3.0;
         vsCoil1.MSRatedWaterVolFlowPerRatedTotCap(spdNum) = 1.0E-7;
@@ -23041,12 +23040,9 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilVSWAHPCoolingEquationFit;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
-        vsCoil1.Name;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
-        vsCoil1.WaterInletNodeNum;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
-        vsCoil1.WaterOutletNodeNum;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = vsCoil1.Name;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = vsCoil1.WaterInletNodeNum;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = vsCoil1.WaterOutletNodeNum;
     // use pseudo real CapFT curve, use unity curves for all others
     auto *curve1 = Curve::AddCurve(*state, "Curve1");
     curve1->curveType = Curve::CurveType::BiQuadratic;
@@ -23101,18 +23097,14 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
     // now prove the correct CapFT value was used
     Real64 MixWetBulb = Psychrometrics::PsyTwbFnTdbWPb(*state, MixTemp, MixHumRat, state->dataEnvrn->StdBaroPress);
     Real64 constexpr RatedInletWaterTemp = 29.4444; // 85 F cooling mode
-    Real64 capFT_water =
-        Curve::CurveValue(*state, vsCoil1.MSCCapFTemp(10), MixWetBulb, RatedInletWaterTemp);
+    Real64 capFT_water = Curve::CurveValue(*state, vsCoil1.MSCCapFTemp(10), MixWetBulb, RatedInletWaterTemp);
 
     // these curve results are very near 1
     EXPECT_NEAR(state->dataSize->DataCoilSizingCapFT, capFT_water, 0.0001);
     EXPECT_NEAR(capFT_water, 0.9994, 0.0001);
 
     // OAT at cooling peak was set = 0 C
-    Real64 capFT_OAT = Curve::CurveValue(*state,
-                                         vsCoil1.MSCCapFTemp(10),
-                                         MixWetBulb,
-                                         state->dataSize->FinalSysSizing(1).OutTempAtCoolPeak);
+    Real64 capFT_OAT = Curve::CurveValue(*state, vsCoil1.MSCCapFTemp(10), MixWetBulb, state->dataSize->FinalSysSizing(1).OutTempAtCoolPeak);
     // this value is certainly not used in the capacity calculation as shown below
     EXPECT_NEAR(capFT_OAT, 1.5, 0.0001);
 

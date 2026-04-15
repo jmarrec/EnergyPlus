@@ -737,7 +737,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
         waterCoil.Name = AlphArray(1);
         waterCoil.coilType = HVAC::CoilType::CoolingWater;
         waterCoil.coilReportNum = ReportCoilSelection::getReportIndex(state, waterCoil.Name, waterCoil.coilType);
-        
+
         if (lAlphaBlanks(2)) {
             waterCoil.availSched = Sched::GetScheduleAlwaysOn(state);
         } else if ((waterCoil.availSched = Sched::GetSchedule(state, AlphArray(2))) == nullptr) {
@@ -1629,16 +1629,14 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
                       "Water Heating Coil Capacity Information,Coil:Heating:Water",
                       waterCoil.Name,
                       waterCoil.TotWaterHeatingCoilRate);
-                ReportCoilSelection::setCoilAirFlow(
-                    state, waterCoil.coilReportNum, waterCoil.DesAirVolFlowRate, waterCoil.RequestingAutoSize);
-                ReportCoilSelection::setCoilWaterHeaterCapacityNodeNums(
-                    state,
-                    waterCoil.coilReportNum,
-                    waterCoil.DesWaterHeatingCoilRate,
-                    waterCoil.RequestingAutoSize,
-                    waterCoil.WaterInletNodeNum,
-                    waterCoil.WaterOutletNodeNum,
-                    waterCoil.WaterPlantLoc.loopNum); // coil report
+                ReportCoilSelection::setCoilAirFlow(state, waterCoil.coilReportNum, waterCoil.DesAirVolFlowRate, waterCoil.RequestingAutoSize);
+                ReportCoilSelection::setCoilWaterHeaterCapacityNodeNums(state,
+                                                                        waterCoil.coilReportNum,
+                                                                        waterCoil.DesWaterHeatingCoilRate,
+                                                                        waterCoil.RequestingAutoSize,
+                                                                        waterCoil.WaterInletNodeNum,
+                                                                        waterCoil.WaterOutletNodeNum,
+                                                                        waterCoil.WaterPlantLoc.loopNum); // coil report
                 break;
             }
             case DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling: {
@@ -1795,39 +1793,37 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
             // call set routine in coil report
             if (waterCoil.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling ||
                 waterCoil.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterCooling) {
-                ReportCoilSelection::setRatedCoilConditions(
-                    state,
-                    waterCoil.coilReportNum,
-                    waterCoil.TotWaterCoolingCoilRate, // this is the report variable
-                    waterCoil.SenWaterCoolingCoilRate, // this is the report variable
-                    waterCoil.InletAirMassFlowRate,
-                    waterCoil.InletAirTemp,
-                    waterCoil.InletAirHumRat,
-                    DesInletWetBulb,
-                    waterCoil.OutletAirTemp,
-                    waterCoil.OutletAirHumRat,
-                    RatedOutletWetBulb,
-                    -999.0,
-                    -999.0,
-                    -999.0,
-                    -999.0); // coil effectiveness
+                ReportCoilSelection::setRatedCoilConditions(state,
+                                                            waterCoil.coilReportNum,
+                                                            waterCoil.TotWaterCoolingCoilRate, // this is the report variable
+                                                            waterCoil.SenWaterCoolingCoilRate, // this is the report variable
+                                                            waterCoil.InletAirMassFlowRate,
+                                                            waterCoil.InletAirTemp,
+                                                            waterCoil.InletAirHumRat,
+                                                            DesInletWetBulb,
+                                                            waterCoil.OutletAirTemp,
+                                                            waterCoil.OutletAirHumRat,
+                                                            RatedOutletWetBulb,
+                                                            -999.0,
+                                                            -999.0,
+                                                            -999.0,
+                                                            -999.0); // coil effectiveness
             } else if (waterCoil.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterSimpleHeating) {
-                ReportCoilSelection::setRatedCoilConditions(
-                    state,
-                    waterCoil.coilReportNum,
-                    waterCoil.TotWaterHeatingCoilRate, // this is the report variable
-                    waterCoil.TotWaterHeatingCoilRate, // this is the report variable
-                    waterCoil.InletAirMassFlowRate,
-                    waterCoil.InletAirTemp,
-                    waterCoil.InletAirHumRat,
-                    DesInletWetBulb,
-                    waterCoil.OutletAirTemp,
-                    waterCoil.OutletAirHumRat,
-                    RatedOutletWetBulb,
-                    -999.0,
-                    -999.0,
-                    -999.0,
-                    -999.0); // coil effectiveness
+                ReportCoilSelection::setRatedCoilConditions(state,
+                                                            waterCoil.coilReportNum,
+                                                            waterCoil.TotWaterHeatingCoilRate, // this is the report variable
+                                                            waterCoil.TotWaterHeatingCoilRate, // this is the report variable
+                                                            waterCoil.InletAirMassFlowRate,
+                                                            waterCoil.InletAirTemp,
+                                                            waterCoil.InletAirHumRat,
+                                                            DesInletWetBulb,
+                                                            waterCoil.OutletAirTemp,
+                                                            waterCoil.OutletAirHumRat,
+                                                            RatedOutletWetBulb,
+                                                            -999.0,
+                                                            -999.0,
+                                                            -999.0,
+                                                            -999.0); // coil effectiveness
             }
             // now replace the outdoor air conditions set above for one time rating point calc
             state.dataEnvrn->OutBaroPress = holdOutBaroPress;
