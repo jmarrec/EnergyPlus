@@ -222,7 +222,6 @@ namespace BaseboardRadiator {
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName = "GetBaseboardInput: "; // include trailing blank space
         static constexpr std::string_view routineName = "GetBaseboardInput";
-        int constexpr iHeatCAPMAlphaNum = 5;                   // get input index to water baseboard Radiator system heating capacity sizing method
         int constexpr iHeatDesignCapacityNumericNum = 1;       // get input index to water baseboard Radiator system electric heating capacity
         int constexpr iHeatCapacityPerFloorAreaNumericNum = 2; // index to baseboard Radiator system electric heating capacity per floor area sizing
         int constexpr iHeatFracOfAutosizedCapacityNumericNum = 3; //  index to baseboard heating capacity fraction of autosized heating capacity
@@ -247,8 +246,6 @@ namespace BaseboardRadiator {
                                                                                   "Maximum Water Flow Rate",
                                                                                   "Convergence Tolerance"};
             static constexpr std::string_view availabilityScheduleFieldName = "Availability Schedule Name";
-            static constexpr std::string_view inletNodeFieldName = "Inlet Node Name";
-            static constexpr std::string_view outletNodeFieldName = "Outlet Node Name";
             static constexpr std::string_view heatingDesignCapacityMethodFieldName = "Heating Design Capacity Method";
 
             int ConvHWBaseboardNum = 0;
