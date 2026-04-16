@@ -3108,13 +3108,11 @@ TEST_F(EnergyPlusFixture, EMSManager_MeterSensor_ReadsLiveSourceSum_Issue7563)
 
 TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllBeforeReportingCallPoints_Issue7563)
 {
-    // Fail-first: step 1 populates CurTSValue == 1000 via UpdateDataandReport.
-    // Step 2 sets the live source var to 2000 but does NOT call
-    // UpdateDataandReport (so CurTSValue stays at 1000). Meter sensor is
-    // sampled at every "pre-reporting" calling point.
-    //   Pre-fix:  sensor == CurTSValue == 1000   -> test FAILS
-    //   Post-fix: sensor == live source sum == 2000 -> test PASSES
-    // Variable sensor (control) always reads the live source -> 2000.
+    // Step 1 populates meter->CurTSValue via UpdateDataandReport. Step 2 sets
+    // the live source var to a new value but does NOT call UpdateDataandReport
+    // (so CurTSValue stays at step 1's value). Meter sensor is sampled at every
+    // "pre-reporting" calling point and must read the current step's live
+    // source sum. Variable sensor is the control.
     std::string const idf_objects = delimited_string({
         "Output:Meter,Electricity:Facility,Timestep;",
         "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
@@ -3224,3 +3222,9 @@ TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllBeforeReportingCall
     EXPECT_DOUBLE_EQ(2000.0, state->dataRuntimeLang->ErlVariable(meterErl).Value.Number)
         << "Only EndSystemTimestepAfterHVACReporting reads the current step's meter value";
 }
+
+// Note: a unit test for an "Averaged-type source on a meter" was considered
+// but found to be unreachable -- OutputProcessor.cc:810 enforces that
+// Meter:Custom source vars must be StoreType::Sum (pre-check emits a Severe
+// and drops the source). Built-in meters (Electricity:Facility etc.) are
+// always Sum. So the fix only has to handle Sum-source meters in practice.
