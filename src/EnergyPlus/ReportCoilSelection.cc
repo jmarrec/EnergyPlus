@@ -136,7 +136,7 @@ namespace ReportCoilSelection {
         for (auto *c : state.dataRptCoilSelection->coils) {
 
             OutputReportPredefined::PreDefTableEntry(
-                state, state.dataOutRptPredefined->pdchCoilType, c->coilName_, HVAC::coilTypeNamesUC[(int)c->coilType]);
+                state, state.dataOutRptPredefined->pdchCoilType, c->coilName_, HVAC::coilTypeNames[(int)c->coilType]);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilLocation, c->coilName_, c->coilLocation);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilHVACType, c->coilName_, c->typeHVACname);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilHVACName, c->coilName_, c->userNameforHVACsystem);
