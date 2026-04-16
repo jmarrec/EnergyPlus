@@ -74,6 +74,8 @@ namespace OutputReportPredefined {
     int constexpr recKindSurface(1);
     int constexpr recKindSubsurface(2);
 
+    inline std::string_view standard62RptSummaryName = "Standard62.1Summary";
+
     // Types
 
     struct reportNameType

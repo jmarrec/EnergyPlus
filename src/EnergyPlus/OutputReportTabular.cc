@@ -1435,6 +1435,7 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     auto &ort = state.dataOutRptTab;
     bool ErrorsFound = false;
+    bool const standard62Enabled = state.dataGlobal->DoZoneSizing || state.dataGlobal->DoSystemSizing;
 
     if (!state.files.outputControl.writeTabular(state)) {
         ort->WriteTabularFiles = false;
@@ -1575,7 +1576,9 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
                 ort->displayVisualResilienceSummary = true;
                 nameFound = true;
                 for (int jReport = 1; jReport <= state.dataOutRptPredefined->numReportName; ++jReport) {
-                    state.dataOutRptPredefined->reportName(jReport).show = true;
+                    if (!Util::SameString(state.dataOutRptPredefined->reportName(jReport).name, standard62RptSummaryName) || standard62Enabled) {
+                        state.dataOutRptPredefined->reportName(jReport).show = true;
+                    }
                 }
             } else if (Util::SameString(AlphArray(iReport), "AllSummaryAndSizingPeriod")) {
                 ort->WriteTabularFiles = true;
@@ -1598,7 +1601,9 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
                 ort->displayVisualResilienceSummary = true;
                 nameFound = true;
                 for (int jReport = 1; jReport <= state.dataOutRptPredefined->numReportName; ++jReport) {
-                    state.dataOutRptPredefined->reportName(jReport).show = true;
+                    if (!Util::SameString(state.dataOutRptPredefined->reportName(jReport).name, standard62RptSummaryName) || standard62Enabled) {
+                        state.dataOutRptPredefined->reportName(jReport).show = true;
+                    }
                 }
                 // the sizing period reports
                 ort->displayZoneComponentLoadSummary = true;
@@ -1631,7 +1636,9 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
                 ort->displayVisualResilienceSummary = true;
                 nameFound = true;
                 for (int jReport = 1; jReport <= state.dataOutRptPredefined->numReportName; ++jReport) {
-                    state.dataOutRptPredefined->reportName(jReport).show = true;
+                    if (!Util::SameString(state.dataOutRptPredefined->reportName(jReport).name, standard62RptSummaryName) || standard62Enabled) {
+                        state.dataOutRptPredefined->reportName(jReport).show = true;
+                    }
                 }
                 for (int jReport = 1; jReport <= numNamedMonthly; ++jReport) {
                     ort->namedMonthly(jReport).show = true;
@@ -1657,7 +1664,9 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
                 ort->displayVisualResilienceSummary = true;
                 nameFound = true;
                 for (int jReport = 1; jReport <= state.dataOutRptPredefined->numReportName; ++jReport) {
-                    state.dataOutRptPredefined->reportName(jReport).show = true;
+                    if (!Util::SameString(state.dataOutRptPredefined->reportName(jReport).name, standard62RptSummaryName) || standard62Enabled) {
+                        state.dataOutRptPredefined->reportName(jReport).show = true;
+                    }
                 }
                 for (int jReport = 1; jReport <= numNamedMonthly; ++jReport) {
                     ort->namedMonthly(jReport).show = true;
@@ -1670,14 +1679,18 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
             // check the reports that are predefined and are created by OutputReportPredefined
             for (int jReport = 1; jReport <= state.dataOutRptPredefined->numReportName; ++jReport) {
                 if (Util::SameString(AlphArray(iReport), state.dataOutRptPredefined->reportName(jReport).name)) {
-                    ort->WriteTabularFiles = true;
-                    state.dataOutRptPredefined->reportName(jReport).show = true;
-                    nameFound = true;
+                    if (!Util::SameString(state.dataOutRptPredefined->reportName(jReport).name, standard62RptSummaryName) || standard62Enabled) {
+                        ort->WriteTabularFiles = true;
+                        state.dataOutRptPredefined->reportName(jReport).show = true;
+                        nameFound = true;
+                    }
                 }
                 if (Util::SameString(AlphArray(iReport), state.dataOutRptPredefined->reportName(jReport).abrev)) {
-                    ort->WriteTabularFiles = true;
-                    state.dataOutRptPredefined->reportName(jReport).show = true;
-                    nameFound = true;
+                    if (!Util::SameString(state.dataOutRptPredefined->reportName(jReport).name, standard62RptSummaryName) || standard62Enabled) {
+                        ort->WriteTabularFiles = true;
+                        state.dataOutRptPredefined->reportName(jReport).show = true;
+                        nameFound = true;
+                    }
                 }
             }
             // check if the predefined monthly reports are used
@@ -1689,9 +1702,10 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
                 }
             }
             if (!nameFound) {
-                if (Util::SameString(AlphArray(iReport), "Standard62.1Summary")) {
+                if (Util::SameString(AlphArray(iReport), standard62RptSummaryName) || Util::SameString(AlphArray(iReport), "Std62")) {
                     ShowWarningError(
-                        state, EnergyPlus::format("{} Field[{}]=\"Standard62.1Summary\", Report is not enabled.", CurrentModuleObject, iReport));
+                        state,
+                        EnergyPlus::format("{} Field[{}]=\"{}\", Report is not enabled.", CurrentModuleObject, standard62RptSummaryName, iReport));
                     ShowContinueError(state, "Do Zone Sizing or Do System Sizing must be enabled in SimulationControl.");
 
                 } else {

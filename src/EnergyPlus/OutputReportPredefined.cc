@@ -1447,8 +1447,7 @@ namespace OutputReportPredefined {
         s->pdchSHGSHtOtherRem = newPreDefColumn(state, s->pdstSHGSpkHt, "Opaque Surface Conduction and Other Heat Removal [W]");
 
         // Standard62Report
-        //        if (state.dataGlobal->DoZoneSizing || state.dataGlobal->DoSystemSizing) {
-        s->pdrStd62 = newPreDefReport(state, "Standard62.1Summary", "Std62", "Standard 62.1 Summary");
+        s->pdrStd62 = newPreDefReport(state, standard62RptSummaryName, "Std62", "Standard 62.1 Summary");
 
         s->pdstS62sysVentReqCool = newPreDefSubTable(state, s->pdrStd62, "System Ventilation Requirements for Cooling");
 
@@ -1566,8 +1565,6 @@ namespace OutputReportPredefined {
         s->pdchS62shdVpzmin = newPreDefColumn(state, s->pdstS62sysHeatDes, "Sum of Min Zone Primary Airflow - Vpz-min [m3/s]");
         s->pdchS62shdVozhtg = newPreDefColumn(state, s->pdstS62sysHeatDes, "Zone Outdoor Airflow Heating - Voz-htg [m3/s]");
         s->pdchS62shdEvz = newPreDefColumn(state, s->pdstS62sysHeatDes, "Zone Ventilation Efficiency - Evz-min");
-        // }
-
         s->pdrLeed = newPreDefReport(state, "LEEDsummary", "LEED", "LEED Summary");
 
         s->pdstLeedGenInfo = newPreDefSubTable(state, s->pdrLeed, "Sec1.1A-General Information");
