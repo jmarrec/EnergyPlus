@@ -547,10 +547,7 @@ namespace SteamCoils {
             steamCoil.OutletSteamQuality = 0.0;
 
             // More Environment initializations
-            AirInletNode = steamCoil.AirInletNodeNum;
             SteamInletNode = steamCoil.SteamInletNodeNum;
-            ControlNode = steamCoil.TempSetPointNodeNum;
-            AirOutletNode = steamCoil.AirOutletNodeNum;
 
             state.dataLoopNodes->Node(SteamInletNode).Temp = 100.0;
             state.dataLoopNodes->Node(SteamInletNode).Press = 101325.0;
@@ -1925,9 +1922,9 @@ namespace SteamCoils {
     }
 
     Real64 GetCoilCapacity(EnergyPlusData &state,
-                           std::string const &CoilType, // must match coil types in this module
-                           std::string const &CoilName, // must match coil names for the coil type
-                           bool &ErrorsFound            // set to true if problem
+                           std::string_view const CoilType, // must match coil types in this module
+                           std::string const &CoilName,     // must match coil names for the coil type
+                           bool &ErrorsFound                // set to true if problem
     )
     {
 
