@@ -268,10 +268,10 @@ namespace ElectricBaseboardRadiator {
                         }
                     } else {
                         ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
-                        ShowContinueError(
-                            state, EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
-                        ShowContinueError(
-                            state, EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatDesignCapacityNumericNum - 1]));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatDesignCapacityNumericNum - 1]));
                         ErrorsFound = true;
                     }
                 } else if (Util::SameString(heatingDesignCapacityMethod, "CapacityPerFloorArea")) {
@@ -299,8 +299,8 @@ namespace ElectricBaseboardRadiator {
                         }
                     } else {
                         ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
-                        ShowContinueError(
-                            state, EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
                         ShowContinueError(
                             state, EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatCapacityPerFloorAreaNumericNum - 1]));
                         ErrorsFound = true;
@@ -321,118 +321,116 @@ namespace ElectricBaseboardRadiator {
                         }
                     } else {
                         ShowSevereError(state, cCurrentModuleObject + " = " + elecBaseboard.EquipName);
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
                         ShowContinueError(
-                            state, EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
-                        ShowContinueError(
-                            state, EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatFracOfAutosizedCapacityNumericNum - 1]));
+                            state,
+                            EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatFracOfAutosizedCapacityNumericNum - 1]));
                         ErrorsFound = true;
                     }
                 } else {
                     ShowSevereError(state, cCurrentModuleObject + " = " + elecBaseboard.EquipName);
-                    ShowContinueError(state, EnergyPlus::format("Illegal {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("Illegal {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
                     ErrorsFound = true;
                 }
 
                 elecBaseboard.BaseboardEfficiency = inputProcessor->getRealFieldValue(elecBaseboardFields, elecBaseboardSchemaProps, "efficiency");
                 elecBaseboard.FracRadiant = inputProcessor->getRealFieldValue(elecBaseboardFields, elecBaseboardSchemaProps, "fraction_radiant");
-            if (elecBaseboard.FracRadiant < MinFraction) {
-                ShowWarningError(state,
-                                 std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
-                                     std::string{numericFieldNames[4]} + " was lower than the allowable minimum.");
-                ShowContinueError(state, EnergyPlus::format("...reset to minimum value=[{:.2R}].", MinFraction));
-                elecBaseboard.FracRadiant = MinFraction;
-            }
-            if (elecBaseboard.FracRadiant > MaxFraction) {
-                ShowWarningError(state,
-                                 std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
-                                     std::string{numericFieldNames[4]} + " was higher than the allowable maximum.");
-                ShowContinueError(state, EnergyPlus::format("...reset to maximum value=[{:.2R}].", MaxFraction));
-                elecBaseboard.FracRadiant = MaxFraction;
-            }
+                if (elecBaseboard.FracRadiant < MinFraction) {
+                    ShowWarningError(state,
+                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
+                                         std::string{numericFieldNames[4]} + " was lower than the allowable minimum.");
+                    ShowContinueError(state, EnergyPlus::format("...reset to minimum value=[{:.2R}].", MinFraction));
+                    elecBaseboard.FracRadiant = MinFraction;
+                }
+                if (elecBaseboard.FracRadiant > MaxFraction) {
+                    ShowWarningError(state,
+                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
+                                         std::string{numericFieldNames[4]} + " was higher than the allowable maximum.");
+                    ShowContinueError(state, EnergyPlus::format("...reset to maximum value=[{:.2R}].", MaxFraction));
+                    elecBaseboard.FracRadiant = MaxFraction;
+                }
 
-            // Remaining fraction is added to the zone as convective heat transfer
-            if (elecBaseboard.FracRadiant > MaxFraction) {
-                ShowWarningError(state,
-                                 std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName +
-                                     "\", Fraction Radiant was higher than the allowable maximum.");
-                elecBaseboard.FracRadiant = MaxFraction;
-                elecBaseboard.FracConvect = 0.0;
-            } else {
-                elecBaseboard.FracConvect = 1.0 - elecBaseboard.FracRadiant;
-            }
+                // Remaining fraction is added to the zone as convective heat transfer
+                if (elecBaseboard.FracRadiant > MaxFraction) {
+                    ShowWarningError(state,
+                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName +
+                                         "\", Fraction Radiant was higher than the allowable maximum.");
+                    elecBaseboard.FracRadiant = MaxFraction;
+                    elecBaseboard.FracConvect = 0.0;
+                } else {
+                    elecBaseboard.FracConvect = 1.0 - elecBaseboard.FracRadiant;
+                }
 
-                elecBaseboard.FracDistribPerson = inputProcessor->getRealFieldValue(
-                    elecBaseboardFields, elecBaseboardSchemaProps, "fraction_of_radiant_energy_incident_on_people");
-            if (elecBaseboard.FracDistribPerson < MinFraction) {
-                ShowWarningError(state,
-                                 std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
-                                     std::string{numericFieldNames[5]} + " was lower than the allowable minimum.");
-                ShowContinueError(state, EnergyPlus::format("...reset to minimum value=[{:.2R}].", MinFraction));
-                elecBaseboard.FracDistribPerson = MinFraction;
-            }
-            if (elecBaseboard.FracDistribPerson > MaxFraction) {
-                ShowWarningError(state,
-                                 std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
-                                     std::string{numericFieldNames[5]} + " was higher than the allowable maximum.");
-                ShowContinueError(state, EnergyPlus::format("...reset to maximum value=[{:.2R}].", MaxFraction));
-                elecBaseboard.FracDistribPerson = MaxFraction;
-            }
+                elecBaseboard.FracDistribPerson =
+                    inputProcessor->getRealFieldValue(elecBaseboardFields, elecBaseboardSchemaProps, "fraction_of_radiant_energy_incident_on_people");
+                if (elecBaseboard.FracDistribPerson < MinFraction) {
+                    ShowWarningError(state,
+                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
+                                         std::string{numericFieldNames[5]} + " was lower than the allowable minimum.");
+                    ShowContinueError(state, EnergyPlus::format("...reset to minimum value=[{:.2R}].", MinFraction));
+                    elecBaseboard.FracDistribPerson = MinFraction;
+                }
+                if (elecBaseboard.FracDistribPerson > MaxFraction) {
+                    ShowWarningError(state,
+                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
+                                         std::string{numericFieldNames[5]} + " was higher than the allowable maximum.");
+                    ShowContinueError(state, EnergyPlus::format("...reset to maximum value=[{:.2R}].", MaxFraction));
+                    elecBaseboard.FracDistribPerson = MaxFraction;
+                }
 
                 elecBaseboard.TotSurfToDistrib = numSurfaceFractions;
 
-            if ((elecBaseboard.TotSurfToDistrib < MinDistribSurfaces) && (elecBaseboard.FracRadiant > MinFraction)) {
-                ShowSevereError(state,
-                                std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName +
-                                    "\", the number of surface/radiant fraction groups entered was less than the allowable minimum.");
-                ShowContinueError(state, EnergyPlus::format("...the minimum that must be entered=[{}].", MinDistribSurfaces));
-                ErrorsFound = true;
-                elecBaseboard.TotSurfToDistrib = 0;
-            }
+                if ((elecBaseboard.TotSurfToDistrib < MinDistribSurfaces) && (elecBaseboard.FracRadiant > MinFraction)) {
+                    ShowSevereError(state,
+                                    std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName +
+                                        "\", the number of surface/radiant fraction groups entered was less than the allowable minimum.");
+                    ShowContinueError(state, EnergyPlus::format("...the minimum that must be entered=[{}].", MinDistribSurfaces));
+                    ErrorsFound = true;
+                    elecBaseboard.TotSurfToDistrib = 0;
+                }
 
-            elecBaseboard.SurfaceName.allocate(elecBaseboard.TotSurfToDistrib);
-            elecBaseboard.SurfaceName = "";
-            elecBaseboard.SurfacePtr.allocate(elecBaseboard.TotSurfToDistrib);
-            elecBaseboard.SurfacePtr = 0;
-            elecBaseboard.FracDistribToSurf.allocate(elecBaseboard.TotSurfToDistrib);
-            elecBaseboard.FracDistribToSurf = 0.0;
+                elecBaseboard.SurfaceName.allocate(elecBaseboard.TotSurfToDistrib);
+                elecBaseboard.SurfaceName = "";
+                elecBaseboard.SurfacePtr.allocate(elecBaseboard.TotSurfToDistrib);
+                elecBaseboard.SurfacePtr = 0;
+                elecBaseboard.FracDistribToSurf.allocate(elecBaseboard.TotSurfToDistrib);
+                elecBaseboard.FracDistribToSurf = 0.0;
 
-                elecBaseboard.ZonePtr =
-                    DataZoneEquipment::GetZoneEquipControlledZoneNum(state, DataZoneEquipment::ZoneEquipType::BaseboardElectric, elecBaseboard.EquipName);
+                elecBaseboard.ZonePtr = DataZoneEquipment::GetZoneEquipControlledZoneNum(
+                    state, DataZoneEquipment::ZoneEquipType::BaseboardElectric, elecBaseboard.EquipName);
 
-            Real64 AllFracsSummed = elecBaseboard.FracDistribPerson;
-            for (int SurfNum = 1; SurfNum <= elecBaseboard.TotSurfToDistrib; ++SurfNum) {
+                Real64 AllFracsSummed = elecBaseboard.FracDistribPerson;
+                for (int SurfNum = 1; SurfNum <= elecBaseboard.TotSurfToDistrib; ++SurfNum) {
                     auto const &surfaceFraction = (*surfaceFractionsField)[SurfNum - 1];
                     elecBaseboard.SurfaceName(SurfNum) =
                         inputProcessor->getAlphaFieldValue(surfaceFraction, surfaceFractionSchemaProps, "surface_name");
-                    elecBaseboard.SurfacePtr(SurfNum) = HeatBalanceIntRadExchange::GetRadiantSystemSurface(state,
-                                                                                                           cCurrentModuleObject,
-                                                                                                           elecBaseboard.EquipName,
-                                                                                                           elecBaseboard.ZonePtr,
-                                                                                                           elecBaseboard.SurfaceName(SurfNum),
-                                                                                                           ErrorsFound);
+                    elecBaseboard.SurfacePtr(SurfNum) = HeatBalanceIntRadExchange::GetRadiantSystemSurface(
+                        state, cCurrentModuleObject, elecBaseboard.EquipName, elecBaseboard.ZonePtr, elecBaseboard.SurfaceName(SurfNum), ErrorsFound);
                     elecBaseboard.FracDistribToSurf(SurfNum) =
                         inputProcessor->getRealFieldValue(surfaceFraction, surfaceFractionSchemaProps, "fraction_of_radiant_energy_to_surface");
-                if (elecBaseboard.FracDistribToSurf(SurfNum) > MaxFraction) {
-                    ShowWarningError(state,
-                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
-                                         std::string{radiantSurfaceFractionFieldName} + " was greater than the allowable maximum.");
-                    ShowContinueError(state, EnergyPlus::format("...reset to maximum value=[{:.2R}].", MaxFraction));
-                    elecBaseboard.FracDistribToSurf(SurfNum) = MaxFraction;
-                }
-                if (elecBaseboard.FracDistribToSurf(SurfNum) < MinFraction) {
-                    ShowWarningError(state,
-                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
-                                         std::string{radiantSurfaceFractionFieldName} + " was less than the allowable minimum.");
-                    ShowContinueError(state, EnergyPlus::format("...reset to minimum value=[{:.2R}].", MinFraction));
-                    elecBaseboard.FracDistribToSurf(SurfNum) = MinFraction;
-                }
-                if (elecBaseboard.SurfacePtr(SurfNum) != 0) {
-                    state.dataSurface->surfIntConv(elecBaseboard.SurfacePtr(SurfNum)).getsRadiantHeat = true;
-                    state.dataSurface->allGetsRadiantHeatSurfaceList.emplace_back(elecBaseboard.SurfacePtr(SurfNum));
-                }
+                    if (elecBaseboard.FracDistribToSurf(SurfNum) > MaxFraction) {
+                        ShowWarningError(state,
+                                         std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
+                                             std::string{radiantSurfaceFractionFieldName} + " was greater than the allowable maximum.");
+                        ShowContinueError(state, EnergyPlus::format("...reset to maximum value=[{:.2R}].", MaxFraction));
+                        elecBaseboard.FracDistribToSurf(SurfNum) = MaxFraction;
+                    }
+                    if (elecBaseboard.FracDistribToSurf(SurfNum) < MinFraction) {
+                        ShowWarningError(state,
+                                         std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName + "\", " +
+                                             std::string{radiantSurfaceFractionFieldName} + " was less than the allowable minimum.");
+                        ShowContinueError(state, EnergyPlus::format("...reset to minimum value=[{:.2R}].", MinFraction));
+                        elecBaseboard.FracDistribToSurf(SurfNum) = MinFraction;
+                    }
+                    if (elecBaseboard.SurfacePtr(SurfNum) != 0) {
+                        state.dataSurface->surfIntConv(elecBaseboard.SurfacePtr(SurfNum)).getsRadiantHeat = true;
+                        state.dataSurface->allGetsRadiantHeatSurfaceList.emplace_back(elecBaseboard.SurfacePtr(SurfNum));
+                    }
 
-                AllFracsSummed += elecBaseboard.FracDistribToSurf(SurfNum);
-            } // Surfaces
+                    AllFracsSummed += elecBaseboard.FracDistribToSurf(SurfNum);
+                } // Surfaces
 
                 if (AllFracsSummed > (MaxFraction + 0.01)) {
                     ShowSevereError(state,

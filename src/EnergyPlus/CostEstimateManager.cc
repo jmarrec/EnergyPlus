@@ -185,8 +185,7 @@ namespace CostEstimateManager {
                 costLineItem.LineName = Util::makeUPPER(lineItemInstance.key());
                 costLineItem.ParentObjType = static_cast<ParentObject>(
                     getEnumValue(ParentObjectNamesUC, inputProcessor->getAlphaFieldValue(lineItemFields, lineItemSchemaProps, "line_item_type")));
-                costLineItem.ParentObjName =
-                    Util::makeUPPER(inputProcessor->getAlphaFieldValue(lineItemFields, lineItemSchemaProps, "item_name"));
+                costLineItem.ParentObjName = Util::makeUPPER(inputProcessor->getAlphaFieldValue(lineItemFields, lineItemSchemaProps, "item_name"));
                 costLineItem.PerEach = inputProcessor->getRealFieldValue(lineItemFields, lineItemSchemaProps, "cost_per_each");
                 costLineItem.PerSquareMeter = inputProcessor->getRealFieldValue(lineItemFields, lineItemSchemaProps, "cost_per_area");
                 costLineItem.PerKiloWattCap =
@@ -198,8 +197,9 @@ namespace CostEstimateManager {
                 costLineItem.PerUAinWattperDelK =
                     inputProcessor->getRealFieldValue(lineItemFields, lineItemSchemaProps, "cost_per_energy_per_temperature_difference");
                 auto const quantityField = lineItemFields.find("quantity");
-                costLineItem.Qty =
-                    (quantityField != lineItemFields.end()) ? inputProcessor->getRealFieldValue(lineItemFields, lineItemSchemaProps, "quantity") : 0.0;
+                costLineItem.Qty = (quantityField != lineItemFields.end())
+                                       ? inputProcessor->getRealFieldValue(lineItemFields, lineItemSchemaProps, "quantity")
+                                       : 0.0;
             }
         }
 
@@ -258,8 +258,8 @@ namespace CostEstimateManager {
                     inputProcessor->getRealFieldValue(referenceFields, referenceSchemaProps, "reference_building_contractor_fee");
                 state.dataCostEstimateManager->RefrncBldg.ContingencyFrac =
                     inputProcessor->getRealFieldValue(referenceFields, referenceSchemaProps, "reference_building_contingency");
-                state.dataCostEstimateManager->RefrncBldg.BondCostFrac = inputProcessor->getRealFieldValue(
-                    referenceFields, referenceSchemaProps, "reference_building_permits_bonding_and_insurance");
+                state.dataCostEstimateManager->RefrncBldg.BondCostFrac =
+                    inputProcessor->getRealFieldValue(referenceFields, referenceSchemaProps, "reference_building_permits_bonding_and_insurance");
                 state.dataCostEstimateManager->RefrncBldg.CommissioningFrac =
                     inputProcessor->getRealFieldValue(referenceFields, referenceSchemaProps, "reference_building_commissioning_fee");
                 state.dataCostEstimateManager->RefrncBldg.RegionalModifier =
