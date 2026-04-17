@@ -176,7 +176,6 @@ namespace ElectricBaseboardRadiator {
         Real64 constexpr MinFraction(0.0); // Minimum limit of fractional values
         //    INTEGER,PARAMETER :: MaxDistribSurfaces   = 20      ! Maximum number of surfaces that a baseboard heater can radiate to
         int constexpr MinDistribSurfaces(1);                  // Minimum number of surfaces that a baseboard heater can radiate to
-        int constexpr iHeatCAPMAlphaNum(3);                   // get input index to HW baseboard heating capacity sizing method
         int constexpr iHeatDesignCapacityNumericNum(1);       // get input index to HW baseboard heating capacity
         int constexpr iHeatCapacityPerFloorAreaNumericNum(2); // get input index to HW baseboard heating capacity per floor area sizing
         int constexpr iHeatFracOfAutosizedCapacityNumericNum(
