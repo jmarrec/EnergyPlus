@@ -3215,12 +3215,18 @@ TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllBeforeReportingCall
             << "Control: at " << cs.label << ", sensor on Output:Variable reads current step via *var->Which";
     }
 
-    // Post-UpdateDataandReport: both pre-fix and post-fix paths agree.
+    // After a manual UpdateDataandReport(Zone), CurTSValue is refreshed, so
+    // both pre-fix (GetCurrentMeterValue) and post-fix (GetInstantMeterValue
+    // sum) paths return the same value. Note: in a real simulation, no EMS
+    // calling point inside HVACManager runs after UpdateDataandReport(Zone)
+    // -- that call lives in HeatBalanceManager and fires at the zone timestep
+    // boundary. The EndSystemTimestepAfterHVACReporting calling point here
+    // is just a convenient hook to demonstrate the post-refresh state.
     UpdateMeterReporting(*state);
     UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
     EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::EndSystemTimestepAfterHVACReporting, anyRan, ObjexxFCL::Optional_int_const());
     EXPECT_DOUBLE_EQ(2000.0, state->dataRuntimeLang->ErlVariable(meterErl).Value.Number)
-        << "Only EndSystemTimestepAfterHVACReporting reads the current step's meter value";
+        << "After UpdateDataandReport(Zone), both pre-fix and post-fix paths read the current step's value";
 }
 
 // Note: a unit test for an "Averaged-type source on a meter" was considered
