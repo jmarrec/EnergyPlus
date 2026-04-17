@@ -3228,3 +3228,307 @@ TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllBeforeReportingCall
 // Meter:Custom source vars must be StoreType::Sum (pre-check emits a Severe
 // and drops the source). Built-in meters (Electricity:Facility etc.) are
 // always Sum. So the fix only has to handle Sum-source meters in practice.
+
+TEST_F(EnergyPlusFixture, EMSManager_MeterSensor_SumsZoneAndSystemSourceVars_Issue7563)
+{
+    // Proves the Zone+System sum is correct for a mixed-type meter.
+    // Electricity:Facility aggregates Zone-type vars (Lights, ElecEquip)
+    // and System-type vars (Fan, Pump). GetInstantMeterValue filters by
+    // TimeStepType, so both calls are needed to cover all source vars.
+    // This test verifies:
+    //   1. Each GetInstantMeterValue call returns only its type's contribution
+    //   2. The sum matches what UpdateDataandReport produces in CurTSValue
+    //   3. The EMS sensor reads the sum, not a partial value
+    std::string const idf_objects = delimited_string({
+        "Output:Meter,Electricity:Facility,Timestep;",
+        "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
+        "EnergyManagementSystem:Program,NoOp,SET Dummy = 1;",
+        "EnergyManagementSystem:ProgramCallingManager,Mgr,"
+        "EndOfSystemTimestepBeforeHVACReporting,NoOp;",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->dataGlobal->TimeStepZone = 1.0;
+    state->dataHVACGlobal->TimeStepSys = 1.0;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour;
+    state->dataGlobal->HourOfDay = 1;
+    state->dataGlobal->TimeStep = 1;
+    state->dataEnvrn->Month = 1;
+    state->dataEnvrn->DayOfMonth = 1;
+    state->dataEnvrn->DayOfWeek = 1;
+    state->dataGlobal->DayOfSim = 1;
+    state->dataGlobal->NumOfDayInEnvrn = 1;
+
+    EMSManager::CheckIfAnyEMS(*state);
+    state->init_state(*state);
+    OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, state->dataGlobal->TimeStepZone);
+    OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::System, state->dataHVACGlobal->TimeStepSys);
+    state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::Zone].CurMinute = 60;
+    state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::System].CurMinute = 60;
+
+    OutputProcessor::GetReportVariableInput(*state);
+
+    Real64 lightsEnergy = 0.0;
+    Real64 equipEnergy = 0.0;
+    Real64 fanEnergy = 0.0;
+    Real64 pumpEnergy = 0.0;
+
+    SetupOutputVariable(*state,
+                        "Lights Electricity Energy",
+                        Constant::Units::J,
+                        lightsEnergy,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "TEST LIGHTS",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Building,
+                        OutputProcessor::EndUseCat::InteriorLights,
+                        "GeneralLights",
+                        "ZONE 1",
+                        1,
+                        1);
+
+    SetupOutputVariable(*state,
+                        "Electric Equipment Electricity Energy",
+                        Constant::Units::J,
+                        equipEnergy,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "TEST EQUIP",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Building,
+                        OutputProcessor::EndUseCat::InteriorEquipment,
+                        "GeneralEquipment",
+                        "ZONE 1",
+                        1,
+                        1);
+
+    SetupOutputVariable(*state,
+                        "Fan Electricity Energy",
+                        Constant::Units::J,
+                        fanEnergy,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
+                        "TEST FAN",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::HVAC,
+                        OutputProcessor::EndUseCat::Fans,
+                        "GeneralFans",
+                        "ZONE 1",
+                        1,
+                        1);
+
+    SetupOutputVariable(*state,
+                        "Pump Electricity Energy",
+                        Constant::Units::J,
+                        pumpEnergy,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
+                        "TEST PUMP",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Plant,
+                        OutputProcessor::EndUseCat::Pumps,
+                        "GeneralPumps",
+                        "ZONE 1",
+                        1,
+                        1);
+
+    state->dataEMSMgr->FinishProcessingUserInput = true;
+    bool anyRan = false;
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginZoneTimestepBeforeInitHeatBalance, anyRan, ObjexxFCL::Optional_int_const());
+
+    ASSERT_EQ(1, state->dataRuntimeLang->NumSensors);
+    auto const &sensor = state->dataRuntimeLang->Sensor(1);
+    EXPECT_ENUM_EQ(OutputProcessor::VariableType::Meter, sensor.VariableType);
+    int const meterIdx = sensor.Index;
+    ASSERT_GE(meterIdx, 0);
+    auto *meter = state->dataOutputProcessor->meters[meterIdx];
+    EXPECT_EQ("Electricity:Facility", meter->Name);
+    int const erlIdx = sensor.VariableNum;
+    state->dataGlobal->WarmupFlag = false;
+    state->dataGlobal->DoOutputReporting = true;
+
+    lightsEnergy = 100.0;
+    equipEnergy = 200.0;
+    fanEnergy = 300.0;
+    pumpEnergy = 400.0;
+    meter->CurTSValue = -999.0;
+
+    Real64 zoneOnly = GetInstantMeterValue(*state, meterIdx, OutputProcessor::TimeStepType::Zone);
+    Real64 systemOnly = GetInstantMeterValue(*state, meterIdx, OutputProcessor::TimeStepType::System);
+
+    EXPECT_DOUBLE_EQ(300.0, zoneOnly) << "Zone call must return only Zone-type source vars (100+200)";
+    EXPECT_DOUBLE_EQ(700.0, systemOnly) << "System call must return only System-type source vars (300+400)";
+    EXPECT_DOUBLE_EQ(1000.0, zoneOnly + systemOnly) << "Sum must cover all source vars";
+
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::EndSystemTimestepBeforeHVACReporting, anyRan, ObjexxFCL::Optional_int_const());
+    EXPECT_DOUBLE_EQ(1000.0, state->dataRuntimeLang->ErlVariable(erlIdx).Value.Number) << "EMS sensor must read Zone+System sum, not a partial value";
+
+    UpdateMeterReporting(*state);
+    UpdateDataandReport(*state, OutputProcessor::TimeStepType::System);
+    UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
+    EXPECT_DOUBLE_EQ(1000.0, meter->CurTSValue) << "After UpdateDataandReport, CurTSValue must match the GetInstantMeterValue sum";
+}
+
+TEST_F(EnergyPlusFixture, EMSManager_MeterSensor_SystemOnlyMeter_Issue7563)
+{
+    // Complement to the existing Zone-only tests: a meter whose source vars
+    // are all System-type. GetInstantMeterValue(Zone) must return 0, and the
+    // Zone+System sum must still equal the full meter value.
+    std::string const idf_objects = delimited_string({
+        "Output:Meter,Electricity:Facility,Timestep;",
+        "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
+        "EnergyManagementSystem:Program,NoOp,SET Dummy = 1;",
+        "EnergyManagementSystem:ProgramCallingManager,Mgr,"
+        "EndOfSystemTimestepBeforeHVACReporting,NoOp;",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->dataGlobal->TimeStepZone = 1.0;
+    state->dataHVACGlobal->TimeStepSys = 1.0;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour;
+
+    EMSManager::CheckIfAnyEMS(*state);
+    state->init_state(*state);
+    OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, state->dataGlobal->TimeStepZone);
+    OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::System, state->dataHVACGlobal->TimeStepSys);
+
+    Real64 fanEnergy = 0.0;
+    Real64 pumpEnergy = 0.0;
+
+    SetupOutputVariable(*state,
+                        "Fan Electricity Energy",
+                        Constant::Units::J,
+                        fanEnergy,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
+                        "TEST FAN",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::HVAC,
+                        OutputProcessor::EndUseCat::Fans,
+                        "GeneralFans",
+                        "ZONE 1",
+                        1,
+                        1);
+
+    SetupOutputVariable(*state,
+                        "Pump Electricity Energy",
+                        Constant::Units::J,
+                        pumpEnergy,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
+                        "TEST PUMP",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Plant,
+                        OutputProcessor::EndUseCat::Pumps,
+                        "GeneralPumps",
+                        "ZONE 1",
+                        1,
+                        1);
+
+    state->dataEMSMgr->FinishProcessingUserInput = true;
+    bool anyRan = false;
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginZoneTimestepBeforeInitHeatBalance, anyRan, ObjexxFCL::Optional_int_const());
+
+    ASSERT_EQ(1, state->dataRuntimeLang->NumSensors);
+    int const meterIdx = state->dataRuntimeLang->Sensor(1).Index;
+    ASSERT_GE(meterIdx, 0);
+    int const erlIdx = state->dataRuntimeLang->Sensor(1).VariableNum;
+    state->dataGlobal->WarmupFlag = false;
+
+    fanEnergy = 500.0;
+    pumpEnergy = 250.0;
+
+    Real64 zoneOnly = GetInstantMeterValue(*state, meterIdx, OutputProcessor::TimeStepType::Zone);
+    Real64 systemOnly = GetInstantMeterValue(*state, meterIdx, OutputProcessor::TimeStepType::System);
+
+    EXPECT_DOUBLE_EQ(0.0, zoneOnly) << "No Zone-type source vars on this meter";
+    EXPECT_DOUBLE_EQ(750.0, systemOnly) << "System call must return 500+250";
+
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::EndSystemTimestepBeforeHVACReporting, anyRan, ObjexxFCL::Optional_int_const());
+    EXPECT_DOUBLE_EQ(750.0, state->dataRuntimeLang->ErlVariable(erlIdx).Value.Number) << "Sensor on system-only meter must read 750";
+}
+
+TEST_F(EnergyPlusFixture, EMSManager_MeterSensor_ZoneMultiplier_Issue7563)
+{
+    // Verifies GetInstantMeterValue applies ZoneMult and ZoneListMult the
+    // same way as UpdateDataandReport's meter accumulation.
+    std::string const idf_objects = delimited_string({
+        "Output:Meter,Electricity:Facility,Timestep;",
+        "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
+        "EnergyManagementSystem:Program,NoOp,SET Dummy = 1;",
+        "EnergyManagementSystem:ProgramCallingManager,Mgr,"
+        "EndOfSystemTimestepBeforeHVACReporting,NoOp;",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->dataGlobal->TimeStepZone = 1.0;
+    state->dataHVACGlobal->TimeStepSys = 1.0;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour;
+    state->dataGlobal->HourOfDay = 1;
+    state->dataGlobal->TimeStep = 1;
+    state->dataEnvrn->Month = 1;
+    state->dataEnvrn->DayOfMonth = 1;
+    state->dataEnvrn->DayOfWeek = 1;
+    state->dataGlobal->DayOfSim = 1;
+    state->dataGlobal->NumOfDayInEnvrn = 1;
+
+    EMSManager::CheckIfAnyEMS(*state);
+    state->init_state(*state);
+    OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, state->dataGlobal->TimeStepZone);
+    OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::System, state->dataHVACGlobal->TimeStepSys);
+    state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::Zone].CurMinute = 60;
+    state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::System].CurMinute = 60;
+
+    OutputProcessor::GetReportVariableInput(*state);
+
+    Real64 lightsEnergy = 0.0;
+    constexpr int zoneMult = 3;
+    constexpr int zoneListMult = 2;
+
+    SetupOutputVariable(*state,
+                        "Lights Electricity Energy",
+                        Constant::Units::J,
+                        lightsEnergy,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "MULT LIGHTS",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Building,
+                        OutputProcessor::EndUseCat::InteriorLights,
+                        "GeneralLights",
+                        "MULT ZONE",
+                        zoneMult,
+                        zoneListMult);
+
+    state->dataEMSMgr->FinishProcessingUserInput = true;
+    bool anyRan = false;
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginZoneTimestepBeforeInitHeatBalance, anyRan, ObjexxFCL::Optional_int_const());
+
+    ASSERT_EQ(1, state->dataRuntimeLang->NumSensors);
+    int const meterIdx = state->dataRuntimeLang->Sensor(1).Index;
+    ASSERT_GE(meterIdx, 0);
+    int const erlIdx = state->dataRuntimeLang->Sensor(1).VariableNum;
+    state->dataGlobal->WarmupFlag = false;
+    state->dataGlobal->DoOutputReporting = true;
+
+    lightsEnergy = 100.0;
+    constexpr Real64 expected = 100.0 * zoneMult * zoneListMult; // 600
+
+    Real64 meterVal = GetInstantMeterValue(*state, meterIdx, OutputProcessor::TimeStepType::Zone);
+    EXPECT_DOUBLE_EQ(expected, meterVal) << "GetInstantMeterValue must apply ZoneMult*ZoneListMult";
+
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::EndSystemTimestepBeforeHVACReporting, anyRan, ObjexxFCL::Optional_int_const());
+    EXPECT_DOUBLE_EQ(expected, state->dataRuntimeLang->ErlVariable(erlIdx).Value.Number) << "Sensor must reflect multiplied value";
+
+    UpdateMeterReporting(*state);
+    UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
+    EXPECT_DOUBLE_EQ(expected, state->dataOutputProcessor->meters[meterIdx]->CurTSValue)
+        << "CurTSValue after UpdateDataandReport must match GetInstantMeterValue";
+}
