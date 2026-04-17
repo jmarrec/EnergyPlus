@@ -4561,7 +4561,6 @@ namespace Avail {
         using Psychrometrics::PsyWFnTdbRhPb;
 
         Real64 ZoneAirEnthalpy;             // Zone air enthalpy
-        Real64 ZoneAirDewPoint;             // Zone air dew point temperature
         Real64 ZoneAirRH;                   // Zone air relative humidity
         Real64 TempExt;                     // Outdoor dry bulb temperature at zone height
         Real64 WindExt;                     // Outdoor wind speed at zone height
@@ -4790,7 +4789,6 @@ namespace Avail {
                 // Dew point control mode
                 if (hybridVentMgr.ctrlType == VentCtrlType::DewPoint) {
                     ZoneAirRH = PsyRhFnTdbWPb(state, thisZoneHB.MAT, thisZoneHB.airHumRat, state.dataEnvrn->OutBaroPress) * 100.0;
-                    ZoneAirDewPoint = PsyTdpFnWPb(state, thisZoneHB.airHumRat, state.dataEnvrn->OutBaroPress);
                     if (state.dataZoneCtrls->NumHumidityControlZones == 0) {
                         ++hybridVentMgr.DewPointNoRHErrCount;
                         if (hybridVentMgr.DewPointNoRHErrCount < 2) {
@@ -4816,8 +4814,32 @@ namespace Avail {
                          ++HStatZoneNum) { // Humidity control zone number
                         if (state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).ActualZoneNum == ZoneNum) {
                             found = true;
-                            ZoneRHHumidifyingSetPoint = state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).humidifyingSched->getCurrentVal();
-                            ZoneRHDehumidifyingSetPoint = state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).dehumidifyingSched->getCurrentVal();
+                            if (state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).humidityControlVariableType ==
+                                DataZoneControls::HumidityCtrlVarType::RelativeHumidity) {
+                                ZoneRHHumidifyingSetPoint = state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).humidifyingSched->getCurrentVal();
+                                ZoneRHDehumidifyingSetPoint =
+                                    state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).dehumidifyingSched->getCurrentVal();
+                            } else if (state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).humidityControlVariableType ==
+                                       DataZoneControls::HumidityCtrlVarType::DewPoint) { // Recalculate RH setpoint from DP
+                                ZoneRHHumidifyingSetPoint =
+                                    100 * Psychrometrics::PsyRhFnTdbWPb(
+                                              state,
+                                              thisZoneHB.ZT,
+                                              Psychrometrics::PsyWFnTdpPb(
+                                                  state,
+                                                  state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).humidifyingSched->getCurrentVal(),
+                                                  state.dataEnvrn->OutBaroPress),
+                                              state.dataEnvrn->OutBaroPress);
+                                ZoneRHDehumidifyingSetPoint =
+                                    100 * Psychrometrics::PsyRhFnTdbWPb(
+                                              state,
+                                              thisZoneHB.ZT,
+                                              Psychrometrics::PsyWFnTdpPb(
+                                                  state,
+                                                  state.dataZoneCtrls->HumidityControlZone(HStatZoneNum).dehumidifyingSched->getCurrentVal(),
+                                                  state.dataEnvrn->OutBaroPress),
+                                              state.dataEnvrn->OutBaroPress);
+                            }
                             if (ZoneAirRH > ZoneRHDehumidifyingSetPoint) { // Need dehumidification
                                 WSetPoint =
                                     PsyWFnTdbRhPb(state, thisZoneHB.MAT, (ZoneRHDehumidifyingSetPoint / 100.0), state.dataEnvrn->OutBaroPress);
