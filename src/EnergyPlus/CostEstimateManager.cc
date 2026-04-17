@@ -211,11 +211,11 @@ namespace CostEstimateManager {
             auto const &costAdjustSchemaProps = inputProcessor->getObjectSchemaProps(state, cCurrentModuleObject);
             auto const costAdjustObjects = inputProcessor->epJSON.find(cCurrentModuleObject);
             if (costAdjustObjects != inputProcessor->epJSON.end()) {
-                auto const costAdjustItems = costAdjustObjects.value().items();
-                auto const &costAdjustInstance = *costAdjustItems.begin();
-                auto const &costAdjustFields = costAdjustInstance.value();
+                auto const costAdjustIt = costAdjustObjects.value().begin();
+                auto const costAdjustKey = std::string(costAdjustIt.key());
+                auto const &costAdjustFields = costAdjustIt.value();
 
-                inputProcessor->markObjectAsUsed(cCurrentModuleObject, costAdjustInstance.key());
+                inputProcessor->markObjectAsUsed(cCurrentModuleObject, costAdjustKey);
 
                 state.dataCostEstimateManager->CurntBldg.MiscCostperSqMeter =
                     inputProcessor->getRealFieldValue(costAdjustFields, costAdjustSchemaProps, "miscellaneous_cost_per_conditioned_area");
@@ -244,11 +244,11 @@ namespace CostEstimateManager {
             auto const &referenceSchemaProps = inputProcessor->getObjectSchemaProps(state, cCurrentModuleObject);
             auto const referenceObjects = inputProcessor->epJSON.find(cCurrentModuleObject);
             if (referenceObjects != inputProcessor->epJSON.end()) {
-                auto const referenceItems = referenceObjects.value().items();
-                auto const &referenceInstance = *referenceItems.begin();
-                auto const &referenceFields = referenceInstance.value();
+                auto const referenceIt = referenceObjects.value().begin();
+                auto const referenceKey = std::string(referenceIt.key());
+                auto const &referenceFields = referenceIt.value();
 
-                inputProcessor->markObjectAsUsed(cCurrentModuleObject, referenceInstance.key());
+                inputProcessor->markObjectAsUsed(cCurrentModuleObject, referenceKey);
 
                 state.dataCostEstimateManager->RefrncBldg.LineItemTot =
                     inputProcessor->getRealFieldValue(referenceFields, referenceSchemaProps, "reference_building_line_item_costs");
