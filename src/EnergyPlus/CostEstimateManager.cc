@@ -211,7 +211,8 @@ namespace CostEstimateManager {
             auto const &costAdjustSchemaProps = inputProcessor->getObjectSchemaProps(state, cCurrentModuleObject);
             auto const costAdjustObjects = inputProcessor->epJSON.find(cCurrentModuleObject);
             if (costAdjustObjects != inputProcessor->epJSON.end()) {
-                auto const &costAdjustInstance = *costAdjustObjects.value().items().begin();
+                auto const costAdjustItems = costAdjustObjects.value().items();
+                auto const &costAdjustInstance = *costAdjustItems.begin();
                 auto const &costAdjustFields = costAdjustInstance.value();
 
                 inputProcessor->markObjectAsUsed(cCurrentModuleObject, costAdjustInstance.key());
@@ -243,7 +244,8 @@ namespace CostEstimateManager {
             auto const &referenceSchemaProps = inputProcessor->getObjectSchemaProps(state, cCurrentModuleObject);
             auto const referenceObjects = inputProcessor->epJSON.find(cCurrentModuleObject);
             if (referenceObjects != inputProcessor->epJSON.end()) {
-                auto const &referenceInstance = *referenceObjects.value().items().begin();
+                auto const referenceItems = referenceObjects.value().items();
+                auto const &referenceInstance = *referenceItems.begin();
                 auto const &referenceFields = referenceInstance.value();
 
                 inputProcessor->markObjectAsUsed(cCurrentModuleObject, referenceInstance.key());
