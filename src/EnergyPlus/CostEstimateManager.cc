@@ -185,7 +185,7 @@ namespace CostEstimateManager {
                 costLineItem.LineName = Util::makeUPPER(lineItemInstance.key());
                 costLineItem.ParentObjType = static_cast<ParentObject>(
                     getEnumValue(ParentObjectNamesUC, inputProcessor->getAlphaFieldValue(lineItemFields, lineItemSchemaProps, "line_item_type")));
-                costLineItem.ParentObjName = Util::makeUPPER(inputProcessor->getAlphaFieldValue(lineItemFields, lineItemSchemaProps, "item_name"));
+                costLineItem.ParentObjName = inputProcessor->getAlphaFieldValue(lineItemFields, lineItemSchemaProps, "item_name");
                 costLineItem.PerEach = inputProcessor->getRealFieldValue(lineItemFields, lineItemSchemaProps, "cost_per_each");
                 costLineItem.PerSquareMeter = inputProcessor->getRealFieldValue(lineItemFields, lineItemSchemaProps, "cost_per_area");
                 costLineItem.PerKiloWattCap =
