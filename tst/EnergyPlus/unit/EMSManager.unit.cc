@@ -3106,13 +3106,16 @@ TEST_F(EnergyPlusFixture, EMSManager_MeterSensor_ReadsLiveSourceSum_Issue7563)
     }
 }
 
-TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllBeforeReportingCallPoints_Issue7563)
+TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllHVACManagerCallPoints_Issue7563)
 {
-    // Step 1 populates meter->CurTSValue via UpdateDataandReport. Step 2 sets
-    // the live source var to a new value but does NOT call UpdateDataandReport
-    // (so CurTSValue stays at step 1's value). Meter sensor is sampled at every
-    // "pre-reporting" calling point and must read the current step's live
-    // source sum. Variable sensor is the control.
+    // Phase 1 populates meter->CurTSValue via UpdateDataandReport. Phase 2
+    // sets the live source var to a new value but does NOT call
+    // UpdateDataandReport (so CurTSValue stays at phase 1's value). Meter
+    // sensor is sampled at every EMS calling point inside HVACManager and
+    // must read the current value via live source sum. Variable sensor is
+    // the control. At each calling point, we also assert CurTSValue is
+    // still stale -- this is the pre-fix evidence, since pre-fix code
+    // returned CurTSValue via GetCurrentMeterValue.
     std::string const idf_objects = delimited_string({
         "Output:Meter,Electricity:Facility,Timestep;",
         "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
@@ -3184,13 +3187,13 @@ TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllBeforeReportingCall
     state->dataGlobal->WarmupFlag = false;
     state->dataGlobal->DoOutputReporting = true;
 
-    // Step 1
+    // Phase 1: populate CurTSValue via the reporting pipeline.
     lightsEnergy = 1000.0;
     UpdateMeterReporting(*state);
     UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
-    ASSERT_DOUBLE_EQ(1000.0, meter->CurTSValue) << "Step 1 UpdateDataandReport did not update CurTSValue";
+    ASSERT_DOUBLE_EQ(1000.0, meter->CurTSValue) << "Phase 1 UpdateDataandReport did not update CurTSValue";
 
-    // Step 2 begins: drive source to 2000. Do not call UpdateDataandReport yet.
+    // Phase 2: drive source to 2000. Do not call UpdateDataandReport yet.
     lightsEnergy = 2000.0;
 
     struct CallSite
@@ -3198,35 +3201,30 @@ TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllBeforeReportingCall
         EMSManager::EMSCallFrom cf;
         char const *label;
     };
-    std::array<CallSite, 5> const preReportCalls = {{
+    std::array<CallSite, 6> const hvacManagerCalls = {{
         {EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, "BeginTimestepBeforePredictor"},
         {EMSManager::EMSCallFrom::BeforeHVACManagers, "BeforeHVACManagers"},
         {EMSManager::EMSCallFrom::AfterHVACManagers, "AfterHVACManagers"},
         {EMSManager::EMSCallFrom::HVACIterationLoop, "HVACIterationLoop"},
         {EMSManager::EMSCallFrom::EndSystemTimestepBeforeHVACReporting, "EndSystemTimestepBeforeHVACReporting"},
+        {EMSManager::EMSCallFrom::EndSystemTimestepAfterHVACReporting, "EndSystemTimestepAfterHVACReporting"},
     }};
 
-    for (auto const &cs : preReportCalls) {
+    // At every EMS calling point inside HVACManager, CurTSValue remains stale
+    // (1000 from phase 1) because UpdateDataandReport(Zone) -- the only path
+    // that refreshes it -- runs later from HeatBalanceManager at zone-timestep
+    // boundary. Pre-fix code returned CurTSValue and saw the stale 1000;
+    // post-fix reads live source sum via GetInstantMeterValue and sees 2000.
+    for (auto const &cs : hvacManagerCalls) {
         EMSManager::ManageEMS(*state, cs.cf, anyRan, ObjexxFCL::Optional_int_const());
-        EXPECT_DOUBLE_EQ(2000.0, state->dataRuntimeLang->ErlVariable(meterErl).Value.Number)
-            << "Post-fix for #7563: at " << cs.label << ", meter sensor must read current step's live source sum";
-        // Control: variable sensor reads live source pointer -> current step.
-        EXPECT_DOUBLE_EQ(2000.0, state->dataRuntimeLang->ErlVariable(varErl).Value.Number)
-            << "Control: at " << cs.label << ", sensor on Output:Variable reads current step via *var->Which";
+        Real64 preFixValue = meter->CurTSValue; // what GetCurrentMeterValue would return
+        Real64 postFixValue = state->dataRuntimeLang->ErlVariable(meterErl).Value.Number;
+        Real64 varValue = state->dataRuntimeLang->ErlVariable(varErl).Value.Number;
+        EXPECT_DOUBLE_EQ(1000.0, preFixValue) << "Pre-fix evidence: at " << cs.label
+                                              << ", CurTSValue stays stale (what GetCurrentMeterValue would return)";
+        EXPECT_DOUBLE_EQ(2000.0, postFixValue) << "Post-fix for #7563: at " << cs.label << ", meter sensor reads live source sum";
+        EXPECT_DOUBLE_EQ(2000.0, varValue) << "Control: at " << cs.label << ", sensor on Output:Variable reads current step via *var->Which";
     }
-
-    // After a manual UpdateDataandReport(Zone), CurTSValue is refreshed, so
-    // both pre-fix (GetCurrentMeterValue) and post-fix (GetInstantMeterValue
-    // sum) paths return the same value. Note: in a real simulation, no EMS
-    // calling point inside HVACManager runs after UpdateDataandReport(Zone)
-    // -- that call lives in HeatBalanceManager and fires at the zone timestep
-    // boundary. The EndSystemTimestepAfterHVACReporting calling point here
-    // is just a convenient hook to demonstrate the post-refresh state.
-    UpdateMeterReporting(*state);
-    UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
-    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::EndSystemTimestepAfterHVACReporting, anyRan, ObjexxFCL::Optional_int_const());
-    EXPECT_DOUBLE_EQ(2000.0, state->dataRuntimeLang->ErlVariable(meterErl).Value.Number)
-        << "After UpdateDataandReport(Zone), both pre-fix and post-fix paths read the current step's value";
 }
 
 // Note: a unit test for an "Averaged-type source on a meter" was considered
