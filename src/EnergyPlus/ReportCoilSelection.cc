@@ -161,7 +161,7 @@ namespace ReportCoilSelection {
             // begin std 229 New coil connections table entries
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilName_CCs, c->coilName_, c->coilName_);
             OutputReportPredefined::PreDefTableEntry(
-                state, state.dataOutRptPredefined->pdchCoilType_CCs, c->coilName_, HVAC::coilTypeNamesUC[(int)c->coilType]);
+                state, state.dataOutRptPredefined->pdchCoilType_CCs, c->coilName_, HVAC::coilTypeNames[(int)c->coilType]);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilLoc_CCs, c->coilName_, c->coilLocation);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilHVACType_CCs, c->coilName_, c->typeHVACname);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilHVACName_CCs, c->coilName_, c->userNameforHVACsystem);
@@ -454,7 +454,7 @@ namespace ReportCoilSelection {
         // make calls to fill out predefined tabular report entries for each coil selection report object
         for (auto *c : state.dataRptCoilSelection->coils) {
             OutputReportPredefined::PreDefTableEntry(
-                state, state.dataOutRptPredefined->pdch2CoilType, c->coilName_, HVAC::coilTypeNamesUC[(int)c->coilType]);
+                state, state.dataOutRptPredefined->pdch2CoilType, c->coilName_, HVAC::coilTypeNames[(int)c->coilType]);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdch2CoilHVACType, c->coilName_, c->typeHVACname);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdch2CoilHVACName, c->coilName_, c->userNameforHVACsystem);
 
