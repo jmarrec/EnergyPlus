@@ -103,7 +103,7 @@ namespace SolarShading {
 
     void checkScheduledSurfacePresent(EnergyPlusData &state);
 
-    void checkNotScheduledSurfacePresent(EnergyPlusData &state);
+    void checkNotScheduledOrImportedSurfacePresent(EnergyPlusData &state);
 
     void AllocateModuleArrays(EnergyPlusData &state);
 
