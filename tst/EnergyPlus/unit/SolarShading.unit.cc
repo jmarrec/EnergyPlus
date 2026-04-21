@@ -5903,19 +5903,19 @@ WindowMaterial:SimpleGlazingSystem,
     EXPECT_TRUE(state->dataSolarShading->GetInputFlag);
     SolarShading::InitSolarCalculations(*state);
 
-    std::string const error_string = delimited_string({
-        "   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
-        "   **   ~~~   ** This shading surface will be ignored.",
-        "   ** Warning ** ShadowCalculation specified \"Scheduled\" for the Shading Calculation Method but no schedule provided for WALL1NOTOK.",
-        "   **   ~~~   ** When \"Scheduled\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,",
-        "   **   ~~~   ** EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use SurfaceProperty:LocalEnvironment to specify a schedule",
-        "   **   ~~~   ** for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.",
-        "   ** Warning ** No schedule was provided for WINDOW1NOTOK either. See above error message for more details.",
-        "   ** Warning ** DetermineShadowingCombinations: Surface=\"5BB552\" is a receiving surface and is non-convex.",
-        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
-        "   ** Severe  ** DetermineShadowingCombinations: Surface=\"5BB552\" is a casting surface and is non-convex.",
-        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"
-    });
+    std::string const error_string = delimited_string(
+        {"   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
+         "   **   ~~~   ** This shading surface will be ignored.",
+         "   ** Warning ** ShadowCalculation specified \"Scheduled\" for the Shading Calculation Method but no schedule provided for WALL1NOTOK.",
+         "   **   ~~~   ** When \"Scheduled\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,",
+         "   **   ~~~   ** EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use SurfaceProperty:LocalEnvironment "
+         "to specify a schedule",
+         "   **   ~~~   ** for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.",
+         "   ** Warning ** No schedule was provided for WINDOW1NOTOK either. See above error message for more details.",
+         "   ** Warning ** DetermineShadowingCombinations: Surface=\"5BB552\" is a receiving surface and is non-convex.",
+         "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
+         "   ** Severe  ** DetermineShadowingCombinations: Surface=\"5BB552\" is a casting surface and is non-convex.",
+         "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"});
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 
@@ -6240,31 +6240,31 @@ WindowMaterial:SimpleGlazingSystem,
     has_err_output(true); // clear any setup output before exercising GetBuildingData
 
     EXPECT_TRUE(s_sched->ScheduleFileShadingProcessed);
-    EXPECT_EQ(116, s_sched->schedules.size());  // AlwaysOn, AlwaysOff, OnSch, plus file
-    
+    EXPECT_EQ(116, s_sched->schedules.size()); // AlwaysOn, AlwaysOff, OnSch, plus file
+
     auto &[fPath, root] = *(s_sched->UniqueProcessedExternalFiles.begin());
     EXPECT_EQ(scheduleFile, fPath);
     EXPECT_EQ(114, root["header"].size());
-    
+
     HeatBalanceManager::GetBuildingData(*state, FoundError);
     ASSERT_FALSE(FoundError);
     state->dataGlobal->BeginSimFlag = true;
     EXPECT_TRUE(state->dataSolarShading->GetInputFlag);
     SolarShading::InitSolarCalculations(*state);
 
-    std::string const error_string = delimited_string({
-        "   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
-        "   **   ~~~   ** This shading surface will be ignored.",
-        "   ** Warning ** ShadowCalculation specified \"Imported\" for the Shading Calculation Method but no schedule provided for WALL1NOTOK.",
-        "   **   ~~~   ** When \"Imported\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,",
-        "   **   ~~~   ** EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use Schedule:File:Shading to specify a schedule",
-        "   **   ~~~   ** for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.",
-        "   ** Warning ** No schedule was provided for WINDOW1NOTOK either. See above error message for more details.",
-        "   ** Warning ** DetermineShadowingCombinations: Surface=\"ZN001:WALL001\" is a receiving surface and is non-convex.",
-        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
-        "   ** Severe  ** DetermineShadowingCombinations: Surface=\"ZN001:WALL001\" is a casting surface and is non-convex.",
-        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"
-    });
+    std::string const error_string = delimited_string(
+        {"   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
+         "   **   ~~~   ** This shading surface will be ignored.",
+         "   ** Warning ** ShadowCalculation specified \"Imported\" for the Shading Calculation Method but no schedule provided for WALL1NOTOK.",
+         "   **   ~~~   ** When \"Imported\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,",
+         "   **   ~~~   ** EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use Schedule:File:Shading to specify "
+         "a schedule",
+         "   **   ~~~   ** for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.",
+         "   ** Warning ** No schedule was provided for WINDOW1NOTOK either. See above error message for more details.",
+         "   ** Warning ** DetermineShadowingCombinations: Surface=\"ZN001:WALL001\" is a receiving surface and is non-convex.",
+         "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
+         "   ** Severe  ** DetermineShadowingCombinations: Surface=\"ZN001:WALL001\" is a casting surface and is non-convex.",
+         "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"});
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 
@@ -6585,17 +6585,17 @@ WindowMaterial:SimpleGlazingSystem,
     EXPECT_TRUE(state->dataSolarShading->GetInputFlag);
     SolarShading::InitSolarCalculations(*state);
 
-    std::string const error_string = delimited_string({
-        "   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
-        "   **   ~~~   ** This shading surface will be ignored.",
-        "   ** Warning ** ShadowCalculation did not specify \"Scheduled\" or \"Imported\" for the Shading Calculation Method but schedule provided for "
-        "WALL1NOTOK.",
-        "   ** Warning ** Schedule was also provided for WINDOW1NOTOK. See above error message for more details.",
-        "   ** Warning ** DetermineShadowingCombinations: Surface=\"5BB552\" is a receiving surface and is non-convex.",
-        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
-        "   ** Severe  ** DetermineShadowingCombinations: Surface=\"5BB552\" is a casting surface and is non-convex.",
-        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"
-    });
+    std::string const error_string =
+        delimited_string({"   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
+                          "   **   ~~~   ** This shading surface will be ignored.",
+                          "   ** Warning ** ShadowCalculation did not specify \"Scheduled\" or \"Imported\" for the Shading Calculation Method but "
+                          "schedule provided for "
+                          "WALL1NOTOK.",
+                          "   ** Warning ** Schedule was also provided for WINDOW1NOTOK. See above error message for more details.",
+                          "   ** Warning ** DetermineShadowingCombinations: Surface=\"5BB552\" is a receiving surface and is non-convex.",
+                          "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
+                          "   ** Severe  ** DetermineShadowingCombinations: Surface=\"5BB552\" is a casting surface and is non-convex.",
+                          "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"});
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 

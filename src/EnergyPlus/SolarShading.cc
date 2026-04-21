@@ -846,40 +846,46 @@ void checkSurfaceExternalShadingSchedules(EnergyPlusData &state)
                     if (state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Scheduled) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format("ShadowCalculation specified \"Scheduled\" for the Shading Calculation Method but no schedule provided for {}.",
-                                               thisSurf.Name));
-                        ShowContinueError(
-                            state, "When \"Scheduled\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,");
-                        ShowContinueError(
-                            state, "EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use SurfaceProperty:LocalEnvironment to specify a schedule");
+                            EnergyPlus::format(
+                                "ShadowCalculation specified \"Scheduled\" for the Shading Calculation Method but no schedule provided for {}.",
+                                thisSurf.Name));
+                        ShowContinueError(state,
+                                          "When \"Scheduled\" is selected for the Shading Calculation Method and no schedule is provided for a "
+                                          "particular surface,");
+                        ShowContinueError(state,
+                                          "EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use "
+                                          "SurfaceProperty:LocalEnvironment to specify a schedule");
                     } else if (state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Imported) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format("ShadowCalculation specified \"Imported\" for the Shading Calculation Method but no schedule provided for {}.",
-                                               thisSurf.Name));
+                            EnergyPlus::format(
+                                "ShadowCalculation specified \"Imported\" for the Shading Calculation Method but no schedule provided for {}.",
+                                thisSurf.Name));
                         ShowContinueError(
-                            state, "When \"Imported\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,");
-                        ShowContinueError(
-                            state, "EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use Schedule:File:Shading to specify a schedule");
+                            state,
+                            "When \"Imported\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,");
+                        ShowContinueError(state,
+                                          "EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use "
+                                          "Schedule:File:Shading to specify a schedule");
                     }
                     ShowContinueError(state, "for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.");
                 } else if (numNotDef <= maxErrMessages) {
                     ShowWarningError(
-                        state, EnergyPlus::format("No schedule was provided for {} either. See above error message for more details.", thisSurf.Name));
+                        state,
+                        EnergyPlus::format("No schedule was provided for {} either. See above error message for more details.", thisSurf.Name));
                 }
             }
         } else {
             if (thisSurf.SurfSchedExternalShadingFrac) {
                 numNotDef += 1;
                 if (numNotDef == 1) {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format(
-                            "ShadowCalculation did not specify \"Scheduled\" or \"Imported\" for the Shading Calculation Method but schedule provided for {}.",
-                            thisSurf.Name));
-                } else if (numNotDef <= maxErrMessages) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("Schedule was also provided for {}. See above error message for more details.", thisSurf.Name));
+                                     EnergyPlus::format("ShadowCalculation did not specify \"Scheduled\" or \"Imported\" for the Shading Calculation "
+                                                        "Method but schedule provided for {}.",
+                                                        thisSurf.Name));
+                } else if (numNotDef <= maxErrMessages) {
+                    ShowWarningError(
+                        state, EnergyPlus::format("Schedule was also provided for {}. See above error message for more details.", thisSurf.Name));
                 }
             }
         }
