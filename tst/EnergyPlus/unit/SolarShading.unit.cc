@@ -52,6 +52,7 @@
 
 // EnergyPlus Headers
 #include "Fixtures/EnergyPlusFixture.hh"
+#include <EnergyPlus/ConfiguredFunctions.hh>
 #include <EnergyPlus/Construction.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataErrorTracking.hh>
@@ -2515,13 +2516,16 @@ RunPeriod,
   No,                      !- Apply Weekend Holiday Rule
   Yes,                     !- Use Weather File Rain Indicators
   Yes;                     !- Use Weather File Snow Indicators
+
 ShadowCalculation,
   PolygonClipping,               !- Shading Calculation Method
   Timestep,                      !- Shading Calculation Update Frequency Method
   20,                            !- Shading Calculation Update Frequency
   15000,                         !- Maximum Figures in Shadow Overlap Calculations
   ConvexWeilerAtherton;          !- Polygon Clipping Algorithm
+
 Timestep,4;
+
 Building,
   Non-convex,    !- Name
   0,      !- North Axis {deg}
@@ -2531,10 +2535,12 @@ Building,
   FullInteriorAndExterior, !- Solar Distribution
   25,  !- Maximum Number of Warmup Days
   2;  !- Minimum Number of Warmup Days
+
 GlobalGeometryRules,
     UpperLeftCorner,          !- Starting Vertex Position
     Counterclockwise,         !- Vertex Entry Direction
     Relative;                 !- Coordinate System
+
 Zone,
     Zone A,                   !- Name
     0,                        !- Direction of Relative North
@@ -2543,6 +2549,7 @@ Zone,
     0,                        !- Z Origin
     ,                         !- Type
     1;                        !- Multiplier
+
 BuildingSurface:Detailed,
     A48756,                   !- Name
     Floor,                    !- Surface Type
@@ -2559,6 +2566,7 @@ BuildingSurface:Detailed,
     6.096, 0, 0,                        !- Vertex 2 Zcoordinate
     0, 0, 0,                        !- Vertex 3 Zcoordinate
     0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+
 BuildingSurface:Detailed,
     69C03D,                   !- Name
     Wall,                     !- Surface Type
@@ -2577,6 +2585,7 @@ BuildingSurface:Detailed,
     0, 0, 3.048,                    !- Vertex 4 Zcoordinate
     0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
     0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+
 BuildingSurface:Detailed,
     5BB552,                   !- Name
     Wall,                     !- Surface Type
@@ -2595,6 +2604,7 @@ BuildingSurface:Detailed,
     6.096, 0, 0,                        !- Vertex 4 Zcoordinate
     6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
     6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+
 BuildingSurface:Detailed,
     682F88,                   !- Name
     Wall,                     !- Surface Type
@@ -2611,6 +2621,7 @@ BuildingSurface:Detailed,
     6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
     0, 6.096, 0,                        !- Vertex 3 Zcoordinate
     0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
 BuildingSurface:Detailed,
     C292CF,                   !- Name
     Wall,                     !- Surface Type
@@ -2627,6 +2638,7 @@ BuildingSurface:Detailed,
     0, 0, 0,                        !- Vertex 2 Zcoordinate
     6.096, 0, 0,                        !- Vertex 3 Zcoordinate
     6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+
 BuildingSurface:Detailed,
     319080,                   !- Name
     Wall,                     !- Surface Type
@@ -2643,6 +2655,7 @@ BuildingSurface:Detailed,
     0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
     6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
     6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+
 BuildingSurface:Detailed,
     866E33,                   !- Name
     Roof,                     !- Surface Type
@@ -2659,6 +2672,7 @@ BuildingSurface:Detailed,
     0, 0, 3.048,                    !- Vertex 2 Zcoordinate
     6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
     6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+
 BuildingSurface:Detailed,
     32CB6F,                   !- Name
     Roof,                     !- Surface Type
@@ -2675,6 +2689,7 @@ BuildingSurface:Detailed,
     0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
     6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
     6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
 FenestrationSurface:Detailed,
     DAF2B2,                   !- Name
     Window,                   !- Surface Type
@@ -2689,6 +2704,7 @@ FenestrationSurface:Detailed,
     0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
     5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
     5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+
 Material,
   Wall Continuous Insulation,  !- Name
   MediumSmooth,               !- Roughness
@@ -2696,6 +2712,7 @@ Material,
   0.0288,  !- Conductivity {W/m-K}
   32,                      !- Density {kg/m3}
   1465;                     !- Specific Heat {J/kg-K}
+
 Material,
   Wall Cavity Effective Insulation,  !- Name
   VeryRough,               !- Roughness
@@ -2703,15 +2720,18 @@ Material,
   0.08389829384297165,  !- Conductivity {W/m-K}
   8.17,                      !- Density {kg/m3}
   837;                     !- Specific Heat {J/kg-K}
+
 Construction,
   Exterior Wall,           !- Name
   Stucco,  !- Layer
   Wall Continuous Insulation,  !- Layer
   Wall Cavity Effective Insulation,  !- Layer
   Gypsum 5/8in;  !- Layer
+
 Construction,
   Exterior Window,         !- Name
   Theoretical Glazing;     !- Outside Layer
+
 Material,
   Gypsum 5/8in,           !- Name
   MediumSmooth,            !- Roughness
@@ -2722,6 +2742,7 @@ Material,
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
+
 Material,
   Stucco,           !- Name
   Smooth,                  !- Roughness
@@ -2732,6 +2753,7 @@ Material,
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
+
 WindowMaterial:SimpleGlazingSystem,
   Theoretical Glazing,     !- Name
   3.1232254400908577,  !- U-Factor {W/m2-K}
@@ -5526,96 +5548,1055 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
     EXPECT_NEAR(expWinSunlitFrac, winSunLitFracShade1Shade2Partial, 0.0001);
 }
 
-TEST_F(EnergyPlusFixture, SolarShadingTest_checkScheduledSurfacePresent)
+TEST_F(EnergyPlusFixture, SolarShadingTest_checkSurfaceExternalShadingSchedules_Scheduled)
 // Test of check to see if all surfaces have a sunlit schedule when shadow calculations are set to "Scheduled"
 {
-    auto &surfData = state->dataSurface;
-    surfData->TotSurfaces = 6;
-    surfData->Surface.allocate(surfData->TotSurfaces);
+    // Set up data for test. Shading surfaces are skipped so they should not report any errors.
+    // Some surfaces will be correctly defined while two other surfaces will not be correctly defined and will generate errors.
+    std::string const idf_objects = R"IDF(
+RunPeriod,
+  Annual,                  !- Name
+  1,                       !- Begin Month
+  1,                       !- Begin Day of Month
+  ,                        !- Begin Year
+  12,                      !- End Month
+  31,                      !- End Day of Month
+  ,                        !- End Year
+  Sunday,                  !- Day of Week for Start Day
+  No,                      !- Use Weather File Holidays and Special Days
+  No,                      !- Use Weather File Daylight Saving Period
+  No,                      !- Apply Weekend Holiday Rule
+  Yes,                     !- Use Weather File Rain Indicators
+  Yes;                     !- Use Weather File Snow Indicators
 
-    // Set up data for test: four of six surfaces are non-shading and two are shading.  Shading surfaces
-    // are skipped so they should not report any errors.  Two of the surfaces will be correctly defined while
-    // two other surfaces will not be correctly defined and will generate errors.
-    surfData->Surface(1).Class = SurfaceClass::Wall;
-    surfData->Surface(1).SurfSchedExternalShadingFrac = true;
-    surfData->Surface(1).Name = "WALL1OK";
-    surfData->Surface(2).Class = SurfaceClass::Roof;
-    surfData->Surface(2).SurfSchedExternalShadingFrac = true;
-    surfData->Surface(2).Name = "ROOF1OK";
-    surfData->Surface(3).Class = SurfaceClass::Window;
-    surfData->Surface(3).SurfSchedExternalShadingFrac = false;
-    surfData->Surface(3).Name = "WINDOW1NOTOK";
-    surfData->Surface(4).Class = SurfaceClass::Shading;
-    surfData->Surface(4).SurfSchedExternalShadingFrac = true;
-    surfData->Surface(4).Name = "SHADING1SKIPPED";
-    surfData->Surface(5).Class = SurfaceClass::Overhang;
-    surfData->Surface(5).SurfSchedExternalShadingFrac = false;
-    surfData->Surface(5).Name = "SHADING2SKIPPED";
-    surfData->Surface(6).Class = SurfaceClass::Window;
-    surfData->Surface(6).SurfSchedExternalShadingFrac = false;
-    surfData->Surface(6).Name = "WINDOW2NOTOK";
+ShadowCalculation,
+  Scheduled,               !- Shading Calculation Method
+  Periodic,                !- Shading Calculation Update Frequency Method
+  1,                       !- Shading Calculation Update Frequency
+  ,                        !- Maximum Figures in Shadow Overlap Calculations
+  ,                        !- Polygon Clipping Algorithm
+  ,                        !- Pixel Counting Resolution
+  ,                        !- Sky Diffuse Modeling Algorithm
+  Yes;                     !- Output External Shading Calculation Results
 
-    checkScheduledSurfacePresent(*state);
+Timestep,4;
+
+Building,
+  Non-convex,    !- Name
+  0,      !- North Axis {deg}
+  City,          !- Terrain
+  0.5,  !- Loads Convergence Tolerance Value
+  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior, !- Solar Distribution
+  25,  !- Maximum Number of Warmup Days
+  2;  !- Minimum Number of Warmup Days
+
+GlobalGeometryRules,
+    UpperLeftCorner,          !- Starting Vertex Position
+    Counterclockwise,         !- Vertex Entry Direction
+    Relative;                 !- Coordinate System
+
+Zone,
+    Zone A,                   !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0,                        !- Z Origin
+    ,                         !- Type
+    1;                        !- Multiplier
+
+Schedule:Constant,OnSch,,1.0;
+
+BuildingSurface:Detailed,
+    A48756,                   !- Name
+    Floor,                    !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
+    0, 0, 0,                        !- Vertex 3 Zcoordinate
+    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:A48756,    !- Name
+  A48756,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+BuildingSurface:Detailed,
+    WALL1NOTOK,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    6,                        !- Number of Vertices
+    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
+    0, 0, 0,                        !- Vertex 3 Zcoordinate
+    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
+    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
+    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+
+BuildingSurface:Detailed,
+    5BB552,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    6,                        !- Number of Vertices
+    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
+    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
+    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
+    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:5BB552,    !- Name
+  5BB552,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+BuildingSurface:Detailed,
+    682F88,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
+    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
+    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:682F88,    !- Name
+  682F88,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+BuildingSurface:Detailed,
+    C292CF,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
+    0, 0, 0,                        !- Vertex 2 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
+    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:C292CF,    !- Name
+  C292CF,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+BuildingSurface:Detailed,
+    319080,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:319080,    !- Name
+  319080,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+BuildingSurface:Detailed,
+    866E33,                   !- Name
+    Roof,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
+    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:866E33,    !- Name
+  866E33,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+BuildingSurface:Detailed,
+    32CB6F,                   !- Name
+    Roof,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
+    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
+    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:32CB6F,    !- Name
+  32CB6F,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+FenestrationSurface:Detailed,
+    WINDOW1NOTOK,                   !- Name
+    Window,                   !- Surface Type
+    Exterior Window,          !- Construction Name
+    319080,                   !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    ,                         !- Multiplier
+    4,                        !- Number of Vertices
+    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
+    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
+    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
+    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+
+Shading:Site:Detailed,
+  EAST SIDE TREE,          !- Name
+  OnSch,  !- Transmittance Schedule Name
+  3,                       !- Number of Vertices
+  33.52800,10.66800,10.05800,  !- X,Y,Z ==> Vertex 1 {m}
+  33.52800,13.71600,0.9140000,  !- X,Y,Z ==> Vertex 2 {m}
+  33.52800,4.572000,0.9140000;  !- X,Y,Z ==> Vertex 3 {m}
+
+Material,
+  Wall Continuous Insulation,  !- Name
+  MediumSmooth,               !- Roughness
+  0.038037600000000005,  !- Thickness {m}
+  0.0288,  !- Conductivity {W/m-K}
+  32,                      !- Density {kg/m3}
+  1465;                     !- Specific Heat {J/kg-K}
+
+Material,
+  Wall Cavity Effective Insulation,  !- Name
+  VeryRough,               !- Roughness
+  0.08889999999999999,  !- Thickness {m}
+  0.08389829384297165,  !- Conductivity {W/m-K}
+  8.17,                      !- Density {kg/m3}
+  837;                     !- Specific Heat {J/kg-K}
+
+Construction,
+  Exterior Wall,           !- Name
+  Stucco,  !- Layer
+  Wall Continuous Insulation,  !- Layer
+  Wall Cavity Effective Insulation,  !- Layer
+  Gypsum 5/8in;  !- Layer
+
+Construction,
+  Exterior Window,         !- Name
+  Theoretical Glazing;     !- Outside Layer
+
+Material,
+  Gypsum 5/8in,           !- Name
+  MediumSmooth,            !- Roughness
+  0.016,                   !- Thickness {m}
+  0.1622,                  !- Conductivity {W/m-K}
+  800,                     !- Density {kg/m3}
+  1090,                    !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
+
+Material,
+  Stucco,           !- Name
+  Smooth,                  !- Roughness
+  0.01015,                 !- Thickness {m}
+  0.72,                    !- Conductivity {W/m-K}
+  1856,                    !- Density {kg/m3}
+  840,                     !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
+
+WindowMaterial:SimpleGlazingSystem,
+  Theoretical Glazing,     !- Name
+  3.1232254400908577,  !- U-Factor {W/m2-K}
+  0.4,  !- Solar Heat Gain Coefficient
+  0.4;  !- Visible Transmittance
+)IDF";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    bool FoundError = false;
+
+    state->dataHeatBal->ZoneIntGain.allocate(1);
+    createFacilityElectricPowerServiceObject(*state);
+    HeatBalanceManager::SetPreConstructionInputParameters(*state);
+    HeatBalanceManager::GetProjectControlData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    Material::GetMaterialData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    HeatBalanceManager::GetFrameAndDividerData(*state);
+
+    HeatBalanceManager::GetConstructData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    state->dataGlobal->DisplayExtraWarnings = true;
+    has_err_output(true); // clear any setup output before exercising GetBuildingData
+
+    HeatBalanceManager::GetBuildingData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+    state->dataGlobal->BeginSimFlag = true;
+    EXPECT_TRUE(state->dataSolarShading->GetInputFlag);
+    SolarShading::InitSolarCalculations(*state);
 
     std::string const error_string = delimited_string({
-        "   ** Warning ** ShadowCalculation specified Scheduled for the Shading Calculation Method but no schedule provided for WINDOW1NOTOK.",
-        "   **   ~~~   ** When Scheduled is selected for the Shading Calculation Method and no schedule is provided for a particular surface,",
-        "   **   ~~~   ** EnergyPlus will assume that the surface is not shaded.  Use SurfaceProperty:LocalEnvironment to specify a schedule",
-        "   **   ~~~   ** for sunlit fraction if this was not desired.  Otherwise, this surface will not be shaded at all.",
-        "   ** Warning ** No schedule was provided for WINDOW2NOTOK either.  See above error message for more details.",
+        "   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
+        "   **   ~~~   ** This shading surface will be ignored.",
+        "   ** Warning ** ShadowCalculation specified \"Scheduled\" for the Shading Calculation Method but no schedule provided for WALL1NOTOK.",
+        "   **   ~~~   ** When \"Scheduled\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,",
+        "   **   ~~~   ** EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use SurfaceProperty:LocalEnvironment to specify a schedule",
+        "   **   ~~~   ** for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.",
+        "   ** Warning ** No schedule was provided for WINDOW1NOTOK either. See above error message for more details.",
+        "   ** Warning ** DetermineShadowingCombinations: Surface=\"5BB552\" is a receiving surface and is non-convex.",
+        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
+        "   ** Severe  ** DetermineShadowingCombinations: Surface=\"5BB552\" is a casting surface and is non-convex.",
+        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"
     });
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 
-TEST_F(EnergyPlusFixture, SolarShadingTest_checkNotScheduledSurfacePresent)
-// Test of check to see if all surfaces do not have a sunlit schedule when shadow calculations are not set to "Scheduled"
+TEST_F(EnergyPlusFixture, SolarShadingTest_checkSurfaceExternalShadingSchedules_Imported)
+// Test of check to see if all surfaces have a sunlit schedule when shadow calculations are set to "Imported"
 {
-    auto &surfData = state->dataSurface;
-    surfData->TotSurfaces = 5;
-    surfData->Surface.allocate(surfData->TotSurfaces);
+    // Set up data for test. Shading surfaces are skipped so they should not report any errors.
+    // Some surfaces will be correctly defined while two other surfaces will not be correctly defined and will generate errors.
+    const fs::path scheduleFile = configured_source_directory() / "testfiles/SolarShadingTest_Shading_Data.csv";
 
-    // Set up data for test: three of five surfaces are non-shading and two are shading.  Shading surfaces
-    // are skipped so they should not report any errors.  One of the surfaces will be correctly defined while
-    // two surfaces will not be correctly defined and will generate errors.
-    surfData->Surface(1).Class = SurfaceClass::Wall;
-    surfData->Surface(1).SurfSchedExternalShadingFrac = true;
-    surfData->Surface(1).Name = "WALL1NOTOK";
-    surfData->Surface(2).Class = SurfaceClass::Roof;
-    surfData->Surface(2).SurfSchedExternalShadingFrac = true;
-    surfData->Surface(2).Name = "ROOF1NOTOK";
-    surfData->Surface(3).Class = SurfaceClass::Window;
-    surfData->Surface(3).SurfSchedExternalShadingFrac = false;
-    surfData->Surface(3).Name = "WINDOW1OK";
-    surfData->Surface(4).Class = SurfaceClass::Shading;
-    surfData->Surface(4).SurfSchedExternalShadingFrac = true;
-    surfData->Surface(4).Name = "SHADING1SKIPPED";
-    surfData->Surface(5).Class = SurfaceClass::Overhang;
-    surfData->Surface(5).SurfSchedExternalShadingFrac = false;
-    surfData->Surface(5).Name = "SHADING2SKIPPED";
+    std::string const idf_objects1 = R"IDF(
+RunPeriod,
+  Annual,                  !- Name
+  1,                       !- Begin Month
+  1,                       !- Begin Day of Month
+  ,                        !- Begin Year
+  12,                      !- End Month
+  31,                      !- End Day of Month
+  ,                        !- End Year
+  Sunday,                  !- Day of Week for Start Day
+  No,                      !- Use Weather File Holidays and Special Days
+  No,                      !- Use Weather File Daylight Saving Period
+  No,                      !- Apply Weekend Holiday Rule
+  Yes,                     !- Use Weather File Rain Indicators
+  Yes;                     !- Use Weather File Snow Indicators
 
-    checkNotScheduledOrImportedSurfacePresent(*state);
+ShadowCalculation,
+  Imported,               !- Shading Calculation Method
+  Periodic,                !- Shading Calculation Update Frequency Method
+  1,                       !- Shading Calculation Update Frequency
+  ,                        !- Maximum Figures in Shadow Overlap Calculations
+  ,                        !- Polygon Clipping Algorithm
+  ,                        !- Pixel Counting Resolution
+  ,                        !- Sky Diffuse Modeling Algorithm
+  No;                     !- Output External Shading Calculation Results
+)IDF";
+
+    std::string const idf_objects2 = delimited_string({
+        "Schedule:File:Shading,",
+        "  " + scheduleFile.string() + ";              !- Name of File",
+    });
+
+    std::string const idf_objects3 = R"IDF(
+Timestep,4;
+
+Building,
+  Non-convex,    !- Name
+  0,      !- North Axis {deg}
+  City,          !- Terrain
+  0.5,  !- Loads Convergence Tolerance Value
+  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior, !- Solar Distribution
+  25,  !- Maximum Number of Warmup Days
+  2;  !- Minimum Number of Warmup Days
+
+GlobalGeometryRules,
+    UpperLeftCorner,          !- Starting Vertex Position
+    Counterclockwise,         !- Vertex Entry Direction
+    Relative;                 !- Coordinate System
+
+Zone,
+    Zone A,                   !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0,                        !- Z Origin
+    ,                         !- Type
+    1;                        !- Multiplier
+
+Schedule:Constant,OnSch,,1.0;
+
+BuildingSurface:Detailed,
+    ZN001:FLR001,                   !- Name
+    Floor,                    !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
+    0, 0, 0,                        !- Vertex 3 Zcoordinate
+    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    WALL1NOTOK,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    6,                        !- Number of Vertices
+    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
+    0, 0, 0,                        !- Vertex 3 Zcoordinate
+    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
+    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
+    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+
+BuildingSurface:Detailed,
+    Zn001:Wall001,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    6,                        !- Number of Vertices
+    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
+    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
+    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
+    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+
+BuildingSurface:Detailed,
+    ZN001:WALL002,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
+    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
+    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    ZN001:WALL003,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
+    0, 0, 0,                        !- Vertex 2 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
+    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    ZN001:WALL004,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    ZN001:WALL005,                   !- Name
+    Roof,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
+    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    ZN001:WALL006,                   !- Name
+    Roof,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
+    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
+    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    WINDOW1NOTOK,                   !- Name
+    Window,                   !- Surface Type
+    Exterior Window,          !- Construction Name
+    ZN001:WALL004,                   !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    ,                         !- Multiplier
+    4,                        !- Number of Vertices
+    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
+    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
+    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
+    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+
+Shading:Site:Detailed,
+  EAST SIDE TREE,          !- Name
+  OnSch,  !- Transmittance Schedule Name
+  3,                       !- Number of Vertices
+  33.52800,10.66800,10.05800,  !- X,Y,Z ==> Vertex 1 {m}
+  33.52800,13.71600,0.9140000,  !- X,Y,Z ==> Vertex 2 {m}
+  33.52800,4.572000,0.9140000;  !- X,Y,Z ==> Vertex 3 {m}
+
+Material,
+  Wall Continuous Insulation,  !- Name
+  MediumSmooth,               !- Roughness
+  0.038037600000000005,  !- Thickness {m}
+  0.0288,  !- Conductivity {W/m-K}
+  32,                      !- Density {kg/m3}
+  1465;                     !- Specific Heat {J/kg-K}
+
+Material,
+  Wall Cavity Effective Insulation,  !- Name
+  VeryRough,               !- Roughness
+  0.08889999999999999,  !- Thickness {m}
+  0.08389829384297165,  !- Conductivity {W/m-K}
+  8.17,                      !- Density {kg/m3}
+  837;                     !- Specific Heat {J/kg-K}
+
+Construction,
+  Exterior Wall,           !- Name
+  Stucco,  !- Layer
+  Wall Continuous Insulation,  !- Layer
+  Wall Cavity Effective Insulation,  !- Layer
+  Gypsum 5/8in;  !- Layer
+
+Construction,
+  Exterior Window,         !- Name
+  Theoretical Glazing;     !- Outside Layer
+
+Material,
+  Gypsum 5/8in,           !- Name
+  MediumSmooth,            !- Roughness
+  0.016,                   !- Thickness {m}
+  0.1622,                  !- Conductivity {W/m-K}
+  800,                     !- Density {kg/m3}
+  1090,                    !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
+
+Material,
+  Stucco,           !- Name
+  Smooth,                  !- Roughness
+  0.01015,                 !- Thickness {m}
+  0.72,                    !- Conductivity {W/m-K}
+  1856,                    !- Density {kg/m3}
+  840,                     !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
+
+WindowMaterial:SimpleGlazingSystem,
+  Theoretical Glazing,     !- Name
+  3.1232254400908577,  !- U-Factor {W/m2-K}
+  0.4,  !- Solar Heat Gain Coefficient
+  0.4;  !- Visible Transmittance
+)IDF";
+
+    std::string const idf_objects = idf_objects1 + idf_objects2 + idf_objects3;
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    auto &s_sched = state->dataSched;
+    auto &s_glob = state->dataGlobal;
+
+    s_glob->TimeStepsInHour = 4;    // must initialize this to get schedules initialized
+    s_glob->MinutesInTimeStep = 15; // must initialize this to get schedules initialized
+    s_glob->TimeStepZone = 0.25;
+    s_glob->TimeStepZoneSec = s_glob->TimeStepZone * Constant::rSecsInHour;
+    state->dataEnvrn->CurrentYearIsLeapYear = false;
+
+    state->init_state(*state);
+
+    bool FoundError = false;
+
+    state->dataHeatBal->ZoneIntGain.allocate(1);
+    createFacilityElectricPowerServiceObject(*state);
+    HeatBalanceManager::SetPreConstructionInputParameters(*state);
+    HeatBalanceManager::GetProjectControlData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    Material::GetMaterialData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    HeatBalanceManager::GetFrameAndDividerData(*state);
+
+    HeatBalanceManager::GetConstructData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    state->dataGlobal->DisplayExtraWarnings = true;
+    has_err_output(true); // clear any setup output before exercising GetBuildingData
+
+    EXPECT_TRUE(s_sched->ScheduleFileShadingProcessed);
+    EXPECT_EQ(116, s_sched->schedules.size());  // AlwaysOn, AlwaysOff, OnSch, plus file
+    
+    auto &[fPath, root] = *(s_sched->UniqueProcessedExternalFiles.begin());
+    EXPECT_EQ(scheduleFile, fPath);
+    EXPECT_EQ(114, root["header"].size());
+    
+    HeatBalanceManager::GetBuildingData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+    state->dataGlobal->BeginSimFlag = true;
+    EXPECT_TRUE(state->dataSolarShading->GetInputFlag);
+    SolarShading::InitSolarCalculations(*state);
 
     std::string const error_string = delimited_string({
-        "   ** Warning ** ShadowCalculation did not specify Scheduled or Imported for the Shading Calculation Method but schedule provided for WALL1NOTOK.",
-        "   ** Warning ** Schedule was also provided for ROOF1NOTOK.  See above error message for more details.",
+        "   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
+        "   **   ~~~   ** This shading surface will be ignored.",
+        "   ** Warning ** ShadowCalculation specified \"Imported\" for the Shading Calculation Method but no schedule provided for WALL1NOTOK.",
+        "   **   ~~~   ** When \"Imported\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,",
+        "   **   ~~~   ** EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use Schedule:File:Shading to specify a schedule",
+        "   **   ~~~   ** for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.",
+        "   ** Warning ** No schedule was provided for WINDOW1NOTOK either. See above error message for more details.",
+        "   ** Warning ** DetermineShadowingCombinations: Surface=\"ZN001:WALL001\" is a receiving surface and is non-convex.",
+        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
+        "   ** Severe  ** DetermineShadowingCombinations: Surface=\"ZN001:WALL001\" is a casting surface and is non-convex.",
+        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"
     });
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 
-TEST_F(EnergyPlusFixture, SolarShadingTest_GetShadowingInputImportedDoesNotWarnForPresetExternalSunlitSchedule)
+TEST_F(EnergyPlusFixture, SolarShadingTest_checkSurfaceExternalShadingSchedules_PolygonClipping)
+// Test of check to see if all surfaces do not have a sunlit schedule when shadow calculations are not set to "Scheduled" or "Imported"
 {
-    state->dataSysVars->shadingMethod = ShadingMethod::Imported;
-    state->dataSurface->TotSurfaces = 1;
-    state->dataSurface->Surface.allocate(1);
+    // Set up data for test. Shading surfaces are skipped so they should not report any errors.
+    // Some surfaces will be correctly defined while two other surfaces will not be correctly defined and will generate errors.
+    std::string const idf_objects = R"IDF(
+RunPeriod,
+  Annual,                  !- Name
+  1,                       !- Begin Month
+  1,                       !- Begin Day of Month
+  ,                        !- Begin Year
+  12,                      !- End Month
+  31,                      !- End Day of Month
+  ,                        !- End Year
+  Sunday,                  !- Day of Week for Start Day
+  No,                      !- Use Weather File Holidays and Special Days
+  No,                      !- Use Weather File Daylight Saving Period
+  No,                      !- Apply Weekend Holiday Rule
+  Yes,                     !- Use Weather File Rain Indicators
+  Yes;                     !- Use Weather File Snow Indicators
 
-    auto &surface = state->dataSurface->Surface(1);
-    surface.Name = "WALL1";
-    surface.Class = SurfaceClass::Wall;
-    surface.SurfSchedExternalShadingFrac = true;
+ShadowCalculation,
+  PolygonClipping,               !- Shading Calculation Method
+  Periodic,                      !- Shading Calculation Update Frequency Method
+  ,                            !- Shading Calculation Update Frequency
+  ,                         !- Maximum Figures in Shadow Overlap Calculations
+  ;          !- Polygon Clipping Algorithm
 
-    has_err_output(true);
-    checkNotScheduledOrImportedSurfacePresent(*state);
-    ASSERT_FALSE(has_err_output(false));
+Timestep,4;
+
+Building,
+  Non-convex,    !- Name
+  0,      !- North Axis {deg}
+  City,          !- Terrain
+  0.5,  !- Loads Convergence Tolerance Value
+  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior, !- Solar Distribution
+  25,  !- Maximum Number of Warmup Days
+  2;  !- Minimum Number of Warmup Days
+
+GlobalGeometryRules,
+    UpperLeftCorner,          !- Starting Vertex Position
+    Counterclockwise,         !- Vertex Entry Direction
+    Relative;                 !- Coordinate System
+
+Zone,
+    Zone A,                   !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0,                        !- Z Origin
+    ,                         !- Type
+    1;                        !- Multiplier
+
+Schedule:Constant,OnSch,,1.0;
+
+BuildingSurface:Detailed,
+    A48756,                   !- Name
+    Floor,                    !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
+    0, 0, 0,                        !- Vertex 3 Zcoordinate
+    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    WALL1NOTOK,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    6,                        !- Number of Vertices
+    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
+    0, 0, 0,                        !- Vertex 3 Zcoordinate
+    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
+    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
+    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:WALL1NOTOK,    !- Name
+  WALL1NOTOK,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+BuildingSurface:Detailed,
+    5BB552,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    6,                        !- Number of Vertices
+    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
+    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
+    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
+    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+
+BuildingSurface:Detailed,
+    682F88,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
+    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
+    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    C292CF,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
+    0, 0, 0,                        !- Vertex 2 Zcoordinate
+    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
+    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    319080,                   !- Name
+    Wall,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    866E33,                   !- Name
+    Roof,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
+    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
+    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
+    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    32CB6F,                   !- Name
+    Roof,                     !- Surface Type
+    Exterior Wall,            !- Construction Name
+    Zone A,                   !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
+    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
+    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
+    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    WINDOW1NOTOK,                   !- Name
+    Window,                   !- Surface Type
+    Exterior Window,          !- Construction Name
+    319080,                   !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    ,                         !- Multiplier
+    4,                        !- Number of Vertices
+    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
+    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
+    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
+    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+
+SurfaceProperty:LocalEnvironment,
+  LocEnv:WINDOW1NOTOK,    !- Name
+  WINDOW1NOTOK,           !- Exterior Surface Name
+  OnSch,  !- Sunlit Fraction Schedule Name
+  ,                        !- Surrounding Surfaces Object Name
+  ;                        !- Outdoor Air Node Name
+
+Shading:Site:Detailed,
+  EAST SIDE TREE,          !- Name
+  OnSch,  !- Transmittance Schedule Name
+  3,                       !- Number of Vertices
+  33.52800,10.66800,10.05800,  !- X,Y,Z ==> Vertex 1 {m}
+  33.52800,13.71600,0.9140000,  !- X,Y,Z ==> Vertex 2 {m}
+  33.52800,4.572000,0.9140000;  !- X,Y,Z ==> Vertex 3 {m}
+
+Material,
+  Wall Continuous Insulation,  !- Name
+  MediumSmooth,               !- Roughness
+  0.038037600000000005,  !- Thickness {m}
+  0.0288,  !- Conductivity {W/m-K}
+  32,                      !- Density {kg/m3}
+  1465;                     !- Specific Heat {J/kg-K}
+
+Material,
+  Wall Cavity Effective Insulation,  !- Name
+  VeryRough,               !- Roughness
+  0.08889999999999999,  !- Thickness {m}
+  0.08389829384297165,  !- Conductivity {W/m-K}
+  8.17,                      !- Density {kg/m3}
+  837;                     !- Specific Heat {J/kg-K}
+
+Construction,
+  Exterior Wall,           !- Name
+  Stucco,  !- Layer
+  Wall Continuous Insulation,  !- Layer
+  Wall Cavity Effective Insulation,  !- Layer
+  Gypsum 5/8in;  !- Layer
+
+Construction,
+  Exterior Window,         !- Name
+  Theoretical Glazing;     !- Outside Layer
+
+Material,
+  Gypsum 5/8in,           !- Name
+  MediumSmooth,            !- Roughness
+  0.016,                   !- Thickness {m}
+  0.1622,                  !- Conductivity {W/m-K}
+  800,                     !- Density {kg/m3}
+  1090,                    !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
+
+Material,
+  Stucco,           !- Name
+  Smooth,                  !- Roughness
+  0.01015,                 !- Thickness {m}
+  0.72,                    !- Conductivity {W/m-K}
+  1856,                    !- Density {kg/m3}
+  840,                     !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
+
+WindowMaterial:SimpleGlazingSystem,
+  Theoretical Glazing,     !- Name
+  3.1232254400908577,  !- U-Factor {W/m2-K}
+  0.4,  !- Solar Heat Gain Coefficient
+  0.4;  !- Visible Transmittance
+)IDF";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    bool FoundError = false;
+
+    state->dataHeatBal->ZoneIntGain.allocate(1);
+    createFacilityElectricPowerServiceObject(*state);
+    HeatBalanceManager::SetPreConstructionInputParameters(*state);
+    HeatBalanceManager::GetProjectControlData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    Material::GetMaterialData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    HeatBalanceManager::GetFrameAndDividerData(*state);
+
+    HeatBalanceManager::GetConstructData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+
+    state->dataGlobal->DisplayExtraWarnings = true;
+    has_err_output(true); // clear any setup output before exercising GetBuildingData
+
+    HeatBalanceManager::GetBuildingData(*state, FoundError);
+    ASSERT_FALSE(FoundError);
+    state->dataGlobal->BeginSimFlag = true;
+    EXPECT_TRUE(state->dataSolarShading->GetInputFlag);
+    SolarShading::InitSolarCalculations(*state);
+
+    std::string const error_string = delimited_string({
+        "   ** Warning ** Shading Surface=\"EAST SIDE TREE\", Transmittance Schedule Name=\"ONSCH\", is always transparent.",
+        "   **   ~~~   ** This shading surface will be ignored.",
+        "   ** Warning ** ShadowCalculation did not specify \"Scheduled\" or \"Imported\" for the Shading Calculation Method but schedule provided for "
+        "WALL1NOTOK.",
+        "   ** Warning ** Schedule was also provided for WINDOW1NOTOK. See above error message for more details.",
+        "   ** Warning ** DetermineShadowingCombinations: Surface=\"5BB552\" is a receiving surface and is non-convex.",
+        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details",
+        "   ** Severe  ** DetermineShadowingCombinations: Surface=\"5BB552\" is a casting surface and is non-convex.",
+        "   **   ~~~   ** ...Shadowing values may be inaccurate. Check .shd report file for more surface shading details"
+    });
+    EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 
 TEST_F(EnergyPlusFixture, SolarShadingTest_CalcBeamSolarOnWinRevealSurface)
