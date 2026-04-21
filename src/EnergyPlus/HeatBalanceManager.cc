@@ -1822,15 +1822,6 @@ namespace HeatBalanceManager {
         // SetupZoneGeometry includes the call to GetSurfaceData for
         // populating surfData = state.dataSurface.
         SurfaceGeometry::SetupZoneGeometry(state, ErrorsFound);
-
-        // Surface schedule consistency checks need surfaces to be populated, but
-        // Imported shading can set external shading schedule in the same
-        // way that sunlit fraction schedule can.
-        if (state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Scheduled) {
-            SolarShading::checkScheduledSurfacePresent(state);
-        } else if (state.dataSysVars->shadingMethod != DataSystemVariables::ShadingMethod::Imported) {
-            SolarShading::checkNotScheduledOrImportedSurfacePresent(state);
-        }
     }
 
     void GetZoneData(EnergyPlusData &state, bool &ErrorsFound) // If errors found in input
