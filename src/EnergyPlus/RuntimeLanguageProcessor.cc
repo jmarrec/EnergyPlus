@@ -458,6 +458,16 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
                 VariableNum = NewEMSVariable(state, Variable, StackNum);
                 // Check for invalid variable name
 
+                // issue #10944: static reference check — if this SET targets an actuator's ErlVariable,
+                // mark the actuator as referenced. Catches typos at parse time; avoids false positives
+                // for conditional NULL-branch patterns that never fire during the run.
+                for (int aUsed = 1; aUsed <= state.dataRuntimeLang->numActuatorsUsed; ++aUsed) {
+                    if (state.dataRuntimeLang->EMSActuatorUsed(aUsed).ErlVariableNum == VariableNum) {
+                        state.dataRuntimeLang->EMSActuatorUsed(aUsed).wasActuated = true;
+                        break;
+                    }
+                }
+
                 if (Pos + 1 < Remainder.length()) {
                     Expression = stripped(Remainder.substr(Pos + 1));
                 } else {
