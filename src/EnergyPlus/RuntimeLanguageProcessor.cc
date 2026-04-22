@@ -1256,7 +1256,7 @@ void ParseExpression(EnergyPlusData &state,
                     ShowContinueError(state, "...Use parenthesis to wrap appropriate variables. For example, X / ( -Y ).");
                     ++NumErrors;
                     DivFound = false;
-                } else if (OperatorProcessing && (NextChar == '-')) {
+                } else if (OperatorProcessing) {
                     // if operator was deterined last pass and this character is a -, then insert a 0 before the minus and treat as subtraction
                     // example: change "Var == -1" to "Var == 0-1"
                     OperatorProcessing = false;
@@ -1620,7 +1620,7 @@ int ProcessTokens(
                         state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(5).Number = Token(Pos + 5).Number;
                         state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(5).Expression = Token(Pos + 5).Expression;
                         state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(5).Variable = Token(Pos + 5).Variable;
-                        if ((NumOperands == 5) && (NumTokens - 6 > 0)) { // too many tokens for this non-binary operator
+                        if (NumTokens - 6 > 0) { // too many tokens for this non-binary operator
                             ShowFatalError(state, "EMS error parsing tokens, too many for  built-in function");
                         }
                     }
