@@ -4718,8 +4718,8 @@ namespace UnitarySystems {
                     // **** How to get this info ****
                     // UnitarySystem( UnitarySysNum ).DesignHeatingCapacity =
                     //     GetWtoAHPCoilCapacity(CoolingCoilType, this->m_CoolingCoilName,  errFlag );
-                    HeatingCoilInletNode = thisHeatCoil.Air(1).InletNodeNum;
-                    HeatingCoilOutletNode = thisHeatCoil.Air(1).OutletNodeNum;
+                    HeatingCoilInletNode = thisHeatCoil.Air[0].InletNodeNum;
+                    HeatingCoilOutletNode = thisHeatCoil.Air[0].OutletNodeNum;
                 }
             }
 
@@ -5396,8 +5396,8 @@ namespace UnitarySystems {
                         // **** How to get this info ****
                         //  UnitarySystem( UnitarySysNum ).DesignCoolingCapacity =
                         // GetWtoAHPCoilCapacity(CoolingCoilType, this->m_CoolingCoilName, errFlag );
-                        CoolingCoilInletNode = thisCoolCoil.Air(1).InletNodeNum;
-                        CoolingCoilOutletNode = thisCoolCoil.Air(1).OutletNodeNum;
+                        CoolingCoilInletNode = thisCoolCoil.Air[0].InletNodeNum;
+                        CoolingCoilOutletNode = thisCoolCoil.Air[0].OutletNodeNum;
                     }
                 }
 
@@ -5714,9 +5714,9 @@ namespace UnitarySystems {
                         errFlag = false;
                     } else {
                         auto const &thisSuppCoil = state.dataUserDefinedComponents->UserCoil(this->m_SuppHeatCoilIndex);
-                        SupHeatCoilInletNode = thisSuppCoil.Air(1).InletNodeNum;
+                        SupHeatCoilInletNode = thisSuppCoil.Air[0].InletNodeNum;
                         this->m_SuppCoilAirInletNode = SupHeatCoilInletNode;
-                        SupHeatCoilOutletNode = thisSuppCoil.Air(1).OutletNodeNum;
+                        SupHeatCoilOutletNode = thisSuppCoil.Air[0].OutletNodeNum;
                         this->SuppCoilOutletNodeNum = SupHeatCoilOutletNode;
                     }
                 }
