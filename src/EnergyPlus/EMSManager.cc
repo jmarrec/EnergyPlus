@@ -451,10 +451,19 @@ namespace EMSManager {
             if ((ErlVariableNum > 0) && (state.dataRuntimeLang->Sensor(SensorNum).Index > -1)) {
                 if (state.dataRuntimeLang->Sensor(SensorNum).sched == nullptr) { // not a schedule so get from output processor
 
-                    state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value = RuntimeLanguageProcessor::SetErlValueNumber(
-                        GetInternalVariableValue(
-                            state, state.dataRuntimeLang->Sensor(SensorNum).VariableType, state.dataRuntimeLang->Sensor(SensorNum).Index),
-                        state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
+                    Real64 sensorValue;
+                    if (state.dataRuntimeLang->Sensor(SensorNum).VariableType == OutputProcessor::VariableType::Meter) {
+                        // Issue #7563: for meter sensors, sum live source-var contributions instead of reading
+                        // meter->CurTSValue (refreshed inside UpdateDataandReport, i.e. AFTER most EMS calling points).
+                        sensorValue =
+                            GetInstantMeterValue(state, state.dataRuntimeLang->Sensor(SensorNum).Index, OutputProcessor::TimeStepType::Zone) +
+                            GetInstantMeterValue(state, state.dataRuntimeLang->Sensor(SensorNum).Index, OutputProcessor::TimeStepType::System);
+                    } else {
+                        sensorValue = GetInternalVariableValue(
+                            state, state.dataRuntimeLang->Sensor(SensorNum).VariableType, state.dataRuntimeLang->Sensor(SensorNum).Index);
+                    }
+                    state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value =
+                        RuntimeLanguageProcessor::SetErlValueNumber(sensorValue, state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
                 } else { // schedule so use schedule service
 
                     state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value = RuntimeLanguageProcessor::SetErlValueNumber(
