@@ -9881,8 +9881,6 @@ void SetAverageAirFlow(EnergyPlusData &state,
         // could there be a reason for air loops to use inlet node flow? Possibly when VAV TUs used?
         if (!vrfTu.isInOASys) {
             state.dataLoopNodes->Node(InletNode).MassFlowRate = AverageUnitMassFlow;
-        }
-        if (!vrfTu.isInOASys) {
             state.dataLoopNodes->Node(InletNode).MassFlowRateMaxAvail = AverageUnitMassFlow;
         }
         if (OutsideAirNode > 0) {

@@ -3415,9 +3415,7 @@ namespace WindowComplexManager {
             // Save hcv for use in divider calc with interior or exterior shade (see CalcWinFrameAndDividerTemps)
             if (ShadeFlag == WinShadingType::IntShade) {
                 state.dataSurface->SurfWinConvCoeffWithShade(SurfNum) = 0.0;
-            }
 
-            if (ShadeFlag == WinShadingType::IntShade) {
                 auto const &surfShade = state.dataSurface->surfShades(SurfNum);
                 SurfInsideTemp = theta(2 * ngllayer + 2) - Constant::Kelvin;
 
