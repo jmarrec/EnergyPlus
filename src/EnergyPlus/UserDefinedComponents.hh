@@ -64,6 +64,8 @@ namespace EnergyPlus {
 // Forward declarations
 struct EnergyPlusData;
 
+int constexpr primaryConnIdx = 0;
+
 namespace UserDefinedComponents {
 
     struct PlantConnectionStruct
@@ -217,7 +219,7 @@ namespace UserDefinedComponents {
         int simCallbackIndex = -1;  // If API callbacks are used to simulate this, this defines the location in the vector
         int NumAirConnections;      // count of how many air connections there are
         bool PlantIsConnected;
-        std::vector<AirConnectionStruct> Air;
+        std::vector<AirConnectionStruct> AirConnections;
         PlantConnectionStruct Loop;
         WaterUseTankConnectionStruct Water;
         ZoneInternalGainsStruct Zone;

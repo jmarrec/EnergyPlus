@@ -350,7 +350,7 @@ namespace UserDefinedComponents {
         state.dataUserDefinedComponents->UserCoil(CompNum).report(state);
 
         if (AirLoopNum != -1) { // IF the system is not an equipment of outdoor air unit
-            auto const &primaryAirConnection = state.dataUserDefinedComponents->UserCoil(CompNum).Air[0];
+            auto const &primaryAirConnection = state.dataUserDefinedComponents->UserCoil(CompNum).AirConnections[primaryConnIdx];
             // determine if heating or cooling on primary air stream
             HeatingActive = state.dataLoopNodes->Node(primaryAirConnection.InletNodeNum).Temp <
                             state.dataLoopNodes->Node(primaryAirConnection.OutletNodeNum).Temp;
@@ -1143,12 +1143,12 @@ namespace UserDefinedComponents {
                 int NumAirConnections = std::floor(rNumericArgs(1));
                 auto &userCoil = state.dataUserDefinedComponents->UserCoil(CompLoop);
                 if ((NumAirConnections >= 1) && (NumAirConnections <= 2)) {
-                    userCoil.Air.resize(NumAirConnections);
+                    userCoil.AirConnections.resize(NumAirConnections);
                     userCoil.NumAirConnections = NumAirConnections;
                     for (int connectionIndex = 0; connectionIndex < NumAirConnections; ++connectionIndex) {
                         int const connectionNum = connectionIndex + 1;
                         int aArgCount = connectionIndex * 2 + 4;
-                        auto &airConnection = userCoil.Air[connectionIndex];
+                        auto &airConnection = userCoil.AirConnections[connectionIndex];
                         airConnection.InletNodeNum = Node::GetOnlySingleNode(state,
                                                                              cAlphaArgs(aArgCount),
                                                                              ErrorsFound,
@@ -2518,7 +2518,7 @@ namespace UserDefinedComponents {
 
         // fill internal variable targets
         for (int loop = 0; loop < this->NumAirConnections; ++loop) {
-            auto &airConnection = this->Air[loop];
+            auto &airConnection = this->AirConnections[loop];
             airConnection.InletRho = Psychrometrics::PsyRhoAirFnPbTdbW(state,
                                                                        state.dataEnvrn->OutBaroPress,
                                                                        state.dataLoopNodes->Node(airConnection.InletNodeNum).Temp,
@@ -2800,7 +2800,7 @@ namespace UserDefinedComponents {
         // report model outputs
 
         for (int loop = 0; loop < this->NumAirConnections; ++loop) {
-            auto &airConnection = this->Air[loop];
+            auto &airConnection = this->AirConnections[loop];
             if (airConnection.OutletNodeNum > 0) {
                 state.dataLoopNodes->Node(airConnection.OutletNodeNum).Temp = airConnection.OutletTemp;
                 state.dataLoopNodes->Node(airConnection.OutletNodeNum).HumRat = airConnection.OutletHumRat;
@@ -3005,7 +3005,7 @@ namespace UserDefinedComponents {
             ErrorsFound = true;
             CoilAirInletNode = 0;
         } else {
-            CoilAirInletNode = state.dataUserDefinedComponents->UserCoil(CoilIndex).Air[0].InletNodeNum;
+            CoilAirInletNode = state.dataUserDefinedComponents->UserCoil(CoilIndex).AirConnections[primaryConnIdx].InletNodeNum;
         }
     }
 
@@ -3042,7 +3042,7 @@ namespace UserDefinedComponents {
             ErrorsFound = true;
             CoilAirOutletNode = 0;
         } else {
-            CoilAirOutletNode = state.dataUserDefinedComponents->UserCoil(CoilIndex).Air[0].OutletNodeNum;
+            CoilAirOutletNode = state.dataUserDefinedComponents->UserCoil(CoilIndex).AirConnections[primaryConnIdx].OutletNodeNum;
         }
     }
 

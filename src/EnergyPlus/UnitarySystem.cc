@@ -4718,8 +4718,8 @@ namespace UnitarySystems {
                     // **** How to get this info ****
                     // UnitarySystem( UnitarySysNum ).DesignHeatingCapacity =
                     //     GetWtoAHPCoilCapacity(CoolingCoilType, this->m_CoolingCoilName,  errFlag );
-                    HeatingCoilInletNode = thisHeatCoil.Air[0].InletNodeNum;
-                    HeatingCoilOutletNode = thisHeatCoil.Air[0].OutletNodeNum;
+                    HeatingCoilInletNode = thisHeatCoil.AirConnections[primaryConnIdx].InletNodeNum;
+                    HeatingCoilOutletNode = thisHeatCoil.AirConnections[primaryConnIdx].OutletNodeNum;
                 }
             }
 
@@ -5396,8 +5396,8 @@ namespace UnitarySystems {
                         // **** How to get this info ****
                         //  UnitarySystem( UnitarySysNum ).DesignCoolingCapacity =
                         // GetWtoAHPCoilCapacity(CoolingCoilType, this->m_CoolingCoilName, errFlag );
-                        CoolingCoilInletNode = thisCoolCoil.Air[0].InletNodeNum;
-                        CoolingCoilOutletNode = thisCoolCoil.Air[0].OutletNodeNum;
+                        CoolingCoilInletNode = thisCoolCoil.AirConnections[primaryConnIdx].InletNodeNum;
+                        CoolingCoilOutletNode = thisCoolCoil.AirConnections[primaryConnIdx].OutletNodeNum;
                     }
                 }
 
@@ -5432,9 +5432,8 @@ namespace UnitarySystems {
                     }
                 }
 
-            } else { // IF(.NOT. lAlphaBlanks(16))THEN
+            } else {
                 ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, thisObjectName));
-                // ShowContinueError(state, format("Illegal {} = {}", cAlphaFields(iCoolingCoilTypeAlphaNum), Alphas(iCoolingCoilTypeAlphaNum)));
                 errorsFound = true;
             }
 
@@ -5714,9 +5713,9 @@ namespace UnitarySystems {
                         errFlag = false;
                     } else {
                         auto const &thisSuppCoil = state.dataUserDefinedComponents->UserCoil(this->m_SuppHeatCoilIndex);
-                        SupHeatCoilInletNode = thisSuppCoil.Air[0].InletNodeNum;
+                        SupHeatCoilInletNode = thisSuppCoil.AirConnections[primaryConnIdx].InletNodeNum;
                         this->m_SuppCoilAirInletNode = SupHeatCoilInletNode;
-                        SupHeatCoilOutletNode = thisSuppCoil.Air[0].OutletNodeNum;
+                        SupHeatCoilOutletNode = thisSuppCoil.AirConnections[primaryConnIdx].OutletNodeNum;
                         this->SuppCoilOutletNodeNum = SupHeatCoilOutletNode;
                     }
                 }
