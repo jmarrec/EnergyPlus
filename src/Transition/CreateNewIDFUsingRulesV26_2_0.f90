@@ -411,8 +411,13 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 OutArgs(2) = TRIM(InArgs(1)) // ' Definition'
                 OutArgs(3) = InArgs(2)
                 OutArgs(4) = InArgs(3)
-                OutArgs(5) = InArgs(11)
-                CurArgs = 5
+                ! Optional End Use Subcategory
+                IF (CurArgs >= 11) THEN
+                  OutArgs(5) = InArgs(11)
+                  CurArgs = 5
+                ELSE
+                  CurArgs = 4
+                END IF
                 CALL WriteOutIDFLines(DifLfn,'ElectricEquipment',CurArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 ! Create the new ElectricEquipment:Definition object:
