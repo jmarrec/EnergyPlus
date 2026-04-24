@@ -16955,20 +16955,26 @@ namespace UnitarySystems {
         } else {
             SATempTarget = par13_SATempTarget;
         }
-        bool iterateOnAirOnly = (par16_IterationMethod > 1.0);
+        bool modulateAirFlow = (par16_IterationMethod > 0.0);
 
         bool HXUnitOn = true;
 
-        if (iterateOnAirOnly) {
+        if (modulateAirFlow) {
+            // in Region 2
 
             // set air flow rate bounded by low speed and high speed air flow rates
-            state.dataLoopNodes->Node(AirControlNode).MassFlowRate = airMdot * (lowSpeedRatio + (PartLoadRatio * (1.0 - lowSpeedRatio)));
+            state.dataLoopNodes->Node(AirControlNode).MassFlowRate = systemMaxAirFlowRate * (lowSpeedRatio + (PartLoadRatio * (1.0 - lowSpeedRatio)));
             // FanPartLoadRatio is used to pass info over to function SetAverageAirFlow since air and coil PLR are disassociated in the model
             // FanPartLoadRatio is a report variable that is updated (overwritten) in ReportUnitarySystem
             thisSys.FanPartLoadRatio = PartLoadRatio;
             //            if( WaterControlNode > 0 ) Node( WaterControlNode ).MassFlowRate = highWaterMdot;
+            if (WaterControlNode > 0) {
+                Real64 waterMdot = highWaterMdot * PartLoadRatio;
+                state.dataLoopNodes->Node(WaterControlNode).MassFlowRate = waterMdot;
+            }
 
         } else {
+            // in Region 1 or 3 where air flow is constant and water flow or compressor is modulated to meet the load
 
             state.dataLoopNodes->Node(AirControlNode).MassFlowRate = airMdot;
             if (lowSpeedRatio != 1.0) {
