@@ -77,9 +77,22 @@ namespace InternalHeatGains {
         EquipmentLevel,
         WattsPerArea,
         WattsPerPerson,
-        PowerPerArea,
+        PowerPerArea, // TODO: remove, same as WattsPerArea really! (GasEquipment/OtherEquipment only)
         PowerPerPerson,
         Num
+    };
+
+    struct ZoneEquipDefinitionData // Electric, Gas, Other Equipment, CO2
+    {
+        // Members
+        std::string Name;                                                 // Definition object name
+        DesignLevelMethod designLevelMethod = DesignLevelMethod::Invalid; // Method used to determine design level
+        Real64 levelValue = 0.0;      // design level for internal gain definition (read based on levelMethod, could be W, people, W/m2, etc.)
+        bool levelIsBlank = false;    // True if design level field is blank in input
+        std::string levelField;       // Name of the field used to determine the design level (used for error messages)
+        Real64 FractionLatent = 0.0;  // Percentage (fraction 0.0-1.0) of sensible heat gain that is latent
+        Real64 FractionRadiant = 0.0; // Percentage (fraction 0.0-1.0) of sensible heat gain that is radiant
+        Real64 FractionLost = 0.0;    // Percentage (fraction 0.0-1.0) of sensible heat gain that is lost
     };
 
     struct GlobalInternalGainMiscObject
@@ -97,6 +110,8 @@ namespace InternalHeatGains {
 
     void ManageInternalHeatGains(EnergyPlusData &state,
                                  ObjexxFCL::Optional_bool_const InitOnly = _); // when true, just calls the get input, if appropriate and returns.
+
+    std::vector<ZoneEquipDefinitionData> GetSpaceLoadDefinition(EnergyPlusData &state, const std::string &objectType);
 
     void GetInternalHeatGainsInput(EnergyPlusData &state);
 

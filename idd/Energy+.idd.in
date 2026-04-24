@@ -22460,22 +22460,41 @@ ElectricEquipment,
    \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
    \memo then this definition applies to all applicable spaces, and each instance will
    \memo be named with the Space Name plus this Object Name.
-   \min-fields 10
+   \min-fields 4
   A1 , \field Name
        \required-field
        \type alpha
        \reference ElectricEquipmentNames
-  A2 , \field Zone or ZoneList or Space or SpaceList Name
+       \reference SpaceItemNames
+       \reference SpaceLoadNames
+       \reference SpaceComponentInstanceNames
+  A2 , \field Electric Equipment Definition Name
+       \type object-list
+       \required-field
+       \object-list ElectricEquipmentDefinitionNames
+  A3 , \field Zone or ZoneList or Space or SpaceList Name
        \required-field
        \type object-list
        \object-list ZoneAndZoneListNames
        \object-list SpaceAndSpaceListNames
-  A3 , \field Schedule Name
+  A4 , \field Schedule Name
        \required-field
        \type object-list
        \object-list ScheduleNames
        \note units in schedule should be fraction applied to design level of electric equipment, generally (0.0 - 1.0)
-  A4 , \field Design Level Calculation Method
+  A5 ; \field End-Use Subcategory
+       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
+       \type alpha
+       \retaincase
+       \default General
+
+ElectricEquipment:Definition,
+  A1 , \field Name
+       \type alpha
+       \required-field
+       \reference ElectricEquipmentDefinitionNames
+       \reference SpaceComponentDefinitionNames
+  A2 , \field Design Level Calculation Method
        \note The entered calculation method is used to create the maximum amount of electric equipment
        \note for this set of attributes
        \note Choices: EquipmentLevel => Equipment Level -- simply enter watts of equipment
@@ -22511,16 +22530,11 @@ ElectricEquipment,
        \minimum 0.0
        \maximum 1.0
        \default 0
-  N6 , \field Fraction Lost
+  N6 ; \field Fraction Lost
        \type real
        \minimum 0.0
        \maximum 1.0
        \default 0
-  A5 ; \field End-Use Subcategory
-       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
-       \type alpha
-       \retaincase
-       \default General
 
 GasEquipment,
    \memo Sets internal gains and contaminant rates for gas equipment in the zone.

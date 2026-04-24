@@ -397,6 +397,48 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 
               ! If your original object starts with E, insert the rules here
 
+              CASE('ELECTRICEQUIPMENT')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+
+                ! Write the updated ElectricEquipment object:
+                ! A1 Name (unchanged)
+                ! A2 Electric Equipment Definition Name (new) = Name + ' Definition'
+                ! A3 Zone or ZoneList or Space or SpaceList Name (was A2)
+                ! A4 Schedule Name (was A3)
+                ! A5 End-Use Subcategory (was A5/field 11)
+                OutArgs(1) = InArgs(1)
+                OutArgs(2) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(3) = InArgs(2)
+                OutArgs(4) = InArgs(3)
+                OutArgs(5) = InArgs(11)
+                CurArgs = 5
+                CALL WriteOutIDFLines(DifLfn,'ElectricEquipment',CurArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                ! Create the new ElectricEquipment:Definition object:
+                ! A1 Name = Name + ' Definition'
+                ! A2 Design Level Calculation Method (was A4/field 4)
+                ! N1 Design Level (was N1/field 5)
+                ! N2 Watts per Floor Area (was N2/field 6)
+                ! N3 Watts per Person (was N3/field 7)
+                ! N4 Fraction Latent (was N4/field 8)
+                ! N5 Fraction Radiant (was N5/field 9)
+                ! N6 Fraction Lost (was N6/field 10)
+                ObjectName = 'ElectricEquipment:Definition'
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                OutArgs(1) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(2) = InArgs(4)
+                OutArgs(3) = InArgs(5)
+                OutArgs(4) = InArgs(6)
+                OutArgs(5) = InArgs(7)
+                OutArgs(6) = InArgs(8)
+                OutArgs(7) = InArgs(9)
+                OutArgs(8) = InArgs(10)
+                CurArgs = 8
+                CALL WriteOutIDFLines(DifLfn,ObjectName,CurArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                Written = .true.
+
               ! If your original object starts with F, insert the rules here
 
               ! If your original object starts with G, insert the rules here
