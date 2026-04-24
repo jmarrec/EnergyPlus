@@ -1712,16 +1712,20 @@
 
   ElectricEquipment,
     Floor 1 Cafe_ElecPlug_Equip,  !- Name
+    Floor 1 Cafe_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Cafe,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_DINING,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Cafe_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     403.1472,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Cafe:ElecPlug,  !- Name
@@ -2463,16 +2467,20 @@
 
   ElectricEquipment,
     Floor 1 Clean_ElecPlug_Equip,  !- Name
+    Floor 1 Clean_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Clean,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Clean_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     960.0972,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Clean:ElecPlug,  !- Name
@@ -2931,16 +2939,20 @@
 
   ElectricEquipment,
     Floor 1 Conference_ElecPlug_Equip,  !- Name
+    Floor 1 Conference_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Conference,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Conference_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     617.0620,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Conference:ElecPlug,  !- Name
@@ -3382,16 +3394,20 @@
 
   ElectricEquipment,
     Floor 1 Dining_ElecPlug_Equip,  !- Name
+    Floor 1 Dining_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Dining,          !- Zone or ZoneList or Space or SpaceList Name
     GAS_EQUIP_SCH_DINING,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Dining_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     493.6496,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Dining:ElecPlug,  !- Name
@@ -3833,16 +3849,20 @@
 
   ElectricEquipment,
     Floor 1 Elevator_ElecPlug_Equip,  !- Name
+    Floor 1 Elevator_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Elevator,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Elevator_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     180.6035,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Elevator:ElecPlug,  !- Name
@@ -4284,16 +4304,20 @@
 
   ElectricEquipment,
     Floor 1 Exam_ElecPlug_Equip,  !- Name
+    Floor 1 Exam_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Exam,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Exam_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2639.0409,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Exam:ElecPlug,  !- Name
@@ -4691,16 +4715,20 @@
 
   ElectricEquipment,
     Floor 1 Food Storage_ElecPlug_Equip,  !- Name
+    Floor 1 Food Storage_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Food Storage,    !- Zone or ZoneList or Space or SpaceList Name
     GAS_EQUIP_SCH_DINING,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Food Storage_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2008.2702,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Food Storage:ElecPlug,  !- Name
@@ -4719,16 +4747,20 @@
 
   ElectricEquipment,
     Floor 1 Food Storage_ElecProcess_Equip,  !- Name
+    Floor 1 Food Storage_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Food Storage,    !- Zone or ZoneList or Space or SpaceList Name
     GAS_EQUIP_SCH_DINING,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Food Storage_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     35157.7926,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Food Storage:ElecProcess,  !- Name
@@ -5340,16 +5372,20 @@
 
   ElectricEquipment,
     Floor 1 Gas Storage_ElecPlug_Equip,  !- Name
+    Floor 1 Gas Storage_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Gas Storage,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Gas Storage_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     623.7733,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Gas Storage:ElecPlug,  !- Name
@@ -5767,16 +5803,20 @@
 
   ElectricEquipment,
     Floor 1 Imaging_ElecPlug_Equip,  !- Name
+    Floor 1 Imaging_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Imaging,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Imaging_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1519.4478,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Imaging:ElecPlug,  !- Name
@@ -5795,16 +5835,20 @@
 
   ElectricEquipment,
     Floor 1 Imaging_ElecProcess_Equip,  !- Name
+    Floor 1 Imaging_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Imaging,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Imaging_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     12159.8188,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Imaging:ElecProcess,  !- Name
@@ -6202,16 +6246,20 @@
 
   ElectricEquipment,
     Floor 1 Kitchen_ElecPlug_Equip,  !- Name
+    Floor 1 Kitchen_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Kitchen,         !- Zone or ZoneList or Space or SpaceList Name
     GAS_EQUIP_SCH_DINING,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Kitchen_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2008.2702,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Kitchen:ElecPlug,  !- Name
@@ -6230,16 +6278,20 @@
 
   ElectricEquipment,
     Floor 1 Kitchen_ElecProcess_Equip,  !- Name
+    Floor 1 Kitchen_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Kitchen,         !- Zone or ZoneList or Space or SpaceList Name
     GAS_EQUIP_SCH_DINING,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Kitchen_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     35157.7926,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Kitchen:ElecProcess,  !- Name
@@ -6720,16 +6772,20 @@
 
   ElectricEquipment,
     Floor 1 Lab 1_ElecPlug_Equip,  !- Name
+    Floor 1 Lab 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Lab 1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Lab 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1999.2734,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Lab 1:ElecPlug,  !- Name
@@ -6748,16 +6804,20 @@
 
   ElectricEquipment,
     Floor 1 Lab 1_ElecProcess_Equip,  !- Name
+    Floor 1 Lab 1_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Lab 1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Lab 1_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     5999.6783,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Lab 1:ElecProcess,  !- Name
@@ -7199,16 +7259,20 @@
 
   ElectricEquipment,
     Floor 1 Lab 2_ElecPlug_Equip,  !- Name
+    Floor 1 Lab 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Lab 2,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Lab 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4898.2199,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Lab 2:ElecPlug,  !- Name
@@ -7227,16 +7291,20 @@
 
   ElectricEquipment,
     Floor 1 Lab 2_ElecProcess_Equip,  !- Name
+    Floor 1 Lab 2_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Lab 2,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Lab 2_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     14699.2119,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Lab 2:ElecProcess,  !- Name
@@ -7678,16 +7746,20 @@
 
   ElectricEquipment,
     Floor 1 Laundry_ElecProcess_Equip,  !- Name
+    Floor 1 Laundry_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Laundry,         !- Zone or ZoneList or Space or SpaceList Name
     LAUNDRY_EQUIP_GAS_SCH,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Laundry_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1117.5938,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Laundry:ElecProcess,  !- Name
@@ -8212,16 +8284,20 @@
 
   ElectricEquipment,
     Floor 1 Lobby_ElecPlug_Equip,  !- Name
+    Floor 1 Lobby_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Lobby,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Lobby_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     376.2573,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Lobby:ElecPlug,  !- Name
@@ -8619,16 +8695,20 @@
 
   ElectricEquipment,
     Floor 1 Lounge_ElecPlug_Equip,  !- Name
+    Floor 1 Lounge_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Lounge,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Lounge_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     128.4292,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Lounge:ElecPlug,  !- Name
@@ -9048,16 +9128,20 @@
 
   ElectricEquipment,
     Floor 1 Mech 1_ElecPlug_Equip,  !- Name
+    Floor 1 Mech 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Mech 1,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Mech 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     812.7158,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Mech 1:ElecPlug,  !- Name
@@ -9526,16 +9610,20 @@
 
   ElectricEquipment,
     Floor 1 Mech 2_ElecPlug_Equip,  !- Name
+    Floor 1 Mech 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Mech 2,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Mech 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1083.6211,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Mech 2:ElecPlug,  !- Name
@@ -9977,16 +10065,20 @@
 
   ElectricEquipment,
     Floor 1 Office 1_ElecPlug_Equip,  !- Name
+    Floor 1 Office 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Office 1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Office 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3688.6595,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Office 1:ElecPlug,  !- Name
@@ -10428,16 +10520,20 @@
 
   ElectricEquipment,
     Floor 1 Office 2_ElecPlug_Equip,  !- Name
+    Floor 1 Office 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Office 2,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Office 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2840.9675,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Office 2:ElecPlug,  !- Name
@@ -10896,16 +10992,20 @@
 
   ElectricEquipment,
     Floor 1 Office 3_ElecPlug_Equip,  !- Name
+    Floor 1 Office 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Office 3,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Office 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     9893.9043,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Office 3:ElecPlug,  !- Name
@@ -11347,16 +11447,20 @@
 
   ElectricEquipment,
     Floor 1 Office 3 Perimeter 1_ElecPlug_Equip,  !- Name
-    Floor 1 Office 3 Perimeter 1,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 1 Office 3 Perimeter 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 1 Office 3 Perimeter 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Office 3 Perimeter 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1443.2255,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Office 3 Perimeter 1:ElecPlug,  !- Name
@@ -11798,16 +11902,20 @@
 
   ElectricEquipment,
     Floor 1 Office 3 Perimeter 2_ElecPlug_Equip,  !- Name
-    Floor 1 Office 3 Perimeter 2,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 1 Office 3 Perimeter 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 1 Office 3 Perimeter 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Office 3 Perimeter 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     914.6676,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Office 3 Perimeter 2:ElecPlug,  !- Name
@@ -12264,16 +12372,20 @@
 
   ElectricEquipment,
     Floor 1 Office 3 Perimeter 3_ElecPlug_Equip,  !- Name
-    Floor 1 Office 3 Perimeter 3,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 1 Office 3 Perimeter 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 1 Office 3 Perimeter 3, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Office 3 Perimeter 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1443.2255,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Office 3 Perimeter 3:ElecPlug,  !- Name
@@ -12715,16 +12827,20 @@
 
   ElectricEquipment,
     Floor 1 Patient_ElecPlug_Equip,  !- Name
+    Floor 1 Patient_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Patient,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Patient_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1799.3461,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Patient:ElecPlug,  !- Name
@@ -13122,16 +13238,20 @@
 
   ElectricEquipment,
     Floor 1 Pharmacy_ElecPlug_Equip,  !- Name
+    Floor 1 Pharmacy_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Pharmacy,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Pharmacy_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     5997.8203,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Pharmacy:ElecPlug,  !- Name
@@ -13529,16 +13649,20 @@
 
   ElectricEquipment,
     Floor 1 Physical Therapy_ElecPlug_Equip,  !- Name
-    Floor 1 Physical Therapy,!- Zone or ZoneList or Space or SpaceList Name
+    Floor 1 Physical Therapy_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 1 Physical Therapy, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Physical Therapy_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4918.2126,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Physical Therapy:ElecPlug,  !- Name
@@ -13958,16 +14082,20 @@
 
   ElectricEquipment,
     Floor 1 Receiving_ElecPlug_Equip,  !- Name
+    Floor 1 Receiving_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Receiving,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Receiving_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2235.1877,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Receiving:ElecPlug,  !- Name
@@ -14409,16 +14537,20 @@
 
   ElectricEquipment,
     Floor 1 Reception_ElecPlug_Equip,  !- Name
+    Floor 1 Reception_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Reception,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Reception_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     56.1878,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Reception:ElecPlug,  !- Name
@@ -15178,16 +15310,20 @@
 
   ElectricEquipment,
     Floor 1 Storage_ElecPlug_Equip,  !- Name
+    Floor 1 Storage_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Storage,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Storage_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     5398.0382,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Storage:ElecPlug,  !- Name
@@ -15585,16 +15721,20 @@
 
   ElectricEquipment,
     Floor 1 Waiting_ElecPlug_Equip,  !- Name
+    Floor 1 Waiting_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 1 Waiting,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 1 Waiting_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     152.5096,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 1 Waiting:ElecPlug,  !- Name
@@ -16051,16 +16191,20 @@
 
   ElectricEquipment,
     Floor 2 Chapel_ElecPlug_Equip,  !- Name
+    Floor 2 Chapel_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Chapel,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Chapel_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1019.6294,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Chapel:ElecPlug,  !- Name
@@ -16458,16 +16602,20 @@
 
   ElectricEquipment,
     Floor 2 Clean 1_ElecPlug_Equip,  !- Name
+    Floor 2 Clean 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Clean 1,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Clean 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     966.0978,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Clean 1:ElecPlug,  !- Name
@@ -16865,16 +17013,20 @@
 
   ElectricEquipment,
     Floor 2 Clean 2_ElecPlug_Equip,  !- Name
+    Floor 2 Clean 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Clean 2,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Clean 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     640.0648,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Clean 2:ElecPlug,  !- Name
@@ -17296,16 +17448,20 @@
 
   ElectricEquipment,
     Floor 2 Corridor_ElecPlug_Equip,  !- Name
+    Floor 2 Corridor_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Corridor,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Corridor_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     521.7435,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Corridor:ElecPlug,  !- Name
@@ -17747,16 +17903,20 @@
 
   ElectricEquipment,
     Floor 2 Elevator_ElecPlug_Equip,  !- Name
+    Floor 2 Elevator_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Elevator,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Elevator_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     180.6035,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Elevator:ElecPlug,  !- Name
@@ -18213,16 +18373,20 @@
 
   ElectricEquipment,
     Floor 2 Exam 1_ElecPlug_Equip,  !- Name
+    Floor 2 Exam 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Exam 1,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Exam 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4198.4742,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Exam 1:ElecPlug,  !- Name
@@ -18620,16 +18784,20 @@
 
   ElectricEquipment,
     Floor 2 Exam 2_ElecPlug_Equip,  !- Name
+    Floor 2 Exam 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Exam 2,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Exam 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1349.5096,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Exam 2:ElecPlug,  !- Name
@@ -19027,16 +19195,20 @@
 
   ElectricEquipment,
     Floor 2 Exam 3_ElecPlug_Equip,  !- Name
+    Floor 2 Exam 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Exam 3,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Exam 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4048.5287,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Exam 3:ElecPlug,  !- Name
@@ -19451,16 +19623,20 @@
 
   ElectricEquipment,
     Floor 2 Exam 4_ElecPlug_Equip,  !- Name
+    Floor 2 Exam 4_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Exam 4,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Exam 4_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3998.5468,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Exam 4:ElecPlug,  !- Name
@@ -19902,16 +20078,20 @@
 
   ElectricEquipment,
     Floor 2 Gift Shop_ElecPlug_Equip,  !- Name
+    Floor 2 Gift Shop_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Gift Shop,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Gift Shop_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     899.6730,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Gift Shop:ElecPlug,  !- Name
@@ -20309,16 +20489,20 @@
 
   ElectricEquipment,
     Floor 2 Imaging 1_ElecPlug_Equip,  !- Name
+    Floor 2 Imaging 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Imaging 1,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Imaging 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2309.1608,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Imaging 1:ElecPlug,  !- Name
@@ -20337,16 +20521,20 @@
 
   ElectricEquipment,
     Floor 2 Imaging 1_ElecProcess_Equip,  !- Name
+    Floor 2 Imaging 1_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Imaging 1,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Imaging 1_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     18479.7246,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Imaging 1:ElecProcess,  !- Name
@@ -20805,16 +20993,20 @@
 
   ElectricEquipment,
     Floor 2 Imaging 2_ElecPlug_Equip,  !- Name
+    Floor 2 Imaging 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Imaging 2,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Imaging 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3398.7648,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Imaging 2:ElecPlug,  !- Name
@@ -20833,16 +21025,20 @@
 
   ElectricEquipment,
     Floor 2 Imaging 2_ElecProcess_Equip,  !- Name
+    Floor 2 Imaging 2_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Imaging 2,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Imaging 2_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     27199.5946,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Imaging 2:ElecProcess,  !- Name
@@ -21299,16 +21495,20 @@
 
   ElectricEquipment,
     Floor 2 Imaging 3_ElecPlug_Equip,  !- Name
+    Floor 2 Imaging 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Imaging 3,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Imaging 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3998.5468,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Imaging 3:ElecPlug,  !- Name
@@ -21327,16 +21527,20 @@
 
   ElectricEquipment,
     Floor 2 Imaging 3_ElecProcess_Equip,  !- Name
+    Floor 2 Imaging 3_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Imaging 3,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Imaging 3_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     31999.5231,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Imaging 3:ElecProcess,  !- Name
@@ -21734,16 +21938,20 @@
 
   ElectricEquipment,
     Floor 2 Lab 1_ElecPlug_Equip,  !- Name
+    Floor 2 Lab 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Lab 1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Lab 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2279.1717,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Lab 1:ElecPlug,  !- Name
@@ -21762,16 +21970,20 @@
 
   ElectricEquipment,
     Floor 2 Lab 1_ElecProcess_Equip,  !- Name
+    Floor 2 Lab 1_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Lab 1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Lab 1_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6839.6333,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Lab 1:ElecProcess,  !- Name
@@ -22192,16 +22404,20 @@
 
   ElectricEquipment,
     Floor 2 Lab 2_ElecPlug_Equip,  !- Name
+    Floor 2 Lab 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Lab 2,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Lab 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3398.7648,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Lab 2:ElecPlug,  !- Name
@@ -22220,16 +22436,20 @@
 
   ElectricEquipment,
     Floor 2 Lab 2_ElecProcess_Equip,  !- Name
+    Floor 2 Lab 2_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Lab 2,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Lab 2_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     10199.4531,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Lab 2:ElecProcess,  !- Name
@@ -22627,16 +22847,20 @@
 
   ElectricEquipment,
     Floor 2 Lockers_ElecPlug_Equip,  !- Name
+    Floor 2 Lockers_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Lockers,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Lockers_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     187.4319,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Lockers:ElecPlug,  !- Name
@@ -23054,16 +23278,20 @@
 
   ElectricEquipment,
     Floor 2 Lounge 1_ElecPlug_Equip,  !- Name
+    Floor 2 Lounge 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Lounge 1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Lounge 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     120.4023,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Lounge 1:ElecPlug,  !- Name
@@ -23520,16 +23748,20 @@
 
   ElectricEquipment,
     Floor 2 Lounge 2_ElecPlug_Equip,  !- Name
+    Floor 2 Lounge 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Lounge 2,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Lounge 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     87.7934,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Lounge 2:ElecPlug,  !- Name
@@ -23927,16 +24159,20 @@
 
   ElectricEquipment,
     Floor 2 Nurse Station 1_ElecPlug_Equip,  !- Name
+    Floor 2 Nurse Station 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Nurse Station 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Nurse Station 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     322.3828,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Nurse Station 1:ElecPlug,  !- Name
@@ -23955,16 +24191,20 @@
 
   ElectricEquipment,
     Floor 2 Nurse Station 1_ElecProcess_Equip,  !- Name
+    Floor 2 Nurse Station 1_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Nurse Station 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Nurse Station 1_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     644.7657,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Nurse Station 1:ElecProcess,  !- Name
@@ -24423,16 +24663,20 @@
 
   ElectricEquipment,
     Floor 2 Nurse Station 2_ElecPlug_Equip,  !- Name
+    Floor 2 Nurse Station 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Nurse Station 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Nurse Station 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     999.6367,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Nurse Station 2:ElecPlug,  !- Name
@@ -24451,16 +24695,20 @@
 
   ElectricEquipment,
     Floor 2 Nurse Station 2_ElecProcess_Equip,  !- Name
+    Floor 2 Nurse Station 2_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Nurse Station 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Nurse Station 2_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1999.2734,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Nurse Station 2:ElecProcess,  !- Name
@@ -24858,16 +25106,20 @@
 
   ElectricEquipment,
     Floor 2 Office 1_ElecPlug_Equip,  !- Name
+    Floor 2 Office 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Office 1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Office 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1169.5750,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Office 1:ElecPlug,  !- Name
@@ -25309,16 +25561,20 @@
 
   ElectricEquipment,
     Floor 2 Office 2_ElecPlug_Equip,  !- Name
+    Floor 2 Office 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Office 2,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Office 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     959.6512,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Office 2:ElecPlug,  !- Name
@@ -25716,16 +25972,20 @@
 
   ElectricEquipment,
     Floor 2 Office 3_ElecPlug_Equip,  !- Name
+    Floor 2 Office 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Office 3,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Office 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1499.4551,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Office 3:ElecPlug,  !- Name
@@ -26182,16 +26442,20 @@
 
   ElectricEquipment,
     Floor 2 Office 4_ElecPlug_Equip,  !- Name
+    Floor 2 Office 4_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Office 4,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Office 4_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1749.3642,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Office 4:ElecPlug,  !- Name
@@ -26697,16 +26961,20 @@
 
   ElectricEquipment,
     Floor 2 Operating_ElecPlug_Equip,  !- Name
+    Floor 2 Operating_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Operating,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Operating_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     19268.9972,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Operating:ElecPlug,  !- Name
@@ -26725,16 +26993,20 @@
 
   ElectricEquipment,
     Floor 2 Operating_ElecProcess_Equip,  !- Name
+    Floor 2 Operating_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Operating,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Operating_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     57824.8997,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Operating:ElecProcess,  !- Name
@@ -27199,16 +27471,20 @@
 
   ElectricEquipment,
     Floor 2 PACU_ElecPlug_Equip,  !- Name
+    Floor 2 PACU_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 PACU,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 PACU_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4048.5287,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 PACU:ElecPlug,  !- Name
@@ -27227,16 +27503,20 @@
 
   ElectricEquipment,
     Floor 2 PACU_ElecProcess_Equip,  !- Name
+    Floor 2 PACU_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 PACU,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 PACU_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4048.5287,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 PACU:ElecProcess,  !- Name
@@ -27678,16 +27958,20 @@
 
   ElectricEquipment,
     Floor 2 Patient 1_ElecPlug_Equip,  !- Name
+    Floor 2 Patient 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Patient 1,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Patient 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3406.7619,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Patient 1:ElecPlug,  !- Name
@@ -28085,16 +28369,20 @@
 
   ElectricEquipment,
     Floor 2 Patient 2_ElecPlug_Equip,  !- Name
+    Floor 2 Patient 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Patient 2,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Patient 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2804.9806,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Patient 2:ElecPlug,  !- Name
@@ -28492,16 +28780,20 @@
 
   ElectricEquipment,
     Floor 2 Procedure 1_ElecPlug_Equip,  !- Name
+    Floor 2 Procedure 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Procedure 1,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Procedure 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2519.0845,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Procedure 1:ElecPlug,  !- Name
@@ -28520,16 +28812,20 @@
 
   ElectricEquipment,
     Floor 2 Procedure 1_ElecProcess_Equip,  !- Name
+    Floor 2 Procedure 1_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Procedure 1,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Procedure 1_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     7559.5947,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Procedure 1:ElecProcess,  !- Name
@@ -28927,16 +29223,20 @@
 
   ElectricEquipment,
     Floor 2 Procedure 2_ElecPlug_Equip,  !- Name
+    Floor 2 Procedure 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Procedure 2,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Procedure 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1359.5059,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Procedure 2:ElecPlug,  !- Name
@@ -28955,16 +29255,20 @@
 
   ElectricEquipment,
     Floor 2 Procedure 2_ElecProcess_Equip,  !- Name
+    Floor 2 Procedure 2_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Procedure 2,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Procedure 2_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4079.7813,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Procedure 2:ElecProcess,  !- Name
@@ -29406,16 +29710,20 @@
 
   ElectricEquipment,
     Floor 2 Reception_ElecPlug_Equip,  !- Name
+    Floor 2 Reception_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Reception,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Reception_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     175.5867,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Reception:ElecPlug,  !- Name
@@ -29857,16 +30165,20 @@
 
   ElectricEquipment,
     Floor 2 Restroom 1_ElecPlug_Equip,  !- Name
+    Floor 2 Restroom 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Restroom 1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Restroom 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     64.2146,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Restroom 1:ElecPlug,  !- Name
@@ -30328,16 +30640,20 @@
 
   ElectricEquipment,
     Floor 2 Restroom 2_ElecPlug_Equip,  !- Name
+    Floor 2 Restroom 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Restroom 2,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Restroom 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     90.3018,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Restroom 2:ElecPlug,  !- Name
@@ -31516,16 +31832,20 @@
 
   ElectricEquipment,
     Floor 2 Sterilizing_ElecPlug_Equip,  !- Name
+    Floor 2 Sterilizing_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Sterilizing,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Sterilizing_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1359.5059,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Sterilizing:ElecPlug,  !- Name
@@ -31544,16 +31864,20 @@
 
   ElectricEquipment,
     Floor 2 Sterilizing_ElecProcess_Equip,  !- Name
+    Floor 2 Sterilizing_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Sterilizing,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Sterilizing_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6800.0566,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Sterilizing:ElecProcess,  !- Name
@@ -31963,16 +32287,20 @@
 
   ElectricEquipment,
     Floor 2 Storage 1_ElecPlug_Equip,  !- Name
+    Floor 2 Storage 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Storage 1,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Storage 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1499.4551,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Storage 1:ElecPlug,  !- Name
@@ -32333,16 +32661,20 @@
 
   ElectricEquipment,
     Floor 2 Storage 2_ElecPlug_Equip,  !- Name
+    Floor 2 Storage 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Storage 2,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Storage 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     639.7675,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Storage 2:ElecPlug,  !- Name
@@ -32740,16 +33072,20 @@
 
   ElectricEquipment,
     Floor 2 Trauma_ElecPlug_Equip,  !- Name
+    Floor 2 Trauma_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Trauma,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Trauma_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4478.3725,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Trauma:ElecPlug,  !- Name
@@ -32768,16 +33104,20 @@
 
   ElectricEquipment,
     Floor 2 Trauma_ElecProcess_Equip,  !- Name
+    Floor 2 Trauma_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Trauma,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Trauma_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     13439.2794,              !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Trauma:ElecProcess,  !- Name
@@ -33219,16 +33559,20 @@
 
   ElectricEquipment,
     Floor 2 Triage_ElecPlug_Equip,  !- Name
+    Floor 2 Triage_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Triage,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Triage_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     874.6821,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Triage:ElecPlug,  !- Name
@@ -33711,16 +34055,20 @@
 
   ElectricEquipment,
     Floor 2 Waiting_ElecPlug_Equip,  !- Name
+    Floor 2 Waiting_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 2 Waiting,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 2 Waiting_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     391.3076,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 2 Waiting:ElecPlug,  !- Name
@@ -34118,16 +34466,20 @@
 
   ElectricEquipment,
     Floor 3 Clean_ElecPlug_Equip,  !- Name
+    Floor 3 Clean_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Clean,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Clean_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000.1012,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Clean:ElecPlug,  !- Name
@@ -34599,16 +34951,20 @@
 
   ElectricEquipment,
     Floor 3 Elevator_ElecPlug_Equip,  !- Name
+    Floor 3 Elevator_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Elevator,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Elevator_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     180.6035,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Elevator:ElecPlug,  !- Name
@@ -35006,16 +35362,20 @@
 
   ElectricEquipment,
     Floor 3 Exam_ElecPlug_Equip,  !- Name
+    Floor 3 Exam_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Exam,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Exam_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2699.0191,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Exam:ElecPlug,  !- Name
@@ -35472,16 +35832,20 @@
 
   ElectricEquipment,
     Floor 3 ICU_ElecPlug_Equip,  !- Name
+    Floor 3 ICU_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 ICU,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 ICU_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2099.2371,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 ICU:ElecPlug,  !- Name
@@ -35500,16 +35864,20 @@
 
   ElectricEquipment,
     Floor 3 ICU_ElecProcess_Equip,  !- Name
+    Floor 3 ICU_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 ICU,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 ICU_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2099.2371,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 ICU:ElecProcess,  !- Name
@@ -35957,16 +36325,20 @@
 
   ElectricEquipment,
     Floor 3 Nurse Station 1_ElecPlug_Equip,  !- Name
+    Floor 3 Nurse Station 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Nurse Station 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Nurse Station 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     751.7268,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Nurse Station 1:ElecPlug,  !- Name
@@ -35985,16 +36357,20 @@
 
   ElectricEquipment,
     Floor 3 Nurse Station 1_ElecProcess_Equip,  !- Name
+    Floor 3 Nurse Station 1_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Nurse Station 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Nurse Station 1_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1503.4536,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Nurse Station 1:ElecProcess,  !- Name
@@ -36451,16 +36827,20 @@
 
   ElectricEquipment,
     Floor 3 Nurse Station 2_ElecPlug_Equip,  !- Name
+    Floor 3 Nurse Station 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Nurse Station 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Nurse Station 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     599.7820,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Nurse Station 2:ElecPlug,  !- Name
@@ -36479,16 +36859,20 @@
 
   ElectricEquipment,
     Floor 3 Nurse Station 2_ElecProcess_Equip,  !- Name
+    Floor 3 Nurse Station 2_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Nurse Station 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Nurse Station 2_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1199.5641,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Nurse Station 2:ElecProcess,  !- Name
@@ -36930,16 +37314,20 @@
 
   ElectricEquipment,
     Floor 3 Nursery_ElecPlug_Equip,  !- Name
+    Floor 3 Nursery_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Nursery,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Nursery_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     989.6403,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Nursery:ElecPlug,  !- Name
@@ -37381,16 +37769,20 @@
 
   ElectricEquipment,
     Floor 3 Office_ElecPlug_Equip,  !- Name
+    Floor 3 Office_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Office,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Office_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1349.5096,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Office:ElecPlug,  !- Name
@@ -37832,16 +38224,20 @@
 
   ElectricEquipment,
     Floor 3 Operating_ElecPlug_Equip,  !- Name
+    Floor 3 Operating_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Operating,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Operating_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1799.4248,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Operating:ElecPlug,  !- Name
@@ -37860,16 +38256,20 @@
 
   ElectricEquipment,
     Floor 3 Operating_ElecProcess_Equip,  !- Name
+    Floor 3 Operating_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Operating,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Operating_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     5399.9467,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Operating:ElecProcess,  !- Name
@@ -38326,16 +38726,20 @@
 
   ElectricEquipment,
     Floor 3 Patient 1_ElecPlug_Equip,  !- Name
+    Floor 3 Patient 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Patient 1,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Patient 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4998.1836,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Patient 1:ElecPlug,  !- Name
@@ -38792,16 +39196,20 @@
 
   ElectricEquipment,
     Floor 3 Patient 2_ElecPlug_Equip,  !- Name
+    Floor 3 Patient 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Patient 2,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Patient 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4998.1836,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Patient 2:ElecPlug,  !- Name
@@ -39275,16 +39683,20 @@
 
   ElectricEquipment,
     Floor 3 Patient 3_ElecPlug_Equip,  !- Name
+    Floor 3 Patient 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Patient 3,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Patient 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3948.5650,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Patient 3:ElecPlug,  !- Name
@@ -39741,16 +40153,20 @@
 
   ElectricEquipment,
     Floor 3 Patient 4_ElecPlug_Equip,  !- Name
+    Floor 3 Patient 4_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Patient 4,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Patient 4_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3948.5650,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Patient 4:ElecPlug,  !- Name
@@ -40170,16 +40586,20 @@
 
   ElectricEquipment,
     Floor 3 Patient Corridor 1_ElecPlug_Equip,  !- Name
-    Floor 3 Patient Corridor 1,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 3 Patient Corridor 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 3 Patient Corridor 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Patient Corridor 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     335.5201,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Patient Corridor 1:ElecPlug,  !- Name
@@ -40599,16 +41019,20 @@
 
   ElectricEquipment,
     Floor 3 Patient Corridor 2_ElecPlug_Equip,  !- Name
-    Floor 3 Patient Corridor 2,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 3 Patient Corridor 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 3 Patient Corridor 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Patient Corridor 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     335.5201,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Patient Corridor 2:ElecPlug,  !- Name
@@ -41050,16 +41474,20 @@
 
   ElectricEquipment,
     Floor 3 Procedure_ElecPlug_Equip,  !- Name
+    Floor 3 Procedure_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Procedure,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Procedure_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     719.7384,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Procedure:ElecPlug,  !- Name
@@ -41078,16 +41506,20 @@
 
   ElectricEquipment,
     Floor 3 Procedure_ElecProcess_Equip,  !- Name
+    Floor 3 Procedure_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Procedure,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Procedure_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2159.8842,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Procedure:ElecProcess,  !- Name
@@ -41891,16 +42323,20 @@
 
   ElectricEquipment,
     Floor 3 Supply_ElecPlug_Equip,  !- Name
+    Floor 3 Supply_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Supply,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Supply_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3678.6631,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Supply:ElecPlug,  !- Name
@@ -42342,16 +42778,20 @@
 
   ElectricEquipment,
     Floor 3 Triage_ElecPlug_Equip,  !- Name
+    Floor 3 Triage_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Triage,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Triage_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1499.4551,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Triage:ElecPlug,  !- Name
@@ -42819,16 +43259,20 @@
 
   ElectricEquipment,
     Floor 3 Waiting_ElecPlug_Equip,  !- Name
+    Floor 3 Waiting_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 3 Waiting,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 3 Waiting_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     99.3319,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 3 Waiting:ElecPlug,  !- Name
@@ -43226,16 +43670,20 @@
 
   ElectricEquipment,
     Floor 4-6 Clean_ElecPlug_Equip,  !- Name
+    Floor 4-6 Clean_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Clean,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Clean_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000.1012,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Clean:ElecPlug,  !- Name
@@ -43707,16 +44155,20 @@
 
   ElectricEquipment,
     Floor 4-6 Elevator_ElecPlug_Equip,  !- Name
+    Floor 4-6 Elevator_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Elevator,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Elevator_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     180.6035,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Elevator:ElecPlug,  !- Name
@@ -44158,16 +44610,20 @@
 
   ElectricEquipment,
     Floor 4-6 Nurse Station_ElecPlug_Equip,  !- Name
+    Floor 4-6 Nurse Station_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Nurse Station, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Nurse Station_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     751.7268,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Nurse Station:ElecPlug,  !- Name
@@ -44186,16 +44642,20 @@
 
   ElectricEquipment,
     Floor 4-6 Nurse Station_ElecProcess_Equip,  !- Name
+    Floor 4-6 Nurse Station_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Nurse Station, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Nurse Station_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1503.4536,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Nurse Station:ElecProcess,  !- Name
@@ -44637,16 +45097,20 @@
 
   ElectricEquipment,
     Floor 4-6 Office_ElecPlug_Equip,  !- Name
+    Floor 4-6 Office_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Office,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Office_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     749.7275,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Office:ElecPlug,  !- Name
@@ -45103,16 +45567,20 @@
 
   ElectricEquipment,
     Floor 4-6 Patient 1_ElecPlug_Equip,  !- Name
+    Floor 4-6 Patient 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Patient 1,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Patient 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4998.1836,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Patient 1:ElecPlug,  !- Name
@@ -45569,16 +46037,20 @@
 
   ElectricEquipment,
     Floor 4-6 Patient 2_ElecPlug_Equip,  !- Name
+    Floor 4-6 Patient 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Patient 2,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Patient 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4998.1836,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Patient 2:ElecPlug,  !- Name
@@ -46035,16 +46507,20 @@
 
   ElectricEquipment,
     Floor 4-6 Patient 3_ElecPlug_Equip,  !- Name
+    Floor 4-6 Patient 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Patient 3,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Patient 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3948.5650,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Patient 3:ElecPlug,  !- Name
@@ -46501,16 +46977,20 @@
 
   ElectricEquipment,
     Floor 4-6 Patient 4_ElecPlug_Equip,  !- Name
+    Floor 4-6 Patient 4_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Patient 4,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Patient 4_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3948.5650,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Patient 4:ElecPlug,  !- Name
@@ -46930,16 +47410,20 @@
 
   ElectricEquipment,
     Floor 4-6 Patient Corridor 1_ElecPlug_Equip,  !- Name
-    Floor 4-6 Patient Corridor 1,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 4-6 Patient Corridor 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 4-6 Patient Corridor 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Patient Corridor 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     335.5201,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Patient Corridor 1:ElecPlug,  !- Name
@@ -47359,16 +47843,20 @@
 
   ElectricEquipment,
     Floor 4-6 Patient Corridor 2_ElecPlug_Equip,  !- Name
-    Floor 4-6 Patient Corridor 2,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 4-6 Patient Corridor 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 4-6 Patient Corridor 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Patient Corridor 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     335.5201,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Patient Corridor 2:ElecPlug,  !- Name
@@ -48172,16 +48660,20 @@
 
   ElectricEquipment,
     Floor 4-6 Supply_ElecPlug_Equip,  !- Name
+    Floor 4-6 Supply_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 4-6 Supply,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 4-6 Supply_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3678.6631,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 4-6 Supply:ElecPlug,  !- Name
@@ -48579,16 +49071,20 @@
 
   ElectricEquipment,
     Floor 7 Clean_ElecPlug_Equip,  !- Name
+    Floor 7 Clean_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Clean,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Clean_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000.1012,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Clean:ElecPlug,  !- Name
@@ -49060,16 +49556,20 @@
 
   ElectricEquipment,
     Floor 7 Elevator_ElecPlug_Equip,  !- Name
+    Floor 7 Elevator_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Elevator,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Elevator_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     180.6035,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Elevator:ElecPlug,  !- Name
@@ -49511,16 +50011,20 @@
 
   ElectricEquipment,
     Floor 7 Nurse Station_ElecPlug_Equip,  !- Name
+    Floor 7 Nurse Station_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Nurse Station,   !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Nurse Station_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     751.7268,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Nurse Station:ElecPlug,  !- Name
@@ -49539,16 +50043,20 @@
 
   ElectricEquipment,
     Floor 7 Nurse Station_ElecProcess_Equip,  !- Name
+    Floor 7 Nurse Station_ElecProcess_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Nurse Station,   !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Nurse Station_ElecProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1503.4536,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Nurse Station:ElecProcess,  !- Name
@@ -49990,16 +50498,20 @@
 
   ElectricEquipment,
     Floor 7 Office_ElecPlug_Equip,  !- Name
+    Floor 7 Office_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Office,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Office_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     749.7275,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Office:ElecPlug,  !- Name
@@ -50456,16 +50968,20 @@
 
   ElectricEquipment,
     Floor 7 Patient 1_ElecPlug_Equip,  !- Name
+    Floor 7 Patient 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Patient 1,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Patient 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4998.1836,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Patient 1:ElecPlug,  !- Name
@@ -50922,16 +51438,20 @@
 
   ElectricEquipment,
     Floor 7 Patient 2_ElecPlug_Equip,  !- Name
+    Floor 7 Patient 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Patient 2,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Patient 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4998.1836,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Patient 2:ElecPlug,  !- Name
@@ -51388,16 +51908,20 @@
 
   ElectricEquipment,
     Floor 7 Patient 3_ElecPlug_Equip,  !- Name
+    Floor 7 Patient 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Patient 3,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Patient 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3948.5650,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Patient 3:ElecPlug,  !- Name
@@ -51854,16 +52378,20 @@
 
   ElectricEquipment,
     Floor 7 Patient 4_ElecPlug_Equip,  !- Name
+    Floor 7 Patient 4_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Patient 4,       !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Patient 4_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3948.5650,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Patient 4:ElecPlug,  !- Name
@@ -52283,16 +52811,20 @@
 
   ElectricEquipment,
     Floor 7 Patient Corridor 1_ElecPlug_Equip,  !- Name
-    Floor 7 Patient Corridor 1,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 7 Patient Corridor 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 7 Patient Corridor 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Patient Corridor 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     335.5201,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Patient Corridor 1:ElecPlug,  !- Name
@@ -52712,16 +53244,20 @@
 
   ElectricEquipment,
     Floor 7 Patient Corridor 2_ElecPlug_Equip,  !- Name
-    Floor 7 Patient Corridor 2,  !- Zone or ZoneList or Space or SpaceList Name
+    Floor 7 Patient Corridor 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    Floor 7 Patient Corridor 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Patient Corridor 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     335.5201,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Patient Corridor 2:ElecPlug,  !- Name
@@ -53525,16 +54061,20 @@
 
   ElectricEquipment,
     Floor 7 Supply_ElecPlug_Equip,  !- Name
+    Floor 7 Supply_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     Floor 7 Supply,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Floor 7 Supply_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3678.6631,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:Floor 7 Supply:ElecPlug,  !- Name
@@ -53932,16 +54472,20 @@
 
   ElectricEquipment,
     MOB Floor 1 Core_ElecPlug_Equip,  !- Name
+    MOB Floor 1 Core_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 1 Core,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 1 Core_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6884.9978,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 1 Core:ElecPlug,  !- Name
@@ -54383,16 +54927,20 @@
 
   ElectricEquipment,
     MOB Floor 1 Perimeter 1_ElecPlug_Equip,  !- Name
+    MOB Floor 1 Perimeter 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 1 Perimeter 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 1 Perimeter 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1143.3345,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 1 Perimeter 1:ElecPlug,  !- Name
@@ -54834,16 +55382,20 @@
 
   ElectricEquipment,
     MOB Floor 1 Perimeter 2_ElecPlug_Equip,  !- Name
+    MOB Floor 1 Perimeter 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 1 Perimeter 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 1 Perimeter 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     824.7003,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 1 Perimeter 2:ElecPlug,  !- Name
@@ -55285,16 +55837,20 @@
 
   ElectricEquipment,
     MOB Floor 1 Perimeter 3_ElecPlug_Equip,  !- Name
+    MOB Floor 1 Perimeter 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 1 Perimeter 3, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 1 Perimeter 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1143.3345,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 1 Perimeter 3:ElecPlug,  !- Name
@@ -55692,16 +56248,20 @@
 
   ElectricEquipment,
     MOB Floor 2-4 Core_ElecPlug_Equip,  !- Name
+    MOB Floor 2-4 Core_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 2-4 Core,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 2-4 Core_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6172.7567,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 2-4 Core:ElecPlug,  !- Name
@@ -56143,16 +56703,20 @@
 
   ElectricEquipment,
     MOB Floor 2-4 Perimeter 1_ElecPlug_Equip,  !- Name
-    MOB Floor 2-4 Perimeter 1,  !- Zone or ZoneList or Space or SpaceList Name
+    MOB Floor 2-4 Perimeter 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    MOB Floor 2-4 Perimeter 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 2-4 Perimeter 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1087.1049,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 2-4 Perimeter 1:ElecPlug,  !- Name
@@ -56594,16 +57158,20 @@
 
   ElectricEquipment,
     MOB Floor 2-4 Perimeter 2_ElecPlug_Equip,  !- Name
-    MOB Floor 2-4 Perimeter 2,  !- Zone or ZoneList or Space or SpaceList Name
+    MOB Floor 2-4 Perimeter 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    MOB Floor 2-4 Perimeter 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 2-4 Perimeter 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     824.7003,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 2-4 Perimeter 2:ElecPlug,  !- Name
@@ -57045,16 +57613,20 @@
 
   ElectricEquipment,
     MOB Floor 2-4 Perimeter 3_ElecPlug_Equip,  !- Name
-    MOB Floor 2-4 Perimeter 3,  !- Zone or ZoneList or Space or SpaceList Name
+    MOB Floor 2-4 Perimeter 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    MOB Floor 2-4 Perimeter 3, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 2-4 Perimeter 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1087.1049,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 2-4 Perimeter 3:ElecPlug,  !- Name
@@ -57496,16 +58068,20 @@
 
   ElectricEquipment,
     MOB Floor 2-4 Perimeter 4_ElecPlug_Equip,  !- Name
-    MOB Floor 2-4 Perimeter 4,  !- Zone or ZoneList or Space or SpaceList Name
+    MOB Floor 2-4 Perimeter 4_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
+    MOB Floor 2-4 Perimeter 4, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 2-4 Perimeter 4_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     824.7003,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 2-4 Perimeter 4:ElecPlug,  !- Name
@@ -57903,16 +58479,20 @@
 
   ElectricEquipment,
     MOB Floor 5 Core_ElecPlug_Equip,  !- Name
+    MOB Floor 5 Core_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 5 Core,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 5 Core_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6172.7567,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 5 Core:ElecPlug,  !- Name
@@ -58354,16 +58934,20 @@
 
   ElectricEquipment,
     MOB Floor 5 Perimeter 1_ElecPlug_Equip,  !- Name
+    MOB Floor 5 Perimeter 1_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 5 Perimeter 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 5 Perimeter 1_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1087.1049,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 5 Perimeter 1:ElecPlug,  !- Name
@@ -58805,16 +59389,20 @@
 
   ElectricEquipment,
     MOB Floor 5 Perimeter 2_ElecPlug_Equip,  !- Name
+    MOB Floor 5 Perimeter 2_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 5 Perimeter 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 5 Perimeter 2_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     824.7003,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 5 Perimeter 2:ElecPlug,  !- Name
@@ -59256,16 +59844,20 @@
 
   ElectricEquipment,
     MOB Floor 5 Perimeter 3_ElecPlug_Equip,  !- Name
+    MOB Floor 5 Perimeter 3_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 5 Perimeter 3, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 5 Perimeter 3_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1087.1049,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 5 Perimeter 3:ElecPlug,  !- Name
@@ -59707,16 +60299,20 @@
 
   ElectricEquipment,
     MOB Floor 5 Perimeter 4_ElecPlug_Equip,  !- Name
+    MOB Floor 5 Perimeter 4_ElecPlug_Equip Definition, !- Electric Equipment Definition Name
     MOB Floor 5 Perimeter 4, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_OFFICE,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MOB Floor 5 Perimeter 4_ElecPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     824.7003,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:MOB Floor 5 Perimeter 4:ElecPlug,  !- Name

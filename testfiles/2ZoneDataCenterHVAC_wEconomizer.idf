@@ -2865,16 +2865,20 @@
 
   ElectricEquipment,
     West Zone_MiscPlug_Equip,!- Name
+    West Zone_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    West Zone_MiscPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0.,                      !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2500,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment:ITE:AirCooled,
     WestDataCenter_Equip,    !- Name
@@ -3006,16 +3010,20 @@
 
   ElectricEquipment,
     East Zone_MiscPlug_Equip,!- Name
+    East Zone_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     East Zone,               !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    East Zone_MiscPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0.,                      !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment:ITE:AirCooled,
     EastDataCenter_Equip,    !- Name

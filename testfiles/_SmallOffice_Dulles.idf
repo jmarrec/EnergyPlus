@@ -2015,8 +2015,12 @@
 
   ElectricEquipment,
     SouthZone_1stFloor ElecEq,  !- Name
+    SouthZone_1stFloor ElecEq Definition, !- Electric Equipment Definition Name
     SouthZone_1stFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+    Office Lighting and Receptacles; !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SouthZone_1stFloor ElecEq Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2027,8 +2031,12 @@
 
   ElectricEquipment,
     NorthZone_1stFloor ElecEq,  !- Name
+    NorthZone_1stFloor ElecEq Definition, !- Electric Equipment Definition Name
     NorthZone_1stFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+    Office Lighting and Receptacles; !- Schedule Name
+
+  ElectricEquipment:Definition,
+    NorthZone_1stFloor ElecEq Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2039,8 +2047,12 @@
 
   ElectricEquipment,
     SouthZone_2ndFloor ElecEq,  !- Name
+    SouthZone_2ndFloor ElecEq Definition, !- Electric Equipment Definition Name
     SouthZone_2ndFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+    Office Lighting and Receptacles; !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SouthZone_2ndFloor ElecEq Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2051,8 +2063,12 @@
 
   ElectricEquipment,
     NorthZone_2ndFloor ElecEq,  !- Name
+    NorthZone_2ndFloor ElecEq Definition, !- Electric Equipment Definition Name
     NorthZone_2ndFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+    Office Lighting and Receptacles; !- Schedule Name
+
+  ElectricEquipment:Definition,
+    NorthZone_2ndFloor ElecEq Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

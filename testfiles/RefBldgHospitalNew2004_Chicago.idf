@@ -11074,640 +11074,836 @@
 
   ElectricEquipment,
     Basement_MiscPlug_Equip, !- Name
+    Basement_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Basement,                !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Basement_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     8.07,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Dining_Flr_5_MiscPlug_Equip,  !- Name
+    Dining_Flr_5_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Dining_Flr_5,            !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Dining_Flr_5_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ER_Exam1_Mult4_Flr_1_MiscPlug_Equip,  !- Name
+    ER_Exam1_Mult4_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     ER_Exam1_Mult4_Flr_1,    !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ER_Exam1_Mult4_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     16.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ER_Exam3_Mult4_Flr_1_MiscPlug_Equip,  !- Name
+    ER_Exam3_Mult4_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     ER_Exam3_Mult4_Flr_1,    !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ER_Exam3_Mult4_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     16.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ER_NurseStn_Lobby_Flr_1_MiscPlug_Equip,  !- Name
+    ER_NurseStn_Lobby_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     ER_NurseStn_Lobby_Flr_1, !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ER_NurseStn_Lobby_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.63,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ER_Trauma1_Flr_1_MiscPlug_Equip,  !- Name
+    ER_Trauma1_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     ER_Trauma1_Flr_1,        !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ER_Trauma1_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ER_Trauma2_Flr_1_MiscPlug_Equip,  !- Name
+    ER_Trauma2_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     ER_Trauma2_Flr_1,        !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ER_Trauma2_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ER_Triage_Mult4_Flr_1_MiscPlug_Equip,  !- Name
+    ER_Triage_Mult4_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     ER_Triage_Mult4_Flr_1,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ER_Triage_Mult4_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     29.05,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ICU_Flr_2_MiscPlug_Equip,!- Name
+    ICU_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     ICU_Flr_2,               !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ICU_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     32.28,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ICU_NurseStn_Lobby_Flr_2_MiscPlug_Equip,  !- Name
-    ICU_NurseStn_Lobby_Flr_2,!- Zone or ZoneList or Space or SpaceList Name
+    ICU_NurseStn_Lobby_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
+    ICU_NurseStn_Lobby_Flr_2, !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ICU_NurseStn_Lobby_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     IC_PatRoom1_Mult5_Flr_2_MiscPlug_Equip,  !- Name
+    IC_PatRoom1_Mult5_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     IC_PatRoom1_Mult5_Flr_2, !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    IC_PatRoom1_Mult5_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     32.28,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     IC_PatRoom2_Flr_2_MiscPlug_Equip,  !- Name
+    IC_PatRoom2_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     IC_PatRoom2_Flr_2,       !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    IC_PatRoom2_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     32.28,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     IC_PatRoom3_Mult6_Flr_2_MiscPlug_Equip,  !- Name
+    IC_PatRoom3_Mult6_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     IC_PatRoom3_Mult6_Flr_2, !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    IC_PatRoom3_Mult6_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     32.28,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_Flr_5_ExhFan_Equip,  !- Name
+    Kitchen_Flr_5_ExhFan_Equip Definition, !- Electric Equipment Definition Name
     Kitchen_Flr_5,           !- Zone or ZoneList or Space or SpaceList Name
     Kitchen_Exhaust_SCH,     !- Schedule Name
+    KitchenExhFan;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_Flr_5_ExhFan_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     925,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    1.0000,                  !- Fraction Lost
-    KitchenExhFan;           !- End-Use Subcategory
+    1.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_Flr_5_MiscElec_Equip,  !- Name
+    Kitchen_Flr_5_MiscElec_Equip Definition, !- Electric Equipment Definition Name
     Kitchen_Flr_5,           !- Zone or ZoneList or Space or SpaceList Name
     Kitchen_Elec_Equip_SCH,  !- Schedule Name
+    MiscElec;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_Flr_5_MiscElec_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     80.7,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.1000,                  !- Fraction Lost
-    MiscElec;                !- End-Use Subcategory
+    0.1000;                  !- Fraction Lost
 
   ElectricEquipment,
     Lab_Flr_3_MiscPlug_Equip,!- Name
+    Lab_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Lab_Flr_3,               !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Lab_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Lab_Flr_4_MiscPlug_Equip,!- Name
+    Lab_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Lab_Flr_4,               !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Lab_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Lobby_Records_Flr_1_MiscPlug_Equip,  !- Name
+    Lobby_Records_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Lobby_Records_Flr_1,     !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Lobby_Records_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     1.08,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     NurseStn_Lobby_Flr_3_MiscPlug_Equip,  !- Name
+    NurseStn_Lobby_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     NurseStn_Lobby_Flr_3,    !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    NurseStn_Lobby_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.19,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     NurseStn_Lobby_Flr_4_MiscPlug_Equip,  !- Name
+    NurseStn_Lobby_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     NurseStn_Lobby_Flr_4,    !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    NurseStn_Lobby_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.19,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     NurseStn_Lobby_Flr_5_MiscPlug_Equip,  !- Name
+    NurseStn_Lobby_Flr_5_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     NurseStn_Lobby_Flr_5,    !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    NurseStn_Lobby_Flr_5_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.19,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     OR1_Flr_2_MiscPlug_Equip,!- Name
+    OR1_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     OR1_Flr_2,               !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    OR1_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     OR2_Mult5_Flr_2_MiscPlug_Equip,  !- Name
+    OR2_Mult5_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     OR2_Mult5_Flr_2,         !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    OR2_Mult5_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     OR3_Flr_2_MiscPlug_Equip,!- Name
+    OR3_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     OR3_Flr_2,               !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    OR3_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     OR4_Flr_2_MiscPlug_Equip,!- Name
+    OR4_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     OR4_Flr_2,               !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    OR4_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     43.04,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     OR_NurseStn_Lobby_Flr_2_MiscPlug_Equip,  !- Name
+    OR_NurseStn_Lobby_Flr_2_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     OR_NurseStn_Lobby_Flr_2, !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    OR_NurseStn_Lobby_Flr_2_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.19,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Office1_Flr_5_MiscPlug_Equip,  !- Name
+    Office1_Flr_5_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Office1_Flr_5,           !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office1_Flr_5_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Office1_Mult4_Flr_1_MiscPlug_Equip,  !- Name
+    Office1_Mult4_Flr_1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Office1_Mult4_Flr_1,     !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office1_Mult4_Flr_1_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Office2_Mult5_Flr_5_MiscPlug_Equip,  !- Name
+    Office2_Mult5_Flr_5_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Office2_Mult5_Flr_5,     !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office2_Mult5_Flr_5_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Office3_Flr_5_MiscPlug_Equip,  !- Name
+    Office3_Flr_5_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Office3_Flr_5,           !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office3_Flr_5_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Office4_Mult6_Flr_5_MiscPlug_Equip,  !- Name
+    Office4_Mult6_Flr_5_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Office4_Mult6_Flr_5,     !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office4_Mult6_Flr_5_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom1_Mult10_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom1_Mult10_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom1_Mult10_Flr_3,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom1_Mult10_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom1_Mult10_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom1_Mult10_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom1_Mult10_Flr_4,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom1_Mult10_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom2_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom2_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom2_Flr_3,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom2_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom2_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom2_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom2_Flr_4,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom2_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom3_Mult10_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom3_Mult10_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom3_Mult10_Flr_3,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom3_Mult10_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom3_Mult10_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom3_Mult10_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom3_Mult10_Flr_4,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom3_Mult10_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom4_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom4_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom4_Flr_3,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom4_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom4_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom4_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom4_Flr_4,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom4_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom5_Mult10_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom5_Mult10_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom5_Mult10_Flr_3,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom5_Mult10_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom5_Mult10_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom5_Mult10_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom5_Mult10_Flr_4,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom5_Mult10_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom6_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom6_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom6_Flr_3,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom6_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom6_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom6_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom6_Flr_4,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom6_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom7_Mult10_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom7_Mult10_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom7_Mult10_Flr_3,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom7_Mult10_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom7_Mult10_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom7_Mult10_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom7_Mult10_Flr_4,   !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom7_Mult10_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom8_Flr_3_MiscPlug_Equip,  !- Name
+    PatRoom8_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom8_Flr_3,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom8_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PatRoom8_Flr_4_MiscPlug_Equip,  !- Name
+    PatRoom8_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PatRoom8_Flr_4,          !- Zone or ZoneList or Space or SpaceList Name
     CRITICAL_EQUIP_SCH,      !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PatRoom8_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     21.52,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     PhysTherapy_Flr_3_MiscPlug_Equip,  !- Name
+    PhysTherapy_Flr_3_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     PhysTherapy_Flr_3,       !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    PhysTherapy_Flr_3_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     16.14,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Radiology_Flr_4_MiscPlug_Equip,  !- Name
+    Radiology_Flr_4_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Radiology_Flr_4,         !- Zone or ZoneList or Space or SpaceList Name
     ADMIN_EQUIP_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Radiology_Flr_4_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     53.08,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   GasEquipment,
     Kitchen_Flr_5_MiscGas_Equip,  !- Name

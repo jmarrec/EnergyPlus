@@ -14855,887 +14855,1159 @@
 
   ElectricEquipment,
     CorridorFlr1_PlugLoad,   !- Name
+    CorridorFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     CorridorFlr1,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    CorridorFlr1_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     CorridorFlr2_PlugLoad,   !- Name
+    CorridorFlr2_PlugLoad Definition, !- Electric Equipment Definition Name
     CorridorFlr2,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    CorridorFlr2_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     CorridorFlr3_PlugLoad,   !- Name
+    CorridorFlr3_PlugLoad Definition, !- Electric Equipment Definition Name
     CorridorFlr3,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    CorridorFlr3_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     CorridorFlr4_PlugLoad,   !- Name
+    CorridorFlr4_PlugLoad Definition, !- Electric Equipment Definition Name
     CorridorFlr4,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    CorridorFlr4_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     ElevatorCoreFlr1_Elevators_Equip,  !- Name
+    ElevatorCoreFlr1_Elevators_Equip Definition, !- Electric Equipment Definition Name
     ElevatorCoreFlr1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_ELEVATORS,          !- Schedule Name
+    ElevatorLift;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ElevatorCoreFlr1_Elevators_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     32109.8901098901,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ElevatorLift;            !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Elevators_Lights_Fan,    !- Name
+    Elevators_Lights_Fan Definition, !- Electric Equipment Definition Name
     ElevatorCoreFlr1,        !- Zone or ZoneList or Space or SpaceList Name
-    ELEV_LIGHT_FAN_SCH_ADD_DF,  !- Schedule Name
+    ELEV_LIGHT_FAN_SCH_ADD_DF, !- Schedule Name
+    ElevatorLightsFan;       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Elevators_Lights_Fan Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     125,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ElevatorLightsFan;       !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ElevatorCoreFlr2_PlugLoad,  !- Name
+    ElevatorCoreFlr2_PlugLoad Definition, !- Electric Equipment Definition Name
     ElevatorCoreFlr2,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ElevatorCoreFlr2_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     ElevatorCoreFlr3_PlugLoad,  !- Name
+    ElevatorCoreFlr3_PlugLoad Definition, !- Electric Equipment Definition Name
     ElevatorCoreFlr3,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ElevatorCoreFlr3_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     ElevatorCoreFlr4_PlugLoad,  !- Name
+    ElevatorCoreFlr4_PlugLoad Definition, !- Electric Equipment Definition Name
     ElevatorCoreFlr4,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ElevatorCoreFlr4_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     EmployeeLoungeFlr1_PlugLoad,  !- Name
+    EmployeeLoungeFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     EmployeeLoungeFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     EmployeeLounge_Eqp_Sch,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    EmployeeLoungeFlr1_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Design Level {W}
     21.51,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     ExerciseCenterFlr1_PlugLoad,  !- Name
+    ExerciseCenterFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     ExerciseCenterFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     ExerciseCenter_Eqp_Sch,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ExerciseCenterFlr1_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Design Level {W}
     18.59,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontLoungeFlr1_PlugLoad,!- Name
+    FrontLoungeFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontLoungeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     Lobby_Eqp_Sch,           !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontLoungeFlr1_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Design Level {W}
     26.06,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontOfficeFlr1_PlugLoad,!- Name
+    FrontOfficeFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontOfficeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     OFF_EQUIP_SCH,           !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontOfficeFlr1_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Design Level {W}
     13.78,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStairsFlr1_PlugLoad,!- Name
+    FrontStairsFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStairsFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStairsFlr1_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStairsFlr2_PlugLoad,!- Name
+    FrontStairsFlr2_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStairsFlr2,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStairsFlr2_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStairsFlr3_PlugLoad,!- Name
+    FrontStairsFlr3_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStairsFlr3,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStairsFlr3_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStairsFlr4_PlugLoad,!- Name
+    FrontStairsFlr4_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStairsFlr4,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStairsFlr4_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStorageFlr1_PlugLoad,  !- Name
+    FrontStorageFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStorageFlr1,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStorageFlr1_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStorageFlr2_PlugLoad,  !- Name
+    FrontStorageFlr2_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStorageFlr2,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStorageFlr2_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStorageFlr3_PlugLoad,  !- Name
+    FrontStorageFlr3_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStorageFlr3,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStorageFlr3_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     FrontStorageFlr4_PlugLoad,  !- Name
+    FrontStorageFlr4_PlugLoad Definition, !- Electric Equipment Definition Name
     FrontStorageFlr4,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontStorageFlr4_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom101_PlugLoad,   !- Name
+    GuestRoom101_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom101,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom101_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom102_PlugLoad,   !- Name
+    GuestRoom102_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom102,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom102_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom103_PlugLoad,   !- Name
+    GuestRoom103_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom103,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom103_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom104_PlugLoad,   !- Name
+    GuestRoom104_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom104,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom104_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom105_PlugLoad,   !- Name
+    GuestRoom105_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom105,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom105_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom201_PlugLoad,   !- Name
+    GuestRoom201_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom201,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom201_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom202_205_PlugLoad,  !- Name
+    GuestRoom202_205_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom202_205,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom202_205_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom206_208_PlugLoad,  !- Name
+    GuestRoom206_208_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom206_208,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom206_208_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom209_212_PlugLoad,  !- Name
+    GuestRoom209_212_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom209_212,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom209_212_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom213_PlugLoad,   !- Name
+    GuestRoom213_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom213,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom213_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom214_PlugLoad,   !- Name
+    GuestRoom214_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom214,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom214_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom215_218_PlugLoad,  !- Name
+    GuestRoom215_218_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom215_218,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom215_218_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom219_PlugLoad,   !- Name
+    GuestRoom219_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom219,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom219_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom220_223_PlugLoad,  !- Name
+    GuestRoom220_223_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom220_223,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom220_223_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom224_PlugLoad,   !- Name
+    GuestRoom224_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom224,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom224_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom301_PlugLoad,   !- Name
+    GuestRoom301_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom301,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom301_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom302_305_PlugLoad,  !- Name
+    GuestRoom302_305_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom302_305,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom302_305_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom306_308_PlugLoad,  !- Name
+    GuestRoom306_308_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom306_308,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom306_308_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom309_312_PlugLoad,  !- Name
+    GuestRoom309_312_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom309_312,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom309_312_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom313_PlugLoad,   !- Name
+    GuestRoom313_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom313,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom313_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom314_PlugLoad,   !- Name
+    GuestRoom314_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom314,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom314_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom315_318_PlugLoad,  !- Name
+    GuestRoom315_318_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom315_318,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom315_318_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom319_PlugLoad,   !- Name
+    GuestRoom319_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom319,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom319_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom320_323_PlugLoad,  !- Name
+    GuestRoom320_323_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom320_323,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom320_323_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom324_PlugLoad,   !- Name
+    GuestRoom324_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom324,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom324_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom401_PlugLoad,   !- Name
+    GuestRoom401_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom401,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom401_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom402_405_PlugLoad,  !- Name
+    GuestRoom402_405_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom402_405,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom402_405_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom406_408_PlugLoad,  !- Name
+    GuestRoom406_408_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom406_408,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom406_408_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom409_412_PlugLoad,  !- Name
+    GuestRoom409_412_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom409_412,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom409_412_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom413_PlugLoad,   !- Name
+    GuestRoom413_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom413,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom413_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom414_PlugLoad,   !- Name
+    GuestRoom414_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom414,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom414_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom415_418_PlugLoad,  !- Name
+    GuestRoom415_418_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom415_418,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom415_418_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom419_PlugLoad,   !- Name
+    GuestRoom419_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom419,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom419_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom420_423_PlugLoad,  !- Name
+    GuestRoom420_423_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom420_423,        !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom420_423_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom424_PlugLoad,   !- Name
+    GuestRoom424_PlugLoad Definition, !- Electric Equipment Definition Name
     GuestRoom424,            !- Zone or ZoneList or Space or SpaceList Name
     Guestroom_Eqp_Sch_Adva,  !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom424_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.89346164,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     MechanicalRoomFlr1_PlugLoad,  !- Name
+    MechanicalRoomFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     MechanicalRoomFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MechanicalRoomFlr1_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     MeetingRoomFlr1_PlugLoad,!- Name
+    MeetingRoomFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     MeetingRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     MeetingRoom_Eqp_Sch,     !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MeetingRoomFlr1_PlugLoad Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Design Level {W}
     6.18,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStairsFlr1_PlugLoad, !- Name
+    RearStairsFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStairsFlr1,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStairsFlr1_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStairsFlr2_PlugLoad, !- Name
+    RearStairsFlr2_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStairsFlr2,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStairsFlr2_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStairsFlr3_PlugLoad, !- Name
+    RearStairsFlr3_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStairsFlr3,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStairsFlr3_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStairsFlr4_PlugLoad, !- Name
+    RearStairsFlr4_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStairsFlr4,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStairsFlr4_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStorageFlr1_PlugLoad,!- Name
+    RearStorageFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStorageFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStorageFlr1_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStorageFlr2_PlugLoad,!- Name
+    RearStorageFlr2_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStorageFlr2,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStorageFlr2_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStorageFlr3_PlugLoad,!- Name
+    RearStorageFlr3_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStorageFlr3,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStorageFlr3_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RearStorageFlr4_PlugLoad,!- Name
+    RearStorageFlr4_PlugLoad Definition, !- Electric Equipment Definition Name
     RearStorageFlr4,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RearStorageFlr4_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     RestroomFlr1_PlugLoad,   !- Name
+    RestroomFlr1_PlugLoad Definition, !- Electric Equipment Definition Name
     RestroomFlr1,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RestroomFlr1_PlugLoad Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     Laundry Equipment 1,     !- Name
+    Laundry Equipment 1 Definition, !- Electric Equipment Definition Name
     LaundryRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
-    LaundryRoom_Eqp_Elec_Sch,!- Schedule Name
+    LaundryRoom_Eqp_Elec_Sch, !- Schedule Name
+    Laundry;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Laundry Equipment 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2709.075,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.2,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    Laundry;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: GASEQUIPMENT ===========
 

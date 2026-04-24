@@ -573,16 +573,20 @@
 
   ElectricEquipment,
     SPACE1-1_MiscPlug_Equip, !- Name
+    SPACE1-1_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    SPACE1-1_MiscPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     207.7352,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   Schedule:Compact,
     LIGHTS-1,                !- Name

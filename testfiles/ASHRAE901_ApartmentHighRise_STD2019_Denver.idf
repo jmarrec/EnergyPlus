@@ -16921,1069 +16921,1397 @@
 
   ElectricEquipment,
     G SW Apartment_Plug_GSW_Equip,  !- Name
+    G SW Apartment_Plug_GSW_Equip Definition, !- Electric Equipment Definition Name
     G SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    G SW Apartment_Plug_GSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     G NW Apartment_Plug_GNW_Equip,  !- Name
+    G NW Apartment_Plug_GNW_Equip Definition, !- Electric Equipment Definition Name
     G NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    G NW Apartment_Plug_GNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Office_Plug_Office_Equip,!- Name
+    Office_Plug_Office_Equip Definition, !- Electric Equipment Definition Name
     Office,                  !- Zone or ZoneList or Space or SpaceList Name
     EQP_OFF_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office_Plug_Office_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     G NE Apartment_Plug_GNE_Equip,  !- Name
+    G NE Apartment_Plug_GNE_Equip Definition, !- Electric Equipment Definition Name
     G NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    G NE Apartment_Plug_GNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     G N1 Apartment_Plug_GN1_Equip,  !- Name
+    G N1 Apartment_Plug_GN1_Equip Definition, !- Electric Equipment Definition Name
     G N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    G N1 Apartment_Plug_GN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     G N2 Apartment_Plug_GN2_Equip,  !- Name
+    G N2 Apartment_Plug_GN2_Equip Definition, !- Electric Equipment Definition Name
     G N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    G N2 Apartment_Plug_GN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     G S1 Apartment_Plug_GS1_Equip,  !- Name
+    G S1 Apartment_Plug_GS1_Equip Definition, !- Electric Equipment Definition Name
     G S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    G S1 Apartment_Plug_GS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     G S2 Apartment_Plug_GS2_Equip,  !- Name
+    G S2 Apartment_Plug_GS2_Equip Definition, !- Electric Equipment Definition Name
     G S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    G S2 Apartment_Plug_GS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 SW Apartment_Plug_MSW_Equip,  !- Name
+    F2 SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     F2 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 NW Apartment_Plug_MNW_Equip,  !- Name
+    F2 NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     F2 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 SE Apartment_Plug_MSE_Equip,  !- Name
+    F2 SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     F2 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 NE Apartment_Plug_MNE_Equip,  !- Name
+    F2 NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     F2 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 N1 Apartment_Plug_MN1_Equip,  !- Name
+    F2 N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     F2 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 N2 Apartment_Plug_MN2_Equip,  !- Name
+    F2 N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     F2 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 S1 Apartment_Plug_MS1_Equip,  !- Name
+    F2 S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     F2 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F2 S2 Apartment_Plug_MS2_Equip,  !- Name
+    F2 S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     F2 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F2 S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 SW Apartment_Plug_MSW_Equip,  !- Name
+    F3 SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     F3 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 NW Apartment_Plug_MNW_Equip,  !- Name
+    F3 NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     F3 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 SE Apartment_Plug_MSE_Equip,  !- Name
+    F3 SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     F3 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 NE Apartment_Plug_MNE_Equip,  !- Name
+    F3 NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     F3 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 N1 Apartment_Plug_MN1_Equip,  !- Name
+    F3 N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     F3 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 N2 Apartment_Plug_MN2_Equip,  !- Name
+    F3 N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     F3 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 S1 Apartment_Plug_MS1_Equip,  !- Name
+    F3 S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     F3 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F3 S2 Apartment_Plug_MS2_Equip,  !- Name
+    F3 S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     F3 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F3 S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 SW Apartment_Plug_MSW_Equip,  !- Name
+    F4 SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     F4 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 NW Apartment_Plug_MNW_Equip,  !- Name
+    F4 NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     F4 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 SE Apartment_Plug_MSE_Equip,  !- Name
+    F4 SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     F4 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 NE Apartment_Plug_MNE_Equip,  !- Name
+    F4 NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     F4 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 N1 Apartment_Plug_MN1_Equip,  !- Name
+    F4 N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     F4 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 N2 Apartment_Plug_MN2_Equip,  !- Name
+    F4 N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     F4 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 S1 Apartment_Plug_MS1_Equip,  !- Name
+    F4 S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     F4 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F4 S2 Apartment_Plug_MS2_Equip,  !- Name
+    F4 S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     F4 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F4 S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M SW Apartment_Plug_MSW_Equip,  !- Name
+    M SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     M SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M NW Apartment_Plug_MNW_Equip,  !- Name
+    M NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     M NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M SE Apartment_Plug_MSE_Equip,  !- Name
+    M SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     M SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M NE Apartment_Plug_MNE_Equip,  !- Name
+    M NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     M NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M N1 Apartment_Plug_MN1_Equip,  !- Name
+    M N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     M N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M N2 Apartment_Plug_MN2_Equip,  !- Name
+    M N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     M N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M S1 Apartment_Plug_MS1_Equip,  !- Name
+    M S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     M S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     M S2 Apartment_Plug_MS2_Equip,  !- Name
+    M S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     M S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    M S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 SW Apartment_Plug_MSW_Equip,  !- Name
+    F6 SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     F6 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 NW Apartment_Plug_MNW_Equip,  !- Name
+    F6 NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     F6 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 SE Apartment_Plug_MSE_Equip,  !- Name
+    F6 SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     F6 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 NE Apartment_Plug_MNE_Equip,  !- Name
+    F6 NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     F6 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 N1 Apartment_Plug_MN1_Equip,  !- Name
+    F6 N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     F6 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 N2 Apartment_Plug_MN2_Equip,  !- Name
+    F6 N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     F6 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 S1 Apartment_Plug_MS1_Equip,  !- Name
+    F6 S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     F6 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F6 S2 Apartment_Plug_MS2_Equip,  !- Name
+    F6 S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     F6 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F6 S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 SW Apartment_Plug_MSW_Equip,  !- Name
+    F7 SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     F7 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 NW Apartment_Plug_MNW_Equip,  !- Name
+    F7 NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     F7 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 SE Apartment_Plug_MSE_Equip,  !- Name
+    F7 SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     F7 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 NE Apartment_Plug_MNE_Equip,  !- Name
+    F7 NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     F7 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 N1 Apartment_Plug_MN1_Equip,  !- Name
+    F7 N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     F7 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 N2 Apartment_Plug_MN2_Equip,  !- Name
+    F7 N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     F7 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 S1 Apartment_Plug_MS1_Equip,  !- Name
+    F7 S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     F7 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F7 S2 Apartment_Plug_MS2_Equip,  !- Name
+    F7 S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     F7 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F7 S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 SW Apartment_Plug_MSW_Equip,  !- Name
+    F8 SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     F8 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 NW Apartment_Plug_MNW_Equip,  !- Name
+    F8 NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     F8 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 SE Apartment_Plug_MSE_Equip,  !- Name
+    F8 SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     F8 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 NE Apartment_Plug_MNE_Equip,  !- Name
+    F8 NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     F8 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 N1 Apartment_Plug_MN1_Equip,  !- Name
+    F8 N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     F8 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 N2 Apartment_Plug_MN2_Equip,  !- Name
+    F8 N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     F8 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 S1 Apartment_Plug_MS1_Equip,  !- Name
+    F8 S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     F8 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F8 S2 Apartment_Plug_MS2_Equip,  !- Name
+    F8 S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     F8 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F8 S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 SW Apartment_Plug_MSW_Equip,  !- Name
+    F9 SW Apartment_Plug_MSW_Equip Definition, !- Electric Equipment Definition Name
     F9 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 SW Apartment_Plug_MSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 NW Apartment_Plug_MNW_Equip,  !- Name
+    F9 NW Apartment_Plug_MNW_Equip Definition, !- Electric Equipment Definition Name
     F9 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 NW Apartment_Plug_MNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 SE Apartment_Plug_MSE_Equip,  !- Name
+    F9 SE Apartment_Plug_MSE_Equip Definition, !- Electric Equipment Definition Name
     F9 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 SE Apartment_Plug_MSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 NE Apartment_Plug_MNE_Equip,  !- Name
+    F9 NE Apartment_Plug_MNE_Equip Definition, !- Electric Equipment Definition Name
     F9 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 NE Apartment_Plug_MNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 N1 Apartment_Plug_MN1_Equip,  !- Name
+    F9 N1 Apartment_Plug_MN1_Equip Definition, !- Electric Equipment Definition Name
     F9 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 N1 Apartment_Plug_MN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 N2 Apartment_Plug_MN2_Equip,  !- Name
+    F9 N2 Apartment_Plug_MN2_Equip Definition, !- Electric Equipment Definition Name
     F9 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 N2 Apartment_Plug_MN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 S1 Apartment_Plug_MS1_Equip,  !- Name
+    F9 S1 Apartment_Plug_MS1_Equip Definition, !- Electric Equipment Definition Name
     F9 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 S1 Apartment_Plug_MS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     F9 S2 Apartment_Plug_MS2_Equip,  !- Name
+    F9 S2 Apartment_Plug_MS2_Equip Definition, !- Electric Equipment Definition Name
     F9 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    F9 S2 Apartment_Plug_MS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T SW Apartment_Plug_TSW_Equip,  !- Name
+    T SW Apartment_Plug_TSW_Equip Definition, !- Electric Equipment Definition Name
     T SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T SW Apartment_Plug_TSW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T NW Apartment_Plug_TNW_Equip,  !- Name
+    T NW Apartment_Plug_TNW_Equip Definition, !- Electric Equipment Definition Name
     T NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T NW Apartment_Plug_TNW_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T SE Apartment_Plug_TSE_Equip,  !- Name
+    T SE Apartment_Plug_TSE_Equip Definition, !- Electric Equipment Definition Name
     T SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T SE Apartment_Plug_TSE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T NE Apartment_Plug_TNE_Equip,  !- Name
+    T NE Apartment_Plug_TNE_Equip Definition, !- Electric Equipment Definition Name
     T NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T NE Apartment_Plug_TNE_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T N1 Apartment_Plug_TN1_Equip,  !- Name
+    T N1 Apartment_Plug_TN1_Equip Definition, !- Electric Equipment Definition Name
     T N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T N1 Apartment_Plug_TN1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T N2 Apartment_Plug_TN2_Equip,  !- Name
+    T N2 Apartment_Plug_TN2_Equip Definition, !- Electric Equipment Definition Name
     T N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T N2 Apartment_Plug_TN2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T S1 Apartment_Plug_TS1_Equip,  !- Name
+    T S1 Apartment_Plug_TS1_Equip Definition, !- Electric Equipment Definition Name
     T S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T S1 Apartment_Plug_TS1_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T S2 Apartment_Plug_TS2_Equip,  !- Name
+    T S2 Apartment_Plug_TS2_Equip Definition, !- Electric Equipment Definition Name
     T S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     EQP_APT_SCH,             !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T S2 Apartment_Plug_TS2_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     6.67,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     T Corridor_Elevators_Equip,  !- Name
+    T Corridor_Elevators_Equip Definition, !- Electric Equipment Definition Name
     T Corridor,              !- Zone or ZoneList or Space or SpaceList Name
     BLDG_ELEVATORS,          !- Schedule Name
+    ElevatorLift;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    T Corridor_Elevators_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     20370,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    0.9500,                  !- Fraction Lost
-    ElevatorLift;            !- End-Use Subcategory
+    0.9500;                  !- Fraction Lost
 
   ElectricEquipment,
     Elevators_Lights_Fan,    !- Name
+    Elevators_Lights_Fan Definition, !- Electric Equipment Definition Name
     T Corridor,              !- Zone or ZoneList or Space or SpaceList Name
-    ELEV_LIGHT_FAN_SCH_ADD_DF,  !- Schedule Name
+    ELEV_LIGHT_FAN_SCH_ADD_DF, !- Schedule Name
+    ElevatorLightsFan;       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Elevators_Lights_Fan Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     63,                      !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    0.9500,                  !- Fraction Lost
-    ElevatorLightsFan;       !- End-Use Subcategory
+    0.9500;                  !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONEINFILTRATION:DESIGNFLOWRATE ===========
 

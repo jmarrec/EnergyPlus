@@ -641,8 +641,12 @@
 
   ElectricEquipment,
     West Zone ElecEq 1,      !- Name
+    West Zone ElecEq 1 Definition, !- Electric Equipment Definition Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    West Zone ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

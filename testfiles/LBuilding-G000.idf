@@ -1659,16 +1659,20 @@
 
   ElectricEquipment,
     Main_Zone_a_b_g_l_Elec,  !- Name
+    Main_Zone_a_b_g_l_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_a_b_g_l,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_a_b_g_l_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_a_b_g_l_Furniture1,  !- Name
@@ -1725,16 +1729,20 @@
 
   ElectricEquipment,
     Main_Zone_b_c_h_g_Elec,  !- Name
+    Main_Zone_b_c_h_g_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_b_c_h_g,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_b_c_h_g_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_b_c_h_g_Furniture1,  !- Name
@@ -1791,16 +1799,20 @@
 
   ElectricEquipment,
     Main_Zone_c_d_i_h_Elec,  !- Name
+    Main_Zone_c_d_i_h_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_c_d_i_h,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_c_d_i_h_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_c_d_i_h_Furniture1,  !- Name
@@ -1857,16 +1869,20 @@
 
   ElectricEquipment,
     Main_Zone_d_e_j_i_Elec,  !- Name
+    Main_Zone_d_e_j_i_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_d_e_j_i,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_d_e_j_i_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_d_e_j_i_Furniture1,  !- Name
@@ -1923,16 +1939,20 @@
 
   ElectricEquipment,
     Main_Zone_e_f_k_j_Elec,  !- Name
+    Main_Zone_e_f_k_j_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_e_f_k_j,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_e_f_k_j_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_e_f_k_j_Furniture1,  !- Name
@@ -1989,16 +2009,20 @@
 
   ElectricEquipment,
     Main_Zone_l_k_f_a_Elec,  !- Name
+    Main_Zone_l_k_f_a_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_l_k_f_a,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_l_k_f_a_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_l_k_f_a_Furniture1,  !- Name
@@ -2055,16 +2079,20 @@
 
   ElectricEquipment,
     Main_Zone_g_h_i_l_Elec,  !- Name
+    Main_Zone_g_h_i_l_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_g_h_i_l,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_g_h_i_l_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_g_h_i_l_Furniture1,  !- Name
@@ -2121,16 +2149,20 @@
 
   ElectricEquipment,
     Main_Zone_i_j_k_l_Elec,  !- Name
+    Main_Zone_i_j_k_l_Elec Definition, !- Electric Equipment Definition Name
     Main_Zone_i_j_k_l,       !- Zone or ZoneList or Space or SpaceList Name
     Elec_office_Sch,         !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Zone_i_j_k_l_Elec Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     2.36625,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.25,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   InternalMass,
     Main_Zone_i_j_k_l_Furniture1,  !- Name

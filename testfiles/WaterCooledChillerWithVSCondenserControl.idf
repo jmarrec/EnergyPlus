@@ -14382,16 +14382,20 @@
 
   ElectricEquipment,
     Office_Plug_Loads 1,     !- Name
-    Office_Space_Type_62.2_Multizone_Adjusted,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Plug_And_Process_Schedule,  !- Schedule Name
+    Office_Plug_Loads 1 Definition, !- Electric Equipment Definition Name
+    Office_Space_Type_62.2_Multizone_Adjusted, !- Zone or ZoneList or Space or SpaceList Name
+    Office_Plug_And_Process_Schedule, !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office_Plug_Loads 1 Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     8.07293281253229,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONEINFILTRATION:DESIGNFLOWRATE ===========
 

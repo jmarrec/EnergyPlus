@@ -1017,42 +1017,54 @@
 
   ElectricEquipment,
     Dining_MiscElec_Equip,   !- Name
+    Dining_MiscElec_Equip Definition, !- Electric Equipment Definition Name
     Dining,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscElec;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Dining_MiscElec_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     22402,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2500,                  !- Fraction Latent
     0.3000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscElec;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_MiscElec_Equip,  !- Name
+    Kitchen_MiscElec_Equip Definition, !- Electric Equipment Definition Name
     Kitchen,                 !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscElec;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_MiscElec_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     52500,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2500,                  !- Fraction Latent
     0.3000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Lost
-    MiscElec;                !- End-Use Subcategory
+    0.2000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_ExhFan_Equip,    !- Name
+    Kitchen_ExhFan_Equip Definition, !- Electric Equipment Definition Name
     Kitchen,                 !- Zone or ZoneList or Space or SpaceList Name
     Kitchen_Exhaust_SCH,     !- Schedule Name
+    KitchenExhFan;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_ExhFan_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     699,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    1.0000,                  !- Fraction Lost
-    KitchenExhFan;           !- End-Use Subcategory
+    1.0000;                  !- Fraction Lost
 
   GasEquipment,
     Kitchen_MiscGas_Equip,   !- Name

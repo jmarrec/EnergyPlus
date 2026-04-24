@@ -857,8 +857,12 @@
 
   ElectricEquipment,
     AllZones with Electric Equipment,  !- Name
+    AllZones with Electric Equipment Definition, !- Electric Equipment Definition Name
     AllOccupiedZones,        !- Zone or ZoneList or Space or SpaceList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    AllZones with Electric Equipment Definition, !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

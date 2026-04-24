@@ -415,8 +415,12 @@
 
   ElectricEquipment,
     ZONE 1 ElecEq 1,         !- Name
+    ZONE 1 ElecEq 1 Definition, !- Electric Equipment Definition Name
     ZONE 1,                  !- Zone or ZoneList or Space or SpaceList Name
-    BLDG Sch   2,            !- Schedule Name
+    BLDG Sch   2;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE 1 ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4310.000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

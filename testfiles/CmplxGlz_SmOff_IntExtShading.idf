@@ -1400,8 +1400,12 @@
 
   ElectricEquipment,
     ZSF1 ElecEq 1,           !- Name
+    ZSF1 ElecEq 1 Definition, !- Electric Equipment Definition Name
     ZSF1,                    !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZSF1 ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1412,8 +1416,12 @@
 
   ElectricEquipment,
     ZNF1 ElecEq 1,           !- Name
+    ZNF1 ElecEq 1 Definition, !- Electric Equipment Definition Name
     ZNF1,                    !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZNF1 ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1424,8 +1432,12 @@
 
   ElectricEquipment,
     ZSF2 ElecEq 1,           !- Name
+    ZSF2 ElecEq 1 Definition, !- Electric Equipment Definition Name
     ZSF2,                    !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZSF2 ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1436,8 +1448,12 @@
 
   ElectricEquipment,
     ZNF2 ElecEq 1,           !- Name
+    ZNF2 ElecEq 1 Definition, !- Electric Equipment Definition Name
     ZNF2,                    !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZNF2 ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     687.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

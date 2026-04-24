@@ -2514,55 +2514,71 @@
 
   ElectricEquipment,
     Dining_MiscElec_Equip,   !- Name
+    Dining_MiscElec_Equip Definition, !- Electric Equipment Definition Name
     Dining,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    Cooking;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Dining_MiscElec_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     24136.66197,             !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2500,                  !- Fraction Latent
     0.3000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    Cooking;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_MiscElec_Equip,  !- Name
+    Kitchen_MiscElec_Equip Definition, !- Electric Equipment Definition Name
     Kitchen,                 !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    Cooking;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_MiscElec_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     56318.87793,             !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2500,                  !- Fraction Latent
     0.3000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Lost
-    Cooking;                 !- End-Use Subcategory
+    0.2000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_Reach-in-Freezer,!- Name
+    Kitchen_Reach-in-Freezer Definition, !- Electric Equipment Definition Name
     Kitchen,                 !- Zone or ZoneList or Space or SpaceList Name
     Always_on,               !- Schedule Name
+    ReachInFreezer;          !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_Reach-in-Freezer Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     277.5,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2500,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ReachInFreezer;          !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_Reach-in-Refrigerator,  !- Name
+    Kitchen_Reach-in-Refrigerator Definition, !- Electric Equipment Definition Name
     Kitchen,                 !- Zone or ZoneList or Space or SpaceList Name
     Always_on,               !- Schedule Name
+    ReachInRefrigerator;     !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_Reach-in-Refrigerator Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     313.3,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2500,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ReachInRefrigerator;     !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: GASEQUIPMENT ===========
 

@@ -1535,94 +1535,122 @@
 
   ElectricEquipment,
     Bakery_MiscPlug_Equip,   !- Name
+    Bakery_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Bakery,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Bakery_MiscPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     11244,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Deli_MiscPlug_Equip,     !- Name
+    Deli_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Deli,                    !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Deli_MiscPlug_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     12105,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     DryStorage_MiscPlug_Equip,  !- Name
+    DryStorage_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     DryStorage,              !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    DryStorage_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     8.07,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Office_MiscPlug_Equip,   !- Name
+    Office_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Office,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     8.07,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Produce_MiscPlug_Equip,  !- Name
+    Produce_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Produce,                 !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Produce_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     5.38,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Sales_MiscPlug_Equip,    !- Name
+    Sales_MiscPlug_Equip Definition, !- Electric Equipment Definition Name
     Sales,                   !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Sales_MiscPlug_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     5.38,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Deli_Exhaust_Fan,        !- Name
+    Deli_Exhaust_Fan Definition, !- Electric Equipment Definition Name
     Deli,                    !- Zone or ZoneList or Space or SpaceList Name
     Deli_Exhaust_SCH,        !- Schedule Name
+    ExhaustFans;             !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Deli_Exhaust_Fan Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     524,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    1.0000,                  !- Fraction Lost
-    ExhaustFans;             !- End-Use Subcategory
+    1.0000;                  !- Fraction Lost
 
   GasEquipment,
     Bakery_MiscGas_Equip,    !- Name

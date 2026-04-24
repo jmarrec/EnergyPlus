@@ -1347,8 +1347,12 @@
 
   ElectricEquipment,
     BackRoom ElecEq 1,       !- Name
+    BackRoom ElecEq 1 Definition, !- Electric Equipment Definition Name
     BackRoom,                !- Zone or ZoneList or Space or SpaceList Name
-    Elec_Equip_Sch,          !- Schedule Name
+    Elec_Equip_Sch;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    BackRoom ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     150.0,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1359,8 +1363,12 @@
 
   ElectricEquipment,
     SalesFloor ElecEq 1,     !- Name
+    SalesFloor ElecEq 1 Definition, !- Electric Equipment Definition Name
     SalesFloor,              !- Zone or ZoneList or Space or SpaceList Name
-    Register_Equip_Sch,      !- Schedule Name
+    Register_Equip_Sch;      !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SalesFloor ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1500.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1371,8 +1379,12 @@
 
   ElectricEquipment,
     SalesFloor ElecEq 2,     !- Name
+    SalesFloor ElecEq 2 Definition, !- Electric Equipment Definition Name
     SalesFloor,              !- Zone or ZoneList or Space or SpaceList Name
-    Bakery_Equip_Sch,        !- Schedule Name
+    Bakery_Equip_Sch;        !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SalesFloor ElecEq 2 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     15000.0,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1383,8 +1395,12 @@
 
   ElectricEquipment,
     SalesFloor ElecEq 3,     !- Name
+    SalesFloor ElecEq 3 Definition, !- Electric Equipment Definition Name
     SalesFloor,              !- Zone or ZoneList or Space or SpaceList Name
-    Elec_Equip_Sch,          !- Schedule Name
+    Elec_Equip_Sch;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SalesFloor ElecEq 3 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     600.0,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

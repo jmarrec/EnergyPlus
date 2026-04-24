@@ -4243,29 +4243,37 @@
 
   ElectricEquipment,
     Office Plug Load,        !- Name
+    Office Plug Load Definition, !- Electric Equipment Definition Name
     Zone1 Office,            !- Zone or ZoneList or Space or SpaceList Name
     Office_Plug_SCH,         !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office Plug Load Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1912.5,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Fraction Latent
     ,                        !- Fraction Radiant
-    ,                        !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    ;                        !- Fraction Lost
 
   ElectricEquipment,
     Bulk Storage  Plug Load, !- Name
+    Bulk Storage  Plug Load Definition, !- Electric Equipment Definition Name
     Zone3 Bulk Storage,      !- Zone or ZoneList or Space or SpaceList Name
-    Bulk Storage Plug Schedule,  !- Schedule Name
+    Bulk Storage Plug Schedule, !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Bulk Storage  Plug Load Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     8200.12,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Fraction Latent
     ,                        !- Fraction Radiant
-    ,                        !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    ;                        !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: DAYLIGHTING:CONTROLS ===========
 

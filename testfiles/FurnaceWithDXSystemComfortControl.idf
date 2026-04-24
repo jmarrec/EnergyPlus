@@ -1111,42 +1111,54 @@
 
   ElectricEquipment,
     WEST ZONE ElecEq 1,      !- Name
+    WEST ZONE ElecEq 1 Definition, !- Electric Equipment Definition Name
     WEST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     INTERMITTENT,            !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    WEST ZONE ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3000000,               !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     EAST ZONE ElecEq 1,      !- Name
+    EAST ZONE ElecEq 1 Definition, !- Electric Equipment Definition Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     INTERMITTENT,            !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    EAST ZONE ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3000000,               !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     NORTH ZONE ElecEq 1,     !- Name
+    NORTH ZONE ElecEq 1 Definition, !- Electric Equipment Definition Name
     NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
     INTERMITTENT,            !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    NORTH ZONE ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3000000,               !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   Curve:Biquadratic,
     WindACCoolCapFT,         !- Name

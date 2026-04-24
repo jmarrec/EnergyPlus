@@ -1022,29 +1022,37 @@
 
   ElectricEquipment,
     Dining_MiscElec_Equip,   !- Name
+    Dining_MiscElec_Equip Definition, !- Electric Equipment Definition Name
     Dining,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscElec;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Dining_MiscElec_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     15000,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2500,                  !- Fraction Latent
     0.3000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscElec;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_MiscElec_Equip,  !- Name
+    Kitchen_MiscElec_Equip Definition, !- Electric Equipment Definition Name
     Kitchen,                 !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscElec;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_MiscElec_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     35000,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2500,                  !- Fraction Latent
     0.3000,                  !- Fraction Radiant
-    0.3000,                  !- Fraction Lost
-    MiscElec;                !- End-Use Subcategory
+    0.3000;                  !- Fraction Lost
 
   GasEquipment,
     Kitchen_MiscGas_Equip,   !- Name

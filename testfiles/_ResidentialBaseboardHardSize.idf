@@ -5151,133 +5151,173 @@
 
   ElectricEquipment,
     clothes dryer,           !- Name
+    clothes dryer Definition, !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     clothes dryer schedule,  !- Schedule Name
+    clothes dryer;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    clothes dryer Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     98.3800120427115,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.015,                   !- Fraction Latent
     0.081,                   !- Fraction Radiant
-    0.85,                    !- Fraction Lost
-    clothes dryer;           !- End-Use Subcategory
+    0.85;                    !- Fraction Lost
 
   ElectricEquipment,
     clothes washer,          !- Name
+    clothes washer Definition, !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     clothes washer schedule, !- Schedule Name
+    clothes washer;          !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    clothes washer Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     25.2249705337425,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.03,                    !- Fraction Latent
     0.162,                   !- Fraction Radiant
-    0.7,                     !- Fraction Lost
-    clothes washer;          !- End-Use Subcategory
+    0.7;                     !- Fraction Lost
 
   ElectricEquipment,
     cooking range,           !- Name
+    cooking range Definition, !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     cooking range schedule,  !- Schedule Name
+    cooking range;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    cooking range Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     164.471232876712,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0799999999999999,      !- Fraction Latent
     0.432,                   !- Fraction Radiant
-    0.2,                     !- Fraction Lost
-    cooking range;           !- End-Use Subcategory
+    0.2;                     !- Fraction Lost
 
   ElectricEquipment,
     dishwasher,              !- Name
+    dishwasher Definition,   !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     dishwasher schedule,     !- Schedule Name
+    dishwasher;              !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    dishwasher Definition,   !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     28.4013402782189,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.3,                     !- Fraction Latent
     0.18,                    !- Fraction Radiant
-    0.4,                     !- Fraction Lost
-    dishwasher;              !- End-Use Subcategory
+    0.4;                     !- Fraction Lost
 
   ElectricEquipment,
     fridge,                  !- Name
+    fridge Definition,       !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     fridge schedule,         !- Schedule Name
+    fridge;                  !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    fridge Definition,       !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     74.2009132420091,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.6,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    fridge;                  !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     mech vent house fan,     !- Name
+    mech vent house fan Definition, !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
-    mech vent house fan schedule,  !- Schedule Name
+    mech vent house fan schedule, !- Schedule Name
+    mech vent;               !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    mech vent house fan Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    1,                       !- Fraction Lost
-    mech vent;               !- End-Use Subcategory
+    1;                       !- Fraction Lost
 
   ElectricEquipment,
     mech vent house fan cfis,!- Name
+    mech vent house fan cfis Definition, !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
-    mech vent house fan cfis schedule,  !- Schedule Name
+    mech vent house fan cfis schedule, !- Schedule Name
+    mech vent;               !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    mech vent house fan cfis Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    mech vent;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     misc plug loads,         !- Name
+    misc plug loads Definition, !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
-    misc plug loads schedule,!- Schedule Name
+    misc plug loads schedule, !- Schedule Name
+    misc plug loads;         !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    misc plug loads Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     114.435616438356,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.045,                   !- Fraction Latent
     0.513,                   !- Fraction Radiant
-    0.1,                     !- Fraction Lost
-    misc plug loads;         !- End-Use Subcategory
+    0.1;                     !- Fraction Lost
 
   ElectricEquipment,
     misc tv,                 !- Name
+    misc tv Definition,      !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     misc tv schedule,        !- Schedule Name
+    misc tv;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    misc tv Definition,      !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     224.219178082192,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.6,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    misc tv;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     whole house fan,         !- Name
+    whole house fan Definition, !- Electric Equipment Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    whole house fan;         !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    whole house fan Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    1,                       !- Fraction Lost
-    whole house fan;         !- End-Use Subcategory
+    1;                       !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: OTHEREQUIPMENT ===========
 

@@ -1450,81 +1450,105 @@
 
   ElectricEquipment,
     Res Refrigerator,        !- Name
+    Res Refrigerator Definition, !- Electric Equipment Definition Name
     LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
     Refrigerator Sch,        !- Schedule Name
+    Refrigerator;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Res Refrigerator Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     91.09,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.35,                    !- Fraction Radiant
-    0,                       !- Fraction Lost
-    Refrigerator;            !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     Res Clothes Washer,      !- Name
+    Res Clothes Washer Definition, !- Electric Equipment Definition Name
     LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
     Clothes Washer Sch,      !- Schedule Name
+    Clotheswashing;          !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Res Clothes Washer Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     24.74,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.6,                     !- Fraction Radiant
-    0.2,                     !- Fraction Lost
-    Clotheswashing;          !- End-Use Subcategory
+    0.2;                     !- Fraction Lost
 
   ElectricEquipment,
     Res Clothes Dryer Electric,  !- Name
+    Res Clothes Dryer Electric Definition, !- Electric Equipment Definition Name
     LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
     Clothes Dryer Sch,       !- Schedule Name
+    ClothesDrying;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Res Clothes Dryer Electric Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     185.76,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.05,                    !- Fraction Latent
     0.1125,                  !- Fraction Radiant
-    0.8,                     !- Fraction Lost
-    ClothesDrying;           !- End-Use Subcategory
+    0.8;                     !- Fraction Lost
 
   ElectricEquipment,
     Res Dish Washers,        !- Name
+    Res Dish Washers Definition, !- Electric Equipment Definition Name
     LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
     Dish Washer Sch,         !- Schedule Name
+    Dishwashing;             !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Res Dish Washers Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     62.57,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.20,                    !- Fraction Latent
     0.45,                    !- Fraction Radiant
-    0.20,                    !- Fraction Lost
-    Dishwashing;             !- End-Use Subcategory
+    0.20;                    !- Fraction Lost
 
   ElectricEquipment,
     Res Range Electric,      !- Name
+    Res Range Electric Definition, !- Electric Equipment Definition Name
     LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
     Range Sch,               !- Schedule Name
+    Cooking;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Res Range Electric Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     248.1,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.4,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Lost
-    Cooking;                 !- End-Use Subcategory
+    0.2;                     !- Fraction Lost
 
   ElectricEquipment,
     Res Other appliances & Plug Loads,  !- Name
+    Res Other appliances & Plug Loads Definition, !- Electric Equipment Definition Name
     LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
     Other Plug Loads Sch,    !- Schedule Name
+    OtherPlugloads;          !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Res Other appliances & Plug Loads Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     567.31,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.1,                     !- Fraction Latent
     0.315,                   !- Fraction Radiant
-    0,                       !- Fraction Lost
-    OtherPlugloads;          !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   Curve:Biquadratic,
     CentralACCoolCapFT,      !- Name

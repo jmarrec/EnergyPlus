@@ -579,16 +579,20 @@
 
   ElectricEquipment,
     ROOM ELE EQU,            !- Name
+    ROOM ELE EQU Definition, !- Electric Equipment Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     Sch Equ,                 !- Schedule Name
+    Room Equi;               !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ROOM ELE EQU Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     768,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    Room Equi;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   Lights,
     ROOM LIGHTS,             !- Name
