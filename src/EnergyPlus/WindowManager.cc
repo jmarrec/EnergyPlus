@@ -4260,7 +4260,7 @@ namespace Window {
         //   as output: decomposed matrix
         //   if odd
 
-        int imax; // Temporary variable
+        int imax = 0; // Temporary variable
         //   as output: decomposed matrix
 
         assert(n <= 10);                   // vv sizing

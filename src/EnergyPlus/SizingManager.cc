@@ -2696,7 +2696,7 @@ void GetZoneSizingInput(EnergyPlusData &state)
     bool errFlag;
     Array1D_string ZoneNames;
     int NumZones;
-    int NumZoneLists;
+    int NumZoneLists = 0;
 
     struct GlobalMiscObject
     {

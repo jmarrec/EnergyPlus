@@ -11479,7 +11479,7 @@ namespace AirflowNetwork {
 
         // Check number of fans specified in an AirLoop #6748
         int BranchNum;
-        int NumOfFans;
+        int NumOfFans = 0;
         std::string FanNames;
         for (BranchNum = 1; BranchNum <= m_state.dataAirSystemsData->PrimaryAirSystems(1).NumBranches; ++BranchNum) {
             NumOfFans = 0;
