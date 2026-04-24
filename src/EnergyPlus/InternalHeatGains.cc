@@ -1260,6 +1260,7 @@ namespace InternalHeatGains {
         PreDefTableEntry(state, state.dataOutRptPredefined->pdchInLtArea, "Interior Lighting Total", sumArea);
         PreDefTableEntry(state, state.dataOutRptPredefined->pdchInLtPower, "Interior Lighting Total", sumPower);
 
+        // TODO: HERE
         // ElectricEquipment
         // Declared in state because the lights inputs are needed for demand manager
         int numZoneElectricStatements = 0;
@@ -1272,6 +1273,10 @@ namespace InternalHeatGains {
 
         if (state.dataHeatBal->TotElecEquip > 0) {
             state.dataHeatBal->ZoneElectric.allocate(state.dataHeatBal->TotElecEquip);
+
+            // Read the definitions
+            std::vector<ZoneEquipDefinitionData> elecLoadDefs = GetSpaceLoadDefinition(state, "ElectricEquipment:Definition");
+
             int elecEqNum = 0;
             for (int elecEqInputNum = 1; elecEqInputNum <= numZoneElectricStatements; ++elecEqInputNum) {
 
@@ -1289,38 +1294,28 @@ namespace InternalHeatGains {
                                                                          IHGNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, elecEqModuleObject, IHGAlphas(1)};
-                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(3));
-                if (IHGAlphaFieldBlanks(3)) {
-                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(3));
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
                     ErrorsFound = true;
                 } else if (schedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
                     ErrorsFound = true;
                 } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
                     ErrorsFound = true;
                 }
 
                 auto &thisElecEqInput = state.dataInternalHeatGains->zoneElectricObjects(elecEqInputNum);
-                DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
-                int fieldNum = 1;
-                switch (levelMethod) {
-                case DesignLevelMethod::EquipmentLevel: {
-                    fieldNum = 1;
-                } break;
-                case DesignLevelMethod::WattsPerArea: {
-                    fieldNum = 2;
-                } break;
-                case DesignLevelMethod::WattsPerPerson: {
-                    fieldNum = 3;
-                } break;
-                default: {
-                    assert(false);
-                } break;
+                std::string defName = IHGAlphas(2);
+
+                auto itElecLoadDef = std::find_if(
+                    elecLoadDefs.begin(), elecLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itElecLoadDef == elecLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
                 }
-                Real64 const levelValue = IHGNumbers(fieldNum);
-                bool const levelBlank = IHGNumericFieldBlanks(fieldNum);
-                std::string_view const levelField = IHGNumericFieldNames(fieldNum);
 
                 for (int Item1 = 1; Item1 <= thisElecEqInput.numOfSpaces; ++Item1) {
                     ++elecEqNum;
@@ -1333,16 +1328,24 @@ namespace InternalHeatGains {
                     thisZoneElectric.sched = schedPtr;
 
                     // Electric equipment design level calculation method.
-                    thisZoneElectric.DesignLevel = setDesignLevel(
-                        state, ErrorsFound, elecEqModuleObject, thisElecEqInput, levelMethod, zoneNum, spaceNum, levelValue, levelBlank, levelField);
+                    thisZoneElectric.DesignLevel = setDesignLevel(state,
+                                                                  ErrorsFound,
+                                                                  elecEqModuleObject,
+                                                                  thisElecEqInput,
+                                                                  itElecLoadDef->designLevelMethod,
+                                                                  zoneNum,
+                                                                  spaceNum,
+                                                                  itElecLoadDef->levelValue,
+                                                                  itElecLoadDef->levelIsBlank,
+                                                                  itElecLoadDef->levelField);
 
                     // Calculate nominal min/max equipment level
                     thisZoneElectric.NomMinDesignLevel = thisZoneElectric.DesignLevel * thisZoneElectric.sched->getMinVal(state);
                     thisZoneElectric.NomMaxDesignLevel = thisZoneElectric.DesignLevel * thisZoneElectric.sched->getMaxVal(state);
 
-                    thisZoneElectric.FractionLatent = IHGNumbers(4);
-                    thisZoneElectric.FractionRadiant = IHGNumbers(5);
-                    thisZoneElectric.FractionLost = IHGNumbers(6);
+                    thisZoneElectric.FractionLatent = itElecLoadDef->FractionLatent;
+                    thisZoneElectric.FractionRadiant = itElecLoadDef->FractionRadiant;
+                    thisZoneElectric.FractionLost = itElecLoadDef->FractionLost;
                     // FractionConvected is a calculated field
                     thisZoneElectric.FractionConvected =
                         1.0 - (thisZoneElectric.FractionLatent + thisZoneElectric.FractionRadiant + thisZoneElectric.FractionLost);
@@ -3297,6 +3300,80 @@ namespace InternalHeatGains {
         }
     }
 
+    std::vector<ZoneEquipDefinitionData> GetSpaceLoadDefinition(EnergyPlusData &state, const std::string &objectType)
+    {
+
+        constexpr std::string_view routineName = "getSpaceLoadDefinition: ";
+
+        // static constexpr std::array<std::pair<DesignLevelMethod, std::string_view>, static_cast<int>(DesignLevelMethod::Num)>
+        // DesignLevelMethodFieldNames {{
+        //     {DesignLevelMethod::People, "number_of_people"},
+        //     {DesignLevelMethod::PeoplePerArea, "people_per_floor_area"},
+        //     {DesignLevelMethod::AreaPerPerson, "floor_area_per_person"},
+        //     {DesignLevelMethod::LightingLevel, "lighting_level"},
+        //     {DesignLevelMethod::EquipmentLevel, "equipment_level"},
+        //     {DesignLevelMethod::WattsPerArea, "watts_per_floor_area"},
+        //     {DesignLevelMethod::WattsPerPerson, "watts_per_person"},
+        //     {DesignLevelMethod::PowerPerArea, "power_per_floor_area"}, // TODO: remove
+        //     {DesignLevelMethod::PowerPerPerson, "power_per_person"}
+        // }};
+        static constexpr std::array<std::string_view, static_cast<int>(DesignLevelMethod::Num)> DesignLevelMethodFieldNames = {
+            "number_of_people",      // DesignLevelMethod::People
+            "people_per_floor_area", // DesignLevelMethod::PeoplePerArea
+            "floor_area_per_person", // DesignLevelMethod::AreaPerPerson
+            "lighting_level",        // DesignLevelMethod::LightingLevel
+            "design_level",          // DesignLevelMethod::EquipmentLevel
+            "watts_per_floor_area",  // DesignLevelMethod::WattsPerArea
+            "watts_per_person",      // DesignLevelMethod::WattsPerPerson
+            "power_per_floor_area",  // DesignLevelMethod::PowerPerArea
+            "power_per_person"       // DesignLevelMethod::PowerPerPerson
+        };
+
+        std::vector<ZoneEquipDefinitionData> spaceLoadDefs;
+
+        auto &ip = state.dataInputProcessing->inputProcessor;
+        auto const instances = ip->epJSON.find(objectType);
+        if (instances != ip->epJSON.end()) {
+            auto const &objectSchemaProps = ip->getObjectSchemaProps(state, objectType);
+            auto &instancesValue = instances.value();
+            spaceLoadDefs.reserve(instancesValue.size());
+
+            for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
+                auto &spaceLoadDef = spaceLoadDefs.emplace_back();
+
+                auto const &objectFields = instance.value();
+                ip->markObjectAsUsed(objectType, instance.key());
+
+                spaceLoadDef.Name = Util::makeUPPER(instance.key());
+
+                std::string const designLevelMethodName =
+                    ip->getAlphaFieldValue(objectFields, objectSchemaProps, "design_level_calculation_method", true);
+                spaceLoadDef.designLevelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, designLevelMethodName));
+                spaceLoadDef.levelField = std::string{DesignLevelMethodFieldNames[static_cast<int>(spaceLoadDef.designLevelMethod)]};
+
+                auto it = objectFields.find(spaceLoadDef.levelField);
+                if (it == objectFields.end()) {
+                    ShowWarningError(
+                        state,
+                        EnergyPlus::format("{}{}=\"{}\", specifies Method={}, but the corresponding field \"{}\"is blank. 0 will result.",
+                                           routineName,
+                                           objectType,
+                                           spaceLoadDef.Name,
+                                           designLevelMethodName,
+                                           spaceLoadDef.levelField));
+                    spaceLoadDef.levelIsBlank = true;
+                }
+                spaceLoadDef.levelValue = ip->getRealFieldValue(objectFields, objectSchemaProps, spaceLoadDef.levelField);
+
+                spaceLoadDef.FractionLatent = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_latent");
+                spaceLoadDef.FractionRadiant = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_radiant");
+                spaceLoadDef.FractionLost = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_lost");
+            }
+        }
+
+        return spaceLoadDefs;
+    }
+
     void setupIHGZonesAndSpaces(EnergyPlusData &state,
                                 const std::string &objectType,
                                 EPVector<InternalHeatGains::GlobalInternalGainMiscObject> &inputObjects,
@@ -3324,7 +3401,7 @@ namespace InternalHeatGains {
             int counter = 0;
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
                 auto const &objectFields = instance.value();
-                std::string const &thisObjectName = Util::makeUPPER(instance.key());
+                std::string const thisObjectName = Util::makeUPPER(instance.key());
                 ip->markObjectAsUsed(objectType, instance.key());
 
                 // For incoming idf, maintain object order
