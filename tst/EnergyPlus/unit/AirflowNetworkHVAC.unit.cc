@@ -3805,8 +3805,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_MultiAirLoopTest)
 
         "  ElectricEquipment,",
         "    West Zone ElecEq 1,      !- Name",
+        "    West Zone ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    West Zone,               !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    West Zone ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    2928.751,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3817,8 +3821,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_MultiAirLoopTest)
 
         "  ElectricEquipment,",
         "    EAST ZONE ElecEq 1,      !- Name",
+        "    EAST ZONE ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    EAST ZONE,               !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    EAST ZONE ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1464.375,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3829,8 +3837,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_MultiAirLoopTest)
 
         "  ElectricEquipment,",
         "    NORTH ZONE ElecEq 1,     !- Name",
+        "    NORTH ZONE ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    NORTH ZONE,              !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    NORTH ZONE ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    2928.751,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -13951,8 +13963,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestIntraZoneLinkageZoneIndex)
 
         "ElectricEquipment,",
         "    WEST_ZONE Equip,         !- Name",
+        "    WEST_ZONE Equip Definition, !- Electric Equipment Definition Name",
         "    WEST_ZONE,               !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    WEST_ZONE Equip Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    2928.751,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -13963,8 +13979,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestIntraZoneLinkageZoneIndex)
 
         "ElectricEquipment,",
         "    EAST_ZONE Equip,         !- Name",
+        "    EAST_ZONE Equip Definition, !- Electric Equipment Definition Name",
         "    EAST_ZONE,               !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    EAST_ZONE Equip Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1464.375,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -13975,8 +13995,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestIntraZoneLinkageZoneIndex)
 
         "ElectricEquipment,",
         "    NORTH_ZONE Equip,        !- Name",
+        "    NORTH_ZONE Equip Definition, !- Electric Equipment Definition Name",
         "    NORTH_ZONE,              !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    NORTH_ZONE Equip Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    2928.751,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -13987,8 +14011,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestIntraZoneLinkageZoneIndex)
 
         "ElectricEquipment,",
         "    WEST_ZONE_T Equip,       !- Name",
+        "    WEST_ZONE_T Equip Definition, !- Electric Equipment Definition Name",
         "    WEST_ZONE_T,             !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    WEST_ZONE_T Equip Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    2928.751,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -13999,8 +14027,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestIntraZoneLinkageZoneIndex)
 
         "ElectricEquipment,",
         "    EAST_ZONE_T Equip,       !- Name",
+        "    EAST_ZONE_T Equip Definition, !- Electric Equipment Definition Name",
         "    EAST_ZONE_T,             !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    EAST_ZONE_T Equip Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1464.375,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -15799,8 +15831,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_DuctSizingTest)
 
         "  ElectricEquipment,",
         "    LIVING ZONE ElecEq,      !- Name",
+        "    LIVING ZONE ElecEq Definition, !- Electric Equipment Definition Name",
         "    LIVING ZONE,             !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    LIVING ZONE ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500,                     !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
