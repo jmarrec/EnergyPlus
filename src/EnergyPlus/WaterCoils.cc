@@ -4446,7 +4446,7 @@ void CoilOutletStreamCondition(EnergyPlusData &state,
             if (d < -20.0 || d > 0.0) {
                 effectiveness = 1.0;
             } else {
-                effectiveness = 1.0 - std::expm1(std::exp(-NTU * RatioStreamCapacity * eta) / (RatioStreamCapacity * eta));
+                effectiveness = 1.0 - std::exp(std::expm1(-NTU * RatioStreamCapacity * eta) / (RatioStreamCapacity * eta));
                 if (effectiveness < 0.0) {
                     effectiveness = 0.0;
                 }
