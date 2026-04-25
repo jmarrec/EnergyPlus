@@ -800,6 +800,9 @@ target_link_libraries(
 
 target_link_libraries(energypluslib PRIVATE project_options project_fp_options project_warnings)
 ep_enable_pch(energypluslib)
+if(LINK_WITH_PYTHON)
+  set_source_files_properties(PluginManager.cc PythonEngine.cc PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+endif()
 
 if(OPENGL_FOUND)
   target_link_libraries(energypluslib PUBLIC penumbra)

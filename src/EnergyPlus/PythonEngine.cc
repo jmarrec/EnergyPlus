@@ -45,11 +45,6 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <EnergyPlus/DataStringGlobals.hh>
-#include <EnergyPlus/PluginManager.hh>
-#include <EnergyPlus/PythonEngine.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
-
 #if LINK_WITH_PYTHON
 #    ifdef _DEBUG
 // We don't want to try to import a debug build of Python here
@@ -62,7 +57,14 @@
 #    else
 #        include <Python.h>
 #    endif
+#endif
 
+#include <EnergyPlus/DataStringGlobals.hh>
+#include <EnergyPlus/PluginManager.hh>
+#include <EnergyPlus/PythonEngine.hh>
+#include <EnergyPlus/UtilityRoutines.hh>
+
+#if LINK_WITH_PYTHON
 #    include <fmt/format.h>
 namespace fmt {
 template <> struct formatter<PyStatus>
