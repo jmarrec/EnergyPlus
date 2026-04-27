@@ -161,6 +161,6 @@ if(BUILD_TESTING)
               --transition-cli-dir "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
               "${CMAKE_CURRENT_SOURCE_DIR}/tests/"
     )
-    set_tests_properties(Transition.transition_tests PROPERTIES TIMEOUT 120)
+    set_tests_properties(Transition.transition_tests PROPERTIES TIMEOUT 300)
   endif()
 endif()

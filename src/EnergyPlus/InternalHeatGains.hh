@@ -91,6 +91,7 @@ namespace InternalHeatGains {
         Real64 FractionLatent = 0.0;  // Percentage (fraction 0.0-1.0) of sensible heat gain that is latent
         Real64 FractionRadiant = 0.0; // Percentage (fraction 0.0-1.0) of sensible heat gain that is radiant
         Real64 FractionLost = 0.0;    // Percentage (fraction 0.0-1.0) of sensible heat gain that is lost
+        Real64 CO2RateFactor = 0.0;   // CO2 rate factor [m3/s/W], only for Gas and OtherEquipment
     };
 
     struct GlobalInternalGainMiscObject
