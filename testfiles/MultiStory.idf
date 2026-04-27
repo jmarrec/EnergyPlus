@@ -478,16 +478,20 @@
 
   HotWaterEquipment,
     Office Buildings,        !- Name
+    Office Buildings Definition, !- Hot Water Equipment Definition Name
     AllZones,                !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Office Buildings Definition, !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     31.1,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
   ScheduleTypeLimits,
     Any Number;              !- Name
