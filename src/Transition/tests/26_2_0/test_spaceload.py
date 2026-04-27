@@ -843,3 +843,124 @@ def test_people_with_tc_models(run_transition_test):
 """
 
     run_transition_test(idf_text, expected_idf_text)
+
+
+def test_lights_with_end_use_subcat(run_transition_test):
+    """Lights object with End-Use Subcategory → split into instance + definition."""
+    idf_text = """
+  Lights,
+    SPACE1-1 Lights 1,       !- Name
+    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    LightingLevel,           !- Design Level Calculation Method
+    1000.0,                  !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.32,                    !- Fraction Radiant
+    0.25,                    !- Fraction Visible
+    1.0,                     !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+    """
+
+    expected_idf_text = """
+  Lights,
+    SPACE1-1 Lights 1,       !- Name
+    SPACE1-1 Lights 1 Definition,  !- Lights Definition Name
+    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SPACE1-1 Lights 1 Definition,  !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    1000.0,                  !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.32,                    !- Fraction Radiant
+    0.25;                    !- Fraction Visible
+"""
+
+    run_transition_test(idf_text, expected_idf_text)
+
+
+def test_lights_blank_end_use_subcat(run_transition_test):
+    """Lights with blank End-Use Subcategory round-trips correctly."""
+    idf_text = """
+  Lights,
+    SPACE1-1 Lights 1,       !- Name
+    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    LightingLevel,           !- Design Level Calculation Method
+    1000.0,                  !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.32,                    !- Fraction Radiant
+    0.25,                    !- Fraction Visible
+    1.0,                     !- Fraction Replaceable
+    ;                        !- End-Use Subcategory
+    """
+
+    expected_idf_text = """
+  Lights,
+    SPACE1-1 Lights 1,       !- Name
+    SPACE1-1 Lights 1 Definition,  !- Lights Definition Name
+    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    ;                        !- End-Use Subcategory
+
+  Lights:Definition,
+    SPACE1-1 Lights 1 Definition,  !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    1000.0,                  !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.32,                    !- Fraction Radiant
+    0.25;                    !- Fraction Visible
+"""
+
+    run_transition_test(idf_text, expected_idf_text)
+
+
+def test_lights_no_end_use_subcat(run_transition_test):
+    """Old Lights without End-Use Subcategory → instance terminates at Fraction Replaceable."""
+    idf_text = """
+  Lights,
+    SPACE1-1 Lights 1,       !- Name
+    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    LightingLevel,           !- Design Level Calculation Method
+    1000.0,                  !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.32,                    !- Fraction Radiant
+    0.25,                    !- Fraction Visible
+    1.0;                     !- Fraction Replaceable
+    """
+
+    expected_idf_text = """
+  Lights,
+    SPACE1-1 Lights 1,       !- Name
+    SPACE1-1 Lights 1 Definition,  !- Lights Definition Name
+    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    1.0;                     !- Fraction Replaceable
+
+  Lights:Definition,
+    SPACE1-1 Lights 1 Definition,  !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    1000.0,                  !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.32,                    !- Fraction Radiant
+    0.25;                    !- Fraction Visible
+"""
+
+    run_transition_test(idf_text, expected_idf_text)

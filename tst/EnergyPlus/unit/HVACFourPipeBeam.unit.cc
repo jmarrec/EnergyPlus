@@ -595,8 +595,14 @@ TEST_F(EnergyPlusFixture, Beam_sizeandSimulateOneZone)
 
                           "  Lights,",
                           "    ZONE ONE Lights,  !- Name",
+                          "    ZONE ONE Lights Definition, !- Lights Definition Name",
                           "    ZONE ONE,      !- Zone or ZoneList Name",
                           "    BLDG_LIGHT_SCH,          !- Schedule Name",
+                          "    1.0000,                  !- Fraction Replaceable",
+                          "    General;                 !- End-Use Subcategory",
+
+                          "  Lights:Definition,",
+                          "    ZONE ONE Lights Definition, !- Name",
                           "    Watts/Area,              !- Design Level Calculation Method",
                           "    ,                        !- Lighting Level {W}",
                           "    10.76,                   !- Watts per Zone Floor Area {W/m2}",
@@ -604,8 +610,6 @@ TEST_F(EnergyPlusFixture, Beam_sizeandSimulateOneZone)
                           "    0.0000,                  !- Return Air Fraction",
                           "    0.7000,                  !- Fraction Radiant",
                           "    0.2000,                  !- Fraction Visible",
-                          "    1.0000,                  !- Fraction Replaceable",
-                          "    General,                 !- End-Use Subcategory",
                           "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
 
                           "  ElectricEquipment,",
@@ -2175,8 +2179,14 @@ TEST_F(EnergyPlusFixture, Beam_fatalWhenSysSizingOff)
 
                           "  Lights,",
                           "    ZONE ONE Lights,  !- Name",
+                          "    ZONE ONE Lights Definition, !- Lights Definition Name",
                           "    ZONE ONE,      !- Zone or ZoneList Name",
                           "    BLDG_LIGHT_SCH,          !- Schedule Name",
+                          "    1.0000,                  !- Fraction Replaceable",
+                          "    General;                 !- End-Use Subcategory",
+
+                          "  Lights:Definition,",
+                          "    ZONE ONE Lights Definition, !- Name",
                           "    Watts/Area,              !- Design Level Calculation Method",
                           "    ,                        !- Lighting Level {W}",
                           "    10.76,                   !- Watts per Zone Floor Area {W/m2}",
@@ -2184,8 +2194,6 @@ TEST_F(EnergyPlusFixture, Beam_fatalWhenSysSizingOff)
                           "    0.0000,                  !- Return Air Fraction",
                           "    0.7000,                  !- Fraction Radiant",
                           "    0.2000,                  !- Fraction Visible",
-                          "    1.0000,                  !- Fraction Replaceable",
-                          "    General,                 !- End-Use Subcategory",
                           "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
 
                           "  ElectricEquipment,",
@@ -3670,8 +3678,14 @@ TEST_F(EnergyPlusFixture, Beam_sizeandSimulateHighOA)
 
                           "  Lights,",
                           "    ZONE ONE Lights,  !- Name",
+                          "    ZONE ONE Lights Definition, !- Lights Definition Name",
                           "    ZONE ONE,      !- Zone or ZoneList Name",
                           "    BLDG_LIGHT_SCH,          !- Schedule Name",
+                          "    1.0000,                  !- Fraction Replaceable",
+                          "    General;                 !- End-Use Subcategory",
+
+                          "  Lights:Definition,",
+                          "    ZONE ONE Lights Definition, !- Name",
                           "    Watts/Area,              !- Design Level Calculation Method",
                           "    ,                        !- Lighting Level {W}",
                           "    10.76,                   !- Watts per Zone Floor Area {W/m2}",
@@ -3679,8 +3693,6 @@ TEST_F(EnergyPlusFixture, Beam_sizeandSimulateHighOA)
                           "    0.0000,                  !- Return Air Fraction",
                           "    0.7000,                  !- Fraction Radiant",
                           "    0.2000,                  !- Fraction Visible",
-                          "    1.0000,                  !- Fraction Replaceable",
-                          "    General,                 !- End-Use Subcategory",
                           "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
 
                           "  ElectricEquipment,",

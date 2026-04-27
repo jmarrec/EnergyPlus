@@ -951,16 +951,20 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIU_SimTest)
 
         "Lights,",
         "    OpenOffice Lights,       !- Name",
+        "    OpenOffice Lights Definition, !- Lights Definition Name",
         "    OpenOffice - ZoneList,   !- Zone or ZoneList Name",
         "    Office Bldg Light,       !- Schedule Name",
+        "    ;                        !- Fraction Replaceable",
+
+        "Lights:Definition,",
+        "    OpenOffice Lights Definition, !- Name",
         "    Watts/Area,              !- Design Level Calculation Method",
         "    ,                        !- Lighting Level {W}",
         "    9.10,                    !- Watts per Zone Floor Area {W/m2}",
         "    ,                        !- Watts per Person {W/person}",
         "    ,                        !- Return Air Fraction",
         "    0.3,                     !- Fraction Radiant",
-        "    ,                        !- Fraction Visible",
-        "    ;                        !- Fraction Replaceable",
+        "    ;                        !- Fraction Visible",
 
         "ElectricEquipment,",
         "    OpenOffice Electric Equipment,  !- Name",

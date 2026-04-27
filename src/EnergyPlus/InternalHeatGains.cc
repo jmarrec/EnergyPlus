@@ -852,6 +852,9 @@ namespace InternalHeatGains {
 
         if (state.dataHeatBal->TotLights > 0) {
             state.dataHeatBal->Lights.allocate(state.dataHeatBal->TotLights);
+
+            std::vector<LightsDefinitionData> lightsLoadDefs = GetLightsDefinition(state);
+
             bool CheckSharedExhaustFlag = false;
             int lightsNum = 0;
             for (int lightsInputNum = 1; lightsInputNum <= numLightsStatements; ++lightsInputNum) {
@@ -870,39 +873,30 @@ namespace InternalHeatGains {
                                                                          IHGNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, lightsModuleObject, IHGAlphas(1)};
-                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(3));
-                if (IHGAlphaFieldBlanks(3)) {
-                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(3));
+                // A4: Schedule Name
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
                     ErrorsFound = true;
                 } else if (schedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
                     ErrorsFound = true;
                 } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
                     ErrorsFound = true;
+                }
+
+                // A2: Lights Definition Name
+                std::string defName = IHGAlphas(2);
+                auto itLightsDef = std::find_if(
+                    lightsLoadDefs.begin(), lightsLoadDefs.end(), [&defName](LightsDefinitionData const &d) { return d.Name == defName; });
+                if (itLightsDef == lightsLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
                 }
 
                 auto &thisLightsInput = state.dataInternalHeatGains->lightsObjects(lightsInputNum);
-
-                DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
-                int fieldNum = 1;
-                switch (levelMethod) {
-                case DesignLevelMethod::LightingLevel: {
-                    fieldNum = 1;
-                } break;
-                case DesignLevelMethod::WattsPerArea: {
-                    fieldNum = 2;
-                } break;
-                case DesignLevelMethod::WattsPerPerson: {
-                    fieldNum = 3;
-                } break;
-                default: {
-                    assert(false);
-                } break;
-                }
-                Real64 const levelValue = IHGNumbers(fieldNum);
-                bool const levelBlank = IHGNumericFieldBlanks(fieldNum);
-                std::string_view const levelField = IHGNumericFieldNames(fieldNum);
 
                 // Create one Lights instance for every space associated with this Lights input object
                 // Why? Why can't multiple spaces share a single lights instance?
@@ -917,20 +911,28 @@ namespace InternalHeatGains {
                     thisLights.ZonePtr = zoneNum;
                     thisLights.sched = schedPtr;
 
-                    // Lights Design Level calculation method.
-                    thisLights.DesignLevel = setDesignLevel(
-                        state, ErrorsFound, lightsModuleObject, thisLightsInput, levelMethod, zoneNum, spaceNum, levelValue, levelBlank, levelField);
+                    // Lights Design Level calculation method (from definition).
+                    thisLights.DesignLevel = setDesignLevel(state,
+                                                            ErrorsFound,
+                                                            lightsModuleObject,
+                                                            thisLightsInput,
+                                                            itLightsDef->designLevelMethod,
+                                                            zoneNum,
+                                                            spaceNum,
+                                                            itLightsDef->levelValue,
+                                                            itLightsDef->levelIsBlank,
+                                                            itLightsDef->levelField);
 
                     // Calculate nominal min/max lighting level
                     thisLights.NomMinDesignLevel = thisLights.DesignLevel * thisLights.sched->getMinVal(state);
                     thisLights.NomMaxDesignLevel = thisLights.DesignLevel * thisLights.sched->getMaxVal(state);
 
-                    thisLights.FractionReturnAir = IHGNumbers(4);
-                    thisLights.FractionRadiant = IHGNumbers(5);
-                    thisLights.FractionShortWave = IHGNumbers(6);
-                    thisLights.FractionReplaceable = IHGNumbers(7);
-                    thisLights.FractionReturnAirPlenTempCoeff1 = IHGNumbers(8);
-                    thisLights.FractionReturnAirPlenTempCoeff2 = IHGNumbers(9);
+                    thisLights.FractionReturnAir = itLightsDef->FractionReturnAir;
+                    thisLights.FractionRadiant = itLightsDef->FractionRadiant;
+                    thisLights.FractionShortWave = itLightsDef->FractionShortWave;
+                    thisLights.FractionReplaceable = IHGNumbers(1); // N1 of instance
+                    thisLights.FractionReturnAirPlenTempCoeff1 = itLightsDef->FractionReturnAirPlenTempCoeff1;
+                    thisLights.FractionReturnAirPlenTempCoeff2 = itLightsDef->FractionReturnAirPlenTempCoeff2;
 
                     thisLights.FractionConvected = 1.0 - (thisLights.FractionReturnAir + thisLights.FractionRadiant + thisLights.FractionShortWave);
                     if (std::abs(thisLights.FractionConvected) <= 0.001) {
@@ -960,67 +962,53 @@ namespace InternalHeatGains {
                         thisLights.EndUseSubcategory = "General";
                     }
 
-                    if (IHGAlphaFieldBlanks(6)) {
-                        thisLights.FractionReturnAirIsCalculated = false;
-                    } else if (IHGAlphas(6) != "YES" && IHGAlphas(6) != "NO") {
-                        if (Item1 == 1) {
-                            ShowWarningError(state,
-                                             EnergyPlus::format("{}{}=\"{}\", invalid {}, value  ={}",
-                                                                RoutineName,
-                                                                lightsModuleObject,
-                                                                thisLightsInput.Name,
-                                                                IHGAlphaFieldNames(6),
-                                                                IHGAlphas(6)));
-                            ShowContinueError(state, ".. Return Air Fraction from Plenum will NOT be calculated.");
-                        }
-                        thisLights.FractionReturnAirIsCalculated = false;
-                    } else {
-                        thisLights.FractionReturnAirIsCalculated = (IHGAlphas(6) == "YES");
-                    }
+                    thisLights.FractionReturnAirIsCalculated = itLightsDef->FractionReturnAirIsCalculated;
 
                     // Set return air node number
                     thisLights.ZoneReturnNum = 0;
                     thisLights.RetNodeName = "";
-                    if (!IHGAlphaFieldBlanks(7)) {
+                    if (!itLightsDef->RetNodeName.empty()) {
                         if (thisLightsInput.ZoneListActive) {
                             ShowSevereError(state,
                                             EnergyPlus::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
                                                                RoutineName,
                                                                lightsModuleObject,
                                                                thisLightsInput.Name,
-                                                               IHGAlphaFieldNames(7)));
+                                                               "Return Air Heat Gain Node Name"));
                             ErrorsFound = true;
                         } else {
-                            thisLights.RetNodeName = IHGAlphas(7);
+                            thisLights.RetNodeName = itLightsDef->RetNodeName;
                         }
                     }
                     if ((thisLights.FractionReturnAir > 0.0) && (thisLights.ZonePtr > 0)) {
                         thisLights.ZoneReturnNum = DataZoneEquipment::GetReturnNumForZone(state, thisLights.ZonePtr, thisLights.RetNodeName);
                     }
 
-                    if ((thisLights.ZoneReturnNum == 0) && (thisLights.FractionReturnAir > 0.0) && (!IHGAlphaFieldBlanks(7))) {
-                        ShowSevereError(
-                            state,
-                            EnergyPlus::format(
-                                "{}{}=\"{}\", invalid {} ={}", RoutineName, lightsModuleObject, IHGAlphas(1), IHGAlphaFieldNames(7), IHGAlphas(7)));
+                    if ((thisLights.ZoneReturnNum == 0) && (thisLights.FractionReturnAir > 0.0) && (!itLightsDef->RetNodeName.empty())) {
+                        ShowSevereError(state,
+                                        EnergyPlus::format("{}{}=\"{}\", invalid Return Air Heat Gain Node Name ={}",
+                                                           RoutineName,
+                                                           lightsModuleObject,
+                                                           IHGAlphas(1),
+                                                           itLightsDef->RetNodeName));
                         ShowContinueError(state, "No matching Zone Return Air Node found.");
                         ErrorsFound = true;
                     }
                     // Set exhaust air node number
                     thisLights.ZoneExhaustNodeNum = 0;
-                    if (!IHGAlphaFieldBlanks(8)) {
+                    if (!itLightsDef->ExhaustNodeName.empty()) {
                         if (thisLightsInput.ZoneListActive) {
                             ShowSevereError(state,
                                             EnergyPlus::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
                                                                RoutineName,
                                                                lightsModuleObject,
                                                                thisLightsInput.Name,
-                                                               IHGAlphaFieldNames(8)));
+                                                               "Exhaust Air Heat Gain Node Name"));
                             ErrorsFound = true;
                         } else {
                             bool exhaustNodeError = false;
                             thisLights.ZoneExhaustNodeNum = GetOnlySingleNode(state,
-                                                                              IHGAlphas(8),
+                                                                              itLightsDef->ExhaustNodeName,
                                                                               exhaustNodeError,
                                                                               Node::ConnectionObjectType::Lights,
                                                                               thisLights.Name,
@@ -1034,12 +1022,11 @@ namespace InternalHeatGains {
                             }
                             if (exhaustNodeError) {
                                 ShowSevereError(state,
-                                                EnergyPlus::format("{}{}=\"{}\", invalid {} = {}",
+                                                EnergyPlus::format("{}{}=\"{}\", invalid Exhaust Air Heat Gain Node Name = {}",
                                                                    RoutineName,
                                                                    lightsModuleObject,
                                                                    IHGAlphas(1),
-                                                                   IHGAlphaFieldNames(8),
-                                                                   IHGAlphas(8)));
+                                                                   itLightsDef->ExhaustNodeName));
                                 ShowContinueError(state, "No matching Zone Exhaust Air Node found.");
                                 ErrorsFound = true;
                             } else {
@@ -1049,12 +1036,11 @@ namespace InternalHeatGains {
                                     CheckSharedExhaustFlag = true;
                                 } else {
                                     ShowSevereError(state,
-                                                    EnergyPlus::format("{}{}=\"{}\", {} ={} is not used",
+                                                    EnergyPlus::format("{}{}=\"{}\", Exhaust Air Heat Gain Node Name ={} is not used",
                                                                        RoutineName,
                                                                        lightsModuleObject,
                                                                        IHGAlphas(1),
-                                                                       IHGAlphaFieldNames(8),
-                                                                       IHGAlphas(8)));
+                                                                       itLightsDef->ExhaustNodeName));
                                     ShowContinueError(
                                         state, "No matching Zone Return Air Node found. The Exhaust Node requires Return Node to work together");
                                     ErrorsFound = true;
@@ -1087,6 +1073,9 @@ namespace InternalHeatGains {
             for (int lightsNum2 = 1; lightsNum2 <= state.dataHeatBal->TotLights; ++lightsNum2) {
                 int spaceNum = state.dataHeatBal->Lights(lightsNum2).spaceIndex;
                 int zoneNum = state.dataHeatBal->Lights(lightsNum2).ZonePtr;
+                if (zoneNum <= 0) {
+                    continue; // skip entries that failed definition lookup
+                }
                 // setup internal gains
                 int returnNodeNum = 0;
                 if ((state.dataHeatBal->Lights(lightsNum2).ZoneReturnNum > 0) &&
@@ -3443,6 +3432,83 @@ namespace InternalHeatGains {
         }
 
         return peopleDefs;
+    }
+
+    std::vector<LightsDefinitionData> GetLightsDefinition(EnergyPlusData &state)
+    {
+        constexpr std::string_view routineName = "getLightsDefinition: ";
+
+        std::vector<LightsDefinitionData> lightsDefs;
+
+        auto &ip = state.dataInputProcessing->inputProcessor;
+        auto const instances = ip->epJSON.find("Lights:Definition");
+        if (instances != ip->epJSON.end()) {
+            auto const &objectSchemaProps = ip->getObjectSchemaProps(state, "Lights:Definition");
+            auto &instancesValue = instances.value();
+            lightsDefs.reserve(instancesValue.size());
+
+            for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
+                auto &lightsDef = lightsDefs.emplace_back();
+                auto const &objectFields = instance.value();
+                ip->markObjectAsUsed("Lights:Definition", instance.key());
+
+                lightsDef.Name = Util::makeUPPER(instance.key());
+
+                // Design Level Calculation Method
+                std::string const designLevelMethodName =
+                    ip->getAlphaFieldValue(objectFields, objectSchemaProps, "design_level_calculation_method", true);
+                lightsDef.designLevelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, designLevelMethodName));
+
+                switch (lightsDef.designLevelMethod) {
+                case DesignLevelMethod::LightingLevel:
+                    lightsDef.levelField = "lighting_level";
+                    break;
+                case DesignLevelMethod::WattsPerArea:
+                    lightsDef.levelField = "watts_per_floor_area";
+                    break;
+                case DesignLevelMethod::WattsPerPerson:
+                    lightsDef.levelField = "watts_per_person";
+                    break;
+                default:
+                    lightsDef.levelField = "lighting_level";
+                    break;
+                }
+
+                if (objectFields.find(lightsDef.levelField) == objectFields.end()) {
+                    ShowWarningError(
+                        state,
+                        EnergyPlus::format(
+                            "{}Lights:Definition=\"{}\", specifies Method={}, but the corresponding field \"{}\"is blank. 0 will result.",
+                            routineName,
+                            lightsDef.Name,
+                            designLevelMethodName,
+                            lightsDef.levelField));
+                    lightsDef.levelIsBlank = true;
+                }
+                lightsDef.levelValue = ip->getRealFieldValue(objectFields, objectSchemaProps, lightsDef.levelField);
+
+                lightsDef.FractionReturnAir = ip->getRealFieldValue(objectFields, objectSchemaProps, "return_air_fraction");
+                lightsDef.FractionRadiant = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_radiant");
+                lightsDef.FractionShortWave = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_visible");
+
+                // Return Air Fraction Calculated from Plenum Temperature
+                std::string const plenumCalc =
+                    ip->getAlphaFieldValue(objectFields, objectSchemaProps, "return_air_fraction_calculated_from_plenum_temperature", true);
+                if (BooleanSwitch bs = getYesNoValue(plenumCalc); bs != BooleanSwitch::Invalid) {
+                    lightsDef.FractionReturnAirIsCalculated = static_cast<bool>(bs);
+                }
+
+                lightsDef.FractionReturnAirPlenTempCoeff1 =
+                    ip->getRealFieldValue(objectFields, objectSchemaProps, "return_air_fraction_function_of_plenum_temperature_coefficient_1");
+                lightsDef.FractionReturnAirPlenTempCoeff2 =
+                    ip->getRealFieldValue(objectFields, objectSchemaProps, "return_air_fraction_function_of_plenum_temperature_coefficient_2");
+
+                lightsDef.RetNodeName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "return_air_heat_gain_node_name", true);
+                lightsDef.ExhaustNodeName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "exhaust_air_heat_gain_node_name", true);
+            }
+        }
+
+        return lightsDefs;
     }
 
     void setupIHGZonesAndSpaces(EnergyPlusData &state,
