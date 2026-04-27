@@ -1548,6 +1548,10 @@ namespace InternalHeatGains {
 
         if (state.dataHeatBal->TotHWEquip > 0) {
             state.dataHeatBal->ZoneHWEq.allocate(state.dataHeatBal->TotHWEquip);
+
+            // Read the definitions
+            std::vector<ZoneEquipDefinitionData> hwLoadDefs = GetSpaceLoadDefinition(state, "HotWaterEquipment:Definition");
+
             int hwEqNum = 0;
             for (int hwEqInputNum = 1; hwEqInputNum <= numHotWaterEqStatements; ++hwEqInputNum) {
 
@@ -1565,40 +1569,29 @@ namespace InternalHeatGains {
                                                                          IHGNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, hwEqModuleObject, IHGAlphas(1)};
-                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(3));
-                if (IHGAlphaFieldBlanks(3)) {
-                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(3));
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
                     ErrorsFound = true;
                 } else if (schedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
                     ErrorsFound = true;
                 } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
                     ErrorsFound = true;
                 }
 
-                auto &thisHWEqInput = hotWaterEqObjects(hwEqInputNum);
-                DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
-                int fieldNum = 1;
-                switch (levelMethod) {
-                case DesignLevelMethod::EquipmentLevel: {
-                    fieldNum = 1;
-                } break;
-                case DesignLevelMethod::WattsPerArea:
-                case DesignLevelMethod::PowerPerArea: {
-                    fieldNum = 2;
-                } break;
-                case DesignLevelMethod::WattsPerPerson:
-                case DesignLevelMethod::PowerPerPerson: {
-                    fieldNum = 3;
-                } break;
-                default: {
-                    assert(false);
-                } break;
+                std::string defName = IHGAlphas(2);
+
+                auto itHWLoadDef = std::find_if(
+                    hwLoadDefs.begin(), hwLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itHWLoadDef == hwLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
                 }
-                Real64 const levelValue = IHGNumbers(fieldNum);
-                bool const levelBlank = IHGNumericFieldBlanks(fieldNum);
-                std::string_view const levelField = IHGNumericFieldNames(fieldNum);
+
+                auto &thisHWEqInput = hotWaterEqObjects(hwEqInputNum);
 
                 for (int Item1 = 1; Item1 <= thisHWEqInput.numOfSpaces; ++Item1) {
                     ++hwEqNum;
@@ -1611,16 +1604,24 @@ namespace InternalHeatGains {
                     thisZoneHWEq.sched = schedPtr;
 
                     // Hot Water equipment design level calculation method.
-                    thisZoneHWEq.DesignLevel = setDesignLevel(
-                        state, ErrorsFound, hwEqModuleObject, thisHWEqInput, levelMethod, zoneNum, spaceNum, levelValue, levelBlank, levelField);
+                    thisZoneHWEq.DesignLevel = setDesignLevel(state,
+                                                              ErrorsFound,
+                                                              hwEqModuleObject,
+                                                              thisHWEqInput,
+                                                              itHWLoadDef->designLevelMethod,
+                                                              zoneNum,
+                                                              spaceNum,
+                                                              itHWLoadDef->levelValue,
+                                                              itHWLoadDef->levelIsBlank,
+                                                              itHWLoadDef->levelField);
 
                     // Calculate nominal min/max equipment level
                     thisZoneHWEq.NomMinDesignLevel = thisZoneHWEq.DesignLevel * thisZoneHWEq.sched->getMinVal(state);
                     thisZoneHWEq.NomMaxDesignLevel = thisZoneHWEq.DesignLevel * thisZoneHWEq.sched->getMaxVal(state);
 
-                    thisZoneHWEq.FractionLatent = IHGNumbers(4);
-                    thisZoneHWEq.FractionRadiant = IHGNumbers(5);
-                    thisZoneHWEq.FractionLost = IHGNumbers(6);
+                    thisZoneHWEq.FractionLatent = itHWLoadDef->FractionLatent;
+                    thisZoneHWEq.FractionRadiant = itHWLoadDef->FractionRadiant;
+                    thisZoneHWEq.FractionLost = itHWLoadDef->FractionLost;
                     // FractionConvected is a calculated field
                     thisZoneHWEq.FractionConvected = 1.0 - (thisZoneHWEq.FractionLatent + thisZoneHWEq.FractionRadiant + thisZoneHWEq.FractionLost);
                     if (std::abs(thisZoneHWEq.FractionConvected) <= 0.001) {
@@ -3374,14 +3375,13 @@ namespace InternalHeatGains {
 
                 auto it = objectFields.find(spaceLoadDef.levelField);
                 if (it == objectFields.end()) {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format("{}{}=\"{}\", specifies Method={}, but the corresponding field \"{}\"is blank. 0 will result.",
-                                           routineName,
-                                           objectType,
-                                           spaceLoadDef.Name,
-                                           designLevelMethodName,
-                                           spaceLoadDef.levelField));
+                    ShowWarningError(state,
+                                     std::format("{}{}=\"{}\", specifies Method={}, but the corresponding field \"{}\"is blank. 0 will result.",
+                                                 routineName,
+                                                 objectType,
+                                                 spaceLoadDef.Name,
+                                                 designLevelMethodName,
+                                                 spaceLoadDef.levelField));
                     spaceLoadDef.levelIsBlank = true;
                 }
                 spaceLoadDef.levelValue = ip->getRealFieldValue(objectFields, objectSchemaProps, spaceLoadDef.levelField);

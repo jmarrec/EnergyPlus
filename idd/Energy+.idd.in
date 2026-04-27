@@ -22622,21 +22622,42 @@ HotWaterEquipment,
    \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
    \memo then this definition applies to all applicable spaces, and each instance will
    \memo be named with the Space Name plus this Object Name.
-   \min-fields 10
+   \min-fields 4
   A1 , \field Name
        \required-field
        \type alpha
-  A2 , \field Zone or ZoneList or Space or SpaceList Name
+       \reference HotWaterEquipmentNames
+       \reference SpaceItemNames
+       \reference SpaceLoadNames
+       \reference SpaceComponentInstanceNames
+  A2 , \field Hot Water Equipment Definition Name
+       \type object-list
+       \required-field
+       \object-list HotWaterEquipmentDefinitionNames
+  A3 , \field Zone or ZoneList or Space or SpaceList Name
        \required-field
        \type object-list
        \object-list ZoneAndZoneListNames
        \object-list SpaceAndSpaceListNames
-  A3 , \field Schedule Name
+  A4 , \field Schedule Name
        \required-field
        \type object-list
        \object-list ScheduleNames
        \note units in Schedule should be fraction applied to design level of hot water equipment, generally (0.0 - 1.0)
-  A4 , \field Design Level Calculation Method
+  A5 ; \field End-Use Subcategory
+       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
+       \type alpha
+       \retaincase
+       \default General
+
+HotWaterEquipment:Definition,
+   \min-fields 8
+  A1 , \field Name
+       \type alpha
+       \required-field
+       \reference HotWaterEquipmentDefinitionNames
+       \reference SpaceComponentDefinitionNames
+  A2 , \field Design Level Calculation Method
        \note The entered calculation method is used to create the maximum amount of hot water equipment
        \note for this set of attributes
        \note Choices: EquipmentLevel => Design Level -- simply enter power input of equipment
@@ -22674,16 +22695,11 @@ HotWaterEquipment,
        \minimum 0.0
        \maximum 1.0
        \default 0
-  N6 , \field Fraction Lost
+  N6 ; \field Fraction Lost
        \type real
        \minimum 0.0
        \maximum 1.0
        \default 0
-  A5 ; \field End-Use Subcategory
-       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
-       \type alpha
-       \retaincase
-       \default General
 
 SteamEquipment,
    \memo Sets internal gains for steam equipment in the zone.
