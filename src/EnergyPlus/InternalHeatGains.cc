@@ -1396,6 +1396,10 @@ namespace InternalHeatGains {
 
         if (state.dataHeatBal->TotGasEquip > 0) {
             state.dataHeatBal->ZoneGas.allocate(state.dataHeatBal->TotGasEquip);
+
+            // Read the definitions
+            std::vector<ZoneEquipDefinitionData> gasLoadDefs = GetSpaceLoadDefinition(state, "GasEquipment:Definition");
+
             int gasEqNum = 0;
             for (int gasEqInputNum = 1; gasEqInputNum <= numZoneGasStatements; ++gasEqInputNum) {
 
@@ -1413,40 +1417,29 @@ namespace InternalHeatGains {
                                                                          IHGNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, gasEqModuleObject, IHGAlphas(1)};
-                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(3));
-                if (IHGAlphaFieldBlanks(3)) {
-                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(3));
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
                     ErrorsFound = true;
                 } else if (schedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
                     ErrorsFound = true;
                 } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
                     ErrorsFound = true;
                 }
 
-                auto &thisGasEqInput = zoneGasObjects(gasEqInputNum);
-                DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
-                int fieldNum = 1;
-                switch (levelMethod) {
-                case DesignLevelMethod::EquipmentLevel: {
-                    fieldNum = 1;
-                } break;
-                case DesignLevelMethod::WattsPerArea:
-                case DesignLevelMethod::PowerPerArea: {
-                    fieldNum = 2;
-                } break;
-                case DesignLevelMethod::WattsPerPerson:
-                case DesignLevelMethod::PowerPerPerson: {
-                    fieldNum = 3;
-                } break;
-                default: {
-                    assert(false);
-                } break;
+                std::string defName = IHGAlphas(2);
+
+                auto itGasLoadDef = std::find_if(
+                    gasLoadDefs.begin(), gasLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itGasLoadDef == gasLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
                 }
-                Real64 const levelValue = IHGNumbers(fieldNum);
-                bool const levelBlank = IHGNumericFieldBlanks(fieldNum);
-                std::string_view const levelField = IHGNumericFieldNames(fieldNum);
+
+                auto &thisGasEqInput = zoneGasObjects(gasEqInputNum);
 
                 for (int Item1 = 1; Item1 <= thisGasEqInput.numOfSpaces; ++Item1) {
                     ++gasEqNum;
@@ -1459,38 +1452,42 @@ namespace InternalHeatGains {
                     thisZoneGas.sched = schedPtr;
 
                     // Gas equipment design level calculation method.
-                    thisZoneGas.DesignLevel = setDesignLevel(
-                        state, ErrorsFound, gasEqModuleObject, thisGasEqInput, levelMethod, zoneNum, spaceNum, levelValue, levelBlank, levelField);
+                    thisZoneGas.DesignLevel = setDesignLevel(state,
+                                                             ErrorsFound,
+                                                             gasEqModuleObject,
+                                                             thisGasEqInput,
+                                                             itGasLoadDef->designLevelMethod,
+                                                             zoneNum,
+                                                             spaceNum,
+                                                             itGasLoadDef->levelValue,
+                                                             itGasLoadDef->levelIsBlank,
+                                                             itGasLoadDef->levelField);
 
                     // Calculate nominal min/max equipment level
                     thisZoneGas.NomMinDesignLevel = thisZoneGas.DesignLevel * thisZoneGas.sched->getMinVal(state);
                     thisZoneGas.NomMaxDesignLevel = thisZoneGas.DesignLevel * thisZoneGas.sched->getMaxVal(state);
 
-                    thisZoneGas.FractionLatent = IHGNumbers(4);
-                    thisZoneGas.FractionRadiant = IHGNumbers(5);
-                    thisZoneGas.FractionLost = IHGNumbers(6);
+                    thisZoneGas.FractionLatent = itGasLoadDef->FractionLatent;
+                    thisZoneGas.FractionRadiant = itGasLoadDef->FractionRadiant;
+                    thisZoneGas.FractionLost = itGasLoadDef->FractionLost;
 
-                    if ((IHGNumNumbers == 7) || (!IHGNumericFieldBlanks(7))) {
-                        thisZoneGas.CO2RateFactor = IHGNumbers(7);
-                    }
+                    thisZoneGas.CO2RateFactor = itGasLoadDef->CO2RateFactor;
                     if (thisZoneGas.CO2RateFactor < 0.0) {
                         ShowSevereError(state,
-                                        std::format("{}{}=\"{}\", {} < 0.0, value ={:.2f}",
-                                                    RoutineName,
-                                                    gasEqModuleObject,
-                                                    thisGasEqInput.Name,
-                                                    IHGNumericFieldNames(7),
-                                                    IHGNumbers(7)));
+                                        std::format("{}{}=\"{}\", carbon_dioxide_generation_rate < 0.0, value ={:.2f}",
+                                                  RoutineName,
+                                                  gasEqModuleObject,
+                                                  thisGasEqInput.Name,
+                                                  thisZoneGas.CO2RateFactor));
                         ErrorsFound = true;
                     }
                     if (thisZoneGas.CO2RateFactor > 4.0e-7) {
                         ShowSevereError(state,
-                                        std::format("{}{}=\"{}\", {} > 4.0E-7, value ={:.2f}",
-                                                    RoutineName,
-                                                    gasEqModuleObject,
-                                                    thisGasEqInput.Name,
-                                                    IHGNumericFieldNames(7),
-                                                    IHGNumbers(7)));
+                                        std::format("{}{}=\"{}\", carbon_dioxide_generation_rate > 4.0E-7, value ={:.2f}",
+                                                  RoutineName,
+                                                  gasEqModuleObject,
+                                                  thisGasEqInput.Name,
+                                                  thisZoneGas.CO2RateFactor));
                         ErrorsFound = true;
                     }
                     // FractionConvected is a calculated field
@@ -1938,22 +1935,20 @@ namespace InternalHeatGains {
 
                     if (thisZoneOthEq.CO2RateFactor < 0.0) {
                         ShowSevereError(state,
-                                        std::format("{}{}=\"{}\", {} < 0.0, value ={:.2f}",
-                                                    RoutineName,
-                                                    othEqModuleObject,
-                                                    thisOthEqInput.Name,
-                                                    "carbon_dioxide_generation_rate",
-                                                    thisZoneOthEq.CO2RateFactor));
+                                        std::format("{}{}=\"{}\", carbon_dioxide_generation_rate < 0.0, value ={:.2f}",
+                                                  RoutineName,
+                                                  othEqModuleObject,
+                                                  thisOthEqInput.Name,
+                                                  thisZoneOthEq.CO2RateFactor));
                         ErrorsFound = true;
                     }
                     if (thisZoneOthEq.CO2RateFactor > 4.0e-7) {
                         ShowSevereError(state,
-                                        std::format("{}{}=\"{}\", {} > 4.0E-7, value ={:.2f}",
-                                                    RoutineName,
-                                                    othEqModuleObject,
-                                                    thisOthEqInput.Name,
-                                                    "carbon_dioxide_generation_rate",
-                                                    thisZoneOthEq.CO2RateFactor));
+                                        std::format("{}{}=\"{}\", carbon_dioxide_generation_rate > 4.0E-7, value ={:.2f}",
+                                                  RoutineName,
+                                                  othEqModuleObject,
+                                                  thisOthEqInput.Name,
+                                                  thisZoneOthEq.CO2RateFactor));
                         ErrorsFound = true;
                     }
 

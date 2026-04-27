@@ -22542,21 +22542,42 @@ GasEquipment,
    \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
    \memo then this definition applies to all applicable spaces, and each instance will
    \memo be named with the Space Name plus this Object Name.
-   \min-fields 10
+   \min-fields 4
   A1 , \field Name
        \required-field
        \type alpha
-  A2 , \field Zone or ZoneList or Space or SpaceList Name
+       \reference GasEquipmentNames
+       \reference SpaceItemNames
+       \reference SpaceLoadNames
+       \reference SpaceComponentInstanceNames
+  A2 , \field Gas Equipment Definition Name
+       \type object-list
+       \required-field
+       \object-list GasEquipmentDefinitionNames
+  A3 , \field Zone or ZoneList or Space or SpaceList Name
        \required-field
        \type object-list
        \object-list ZoneAndZoneListNames
        \object-list SpaceAndSpaceListNames
-  A3 , \field Schedule Name
+  A4 , \field Schedule Name
        \required-field
        \type object-list
        \object-list ScheduleNames
        \note units in Schedule should be fraction applied to design level of gas equipment, generally (0.0 - 1.0)
-  A4 , \field Design Level Calculation Method
+  A5 ; \field End-Use Subcategory
+       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
+       \type alpha
+       \retaincase
+       \default General
+
+GasEquipment:Definition,
+   \min-fields 8
+  A1 , \field Name
+       \type alpha
+       \required-field
+       \reference GasEquipmentDefinitionNames
+       \reference SpaceComponentDefinitionNames
+  A2 , \field Design Level Calculation Method
        \note The entered calculation method is used to create the maximum amount of gas equipment
        \note for this set of attributes
        \note Choices: EquipmentLevel => Design Level -- simply enter power input of equipment
@@ -22599,7 +22620,7 @@ GasEquipment,
        \minimum 0.0
        \maximum 1.0
        \default 0
-  N7 , \field Carbon Dioxide Generation Rate
+  N7 ; \field Carbon Dioxide Generation Rate
        \note CO2 generation rate per unit of power input
        \type real
        \units m3/s-W
@@ -22611,11 +22632,6 @@ GasEquipment,
        \note For unvented equipment, a suggested value is 3.45E-8 m3/s-W. This value is
        \note converted from a natural gas CO2 emission rate of 117 lbs CO2 per million Btu.
        \note The maximum value assumes to be 10 times of the recommended value.
-  A5 ; \field End-Use Subcategory
-       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
-       \type alpha
-       \retaincase
-       \default General
 
 HotWaterEquipment,
    \memo Sets internal gains for hot water equipment in the zone.
