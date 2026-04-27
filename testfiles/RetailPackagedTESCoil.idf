@@ -7950,6 +7950,7 @@
 
   EnergyManagementSystem:Program,
     InitializeParameters,    !- Name
+    Set Troof = 0.0,
     Set CV_Height = 1.0,     !- Program Line 1
     Set CV_effWidth = 40.0,  !- Program Line 2
     Set CV_crossSectArea = CV_Height * CV_effWidth,  !- <none>
@@ -8066,10 +8067,8 @@
 
   EnergyManagementSystem:GlobalVariable,
     Troof,                   !- Erl Variable 1 Name
-    DeltaT,                  !- Erl Variable 2 Name
-    ratioT,                  !- Erl Variable 3 Name
-    CV_Height,               !- <none>
-    CV_crossSectArea,        !- <none>
+    CV_Height,               !- Erl Variable 2 Name
+    CV_crossSectArea,        !- Erl Variable 3 Name
     C_v,                     !- <none>
     rhoAir,                  !- <none>
     CpAir,                   !- <none>
