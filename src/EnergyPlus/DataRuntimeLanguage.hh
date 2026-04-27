@@ -364,7 +364,7 @@ namespace DataRuntimeLanguage {
         int TrendVarPointer; // index to match in TrendVariable structure
         std::string Error;   // holds error message string for reporting
         bool initialized;    // true if number value has been SET (ie. has been on LHS in SET expression)
-        bool SetupInit;
+        bool SetupInit;      // false if EvaluateExpression is thrown for Erl variable
 
         // Default Constructor
         ErlValueType() : Type(Value::Null), Number(0.0), Variable(0), Expression(0), TrendVariable(false), TrendVarPointer(0), initialized(false), SetupInit(true)
