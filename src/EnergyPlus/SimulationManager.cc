@@ -276,6 +276,7 @@ namespace SimulationManager {
 
         state.dataErrTracking->AskForConnectionsReport = true; // set to true now that input processing and sizing is done.
         state.dataGlobal->KickOffSimulation = false;
+        state.dataGlobal->SetupFlag = false;
         state.dataGlobal->WarmupFlag = false;
         state.dataReportFlag->DoWeatherInitReporting = true;
 
@@ -1991,6 +1992,7 @@ namespace SimulationManager {
             state.dataGlobal->BeginEnvrnFlag = true;
             state.dataGlobal->EndEnvrnFlag = false;
             state.dataEnvrn->EndMonthFlag = false;
+            state.dataGlobal->SetupFlag = true;
             state.dataGlobal->WarmupFlag = true;
             state.dataGlobal->DayOfSim = 0;
 

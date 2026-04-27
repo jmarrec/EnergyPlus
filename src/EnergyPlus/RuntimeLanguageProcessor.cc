@@ -310,6 +310,10 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
         if (state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.initialized) {
             state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value =
                 SetErlValueNumber(0.0, state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
+
+            if (!state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.SetupInit) {
+                state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.initialized = false;
+            }
         }
     }
     // reinitialize state of actuators
@@ -976,7 +980,7 @@ void WriteTrace(EnergyPlusData &state, int const StackNum, int const Instruction
     std::string LineString;
     std::string cValueString;
     std::string TimeString;
-    std::string DuringWarmup;
+    std::string OccurrenceTimingInfo;
 
     if ((!state.dataRuntimeLang->OutputFullEMSTrace) && (!state.dataRuntimeLang->OutputEMSErrors) && (!seriousErrorFound)) {
         return;
@@ -1004,19 +1008,27 @@ void WriteTrace(EnergyPlusData &state, int const StackNum, int const Instruction
 
     // put together timestamp info
     if (state.dataGlobal->WarmupFlag) {
-        if (!state.dataGlobal->DoingSizing) {
-            DuringWarmup = " During Warmup, Occurrence info=";
+        if (!state.dataGlobal->SetupFlag) {
+            if (!state.dataGlobal->DoingSizing) {
+                OccurrenceTimingInfo = " During Warmup, Occurrence info=";
+            } else {
+                OccurrenceTimingInfo = " During Warmup & Sizing, Occurrence info=";
+            }
         } else {
-            DuringWarmup = " During Warmup & Sizing, Occurrence info=";
+            if (!state.dataGlobal->DoingSizing) {
+                OccurrenceTimingInfo = " During Setup, Occurrence info=";
+            } else {
+                OccurrenceTimingInfo = " During Setup & Sizing, Occurrence info=";
+            }
         }
     } else {
         if (!state.dataGlobal->DoingSizing) {
-            DuringWarmup = " Occurrence info=";
+            OccurrenceTimingInfo = " Occurrence info=";
         } else {
-            DuringWarmup = " During Sizing, Occurrence info=";
+            OccurrenceTimingInfo = " During Sizing, Occurrence info=";
         }
     }
-    TimeString = DuringWarmup + state.dataEnvrn->EnvironmentName + ", " + state.dataEnvrn->CurMnDy + ' ' + CreateSysTimeIntervalString(state);
+    TimeString = OccurrenceTimingInfo + state.dataEnvrn->EnvironmentName + ", " + state.dataEnvrn->CurMnDy + ' ' + CreateSysTimeIntervalString(state);
 
     if (state.dataRuntimeLang->OutputFullEMSTrace || (state.dataRuntimeLang->OutputEMSErrors && (ReturnValue.Type == Value::Error))) {
         print(state.files.edd, "{},Line {},{},{},{}\n", NameString, LineNumString, LineString, cValueString, TimeString);
@@ -1806,19 +1818,16 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 }
 
             } else if (thisOperand.Type == Value::Variable) {
-                auto const &thisErlVar = state.dataRuntimeLang->ErlVariable(thisOperand.Variable);
+                auto &thisErlVar = state.dataRuntimeLang->ErlVariable(thisOperand.Variable);
                 if (thisErlVar.Value.initialized) { // check that value has been initialized
                     thisOperand = thisErlVar.Value;
-                } else { // value has never been set
-                    // During setup (before simulation), we want to avoid initializing variables to zero without throwing an error.
-                    // Throw the error, and write it to edd file, if variable is uninitialized and is *not* a global or internal variable.
-                    // The assumption is that if we made it here for a global variable, it is initialized in another program.
-                    // E.g., if it's initialized in a program with BeginNewEnvironment calling point, setup won't set it but simulation will.
-                    if ((!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) ||
-                        (!(thisErlVar.SetByGlobalVariable || thisErlVar.SetByInternalVariable))) {
 
-                        ReturnValue.Type = Value::Error;
-                        ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
+                } else { // value has never been set
+
+                    ReturnValue.Type = Value::Error;
+                    ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
+                    thisErlVar.Value.SetupInit = false;
+                    if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
 
                         // check if this is an arg in CurveValue,
                         if (thisErlExpression.Operator !=
