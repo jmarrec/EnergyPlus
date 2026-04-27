@@ -448,6 +448,60 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 
               ! If your original object starts with G, insert the rules here
 
+              CASE('GASEQUIPMENT')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+
+                ! Write the updated GasEquipment object:
+                ! A1 Name (unchanged)
+                ! A2 Gas Equipment Definition Name (new) = Name + ' Definition'
+                ! A3 Zone or ZoneList or Space or SpaceList Name (was A2)
+                ! A4 Schedule Name (was A3)
+                ! A5 End-Use Subcategory (was A5/field 12)
+                OutArgs(1) = InArgs(1)
+                OutArgs(2) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(3) = InArgs(2)
+                OutArgs(4) = InArgs(3)
+                ! Optional End Use Subcategory
+                IF (CurArgs >= 12) THEN
+                  OutArgs(5) = InArgs(12)
+                  COutArgs = 5
+                ELSE
+                  COutArgs = 4
+                END IF
+                CALL WriteOutIDFLines(DifLfn,'GasEquipment',COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                ! Create the new GasEquipment:Definition object:
+                ! A1 Name = Name + ' Definition'
+                ! A2 Design Level Calculation Method (was A4/field 4)
+                ! N1 Design Level (was N1/field 5)
+                ! N2 Power per Floor Area (was N2/field 6)
+                ! N3 Power per Person (was N3/field 7)
+                ! N4 Fraction Latent (was N4/field 8)
+                ! N5 Fraction Radiant (was N5/field 9)
+                ! N6 Fraction Lost (was N6/field 10)
+                ! N7 Carbon Dioxide Generation Rate (was N7/field 11) -- optional
+                ObjectName = 'GasEquipment:Definition'
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                OutArgs(1) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(2) = InArgs(4)
+                OutArgs(3) = InArgs(5)
+                OutArgs(4) = InArgs(6)
+                OutArgs(5) = InArgs(7)
+                OutArgs(6) = InArgs(8)
+                OutArgs(7) = InArgs(9)
+                OutArgs(8) = InArgs(10)
+                ! Optional Carbon Dioxide Generation Rate
+                IF (CurArgs >= 11) THEN
+                  OutArgs(9) = InArgs(11)
+                  COutArgs = 9
+                ELSE
+                  COutArgs = 8
+                END IF
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                Written = .true.
+
               ! If your original object starts with H, insert the rules here
 
               CASE('HOTWATEREQUIPMENT')
