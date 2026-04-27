@@ -3353,6 +3353,25 @@ namespace InternalHeatGains {
                 spaceLoadDef.designLevelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, designLevelMethodName));
                 spaceLoadDef.levelField = std::string{DesignLevelMethodFieldNames[static_cast<int>(spaceLoadDef.designLevelMethod)]};
 
+                // Watts/Area and Power/Area are aliases that resolve to different field names depending
+                // on the object type (e.g. ElectricEquipment:Definition uses watts_per_floor_area,
+                // SteamEquipment:Definition uses power_per_floor_area). Remap to whichever name the
+                // schema actually contains.
+                static constexpr std::array<std::pair<std::string_view, std::string_view>, 2> wattsAliases{{
+                    {"watts_per_floor_area", "power_per_floor_area"},
+                    {"watts_per_person", "power_per_person"},
+                }};
+                for (auto const &[watts, power] : wattsAliases) {
+                    if (spaceLoadDef.levelField == watts && objectSchemaProps.find(std::string(watts)) == objectSchemaProps.end()) {
+                        spaceLoadDef.levelField = std::string(power);
+                        break;
+                    }
+                    if (spaceLoadDef.levelField == power && objectSchemaProps.find(std::string(power)) == objectSchemaProps.end()) {
+                        spaceLoadDef.levelField = std::string(watts);
+                        break;
+                    }
+                }
+
                 auto it = objectFields.find(spaceLoadDef.levelField);
                 if (it == objectFields.end()) {
                     ShowWarningError(
