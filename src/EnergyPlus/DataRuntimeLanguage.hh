@@ -367,7 +367,9 @@ namespace DataRuntimeLanguage {
         bool SetupInit;      // false if EvaluateExpression is thrown for Erl variable
 
         // Default Constructor
-        ErlValueType() : Type(Value::Null), Number(0.0), Variable(0), Expression(0), TrendVariable(false), TrendVarPointer(0), initialized(false), SetupInit(true)
+       ErlValueType()
+           : Type(Value::Null), Number(0.0), Variable(0), Expression(0), TrendVariable(false), TrendVarPointer(0), initialized(false),
+             SetupInit(true)
         {
         }
 

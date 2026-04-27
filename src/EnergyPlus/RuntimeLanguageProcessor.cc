@@ -1821,12 +1821,13 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 auto &thisErlVar = state.dataRuntimeLang->ErlVariable(thisOperand.Variable);
                 if (thisErlVar.Value.initialized) { // check that value has been initialized
                     thisOperand = thisErlVar.Value;
-
                 } else { // value has never been set
 
                     ReturnValue.Type = Value::Error;
                     ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
-                    thisErlVar.Value.SetupInit = false;
+                    // Use SetupInit in BeginEnvrnInitializeRuntimeLanguage for "un-initializing" Erl variables that may have been
+                    // initialized to zero during setup. This can happen since SetupSimulation does not call BeginNewEnvironment.
+                    thisErlVar.Value.SetupInit = false; 
                     if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
 
                         // check if this is an arg in CurveValue,
