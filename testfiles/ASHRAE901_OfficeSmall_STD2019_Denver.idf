@@ -2928,75 +2928,95 @@
 
   People,
     Core_ZN,                 !- Name
+    Core_ZN Definition,      !- People Definition Name
     Core_ZN,                 !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH_wo_SB,      !- Number of People Schedule Name
+    ACTIVITY_SCH;            !- Activity Level Schedule Name
+
+  People:Definition,
+    Core_ZN Definition,      !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     16.5880764430522,        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
     AUTOCALCULATE,           !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     Perimeter_ZN_1,          !- Name
+    Perimeter_ZN_1 Definition, !- People Definition Name
     Perimeter_ZN_1,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH_wo_SB,      !- Number of People Schedule Name
+    ACTIVITY_SCH;            !- Activity Level Schedule Name
+
+  People:Definition,
+    Perimeter_ZN_1 Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     16.5880764430522,        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
     AUTOCALCULATE,           !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     Perimeter_ZN_2,          !- Name
+    Perimeter_ZN_2 Definition, !- People Definition Name
     Perimeter_ZN_2,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH_w_SB,       !- Number of People Schedule Name
+    ACTIVITY_SCH;            !- Activity Level Schedule Name
+
+  People:Definition,
+    Perimeter_ZN_2 Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     16.5880764430522,        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
     AUTOCALCULATE,           !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     Perimeter_ZN_3,          !- Name
+    Perimeter_ZN_3 Definition, !- People Definition Name
     Perimeter_ZN_3,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH_wo_SB,      !- Number of People Schedule Name
+    ACTIVITY_SCH;            !- Activity Level Schedule Name
+
+  People:Definition,
+    Perimeter_ZN_3 Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     16.5880764430522,        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
     AUTOCALCULATE,           !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     Perimeter_ZN_4,          !- Name
+    Perimeter_ZN_4 Definition, !- People Definition Name
     Perimeter_ZN_4,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH_wo_SB,      !- Number of People Schedule Name
+    ACTIVITY_SCH;            !- Activity Level Schedule Name
+
+  People:Definition,
+    Perimeter_ZN_4 Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     16.5880764430522,        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
     AUTOCALCULATE,           !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type

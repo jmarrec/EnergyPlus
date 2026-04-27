@@ -23,15 +23,19 @@
 
   People,
     Auditoriums,             !- Name
+    Auditoriums Definition,  !- People Definition Name
     Auditoriums,             !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd103;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Auditoriums Definition,  !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     0.65,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.7,                     !- Sensible Heat Fraction
-    ActSchd103;              !- Activity Level Schedule Name
+    0.7;                     !- Sensible Heat Fraction
 
   Lights,
     Auditoriums,             !- Name
@@ -95,15 +99,19 @@
 
   People,
     Classroom Building,      !- Name
+    Classroom Building Definition, !- People Definition Name
     Classroom Building,      !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd122;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Classroom Building Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     2.32,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.59,                    !- Sensible Heat Fraction
-    ActSchd122;              !- Activity Level Schedule Name
+    0.59;                    !- Sensible Heat Fraction
 
   Lights,
     Classroom Building,      !- Name
@@ -167,15 +175,19 @@
 
   People,
     Commercial and Industrial Building,  !- Name
-    Commercial and Industrial Building,  !- Zone or ZoneList or Space or SpaceList Name
+    Commercial and Industrial Building Definition, !- People Definition Name
+    Commercial and Industrial Building, !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd197;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Commercial and Industrial Building Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     18.58,                   !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.40,                    !- Sensible Heat Fraction
-    ActSchd197;              !- Activity Level Schedule Name
+    0.40;                    !- Sensible Heat Fraction
 
   Lights,
     Commercial and Industrial Building,  !- Name
@@ -239,15 +251,19 @@
 
   People,
     Convention Centers,      !- Name
+    Convention Centers Definition, !- People Definition Name
     Convention Centers,      !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd105;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Convention Centers Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     0.68,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.69,                    !- Sensible Heat Fraction
-    ActSchd105;              !- Activity Level Schedule Name
+    0.69;                    !- Sensible Heat Fraction
 
   Lights,
     Convention Centers,      !- Name
@@ -311,15 +327,19 @@
 
   People,
     Financial Institutions,  !- Name
+    Financial Institutions Definition, !- People Definition Name
     Financial Institutions,  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd146;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Financial Institutions Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     9.29,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.50,                    !- Sensible Heat Fraction
-    ActSchd146;              !- Activity Level Schedule Name
+    0.50;                    !- Sensible Heat Fraction
 
   Lights,
     Financial Institutions,  !- Name
@@ -383,15 +403,19 @@
 
   People,
     General Commercial and Industrial Work Buildings,  !- Name
-    General Commercial and Industrial Work Buildings,  !- Zone or ZoneList or Space or SpaceList Name
+    General Commercial and Industrial Work Buildings Definition, !- People Definition Name
+    General Commercial and Industrial Work Buildings, !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd293;              !- Activity Level Schedule Name
+
+  People:Definition,
+    General Commercial and Industrial Work Buildings Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     13.27,                   !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.38,                    !- Sensible Heat Fraction
-    ActSchd293;              !- Activity Level Schedule Name
+    0.38;                    !- Sensible Heat Fraction
 
   Lights,
     General Commercial and Industrial Work Buildings,  !- Name
@@ -455,15 +479,19 @@
 
   People,
     Grocery Stores,          !- Name
+    Grocery Stores Definition, !- People Definition Name
     Grocery Stores,          !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd140;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Grocery Stores Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     3.20,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.53,                    !- Sensible Heat Fraction
-    ActSchd140;              !- Activity Level Schedule Name
+    0.53;                    !- Sensible Heat Fraction
 
   Lights,
     Grocery Stores,          !- Name
@@ -527,15 +555,19 @@
 
   People,
     Library,                 !- Name
+    Library Definition,      !- People Definition Name
     Library,                 !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd146;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Library Definition,      !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     9.29,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.50,                    !- Sensible Heat Fraction
-    ActSchd146;              !- Activity Level Schedule Name
+    0.50;                    !- Sensible Heat Fraction
 
   Lights,
     Library,                 !- Name
@@ -599,15 +631,19 @@
 
   People,
     Medical Buildings and Clinics,  !- Name
-    Medical Buildings and Clinics,  !- Zone or ZoneList or Space or SpaceList Name
+    Medical Buildings and Clinics Definition, !- People Definition Name
+    Medical Buildings and Clinics, !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd136;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Medical Buildings and Clinics Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     9.29,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.54,                    !- Sensible Heat Fraction
-    ActSchd136;              !- Activity Level Schedule Name
+    0.54;                    !- Sensible Heat Fraction
 
   Lights,
     Medical Buildings and Clinics,  !- Name
@@ -671,15 +707,19 @@
 
   People,
     Office Buildings,        !- Name
+    Office Buildings Definition, !- People Definition Name
     Office Buildings,        !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd134;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Office Buildings Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     9.29,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.55,                    !- Sensible Heat Fraction
-    ActSchd134;              !- Activity Level Schedule Name
+    0.55;                    !- Sensible Heat Fraction
 
   Lights,
     Office Buildings,        !- Name
@@ -743,15 +783,19 @@
 
   People,
     Religious Facilities,    !- Name
+    Religious Facilities Definition, !- People Definition Name
     Religious Facilities,    !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd105;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Religious Facilities Definition, !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     0.68,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.69,                    !- Sensible Heat Fraction
-    ActSchd105;              !- Activity Level Schedule Name
+    0.69;                    !- Sensible Heat Fraction
 
   Lights,
     Religious Facilities,    !- Name
@@ -815,15 +859,19 @@
 
   People,
     Restaurants,             !- Name
+    Restaurants Definition,  !- People Definition Name
     Restaurants,             !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd178;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Restaurants Definition,  !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     2.06,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.45,                    !- Sensible Heat Fraction
-    ActSchd178;              !- Activity Level Schedule Name
+    0.45;                    !- Sensible Heat Fraction
 
   Lights,
     Restaurants,             !- Name
@@ -887,15 +935,19 @@
 
   People,
     Schools,                 !- Name
+    Schools Definition,      !- People Definition Name
     Schools,                 !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd122;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Schools Definition,      !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     2.32,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.59,                    !- Sensible Heat Fraction
-    ActSchd122;              !- Activity Level Schedule Name
+    0.59;                    !- Sensible Heat Fraction
 
   Lights,
     Schools,                 !- Name
@@ -959,15 +1011,19 @@
 
   People,
     Theaters,                !- Name
+    Theaters Definition,     !- People Definition Name
     Theaters,                !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd197;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Theaters Definition,     !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     0.71,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.40,                    !- Sensible Heat Fraction
-    ActSchd197;              !- Activity Level Schedule Name
+    0.40;                    !- Sensible Heat Fraction
 
   Lights,
     Theaters,                !- Name

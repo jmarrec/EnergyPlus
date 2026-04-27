@@ -5118,15 +5118,19 @@
 
   People,
     occupants,               !- Name
+    occupants Definition,    !- People Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     occupants schedule,      !- Number of People Schedule Name
+    occupants activity schedule; !- Activity Level Schedule Name
+
+  People:Definition,
+    occupants Definition,    !- Name
     People,                  !- Number of People Calculation Method
     3,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.314170909090909,       !- Fraction Radiant
     0.563030303030303,       !- Sensible Heat Fraction
-    occupants activity schedule,  !- Activity Level Schedule Name
     0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type

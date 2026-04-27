@@ -1296,51 +1296,67 @@
 
   People,
     ZSF1 People 1,           !- Name
+    ZSF1 People 1 Definition, !- People Definition Name
     ZSF1,                    !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ZSF1-ActSchd;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ZSF1 People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.27,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ZSF1-ActSchd;            !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZNF1 People 1,           !- Name
+    ZNF1 People 1 Definition, !- People Definition Name
     ZNF1,                    !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ZSF1-ActSchd;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ZNF1 People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.27,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ZSF1-ActSchd;            !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZSF2 People 1,           !- Name
+    ZSF2 People 1 Definition, !- People Definition Name
     ZSF2,                    !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ZSF1-ActSchd;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ZSF2 People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.27,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ZSF1-ActSchd;            !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZNF2 People 1,           !- Name
+    ZNF2 People 1 Definition, !- People Definition Name
     ZNF2,                    !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ZSF1-ActSchd;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ZNF2 People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.27,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ZSF1-ActSchd;            !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     ZSF1 Lights 1,           !- Name

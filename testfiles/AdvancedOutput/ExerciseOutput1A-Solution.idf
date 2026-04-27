@@ -960,15 +960,19 @@
 
   People,
     ZONE ONE People 1,       !- Name
+    ZONE ONE People 1 Definition, !- People Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE ONE People 1 Definition, !- Name
     People,                  !- Number of People Calculation Method
     4,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
 !-   ===========  ALL OBJECTS IN CLASS: OTHER EQUIPMENT ===========
 

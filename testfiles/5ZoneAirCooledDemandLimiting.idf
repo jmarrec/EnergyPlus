@@ -830,15 +830,19 @@
 
   People,
     AllZones with People,    !- Name
+    AllZones with People Definition, !- People Definition Name
     AllOccupiedZones,        !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    AllZones with People Definition, !- Name
     People/Area,             !- Number of People Calculation Method
     ,                        !- Number of People
     .11,                     !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     AllZones with Lights,    !- Name

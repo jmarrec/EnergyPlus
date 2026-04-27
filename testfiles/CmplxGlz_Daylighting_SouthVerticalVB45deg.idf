@@ -85442,24 +85442,28 @@
 
   People,
     COMFENZone People 1,     !- Name
+    COMFENZone People 1 Definition, !- People Definition Name
     COMFENZone,              !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ACTIVITY-SCHED,          !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    WORK_EFF-SCHED,          !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule, !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    CLOTHING-SCHED,          !- Clothing Insulation Schedule Name
+    AIR_VELO-SCHED;          !- Air Velocity Schedule Name
+
+  People:Definition,
+    COMFENZone People 1 Definition, !- Name
     People,                  !- Number of People Calculation Method
     2,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY-SCHED,          !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    WORK_EFF-SCHED,          !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    CLOTHING-SCHED,          !- Clothing Insulation Schedule Name
-    AIR_VELO-SCHED,          !- Air Velocity Schedule Name
     AdaptiveASH55,           !- Thermal Comfort Model 1 Type
     Fanger;                  !- Thermal Comfort Model 2 Type
 

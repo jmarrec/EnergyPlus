@@ -2792,183 +2792,243 @@
 
   People,
     PER-1T People 1,         !- Name
+    PER-1T People 1 Definition, !- People Definition Name
     PER-1T,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-1T People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     5.2,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     COR-T People 1,          !- Name
+    COR-T People 1 Definition, !- People Definition Name
     COR-T,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    COR-T People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     21.5,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-2T People 1,         !- Name
+    PER-2T People 1 Definition, !- People Definition Name
     PER-2T,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-2T People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.3,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-3T People 1,         !- Name
+    PER-3T People 1 Definition, !- People Definition Name
     PER-3T,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-3T People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     5.2,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-4T People 1,         !- Name
+    PER-4T People 1 Definition, !- People Definition Name
     PER-4T,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-4T People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.3,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-1F People 1,         !- Name
+    PER-1F People 1 Definition, !- People Definition Name
     PER-1F,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-1F People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     5.2,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-2F People 1,         !- Name
+    PER-2F People 1 Definition, !- People Definition Name
     PER-2F,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-2F People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.3,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0,                       !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-3F People 1,         !- Name
+    PER-3F People 1 Definition, !- People Definition Name
     PER-3F,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-3F People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     5.2,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-4F People 1,         !- Name
+    PER-4F People 1 Definition, !- People Definition Name
     PER-4F,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-4F People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.3,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     COR-F People 1,          !- Name
+    COR-F People 1 Definition, !- People Definition Name
     COR-F,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    COR-F People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     21.5,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-1I People 1,         !- Name
+    PER-1I People 1 Definition, !- People Definition Name
     PER-1I,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-1I People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     5.2,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-2I People 1,         !- Name
+    PER-2I People 1 Definition, !- People Definition Name
     PER-2I,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-2I People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.3,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-3I People 1,         !- Name
+    PER-3I People 1 Definition, !- People Definition Name
     PER-3I,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-3I People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     5.2,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     PER-4I People 1,         !- Name
+    PER-4I People 1 Definition, !- People Definition Name
     PER-4I,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    PER-4I People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     3.3,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     COR-I People 1,          !- Name
+    COR-I People 1 Definition, !- People Definition Name
     COR-I,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    PER-1T-ActSchd;          !- Activity Level Schedule Name
+
+  People:Definition,
+    COR-I People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     21.5,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    PER-1T-ActSchd;          !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     PER-1T Lights 1,         !- Name

@@ -1848,63 +1848,83 @@
 
   People,
     SOUTH PERIMETER People 1,!- Name
+    SOUTH PERIMETER People 1 Definition, !- People Definition Name
     SOUTH PERIMETER,         !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy 2,      !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SOUTH PERIMETER People 1 Definition, !- Name
     People,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     EAST PERIMETER People 1, !- Name
+    EAST PERIMETER People 1 Definition, !- People Definition Name
     EAST PERIMETER,          !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy 2,      !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    EAST PERIMETER People 1 Definition, !- Name
     People,                  !- Number of People Calculation Method
     5,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     NORTH PERIMETER People 1,!- Name
+    NORTH PERIMETER People 1 Definition, !- People Definition Name
     NORTH PERIMETER,         !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy 2,      !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    NORTH PERIMETER People 1 Definition, !- Name
     People,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     WEST PERIMETER People 1, !- Name
+    WEST PERIMETER People 1 Definition, !- People Definition Name
     WEST PERIMETER,          !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy 2,      !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    WEST PERIMETER People 1 Definition, !- Name
     People,                  !- Number of People Calculation Method
     5,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     CORE People 1,           !- Name
+    CORE People 1 Definition, !- People Definition Name
     CORE,                    !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy 2,      !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    CORE People 1 Definition, !- Name
     People,                  !- Number of People Calculation Method
     20,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     SOUTH PERIMETER Lights 1,!- Name

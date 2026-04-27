@@ -472,15 +472,19 @@
 
   People,
     ZONE 1 People 1,         !- Name
+    ZONE 1 People 1 Definition, !- People Definition Name
     ZONE 1,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   1,            !- Number of People Schedule Name
+    Activity Lvl   1;        !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE 1 People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     29.00000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Activity Lvl   1;        !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     ZONE 1 Lights 1,         !- Name
@@ -514,15 +518,19 @@
 
   People,
     ZONE 2 People 1,         !- Name
+    ZONE 2 People 1 Definition, !- People Definition Name
     ZONE 2,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   1,            !- Number of People Schedule Name
+    Activity Lvl   1;        !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE 2 People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     29.00000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Activity Lvl   1;        !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     ZONE 2 Lights 1,         !- Name
@@ -556,15 +564,19 @@
 
   People,
     ZONE 4 People 1,         !- Name
+    ZONE 4 People 1 Definition, !- People Definition Name
     ZONE 4,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   1,            !- Number of People Schedule Name
+    Activity Lvl   1;        !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE 4 People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     57.00000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Activity Lvl   1;        !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     ZONE 4 Lights 1,         !- Name

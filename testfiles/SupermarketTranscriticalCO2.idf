@@ -1279,27 +1279,35 @@
 
   People,
     BackRoom People 1,       !- Name
+    BackRoom People 1 Definition, !- People Definition Name
     BackRoom,                !- Zone or ZoneList or Space or SpaceList Name
     People_Shopping_Sch,     !- Number of People Schedule Name
+    Activity_Shopping_Sch;   !- Activity Level Schedule Name
+
+  People:Definition,
+    BackRoom People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     10,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Activity_Shopping_Sch;   !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     SalesFloor People 1,     !- Name
+    SalesFloor People 1 Definition, !- People Definition Name
     SalesFloor,              !- Zone or ZoneList or Space or SpaceList Name
     People_Shopping_Sch,     !- Number of People Schedule Name
+    Activity_Shopping_Sch;   !- Activity Level Schedule Name
+
+  People:Definition,
+    SalesFloor People 1 Definition, !- Name
     people,                  !- Number of People Calculation Method
     150,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Activity_Shopping_Sch;   !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
 !-   ===========  ALL OBJECTS IN CLASS: LIGHTS ===========
 
