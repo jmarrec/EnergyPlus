@@ -7785,10 +7785,17 @@
   EnergyManagementSystem:GlobalVariable,
     natural_vent_program_Qwhf;  !- Erl Variable 1 Name
 
-  EnergyManagementSystem:GlobalVariable,
-    Qducts,                  !- Erl Variable 1 Name
-    Qsupply,                 !- Erl Variable 2 Name
-    Qexhaust;                !- Erl Variable 3 Name
+  EnergyManagementSystem:Program,
+    init,  !- Name
+    Set CENTRAL_AC_AND_FURNACE_AIRLOOP_0_DUCTIMBALLKSUPFANEQUIVDZ = 0.0,  !- <none>
+    Set CENTRAL_AC_AND_FURNACE_AIRLOOP_0_DUCTIMBALLKEXHFANEQUIVDZ = 0.0,  !- <none>
+    Set CENTRAL_AC_AND_FURNACE_AIRLOOP_0_DUCTIMBALLKSUPFANEQUIVCOND = 0.0,
+    Set CENTRAL_AC_AND_FURNACE_AIRLOOP_0_DUCTIMBALLKEXHFANEQUIVCOND = 0.0;
+
+  EnergyManagementSystem:ProgramCallingManager,
+    init calling manager,  !- Name
+    BeginNewEnvironment,  !- EnergyPlus Model Calling Point
+    init;  !- Program Name 1
 
 !-   ===========  ALL OBJECTS IN CLASS: ENERGYMANAGEMENTSYSTEM:OUTPUTVARIABLE ===========
 
