@@ -2693,8 +2693,12 @@ TEST_F(EnergyPlusFixture, AirloopHVAC_ZoneSumTest)
 
 //"ElectricEquipment,",
 //" Space ElecEq,             !- Name",
+//" Space ElecEq Definition,  !- Electric Equipment Definition Name"
 //" Space,                    !- Zone or ZoneList Name",
-//" OnSched,                  !- Schedule Name",
+//" OnSched;                  !- Schedule Name",
+
+//"ElectricEquipment:Definition,",
+//" Space ElecEq Definition,  !- Name"
 //" Watts/Area,               !- Design Level Calculation Method",
 //" ,                         !- Design Level{ W }",
 //" 20.0,                     !- Watts per Zone Floor Area{ W / m2 }",
@@ -2705,8 +2709,12 @@ TEST_F(EnergyPlusFixture, AirloopHVAC_ZoneSumTest)
 
 //"ElectricEquipment,",
 //" Space ElecEq x10,         !- Name",
+//" Space ElecEq x10 Definition, !- Electric Equipment Definition Name"
 //" Spacex10,                 !- Zone or ZoneList Name",
 //" OnSched,                  !- Schedule Name",
+
+//"ElectricEquipment:Definition,",
+//" Space ElecEq x10 Definition, !- Name"
 //" Watts/Area,               !- Design Level Calculation Method",
 //" ,                         !- Design Level{ W }",
 //" 20.0,                     !- Watts per Zone Floor Area{ W / m2 }",
@@ -11434,8 +11442,12 @@ TEST_F(SQLiteFixture, DOASDirectToZone_ZoneMultiplierRemoved)
 
   ElectricEquipment,
     TestZone ElecEq,         !- Name
+    TestZone ElecEq Definition, !- Electric Equipment Definition Name
     Test Zone,               !- Zone or ZoneList or Space or SpaceList Name
-    Always On,               !- Schedule Name
+    Always On;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    TestZone ElecEq Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1928.751,                !- Design Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
@@ -12276,8 +12288,12 @@ TEST_F(SQLiteFixture, UpdateSizing_EndSysSizingCalc)
 
   ElectricEquipment,
     West Zone ElecEq,        !- Name
+    West Zone ElecEq Definition, !- Electric Equipment Definition Name
     Thermal Zone one,        !- Zone or ZoneList or Space or SpaceList Name
-    Always On,               !- Schedule Name
+    Always On;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    West Zone ElecEq Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1928.751,                !- Design Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}

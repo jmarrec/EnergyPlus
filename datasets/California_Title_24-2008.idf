@@ -49,8 +49,12 @@
 
   ElectricEquipment,
     Auditoriums,             !- Name
+    Auditoriums Definition,  !- Electric Equipment Definition Name
     Auditoriums,             !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Auditoriums Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
@@ -113,8 +117,12 @@
 
   ElectricEquipment,
     Classroom Building,      !- Name
+    Classroom Building Definition, !- Electric Equipment Definition Name
     Classroom Building,      !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Classroom Building Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
@@ -177,8 +185,12 @@
 
   ElectricEquipment,
     Commercial and Industrial Building,  !- Name
-    Commercial and Industrial Building,  !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    Commercial and Industrial Building Definition, !- Electric Equipment Definition Name
+    Commercial and Industrial Building, !- Zone or ZoneList or Space or SpaceList Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Commercial and Industrial Building Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.63,                    !- Watts per Floor Area {W/m2}
@@ -241,8 +253,12 @@
 
   ElectricEquipment,
     Convention Centers,      !- Name
+    Convention Centers Definition, !- Electric Equipment Definition Name
     Convention Centers,      !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Convention Centers Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.33,                   !- Watts per Floor Area {W/m2}
@@ -305,8 +321,12 @@
 
   ElectricEquipment,
     Financial Institutions,  !- Name
+    Financial Institutions Definition, !- Electric Equipment Definition Name
     Financial Institutions,  !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Financial Institutions Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     16.15,                   !- Watts per Floor Area {W/m2}
@@ -369,8 +389,12 @@
 
   ElectricEquipment,
     General Commercial and Industrial Work Buildings,  !- Name
-    General Commercial and Industrial Work Buildings,  !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    General Commercial and Industrial Work Buildings Definition, !- Electric Equipment Definition Name
+    General Commercial and Industrial Work Buildings, !- Zone or ZoneList or Space or SpaceList Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    General Commercial and Industrial Work Buildings Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
@@ -433,8 +457,12 @@
 
   ElectricEquipment,
     Grocery Stores,          !- Name
+    Grocery Stores Definition, !- Electric Equipment Definition Name
     Grocery Stores,          !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Grocery Stores Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     9.80,                    !- Watts per Floor Area {W/m2}
@@ -497,8 +525,12 @@
 
   ElectricEquipment,
     Library,                 !- Name
+    Library Definition,      !- Electric Equipment Definition Name
     Library,                 !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Library Definition,      !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     16.15,                   !- Watts per Floor Area {W/m2}
@@ -561,8 +593,12 @@
 
   ElectricEquipment,
     Medical Buildings and Clinics,  !- Name
-    Medical Buildings and Clinics,  !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    Medical Buildings and Clinics Definition, !- Electric Equipment Definition Name
+    Medical Buildings and Clinics, !- Zone or ZoneList or Space or SpaceList Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Medical Buildings and Clinics Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     12.7,                    !- Watts per Floor Area {W/m2}
@@ -625,8 +661,12 @@
 
   ElectricEquipment,
     Office Buildings,        !- Name
+    Office Buildings Definition, !- Electric Equipment Definition Name
     Office Buildings,        !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Office Buildings Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.43,                   !- Watts per Floor Area {W/m2}
@@ -689,8 +729,12 @@
 
   ElectricEquipment,
     Religious Facilities,    !- Name
+    Religious Facilities Definition, !- Electric Equipment Definition Name
     Religious Facilities,    !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Religious Facilities Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.33,                   !- Watts per Floor Area {W/m2}
@@ -753,8 +797,12 @@
 
   ElectricEquipment,
     Restaurants,             !- Name
+    Restaurants Definition,  !- Electric Equipment Definition Name
     Restaurants,             !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Restaurants Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     8.50,                    !- Watts per Floor Area {W/m2}
@@ -817,8 +865,12 @@
 
   ElectricEquipment,
     Schools,                 !- Name
+    Schools Definition,      !- Electric Equipment Definition Name
     Schools,                 !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Schools Definition,      !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
@@ -881,8 +933,12 @@
 
   ElectricEquipment,
     Theaters,                !- Name
+    Theaters Definition,     !- Electric Equipment Definition Name
     Theaters,                !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Theaters Definition,     !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     5.81,                    !- Watts per Floor Area {W/m2}
