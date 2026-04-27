@@ -3397,16 +3397,20 @@
 
   SteamEquipment,
     SPACE4-1 ElecEq 1,       !- Name
+    SPACE4-1 ElecEq 1 Definition, !- Steam Equipment Definition Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
+    Laundry;                 !- End-Use Subcategory
+
+  SteamEquipment:Definition,
+    SPACE4-1 ElecEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1050,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.5,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    Laundry;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   BuildingSurface:Detailed,
     LEFT-1,                  !- Name
