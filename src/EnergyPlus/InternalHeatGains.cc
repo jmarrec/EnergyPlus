@@ -1671,6 +1671,10 @@ namespace InternalHeatGains {
 
         if (state.dataHeatBal->TotStmEquip > 0) {
             state.dataHeatBal->ZoneSteamEq.allocate(state.dataHeatBal->TotStmEquip);
+
+            // Read the definitions
+            std::vector<ZoneEquipDefinitionData> stmLoadDefs = GetSpaceLoadDefinition(state, "SteamEquipment:Definition");
+
             int stmEqNum = 0;
             for (int stmEqInputNum = 1; stmEqInputNum <= numSteamEqStatements; ++stmEqInputNum) {
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
@@ -1687,40 +1691,29 @@ namespace InternalHeatGains {
                                                                          IHGNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, stmEqModuleObject, IHGAlphas(1)};
-                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(3));
-                if (IHGAlphaFieldBlanks(3)) {
-                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(3));
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
                     ErrorsFound = true;
                 } else if (schedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
                     ErrorsFound = true;
                 } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(3), IHGAlphas(3), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
                     ErrorsFound = true;
                 }
 
-                auto &thisStmEqInput = steamEqObjects(stmEqInputNum);
-                DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
-                int fieldNum = 1;
-                switch (levelMethod) {
-                case DesignLevelMethod::EquipmentLevel: {
-                    fieldNum = 1;
-                } break;
-                case DesignLevelMethod::WattsPerArea:
-                case DesignLevelMethod::PowerPerArea: {
-                    fieldNum = 2;
-                } break;
-                case DesignLevelMethod::WattsPerPerson:
-                case DesignLevelMethod::PowerPerPerson: {
-                    fieldNum = 3;
-                } break;
-                default: {
-                    assert(false);
-                } break;
+                std::string defName = IHGAlphas(2);
+
+                auto itStmLoadDef = std::find_if(
+                    stmLoadDefs.begin(), stmLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itStmLoadDef == stmLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
                 }
-                Real64 const levelValue = IHGNumbers(fieldNum);
-                bool const levelBlank = IHGNumericFieldBlanks(fieldNum);
-                std::string_view const levelField = IHGNumericFieldNames(fieldNum);
+
+                auto &thisStmEqInput = steamEqObjects(stmEqInputNum);
 
                 for (int Item1 = 1; Item1 <= thisStmEqInput.numOfSpaces; ++Item1) {
                     ++stmEqNum;
@@ -1733,16 +1726,24 @@ namespace InternalHeatGains {
                     thisZoneStmEq.sched = schedPtr;
 
                     // Steam equipment design level calculation method.
-                    thisZoneStmEq.DesignLevel = setDesignLevel(
-                        state, ErrorsFound, stmEqModuleObject, thisStmEqInput, levelMethod, zoneNum, spaceNum, levelValue, levelBlank, levelField);
+                    thisZoneStmEq.DesignLevel = setDesignLevel(state,
+                                                               ErrorsFound,
+                                                               stmEqModuleObject,
+                                                               thisStmEqInput,
+                                                               itStmLoadDef->designLevelMethod,
+                                                               zoneNum,
+                                                               spaceNum,
+                                                               itStmLoadDef->levelValue,
+                                                               itStmLoadDef->levelIsBlank,
+                                                               itStmLoadDef->levelField);
 
                     // Calculate nominal min/max equipment level
                     thisZoneStmEq.NomMinDesignLevel = thisZoneStmEq.DesignLevel * thisZoneStmEq.sched->getMinVal(state);
                     thisZoneStmEq.NomMaxDesignLevel = thisZoneStmEq.DesignLevel * thisZoneStmEq.sched->getMaxVal(state);
 
-                    thisZoneStmEq.FractionLatent = IHGNumbers(4);
-                    thisZoneStmEq.FractionRadiant = IHGNumbers(5);
-                    thisZoneStmEq.FractionLost = IHGNumbers(6);
+                    thisZoneStmEq.FractionLatent = itStmLoadDef->FractionLatent;
+                    thisZoneStmEq.FractionRadiant = itStmLoadDef->FractionRadiant;
+                    thisZoneStmEq.FractionLost = itStmLoadDef->FractionLost;
                     // FractionConvected is a calculated field
                     thisZoneStmEq.FractionConvected =
                         1.0 - (thisZoneStmEq.FractionLatent + thisZoneStmEq.FractionRadiant + thisZoneStmEq.FractionLost);
