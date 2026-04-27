@@ -6028,228 +6028,273 @@
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_RetCondToDZ equip,  !- Name
+    central_ac_and_furnace_airloop_0_RetCondToDZ equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     attic - unvented 1,      !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_RetCondToDZ equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_SupCondToDZ equip,  !- Name
+    central_ac_and_furnace_airloop_0_SupCondToDZ equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     attic - unvented 1,      !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_SupCondToDZ equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_SupLatLkToDZ equip,  !- Name
+    central_ac_and_furnace_airloop_0_SupLatLkToDZ equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     attic - unvented 1,      !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_SupLatLkToDZ equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     1,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_SupSensLkToDZ equip,  !- Name
+    central_ac_and_furnace_airloop_0_SupSensLkToDZ equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     attic - unvented 1,      !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_SupSensLkToDZ equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_RetCondToRP equip,  !- Name
+    central_ac_and_furnace_airloop_0_RetCondToRP equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
-    central ac and furnace airloop ret air space,  !- Zone or ZoneList or Space or SpaceList Name
+    central ac and furnace airloop ret air space, !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    duct load;               !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_RetCondToRP equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    duct load;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_RetLatLkToRP equip,  !- Name
+    central_ac_and_furnace_airloop_0_RetLatLkToRP equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
-    central ac and furnace airloop ret air space,  !- Zone or ZoneList or Space or SpaceList Name
+    central ac and furnace airloop ret air space, !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    duct load;               !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_RetLatLkToRP equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     1,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    duct load;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_RetSensLkToRP equip,  !- Name
+    central_ac_and_furnace_airloop_0_RetSensLkToRP equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
-    central ac and furnace airloop ret air space,  !- Zone or ZoneList or Space or SpaceList Name
+    central ac and furnace airloop ret air space, !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    duct load;               !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_RetSensLkToRP equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    duct load;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_SupCondToLv equip,  !- Name
+    central_ac_and_furnace_airloop_0_SupCondToLv equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    duct load;               !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_SupCondToLv equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    duct load;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_SupLatLkToCond equip,  !- Name
+    central_ac_and_furnace_airloop_0_SupLatLkToCond equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    duct load;               !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_SupLatLkToCond equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     1,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    duct load;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     central_ac_and_furnace_airloop_0_SupSensLkToCond equip,  !- Name
+    central_ac_and_furnace_airloop_0_SupSensLkToCond equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    duct load;               !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    central_ac_and_furnace_airloop_0_SupSensLkToCond equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    duct load;               !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     general water use latent,!- Name
+    general water use latent Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
-    general water use schedule,  !- Schedule Name
+    general water use schedule, !- Schedule Name
+    general water use latent; !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    general water use latent Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     53.2715284252048,        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     1,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    general water use latent;!- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     general water use sensible,  !- Name
+    general water use sensible Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
-    general water use schedule,  !- Schedule Name
+    general water use schedule, !- Schedule Name
+    general water use sensible; !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    general water use sensible Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     -52.5013376527922,       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0.6,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    general water use sensible;  !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     mech vent house fan latent load equip,  !- Name
+    mech vent house fan latent load equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    mech vent house fan;     !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    mech vent house fan latent load equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     1,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    mech vent house fan;     !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     mech vent house fan sensible load equip,  !- Name
+    mech vent house fan sensible load equip Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    mech vent house fan;     !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    mech vent house fan sensible load equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    mech vent house fan;     !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   OtherEquipment,
     water heater energy adjustment1,  !- Name
+    water heater energy adjustment1 Definition, !- Other Equipment Definition Name
     Electricity,             !- Fuel Type
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     Always On Discrete,      !- Schedule Name
+    water heater energy adjustment1; !- End-Use Subcategory
+
+  OtherEquipment:Definition,
+    water heater energy adjustment1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0.01,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
-    1,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    water heater energy adjustment1;  !- End-Use Subcategory
+    1;                       !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONEINFILTRATION:DESIGNFLOWRATE ===========
 

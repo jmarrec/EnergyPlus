@@ -3511,9 +3511,13 @@
 
   OtherEquipment,
     PlenumHG,                !- Name
+    PlenumHG Definition,     !- Other Equipment Definition Name
     None,                    !- Fuel Type
     PLENUM-1,                !- Zone or ZoneList or Space or SpaceList Name
-    AlwaysOn,                !- Schedule Name
+    AlwaysOn;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    PlenumHG Definition,     !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     5500,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
