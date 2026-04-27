@@ -1036,17 +1036,21 @@
 
   Lights,
     Full Building - 1 Zone_Lights_1,  !- Name
+    Full Building - 1 Zone_Lights_1 Definition, !- Lights Definition Name
     Full Building - 1 Zone,  !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+    Office Lighting and Receptacles, !- Schedule Name
+    0,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Full Building - 1 Zone_Lights_1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     26360,                   !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
 !-   ===========  ALL OBJECTS IN CLASS: INFILTRATION ===========
 

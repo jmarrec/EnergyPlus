@@ -14183,941 +14183,1209 @@
 
   Lights,
     CorridorFlr1_Lights,     !- Name
+    CorridorFlr1_Lights Definition, !- Lights Definition Name
     CorridorFlr1,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_CORRIDOR_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    CorridorFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.295843925,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     CorridorFlr2_Lights,     !- Name
+    CorridorFlr2_Lights Definition, !- Lights Definition Name
     CorridorFlr2,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_CORRIDOR_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    CorridorFlr2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.295843925,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     CorridorFlr3_Lights,     !- Name
+    CorridorFlr3_Lights Definition, !- Lights Definition Name
     CorridorFlr3,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_CORRIDOR_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    CorridorFlr3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.295843925,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     CorridorFlr4_Lights,     !- Name
+    CorridorFlr4_Lights Definition, !- Lights Definition Name
     CorridorFlr4,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_CORRIDOR_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    CorridorFlr4_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.295843925,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     ElevatorCoreFlr1_Lights, !- Name
+    ElevatorCoreFlr1_Lights Definition, !- Lights Definition Name
     ElevatorCoreFlr1,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    ElevatorCoreFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     0,                       !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     ElevatorCoreFlr2_Lights, !- Name
+    ElevatorCoreFlr2_Lights Definition, !- Lights Definition Name
     ElevatorCoreFlr2,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    ElevatorCoreFlr2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     0,                       !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     ElevatorCoreFlr3_Lights, !- Name
+    ElevatorCoreFlr3_Lights Definition, !- Lights Definition Name
     ElevatorCoreFlr3,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    ElevatorCoreFlr3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     0,                       !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     ElevatorCoreFlr4_Lights, !- Name
+    ElevatorCoreFlr4_Lights Definition, !- Lights Definition Name
     ElevatorCoreFlr4,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    ElevatorCoreFlr4_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     0,                       !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     EmployeeLoungeFlr1_Lights,  !- Name
+    EmployeeLoungeFlr1_Lights Definition, !- Lights Definition Name
     EmployeeLoungeFlr1,      !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_EMPLOYEELOUNGE_SCH,  !- Schedule Name
+    BLDG_LIGHT_EMPLOYEELOUNGE_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    EmployeeLoungeFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.520842375,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     ExerciseCenterFlr1_Lights,  !- Name
+    ExerciseCenterFlr1_Lights Definition, !- Lights Definition Name
     ExerciseCenterFlr1,      !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_EXERCENTER_SCH,  !- Schedule Name
+    BLDG_LIGHT_EXERCENTER_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    ExerciseCenterFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     11.62502325,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontLoungeFlr1_Lights,  !- Name
+    FrontLoungeFlr1_Lights Definition, !- Lights Definition Name
     FrontLoungeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_FRONTLOUNGE_SCH,  !- Schedule Name
+    BLDG_LIGHT_FRONTLOUNGE_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontLoungeFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.489594313,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontOfficeFlr1_Lights,  !- Name
+    FrontOfficeFlr1_Lights Definition, !- Lights Definition Name
     FrontOfficeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_OFFICE_SCH,   !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontOfficeFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     7.965293709,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStairsFlr1_Lights,  !- Name
+    FrontStairsFlr1_Lights Definition, !- Lights Definition Name
     FrontStairsFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStairsFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStairsFlr2_Lights,  !- Name
+    FrontStairsFlr2_Lights Definition, !- Lights Definition Name
     FrontStairsFlr2,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStairsFlr2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStairsFlr3_Lights,  !- Name
+    FrontStairsFlr3_Lights Definition, !- Lights Definition Name
     FrontStairsFlr3,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStairsFlr3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStairsFlr4_Lights,  !- Name
+    FrontStairsFlr4_Lights Definition, !- Lights Definition Name
     FrontStairsFlr4,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStairsFlr4_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStorageFlr1_Lights, !- Name
+    FrontStorageFlr1_Lights Definition, !- Lights Definition Name
     FrontStorageFlr1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStorageFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStorageFlr2_Lights, !- Name
+    FrontStorageFlr2_Lights Definition, !- Lights Definition Name
     FrontStorageFlr2,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStorageFlr2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStorageFlr3_Lights, !- Name
+    FrontStorageFlr3_Lights Definition, !- Lights Definition Name
     FrontStorageFlr3,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStorageFlr3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     FrontStorageFlr4_Lights, !- Name
+    FrontStorageFlr4_Lights Definition, !- Lights Definition Name
     FrontStorageFlr4,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    FrontStorageFlr4_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom101_Lights,     !- Name
+    GuestRoom101_Lights Definition, !- Lights Definition Name
     GuestRoom101,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom101_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom102_Lights,     !- Name
+    GuestRoom102_Lights Definition, !- Lights Definition Name
     GuestRoom102,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom102_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom103_Lights,     !- Name
+    GuestRoom103_Lights Definition, !- Lights Definition Name
     GuestRoom103,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom103_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom104_Lights,     !- Name
+    GuestRoom104_Lights Definition, !- Lights Definition Name
     GuestRoom104,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom104_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom105_Lights,     !- Name
+    GuestRoom105_Lights Definition, !- Lights Definition Name
     GuestRoom105,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom105_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom201_Lights,     !- Name
+    GuestRoom201_Lights Definition, !- Lights Definition Name
     GuestRoom201,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom201_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom202_205_Lights, !- Name
+    GuestRoom202_205_Lights Definition, !- Lights Definition Name
     GuestRoom202_205,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom202_205_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom206_208_Lights, !- Name
+    GuestRoom206_208_Lights Definition, !- Lights Definition Name
     GuestRoom206_208,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom206_208_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom209_212_Lights, !- Name
+    GuestRoom209_212_Lights Definition, !- Lights Definition Name
     GuestRoom209_212,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom209_212_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom213_Lights,     !- Name
+    GuestRoom213_Lights Definition, !- Lights Definition Name
     GuestRoom213,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom213_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom214_Lights,     !- Name
+    GuestRoom214_Lights Definition, !- Lights Definition Name
     GuestRoom214,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom214_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom215_218_Lights, !- Name
+    GuestRoom215_218_Lights Definition, !- Lights Definition Name
     GuestRoom215_218,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom215_218_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom219_Lights,     !- Name
+    GuestRoom219_Lights Definition, !- Lights Definition Name
     GuestRoom219,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom219_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom220_223_Lights, !- Name
+    GuestRoom220_223_Lights Definition, !- Lights Definition Name
     GuestRoom220_223,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom220_223_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom224_Lights,     !- Name
+    GuestRoom224_Lights Definition, !- Lights Definition Name
     GuestRoom224,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom224_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom301_Lights,     !- Name
+    GuestRoom301_Lights Definition, !- Lights Definition Name
     GuestRoom301,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom301_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom302_305_Lights, !- Name
+    GuestRoom302_305_Lights Definition, !- Lights Definition Name
     GuestRoom302_305,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom302_305_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom306_308_Lights, !- Name
+    GuestRoom306_308_Lights Definition, !- Lights Definition Name
     GuestRoom306_308,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom306_308_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom309_312_Lights, !- Name
+    GuestRoom309_312_Lights Definition, !- Lights Definition Name
     GuestRoom309_312,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom309_312_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom313_Lights,     !- Name
+    GuestRoom313_Lights Definition, !- Lights Definition Name
     GuestRoom313,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom313_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom314_Lights,     !- Name
+    GuestRoom314_Lights Definition, !- Lights Definition Name
     GuestRoom314,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom314_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom315_318_Lights, !- Name
+    GuestRoom315_318_Lights Definition, !- Lights Definition Name
     GuestRoom315_318,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom315_318_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom319_Lights,     !- Name
+    GuestRoom319_Lights Definition, !- Lights Definition Name
     GuestRoom319,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom319_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom320_323_Lights, !- Name
+    GuestRoom320_323_Lights Definition, !- Lights Definition Name
     GuestRoom320_323,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom320_323_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom324_Lights,     !- Name
+    GuestRoom324_Lights Definition, !- Lights Definition Name
     GuestRoom324,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom324_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom401_Lights,     !- Name
+    GuestRoom401_Lights Definition, !- Lights Definition Name
     GuestRoom401,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom401_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom402_405_Lights, !- Name
+    GuestRoom402_405_Lights Definition, !- Lights Definition Name
     GuestRoom402_405,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom402_405_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom406_408_Lights, !- Name
+    GuestRoom406_408_Lights Definition, !- Lights Definition Name
     GuestRoom406_408,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom406_408_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom409_412_Lights, !- Name
+    GuestRoom409_412_Lights Definition, !- Lights Definition Name
     GuestRoom409_412,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom409_412_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom413_Lights,     !- Name
+    GuestRoom413_Lights Definition, !- Lights Definition Name
     GuestRoom413,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom413_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom414_Lights,     !- Name
+    GuestRoom414_Lights Definition, !- Lights Definition Name
     GuestRoom414,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom414_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom415_418_Lights, !- Name
+    GuestRoom415_418_Lights Definition, !- Lights Definition Name
     GuestRoom415_418,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom415_418_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom419_Lights,     !- Name
+    GuestRoom419_Lights Definition, !- Lights Definition Name
     GuestRoom419,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom419_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom420_423_Lights, !- Name
+    GuestRoom420_423_Lights Definition, !- Lights Definition Name
     GuestRoom420_423,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom420_423_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     GuestRoom424_Lights,     !- Name
+    GuestRoom424_Lights Definition, !- Lights Definition Name
     GuestRoom424,            !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_GUESTROOM_SCH,!- Schedule Name
+    BLDG_LIGHT_GUESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    GuestRoom424_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.413203271,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     LaundryRoomFlr1_Lights,  !- Name
+    LaundryRoomFlr1_Lights Definition, !- Lights Definition Name
     LaundryRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_LAUNDRY_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    LaundryRoomFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.704872521,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     MechanicalRoomFlr1_Lights,  !- Name
+    MechanicalRoomFlr1_Lights Definition, !- Lights Definition Name
     MechanicalRoomFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_MECHROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    MechanicalRoomFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.2257149,              !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     MeetingRoomFlr1_Lights,  !- Name
+    MeetingRoomFlr1_Lights Definition, !- Lights Definition Name
     MeetingRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_LIGHT_MEETINGROOM_SCH,  !- Schedule Name
+    BLDG_LIGHT_MEETINGROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    MeetingRoomFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     10.4409931,              !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStairsFlr1_Lights,   !- Name
+    RearStairsFlr1_Lights Definition, !- Lights Definition Name
     RearStairsFlr1,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStairsFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStairsFlr2_Lights,   !- Name
+    RearStairsFlr2_Lights Definition, !- Lights Definition Name
     RearStairsFlr2,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStairsFlr2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStairsFlr3_Lights,   !- Name
+    RearStairsFlr3_Lights Definition, !- Lights Definition Name
     RearStairsFlr3,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStairsFlr3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStairsFlr4_Lights,   !- Name
+    RearStairsFlr4_Lights Definition, !- Lights Definition Name
     RearStairsFlr4,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STAIR_SCH,    !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStairsFlr4_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     5.274316104,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStorageFlr1_Lights,  !- Name
+    RearStorageFlr1_Lights Definition, !- Lights Definition Name
     RearStorageFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStorageFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStorageFlr2_Lights,  !- Name
+    RearStorageFlr2_Lights Definition, !- Lights Definition Name
     RearStorageFlr2,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStorageFlr2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStorageFlr3_Lights,  !- Name
+    RearStorageFlr3_Lights Definition, !- Lights Definition Name
     RearStorageFlr3,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStorageFlr3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RearStorageFlr4_Lights,  !- Name
+    RearStorageFlr4_Lights Definition, !- Lights Definition Name
     RearStorageFlr4,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RearStorageFlr4_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     4.090285958,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     RestroomFlr1_Lights,     !- Name
+    RestroomFlr1_Lights Definition, !- Lights Definition Name
     RestroomFlr1,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_RESTROOM_SCH, !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    RestroomFlr1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.781263563,             !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    LightsWired;             !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
 !-   ===========  ALL OBJECTS IN CLASS: ELECTRICEQUIPMENT ===========
 

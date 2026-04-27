@@ -846,17 +846,21 @@
 
   Lights,
     AllZones with Lights,    !- Name
+    AllZones with Lights Definition, !- Lights Definition Name
     AllOccupiedZones,        !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    AllZones with Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     16,                      !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     AllZones with Electric Equipment,  !- Name

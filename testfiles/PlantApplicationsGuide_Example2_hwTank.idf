@@ -2645,8 +2645,14 @@
 
   Lights,
     ZN_1_FLR_1_SEC_1_Lights, !- Name
+    ZN_1_FLR_1_SEC_1_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_1_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1748.6831,               !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2654,8 +2660,6 @@
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights,          !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   ComponentCost:LineItem,
@@ -3147,8 +3151,14 @@
 
   Lights,
     ZN_1_FLR_1_SEC_2_Lights, !- Name
+    ZN_1_FLR_1_SEC_2_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_2,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_2_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     761.5631,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -3156,8 +3166,6 @@
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights,          !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   ComponentCost:LineItem,
@@ -3630,8 +3638,14 @@
 
   Lights,
     ZN_1_FLR_1_SEC_3_Lights, !- Name
+    ZN_1_FLR_1_SEC_3_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_3,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_3_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1748.6831,               !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -3639,8 +3653,6 @@
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights,          !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   ComponentCost:LineItem,
@@ -4132,8 +4144,14 @@
 
   Lights,
     ZN_1_FLR_1_SEC_4_Lights, !- Name
+    ZN_1_FLR_1_SEC_4_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_4,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_4_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     761.5631,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -4141,8 +4159,6 @@
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights,          !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   ComponentCost:LineItem,
@@ -4720,8 +4736,14 @@
 
   Lights,
     ZN_1_FLR_1_SEC_5_Lights, !- Name
+    ZN_1_FLR_1_SEC_5_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_5,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_5_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     3619.5077,               !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -4729,8 +4751,6 @@
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights,          !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   ComponentCost:LineItem,

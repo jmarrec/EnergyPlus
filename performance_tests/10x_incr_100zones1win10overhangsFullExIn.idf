@@ -21401,17 +21401,21 @@ ZoneList,
 
 Lights,
   90.1-2010 - Office - OpenOffice Lights, !- Name
+  90.1-2010 - Office - OpenOffice Lights Definition, !- Lights Definition Name
   90.1-2010 - Office - OpenOffice,        !- Zone or ZoneList Name
   Office Bldg Light,                      !- Schedule Name
+  1,                                      !- Fraction Replaceable
+  General;                                !- End-Use Subcategory
+
+Lights:Definition,
+  90.1-2010 - Office - OpenOffice Lights Definition, !- Name
   Watts/Area,                             !- Design Level Calculation Method
   ,                                       !- Lighting Level {W}
   10.5486322083755,                       !- Watts per Zone Floor Area {W/m2}
   ,                                       !- Watts per Person {W/person}
   ,                                       !- Return Air Fraction
   ,                                       !- Fraction Radiant
-  ,                                       !- Fraction Visible
-  1,                                      !- Fraction Replaceable
-  General;                                !- End-Use Subcategory
+  ;                                       !- Fraction Visible
 
 People,
   90.1-2010 - Office - OpenOffice People, !- Name

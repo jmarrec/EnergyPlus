@@ -2720,8 +2720,14 @@
 
   Lights,
     LGstore1_Lights,         !- Name
+    LGstore1_Lights Definition, !- Lights Definition Name
     LGstore1,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    LGstore1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     23.99,                   !- Watts per Floor Area {W/m2}
@@ -2729,14 +2735,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     LGstore2_Lights,         !- Name
+    LGstore2_Lights Definition, !- Lights Definition Name
     LGstore2,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    LGstore2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.77,                   !- Watts per Floor Area {W/m2}
@@ -2744,14 +2754,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore1_Lights,         !- Name
+    SMstore1_Lights Definition, !- Lights Definition Name
     SMstore1,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     23.99,                   !- Watts per Floor Area {W/m2}
@@ -2759,14 +2773,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore2_Lights,         !- Name
+    SMstore2_Lights Definition, !- Lights Definition Name
     SMstore2,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore2_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     18.29,                   !- Watts per Floor Area {W/m2}
@@ -2774,14 +2792,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore3_Lights,         !- Name
+    SMstore3_Lights Definition, !- Lights Definition Name
     SMstore3,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     18.29,                   !- Watts per Floor Area {W/m2}
@@ -2789,14 +2811,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore4_Lights,         !- Name
+    SMstore4_Lights Definition, !- Lights Definition Name
     SMstore4,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore4_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     18.29,                   !- Watts per Floor Area {W/m2}
@@ -2804,14 +2830,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore5_Lights,         !- Name
+    SMstore5_Lights Definition, !- Lights Definition Name
     SMstore5,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore5_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.77,                   !- Watts per Floor Area {W/m2}
@@ -2819,14 +2849,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore6_Lights,         !- Name
+    SMstore6_Lights Definition, !- Lights Definition Name
     SMstore6,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.77,                   !- Watts per Floor Area {W/m2}
@@ -2834,14 +2868,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore7_Lights,         !- Name
+    SMstore7_Lights Definition, !- Lights Definition Name
     SMstore7,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore7_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.77,                   !- Watts per Floor Area {W/m2}
@@ -2849,14 +2887,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     SMstore8_Lights,         !- Name
+    SMstore8_Lights Definition, !- Lights Definition Name
     SMstore8,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    SMstore8_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.77,                   !- Watts per Floor Area {W/m2}
@@ -2864,8 +2906,6 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
 ! ***EQUIPMENT GAINS***

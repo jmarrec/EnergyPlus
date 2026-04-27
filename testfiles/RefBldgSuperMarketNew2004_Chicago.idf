@@ -1467,8 +1467,14 @@
 
   Lights,
     Bakery_Lights,           !- Name
+    Bakery_Lights Definition, !- Lights Definition Name
     Bakery,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Bakery_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     18.29,                   !- Watts per Floor Area {W/m2}
@@ -1476,14 +1482,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Deli_Lights,             !- Name
+    Deli_Lights Definition,  !- Lights Definition Name
     Deli,                    !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Deli_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     18.29,                   !- Watts per Floor Area {W/m2}
@@ -1491,14 +1501,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     DryStorage_Lights,       !- Name
+    DryStorage_Lights Definition, !- Lights Definition Name
     DryStorage,              !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    DryStorage_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     8.61,                    !- Watts per Floor Area {W/m2}
@@ -1506,14 +1520,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Office_Lights,           !- Name
+    Office_Lights Definition, !- Lights Definition Name
     Office,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -1521,14 +1539,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Produce_Lights,          !- Name
+    Produce_Lights Definition, !- Lights Definition Name
     Produce,                 !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Produce_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     18.29,                   !- Watts per Floor Area {W/m2}
@@ -1536,14 +1558,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Sales_Lights,            !- Name
+    Sales_Lights Definition, !- Lights Definition Name
     Sales,                   !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Sales_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     18.29,                   !- Watts per Floor Area {W/m2}
@@ -1551,8 +1577,6 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
 ! ***EQUIPMENT GAINS***

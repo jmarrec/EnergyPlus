@@ -5019,8 +5019,14 @@
 
   Lights,
     Banquet_Flr_6_Lights,    !- Name
+    Banquet_Flr_6_Lights Definition, !- Lights Definition Name
     Banquet_Flr_6,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Banquet_Flr_6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.99,                   !- Watts per Floor Area {W/m2}
@@ -5028,14 +5034,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Basement_Lights,         !- Name
+    Basement_Lights Definition, !- Lights Definition Name
     Basement,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Basement_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -5043,14 +5053,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Cafe_Flr_1_Lights,       !- Name
+    Cafe_Flr_1_Lights Definition, !- Lights Definition Name
     Cafe_Flr_1,              !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Cafe_Flr_1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.99,                   !- Watts per Floor Area {W/m2}
@@ -5058,14 +5072,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Corridor_Flr_3_Lights,   !- Name
+    Corridor_Flr_3_Lights Definition, !- Lights Definition Name
     Corridor_Flr_3,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Corridor_Flr_3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.38,                    !- Watts per Floor Area {W/m2}
@@ -5073,14 +5091,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Corridor_Flr_6_Lights,   !- Name
+    Corridor_Flr_6_Lights Definition, !- Lights Definition Name
     Corridor_Flr_6,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Corridor_Flr_6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.38,                    !- Watts per Floor Area {W/m2}
@@ -5088,14 +5110,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Dining_Flr_6_Lights,     !- Name
+    Dining_Flr_6_Lights Definition, !- Lights Definition Name
     Dining_Flr_6,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Dining_Flr_6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.99,                   !- Watts per Floor Area {W/m2}
@@ -5103,14 +5129,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Kitchen_Flr_6_Lights,    !- Name
+    Kitchen_Flr_6_Lights Definition, !- Lights Definition Name
     Kitchen_Flr_6,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Kitchen_Flr_6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     12.91,                   !- Watts per Floor Area {W/m2}
@@ -5118,14 +5148,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Laundry_Flr_1_Lights,    !- Name
+    Laundry_Flr_1_Lights Definition, !- Lights Definition Name
     Laundry_Flr_1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Laundry_Flr_1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.46,                    !- Watts per Floor Area {W/m2}
@@ -5133,14 +5167,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lobby_Flr_1_Lights,      !- Name
+    Lobby_Flr_1_Lights Definition, !- Lights Definition Name
     Lobby_Flr_1,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Lobby_Flr_1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5148,14 +5186,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Mech_Flr_1_Lights,       !- Name
+    Mech_Flr_1_Lights Definition, !- Lights Definition Name
     Mech_Flr_1,              !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Mech_Flr_1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     16.14,                   !- Watts per Floor Area {W/m2}
@@ -5163,14 +5205,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Retail_1_Flr_1_Lights,   !- Name
+    Retail_1_Flr_1_Lights Definition, !- Lights Definition Name
     Retail_1_Flr_1,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Retail_1_Flr_1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     16.14,                   !- Watts per Floor Area {W/m2}
@@ -5178,14 +5224,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Retail_2_Flr_1_Lights,   !- Name
+    Retail_2_Flr_1_Lights Definition, !- Lights Definition Name
     Retail_2_Flr_1,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Retail_2_Flr_1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     16.14,                   !- Watts per Floor Area {W/m2}
@@ -5193,14 +5243,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_1_Flr_3_Lights,     !- Name
+    Room_1_Flr_3_Lights Definition, !- Lights Definition Name
     Room_1_Flr_3,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_1_Flr_3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5208,14 +5262,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_1_Flr_6_Lights,     !- Name
+    Room_1_Flr_6_Lights Definition, !- Lights Definition Name
     Room_1_Flr_6,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_1_Flr_6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5223,14 +5281,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_2_Flr_3_Lights,     !- Name
+    Room_2_Flr_3_Lights Definition, !- Lights Definition Name
     Room_2_Flr_3,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_2_Flr_3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5238,14 +5300,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_2_Flr_6_Lights,     !- Name
+    Room_2_Flr_6_Lights Definition, !- Lights Definition Name
     Room_2_Flr_6,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_2_Flr_6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5253,14 +5319,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_3_Mult19_Flr_3_Lights,  !- Name
+    Room_3_Mult19_Flr_3_Lights Definition, !- Lights Definition Name
     Room_3_Mult19_Flr_3,     !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_3_Mult19_Flr_3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5268,14 +5338,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_3_Mult9_Flr_6_Lights,  !- Name
+    Room_3_Mult9_Flr_6_Lights Definition, !- Lights Definition Name
     Room_3_Mult9_Flr_6,      !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_3_Mult9_Flr_6_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5283,14 +5357,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_4_Mult19_Flr_3_Lights,  !- Name
+    Room_4_Mult19_Flr_3_Lights Definition, !- Lights Definition Name
     Room_4_Mult19_Flr_3,     !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_4_Mult19_Flr_3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5298,14 +5376,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_5_Flr_3_Lights,     !- Name
+    Room_5_Flr_3_Lights Definition, !- Lights Definition Name
     Room_5_Flr_3,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_5_Flr_3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5313,14 +5395,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Room_6_Flr_3_Lights,     !- Name
+    Room_6_Flr_3_Lights Definition, !- Lights Definition Name
     Room_6_Flr_3,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Ltg_Sch_Base,  !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Room_6_Flr_3_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
@@ -5328,14 +5414,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Storage_Flr_1_Lights,    !- Name
+    Storage_Flr_1_Lights Definition, !- Lights Definition Name
     Storage_Flr_1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Storage_Flr_1_Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     9.68,                    !- Watts per Floor Area {W/m2}
@@ -5343,8 +5433,6 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
 ! ***EQUIPMENT GAINS***

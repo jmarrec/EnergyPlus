@@ -629,31 +629,39 @@
 
   Lights,
     Daylit Zone Lights 1,    !- Name
+    Daylit Zone Lights 1 Definition, !- Lights Definition Name
     Daylit Zone,             !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOnSchedule,        !- Schedule Name
-    LightingLevel,           !- Design Level Calculation Method
-    800,                     !- Lighting Level {W}
-    ,                        !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.40,                    !- Fraction Radiant
-    0.20,                    !- Fraction Visible
     1.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
-  Lights,
-    Standard Zone Lights 1,  !- Name
-    Standard Zone,           !- Zone or ZoneList or Space or SpaceList Name
-    AlwaysOnSchedule,        !- Schedule Name
+  Lights:Definition,
+    Daylit Zone Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     800,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.40,                    !- Fraction Radiant
-    0.20,                    !- Fraction Visible
+    0.20;                    !- Fraction Visible
+
+  Lights,
+    Standard Zone Lights 1,  !- Name
+    Standard Zone Lights 1 Definition, !- Lights Definition Name
+    Standard Zone,           !- Zone or ZoneList or Space or SpaceList Name
+    AlwaysOnSchedule,        !- Schedule Name
     1.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Standard Zone Lights 1 Definition, !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    800,                     !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0,                       !- Return Air Fraction
+    0.40,                    !- Fraction Radiant
+    0.20;                    !- Fraction Visible
 
   Daylighting:Controls,
     Daylit Zone_DaylCtrl,    !- Name

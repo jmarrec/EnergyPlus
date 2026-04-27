@@ -432,17 +432,21 @@
 
   Lights,
     rm1_3_C_LIGHTS,          !- Name
+    rm1_3_C_LIGHTS Definition, !- Lights Definition Name
     rm1_3_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_3_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_3_C_EQUIP,           !- Name
@@ -1112,17 +1116,21 @@
 
   Lights,
     rm1_4_C_LIGHTS,          !- Name
+    rm1_4_C_LIGHTS Definition, !- Lights Definition Name
     rm1_4_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_4_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_4_C_EQUIP,           !- Name
@@ -1586,17 +1594,21 @@
 
   Lights,
     rm1_5_C_LIGHTS,          !- Name
+    rm1_5_C_LIGHTS Definition, !- Lights Definition Name
     rm1_5_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_5_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_5_C_EQUIP,           !- Name
@@ -2060,17 +2072,21 @@
 
   Lights,
     rm1_6_C_LIGHTS,          !- Name
+    rm1_6_C_LIGHTS Definition, !- Lights Definition Name
     rm1_6_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_6_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_6_C_EQUIP,           !- Name
@@ -2534,17 +2550,21 @@
 
   Lights,
     rm1_7_C_LIGHTS,          !- Name
+    rm1_7_C_LIGHTS Definition, !- Lights Definition Name
     rm1_7_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_7_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_7_C_EQUIP,           !- Name
@@ -3008,17 +3028,21 @@
 
   Lights,
     rm1_8_C_LIGHTS,          !- Name
+    rm1_8_C_LIGHTS Definition, !- Lights Definition Name
     rm1_8_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_8_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_8_C_EQUIP,           !- Name
@@ -3482,17 +3506,21 @@
 
   Lights,
     rm1_9_C_LIGHTS,          !- Name
+    rm1_9_C_LIGHTS Definition, !- Lights Definition Name
     rm1_9_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_9_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_9_C_EQUIP,           !- Name
@@ -3956,17 +3984,21 @@
 
   Lights,
     rm1_10_C_LIGHTS,         !- Name
+    rm1_10_C_LIGHTS Definition, !- Lights Definition Name
     rm1_10_C,                !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_10_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_10_C_EQUIP,          !- Name
@@ -4430,17 +4462,21 @@
 
   Lights,
     rm1_1_C_LIGHTS,          !- Name
+    rm1_1_C_LIGHTS Definition, !- Lights Definition Name
     rm1_1_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_1_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_1_C_EQUIP,           !- Name
@@ -4904,17 +4940,21 @@
 
   Lights,
     rm1_2_C_LIGHTS,          !- Name
+    rm1_2_C_LIGHTS Definition, !- Lights Definition Name
     rm1_2_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm1_2_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm1_2_C_EQUIP,           !- Name
@@ -5546,17 +5586,21 @@
 
   Lights,
     rm2_1_C_LIGHTS,          !- Name
+    rm2_1_C_LIGHTS Definition, !- Lights Definition Name
     rm2_1_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_1_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_1_C_EQUIP,           !- Name
@@ -6220,17 +6264,21 @@
 
   Lights,
     rm2_2_C_LIGHTS,          !- Name
+    rm2_2_C_LIGHTS Definition, !- Lights Definition Name
     rm2_2_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_2_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_2_C_EQUIP,           !- Name
@@ -6694,17 +6742,21 @@
 
   Lights,
     rm2_3_C_LIGHTS,          !- Name
+    rm2_3_C_LIGHTS Definition, !- Lights Definition Name
     rm2_3_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_3_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_3_C_EQUIP,           !- Name
@@ -7168,17 +7220,21 @@
 
   Lights,
     rm2_4_C_LIGHTS,          !- Name
+    rm2_4_C_LIGHTS Definition, !- Lights Definition Name
     rm2_4_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_4_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_4_C_EQUIP,           !- Name
@@ -7642,17 +7698,21 @@
 
   Lights,
     rm2_5_C_LIGHTS,          !- Name
+    rm2_5_C_LIGHTS Definition, !- Lights Definition Name
     rm2_5_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_5_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_5_C_EQUIP,           !- Name
@@ -8116,17 +8176,21 @@
 
   Lights,
     rm2_6_C_LIGHTS,          !- Name
+    rm2_6_C_LIGHTS Definition, !- Lights Definition Name
     rm2_6_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_6_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_6_C_EQUIP,           !- Name
@@ -8590,17 +8654,21 @@
 
   Lights,
     rm2_7_C_LIGHTS,          !- Name
+    rm2_7_C_LIGHTS Definition, !- Lights Definition Name
     rm2_7_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_7_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_7_C_EQUIP,           !- Name
@@ -9064,17 +9132,21 @@
 
   Lights,
     rm2_8_C_LIGHTS,          !- Name
+    rm2_8_C_LIGHTS Definition, !- Lights Definition Name
     rm2_8_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_8_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_8_C_EQUIP,           !- Name
@@ -9538,17 +9610,21 @@
 
   Lights,
     rm2_9_C_LIGHTS,          !- Name
+    rm2_9_C_LIGHTS Definition, !- Lights Definition Name
     rm2_9_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_9_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_9_C_EQUIP,           !- Name
@@ -10012,17 +10088,21 @@
 
   Lights,
     rm2_10_C_LIGHTS,         !- Name
+    rm2_10_C_LIGHTS Definition, !- Lights Definition Name
     rm2_10_C,                !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm2_10_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm2_10_C_EQUIP,          !- Name
@@ -10654,17 +10734,21 @@
 
   Lights,
     rm3_1_C_LIGHTS,          !- Name
+    rm3_1_C_LIGHTS Definition, !- Lights Definition Name
     rm3_1_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_1_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_1_C_EQUIP,           !- Name
@@ -11328,17 +11412,21 @@
 
   Lights,
     rm3_2_C_LIGHTS,          !- Name
+    rm3_2_C_LIGHTS Definition, !- Lights Definition Name
     rm3_2_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_2_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_2_C_EQUIP,           !- Name
@@ -11802,17 +11890,21 @@
 
   Lights,
     rm3_3_C_LIGHTS,          !- Name
+    rm3_3_C_LIGHTS Definition, !- Lights Definition Name
     rm3_3_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_3_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_3_C_EQUIP,           !- Name
@@ -12276,17 +12368,21 @@
 
   Lights,
     rm3_4_C_LIGHTS,          !- Name
+    rm3_4_C_LIGHTS Definition, !- Lights Definition Name
     rm3_4_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_4_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_4_C_EQUIP,           !- Name
@@ -12750,17 +12846,21 @@
 
   Lights,
     rm3_5_C_LIGHTS,          !- Name
+    rm3_5_C_LIGHTS Definition, !- Lights Definition Name
     rm3_5_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_5_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_5_C_EQUIP,           !- Name
@@ -13224,17 +13324,21 @@
 
   Lights,
     rm3_6_C_LIGHTS,          !- Name
+    rm3_6_C_LIGHTS Definition, !- Lights Definition Name
     rm3_6_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_6_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_6_C_EQUIP,           !- Name
@@ -13698,17 +13802,21 @@
 
   Lights,
     rm3_7_C_LIGHTS,          !- Name
+    rm3_7_C_LIGHTS Definition, !- Lights Definition Name
     rm3_7_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_7_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_7_C_EQUIP,           !- Name
@@ -14172,17 +14280,21 @@
 
   Lights,
     rm3_8_C_LIGHTS,          !- Name
+    rm3_8_C_LIGHTS Definition, !- Lights Definition Name
     rm3_8_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_8_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_8_C_EQUIP,           !- Name
@@ -14646,17 +14758,21 @@
 
   Lights,
     rm3_9_C_LIGHTS,          !- Name
+    rm3_9_C_LIGHTS Definition, !- Lights Definition Name
     rm3_9_C,                 !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_9_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_9_C_EQUIP,           !- Name
@@ -15120,17 +15236,21 @@
 
   Lights,
     rm3_10_C_LIGHTS,         !- Name
+    rm3_10_C_LIGHTS Definition, !- Lights Definition Name
     rm3_10_C,                !- Zone or ZoneList Name
     OffLgt,                  !- Schedule Name
+    0.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    rm3_10_C_LIGHTS Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     2400.,                   !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    0.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   ElectricEquipment,
     rm3_10_C_EQUIP,          !- Name

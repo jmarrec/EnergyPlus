@@ -452,17 +452,21 @@
 
   Lights,
     Office Buildings,        !- Name
+    Office Buildings Definition, !- Lights Definition Name
     AllZones,                !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office Buildings Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     9.15,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Office Buildings,        !- Name

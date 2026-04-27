@@ -2859,17 +2859,21 @@
 
   Lights,
     West Zone Lights,        !- Name
+    West Zone Lights Definition, !- Lights Definition Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    West Zone Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     284,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     West Zone_MiscPlug_Equip,!- Name
@@ -3004,17 +3008,21 @@
 
   Lights,
     East Zone Lights,        !- Name
+    East Zone Lights Definition, !- Lights Definition Name
     East Zone,               !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    East Zone Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     284,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     East Zone_MiscPlug_Equip,!- Name

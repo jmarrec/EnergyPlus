@@ -1975,59 +1975,75 @@
 
   Lights,
     SouthZone_1stFloor Lights,  !- Name
+    SouthZone_1stFloor Lights Definition, !- Lights Definition Name
     SouthZone_1stFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+    Office Lighting and Receptacles, !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    SouthZone_1stFloor Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     3025,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.35;                    !- Fraction Visible
 
   Lights,
     NorthZone_1stFloor Lights,  !- Name
+    NorthZone_1stFloor Lights Definition, !- Lights Definition Name
     NorthZone_1stFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+    Office Lighting and Receptacles, !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    NorthZone_1stFloor Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     3025,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.35;                    !- Fraction Visible
 
   Lights,
     SouthZone_2ndFloor Lights,  !- Name
+    SouthZone_2ndFloor Lights Definition, !- Lights Definition Name
     SouthZone_2ndFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
-    LightingLevel,           !- Design Level Calculation Method
-    3025,                    !- Lighting Level {W}
-    ,                        !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
+    Office Lighting and Receptacles, !- Schedule Name
     0,                       !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
-  Lights,
-    NorthZone_2ndFloor Lights,  !- Name
-    NorthZone_2ndFloor,      !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting and Receptacles,  !- Schedule Name
+  Lights:Definition,
+    SouthZone_2ndFloor Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     3025,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
+    0.35;                    !- Fraction Visible
+
+  Lights,
+    NorthZone_2ndFloor Lights,  !- Name
+    NorthZone_2ndFloor Lights Definition, !- Lights Definition Name
+    NorthZone_2ndFloor,      !- Zone or ZoneList or Space or SpaceList Name
+    Office Lighting and Receptacles, !- Schedule Name
     0,                       !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    NorthZone_2ndFloor Lights Definition, !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    3025,                    !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0,                       !- Return Air Fraction
+    0.35,                    !- Fraction Radiant
+    0.35;                    !- Fraction Visible
 
   ElectricEquipment,
     SouthZone_1stFloor ElecEq,  !- Name

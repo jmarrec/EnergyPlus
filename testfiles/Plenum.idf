@@ -488,17 +488,21 @@
 
   Lights,
     ZONE 1 Lights 1,         !- Name
+    ZONE 1 Lights 1 Definition, !- Lights Definition Name
     ZONE 1,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   2,            !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE 1 Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     4310.000,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     ZONE 1 ElecEq 1,         !- Name
@@ -534,17 +538,21 @@
 
   Lights,
     ZONE 2 Lights 1,         !- Name
+    ZONE 2 Lights 1 Definition, !- Lights Definition Name
     ZONE 2,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   2,            !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE 2 Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     4310.000,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     ZONE 2 ElecEq 1,         !- Name
@@ -580,17 +588,21 @@
 
   Lights,
     ZONE 4 Lights 1,         !- Name
+    ZONE 4 Lights 1 Definition, !- Lights Definition Name
     ZONE 4,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   2,            !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE 4 Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     8610.000,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     ZONE 4 ElecEq 1,         !- Name

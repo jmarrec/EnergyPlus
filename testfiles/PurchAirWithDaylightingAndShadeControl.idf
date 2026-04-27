@@ -1144,17 +1144,21 @@
 
   Lights,
     West Zone Lights 1,      !- Name
+    West Zone Lights 1 Definition, !- Lights Definition Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting,         !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    West Zone Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     West Zone ElecEq 1,      !- Name
@@ -1200,17 +1204,21 @@
 
   Lights,
     EAST ZONE Lights 1,      !- Name
+    EAST ZONE Lights 1 Definition, !- Lights Definition Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting,         !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    EAST ZONE Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     EAST ZONE ElecEq 1,      !- Name
@@ -1256,17 +1264,21 @@
 
   Lights,
     NORTH ZONE Lights 1,     !- Name
+    NORTH ZONE Lights 1 Definition, !- Lights Definition Name
     NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting,         !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    NORTH ZONE Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     878.6252,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     NORTH ZONE ElecEq 1,     !- Name

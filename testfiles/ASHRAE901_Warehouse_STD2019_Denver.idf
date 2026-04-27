@@ -4200,8 +4200,14 @@
 
   Lights,
     Office Lights,           !- Name
+    Office Lights Definition, !- Lights Definition Name
     Zone1 Office,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_OFFICE_SCH,   !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Office Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.888902667,             !- Watts per Floor Area {W/m2}
@@ -4209,14 +4215,18 @@
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Fine Storage Area Lights,!- Name
+    Fine Storage Area Lights Definition, !- Lights Definition Name
     Zone2 Fine Storage,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Fine Storage Area Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.427098188,             !- Watts per Floor Area {W/m2}
@@ -4224,14 +4234,18 @@
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Bulk Storage Area Lights,!- Name
+    Bulk Storage Area Lights Definition, !- Lights Definition Name
     Zone3 Bulk Storage,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_STORAGE_SCH,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Bulk Storage Area Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     3.552090438,             !- Watts per Floor Area {W/m2}
@@ -4239,8 +4253,6 @@
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
 !-   ===========  ALL OBJECTS IN CLASS: ELECTRICEQUIPMENT ===========

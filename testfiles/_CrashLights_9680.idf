@@ -41,17 +41,21 @@
 
   Lights,
     Lights 1,                !- Name
+    Lights 1 Definition,     !- Lights Definition Name
     Space Type 1,            !- Zone or ZoneList or Space or SpaceList Name
     Always On Continuous,    !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Lights 1 Definition,     !- Name
     LightingLevel,           !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     ,                        !- Fraction Radiant
-    ,                        !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    ;                        !- Fraction Visible
 
   Schedule:Constant,Always On Continuous,Fractional,1;
 

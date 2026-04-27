@@ -1366,31 +1366,39 @@
 
   Lights,
     BackRoom Lights 1,       !- Name
+    BackRoom Lights 1 Definition, !- Lights Definition Name
     BackRoom,                !- Zone or ZoneList or Space or SpaceList Name
     Lighting_Sch,            !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    BackRoom Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1500.0,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     SalesFloor Lights 1,     !- Name
+    SalesFloor Lights 1 Definition, !- Lights Definition Name
     SalesFloor,              !- Zone or ZoneList or Space or SpaceList Name
     Lighting_Sch,            !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    SalesFloor Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     30000,                   !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
 !-   ===========  ALL OBJECTS IN CLASS: ELECTRICEQUIPMENT ===========
 

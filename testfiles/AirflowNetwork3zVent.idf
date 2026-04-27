@@ -1017,31 +1017,39 @@
 
   Lights,
     EAST_ZONE Lights,        !- Name
+    EAST_ZONE Lights Definition, !- Lights Definition Name
     EAST_ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     OFFICE LIGHTING,         !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    EAST_ZONE Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   Lights,
     NORTH_ZONE Lights,       !- Name
+    NORTH_ZONE Lights Definition, !- Lights Definition Name
     NORTH_ZONE,              !- Zone or ZoneList or Space or SpaceList Name
     OFFICE LIGHTING,         !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    NORTH_ZONE Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     878.6252,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     WEST_ZONE Equip,         !- Name

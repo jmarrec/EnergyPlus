@@ -5060,199 +5060,255 @@
 
   Lights,
     Freezer_1 Lights,        !- Name
+    Freezer_1 Lights Definition, !- Lights Definition Name
     Freezer_1,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Freezer_1 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Freezer_2 Lights,        !- Name
+    Freezer_2 Lights Definition, !- Lights Definition Name
     Freezer_2,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Freezer_2 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Freezer_3 Lights,        !- Name
+    Freezer_3 Lights Definition, !- Lights Definition Name
     Freezer_3,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Freezer_3 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Freezer_4 Lights,        !- Name
+    Freezer_4 Lights Definition, !- Lights Definition Name
     Freezer_4,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Freezer_4 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Freezer_5 Lights,        !- Name
+    Freezer_5 Lights Definition, !- Lights Definition Name
     Freezer_5,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Freezer_5 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     SubFreezer Lights,       !- Name
+    SubFreezer Lights Definition, !- Lights Definition Name
     SubFreezer,              !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    SubFreezer Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Cooler_1 Lights,         !- Name
+    Cooler_1 Lights Definition, !- Lights Definition Name
     Cooler_1,                !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Cooler_1 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Cooler_2 Lights,         !- Name
+    Cooler_2 Lights Definition, !- Lights Definition Name
     Cooler_2,                !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Cooler_2 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Cooler_3 Lights,         !- Name
+    Cooler_3 Lights Definition, !- Lights Definition Name
     Cooler_3,                !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Cooler_3 Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Dock Lights,             !- Name
+    Dock Lights Definition,  !- Lights Definition Name
     Dock,                    !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Dock Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Office1_Lower Lights,    !- Name
+    Office1_Lower Lights Definition, !- Lights Definition Name
     Office1_Lower,           !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Office1_Lower Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     12.92,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Office1_Upper Lights,    !- Name
+    Office1_Upper Lights Definition, !- Lights Definition Name
     Office1_Upper,           !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Office1_Upper Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     12.92,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.1;                     !- Fraction Visible
 
   Lights,
     Office2_Lower Lights,    !- Name
+    Office2_Lower Lights Definition, !- Lights Definition Name
     Office2_Lower,           !- Zone or ZoneList or Space or SpaceList Name
     T24 Light,               !- Schedule Name
-    Watts/Area,              !- Design Level Calculation Method
-    ,                        !- Lighting Level {W}
-    12.92,                   !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0.,                      !- Return Air Fraction
-    0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
     1.,                      !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
-  Lights,
-    Office2_Upper Lights,    !- Name
-    Office2_Upper,           !- Zone or ZoneList or Space or SpaceList Name
-    T24 Light,               !- Schedule Name
+  Lights:Definition,
+    Office2_Lower Lights Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     12.92,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.67,                    !- Fraction Radiant
-    0.1,                     !- Fraction Visible
+    0.1;                     !- Fraction Visible
+
+  Lights,
+    Office2_Upper Lights,    !- Name
+    Office2_Upper Lights Definition, !- Lights Definition Name
+    Office2_Upper,           !- Zone or ZoneList or Space or SpaceList Name
+    T24 Light,               !- Schedule Name
     1.,                      !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Office2_Upper Lights Definition, !- Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Lighting Level {W}
+    12.92,                   !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.,                      !- Return Air Fraction
+    0.67,                    !- Fraction Radiant
+    0.1;                     !- Fraction Visible
 
   !-   ===========  ALL OBJECTS IN CLASS: ElectricEquipment  ===========
 

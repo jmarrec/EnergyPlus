@@ -1664,17 +1664,21 @@
 
   Lights,
     Main_Zone_a_b_g_l_Lite,  !- Name
+    Main_Zone_a_b_g_l_Lite Definition, !- Lights Definition Name
     Main_Zone_a_b_g_l,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_a_b_g_l_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_a_b_g_l_Elec,  !- Name
@@ -1738,17 +1742,21 @@
 
   Lights,
     Main_Zone_b_c_h_g_Lite,  !- Name
+    Main_Zone_b_c_h_g_Lite Definition, !- Lights Definition Name
     Main_Zone_b_c_h_g,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_b_c_h_g_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_b_c_h_g_Elec,  !- Name
@@ -1812,17 +1820,21 @@
 
   Lights,
     Main_Zone_c_d_i_h_Lite,  !- Name
+    Main_Zone_c_d_i_h_Lite Definition, !- Lights Definition Name
     Main_Zone_c_d_i_h,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_c_d_i_h_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_c_d_i_h_Elec,  !- Name
@@ -1886,17 +1898,21 @@
 
   Lights,
     Main_Zone_d_e_j_i_Lite,  !- Name
+    Main_Zone_d_e_j_i_Lite Definition, !- Lights Definition Name
     Main_Zone_d_e_j_i,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_d_e_j_i_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_d_e_j_i_Elec,  !- Name
@@ -1960,17 +1976,21 @@
 
   Lights,
     Main_Zone_e_f_k_j_Lite,  !- Name
+    Main_Zone_e_f_k_j_Lite Definition, !- Lights Definition Name
     Main_Zone_e_f_k_j,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_e_f_k_j_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_e_f_k_j_Elec,  !- Name
@@ -2034,17 +2054,21 @@
 
   Lights,
     Main_Zone_l_k_f_a_Lite,  !- Name
+    Main_Zone_l_k_f_a_Lite Definition, !- Lights Definition Name
     Main_Zone_l_k_f_a,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_l_k_f_a_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_l_k_f_a_Elec,  !- Name
@@ -2108,17 +2132,21 @@
 
   Lights,
     Main_Zone_g_h_i_l_Lite,  !- Name
+    Main_Zone_g_h_i_l_Lite Definition, !- Lights Definition Name
     Main_Zone_g_h_i_l,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_g_h_i_l_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_g_h_i_l_Elec,  !- Name
@@ -2182,17 +2210,21 @@
 
   Lights,
     Main_Zone_i_j_k_l_Lite,  !- Name
+    Main_Zone_i_j_k_l_Lite Definition, !- Lights Definition Name
     Main_Zone_i_j_k_l,       !- Zone or ZoneList or Space or SpaceList Name
     Lights_office_Sch,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Main_Zone_i_j_k_l_Lite Definition, !- Name
     Watts/area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.52125,                 !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Main_Zone_i_j_k_l_Elec,  !- Name

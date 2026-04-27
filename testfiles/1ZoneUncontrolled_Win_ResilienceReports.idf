@@ -595,17 +595,21 @@
 
   Lights,
     SPACE1-1 Lights 1,       !- Name
+    SPACE1-1 Lights 1 Definition, !- Lights Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    SPACE1-1 Lights 1 Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1584,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Schedule:Compact,
     LIGHTS-1,                !- Name

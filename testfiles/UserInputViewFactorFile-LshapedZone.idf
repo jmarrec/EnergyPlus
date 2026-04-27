@@ -1364,31 +1364,39 @@
 
   Lights,
     Lshaped zoneLights,      !- Name
+    Lshaped zoneLights Definition, !- Lights Definition Name
     Lshaped zone,            !- Zone or ZoneList or Space or SpaceList Name
-    Lshaped zone-LightsSchedule,  !- Schedule Name
-    LightingLevel,           !- Design Level Calculation Method
-    0,                       !- Lighting Level {W}
-    ,                        !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.4,                     !- Fraction Radiant
-    0.0,                     !- Fraction Visible
+    Lshaped zone-LightsSchedule, !- Schedule Name
     0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
-  Lights,
-    LshapedZoneBaseLights,   !- Name
-    LshapedZoneBase,         !- Zone or ZoneList or Space or SpaceList Name
-    LshapedZoneBase-LightsSchedule,  !- Schedule Name
+  Lights:Definition,
+    Lshaped zoneLights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     0,                       !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.4,                     !- Fraction Radiant
-    0.0,                     !- Fraction Visible
+    0.0;                     !- Fraction Visible
+
+  Lights,
+    LshapedZoneBaseLights,   !- Name
+    LshapedZoneBaseLights Definition, !- Lights Definition Name
+    LshapedZoneBase,         !- Zone or ZoneList or Space or SpaceList Name
+    LshapedZoneBase-LightsSchedule, !- Schedule Name
     0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    LshapedZoneBaseLights Definition, !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    0,                       !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0,                       !- Return Air Fraction
+    0.4,                     !- Fraction Radiant
+    0.0;                     !- Fraction Visible
 
   ElectricEquipment,
     Lshaped zoneEEquip,      !- Name

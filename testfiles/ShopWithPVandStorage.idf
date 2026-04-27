@@ -1201,17 +1201,21 @@
 
   Lights,
     ZN_1_FLR_1_SEC_1_Lights, !- Name
+    ZN_1_FLR_1_SEC_1_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_1_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1178.0879,               !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights;          !- End-Use Subcategory
+    0.2000;                  !- Fraction Visible
 
   ComponentCost:LineItem,
     LIGHTING EQUIP:ZN_1_FLR_1_SEC_1,  !- Name
@@ -1605,17 +1609,21 @@
 
   Lights,
     ZN_1_FLR_1_SEC_2_Lights, !- Name
+    ZN_1_FLR_1_SEC_2_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_2,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_2_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     916.1373,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights;          !- End-Use Subcategory
+    0.2000;                  !- Fraction Visible
 
   ComponentCost:LineItem,
     LIGHTING EQUIP:ZN_1_FLR_1_SEC_2,  !- Name
@@ -2009,17 +2017,21 @@
 
   Lights,
     ZN_1_FLR_1_SEC_3_Lights, !- Name
+    ZN_1_FLR_1_SEC_3_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_3,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_3_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1178.0879,               !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights;          !- End-Use Subcategory
+    0.2000;                  !- Fraction Visible
 
   ComponentCost:LineItem,
     LIGHTING EQUIP:ZN_1_FLR_1_SEC_3,  !- Name
@@ -2413,17 +2425,21 @@
 
   Lights,
     ZN_1_FLR_1_SEC_4_Lights, !- Name
+    ZN_1_FLR_1_SEC_4_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_4,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_4_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     916.1373,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights;          !- End-Use Subcategory
+    0.2000;                  !- Fraction Visible
 
   ComponentCost:LineItem,
     LIGHTING EQUIP:ZN_1_FLR_1_SEC_4,  !- Name
@@ -2802,17 +2818,21 @@
 
   Lights,
     ZN_1_FLR_1_SEC_5_Lights, !- Name
+    ZN_1_FLR_1_SEC_5_Lights Definition, !- Lights Definition Name
     ZN_1_FLR_1_SEC_5,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General Lights;          !- End-Use Subcategory
+
+  Lights:Definition,
+    ZN_1_FLR_1_SEC_5_Lights Definition, !- Name
     LightingLevel,           !- Design Level Calculation Method
     1664.2496,               !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Return Air Fraction
     0.2000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General Lights;          !- End-Use Subcategory
+    0.2000;                  !- Fraction Visible
 
   ComponentCost:LineItem,
     LIGHTING EQUIP:ZN_1_FLR_1_SEC_5,  !- Name
