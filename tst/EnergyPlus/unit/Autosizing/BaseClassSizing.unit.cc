@@ -1396,15 +1396,19 @@ TEST_F(EnergyPlusFixture, BaseSizer_SupplyAirTempLessThanZoneTStatTest)
 
         "  People,",
         "      OpenOffice People,       !- Name",
+        "      OpenOffice People Definition, !- People Definition Name",
         "      ZONE ONE,                !- Zone or ZoneList Name",
         "      BLDG_OCC_SCH,            !- Number of People Schedule Name",
+        "      ACTIVITY_SCH;            !- Activity Level Schedule Name",
+
+        "  People:Definition,",
+        "      OpenOffice People Definition, !- Name",
         "      People/Area,             !- Number of People Calculation Method",
         "      ,                        !- Number of People",
         "      0.010,                    !- People per Zone Floor Area {person/m2}",
         "      ,                        !- Zone Floor Area per Person {m2/person}",
         "      0.3,                     !- Fraction Radiant",
-        "      ,                        !- Sensible Heat Fraction",
-        "      ACTIVITY_SCH;            !- Activity Level Schedule Name",
+        "      ;                        !- Sensible Heat Fraction",
 
         "  Lights,",
         "      OfficeLights,            !- Name",

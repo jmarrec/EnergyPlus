@@ -289,24 +289,28 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_AllowBlankFieldsForAdaptiveComfortMo
 
         "People,",
         "LIVING ZONE People, !- Name",
+        "LIVING ZONE People Definition, !- People Definition Name",
         "LIVING ZONE, !- Zone or ZoneList Name",
         "HOUSE OCCUPANCY, !- Number of People Schedule Name",
+        "Activity Sch, !- Activity Level Schedule Name",
+        ", !- Surface Name / Angle Factor List Name",
+        ", !- Work Efficiency Schedule Name",
+        ", !- Clothing Insulation Calculation Method",
+        ", !- Clothing Insulation Calculation Method Schedule Name",
+        ", !- Clothing Insulation Schedule Name",
+        "; !- Air Velocity Schedule Name",
+
+        "People:Definition,",
+        "LIVING ZONE People Definition, !- Name",
         "people, !- Number of People Calculation Method",
         "3.000000, !- Number of People",
         ", !- People per Zone Floor Area{ person / m2 }",
         ", !- Zone Floor Area per Person{ m2 / person }",
         "0.3000000, !- Fraction Radiant",
         ", !- Sensible Heat Fraction",
-        "Activity Sch, !- Activity Level Schedule Name",
         "3.82E-8, !- Carbon Dioxide Generation Rate{ m3 / s - W }",
         ", !- Enable ASHRAE 55 Comfort Warnings",
         "EnclosureAveraged, !- Mean Radiant Temperature Calculation Type",
-        ", !- Surface Name / Angle Factor List Name",
-        ", !- Work Efficiency Schedule Name",
-        ", !- Clothing Insulation Calculation Method",
-        ", !- Clothing Insulation Calculation Method Schedule Name",
-        ", !- Clothing Insulation Schedule Name",
-        ", !- Air Velocity Schedule Name",
         "AdaptiveASH55;                  !- Thermal Comfort Model 1 Type",
 
     });
@@ -1231,15 +1235,19 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
 
         "  People,",
         "    Main Zone People,        !- Name",
+        "    Main Zone People Definition, !- People Definition Name",
         "    Main Zone,               !- Zone or ZoneList Name",
         "    Schedule1,               !- Number of People Schedule Name",
+        "    Schedule1;               !- Activity Level Schedule Name",
+
+        "  People:Definition,",
+        "    Main Zone People Definition, !- Name",
         "    people,                  !- Number of People Calculation Method",
         "    3.000000,                !- Number of People",
         "    ,                        !- People per Zone Floor Area{ person / m2 }",
         "    ,                        !- Zone Floor Area per Person{ m2 / person }",
         "    0.3000000,               !- Fraction Radiant",
         "    0.5,                     !- Sensible Heat Fraction",
-        "    Schedule1,               !- Activity Level Schedule Name",
         "    3.82E-8;                 !- Carbon Dioxide Generation Rate{ m3 / s - W }",
 
         "  Lights,",
@@ -2631,34 +2639,38 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_GetHeatColdStressTemp)
 
         "People,",
         "  Main Zone People,        !- Name",
+        "  Main Zone People Definition, !- People Definition Name",
         "  Main Zone,               !- Zone or ZoneList Name",
         "  Schedule1,               !- Number of People Schedule Name",
-        "  people,                  !- Number of People Calculation Method",
-        "  3.000000,                !- Number of People",
-        "  ,                        !- People per Zone Floor Area{ person / m2 }",
-        "  ,                        !- Zone Floor Area per Person{ m2 / person }",
-        "  0.3000000,               !- Fraction Radiant",
-        "  0.5,                     !- Sensible Heat Fraction",
         "  Schedule1,               !- Activity Level Schedule Name",
-        "  3.82E-8,                 !- Carbon Dioxide Generation Rate{ m3 / s - W }",
-        "  No,                      !- Enable ASHRAE 55 Comfort Warnings",
-        "  EnclosureAveraged,            !- Mean Radiant Temperature Calculation Type",
         "  ,                        !- Surface Name/Angle Factor List Name",
         "  ,                        !- Work Efficiency Schedule Name",
         "  ,                        !- Clothing Insulation Calculation Method",
         "  ,                        !- Clothing Insulation Calculation Method Schedule Name",
         "  ,                        !- Clothing Insulation Schedule Name",
         "  ,                        !- Air Velocity Schedule Name",
+        "  ,                        !- Ankle Level Air Velocity Schedule Name",
+        "  11.5,                    !- Cold Stress Temperature Threshold [C]",
+        "  30.5;                    !- Heat Stress Temperature Threshold [C]",
+
+        "People:Definition,",
+        "  Main Zone People Definition, !- Name",
+        "  people,                  !- Number of People Calculation Method",
+        "  3.000000,                !- Number of People",
+        "  ,                        !- People per Zone Floor Area{ person / m2 }",
+        "  ,                        !- Zone Floor Area per Person{ m2 / person }",
+        "  0.3000000,               !- Fraction Radiant",
+        "  0.5,                     !- Sensible Heat Fraction",
+        "  3.82E-8,                 !- Carbon Dioxide Generation Rate{ m3 / s - W }",
+        "  No,                      !- Enable ASHRAE 55 Comfort Warnings",
+        "  EnclosureAveraged,            !- Mean Radiant Temperature Calculation Type",
         "  ,                        !- Thermal Comfort Model 1 Type",
         "  ,                        !- Thermal Comfort Model 2 Type",
         "  ,                        !- Thermal Comfort Model 3 Type",
         "  ,                        !- Thermal Comfort Model 4 Type",
         "  ,                        !- Thermal Comfort Model 5 Type",
         "  ,                        !- Thermal Comfort Model 6 Type",
-        "  ,                        !- Thermal Comfort Model 7 Type",
-        "  ,                        !- Ankle Level Air Velocity Schedule Name",
-        "  11.5,                    !- Cold Stress Temperature Threshold [C]",
-        "  30.5;                    !- Heat Stress Temperature Threshold [C]",
+        "  ;                        !- Thermal Comfort Model 7 Type",
 
         "Zone,",
         "  Main Zone,               !- Name",
@@ -4964,4 +4976,320 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_GasEquipment_MissingLevelField)
     EXPECT_NEAR(equip.FractionLatent, 0.1, 1e-6);
     EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
     EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_People)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+        "Zone,Zone2;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,SchTypeActivity,70.0,1000.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,PeopleSchedule1,SchType1,1.0;",
+        "Schedule:Constant,PeopleSchedule2,SchType1,0.5;",
+        "Schedule:Constant,ActivitySchedule,SchTypeActivity,120.0;",
+
+        "People,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  PeopleSchedule1,         !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People,",
+        "  Zone2 People,            !- Name",
+        "  PEOPLEDEF,               !- People Definition Name",
+        "  ZonE1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  PeopleSchedule2,         !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People,                  !- Number of People Calculation Method",
+        "  10,                      !- Number of People {people}",
+        "  ,                        !- People per Zone Floor Area {person/m2}",
+        "  ,                        !- Zone Floor Area per Person {m2/person}",
+        "  0.3,                     !- Fraction Radiant",
+        "  autocalculate,           !- Sensible Heat Fraction",
+        "  3.82E-8;                 !- Carbon Dioxide Generation Rate {m3/s-W}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    ASSERT_EQ(state->dataHeatBal->TotPeople, 2);
+
+    for (int i = 1; i <= state->dataHeatBal->TotPeople; ++i) {
+        const auto &people = state->dataHeatBal->People(i);
+        std::string const &zoneName = state->dataHeatBal->Zone(people.ZonePtr).Name;
+        if (people.Name == "ZONE1 PEOPLE") {
+            EXPECT_EQ(zoneName, "ZONE1");
+            EXPECT_EQ(people.sched->Name, "PEOPLESCHEDULE1");
+        } else if (people.Name == "ZONE2 PEOPLE") {
+            EXPECT_EQ(zoneName, "ZONE1");
+            EXPECT_EQ(people.sched->Name, "PEOPLESCHEDULE2");
+        } else {
+            FAIL() << "Unexpected people name: " << people.Name;
+        }
+        EXPECT_NEAR(people.NumberOfPeople, 10.0, 1e-6);
+        EXPECT_NEAR(people.FractionRadiant, 0.3, 1e-6);
+        EXPECT_NEAR(people.UserSpecSensFrac, Constant::AutoCalculate, 1e-6);
+        EXPECT_NEAR(people.CO2RateFactor, 3.82e-8, 1e-15);
+        EXPECT_FALSE(people.Fanger);
+        EXPECT_FALSE(people.Pierce);
+        EXPECT_FALSE(people.KSU);
+    }
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_People_InvalidDefinition)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,SchTypeActivity,70.0,1000.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,PeopleSchedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,SchTypeActivity,120.0;",
+
+        "People,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef WITH A TYPO,   !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  PeopleSchedule1,         !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People,                  !- Number of People Calculation Method",
+        "  10,                      !- Number of People {people}",
+        "  ,                        !- People per Zone Floor Area {person/m2}",
+        "  ,                        !- Zone Floor Area per Person {m2/person}",
+        "  0.3;                     !- Fraction Radiant",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: People = ZONE1 PEOPLE",
+        "   **   ~~~   ** People Definition Name = PEOPLEDEF WITH A TYPO, item not found.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_People_PerArea)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  3.0,                     !- Ceiling Height {m}",
+        "  300.0,                   !- Volume {m3}",
+        "  100.0;                   !- Floor Area {m2}",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,SchTypeActivity,70.0,1000.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,PeopleSchedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,SchTypeActivity,120.0;",
+
+        "People,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  PeopleSchedule1,         !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People/Area,             !- Number of People Calculation Method",
+        "  ,                        !- Number of People {people}",
+        "  0.05,                    !- People per Zone Floor Area {person/m2}",
+        "  ,                        !- Zone Floor Area per Person {m2/person}",
+        "  0.3;                     !- Fraction Radiant",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataHeatBal->Zone(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+    state->dataHeatBal->space(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    ASSERT_EQ(state->dataHeatBal->TotPeople, 1);
+
+    const auto &people = state->dataHeatBal->People(1);
+    EXPECT_EQ("ZONE1 PEOPLE", people.Name);
+    EXPECT_EQ(state->dataHeatBal->Zone(people.ZonePtr).Name, "ZONE1");
+    EXPECT_EQ(people.sched->Name, "PEOPLESCHEDULE1");
+    // 100 m2 * 0.05 person/m2 = 5 people
+    EXPECT_NEAR(people.NumberOfPeople, 100.0 * 0.05, 1e-6);
+    EXPECT_NEAR(people.FractionRadiant, 0.3, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_People_AreaPerPerson)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  3.0,                     !- Ceiling Height {m}",
+        "  300.0,                   !- Volume {m3}",
+        "  100.0;                   !- Floor Area {m2}",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,SchTypeActivity,70.0,1000.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,PeopleSchedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,SchTypeActivity,120.0;",
+
+        "People,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  PeopleSchedule1,         !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  Area/Person,             !- Number of People Calculation Method",
+        "  ,                        !- Number of People {people}",
+        "  ,                        !- People per Zone Floor Area {person/m2}",
+        "  10.0,                    !- Zone Floor Area per Person {m2/person}",
+        "  0.3;                     !- Fraction Radiant",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataHeatBal->Zone(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+    state->dataHeatBal->space(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    ASSERT_EQ(state->dataHeatBal->TotPeople, 1);
+
+    const auto &people = state->dataHeatBal->People(1);
+    EXPECT_EQ("ZONE1 PEOPLE", people.Name);
+    EXPECT_EQ(state->dataHeatBal->Zone(people.ZonePtr).Name, "ZONE1");
+    // 100 m2 / 10.0 m2/person = 10 people
+    EXPECT_NEAR(people.NumberOfPeople, 100.0 / 10.0, 1e-6);
+    EXPECT_NEAR(people.FractionRadiant, 0.3, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_People_MissingLevelField)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,SchTypeActivity,70.0,1000.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,PeopleSchedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,SchTypeActivity,120.0;",
+
+        "People,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  PeopleSchedule1,         !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People/Area,             !- Number of People Calculation Method",
+        "  5,                       !- Number of People {people}",
+        "  ,                        !- People per Zone Floor Area {person/m2}",
+        "  ,                        !- Zone Floor Area per Person {m2/person}",
+        "  0.3;                     !- Fraction Radiant",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        R"(   ** Warning ** getPeopleDefinition: People:Definition="PEOPLEDEF", specifies Method=PEOPLE/AREA, but the corresponding field "people_per_floor_area"is blank. 0 will result.)",
+        R"(   ** Warning ** GetInternalHeatGains: People="ZONE1 PEOPLE", specifies people_per_floor_area, but that field is blank.  0 People will result.)",
+    })));
+
+    ASSERT_EQ(state->dataHeatBal->TotPeople, 1);
+
+    const auto &people = state->dataHeatBal->People(1);
+    EXPECT_NEAR(people.NumberOfPeople, 0.0, 1e-6);
 }
