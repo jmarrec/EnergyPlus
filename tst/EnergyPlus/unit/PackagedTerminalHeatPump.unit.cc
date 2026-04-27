@@ -2818,7 +2818,9 @@ TEST_F(EnergyPlusFixture, PTACDrawAirfromReturnNodeAndPlenum_Test)
         "    SPACE1-1,                !- Zone or ZoneList Name",
         "    LIGHTS-1,                !- Schedule Name",
         "    0,                       !- Fraction Replaceable",
-        "    GeneralLights;           !- End-Use Subcategory",
+        "    GeneralLights,           !- End-Use Subcategory",
+        "    SPACE1-1 Return Outlet,  !- Return Air Heat Gain Node Name",
+        "    SPACE1-1 Air Terminal Mixer Secondary Inlet;   !- Exhaust Air Heat Gain Node Name",
 
         "  Lights:Definition,",
         "    SPACE1-1 Lights 1 Definition, !- Name",
@@ -2831,9 +2833,7 @@ TEST_F(EnergyPlusFixture, PTACDrawAirfromReturnNodeAndPlenum_Test)
         "    0.2,                     !- Fraction Visible",
         "    ,                        !- Return Air Fraction Calculated from Plenum Temperature",
         "    ,                        !- Return Air Fraction Function of Plenum Temperature Coefficient 1",
-        "    ,                        !- Return Air Fraction Function of Plenum Temperature Coefficient 2",
-        "    SPACE1-1 Return Outlet,  !- Return Air Heat Gain Node Name",
-        "    SPACE1-1 Air Terminal Mixer Secondary Inlet;   !- Exhaust Air Heat Gain Node Name",
+        "    ;                        !- Return Air Fraction Function of Plenum Temperature Coefficient 2",
 
         "  Lights,",
         "    SPACE2-1 Lights 1,       !- Name",
