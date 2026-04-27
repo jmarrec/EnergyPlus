@@ -27255,9 +27255,13 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingDX_RunOnLatentLoad)
     std::string const idf_objects_2 = R"IDF(
   OtherEquipment,
     Test 352a,               !- Name
+    Test 352a Definition,    !- Other Equipment Definition Name
     None,                    !- Fuel Type
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    AlwaysOn,                !- Schedule Name
+    AlwaysOn;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    Test 352a Definition,    !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     352,                     !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -27268,9 +27272,13 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingDX_RunOnLatentLoad)
 
   OtherEquipment,
     Test 352 minus,          !- Name
+    Test 352 minus Definition, !- Other Equipment Definition Name
     None,                    !- Fuel Type
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    AlwaysOn,                !- Schedule Name
+    AlwaysOn;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    Test 352 minus Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     -352,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}

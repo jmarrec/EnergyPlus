@@ -22791,11 +22791,19 @@ OtherEquipment,
    \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
    \memo then this definition applies to all applicable spaces, and each instance will
    \memo be named with the Space Name plus this Object Name.
-   \min-fields 11
+   \min-fields 5
   A1 , \field Name
        \required-field
        \type alpha
-  A2 , \field Fuel Type
+       \reference OtherEquipmentNames
+       \reference SpaceItemNames
+       \reference SpaceLoadNames
+       \reference SpaceComponentInstanceNames
+  A2 , \field Other Equipment Definition Name
+       \type object-list
+       \required-field
+       \object-list OtherEquipmentDefinitionNames
+  A3 , \field Fuel Type
        \type choice
        \key None
        \key Electricity
@@ -22812,17 +22820,30 @@ OtherEquipment,
        \key DistrictHeatingSteam
        \key DistrictCooling
        \default None
-  A3 , \field Zone or ZoneList or Space or SpaceList Name
+  A4 , \field Zone or ZoneList or Space or SpaceList Name
        \required-field
        \type object-list
        \object-list ZoneAndZoneListNames
        \object-list SpaceAndSpaceListNames
-  A4 , \field Schedule Name
+  A5 , \field Schedule Name
        \required-field
        \type object-list
        \object-list ScheduleNames
        \note units in Schedule should be fraction applied to design level of other equipment, generally (0.0 - 1.0)
-  A5 , \field Design Level Calculation Method
+  A6 ; \field End-Use Subcategory
+       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
+       \type alpha
+       \retaincase
+       \default General
+
+OtherEquipment:Definition,
+   \min-fields 8
+  A1 , \field Name
+       \type alpha
+       \required-field
+       \reference OtherEquipmentDefinitionNames
+       \reference SpaceComponentDefinitionNames
+  A2 , \field Design Level Calculation Method
        \note The entered calculation method is used to create the maximum amount of other equipment.
        \note to set a loss, use a negative value in the following fields.
        \note for this set of attributes
@@ -22863,7 +22884,7 @@ OtherEquipment,
        \minimum 0.0
        \maximum 1.0
        \default 0
-  N7 , \field Carbon Dioxide Generation Rate
+  N7 ; \field Carbon Dioxide Generation Rate
        \note CO2 generation rate per unit of power input
        \type real
        \units m3/s-W
@@ -22872,11 +22893,6 @@ OtherEquipment,
        \minimum 0.0
        \maximum 4.0E-7
        \note The default value assumes the equipment is fully vented.
-  A6 ; \field End-Use Subcategory
-       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
-       \type alpha
-       \retaincase
-       \default General
 
 IndoorLivingWall,
    \memo Indoor greenery systems such as indoor living walls are panels of plants, which grow hydroponically or from substrates.

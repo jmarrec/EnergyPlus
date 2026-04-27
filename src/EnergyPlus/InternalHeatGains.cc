@@ -1804,6 +1804,10 @@ namespace InternalHeatGains {
 
         if (state.dataHeatBal->TotOthEquip > 0) {
             state.dataHeatBal->ZoneOtherEq.allocate(state.dataHeatBal->TotOthEquip);
+
+            // Read the definitions
+            std::vector<ZoneEquipDefinitionData> othLoadDefs = GetSpaceLoadDefinition(state, "OtherEquipment:Definition");
+
             int othEqNum = 0;
             for (int othEqInputNum = 1; othEqInputNum <= numOtherEqStatements; ++othEqInputNum) {
 
@@ -1822,40 +1826,29 @@ namespace InternalHeatGains {
 
                 // Note alpha field numbers are different for OtherEquipment
                 ErrorObjectHeader eoh{routineName, othEqModuleObject, IHGAlphas(1)};
-                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(5));
                 if (IHGAlphaFieldBlanks(4)) {
-                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(5));
                     ErrorsFound = true;
                 } else if (schedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5));
                     ErrorsFound = true;
                 } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5), Clusive::In, 0.0);
                     ErrorsFound = true;
                 }
 
-                auto &thisOthEqInput = otherEqObjects(othEqInputNum);
-                DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(5)));
-                int levelFieldNum = 1;
-                switch (levelMethod) {
-                case DesignLevelMethod::EquipmentLevel: {
-                    levelFieldNum = 1;
-                } break;
-                case DesignLevelMethod::WattsPerArea:
-                case DesignLevelMethod::PowerPerArea: {
-                    levelFieldNum = 2;
-                } break;
-                case DesignLevelMethod::WattsPerPerson:
-                case DesignLevelMethod::PowerPerPerson: {
-                    levelFieldNum = 3;
-                } break;
-                default: {
-                    assert(false);
-                } break;
+                std::string defName = IHGAlphas(2);
+
+                auto itOthLoadDef = std::find_if(
+                    othLoadDefs.begin(), othLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itOthLoadDef == othLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
                 }
-                Real64 const levelValue = IHGNumbers(levelFieldNum);
-                bool const levelBlank = IHGNumericFieldBlanks(levelFieldNum);
-                std::string_view const levelField = IHGNumericFieldNames(levelFieldNum);
+
+                auto &thisOthEqInput = otherEqObjects(othEqInputNum);
 
                 for (int Item1 = 1; Item1 <= thisOthEqInput.numOfSpaces; ++Item1) {
                     ++othEqNum;
@@ -1867,18 +1860,18 @@ namespace InternalHeatGains {
                     thisZoneOthEq.ZonePtr = zoneNum;
                     thisZoneOthEq.sched = schedPtr;
 
-                    if (IHGAlphas(2) == "NONE") {
+                    if (IHGAlphas(3) == "NONE") {
                         thisZoneOthEq.OtherEquipFuelType = Constant::eFuel::None;
                     } else {
-                        thisZoneOthEq.OtherEquipFuelType = static_cast<Constant::eFuel>(getEnumValue(Constant::eFuelNamesUC, IHGAlphas(2)));
+                        thisZoneOthEq.OtherEquipFuelType = static_cast<Constant::eFuel>(getEnumValue(Constant::eFuelNamesUC, IHGAlphas(3)));
                         if (thisZoneOthEq.OtherEquipFuelType == Constant::eFuel::Invalid ||
                             thisZoneOthEq.OtherEquipFuelType == Constant::eFuel::Water) {
                             ShowSevereError(state,
                                             EnergyPlus::format("{}{}: invalid {} entered={} for {}={}",
                                                                RoutineName,
                                                                othEqModuleObject,
-                                                               IHGAlphaFieldNames(2),
-                                                               IHGAlphas(2),
+                                                               IHGAlphaFieldNames(3),
+                                                               IHGAlphas(3),
                                                                IHGAlphaFieldNames(1),
                                                                thisOthEqInput.Name));
                             ErrorsFound = true;
@@ -1911,8 +1904,16 @@ namespace InternalHeatGains {
                     }
 
                     // equipment design level calculation method.
-                    thisZoneOthEq.DesignLevel = setDesignLevel(
-                        state, ErrorsFound, othEqModuleObject, thisOthEqInput, levelMethod, zoneNum, spaceNum, levelValue, levelBlank, levelField);
+                    thisZoneOthEq.DesignLevel = setDesignLevel(state,
+                                                               ErrorsFound,
+                                                               othEqModuleObject,
+                                                               thisOthEqInput,
+                                                               itOthLoadDef->designLevelMethod,
+                                                               zoneNum,
+                                                               spaceNum,
+                                                               itOthLoadDef->levelValue,
+                                                               itOthLoadDef->levelIsBlank,
+                                                               itOthLoadDef->levelField);
 
                     // Throw an error if the design level is negative and we have a fuel type
                     if (thisZoneOthEq.DesignLevel < 0.0 && thisZoneOthEq.OtherEquipFuelType != Constant::eFuel::Invalid &&
@@ -1922,7 +1923,7 @@ namespace InternalHeatGains {
                                                            RoutineName,
                                                            othEqModuleObject,
                                                            thisOthEqInput.Name,
-                                                           IHGNumericFieldNames(levelFieldNum)));
+                                                           itOthLoadDef->levelField));
                         ShowContinueError(state,
                                           EnergyPlus::format("... when a fuel type of {} is specified.",
                                                              Constant::eFuelNames[(int)thisZoneOthEq.OtherEquipFuelType]));
@@ -1933,21 +1934,19 @@ namespace InternalHeatGains {
                     thisZoneOthEq.NomMinDesignLevel = thisZoneOthEq.DesignLevel * thisZoneOthEq.sched->getMinVal(state);
                     thisZoneOthEq.NomMaxDesignLevel = thisZoneOthEq.DesignLevel * thisZoneOthEq.sched->getMaxVal(state);
 
-                    thisZoneOthEq.FractionLatent = IHGNumbers(4);
-                    thisZoneOthEq.FractionRadiant = IHGNumbers(5);
-                    thisZoneOthEq.FractionLost = IHGNumbers(6);
+                    thisZoneOthEq.FractionLatent = itOthLoadDef->FractionLatent;
+                    thisZoneOthEq.FractionRadiant = itOthLoadDef->FractionRadiant;
+                    thisZoneOthEq.FractionLost = itOthLoadDef->FractionLost;
+                    thisZoneOthEq.CO2RateFactor = itOthLoadDef->CO2RateFactor;
 
-                    if ((IHGNumNumbers == 7) || (!IHGNumericFieldBlanks(7))) {
-                        thisZoneOthEq.CO2RateFactor = IHGNumbers(7);
-                    }
                     if (thisZoneOthEq.CO2RateFactor < 0.0) {
                         ShowSevereError(state,
                                         EnergyPlus::format("{}{}=\"{}\", {} < 0.0, value ={:.2R}",
                                                            RoutineName,
                                                            othEqModuleObject,
                                                            thisOthEqInput.Name,
-                                                           IHGNumericFieldNames(7),
-                                                           IHGNumbers(7)));
+                                                           "carbon_dioxide_generation_rate",
+                                                           thisZoneOthEq.CO2RateFactor));
                         ErrorsFound = true;
                     }
                     if (thisZoneOthEq.CO2RateFactor > 4.0e-7) {
@@ -1956,8 +1955,8 @@ namespace InternalHeatGains {
                                                            RoutineName,
                                                            othEqModuleObject,
                                                            thisOthEqInput.Name,
-                                                           IHGNumericFieldNames(7),
-                                                           IHGNumbers(7)));
+                                                           "carbon_dioxide_generation_rate",
+                                                           thisZoneOthEq.CO2RateFactor));
                         ErrorsFound = true;
                     }
 
@@ -3389,6 +3388,10 @@ namespace InternalHeatGains {
                 spaceLoadDef.FractionLatent = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_latent");
                 spaceLoadDef.FractionRadiant = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_radiant");
                 spaceLoadDef.FractionLost = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_lost");
+
+                if (objectFields.find("carbon_dioxide_generation_rate") != objectFields.end()) {
+                    spaceLoadDef.CO2RateFactor = ip->getRealFieldValue(objectFields, objectSchemaProps, "carbon_dioxide_generation_rate");
+                }
             }
         }
 
