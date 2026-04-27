@@ -1654,31 +1654,37 @@
 
   GasEquipment,
     Bakery_MiscGas_Equip,    !- Name
+    Bakery_MiscGas_Equip Definition, !- Gas Equipment Definition Name
     Bakery,                  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Bakery_MiscGas_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     5622,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   GasEquipment,
     Deli_MiscGas_Equip,      !- Name
+    Deli_MiscGas_Equip Definition, !- Gas Equipment Definition Name
     Deli,                    !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Deli_MiscGas_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6053,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 ! ***EXTERIOR LOADS***
 

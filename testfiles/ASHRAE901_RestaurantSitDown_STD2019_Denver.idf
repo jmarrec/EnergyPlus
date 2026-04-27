@@ -2584,17 +2584,20 @@
 
   GasEquipment,
     Kitchen_MiscGas_Equip,   !- Name
+    Kitchen_MiscGas_Equip Definition, !- Gas Equipment Definition Name
     Kitchen,                 !- Zone or ZoneList or Space or SpaceList Name
     Rest_GAS_EQUIP_SCH,      !- Schedule Name
+    Cooking;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Kitchen_MiscGas_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     90512.48239,             !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.1000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.7000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    Cooking;                 !- End-Use Subcategory
+    0.7000;                  !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: DAYLIGHTING:CONTROLS ===========
 

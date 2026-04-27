@@ -2905,17 +2905,20 @@
 
   GasEquipment,
     SPACE2-1 GasEq 1,        !- Name
+    SPACE2-1 GasEq 1 Definition, !- Gas Equipment Definition Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
+    Cooking;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    SPACE2-1 GasEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
-    Cooking;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   HotWaterEquipment,
     SPACE2-1 HWEq 1,         !- Name
@@ -3370,17 +3373,20 @@
 
   GasEquipment,
     SPACE4-1 GasEq 1,        !- Name
+    SPACE4-1 GasEq 1 Definition, !- Gas Equipment Definition Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
+    Laundry;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    SPACE4-1 GasEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     808,                     !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
-    Laundry;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     SPACE4-1 ElecEq 1,       !- Name

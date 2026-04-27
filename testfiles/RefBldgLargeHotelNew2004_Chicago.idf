@@ -5641,31 +5641,37 @@
 
   GasEquipment,
     Kitchen_Flr_6_MiscGas_Equip,  !- Name
+    Kitchen_Flr_6_MiscGas_Equip Definition, !- Gas Equipment Definition Name
     Kitchen_Flr_6,           !- Zone or ZoneList or Space or SpaceList Name
     Kitchen_Gas_Equip_SCH,   !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Kitchen_Flr_6_MiscGas_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     166606,                  !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.1000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.7000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.7000;                  !- Fraction Lost
 
   GasEquipment,
     Laundry_Flr_1_MiscGas_Equip,  !- Name
+    Laundry_Flr_1_MiscGas_Equip Definition, !- Gas Equipment Definition Name
     Laundry_Flr_1,           !- Zone or ZoneList or Space or SpaceList Name
     LaundryRoom_Eqp_Gas_Sch, !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Laundry_Flr_1_MiscGas_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     41818,                   !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 ! ***EXTERIOR LOADS***
 

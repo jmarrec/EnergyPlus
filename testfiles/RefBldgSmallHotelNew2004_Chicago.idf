@@ -14076,17 +14076,20 @@
 
   GasEquipment,
     LaundryRoomFlr1_LaundryDryers_Equip,  !- Name
+    LaundryRoomFlr1_LaundryDryers_Equip Definition, !- Gas Equipment Definition Name
     LaundryRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     LaundryRoom_Eqp_Gas_Sch, !- Schedule Name
+    LaundryDryers;           !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    LaundryRoomFlr1_LaundryDryers_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     18025,                   !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.5000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    LaundryDryers;           !- End-Use Subcategory
+    0.5000;                  !- Fraction Lost
 
 ! ***EXTERIOR LOADS***
 

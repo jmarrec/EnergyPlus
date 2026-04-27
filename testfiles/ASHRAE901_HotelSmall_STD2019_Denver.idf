@@ -16013,17 +16013,20 @@
 
   GasEquipment,
     Dryer Equipment 1,       !- Name
+    Dryer Equipment 1 Definition, !- Gas Equipment Definition Name
     LaundryRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     LaundryRoom_Eqp_Gas_Sch, !- Schedule Name
+    Laundry;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Dryer Equipment 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     40096.02805,             !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0,                       !- Fraction Latent
     0.2,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    Laundry;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: DAYLIGHTING:CONTROLS ===========
 

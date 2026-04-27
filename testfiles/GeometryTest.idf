@@ -615,8 +615,12 @@
 
   GasEquipment,
     PSI FOYER GasEq 1,       !- Name
+    PSI FOYER GasEq 1 Definition, !- Gas Equipment Definition Name
     PSI FOYER,               !- Zone or ZoneList or Space or SpaceList Name
-    Gas Eq Sch,              !- Schedule Name
+    Gas Eq Sch;              !- Schedule Name
+
+  GasEquipment:Definition,
+    PSI FOYER GasEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     5857.501,                !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -718,8 +722,12 @@
 
   GasEquipment,
     DORM ROOMS AND COMMON AREAS GasEq 1,  !- Name
-    DORM ROOMS AND COMMON AREAS,  !- Zone or ZoneList or Space or SpaceList Name
-    Gas Eq Sch,              !- Schedule Name
+    DORM ROOMS AND COMMON AREAS GasEq 1 Definition, !- Gas Equipment Definition Name
+    DORM ROOMS AND COMMON AREAS, !- Zone or ZoneList or Space or SpaceList Name
+    Gas Eq Sch;              !- Schedule Name
+
+  GasEquipment:Definition,
+    DORM ROOMS AND COMMON AREAS GasEq 1 Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     29287.51,                !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -821,8 +829,12 @@
 
   GasEquipment,
     Office Zones with Gas Equipment,  !- Name
+    Office Zones with Gas Equipment Definition, !- Gas Equipment Definition Name
     OfficeZones,             !- Zone or ZoneList or Space or SpaceList Name
-    Gas Eq Sch,              !- Schedule Name
+    Gas Eq Sch;              !- Schedule Name
+
+  GasEquipment:Definition,
+    Office Zones with Gas Equipment Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     197,                     !- Power per Floor Area {W/m2}

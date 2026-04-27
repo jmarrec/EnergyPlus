@@ -22034,45 +22034,54 @@
 
   GasEquipment,
     Floor 1 Operating Room 1_GasMisc_Equip,  !- Name
-    Floor 1 Operating Room 1,!- Zone or ZoneList or Space or SpaceList Name
+    Floor 1 Operating Room 1_GasMisc_Equip Definition, !- Gas Equipment Definition Name
+    Floor 1 Operating Room 1, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Floor 1 Operating Room 1_GasMisc_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     75.3,                    !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    0.5000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0.5000;                  !- Fraction Lost
 
   GasEquipment,
     Floor 1 Operating Room 2_GasMisc_Equip,  !- Name
-    Floor 1 Operating Room 2,!- Zone or ZoneList or Space or SpaceList Name
+    Floor 1 Operating Room 2_GasMisc_Equip Definition, !- Gas Equipment Definition Name
+    Floor 1 Operating Room 2, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Floor 1 Operating Room 2_GasMisc_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     75.3,                    !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    0.5000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0.5000;                  !- Fraction Lost
 
   GasEquipment,
     Floor 1 Operating Room 3_GasMisc_Equip,  !- Name
-    Floor 1 Operating Room 3,!- Zone or ZoneList or Space or SpaceList Name
+    Floor 1 Operating Room 3_GasMisc_Equip Definition, !- Gas Equipment Definition Name
+    Floor 1 Operating Room 3, !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Floor 1 Operating Room 3_GasMisc_Equip Definition, !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     75.3,                    !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    0.5000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0.5000;                  !- Fraction Lost
 
 ! ***EXTERIOR LOADS***
 

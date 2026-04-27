@@ -5729,17 +5729,20 @@
 
   GasEquipment,
     Floor 1 Food Storage_GasProcess_Equip,  !- Name
+    Floor 1 Food Storage_GasProcess_Equip Definition, !- Gas Equipment Definition Name
     Floor 1 Food Storage,    !- Zone or ZoneList or Space or SpaceList Name
     GAS_EQUIP_SCH_DINING,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Floor 1 Food Storage_GasProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     348963.0687,             !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GasEquipment:Floor 1 Food Storage:GasProcess,  !- Name
@@ -7521,17 +7524,20 @@
 
   GasEquipment,
     Floor 1 Kitchen_GasProcess_Equip,  !- Name
+    Floor 1 Kitchen_GasProcess_Equip Definition, !- Gas Equipment Definition Name
     Floor 1 Kitchen,         !- Zone or ZoneList or Space or SpaceList Name
     GAS_EQUIP_SCH_DINING,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Floor 1 Kitchen_GasProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     348963.0687,             !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GasEquipment:Floor 1 Kitchen:GasProcess,  !- Name
@@ -9290,17 +9296,20 @@
 
   GasEquipment,
     Floor 1 Laundry_GasProcess_Equip,  !- Name
+    Floor 1 Laundry_GasProcess_Equip Definition, !- Gas Equipment Definition Name
     Floor 1 Laundry,         !- Zone or ZoneList or Space or SpaceList Name
     LAUNDRY_EQUIP_GAS_SCH,   !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Floor 1 Laundry_GasProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     22360.1861,              !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GasEquipment:Floor 1 Laundry:GasProcess,  !- Name
@@ -38901,17 +38910,20 @@
 
   GasEquipment,
     Floor 2 Sterilizing_GasProcess_Equip,  !- Name
+    Floor 2 Sterilizing_GasProcess_Equip Definition, !- Gas Equipment Definition Name
     Floor 2 Sterilizing,     !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH_24_7,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Floor 2 Sterilizing_GasProcess_Equip Definition, !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     9520.3319,               !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GasEquipment:Floor 2 Sterilizing:GasProcess,  !- Name
