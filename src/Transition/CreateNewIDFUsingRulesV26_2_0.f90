@@ -414,11 +414,11 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 ! Optional End Use Subcategory
                 IF (CurArgs >= 11) THEN
                   OutArgs(5) = InArgs(11)
-                  CurArgs = 5
+                  COutArgs = 5
                 ELSE
-                  CurArgs = 4
+                  COutArgs = 4
                 END IF
-                CALL WriteOutIDFLines(DifLfn,'ElectricEquipment',CurArgs,OutArgs,NwFldNames,NwFldUnits)
+                CALL WriteOutIDFLines(DifLfn,'ElectricEquipment',COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 ! Create the new ElectricEquipment:Definition object:
                 ! A1 Name = Name + ' Definition'
@@ -439,8 +439,8 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 OutArgs(6) = InArgs(8)
                 OutArgs(7) = InArgs(9)
                 OutArgs(8) = InArgs(10)
-                CurArgs = 8
-                CALL WriteOutIDFLines(DifLfn,ObjectName,CurArgs,OutArgs,NwFldNames,NwFldUnits)
+                COutArgs = 8
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 Written = .true.
 
@@ -467,11 +467,11 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 ! Optional End Use Subcategory
                 IF (CurArgs >= 11) THEN
                   OutArgs(5) = InArgs(11)
-                  CurArgs = 5
+                  COutArgs = 5
                 ELSE
-                  CurArgs = 4
+                  COutArgs = 4
                 END IF
-                CALL WriteOutIDFLines(DifLfn,'HotWaterEquipment',CurArgs,OutArgs,NwFldNames,NwFldUnits)
+                CALL WriteOutIDFLines(DifLfn,'HotWaterEquipment',COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 ! Create the new HotWaterEquipment:Definition object:
                 ! A1 Name = Name + ' Definition'
@@ -492,8 +492,8 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 OutArgs(6) = InArgs(8)
                 OutArgs(7) = InArgs(9)
                 OutArgs(8) = InArgs(10)
-                CurArgs = 8
-                CALL WriteOutIDFLines(DifLfn,ObjectName,CurArgs,OutArgs,NwFldNames,NwFldUnits)
+                COutArgs = 8
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 Written = .true.
 
@@ -506,6 +506,63 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
               ! If your original object starts with N, insert the rules here
 
               ! If your original object starts with O, insert the rules here
+
+              CASE('OTHEREQUIPMENT')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+
+                ! Write the updated OtheEquipment object:
+                ! A1 Name (unchanged)
+                ! A2 Other Water Equipment Definition Name (new) = Name + ' Definition'
+                ! A3 Fuel Type (was A2)
+                ! A4 Zone or ZoneList or Space or SpaceList Name (was A23
+                ! A5 Schedule Name (was A4)
+                ! A6 End-Use Subcategory (was A6/field 13)
+                OutArgs(1) = InArgs(1)
+                OutArgs(2) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(3) = InArgs(2)
+                OutArgs(4) = InArgs(3)
+                OutArgs(5) = InArgs(4)
+                ! Optional End Use Subcategory
+                IF (CurArgs >= 13) THEN
+                  OutArgs(6) = InArgs(13)
+                  COutArgs = 6
+                ELSE
+                  COutArgs = 5
+                END IF
+                CALL WriteOutIDFLines(DifLfn,'OtherEquipment',COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                ! Create the new HotWaterEquipment:Definition object:
+                ! A1 Name = Name + ' Definition'
+                ! A2 Design Level Calculation Method (was A4/field 5)
+                ! N1 Design Level (was N1/field 6)
+                ! N2 Power per Floor Area (was N2/field 7)
+                ! N3 Power per Person (was N3/field 8)
+                ! N4 Fraction Latent (was N4/field 9)
+                ! N5 Fraction Radiant (was N5/field 10)
+                ! N6 Fraction Lost (was N6/field 11)
+                ! N6 Carbon Dioxide Generation Rate (was N7/field 12)
+                ObjectName = 'OtherEquipment:Definition'
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                OutArgs(1) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(2) = InArgs(5)
+                OutArgs(3) = InArgs(6)
+                OutArgs(4) = InArgs(7)
+                OutArgs(5) = InArgs(8)
+                OutArgs(6) = InArgs(9)
+                OutArgs(7) = InArgs(10)
+                OutArgs(8) = InArgs(11)
+                ! Optional Carbon Dioxide Generation Rate
+                IF (CurArgs >= 12) THEN
+                  OutArgs(9) = InArgs(12)
+                  COutArgs = 9
+                ELSE
+                  COutArgs = 8
+                END IF
+
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                Written = .true.
 
               ! If your original object starts with P, insert the rules here
 
@@ -530,11 +587,11 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 ! Optional End Use Subcategory
                 IF (CurArgs >= 11) THEN
                   OutArgs(5) = InArgs(11)
-                  CurArgs = 5
+                  COutArgs = 5
                 ELSE
-                  CurArgs = 4
+                  COutArgs = 4
                 END IF
-                CALL WriteOutIDFLines(DifLfn,'SteamEquipment',CurArgs,OutArgs,NwFldNames,NwFldUnits)
+                CALL WriteOutIDFLines(DifLfn,'SteamEquipment',COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 ! Create the new SteamEquipment:Definition object:
                 ! A1 Name = Name + ' Definition'
@@ -555,8 +612,8 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 OutArgs(6) = InArgs(8)
                 OutArgs(7) = InArgs(9)
                 OutArgs(8) = InArgs(10)
-                CurArgs = 8
-                CALL WriteOutIDFLines(DifLfn,ObjectName,CurArgs,OutArgs,NwFldNames,NwFldUnits)
+                COutArgs = 8
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 Written = .true.
 

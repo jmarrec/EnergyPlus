@@ -90,27 +90,38 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_CheckFuelType)
         "Schedule:Constant,Schedule1,,1.0;",
 
         "OtherEquipment,",
-        "  OtherEq1,",
-        "  ,",
-        "  Zone1,",
-        "  Schedule1,",
-        "  EquipmentLevel,",
-        "  100.0,,,",
-        "  0.1,",
-        "  0.2,",
-        "  0.05;",
+        "  OtherEq1,                !- Name",
+        "  OtherEq1 Definition,     !- Other Equipment Definition Name",
+        "  ,                        !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1;               !- Schedule Name",
+
+        "OtherEquipment:Definition,",
+        "  OtherEq1 Definition,     !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  100.0,                   !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.2,                     !- Fraction Radiant",
+        "  0.05;                    !- Fraction Lost",
 
         "OtherEquipment,",
-        "  OtherEq2,",
-        "  Propane,",
-        "  Zone1,",
-        "  Schedule1,",
-        "  EquipmentLevel,",
-        "  100.0,,,",
-        "  0.1,",
-        "  0.2,",
-        "  0.05;",
+        "  OtherEq2,                !- Name",
+        "  OtherEq2 Definition,     !- Other Equipment Definition Name",
+        "  Propane,                 !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1;               !- Schedule Name",
 
+        "OtherEquipment:Definition,",
+        "  OtherEq2 Definition,     !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  100.0,                   !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.2,                     !- Fraction Radiant",
+        "  0.05;                    !- Fraction Lost",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -150,16 +161,21 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_NegativeDesignLevel)
         "Schedule:Constant,Schedule1,,1.0;",
 
         "OtherEquipment,",
-        "  OtherEq1,",
-        "  FuelOilNo1,",
-        "  Zone1,",
-        "  Schedule1,",
-        "  EquipmentLevel,",
-        "  -100.0,,,",
-        "  0.1,",
-        "  0.2,",
-        "  0.05;",
+        "  OtherEq1,                !- Name",
+        "  OtherEq1 Definition,     !- Other Equipment Definition Name",
+        "  FuelOilNo1,              !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1;               !- Schedule Name",
 
+        "OtherEquipment:Definition,",
+        "  OtherEq1 Definition,     !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  -100.0,                  !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.2,                     !- Fraction Radiant",
+        "  0.05;                    !- Fraction Lost",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -180,12 +196,12 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_NegativeDesignLevel)
         {"   ** Warning ** ProcessScheduleInput: Schedule:Constant = SCHEDULE1",
          "   **   ~~~   ** Schedule Type Limits Name is empty.",
          "   **   ~~~   ** Schedule will not be validated.",
-         "   ** Severe  ** GetInternalHeatGains: OtherEquipment=\"OTHEREQ1\", Design Level is not allowed to be negative",
+         "   ** Severe  ** GetInternalHeatGains: OtherEquipment=\"OTHEREQ1\", design_level is not allowed to be negative",
          "   **   ~~~   ** ... when a fuel type of FuelOilNo1 is specified.",
          "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
          "   ...Summary of Errors that led to program termination:",
          "   ..... Reference severe error count=1",
-         "   ..... Last severe error=GetInternalHeatGains: OtherEquipment=\"OTHEREQ1\", Design Level is not allowed to be negative"});
+         "   ..... Last severe error=GetInternalHeatGains: OtherEquipment=\"OTHEREQ1\", design_level is not allowed to be negative"});
 
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
@@ -201,16 +217,21 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_BadFuelType)
         "Schedule:Constant,Schedule1,,1.0;",
 
         "OtherEquipment,",
-        "  OtherEq1,",
-        "  Water,",
-        "  Zone1,",
-        "  Schedule1,",
-        "  EquipmentLevel,",
-        "  100.0,,,",
-        "  0.1,",
-        "  0.2,",
-        "  0.05;",
+        "  OtherEq1,                !- Name",
+        "  OtherEq1 Definition,     !- Other Equipment Definition Name",
+        "  Water,                   !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1;               !- Schedule Name",
 
+        "OtherEquipment:Definition,",
+        "  OtherEq1 Definition,     !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  -100.0,                  !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.2,                     !- Fraction Radiant",
+        "  0.05;                    !- Fraction Lost",
     });
 
     ASSERT_FALSE(process_idf(idf_objects, false)); // add false to suppress error assertions
@@ -1300,9 +1321,13 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
 
         "  OtherEquipment,",
         "    Main Zone Other Equipment,  !- Name",
+        "    Main Zone Other Equipment Definition, !- Other Equipment Definition Name",
         "    OtherFuel1,              !- Fuel Type",
         "    Main Zone,               !- Zone or ZoneList Name",
-        "    Schedule1,               !- Schedule Name",
+        "    Schedule1;               !- Schedule Name",
+
+        "  OtherEquipment:Definition,",
+        "    Main Zone Other Equipment Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    350.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1314,9 +1339,13 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
 
         "  OtherEquipment,",
         "    Main Zone Other Equipment2,  !- Name",
+        "    Main Zone Other Equipment2 Definition, !- Other Equipment Definition Name",
         "    FuelOilNo2,              !- Fuel Type",
         "    Main Zone,               !- Zone or ZoneList Name",
-        "    Schedule1,               !- Schedule Name",
+        "    Schedule1;               !- Schedule Name",
+
+        "  OtherEquipment:Definition,",
+        "    Main Zone Other Equipment2 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    375.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
