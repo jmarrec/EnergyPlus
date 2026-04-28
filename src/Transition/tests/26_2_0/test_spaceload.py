@@ -964,3 +964,157 @@ def test_lights_no_end_use_subcat(run_transition_test):
 """
 
     run_transition_test(idf_text, expected_idf_text)
+
+
+def test_ite_aircooled_watts_per_unit(run_transition_test):
+    """ElectricEquipment:ITE:AirCooled (Watts/Unit) → split into instance + definition."""
+    idf_text = """
+  ElectricEquipment:ITE:AirCooled,
+    Data Center Servers,     !- Name
+    Main Zone,               !- Zone or Space Name
+    FlowFromSystem,          !- Air Flow Calculation Method
+    Watts/Unit,              !- Design Power Input Calculation Method
+    500,                     !- Watts per Unit {W}
+    100,                     !- Number of Units
+    ,                        !- Watts per Floor Area {W/m2}
+    OperatingSchedule,       !- Design Power Input Schedule Name
+    CPULoadSchedule,         !- CPU Loading Schedule Name
+    CPU_Power_fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name
+    0.4,                     !- Design Fan Power Input Fraction
+    0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}
+    AirFlow_fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name
+    FanPower_fFlow,          !- Fan Power Input Function of Flow Curve Name
+    15,                      !- Design Entering Air Temperature {C}
+    A3,                      !- Environmental Class
+    AdjustedSupply,          !- Air Inlet Connection Type
+    ,                        !- Air Inlet Room Air Model Node Name
+    ,                        !- Air Outlet Room Air Model Node Name
+    Main Zone Inlet Node,    !- Supply Air Node Name
+    0.1,                     !- Design Recirculation Fraction
+    ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name
+    0.9,                     !- Design Electric Power Supply Efficiency
+    ,                        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
+    1.0,                     !- Fraction of Electric Power Supply Losses to Zone
+    ITE-CPU,                 !- CPU End-Use Subcategory
+    ITE-Fans,                !- Fan End-Use Subcategory
+    ITE-UPS;                 !- Electric Power Supply End-Use Subcategory
+    """
+
+    expected_idf_text = """
+  ElectricEquipment:ITE:AirCooled,
+    Data Center Servers,     !- Name
+    Data Center Servers Definition,  !- ElectricEquipment ITE AirCooled Definition Name
+    Main Zone,               !- Zone or Space Name
+    100,                     !- Number of Units
+    OperatingSchedule,       !- Design Power Input Schedule Name
+    CPULoadSchedule,         !- CPU Loading Schedule Name
+    ,                        !- Air Inlet Room Air Model Node Name
+    ,                        !- Air Outlet Room Air Model Node Name
+    Main Zone Inlet Node,    !- Supply Air Node Name
+    ITE-CPU,                 !- CPU End-Use Subcategory
+    ITE-Fans,                !- Fan End-Use Subcategory
+    ITE-UPS;                 !- Electric Power Supply End-Use Subcategory
+
+  ElectricEquipment:ITE:AirCooled:Definition,
+    Data Center Servers Definition,  !- Name
+    FlowFromSystem,          !- Air Flow Calculation Method
+    Watts/Unit,              !- Design Power Input Calculation Method
+    500,                     !- Watts per Unit {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    CPU_Power_fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name
+    0.4,                     !- Design Fan Power Input Fraction
+    0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}
+    AirFlow_fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name
+    FanPower_fFlow,          !- Fan Power Input Function of Flow Curve Name
+    15,                      !- Design Entering Air Temperature {C}
+    A3,                      !- Environmental Class
+    AdjustedSupply,          !- Air Inlet Connection Type
+    0.1,                     !- Design Recirculation Fraction
+    ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name
+    0.9,                     !- Design Electric Power Supply Efficiency
+    ,                        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
+    1.0;                     !- Fraction of Electric Power Supply Losses to Zone
+"""
+
+    run_transition_test(idf_text, expected_idf_text)
+
+
+def test_ite_aircooled_with_approach_temps(run_transition_test):
+    """ITE:AirCooled with FlowControlWithApproachTemperatures and approach temp fields → split."""
+    idf_text = """
+  ElectricEquipment:ITE:AirCooled,
+    DC Servers,              !- Name
+    DC Zone,                 !- Zone or Space Name
+    FlowControlWithApproachTemperatures, !- Air Flow Calculation Method
+    Watts/Unit,              !- Design Power Input Calculation Method
+    1000,                    !- Watts per Unit {W}
+    50,                      !- Number of Units
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Design Power Input Schedule Name
+    ,                        !- CPU Loading Schedule Name
+    CPU_Power_fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name
+    0.3,                     !- Design Fan Power Input Fraction
+    0.00008,                 !- Design Fan Air Flow Rate per Power Input {m3/s-W}
+    AirFlow_fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name
+    FanPower_fFlow,          !- Fan Power Input Function of Flow Curve Name
+    20,                      !- Design Entering Air Temperature {C}
+    None,                    !- Environmental Class
+    AdjustedSupply,          !- Air Inlet Connection Type
+    ,                        !- Air Inlet Room Air Model Node Name
+    ,                        !- Air Outlet Room Air Model Node Name
+    DC Zone Supply Node,     !- Supply Air Node Name
+    0.0,                     !- Design Recirculation Fraction
+    ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name
+    1.0,                     !- Design Electric Power Supply Efficiency
+    ,                        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
+    1.0,                     !- Fraction of Electric Power Supply Losses to Zone
+    ITE-CPU,                 !- CPU End-Use Subcategory
+    ITE-Fans,                !- Fan End-Use Subcategory
+    ITE-UPS,                 !- Electric Power Supply End-Use Subcategory
+    5.0,                     !- Supply Temperature Difference {deltaC}
+    ,                        !- Supply Temperature Difference Schedule
+    3.0,                     !- Return Temperature Difference {deltaC}
+    ;                        !- Return Temperature Difference Schedule
+    """
+
+    expected_idf_text = """
+  ElectricEquipment:ITE:AirCooled,
+    DC Servers,              !- Name
+    DC Servers Definition,   !- ElectricEquipment ITE AirCooled Definition Name
+    DC Zone,                 !- Zone or Space Name
+    50,                      !- Number of Units
+    ,                        !- Design Power Input Schedule Name
+    ,                        !- CPU Loading Schedule Name
+    ,                        !- Air Inlet Room Air Model Node Name
+    ,                        !- Air Outlet Room Air Model Node Name
+    DC Zone Supply Node,     !- Supply Air Node Name
+    ITE-CPU,                 !- CPU End-Use Subcategory
+    ITE-Fans,                !- Fan End-Use Subcategory
+    ITE-UPS;                 !- Electric Power Supply End-Use Subcategory
+
+  ElectricEquipment:ITE:AirCooled:Definition,
+    DC Servers Definition,   !- Name
+    FlowControlWithApproachTemperatures,  !- Air Flow Calculation Method
+    Watts/Unit,              !- Design Power Input Calculation Method
+    1000,                    !- Watts per Unit {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    CPU_Power_fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name
+    0.3,                     !- Design Fan Power Input Fraction
+    0.00008,                 !- Design Fan Air Flow Rate per Power Input {m3/s-W}
+    AirFlow_fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name
+    FanPower_fFlow,          !- Fan Power Input Function of Flow Curve Name
+    20,                      !- Design Entering Air Temperature {C}
+    None,                    !- Environmental Class
+    AdjustedSupply,          !- Air Inlet Connection Type
+    0.0,                     !- Design Recirculation Fraction
+    ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name
+    1.0,                     !- Design Electric Power Supply Efficiency
+    ,                        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
+    1.0,                     !- Fraction of Electric Power Supply Losses to Zone
+    5.0,                     !- Supply Temperature Difference {deltaC}
+    ,                        !- Supply Temperature Difference Schedule
+    3.0,                     !- Return Temperature Difference {deltaC}
+    ;                        !- Return Temperature Difference Schedule
+"""
+
+    run_transition_test(idf_text, expected_idf_text)
