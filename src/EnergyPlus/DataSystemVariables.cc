@@ -196,8 +196,7 @@ namespace DataSystemVariables {
         ShowSevereError(state, EnergyPlus::format("{}\"{}\" not found.", contextString, originalInputFilePath.string()));
         ShowContinueError(state, "  Paths searched:");
         for (auto &path : pathsChecked) {
-            ShowContinueError(state,
-                              EnergyPlus::format("    {}: \"{}\"", static_cast<std::string>(path.second), static_cast<std::string>(path.first)));
+            ShowContinueError(state, EnergyPlus::format("    {}: \"{}\"", path.second, path.first));
         }
 
         return foundFilePath;
