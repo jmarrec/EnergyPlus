@@ -1825,8 +1825,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
 
                     ReturnValue.Type = Value::Error;
                     ReturnValue.Error =
-                        EnergyPlus::format("EvaluateExpression: Variable = '{}' used in expression has not been initialized!",
-                                           thisErlVar.Name);
+                        EnergyPlus::format("EvaluateExpression: Variable = '{}' used in expression has not been initialized!", thisErlVar.Name);
                     // Use SetupInit in BeginEnvrnInitializeRuntimeLanguage for "un-initializing" Erl variables that may have been
                     // initialized to zero during setup. This can happen since SetupSimulation does not call BeginNewEnvironment.
                     thisErlVar.Value.SetupInit = false;
