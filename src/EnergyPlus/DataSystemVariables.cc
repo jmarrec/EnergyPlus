@@ -46,7 +46,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
-
 #include <format>
 #include <utility>
 
@@ -194,10 +193,11 @@ namespace DataSystemVariables {
         }
 
         // If we get here, we didn't find the file
-        ShowSevereError(state, std::format("{}\"{}\" not found.", contextString, originalInputFilePath.string()));
+        ShowSevereError(state, EnergyPlus::format("{}\"{}\" not found.", contextString, originalInputFilePath.string()));
         ShowContinueError(state, "  Paths searched:");
         for (auto &path : pathsChecked) {
-            ShowContinueError(state, std::format("    {}: \"{}\"", static_cast<std::string>(path.second), static_cast<std::string>(path.first)));
+            ShowContinueError(state,
+                              EnergyPlus::format("    {}: \"{}\"", static_cast<std::string>(path.second), static_cast<std::string>(path.first)));
         }
 
         return foundFilePath;

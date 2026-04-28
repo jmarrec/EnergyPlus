@@ -46,13 +46,14 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <format>
 
 // Kiva Headers
-#include <libkiva/Errors.hpp>
 #ifdef GROUND_PLOT
 #    include <EnergyPlus/DataStringGlobals.hh>
 #    include <libgroundplot/GroundPlot.hpp>
 #endif
+#include <libkiva/Errors.hpp>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Construction.hh>
@@ -995,14 +996,13 @@ bool KivaManager::setupKivaInstances(EnergyPlusData &state)
 
                 if (fnd.deepGroundDepth > initDeepGroundDepth) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("Foundation:Kiva=\"{}\", the autocalculated deep ground depth ({:.3T} m) is shallower than "
-                                                        "foundation construction elements ({:.3T} m)",
-                                                        foundationInputs[surface.OSCPtr].name,
-                                                        initDeepGroundDepth,
-                                                        fnd.deepGroundDepth - 1.0));
+                                     std::format("Foundation:Kiva=\"{}\", the autocalculated deep ground depth ({:.3f} m) is shallower than "
+                                                 "foundation construction elements ({:.3f} m)",
+                                                 foundationInputs[surface.OSCPtr].name,
+                                                 initDeepGroundDepth,
+                                                 fnd.deepGroundDepth - 1.0));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("The deep ground depth will be set one meter below the lowest element ({:.3T} m)", fnd.deepGroundDepth));
+                        state, std::format("The deep ground depth will be set one meter below the lowest element ({:.3f} m)", fnd.deepGroundDepth));
                 }
 
                 // polygon
@@ -1176,7 +1176,7 @@ void KivaInstanceMap::plotDomain(EnergyPlusData &state)
 {
     gp.createFrame(*instance.ground, std::format("{}/{} {}:00", state.dataEnvrn->Month, state.dataEnvrn->DayOfMonth, state.dataGlobal->HourOfDay));
 
-    instance.ground->writeCSV(format("{}/{}.csv", debugDir, plotNum));
+    instance.ground->writeCSV(EnergyPlus::format("{}/{}.csv", debugDir, plotNum));
 
     plotNum++;
 }

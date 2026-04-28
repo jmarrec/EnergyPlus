@@ -112,7 +112,7 @@ namespace GeneratorFuelSupply {
             static constexpr std::string_view fuelTypeFieldName = "Fuel Type";
 
             if (NumGeneratorFuelSups <= 0) {
-                ShowSevereError(state, std::format("No {} equipment specified in input file", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", cCurrentModuleObject));
                 ErrorsFound = true;
             }
 
@@ -144,8 +144,9 @@ namespace GeneratorFuelSupply {
                     } else if (Util::SameString("Scheduled", fuelTemperatureModelingMode)) {
                         fuelSupply.FuelTempMode = DataGenerators::FuelTemperatureMode::FuelInTempSchedule;
                     } else {
-                        ShowSevereError(state, std::format("Invalid, {} = {}", fuelTemperatureModelingModeFieldName, fuelTemperatureModelingMode));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, fuelSupplyName));
+                        ShowSevereError(state,
+                                        EnergyPlus::format("Invalid, {} = {}", fuelTemperatureModelingModeFieldName, fuelTemperatureModelingMode));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, fuelSupplyName));
                         ErrorsFound = true;
                     }
 
@@ -169,8 +170,8 @@ namespace GeneratorFuelSupply {
 
                     fuelSupply.CompPowerCurveID = Curve::GetCurveIndex(state, compressorPowerCurveName);
                     if (fuelSupply.CompPowerCurveID == 0) {
-                        ShowSevereError(state, std::format("Invalid, {} = {}", compressorPowerCurveFieldName, compressorPowerCurveName));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, fuelSupplyName));
+                        ShowSevereError(state, EnergyPlus::format("Invalid, {} = {}", compressorPowerCurveFieldName, compressorPowerCurveName));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, fuelSupplyName));
                         ShowContinueError(state, "Curve named was not found ");
                         ErrorsFound = true;
                     }
@@ -183,8 +184,8 @@ namespace GeneratorFuelSupply {
                     } else if (Util::SameString(fuelType, "LiquidGeneric")) {
                         fuelSupply.FuelTypeMode = DataGenerators::FuelMode::GenericLiquid;
                     } else {
-                        ShowSevereError(state, std::format("Invalid, {} = {}", fuelTypeFieldName, fuelType));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, fuelSupplyName));
+                        ShowSevereError(state, EnergyPlus::format("Invalid, {} = {}", fuelTypeFieldName, fuelType));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, fuelSupplyName));
                         ErrorsFound = true;
                     }
 
@@ -205,17 +206,18 @@ namespace GeneratorFuelSupply {
                         fuelSupply.NumConstituents = NumFuelConstit;
 
                         if (NumFuelConstit > 12) {
-                            ShowSevereError(state, std::format("{} model not set up for more than 12 fuel constituents", cCurrentModuleObject));
+                            ShowSevereError(state,
+                                            EnergyPlus::format("{} model not set up for more than 12 fuel constituents", cCurrentModuleObject));
                             ErrorsFound = true;
                         }
                         if (NumFuelConstit < 1) {
-                            ShowSevereError(state, std::format("{} model needs at least one fuel constituent", cCurrentModuleObject));
+                            ShowSevereError(state, EnergyPlus::format("{} model needs at least one fuel constituent", cCurrentModuleObject));
                             ErrorsFound = true;
                         }
 
                         for (int ConstitNum = 1; ConstitNum <= NumFuelConstit; ++ConstitNum) {
-                            auto const constituentNameFieldName = std::format("constituent_{}_name", ConstitNum);
-                            auto const constituentMolarFractionFieldName = std::format("constituent_{}_molar_fraction", ConstitNum);
+                            auto const constituentNameFieldName = EnergyPlus::format("constituent_{}_name", ConstitNum);
+                            auto const constituentMolarFractionFieldName = EnergyPlus::format("constituent_{}_molar_fraction", ConstitNum);
                             fuelSupply.ConstitName(ConstitNum) =
                                 inputProcessor->getAlphaFieldValue(fuelSupplyFields, fuelSupplySchemaProps, constituentNameFieldName);
                             fuelSupply.ConstitMolalFract(ConstitNum) =
@@ -224,9 +226,9 @@ namespace GeneratorFuelSupply {
 
                         // check for molar fractions summing to 1.0.
                         if (std::abs(sum(fuelSupply.ConstitMolalFract) - 1.0) > 0.0001) {
-                            ShowSevereError(state, std::format("{} molar fractions do not sum to 1.0", cCurrentModuleObject));
+                            ShowSevereError(state, EnergyPlus::format("{} molar fractions do not sum to 1.0", cCurrentModuleObject));
                             ShowContinueError(state, EnergyPlus::format("Sum was={:.5R}", sum(fuelSupply.ConstitMolalFract)));
-                            ShowContinueError(state, std::format("Entered in {} = {}", cCurrentModuleObject, fuelSupplyName));
+                            ShowContinueError(state, EnergyPlus::format("Entered in {} = {}", cCurrentModuleObject, fuelSupplyName));
                             ErrorsFound = true;
                         }
                     }
@@ -240,7 +242,7 @@ namespace GeneratorFuelSupply {
             }
 
             if (ErrorsFound) {
-                ShowFatalError(state, std::format("Problem found processing input for {}", cCurrentModuleObject));
+                ShowFatalError(state, EnergyPlus::format("Problem found processing input for {}", cCurrentModuleObject));
             }
 
             state.dataGeneratorFuelSupply->MyOneTimeFlag = false;
@@ -593,7 +595,7 @@ namespace GeneratorFuelSupply {
                 state.dataGenerator->FuelSupply(FuelSupplyNum).GasLibID(i) = thisGasID;
 
                 if (thisGasID == 0) {
-                    ShowSevereError(state, std::format("Fuel constituent not found in thermochemistry data: {}", thisName));
+                    ShowSevereError(state, EnergyPlus::format("Fuel constituent not found in thermochemistry data: {}", thisName));
                     ErrorsFound = true;
                 }
 

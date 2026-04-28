@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -491,8 +492,8 @@ void CalcEQLWindowUvalue(EnergyPlusData &state,
         }
     }
     if (!CFSURated) {
-        ShowWarningMessage(state, std::format("{}Fenestration U-Value calculation failed for {}", RoutineName, FS.Name));
-        ShowContinueError(state, EnergyPlus::format("...Calculated U-value = {:.4T}", U));
+        ShowWarningMessage(state, EnergyPlus::format("{}Fenestration U-Value calculation failed for {}", RoutineName, FS.Name));
+        ShowContinueError(state, EnergyPlus::format("...Calculated U-value = {:.4f}", U));
         ShowContinueError(state, "...Check consistency of inputs");
     }
     UNFRC = U;
@@ -598,9 +599,9 @@ void CalcEQLWindowSHGCAndTransNormal(EnergyPlusData &state,
                                          true);
 
     if (!CFSSHGC) {
-        ShowWarningMessage(state, std::format("{}Solar heat gain coefficient calculation failed for {}", RoutineName, FS.Name));
-        ShowContinueError(state, EnergyPlus::format("...Calculated SHGC = {:.4T}", SHGC));
-        ShowContinueError(state, EnergyPlus::format("...Calculated U-Value = {:.4T}", UCG));
+        ShowWarningMessage(state, EnergyPlus::format("{}Solar heat gain coefficient calculation failed for {}", RoutineName, FS.Name));
+        ShowContinueError(state, EnergyPlus::format("...Calculated SHGC = {:.4f}", SHGC));
+        ShowContinueError(state, EnergyPlus::format("...Calculated U-Value = {:.4f}", UCG));
         ShowContinueError(state, "...Check consistency of inputs.");
         return;
     }
@@ -910,8 +911,8 @@ Real64 P01(EnergyPlusData &state,
     static constexpr std::string_view RoutineName("P01: ");
 
     if (P < -0.05 || P > 1.05) {
-        ShowWarningMessage(state, std::format("{}property value should have been between 0 and 1", RoutineName));
-        ShowContinueError(state, EnergyPlus::format("{}=:  property value is ={:.4T}", WHAT, P));
+        ShowWarningMessage(state, EnergyPlus::format("{}property value should have been between 0 and 1", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("{}=:  property value is ={:.4f}", WHAT, P));
         if (P < 0.0) {
             ShowContinueError(state, "property value is reset to 0.0");
         } else if (P > 1.0) {
@@ -1025,10 +1026,10 @@ void RB_DIFF(EnergyPlusData &state,
 
     if (RHO_DD + TAU_DD > 1.0) {
         SumRefAndTran = RHO_DD + TAU_DD;
-        ShowWarningMessage(state, std::format("{}Roller blind diffuse-diffuse properties are inconsistent", RoutineName));
-        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
-        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
-        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
+        ShowWarningMessage(state, EnergyPlus::format("{}Roller blind diffuse-diffuse properties are inconsistent", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4f}", RHO_DD));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4f}", TAU_DD));
+        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4f}", SumRefAndTran));
         ShowContinueError(state, "...This sum cannot be > 1.0. Transmittance will be reset to 1 minus reflectance");
         TAU_DD = 1.0 - RHO_DD;
     }
@@ -1159,10 +1160,10 @@ void IS_DIFF(EnergyPlusData &state,
 
     if (RHO_DD + TAU_DD > 1.0) {
         SumRefAndTran = RHO_DD + TAU_DD;
-        ShowWarningMessage(state, std::format("{}Calculated insect screen diffuse-diffuse properties are inconsistent", RoutineName));
-        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
-        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
-        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
+        ShowWarningMessage(state, EnergyPlus::format("{}Calculated insect screen diffuse-diffuse properties are inconsistent", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4f}", RHO_DD));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4f}", TAU_DD));
+        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4f}", SumRefAndTran));
         ShowContinueError(state, "...This sum cannot be > 1.0. Transmittance will be reset to 1 minus reflectance");
         TAU_DD = 1.0 - RHO_DD;
     }
@@ -1330,10 +1331,10 @@ void FM_DIFF(EnergyPlusData &state,
 
     if (RHO_DD + TAU_DD > 1.0) {
         SumRefAndTran = RHO_DD + TAU_DD;
-        ShowWarningMessage(state, std::format("{}Calculated drape fabric diffuse-diffuse properties are inconsistent", RoutineName));
-        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
-        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
-        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
+        ShowWarningMessage(state, EnergyPlus::format("{}Calculated drape fabric diffuse-diffuse properties are inconsistent", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4f}", RHO_DD));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4f}", TAU_DD));
+        ShowContinueError(state, std::format("...Sum of diffuse reflectance and transmittance = {:.4f}", SumRefAndTran));
         ShowContinueError(state, "...This sum cannot be > 1.0. Transmittance will be reset to 1 minus reflectance");
         TAU_DD = 1.0 - RHO_DD;
     }
@@ -4636,8 +4637,8 @@ void ASHWAT_ThermalCalc(EnergyPlusData &state,
             ++FS.WEQLSolverErrorIndex;
             ShowSevereError(state, std::format("CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"{}\"", FS.Name));
             ShowContinueError(state, std::format("{}Net radiation analysis did not converge", RoutineName));
-            ShowContinueError(state, EnergyPlus::format("...Maximum error is = {:.6T}", MAXERR));
-            ShowContinueError(state, EnergyPlus::format("...Convergence tolerance is = {:.6T}", TOL));
+            ShowContinueError(state, std::format("...Maximum error is = {:.6f}", MAXERR));
+            ShowContinueError(state, std::format("...Convergence tolerance is = {:.6f}", TOL));
             ShowContinueErrorTimeStamp(state, "");
         } else {
             ShowRecurringWarningErrorAtEnd(state,
@@ -5121,8 +5122,8 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
     //        ++FS.WEQLSolverErrorIndex;
     //        ShowSevereError(state, format("CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"{}\"", FS.Name));
     //        ShowContinueError(state, format("{}Net radiation analysis did not converge", RoutineName));
-    //        ShowContinueError(state, format("...Maximum error is = {:.6T}", MAXERR));
-    //        ShowContinueError(state, format("...Convergence tolerance is = {:.6T}", TOL));
+    //        ShowContinueError(state, format("...Maximum error is = {:.6f}", MAXERR));
+    //        ShowContinueError(state, format("...Convergence tolerance is = {:.6f}", TOL));
     //        ShowContinueErrorTimeStamp(state, "");
     //    } else {
     //        ShowRecurringWarningErrorAtEnd(state, "CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"" + FS.Name + "\"; " + std::string{RoutineName} +

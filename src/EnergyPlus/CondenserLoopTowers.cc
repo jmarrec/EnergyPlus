@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -125,7 +126,7 @@ namespace CondenserLoopTowers {
             return thisObj;
         }
         // If we didn't find it, fatal
-        ShowFatalError(state, std::format("CoolingTowerFactory: Error getting inputs for tower named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(state, EnergyPlus::format("CoolingTowerFactory: Error getting inputs for tower named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -151,7 +152,7 @@ namespace CondenserLoopTowers {
             this->calculateMerkelVariableSpeedTower(state, CurLoad, RunFlag);
             break;
         default:
-            ShowFatalError(state, std::format("Plant Equipment Type specified for {} is not a Cooling Tower.", this->Name));
+            ShowFatalError(state, EnergyPlus::format("Plant Equipment Type specified for {} is not a Cooling Tower.", this->Name));
         }
         this->calculateWaterUsage(state);
         this->update(state);
@@ -388,7 +389,8 @@ namespace CondenserLoopTowers {
                     tower.BasinHeaterSetPointTemp = 2.0;
                 }
                 if (tower.BasinHeaterSetPointTemp < 2.0) {
-                    ShowWarningCustom(state, eoh, std::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(18)));
+                    ShowWarningCustom(
+                        state, eoh, EnergyPlus::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(18)));
                 }
             }
 
@@ -446,9 +448,9 @@ namespace CondenserLoopTowers {
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, tower.OutdoorAirInletNodeNum)) {
                     ShowSevereCustom(state,
                                      eoh,
-                                     std::format("Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}"
-                                                 "does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.",
-                                                 AlphArray(10)));
+                                     EnergyPlus::format("Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}"
+                                                        "does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.",
+                                                        AlphArray(10)));
                     ErrorsFound = true;
                 }
             }
@@ -700,7 +702,8 @@ namespace CondenserLoopTowers {
                     tower.BasinHeaterSetPointTemp = 2.0;
                 }
                 if (tower.BasinHeaterSetPointTemp < 2.0) {
-                    ShowWarningCustom(state, eoh, std::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(26)));
+                    ShowWarningCustom(
+                        state, eoh, EnergyPlus::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(26)));
                 }
             }
 
@@ -785,49 +788,50 @@ namespace CondenserLoopTowers {
             //   Can't tell yet if autosized, check later in initialize.
             if (tower.HighSpeedAirFlowRate <= tower.LowSpeedAirFlowRate && tower.HighSpeedAirFlowRate != DataSizing::AutoSize) {
                 ShowSevereError(state,
-                                std::format("{} \"{}\". Low speed air flow rate must be less than the high speed air flow rate.",
-                                            s_ipsc->cCurrentModuleObject,
-                                            tower.Name));
+                                EnergyPlus::format("{} \"{}\". Low speed air flow rate must be less than the high speed air flow rate.",
+                                                   s_ipsc->cCurrentModuleObject,
+                                                   tower.Name));
                 ErrorsFound = true;
             }
             //   Low speed air flow rate must be greater than free convection air flow rate.
             //   Can't tell yet if autosized, check later in initialize.
             if (tower.LowSpeedAirFlowRate <= tower.FreeConvAirFlowRate && tower.LowSpeedAirFlowRate != DataSizing::AutoSize) {
                 ShowSevereError(state,
-                                std::format("{} \"{}\". Free convection air flow rate must be less than the low speed air flow rate.",
-                                            s_ipsc->cCurrentModuleObject,
-                                            tower.Name));
+                                EnergyPlus::format("{} \"{}\". Free convection air flow rate must be less than the low speed air flow rate.",
+                                                   s_ipsc->cCurrentModuleObject,
+                                                   tower.Name));
                 ErrorsFound = true;
             }
 
             //   Check various inputs if Performance Input Method = "UA and Design Water Flow Rate"
             if (tower.PerformanceInputMethod_Num == PIM::UFactor) {
                 if (tower.DesignWaterFlowRate == 0.0) {
-                    ShowSevereError(state,
-                                    std::format("{} \"{}\". Tower performance input method requires a design water flow rate greater than zero.",
-                                                s_ipsc->cCurrentModuleObject,
-                                                tower.Name));
+                    ShowSevereError(
+                        state,
+                        EnergyPlus::format("{} \"{}\". Tower performance input method requires a design water flow rate greater than zero.",
+                                           s_ipsc->cCurrentModuleObject,
+                                           tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.HighSpeedTowerUA <= tower.LowSpeedTowerUA && tower.HighSpeedTowerUA != DataSizing::AutoSize) {
                     ShowSevereError(state,
-                                    std::format("{} \"{}\". Tower UA at low fan speed must be less than the tower UA at high fan speed.",
-                                                s_ipsc->cCurrentModuleObject,
-                                                tower.Name));
+                                    EnergyPlus::format("{} \"{}\". Tower UA at low fan speed must be less than the tower UA at high fan speed.",
+                                                       s_ipsc->cCurrentModuleObject,
+                                                       tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.LowSpeedTowerUA <= tower.FreeConvTowerUA && tower.LowSpeedTowerUA != DataSizing::AutoSize) {
                     ShowSevereError(
                         state,
-                        std::format("{} \"{}\". Tower UA at free convection air flow rate must be less than the tower UA at low fan speed.",
-                                    s_ipsc->cCurrentModuleObject,
-                                    tower.Name));
+                        EnergyPlus::format("{} \"{}\". Tower UA at free convection air flow rate must be less than the tower UA at low fan speed.",
+                                           s_ipsc->cCurrentModuleObject,
+                                           tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.FreeConvTowerUA > 0.0 && tower.FreeConvAirFlowRate == 0.0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} \"{}\". Free convection air flow rate must be greater than zero when free convection UA is greater than zero.",
                             s_ipsc->cCurrentModuleObject,
                             tower.Name));
@@ -836,43 +840,46 @@ namespace CondenserLoopTowers {
             } else if (tower.PerformanceInputMethod_Num == PIM::NominalCapacity) {
                 if (tower.TowerNominalCapacity == 0.0) {
                     ShowSevereError(state,
-                                    std::format("{} \"{}\". Tower performance input method requires valid high-speed nominal capacity.",
-                                                s_ipsc->cCurrentModuleObject,
-                                                tower.Name));
+                                    EnergyPlus::format("{} \"{}\". Tower performance input method requires valid high-speed nominal capacity.",
+                                                       s_ipsc->cCurrentModuleObject,
+                                                       tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.TowerLowSpeedNomCap == 0.0) {
                     ShowSevereError(state,
-                                    std::format("{} \"{}\". Tower performance input method requires valid low-speed nominal capacity.",
-                                                s_ipsc->cCurrentModuleObject,
-                                                tower.Name));
+                                    EnergyPlus::format("{} \"{}\". Tower performance input method requires valid low-speed nominal capacity.",
+                                                       s_ipsc->cCurrentModuleObject,
+                                                       tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.DesignWaterFlowRate != 0.0) {
                     if (tower.DesignWaterFlowRate > 0.0) {
-                        ShowWarningError(state,
-                                         std::format("{} \"{}\". Nominal capacity input method and design water flow rate have been specified.",
-                                                     s_ipsc->cCurrentModuleObject,
-                                                     tower.Name));
+                        ShowWarningError(
+                            state,
+                            EnergyPlus::format("{} \"{}\". Nominal capacity input method and design water flow rate have been specified.",
+                                               s_ipsc->cCurrentModuleObject,
+                                               tower.Name));
                     } else {
                         ShowSevereError(
                             state,
-                            std::format("{} \"{}\". Nominal capacity input method has been specified and design water flow rate is being autosized.",
-                                        s_ipsc->cCurrentModuleObject,
-                                        tower.Name));
+                            EnergyPlus::format(
+                                "{} \"{}\". Nominal capacity input method has been specified and design water flow rate is being autosized.",
+                                s_ipsc->cCurrentModuleObject,
+                                tower.Name));
                     }
                     ShowContinueError(state, "Design water flow rate will be set according to nominal tower capacity.");
                 }
                 if (tower.HighSpeedTowerUA != 0.0) {
                     if (tower.HighSpeedTowerUA > 0.0) {
-                        ShowWarningError(state,
-                                         std::format("{} \"{}\". Nominal capacity input method and tower UA at high fan speed have been specified.",
-                                                     s_ipsc->cCurrentModuleObject,
-                                                     tower.Name));
+                        ShowWarningError(
+                            state,
+                            EnergyPlus::format("{} \"{}\". Nominal capacity input method and tower UA at high fan speed have been specified.",
+                                               s_ipsc->cCurrentModuleObject,
+                                               tower.Name));
                     } else {
                         ShowSevereError(
                             state,
-                            std::format(
+                            EnergyPlus::format(
                                 "{} \"{}\". Nominal capacity input method has been specified and tower UA at high fan speed is being autosized.",
                                 s_ipsc->cCurrentModuleObject,
                                 tower.Name));
@@ -881,10 +888,11 @@ namespace CondenserLoopTowers {
                 }
                 if (tower.LowSpeedTowerUA != 0.0) {
                     if (tower.LowSpeedTowerUA > 0.0) {
-                        ShowWarningError(state,
-                                         std::format("{} \"{}\". Nominal capacity input method and tower UA at low fan speed have been specified.",
-                                                     s_ipsc->cCurrentModuleObject,
-                                                     tower.Name));
+                        ShowWarningError(
+                            state,
+                            EnergyPlus::format("{} \"{}\". Nominal capacity input method and tower UA at low fan speed have been specified.",
+                                               s_ipsc->cCurrentModuleObject,
+                                               tower.Name));
                     } else {
                         ShowSevereError(
                             state,
@@ -2339,11 +2347,10 @@ namespace CondenserLoopTowers {
                         ShowContinueError(state,
                                           std::format("is inconsistent with Design Loop Delta Temperature specified in Sizing:Plant object = {}.",
                                                       PlantSizData(PltSizCondNum).PlantLoopName));
+                        ShowContinueError(state, std::format("..The Design Range Temperature specified in tower is = {:.2f}", this->DesignRange));
                         ShowContinueError(state,
-                                          EnergyPlus::format("..The Design Range Temperature specified in tower is = {:.2T}", this->DesignRange));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("..The Design Loop Delta Temperature specified in plant sizing data is = {:.2T}",
-                                                             PlantSizData(PltSizCondNum).DeltaT));
+                                          std::format("..The Design Loop Delta Temperature specified in plant sizing data is = {:.2f}",
+                                                      PlantSizData(PltSizCondNum).DeltaT));
                     }
                     // check if the tower approach is different from plant sizing data
                     DesTowerApproachFromPlant = PlantSizData(PltSizCondNum).ExitTemp - this->DesignInletWB;
@@ -2358,10 +2365,9 @@ namespace CondenserLoopTowers {
                         ShowContinueError(state,
                                           std::format("is inconsistent with Design Approach Temperature specified in tower = {}.", this->Name));
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("..The Design Approach Temperature from inputs specified is = {:.2T}", DesTowerApproachFromPlant));
-                        ShowContinueError(
-                            state, EnergyPlus::format("..The Design Approach Temperature specified in tower is = {:.2T}", this->DesignApproach));
+                            state, std::format("..The Design Approach Temperature from inputs specified is = {:.2f}", DesTowerApproachFromPlant));
+                        ShowContinueError(state,
+                                          std::format("..The Design Approach Temperature specified in tower is = {:.2f}", this->DesignApproach));
                     }
                 }
             }
@@ -2584,24 +2590,23 @@ namespace CondenserLoopTowers {
                     // This conditional statement is to trap when the user specified condenser/tower water design setpoint
                     //  temperature is less than design inlet air wet bulb temperature
                     if (PlantSizData(PltSizCondNum).ExitTemp <= this->DesignInletWB) {
-                        ShowSevereError(
-                            state,
-                            EnergyPlus::format("Error when autosizing the UA value for cooling tower = {}. Design Loop Exit Temperature must be "
-                                               "greater than {:.2T} C when autosizing the tower UA.",
-                                               this->Name,
-                                               this->DesignInletWB));
+                        ShowSevereError(state,
+                                        std::format("Error when autosizing the UA value for cooling tower = {}. Design Loop Exit Temperature must be "
+                                                    "greater than {:.2f} C when autosizing the tower UA.",
+                                                    this->Name,
+                                                    this->DesignInletWB));
                         ShowContinueError(state,
-                                          EnergyPlus::format("The Design Loop Exit Temperature specified in Sizing:Plant object = {} ({:.2T} C)",
-                                                             PlantSizData(PltSizCondNum).PlantLoopName,
-                                                             PlantSizData(PltSizCondNum).ExitTemp));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("is less than or equal to the design inlet air wet-bulb temperature of {:.2T} C.",
-                                                             this->DesignInletWB));
+                                          std::format("The Design Loop Exit Temperature specified in Sizing:Plant object = {} ({:.2f} C)",
+                                                      PlantSizData(PltSizCondNum).PlantLoopName,
+                                                      PlantSizData(PltSizCondNum).ExitTemp));
                         ShowContinueError(
                             state,
-                            EnergyPlus::format("If using HVACTemplate:Plant:ChilledWaterLoop, then check that input field Condenser Water Design "
-                                               "Setpoint must be > {:.2T} C if autosizing the cooling tower.",
-                                               this->DesignInletWB));
+                            std::format("is less than or equal to the design inlet air wet-bulb temperature of {:.2f} C.", this->DesignInletWB));
+                        ShowContinueError(
+                            state,
+                            std::format("If using HVACTemplate:Plant:ChilledWaterLoop, then check that input field Condenser Water Design "
+                                        "Setpoint must be > {:.2f} C if autosizing the cooling tower.",
+                                        this->DesignInletWB));
                         ShowFatalError(state, std::format("Autosizing of cooling tower fails for tower = {}.", this->Name));
                     }
 
@@ -2686,34 +2691,33 @@ namespace CondenserLoopTowers {
                     if (DesTowerExitWaterTemp <= this->DesignInletWB) {
                         ShowSevereError(
                             state,
-                            EnergyPlus::format("Error when autosizing the UA value for cooling tower = {}. Design Tower Exit Temperature must be "
-                                               "greater than {:.2T} C when autosizing the tower UA.",
-                                               this->Name,
-                                               this->DesignInletWB));
-                        ShowContinueError(state, EnergyPlus::format("The User-specified Design Loop Exit Temperature={:.2T}", DesTowerExitWaterTemp));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("is less than or equal to the design inlet air wet-bulb temperature of {:.2T} C.",
-                                                             this->DesignInletWB));
+                            std::format("Error when autosizing the UA value for cooling tower = {}. Design Tower Exit Temperature must be "
+                                        "greater than {:.2f} C when autosizing the tower UA.",
+                                        this->Name,
+                                        this->DesignInletWB));
+                        ShowContinueError(state, std::format("The User-specified Design Loop Exit Temperature={:.2f}", DesTowerExitWaterTemp));
+                        ShowContinueError(
+                            state,
+                            std::format("is less than or equal to the design inlet air wet-bulb temperature of {:.2f} C.", this->DesignInletWB));
 
                         if (this->TowerInletCondsAutoSize) {
                             ShowContinueError(state,
-                                              EnergyPlus::format("Because you did not specify the Design Approach Temperature, and you do not have a "
-                                                                 "Sizing:Plant object, it was defaulted to {:.2T} C.",
-                                                                 DesTowerExitWaterTemp));
+                                              std::format("Because you did not specify the Design Approach Temperature, and you do not have a "
+                                                          "Sizing:Plant object, it was defaulted to {:.2f} C.",
+                                                          DesTowerExitWaterTemp));
                         } else {
                             // Should never get there...
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format("The Design Loop Exit Temperature is the sum of the design air inlet wet-bulb temperature= "
-                                                   "{:.2T} C plus the cooling tower design approach temperature = {:.2T}C.",
-                                                   this->DesignInletWB,
-                                                   this->DesignApproach));
+                            ShowContinueError(state,
+                                              std::format("The Design Loop Exit Temperature is the sum of the design air inlet wet-bulb temperature= "
+                                                          "{:.2f} C plus the cooling tower design approach temperature = {:.2f}C.",
+                                                          this->DesignInletWB,
+                                                          this->DesignApproach));
                         }
                         ShowContinueError(
                             state,
-                            EnergyPlus::format("If using HVACTemplate:Plant:ChilledWaterLoop, then check that input field Condenser Water Design "
-                                               "Setpoint must be > {:.2T} C if autosizing the cooling tower.",
-                                               this->DesignInletWB));
+                            std::format("If using HVACTemplate:Plant:ChilledWaterLoop, then check that input field Condenser Water Design "
+                                        "Setpoint must be > {:.2f} C if autosizing the cooling tower.",
+                                        this->DesignInletWB));
                         ShowFatalError(state, std::format("Autosizing of cooling tower fails for tower = {}.", this->Name));
                     }
 
@@ -3078,19 +3082,19 @@ namespace CondenserLoopTowers {
                     ShowContinueError(state, "Tower inlet design air dry-bulb temperature assumed to be 35.0 C.");
                     ShowContinueError(state, "Tower inlet design air wet-bulb temperature assumed to be 25.6 C.");
                     ShowContinueError(state,
-                                      EnergyPlus::format("Tower load assumed to be {:.3T} times free convection capacity of {:.0T} W.",
-                                                         this->HeatRejectCapNomCapSizingRatio,
-                                                         this->TowerFreeConvNomCap));
+                                      std::format("Tower load assumed to be {:.3f} times free convection capacity of {:.0f} W.",
+                                                  this->HeatRejectCapNomCapSizingRatio,
+                                                  this->TowerFreeConvNomCap));
 
                     Real64 OutWaterTemp; // outlet water temperature during sizing [C]
 
                     OutWaterTemp = this->calculateSimpleTowerOutletTemp(state, solveWaterFlow, this->FreeConvAirFlowRate, UA0);
                     Real64 CoolingOutput = Cp * solveWaterFlow * (this->WaterTemp - OutWaterTemp); // tower capacity during sizing [W]
-                    ShowContinueError(state, EnergyPlus::format("Tower capacity at lower UA guess ({:.4T}) = {:.0T} W.", UA0, CoolingOutput));
+                    ShowContinueError(state, std::format("Tower capacity at lower UA guess ({:.4f}) = {:.0f} W.", UA0, CoolingOutput));
 
                     OutWaterTemp = this->calculateSimpleTowerOutletTemp(state, solveWaterFlow, this->FreeConvAirFlowRate, UA1);
                     CoolingOutput = Cp * solveWaterFlow * (this->WaterTemp - OutWaterTemp);
-                    ShowContinueError(state, EnergyPlus::format("Tower capacity at upper UA guess ({:.4T}) = {:.0T} W.", UA1, CoolingOutput));
+                    ShowContinueError(state, std::format("Tower capacity at upper UA guess ({:.4f}) = {:.0f} W.", UA1, CoolingOutput));
 
                     if (CoolingOutput < DesTowerLoad) {
                         ShowContinueError(state, "Free convection capacity should be less than tower capacity at upper UA guess.");
@@ -3402,10 +3406,10 @@ namespace CondenserLoopTowers {
                     ShowContinueError(state,
                                       std::format("is inconsistent with Design Loop Delta Temperature specified in Sizing:Plant object = {}.",
                                                   PlantSizData(PltSizCondNum).PlantLoopName));
-                    ShowContinueError(state, EnergyPlus::format("..The Design Range Temperature specified in tower is = {:.2T}", this->DesignRange));
+                    ShowContinueError(state, std::format("..The Design Range Temperature specified in tower is = {:.2f}", this->DesignRange));
                     ShowContinueError(state,
-                                      EnergyPlus::format("..The Design Loop Delta Temperature specified in plant sizing data is = {:.2T}",
-                                                         PlantSizData(PltSizCondNum).DeltaT));
+                                      std::format("..The Design Loop Delta Temperature specified in plant sizing data is = {:.2f}",
+                                                  PlantSizData(PltSizCondNum).DeltaT));
                 }
                 // check if the tower approach is different from plant sizing data
                 DesTowerApproachFromPlant = PlantSizData(PltSizCondNum).ExitTemp - this->DesignInletWB;
@@ -3419,10 +3423,9 @@ namespace CondenserLoopTowers {
                                       std::format("The Design Approach Temperature from inputs specified in Sizing:Plant object = {}",
                                                   PlantSizData(PltSizCondNum).PlantLoopName));
                     ShowContinueError(state, std::format("is inconsistent with Design Approach Temperature specified in tower = {}.", this->Name));
-                    ShowContinueError(
-                        state, EnergyPlus::format("..The Design Approach Temperature from inputs specified is = {:.2T}", DesTowerApproachFromPlant));
                     ShowContinueError(state,
-                                      EnergyPlus::format("..The Design Approach Temperature specified in tower is = {:.2T}", this->DesignApproach));
+                                      std::format("..The Design Approach Temperature from inputs specified is = {:.2f}", DesTowerApproachFromPlant));
+                    ShowContinueError(state, std::format("..The Design Approach Temperature specified in tower is = {:.2f}", this->DesignApproach));
                 }
             }
         }
@@ -6170,9 +6173,8 @@ namespace CondenserLoopTowers {
                 ShowWarningError(state, std::format("{} \"{}\"", DataPlant::PlantEquipTypeNames[static_cast<int>(this->TowerType)], this->Name));
                 ShowContinueError(state, " Condenser Loop Mass Flow Rate is much greater than the towers design mass flow rate.");
                 ShowContinueError(
-                    state,
-                    EnergyPlus::format(" Condenser Loop Mass Flow Rate = {:.6T}", state.dataLoopNodes->Node(this->WaterOutletNodeNum).MassFlowRate));
-                ShowContinueError(state, EnergyPlus::format(" Tower Design Mass Flow Rate   = {:.6T}", this->DesWaterMassFlowRate));
+                    state, std::format(" Condenser Loop Mass Flow Rate = {:.6f}", state.dataLoopNodes->Node(this->WaterOutletNodeNum).MassFlowRate));
+                ShowContinueError(state, std::format(" Tower Design Mass Flow Rate   = {:.6f}", this->DesWaterMassFlowRate));
                 ShowContinueErrorTimeStamp(state, "");
             } else {
                 ShowRecurringWarningErrorAtEnd(
@@ -6220,7 +6222,7 @@ namespace CondenserLoopTowers {
                 ShowWarningError(state, std::format("{} \"{}\"", DataPlant::PlantEquipTypeNames[static_cast<int>(this->TowerType)], this->Name));
                 ShowContinueError(state, "Cooling tower water mass flow rate near zero.");
                 ShowContinueErrorTimeStamp(state, "");
-                ShowContinueError(state, EnergyPlus::format("Actual Mass flow = {:.2T}", this->WaterMassFlowRate));
+                ShowContinueError(state, std::format("Actual Mass flow = {:.2f}", this->WaterMassFlowRate));
             } else {
                 ShowRecurringWarningErrorAtEnd(state,
                                                std::format("{} \"{}\"  Cooling tower water mass flow rate near zero error continues...",

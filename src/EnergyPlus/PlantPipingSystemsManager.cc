@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <memory>
 #include <set>
 
@@ -157,7 +158,7 @@ namespace PlantPipingSystemsManager {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(state, std::format("PipeCircuitInfoFactory: Error getting inputs for circuit named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(state, EnergyPlus::format("PipeCircuitInfoFactory: Error getting inputs for circuit named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -443,7 +444,7 @@ namespace PlantPipingSystemsManager {
 
         // Report errors that are purely input problems
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}: Preceding input errors cause program termination.", RoutineName));
+            ShowFatalError(state, EnergyPlus::format("{}: Preceding input errors cause program termination.", RoutineName));
         }
 
         // Setup output variables
@@ -483,13 +484,14 @@ namespace PlantPipingSystemsManager {
                 for (auto const &thisSegment : thisCircuit->pipeSegments) {
                     if ((thisSegment->PipeLocation.X > thisDomain.Extents.xMax) || (thisSegment->PipeLocation.X < 0.0) ||
                         (thisSegment->PipeLocation.Y > thisDomain.Extents.yMax) || (thisSegment->PipeLocation.Y < 0.0)) {
-                        ShowSevereError(state,
-                                        std::format("PipingSystems::{}: A pipe was outside of the domain extents after performing corrections for "
-                                                    "basement or burial depth.",
-                                                    RoutineName));
-                        ShowContinueError(state, std::format("Pipe segment name:{}", thisSegment->Name));
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format("PipingSystems::{}: A pipe was outside of the domain extents after performing corrections for "
+                                               "basement or burial depth.",
+                                               RoutineName));
+                        ShowContinueError(state, EnergyPlus::format("Pipe segment name:{}", thisSegment->Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Corrected pipe location: ( x,y )=( {:.2T},{:.2T} )",
+                                          EnergyPlus::format("Corrected pipe location: ( x,y )=( {:.2f},{:.2f} )",
                                                              thisSegment->PipeLocation.X,
                                                              thisSegment->PipeLocation.Y));
                     }
@@ -500,7 +502,7 @@ namespace PlantPipingSystemsManager {
 
         // If we encountered any other errors that we couldn't handle separately than stop now
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}:{}: Errors found in input.", RoutineName, ObjName_ug_GeneralDomain));
+            ShowFatalError(state, EnergyPlus::format("{}:{}: Errors found in input.", RoutineName, ObjName_ug_GeneralDomain));
         }
     }
 
@@ -559,8 +561,8 @@ namespace PlantPipingSystemsManager {
                 } else if (meshDistribution == "SYMMETRICGEOMETRIC") {
                     thisDomain.Mesh.X.thisMeshDistribution = MeshDistribution::SymmetricGeometric;
                     if (mod(thisDomain.Mesh.X.RegionMeshCount, 2) != 0) {
-                        ShowWarningError(state, std::format("PipingSystems:{}: Invalid mesh type-count combination.", routineName));
-                        ShowContinueError(state, std::format("Instance:{}={}", ObjName_ug_GeneralDomain, thisDomain.Name));
+                        ShowWarningError(state, EnergyPlus::format("PipingSystems:{}: Invalid mesh type-count combination.", routineName));
+                        ShowContinueError(state, EnergyPlus::format("Instance:{}={}", ObjName_ug_GeneralDomain, thisDomain.Name));
                         ShowContinueError(state, "An ODD-valued X mesh count was found in the input for symmetric geometric configuration.");
                         ShowContinueError(state, "This is invalid, mesh count incremented UP by one to next EVEN value.");
                         ++thisDomain.Mesh.X.RegionMeshCount;
@@ -589,8 +591,8 @@ namespace PlantPipingSystemsManager {
                 } else if (meshDistribution == "SYMMETRICGEOMETRIC") {
                     thisDomain.Mesh.Y.thisMeshDistribution = MeshDistribution::SymmetricGeometric;
                     if (mod(thisDomain.Mesh.Y.RegionMeshCount, 2) != 0) {
-                        ShowWarningError(state, std::format("PipingSystems:{}: Invalid mesh type-count combination.", routineName));
-                        ShowContinueError(state, std::format("Instance:{}={}", ObjName_ug_GeneralDomain, thisDomain.Name));
+                        ShowWarningError(state, EnergyPlus::format("PipingSystems:{}: Invalid mesh type-count combination.", routineName));
+                        ShowContinueError(state, EnergyPlus::format("Instance:{}={}", ObjName_ug_GeneralDomain, thisDomain.Name));
                         ShowContinueError(state, "An ODD-valued Y mesh count was found in the input for symmetric geometric configuration.");
                         ShowContinueError(state, "This is invalid, mesh count incremented UP by one to next EVEN value.");
                         ++thisDomain.Mesh.Y.RegionMeshCount;
@@ -619,8 +621,8 @@ namespace PlantPipingSystemsManager {
                 } else if (meshDistribution == "SYMMETRICGEOMETRIC") {
                     thisDomain.Mesh.Z.thisMeshDistribution = MeshDistribution::SymmetricGeometric;
                     if (mod(thisDomain.Mesh.Z.RegionMeshCount, 2) != 0) {
-                        ShowWarningError(state, std::format("PipingSystems:{}: Invalid mesh type-count combination.", routineName));
-                        ShowContinueError(state, std::format("Instance:{}={}", ObjName_ug_GeneralDomain, thisDomain.Name));
+                        ShowWarningError(state, EnergyPlus::format("PipingSystems:{}: Invalid mesh type-count combination.", routineName));
+                        ShowContinueError(state, EnergyPlus::format("Instance:{}={}", ObjName_ug_GeneralDomain, thisDomain.Name));
                         ShowContinueError(state, "An ODD-valued Z mesh count was found in the input for symmetric geometric configuration.");
                         ShowContinueError(state, "This is invalid, mesh count incremented UP by one to next EVEN value.");
                         ++thisDomain.Mesh.Z.RegionMeshCount;
@@ -669,7 +671,8 @@ namespace PlantPipingSystemsManager {
                     state.dataIPShortCut->lAlphaFieldBlanks(8) || state.dataIPShortCut->lAlphaFieldBlanks(9) ||
                     state.dataIPShortCut->lAlphaFieldBlanks(10)) {
                     ShowSevereError(
-                        state, std::format("Erroneous basement inputs for {}={}", ObjName_ug_GeneralDomain, state.dataIPShortCut->cAlphaArgs(1)));
+                        state,
+                        EnergyPlus::format("Erroneous basement inputs for {}={}", ObjName_ug_GeneralDomain, state.dataIPShortCut->cAlphaArgs(1)));
                     ShowContinueError(state, "Object specified to have a basement, while at least one basement input was left blank.");
                     ErrorsFound = true;
                 }
@@ -961,8 +964,8 @@ namespace PlantPipingSystemsManager {
                 } else if (thisDomain.HorizIns == HorizInsulation::Perimeter) {
                     // Horizontal insulation perimeter width
                     if (thisDomain.HorizInsWidth <= 0.0) {
-                        ShowSevereError(state, std::format("Invalid {}", s_ipsc->cNumericFieldNames(10)));
-                        ShowContinueError(state, std::format("Found in: {}", thisDomain.Name));
+                        ShowSevereError(state, EnergyPlus::format("Invalid {}", s_ipsc->cNumericFieldNames(10)));
+                        ShowContinueError(state, EnergyPlus::format("Found in: {}", thisDomain.Name));
                         ErrorsFound = true;
                     }
                 }
@@ -999,8 +1002,8 @@ namespace PlantPipingSystemsManager {
 
                 // vertical insulation depth
                 if (thisDomain.VertInsDepth > thisDomain.Extents.yMax || thisDomain.VertInsDepth <= 0.0) {
-                    ShowSevereError(state, std::format("Invalid {}", s_ipsc->cNumericFieldNames(11)));
-                    ShowContinueError(state, std::format("Found in: {}", thisDomain.Name));
+                    ShowSevereError(state, EnergyPlus::format("Invalid {}", s_ipsc->cNumericFieldNames(11)));
+                    ShowContinueError(state, EnergyPlus::format("Found in: {}", thisDomain.Name));
                     ErrorsFound = true;
                 }
             }
@@ -1070,7 +1073,7 @@ namespace PlantPipingSystemsManager {
             if (thisDomain.HorizIns == HorizInsulation::Perimeter && ThisArea > 0.0) {
                 if (2 * (thisDomain.HorizInsWidth + thisDomain.VertInsThickness) > thisDomain.SlabWidth ||
                     2 * (thisDomain.HorizInsWidth + thisDomain.VertInsThickness) > thisDomain.SlabLength) {
-                    ShowContinueError(state, std::format("{}: Perimeter insulation width is too large.", routineName));
+                    ShowContinueError(state, EnergyPlus::format("{}: Perimeter insulation width is too large.", routineName));
                     ShowContinueError(state, "This would cause overlapping insulation. Check inputs.");
                     ShowContinueError(state, "Defaulting to full horizontal insulation.");
                     ShowContinueError(state, std::format("Found in: {}", thisDomain.Name));
@@ -1675,9 +1678,9 @@ namespace PlantPipingSystemsManager {
                 ShowSevereError(state,
                                 std::format("{}: {}=\"{}\" has invalid pipe diameters.", routineName, ObjName_HorizTrench, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("Outer diameter [{:.3T}] must be greater than inner diameter [{:.3T}].",
-                                                     thisCircuit.PipeSize.OuterDia,
-                                                     thisCircuit.PipeSize.InnerDia));
+                                  std::format("Outer diameter [{:.3f}] must be greater than inner diameter [{:.3f}].",
+                                              thisCircuit.PipeSize.OuterDia,
+                                              thisCircuit.PipeSize.InnerDia));
                 ErrorsFound = true;
             }
 
@@ -2278,8 +2281,8 @@ namespace PlantPipingSystemsManager {
 
         ShowSevereError(
             state,
-            EnergyPlus::format(
-                R"({}:{}="{}", invalid {}="{:.3T}", Condition: {})", RoutineName, ObjectName, InstanceName, FieldName, FieldEntry, Condition));
+            std::format(
+                R"({}:{}="{}", invalid {}="{:.3f}", Condition: {})", RoutineName, ObjectName, InstanceName, FieldName, FieldEntry, Condition));
         ErrorsFound = true;
     }
 

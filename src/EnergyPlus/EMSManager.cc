@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -609,8 +610,8 @@ namespace EMSManager {
                     int VariableNum = RuntimeLanguageProcessor::FindEMSVariable(state, cAlphaArgs(1), 0);
 
                     if (VariableNum > 0) {
-                        ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(1), cAlphaArgs(1)));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(1), cAlphaArgs(1)));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, "Object name conflicts with a global variable name in EMS");
                         ErrorsFound = true;
                     } else {
@@ -629,8 +630,8 @@ namespace EMSManager {
                 int VarIndex = GetMeterIndex(state, cAlphaArgs(3));
                 if (VarIndex > -1) {
                     if (!lAlphaFieldBlanks(2)) {
-                        ShowWarningError(state, std::format("Unused{}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowWarningError(state, EnergyPlus::format("Unused{}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, "Meter Name found; Key Name will be ignored"); // why meters have no keys..
                     } else {
                         thisSensor.VariableType = OutputProcessor::VariableType::Meter;
@@ -741,8 +742,8 @@ namespace EMSManager {
                     int VariableNum = RuntimeLanguageProcessor::FindEMSVariable(state, cAlphaArgs(1), 0);
 
                     if (VariableNum > 0) {
-                        ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(1), cAlphaArgs(1)));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(1), cAlphaArgs(1)));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, "Object name conflicts with a global variable name in EMS");
                         ErrorsFound = true;
                     } else {
@@ -773,13 +774,13 @@ namespace EMSManager {
 
                     int nHandle = state.dataRuntimeLang->EMSActuatorAvailable(found->second).handleCount;
                     if (nHandle > 0) {
-                        EnergyPlus::ShowWarningError(state,
-                                                     std::format("Seems like you already tried to get a Handle on this Actuator {}times.", nHandle));
+                        EnergyPlus::ShowWarningError(
+                            state, EnergyPlus::format("Seems like you already tried to get a Handle on this Actuator {}times.", nHandle));
                         EnergyPlus::ShowContinueError(state,
-                                                      std::format("Occurred for componentType='{}', controlType='{}', uniqueKey='{}'.",
-                                                                  thisEMSactuator.ComponentTypeName,
-                                                                  thisEMSactuator.ControlTypeName,
-                                                                  thisEMSactuator.UniqueIDName));
+                                                      EnergyPlus::format("Occurred for componentType='{}', controlType='{}', uniqueKey='{}'.",
+                                                                         thisEMSactuator.ComponentTypeName,
+                                                                         thisEMSactuator.ControlTypeName,
+                                                                         thisEMSactuator.UniqueIDName));
                         EnergyPlus::ShowContinueError(state, "You should take note that there is a risk of overwriting.");
                     }
                     ++state.dataRuntimeLang->EMSActuatorAvailable(found->second).handleCount;
@@ -811,8 +812,8 @@ namespace EMSManager {
                     state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).Name = cAlphaArgs(1);
                     int VariableNum = RuntimeLanguageProcessor::FindEMSVariable(state, cAlphaArgs(1), 0);
                     if (VariableNum > 0) {
-                        ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(1), cAlphaArgs(1)));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(1), cAlphaArgs(1)));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, "Object name conflicts with a global variable name in EMS");
                         ErrorsFound = true;
                     } else {
@@ -879,8 +880,8 @@ namespace EMSManager {
                 for (int AlphaNum = 3; AlphaNum <= NumAlphas; ++AlphaNum) {
                     // find program name in Stack structure
                     if (lAlphaFieldBlanks(AlphaNum)) { // throw error
-                        ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum)));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum)));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, "Program names cannot be blank");
                         ErrorsFound = true;
                     }
@@ -891,8 +892,8 @@ namespace EMSManager {
                         // check for duplicate and warn.
                         for (int Loop = 1; Loop <= ManagerProgramNum; ++Loop) {
                             if (state.dataRuntimeLang->EMSProgramCallManager(CallManagerNum).ErlProgramARR(Loop) == StackNum) {
-                                ShowWarningError(state, std::format("Duplicate {}={}", cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum)));
-                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowWarningError(state, EnergyPlus::format("Duplicate {}={}", cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum)));
+                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(state, "Erl program appears more than once, and the simulation continues.");
                             }
                         }
@@ -902,8 +903,8 @@ namespace EMSManager {
                         state.dataRuntimeLang->EMSProgramCallManager(CallManagerNum).ErlProgramARR(ManagerProgramNum) = StackNum;
 
                     } else {
-                        ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum)));
-                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum)));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, "Program Name not found.");
                         ErrorsFound = true;
                     }
@@ -913,7 +914,7 @@ namespace EMSManager {
         } else { // no program calling manager in input
             if (state.dataRuntimeLang->NumErlPrograms > 0) {
                 cCurrentModuleObject = "EnergyManagementSystem:ProgramCallingManager";
-                ShowWarningError(state, std::format("Energy Management System is missing input object {}", cCurrentModuleObject));
+                ShowWarningError(state, EnergyPlus::format("Energy Management System is missing input object {}", cCurrentModuleObject));
                 ShowContinueError(state, "EnergyPlus Runtime Language programs need a calling manager to control when they get executed");
             }
         }
@@ -977,9 +978,9 @@ namespace EMSManager {
                                         VarIndex);
                 if (VarType == OutputProcessor::VariableType::Invalid) {
                     if (reportErrors) {
-                        ShowSevereError(
-                            state,
-                            std::format("Invalid Output:Variable or Output:Meter Name ={}", state.dataRuntimeLang->Sensor(SensorNum).OutputVarName));
+                        ShowSevereError(state,
+                                        EnergyPlus::format("Invalid Output:Variable or Output:Meter Name ={}",
+                                                           state.dataRuntimeLang->Sensor(SensorNum).OutputVarName));
                         ShowContinueError(state,
                                           std::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->Sensor(SensorNum).Name));
                         ShowContinueError(state, "Output:Variable Name not found");

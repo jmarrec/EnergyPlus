@@ -46,13 +46,15 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 
-// EnergyPlus Headers
+// Local Headers
 #include "AirflowNetwork/Solver.hpp"
 
+// EnergyPlus Headers
 #include <EnergyPlus/Autosizing/Base.hh>
 #include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/CurveManager.hh>
@@ -139,22 +141,23 @@ namespace VariableSpeedCoils {
         if (CompIndex == 0) {
             DXCoilNum = Util::FindItemInList(CompName, state.dataVariableSpeedCoils->VarSpeedCoil);
             if (DXCoilNum == 0) {
-                ShowFatalError(state, std::format("WaterToAirHPVSWEquationFit not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("WaterToAirHPVSWEquationFit not found={}", CompName));
             }
             CompIndex = DXCoilNum;
         } else {
             DXCoilNum = CompIndex;
             if (DXCoilNum > state.dataVariableSpeedCoils->NumVarSpeedCoils || DXCoilNum < 1) {
-                ShowFatalError(state,
-                               std::format("SimVariableSpeedCoils: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
-                                           DXCoilNum,
-                                           state.dataVariableSpeedCoils->NumVarSpeedCoils,
-                                           CompName));
+                ShowFatalError(
+                    state,
+                    EnergyPlus::format("SimVariableSpeedCoils: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
+                                       DXCoilNum,
+                                       state.dataVariableSpeedCoils->NumVarSpeedCoils,
+                                       CompName));
             }
             if (!CompName.empty() && CompName != state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).Name) {
                 ShowFatalError(
                     state,
-                    std::format(
+                    EnergyPlus::format(
                         "SimVariableSpeedCoils: Invalid CompIndex passed={}, WaterToAir HP name={}, stored WaterToAir HP Name for that index={}",
                         DXCoilNum,
                         CompName,
@@ -351,9 +354,8 @@ namespace VariableSpeedCoils {
 
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
-                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...{} must be >= 1. entered number is {:.0T}", cFieldName, varSpeedCoil.NumOfSpeeds));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                    ShowContinueError(state, EnergyPlus::format("...{} must be >= 1. entered number is {}", cFieldName, varSpeedCoil.NumOfSpeeds));
                     ErrorsFound = true;
                 }
 
@@ -362,10 +364,9 @@ namespace VariableSpeedCoils {
                 }
                 cFieldName = "Nominal Speed Level";
                 if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
-                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("...{} must be valid speed level entered number is {:.0T}", cFieldName, varSpeedCoil.NormSpedLevel));
+                        state, EnergyPlus::format("...{} must be valid speed level entered number is {}", cFieldName, varSpeedCoil.NormSpedLevel));
                     ErrorsFound = true;
                 }
 
@@ -381,32 +382,33 @@ namespace VariableSpeedCoils {
                 } else {
                     CurveVal = Curve::CurveValue(state, varSpeedCoil.PLFFPLR, 1.0);
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
-                        ShowWarningError(state, std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                        ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
+                        ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                     }
                 }
 
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
                     std::string fieldName;
-                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_total_cooling_capacity");
+                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_total_cooling_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_sensible_heat_ratio");
+                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_sensible_heat_ratio");
                     varSpeedCoil.MSRatedSHR(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_cooling_cop");
+                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_cooling_cop");
                     varSpeedCoil.MSRatedCOP(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_air_flow_rate");
+                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_air_flow_rate");
                     varSpeedCoil.MSRatedAirVolFlowRate(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_water_flow_rate");
+                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_water_flow_rate");
                     varSpeedCoil.MSRatedWaterVolFlowRate(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
                     fieldName =
-                        std::format("speed_{}{}", std::to_string(I), "_reference_unit_waste_heat_fraction_of_input_power_at_rated_conditions");
+                        EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_waste_heat_fraction_of_input_power_at_rated_conditions");
                     varSpeedCoil.MSWasteHeatFrac(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
 
                     std::string fieldValue =
-                        std::format("speed_{}{}", std::to_string(I), "_total_cooling_capacity_function_of_temperature_curve_name");
+                        EnergyPlus::format("speed_{}{}", std::to_string(I), "_total_cooling_capacity_function_of_temperature_curve_name");
                     std::string cFieldName_curve =
-                        std::format("Speed_{}{}", std::to_string(I), " Total Cooling Capacity Function of Temperature Curve Name");
+                        EnergyPlus::format("Speed_{}{}", std::to_string(I), " Total Cooling Capacity Function of Temperature Curve Name");
                     std::string const coolCapFTCurveName = s_ip->getAlphaFieldValue(fields, schemaProps, fieldValue);
                     if (coolCapFTCurveName.empty()) {
                         ShowWarningEmptyField(state, eoh, cFieldName_curve, "Required field is blank.");
@@ -431,7 +433,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -463,7 +465,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -495,7 +497,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -526,7 +528,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -557,7 +559,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -588,7 +590,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -620,7 +622,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -763,8 +765,7 @@ namespace VariableSpeedCoils {
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...{} must be >= 1. entered number is {:.0T}", cFieldName, varSpeedCoil.NumOfSpeeds));
+                    ShowContinueError(state, std::format("...{} must be >= 1. entered number is {}", cFieldName, varSpeedCoil.NumOfSpeeds));
                     ErrorsFound = true;
                 }
                 if (varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) {
@@ -773,9 +774,8 @@ namespace VariableSpeedCoils {
                 cFieldName = "Nominal Speed Level";
                 if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format("...{} must be valid speed level entered number is {:.0T}", cFieldName, varSpeedCoil.NormSpedLevel));
+                    ShowContinueError(state,
+                                      std::format("...{} must be valid speed level entered number is {}", cFieldName, varSpeedCoil.NormSpedLevel));
                     ErrorsFound = true;
                 }
 
@@ -793,7 +793,7 @@ namespace VariableSpeedCoils {
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
                         ShowWarningError(state, std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                        ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                     }
                 }
 
@@ -851,7 +851,7 @@ namespace VariableSpeedCoils {
                     if (varSpeedCoil.EvapCondPumpElecNomPower < 0.0) {
                         ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(state, std::format("...{} cannot be < 0.0.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...entered value=[{:.2T}].", varSpeedCoil.EvapCondPumpElecNomPower));
+                        ShowContinueError(state, std::format("...entered value=[{:.2f}].", varSpeedCoil.EvapCondPumpElecNomPower));
                         ErrorsFound = true;
                     }
                 }
@@ -862,7 +862,7 @@ namespace VariableSpeedCoils {
                 if (varSpeedCoil.CrankcaseHeaterCapacity < 0.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                     ShowContinueError(state, std::format("...{} cannot be < 0.0.", cFieldName));
-                    ShowContinueError(state, EnergyPlus::format("...entered value=[{:.2T}].", varSpeedCoil.CrankcaseHeaterCapacity));
+                    ShowContinueError(state, std::format("...entered value=[{:.2f}].", varSpeedCoil.CrankcaseHeaterCapacity));
                     ErrorsFound = true;
                 }
 
@@ -934,7 +934,7 @@ namespace VariableSpeedCoils {
                 if (varSpeedCoil.BasinHeaterPowerFTempDiff < 0.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                     ShowContinueError(state, std::format("...{} must be >= 0.0.", cFieldName));
-                    ShowContinueError(state, EnergyPlus::format("...entered value=[{:.2T}].", varSpeedCoil.BasinHeaterPowerFTempDiff));
+                    ShowContinueError(state, std::format("...entered value=[{:.2f}].", varSpeedCoil.BasinHeaterPowerFTempDiff));
                     ErrorsFound = true;
                 }
 
@@ -945,7 +945,7 @@ namespace VariableSpeedCoils {
                     if (varSpeedCoil.BasinHeaterSetPointTemp < 2.0) {
                         ShowWarningError(state, std::format("{}{}=\"{}\", freeze possible", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(state, std::format("...{} is < 2 {{C}}. Freezing could occur.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...entered value=[{:.2T}].", varSpeedCoil.BasinHeaterSetPointTemp));
+                        ShowContinueError(state, std::format("...entered value=[{:.2f}].", varSpeedCoil.BasinHeaterSetPointTemp));
                     }
                 }
 
@@ -982,7 +982,7 @@ namespace VariableSpeedCoils {
                             std::format("Speed_{}{}", std::to_string(I), " Reference Unit Rated Pad Effectiveness of Evap Precooling");
                         ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(state, std::format("...{} cannot be < 0.0 or > 1.0.", FieldName));
-                        ShowContinueError(state, EnergyPlus::format("...entered value=[{:.2T}].", varSpeedCoil.EvapCondEffect(I)));
+                        ShowContinueError(state, std::format("...entered value=[{:.2f}].", varSpeedCoil.EvapCondEffect(I)));
                         ErrorsFound = true;
                     }
 
@@ -1014,7 +1014,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1046,7 +1046,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1077,7 +1077,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1108,7 +1108,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(
                                     state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName_curve));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1263,8 +1263,7 @@ namespace VariableSpeedCoils {
                 //       If (VarSpeedCoil(DXCoilNum)%NumOfSpeeds .LT. 2) Then
                 if (varSpeedCoil.NumOfSpeeds < 1) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...{} must be >= 1. entered number is {:.0T}", cFieldName, varSpeedCoil.NumOfSpeeds));
+                    ShowContinueError(state, std::format("...{} must be >= 1. entered number is {}", cFieldName, varSpeedCoil.NumOfSpeeds));
                     ErrorsFound = true;
                 }
 
@@ -1274,9 +1273,8 @@ namespace VariableSpeedCoils {
                 cFieldName = "Nominal Speed Level";
                 if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format("...{} must be valid speed level entered number is {:.0T}", cFieldName, varSpeedCoil.NormSpedLevel));
+                    ShowContinueError(state,
+                                      std::format("...{} must be valid speed level entered number is {}", cFieldName, varSpeedCoil.NormSpedLevel));
                     ErrorsFound = true;
                 }
                 // part load curve
@@ -1293,7 +1291,7 @@ namespace VariableSpeedCoils {
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
                         ShowWarningError(state, std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                        ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                     }
                 }
 
@@ -1338,7 +1336,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1369,7 +1367,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1400,7 +1398,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1431,7 +1429,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1462,7 +1460,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1493,7 +1491,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1525,7 +1523,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1653,8 +1651,7 @@ namespace VariableSpeedCoils {
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...{} must be >= 1. entered number is {:.0T}", cFieldName, varSpeedCoil.NumOfSpeeds));
+                    ShowContinueError(state, std::format("...{} must be >= 1. entered number is {}", cFieldName, varSpeedCoil.NumOfSpeeds));
                     ErrorsFound = true;
                 }
 
@@ -1664,9 +1661,8 @@ namespace VariableSpeedCoils {
                 cFieldName = "Nominal Speed Level";
                 if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format("...{} must be valid speed level entered number is {:.0T}", cFieldName, varSpeedCoil.NormSpedLevel));
+                    ShowContinueError(state,
+                                      std::format("...{} must be valid speed level entered number is {}", cFieldName, varSpeedCoil.NormSpedLevel));
                     ErrorsFound = true;
                 }
 
@@ -1684,7 +1680,7 @@ namespace VariableSpeedCoils {
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
                         ShowWarningError(state, std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                        ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                     }
                 }
 
@@ -1771,7 +1767,7 @@ namespace VariableSpeedCoils {
                 if (varSpeedCoil.CrankcaseHeaterCapacity < 0.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                     ShowContinueError(state, std::format("...{} cannot be < 0.0.", cFieldName));
-                    ShowContinueError(state, EnergyPlus::format("...entered value=[{:.2T}].", varSpeedCoil.CrankcaseHeaterCapacity));
+                    ShowContinueError(state, std::format("...entered value=[{:.2f}].", varSpeedCoil.CrankcaseHeaterCapacity));
                     ErrorsFound = true;
                 }
                 // Set crankcase heater cutout temperature
@@ -1847,7 +1843,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1879,7 +1875,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1911,7 +1907,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -1943,7 +1939,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -2036,8 +2032,7 @@ namespace VariableSpeedCoils {
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...{} must be >= 1. entered number is {:.0T}", cFieldName, varSpeedCoil.NumOfSpeeds));
+                    ShowContinueError(state, std::format("...{} must be >= 1. entered number is {}", cFieldName, varSpeedCoil.NumOfSpeeds));
                     ErrorsFound = true;
                 }
                 if (varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) {
@@ -2046,16 +2041,15 @@ namespace VariableSpeedCoils {
                 cFieldName = "Nominal Speed Level";
                 if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format("...{} must be valid speed level entered number is {:.0T}", cFieldName, varSpeedCoil.NormSpedLevel));
+                    ShowContinueError(state,
+                                      std::format("...{} must be valid speed level entered number is {}", cFieldName, varSpeedCoil.NormSpedLevel));
                     ErrorsFound = true;
                 }
                 cFieldName = "Rated Water Heating Capacity";
                 varSpeedCoil.RatedCapWH = s_ip->getRealFieldValue(fields, schemaProps, "rated_water_heating_capacity"); // NumArray(3);
                 if (varSpeedCoil.RatedCapWH <= 0.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state, EnergyPlus::format("...{} must be > 0.0, entered value=[{:.2T}].", cFieldName, varSpeedCoil.RatedCapWH));
+                    ShowContinueError(state, std::format("...{} must be > 0.0, entered value=[{:.2f}].", cFieldName, varSpeedCoil.RatedCapWH));
                     ErrorsFound = true;
                 }
                 varSpeedCoil.WHRatedInletDBTemp =
@@ -2070,8 +2064,8 @@ namespace VariableSpeedCoils {
                 if (varSpeedCoil.RatedAirVolFlowRate != Constant::AutoCalculate) {
                     if (varSpeedCoil.RatedAirVolFlowRate <= 0.0) {
                         ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(
-                            state, EnergyPlus::format("...{} must be > 0.0.  entered value=[{:.3T}].", cFieldName, varSpeedCoil.RatedAirVolFlowRate));
+                        ShowContinueError(state,
+                                          std::format("...{} must be > 0.0.  entered value=[{:.3f}].", cFieldName, varSpeedCoil.RatedAirVolFlowRate));
                         ErrorsFound = true;
                     }
                 }
@@ -2082,8 +2076,7 @@ namespace VariableSpeedCoils {
                     if (varSpeedCoil.RatedWaterVolFlowRate <= 0.0) {
                         ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("...{} must be > 0.0  entered value=[{:.3T}].", cFieldName, varSpeedCoil.RatedWaterVolFlowRate));
+                            state, std::format("...{} must be > 0.0  entered value=[{:.3f}].", cFieldName, varSpeedCoil.RatedWaterVolFlowRate));
                         ErrorsFound = true;
                     }
                 }
@@ -2121,9 +2114,9 @@ namespace VariableSpeedCoils {
                     s_ip->getRealFieldValue(fields, schemaProps, "fraction_of_condenser_pump_heat_to_water"); // NumArray(9);
                 if (varSpeedCoil.HPWHCondPumpFracToWater <= 0.0 || varSpeedCoil.HPWHCondPumpFracToWater > 1.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state,
-                                      EnergyPlus::format(
-                                          "...{} must be >= 0 and <= 1.  entered value=[{:.3T}].", cFieldName, varSpeedCoil.HPWHCondPumpFracToWater));
+                    ShowContinueError(
+                        state,
+                        std::format("...{} must be >= 0 and <= 1.  entered value=[{:.3f}].", cFieldName, varSpeedCoil.HPWHCondPumpFracToWater));
                     ErrorsFound = true;
                 }
                 if (!varSpeedCoil.CondPumpHeatInCapacity) {
@@ -2188,8 +2181,8 @@ namespace VariableSpeedCoils {
                 varSpeedCoil.CrankcaseHeaterCapacity = s_ip->getRealFieldValue(fields, schemaProps, "crankcase_heater_capacity"); // NumArray(10);
                 if (varSpeedCoil.CrankcaseHeaterCapacity < 0.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(
-                        state, EnergyPlus::format("...{} must be >= 0.0  entered value=[{:.1T}].", cFieldName, varSpeedCoil.CrankcaseHeaterCapacity));
+                    ShowContinueError(state,
+                                      std::format("...{} must be >= 0.0  entered value=[{:.1f}].", cFieldName, varSpeedCoil.CrankcaseHeaterCapacity));
                     ErrorsFound = true;
                 }
 
@@ -2199,8 +2192,7 @@ namespace VariableSpeedCoils {
                 if (varSpeedCoil.MaxOATCrankcaseHeater < 0.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("...{} must be >= 0 {{C}}.  entered value=[{:.1T}].", cFieldName, varSpeedCoil.MaxOATCrankcaseHeater));
+                        state, std::format("...{} must be >= 0 {{C}}.  entered value=[{:.1f}].", cFieldName, varSpeedCoil.MaxOATCrankcaseHeater));
                     ErrorsFound = true;
                 }
 
@@ -2256,7 +2248,7 @@ namespace VariableSpeedCoils {
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
                         ShowWarningError(state, std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                         ShowContinueError(state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                        ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                     }
                 }
 
@@ -2301,7 +2293,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -2332,7 +2324,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -2363,7 +2355,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -2394,7 +2386,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -2425,7 +2417,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -2456,7 +2448,7 @@ namespace VariableSpeedCoils {
                                                  std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
                                 ShowContinueError(state,
                                                   std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                                ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                                ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                             }
                         }
                     }
@@ -4504,11 +4496,11 @@ namespace VariableSpeedCoils {
                                                   state.dataVariableSpeedCoils->VarSpeedCoil(varSpeedCoil.CompanionCoolingCoilNum).CoolHeatType,
                                                   state.dataVariableSpeedCoils->VarSpeedCoil(varSpeedCoil.CompanionCoolingCoilNum).Name));
                     ShowContinueError(state, "...heating capacity is disproportionate (> 20% different) to total cooling capacity");
-                    ShowContinueError(state, EnergyPlus::format("...heating capacity = {:.3T} W", varSpeedCoil.RatedCapHeat));
+                    ShowContinueError(state, std::format("...heating capacity = {:.3f} W", varSpeedCoil.RatedCapHeat));
                     ShowContinueError(
                         state,
-                        EnergyPlus::format("...cooling capacity = {:.3T} W",
-                                           state.dataVariableSpeedCoils->VarSpeedCoil(varSpeedCoil.CompanionCoolingCoilNum).RatedCapCoolTotal));
+                        std::format("...cooling capacity = {:.3f} W",
+                                    state.dataVariableSpeedCoils->VarSpeedCoil(varSpeedCoil.CompanionCoolingCoilNum).RatedCapCoolTotal));
                 }
             }
         }
@@ -5110,21 +5102,21 @@ namespace VariableSpeedCoils {
                     state, std::format("COIL:{}:WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT \"{}\"", varSpeedCoil.CoolHeatType, varSpeedCoil.Name));
                 ShowContinueError(state, std::format("{}: Rated Sensible Cooling Capacity > Rated Total Cooling Capacity", RoutineName));
                 ShowContinueError(state, "Each of these capacity inputs have been autosized.");
-                ShowContinueError(state, EnergyPlus::format("Rated Sensible Cooling Capacity = {:.2T} W", varSpeedCoil.RatedCapCoolSens));
-                ShowContinueError(state, EnergyPlus::format("Rated Total Cooling Capacity    = {:.2T} W", varSpeedCoil.RatedCapCoolTotal));
+                ShowContinueError(state, std::format("Rated Sensible Cooling Capacity = {:.2f} W", varSpeedCoil.RatedCapCoolSens));
+                ShowContinueError(state, std::format("Rated Total Cooling Capacity    = {:.2f} W", varSpeedCoil.RatedCapCoolTotal));
                 ShowContinueError(state, "See eio file for further details.");
                 ShowContinueError(state, "Check Total and Sensible Cooling Capacity Coefficients to ensure they are accurate.");
                 ShowContinueError(state, "Check Zone and System Sizing objects to verify sizing inputs.");
                 ShowContinueError(state, "Sizing statistics:");
-                ShowContinueError(state, EnergyPlus::format("Entering Air Dry-Bulb Temperature = {:.3T} C", MixTemp));
-                ShowContinueError(state, EnergyPlus::format("Entering Air Wet-Bulb Temperature = {:.3T} C", MixWetBulb));
+                ShowContinueError(state, std::format("Entering Air Dry-Bulb Temperature = {:.3f} C", MixTemp));
+                ShowContinueError(state, std::format("Entering Air Wet-Bulb Temperature = {:.3f} C", MixWetBulb));
                 ShowContinueError(state, "Entering Condenser Water Temperature used = 24.4444 C");
                 ShowContinueError(state, "Used design air and water flow rates (i.e., used 1 for ratioVL and ratioVS)");
-                ShowContinueError(state, EnergyPlus::format("ratioTDB = {:.3T}", ((MixTemp + 283.15) / 273.15)));
-                ShowContinueError(state, EnergyPlus::format("ratioTWB = {:.3T}", ((MixWetBulb + 283.15) / 273.15)));
-                ShowContinueError(state, EnergyPlus::format("ratioTS  = {:.3T}", ((85.0 + 283.15) / 273.15)));
+                ShowContinueError(state, std::format("ratioTDB = {:.3f}", ((MixTemp + 283.15) / 273.15)));
+                ShowContinueError(state, std::format("ratioTWB = {:.3f}", ((MixWetBulb + 283.15) / 273.15)));
+                ShowContinueError(state, std::format("ratioTS  = {:.3f}", ((85.0 + 283.15) / 273.15)));
                 ShowContinueError(state, "Rated Sensible Cooling Capacity = Rated Total Cooling Capacity * Sensible Heat Ratio");
-                ShowContinueError(state, EnergyPlus::format("Total Cooling Capacity Modifier = {:.5T}", TotCapTempModFac));
+                ShowContinueError(state, std::format("Total Cooling Capacity Modifier = {:.5f}", TotCapTempModFac));
                 ShowContinueError(state, "...Rated Total Cooling Capacity = Total Design Load / Total Cooling Capacity Modifier");
                 ShowContinueError(state, "Carefully review the Load Side Total, Sensible, and Latent heat transfer rates");
                 ShowContinueError(state, "... to ensure they meet the expected manufacturers performance specifications.");
@@ -5135,17 +5127,17 @@ namespace VariableSpeedCoils {
                     state, std::format("COIL:{}:WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT \"{}\"", varSpeedCoil.CoolHeatType, varSpeedCoil.Name));
                 ShowContinueError(state, std::format("{}: Rated Sensible Cooling Capacity > Rated Total Cooling Capacity", RoutineName));
                 ShowContinueError(state, "Only the rated total capacity input is autosized, consider autosizing both inputs.");
-                ShowContinueError(state, EnergyPlus::format("Rated Sensible Cooling Capacity = {:.2T} W", varSpeedCoil.RatedCapCoolSens));
-                ShowContinueError(state, EnergyPlus::format("Rated Total Cooling Capacity    = {:.2T} W", varSpeedCoil.RatedCapCoolTotal));
+                ShowContinueError(state, std::format("Rated Sensible Cooling Capacity = {:.2f} W", varSpeedCoil.RatedCapCoolSens));
+                ShowContinueError(state, std::format("Rated Total Cooling Capacity    = {:.2f} W", varSpeedCoil.RatedCapCoolTotal));
                 ShowContinueError(state, "See eio file for further details.");
                 ShowContinueError(state, "Check Total and Sensible Cooling Capacity Coefficients to ensure they are accurate.");
                 ShowContinueError(state, "Check Zone and System Sizing objects to verify sizing inputs.");
                 ShowContinueError(state, "Sizing statistics for Total Cooling Capacity:");
-                ShowContinueError(state, EnergyPlus::format("Entering Air Wet-Bulb Temperature = {:.3T} C", MixWetBulb));
+                ShowContinueError(state, std::format("Entering Air Wet-Bulb Temperature = {:.3f} C", MixWetBulb));
                 ShowContinueError(state, "Entering Condenser Water Temperature used = 24.4444 C");
                 ShowContinueError(state, "Used design air and water flow rates (i.e., used 1 for ratioVL and ratioVS)");
-                ShowContinueError(state, EnergyPlus::format("ratioTWB = {:.3T}", ((MixWetBulb + 283.15) / 273.15)));
-                ShowContinueError(state, EnergyPlus::format("ratioTS  = {:.3T}", ((85.0 + 283.15) / 273.15)));
+                ShowContinueError(state, std::format("ratioTWB = {:.3f}", ((MixWetBulb + 283.15) / 273.15)));
+                ShowContinueError(state, std::format("ratioTS  = {:.3f}", ((85.0 + 283.15) / 273.15)));
                 ShowContinueError(state, "Rated Sensible Cooling Capacity = Rated Total Cooling Capacity * Sensible Heat Ratio");
                 ShowContinueError(state, "Carefully review the Load Side Total, Sensible, and Latent heat transfer rates");
                 ShowContinueError(state, "... to ensure they meet the expected manufacturers performance specifications.");

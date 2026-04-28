@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
@@ -103,8 +104,9 @@ namespace UserDefinedComponents {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(state,
-                       std::format("LocalUserDefinedPlantComponentFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(
+            state,
+            EnergyPlus::format("LocalUserDefinedPlantComponentFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -260,20 +262,21 @@ namespace UserDefinedComponents {
         } else {
             CompNum = CompIndex;
             if (CompNum < 1 || CompNum > state.dataUserDefinedComponents->NumUserCoils) {
-                ShowFatalError(state,
-                               std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
-                                           CompNum,
-                                           state.dataUserDefinedComponents->NumUserCoils,
-                                           EquipName));
+                ShowFatalError(
+                    state,
+                    EnergyPlus::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
+                                       CompNum,
+                                       state.dataUserDefinedComponents->NumUserCoils,
+                                       EquipName));
             }
             if (state.dataUserDefinedComponents->CheckUserCoilName(CompNum)) {
                 if (EquipName != state.dataUserDefinedComponents->UserCoil(CompNum).Name) {
-                    ShowFatalError(
-                        state,
-                        std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
-                                    CompNum,
-                                    EquipName,
-                                    state.dataUserDefinedComponents->UserCoil(CompNum).Name));
+                    ShowFatalError(state,
+                                   EnergyPlus::format(
+                                       "SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
+                                       CompNum,
+                                       EquipName,
+                                       state.dataUserDefinedComponents->UserCoil(CompNum).Name));
                 }
                 state.dataUserDefinedComponents->CheckUserCoilName(CompNum) = false;
             }
@@ -371,20 +374,21 @@ namespace UserDefinedComponents {
         } else {
             CompNum = CompIndex;
             if (CompNum < 1 || CompNum > state.dataUserDefinedComponents->NumUserZoneAir) {
-                ShowFatalError(state,
-                               std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
-                                           CompNum,
-                                           state.dataUserDefinedComponents->NumUserZoneAir,
-                                           CompName));
+                ShowFatalError(
+                    state,
+                    EnergyPlus::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
+                                       CompNum,
+                                       state.dataUserDefinedComponents->NumUserZoneAir,
+                                       CompName));
             }
             if (state.dataUserDefinedComponents->CheckUserZoneAirName(CompNum)) {
                 if (CompName != state.dataUserDefinedComponents->UserZoneAirHVAC(CompNum).Name) {
-                    ShowFatalError(
-                        state,
-                        std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
-                                    CompNum,
-                                    CompName,
-                                    state.dataUserDefinedComponents->UserZoneAirHVAC(CompNum).Name));
+                    ShowFatalError(state,
+                                   EnergyPlus::format(
+                                       "SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
+                                       CompNum,
+                                       CompName,
+                                       state.dataUserDefinedComponents->UserZoneAirHVAC(CompNum).Name));
                 }
                 state.dataUserDefinedComponents->CheckUserZoneAirName(CompNum) = false;
             }
@@ -494,20 +498,21 @@ namespace UserDefinedComponents {
         } else {
             CompNum = CompIndex;
             if (CompNum < 1 || CompNum > state.dataUserDefinedComponents->NumUserAirTerminals) {
-                ShowFatalError(state,
-                               std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
-                                           CompNum,
-                                           state.dataUserDefinedComponents->NumUserAirTerminals,
-                                           CompName));
+                ShowFatalError(
+                    state,
+                    EnergyPlus::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
+                                       CompNum,
+                                       state.dataUserDefinedComponents->NumUserAirTerminals,
+                                       CompName));
             }
             if (state.dataUserDefinedComponents->CheckUserAirTerminal(CompNum)) {
                 if (CompName != state.dataUserDefinedComponents->UserAirTerminal(CompNum).Name) {
-                    ShowFatalError(
-                        state,
-                        std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
-                                    CompNum,
-                                    CompName,
-                                    state.dataUserDefinedComponents->UserAirTerminal(CompNum).Name));
+                    ShowFatalError(state,
+                                   EnergyPlus::format(
+                                       "SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
+                                       CompNum,
+                                       CompName,
+                                       state.dataUserDefinedComponents->UserAirTerminal(CompNum).Name));
                 }
                 state.dataUserDefinedComponents->CheckUserAirTerminal(CompNum) = false;
             }
@@ -621,8 +626,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserPlantComp(CompLoop).simCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(2));
                             if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).simCallbackIndex == -1) {
-                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
-                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
+                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback or a Python Plugin Instance object.");
@@ -709,9 +714,9 @@ namespace UserDefinedComponents {
                                     state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initCallbackIndex =
                                         state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(aArgCount + 4));
                                     if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initCallbackIndex == -1) {
-                                        ShowSevereError(state,
-                                                        std::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
-                                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                        ShowSevereError(
+                                            state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
+                                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                         ShowContinueError(state,
                                                           "Program Manager Name not found as an EMS Program Manager, API callback, or a Python "
                                                           "Plugin Instance object.");
@@ -733,9 +738,9 @@ namespace UserDefinedComponents {
                                     state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simCallbackIndex =
                                         state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(aArgCount + 5));
                                     if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simCallbackIndex == -1) {
-                                        ShowSevereError(state,
-                                                        std::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
-                                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                        ShowSevereError(
+                                            state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
+                                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                         ShowContinueError(state, "Program Manager Name not found as EMS Program, API callback, or Python Plugin.");
                                         ErrorsFound = true;
                                     }
@@ -950,7 +955,8 @@ namespace UserDefinedComponents {
                         Util::FindItemInList(cAlphaArgs(31), state.dataHeatBal->Zone);
                     if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Zone.ZoneNum == 0) {
                         ShowSevereError(
-                            state, std::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(31)));
+                            state,
+                            EnergyPlus::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(31)));
                         ErrorsFound = true;
                     } else {
                         state.dataUserDefinedComponents->UserPlantComp(CompLoop).Zone.DeviceHasInternalGains = true;
@@ -1044,7 +1050,7 @@ namespace UserDefinedComponents {
                     }
                 }
                 if (MgrCountTest == 0) {
-                    ShowSevereError(state, std::format("Invalid {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, "At least one program calling manager is needed.");
                     ErrorsFound = true;
                 }
@@ -1052,7 +1058,7 @@ namespace UserDefinedComponents {
         } // NumUserPlantComps > 0
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
         }
 
         cCurrentModuleObject = "Coil:UserDefined";
@@ -1099,8 +1105,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserCoil(CompLoop).simCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(2));
                             if (state.dataUserDefinedComponents->UserCoil(CompLoop).simCallbackIndex == -1) {
-                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
-                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
+                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback, or a Python Plugin Instance object.");

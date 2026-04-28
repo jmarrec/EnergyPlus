@@ -49,6 +49,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -1948,33 +1949,31 @@ namespace SurfaceGeometry {
 
                                         if (MultFound == 1 && MultSurfNum == 1) {
                                             ShowContinueError(state,
-                                                              EnergyPlus::format("  Area={:.1T} in Surface={}, Zone={}",
-                                                                                 state.dataSurface->Surface(SurfNum).Area,
-                                                                                 state.dataSurface->Surface(SurfNum).Name,
-                                                                                 state.dataSurface->Surface(SurfNum).ZoneName));
+                                                              std::format("  Area={:.1f} in Surface={}, Zone={}",
+                                                                          state.dataSurface->Surface(SurfNum).Area,
+                                                                          state.dataSurface->Surface(SurfNum).Name,
+                                                                          state.dataSurface->Surface(SurfNum).ZoneName));
                                             ShowContinueError(state,
-                                                              EnergyPlus::format("  Area={:.1T} in Surface={}, Zone={}",
-                                                                                 state.dataSurface->Surface(Found).Area,
-                                                                                 state.dataSurface->Surface(Found).Name,
-                                                                                 state.dataSurface->Surface(Found).ZoneName));
+                                                              std::format("  Area={:.1f} in Surface={}, Zone={}",
+                                                                          state.dataSurface->Surface(Found).Area,
+                                                                          state.dataSurface->Surface(Found).Name,
+                                                                          state.dataSurface->Surface(Found).ZoneName));
                                         } else { // Show multiplier info
-                                            ShowContinueError(
-                                                state,
-                                                EnergyPlus::format("  Area={:.1T}, Multipliers={}, Total Area={:.1T} in Surface={} Zone={}",
-                                                                   state.dataSurface->Surface(SurfNum).Area,
-                                                                   MultSurfNum,
-                                                                   state.dataSurface->Surface(SurfNum).Area * MultSurfNum,
-                                                                   state.dataSurface->Surface(SurfNum).Name,
-                                                                   state.dataSurface->Surface(SurfNum).ZoneName));
+                                            ShowContinueError(state,
+                                                              std::format("  Area={:.1f}, Multipliers={}, Total Area={:.1f} in Surface={} Zone={}",
+                                                                          state.dataSurface->Surface(SurfNum).Area,
+                                                                          MultSurfNum,
+                                                                          state.dataSurface->Surface(SurfNum).Area * MultSurfNum,
+                                                                          state.dataSurface->Surface(SurfNum).Name,
+                                                                          state.dataSurface->Surface(SurfNum).ZoneName));
 
-                                            ShowContinueError(
-                                                state,
-                                                EnergyPlus::format("  Area={:.1T}, Multipliers={}, Total Area={:.1T} in Surface={} Zone={}",
-                                                                   state.dataSurface->Surface(Found).Area,
-                                                                   MultFound,
-                                                                   state.dataSurface->Surface(Found).Area * MultFound,
-                                                                   state.dataSurface->Surface(Found).Name,
-                                                                   state.dataSurface->Surface(Found).ZoneName));
+                                            ShowContinueError(state,
+                                                              std::format("  Area={:.1f}, Multipliers={}, Total Area={:.1f} in Surface={} Zone={}",
+                                                                          state.dataSurface->Surface(Found).Area,
+                                                                          MultFound,
+                                                                          state.dataSurface->Surface(Found).Area * MultFound,
+                                                                          state.dataSurface->Surface(Found).Name,
+                                                                          state.dataSurface->Surface(Found).ZoneName));
                                         }
                                     }
                                 }
@@ -1984,15 +1983,15 @@ namespace SurfaceGeometry {
                             if (std::abs(std::abs(state.dataSurface->Surface(Found).Tilt + state.dataSurface->Surface(SurfNum).Tilt) - 180.0) > 1.0) {
                                 ShowWarningError(state, std::format("{}InterZone Surface Tilts do not match as expected.", RoutineName));
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("  Tilt={:.1T} in Surface={}, Zone={}",
-                                                                     state.dataSurface->Surface(SurfNum).Tilt,
-                                                                     state.dataSurface->Surface(SurfNum).Name,
-                                                                     state.dataSurface->Surface(SurfNum).ZoneName));
+                                                  std::format("  Tilt={:.1f} in Surface={}, Zone={}",
+                                                              state.dataSurface->Surface(SurfNum).Tilt,
+                                                              state.dataSurface->Surface(SurfNum).Name,
+                                                              state.dataSurface->Surface(SurfNum).ZoneName));
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("  Tilt={:.1T} in Surface={}, Zone={}",
-                                                                     state.dataSurface->Surface(Found).Tilt,
-                                                                     state.dataSurface->Surface(Found).Name,
-                                                                     state.dataSurface->Surface(Found).ZoneName));
+                                                  std::format("  Tilt={:.1f} in Surface={}, Zone={}",
+                                                              state.dataSurface->Surface(Found).Tilt,
+                                                              state.dataSurface->Surface(Found).Name,
+                                                              state.dataSurface->Surface(Found).ZoneName));
                             }
                             // check surface class match.  interzone surface.
 
@@ -2045,17 +2044,17 @@ namespace SurfaceGeometry {
                                         // if horizontal surfaces, then these are windows/doors/etc in those items.
                                         ShowWarningError(state, std::format("{}InterZone Surface Azimuths do not match as expected.", RoutineName));
                                         ShowContinueError(state,
-                                                          EnergyPlus::format("  Azimuth={:.1T}, Tilt={:.1T}, in Surface={}, Zone={}",
-                                                                             state.dataSurface->Surface(SurfNum).Azimuth,
-                                                                             state.dataSurface->Surface(SurfNum).Tilt,
-                                                                             state.dataSurface->Surface(SurfNum).Name,
-                                                                             state.dataSurface->Surface(SurfNum).ZoneName));
+                                                          std::format("  Azimuth={:.1f}, Tilt={:.1f}, in Surface={}, Zone={}",
+                                                                      state.dataSurface->Surface(SurfNum).Azimuth,
+                                                                      state.dataSurface->Surface(SurfNum).Tilt,
+                                                                      state.dataSurface->Surface(SurfNum).Name,
+                                                                      state.dataSurface->Surface(SurfNum).ZoneName));
                                         ShowContinueError(state,
-                                                          EnergyPlus::format("  Azimuth={:.1T}, Tilt={:.1T}, in Surface={}, Zone={}",
-                                                                             state.dataSurface->Surface(Found).Azimuth,
-                                                                             state.dataSurface->Surface(Found).Tilt,
-                                                                             state.dataSurface->Surface(Found).Name,
-                                                                             state.dataSurface->Surface(Found).ZoneName));
+                                                          std::format("  Azimuth={:.1f}, Tilt={:.1f}, in Surface={}, Zone={}",
+                                                                      state.dataSurface->Surface(Found).Azimuth,
+                                                                      state.dataSurface->Surface(Found).Tilt,
+                                                                      state.dataSurface->Surface(Found).Name,
+                                                                      state.dataSurface->Surface(Found).ZoneName));
                                         ShowContinueError(state,
                                                           std::format("..surface class of first surface={}",
                                                                       cSurfaceClass(state.dataSurface->Surface(SurfNum).Class)));
@@ -3671,8 +3670,8 @@ namespace SurfaceGeometry {
                 if (surfTemp.Area <= 0.0) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
-                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
+                        std::format(
+                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
                     ErrorsFound = true;
                 }
 
@@ -4314,8 +4313,8 @@ namespace SurfaceGeometry {
                 if (surfTemp.Area <= 0.0) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
-                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
+                        std::format(
+                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
                     ErrorsFound = true;
                 }
 
@@ -4339,8 +4338,8 @@ namespace SurfaceGeometry {
                         if (std::abs(surfTemp.Height - state.dataConstruction->Construct(surfTemp.Construction).Height) > 0.05) {
                             ShowWarningError(
                                 state,
-                                EnergyPlus::format(
-                                    "{}=\"{}\", underground Wall Height = {:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Height));
+                                std::format(
+                                    "{}=\"{}\", underground Wall Height = {:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Height));
                             ShowContinueError(state, "..which does not match its construction height.");
                         }
                     }
@@ -4350,16 +4349,16 @@ namespace SurfaceGeometry {
                         if (std::abs(surfTemp.Area - state.dataConstruction->Construct(surfTemp.Construction).Area) > 0.1) {
                             ShowWarningError(
                                 state,
-                                EnergyPlus::format(
-                                    "{}=\"{}\", underground Floor Area = {:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
+                                std::format(
+                                    "{}=\"{}\", underground Floor Area = {:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
                             ShowContinueError(state, "..which does not match its construction area.");
                         }
                         if (surfTemp.Perimeter < state.dataConstruction->Construct(surfTemp.Construction).PerimeterExposed - 0.1) {
                             ShowWarningError(state,
-                                             EnergyPlus::format("{}=\"{}\", underground Floor Perimeter = {:.2T}",
-                                                                s_ipsc->cCurrentModuleObject,
-                                                                surfTemp.Name,
-                                                                surfTemp.Perimeter));
+                                             std::format("{}=\"{}\", underground Floor Perimeter = {:.2f}",
+                                                         s_ipsc->cCurrentModuleObject,
+                                                         surfTemp.Name,
+                                                         surfTemp.Perimeter));
                             ShowContinueError(state, "..which is less than its construction exposed perimeter.");
                         }
                     }
@@ -4726,8 +4725,8 @@ namespace SurfaceGeometry {
                 if (surfTemp.Area <= 0.0) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
-                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
+                        std::format(
+                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
                     ErrorsFound = true;
                 }
 
@@ -4736,8 +4735,7 @@ namespace SurfaceGeometry {
                     if (std::abs(surfTemp.Height - state.dataConstruction->Construct(surfTemp.Construction).Height) > 0.05) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
-                                "{}=\"{}\", underground Wall Height = {:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Height));
+                            std::format("{}=\"{}\", underground Wall Height = {:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Height));
                         ShowContinueError(state, "..which deos not match its construction height.");
                     }
                 }
@@ -4747,15 +4745,14 @@ namespace SurfaceGeometry {
                     if (std::abs(surfTemp.Area - state.dataConstruction->Construct(surfTemp.Construction).Area) > 0.1) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
-                                "{}=\"{}\", underground Floor Area = {:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
+                            std::format("{}=\"{}\", underground Floor Area = {:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
                         ShowContinueError(state, "..which does not match its construction area.");
                     }
                     if (surfTemp.Perimeter < state.dataConstruction->Construct(surfTemp.Construction).PerimeterExposed - 0.1) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
-                                "{}=\"{}\", underground Floor Perimeter = {:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Perimeter));
+                            std::format(
+                                "{}=\"{}\", underground Floor Perimeter = {:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Perimeter));
                         ShowContinueError(state, "..which is less than its construction exposed perimeter.");
                     }
                 }
@@ -5285,11 +5282,11 @@ namespace SurfaceGeometry {
             if ((surfTemp.Class != SurfaceClass::Window && surfTemp.Class != SurfaceClass::GlassDoor && surfTemp.Class != SurfaceClass::Door) &&
                 s_ipsc->rNumericArgs(2) > 1.0) {
                 ShowWarningError(state,
-                                 EnergyPlus::format("{}=\"{}\", invalid {}=[{:.1T}].",
-                                                    s_ipsc->cCurrentModuleObject,
-                                                    surfTemp.Name,
-                                                    s_ipsc->cNumericFieldNames(2),
-                                                    s_ipsc->rNumericArgs(2)));
+                                 std::format("{}=\"{}\", invalid {}=[{:.1f}].",
+                                             s_ipsc->cCurrentModuleObject,
+                                             surfTemp.Name,
+                                             s_ipsc->cNumericFieldNames(2),
+                                             s_ipsc->rNumericArgs(2)));
                 ShowContinueError(state,
                                   std::format("...because {}={} multiplier will be set to 1.0.", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaArgs(2)));
                 surfTemp.Multiplier = 1.0;
@@ -5645,11 +5642,11 @@ namespace SurfaceGeometry {
                     surfTemp.Multiplier = int(s_ipsc->rNumericArgs(1));
                 } else if (s_ipsc->rNumericArgs(1) > 1.0) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("{}=\"{}\", invalid {}=[{:.1T}].",
-                                                        s_ipsc->cCurrentModuleObject,
-                                                        surfTemp.Name,
-                                                        s_ipsc->cNumericFieldNames(1),
-                                                        s_ipsc->rNumericArgs(1)));
+                                     std::format("{}=\"{}\", invalid {}=[{:.1f}].",
+                                                 s_ipsc->cCurrentModuleObject,
+                                                 surfTemp.Name,
+                                                 s_ipsc->cNumericFieldNames(1),
+                                                 s_ipsc->rNumericArgs(1)));
                     ShowContinueError(
                         state, std::format("...because {}={} multiplier will be set to 1.0.", s_ipsc->cAlphaFieldNames(1), s_ipsc->cAlphaArgs(1)));
                     surfTemp.Multiplier = 1.0;
@@ -5666,8 +5663,8 @@ namespace SurfaceGeometry {
                 if (surfTemp.Area <= 0.0) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
-                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2T}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
+                        std::format(
+                            "{}=\"{}\", Surface Area <= 0.0; Entered Area={:.2f}", s_ipsc->cCurrentModuleObject, surfTemp.Name, surfTemp.Area));
                     ErrorsFound = true;
                 }
 
@@ -7646,9 +7643,9 @@ namespace SurfaceGeometry {
                                 std::format("{}=\"{}\", invalid .", s_ipsc->cCurrentModuleObject, state.dataHeatBal->ExtVentedCavity(Item).Name));
                 ErrorsFound = true;
                 ShowContinueError(state,
-                                  EnergyPlus::format("...because field \"{}\" must be greater than Zero=[{:.2T}].",
-                                                     s_ipsc->cNumericFieldNames(5),
-                                                     s_ipsc->rNumericArgs(5)));
+                                  std::format("...because field \"{}\" must be greater than Zero=[{:.2f}].",
+                                              s_ipsc->cNumericFieldNames(5),
+                                              s_ipsc->rNumericArgs(5)));
                 continue;
             }
             state.dataHeatBal->ExtVentedCavity(Item).AreaRatio = s_ipsc->rNumericArgs(6);
@@ -7665,8 +7662,8 @@ namespace SurfaceGeometry {
                                 std::format("{}=\"{}\", invalid .", s_ipsc->cCurrentModuleObject, state.dataHeatBal->ExtVentedCavity(Item).Name));
                 ErrorsFound = true;
                 ShowContinueError(state,
-                                  EnergyPlus::format("...because gross area of underlying surfaces must be greater than Zero=[{:.2T}].",
-                                                     state.dataHeatBal->ExtVentedCavity(Item).ProjArea));
+                                  std::format("...because gross area of underlying surfaces must be greater than Zero=[{:.2f}].",
+                                              state.dataHeatBal->ExtVentedCavity(Item).ProjArea));
                 continue;
             }
             state.dataHeatBal->ExtVentedCavity(Item).ActualArea =
@@ -12859,18 +12856,18 @@ namespace SurfaceGeometry {
             if (!IsCoPlanar) {
                 if (OutOfLine > 0.01) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{}Suspected non-planar surface:\"{}\", Max \"out of line\"={:.5T} at Vertex # {}",
-                                                       RoutineName,
-                                                       surf.Name,
-                                                       OutOfLine,
-                                                       LastVertexInError));
+                                    std::format("{}Suspected non-planar surface:\"{}\", Max \"out of line\"={:.5f} at Vertex # {}",
+                                                RoutineName,
+                                                surf.Name,
+                                                OutOfLine,
+                                                LastVertexInError));
                 } else {
                     ShowWarningError(state,
-                                     EnergyPlus::format("{}Possible non-planar surface:\"{}\", Max \"out of line\"={:.5T} at Vertex # {}",
-                                                        RoutineName,
-                                                        surf.Name,
-                                                        OutOfLine,
-                                                        LastVertexInError));
+                                     std::format("{}Possible non-planar surface:\"{}\", Max \"out of line\"={:.5f} at Vertex # {}",
+                                                 RoutineName,
+                                                 surf.Name,
+                                                 OutOfLine,
+                                                 LastVertexInError));
                 }
                 //       ErrorInSurface=.TRUE.
             }
@@ -13034,9 +13031,9 @@ namespace SurfaceGeometry {
                             ShowContinueError(state,
                                               std::format("Window Surface=\"{}\" area (with frame) is too large to fit on the surface.", surf.Name));
                             ShowContinueError(state,
-                                              EnergyPlus::format("Base surface area (-windows and doors)=[{:.2T}] m2, frame area=[{:.2T}] m2.",
-                                                                 state.dataSurface->Surface(surf.BaseSurf).Area,
-                                                                 state.dataSurface->SurfWinFrameArea(ThisSurf)));
+                                              std::format("Base surface area (-windows and doors)=[{:.2f}] m2, frame area=[{:.2f}] m2.",
+                                                          state.dataSurface->Surface(surf.BaseSurf).Area,
+                                                          state.dataSurface->SurfWinFrameArea(ThisSurf)));
                             ErrorInSurface = true;
                         }
                         state.dataSurface->Surface(surf.BaseSurf).Area -= state.dataSurface->SurfWinFrameArea(ThisSurf);
@@ -13052,9 +13049,9 @@ namespace SurfaceGeometry {
                         if ((surf.Area - state.dataSurface->SurfWinDividerArea(ThisSurf)) <= 0.0) {
                             ShowSevereError(state, std::format("{}Divider area exceeds glazed opening for window {}", RoutineName, surf.Name));
                             ShowContinueError(state,
-                                              EnergyPlus::format("Window surface area=[{:.2T}] m2, divider area=[{:.2T}] m2.",
-                                                                 surf.Area,
-                                                                 state.dataSurface->SurfWinDividerArea(ThisSurf)));
+                                              std::format("Window surface area=[{:.2f}] m2, divider area=[{:.2f}] m2.",
+                                                          surf.Area,
+                                                          state.dataSurface->SurfWinDividerArea(ThisSurf)));
                             ErrorInSurface = true;
                         }
                         surf.Area -= state.dataSurface->SurfWinDividerArea(ThisSurf); // Glazed area

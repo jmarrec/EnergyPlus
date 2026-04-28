@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -153,26 +154,28 @@ namespace TranspiredCollector {
         if (CompIndex == 0) {
             UTSCNum = Util::FindItemInList(CompName, state.dataTranspiredCollector->UTSC);
             if (UTSCNum == 0) {
-                ShowFatalError(state, std::format("Transpired Collector not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("Transpired Collector not found={}", CompName));
             }
             CompIndex = UTSCNum;
         } else {
             UTSCNum = CompIndex;
             if (UTSCNum > state.dataTranspiredCollector->NumUTSC || UTSCNum < 1) {
-                ShowFatalError(state,
-                               std::format("SimTranspiredCollector: Invalid CompIndex passed={}, Number of Transpired Collectors={}, UTSC name={}",
-                                           UTSCNum,
-                                           state.dataTranspiredCollector->NumUTSC,
-                                           CompName));
+                ShowFatalError(
+                    state,
+                    EnergyPlus::format("SimTranspiredCollector: Invalid CompIndex passed={}, Number of Transpired Collectors={}, UTSC name={}",
+                                       UTSCNum,
+                                       state.dataTranspiredCollector->NumUTSC,
+                                       CompName));
             }
             if (state.dataTranspiredCollector->CheckEquipName(UTSCNum)) {
                 if (CompName != state.dataTranspiredCollector->UTSC(UTSCNum).Name) {
-                    ShowFatalError(state,
-                                   std::format("SimTranspiredCollector: Invalid CompIndex passed={}, Transpired Collector name={}, stored Transpired "
-                                               "Collector Name for that index={}",
-                                               UTSCNum,
-                                               CompName,
-                                               state.dataTranspiredCollector->UTSC(UTSCNum).Name));
+                    ShowFatalError(
+                        state,
+                        EnergyPlus::format("SimTranspiredCollector: Invalid CompIndex passed={}, Transpired Collector name={}, stored Transpired "
+                                           "Collector Name for that index={}",
+                                           UTSCNum,
+                                           CompName,
+                                           state.dataTranspiredCollector->UTSC(UTSCNum).Name));
                 }
                 state.dataTranspiredCollector->CheckEquipName(UTSCNum) = false;
             }
@@ -283,10 +286,11 @@ namespace TranspiredCollector {
         state.dataInputProcessing->inputProcessor->getObjectDefMaxArgs(state, CurrentModuleObject, Dummy, MaxNumAlphas, MaxNumNumbers);
 
         if (MaxNumNumbers != 11) {
-            ShowSevereError(state,
-                            std::format("GetTranspiredCollectorInput: {} Object Definition indicates not = 11 Number Objects, Number Indicated={}",
-                                        CurrentModuleObject,
-                                        MaxNumNumbers));
+            ShowSevereError(
+                state,
+                EnergyPlus::format("GetTranspiredCollectorInput: {} Object Definition indicates not = 11 Number Objects, Number Indicated={}",
+                                   CurrentModuleObject,
+                                   MaxNumNumbers));
             ErrorsFound = true;
         }
         Alphas.allocate(MaxNumAlphas);
@@ -328,9 +332,9 @@ namespace TranspiredCollector {
                 if (MaxNumNumbersSplit != 0) {
                     ShowSevereError(
                         state,
-                        std::format("GetTranspiredCollectorInput: {} Object Definition indicates not = 0 Number Objects, Number Indicated={}",
-                                    CurrentModuleMultiObject,
-                                    MaxNumNumbersSplit));
+                        EnergyPlus::format("GetTranspiredCollectorInput: {} Object Definition indicates not = 0 Number Objects, Number Indicated={}",
+                                           CurrentModuleMultiObject,
+                                           MaxNumNumbersSplit));
                     ErrorsFound = true;
                 }
                 if (!allocated(AlphasSplit)) {
@@ -349,9 +353,9 @@ namespace TranspiredCollector {
                     if (mod((NumAlphasSplit), 4) != 1) {
                         ShowSevereError(
                             state,
-                            std::format("GetTranspiredCollectorInput: {} Object Definition indicates not uniform quadtuples of nodes for {}",
-                                        CurrentModuleMultiObject,
-                                        AlphasSplit(1)));
+                            EnergyPlus::format("GetTranspiredCollectorInput: {} Object Definition indicates not uniform quadtuples of nodes for {}",
+                                               CurrentModuleMultiObject,
+                                               AlphasSplit(1)));
                         ErrorsFound = true;
                     }
                     state.dataTranspiredCollector->UTSC(Item).InletNode.allocate(state.dataTranspiredCollector->UTSC(Item).NumOASysAttached);
@@ -422,11 +426,11 @@ namespace TranspiredCollector {
             Found = Util::FindItemInList(state.dataTranspiredCollector->UTSC(Item).OSCMName, state.dataSurface->OSCM);
             if (Found == 0) {
                 ShowSevereError(state,
-                                std::format("{} not found={} in {} ={}",
-                                            state.dataIPShortCut->cAlphaFieldNames(2),
-                                            state.dataTranspiredCollector->UTSC(Item).OSCMName,
-                                            CurrentModuleObject,
-                                            state.dataTranspiredCollector->UTSC(Item).Name));
+                                EnergyPlus::format("{} not found={} in {} ={}",
+                                                   state.dataIPShortCut->cAlphaFieldNames(2),
+                                                   state.dataTranspiredCollector->UTSC(Item).OSCMName,
+                                                   CurrentModuleObject,
+                                                   state.dataTranspiredCollector->UTSC(Item).Name));
                 ErrorsFound = true;
             }
             state.dataTranspiredCollector->UTSC(Item).OSCMPtr = Found;
@@ -509,11 +513,11 @@ namespace TranspiredCollector {
                 state.dataTranspiredCollector->UTSC(Item).Layout = Layout_Square;
             } else {
                 ShowSevereError(state,
-                                std::format("{} has incorrect entry of {} in {} ={}",
-                                            state.dataIPShortCut->cAlphaFieldNames(9),
-                                            Alphas(9),
-                                            CurrentModuleObject,
-                                            state.dataTranspiredCollector->UTSC(Item).Name));
+                                EnergyPlus::format("{} has incorrect entry of {} in {} ={}",
+                                                   state.dataIPShortCut->cAlphaFieldNames(9),
+                                                   Alphas(9),
+                                                   CurrentModuleObject,
+                                                   state.dataTranspiredCollector->UTSC(Item).Name));
                 ErrorsFound = true;
                 continue;
             }
@@ -524,11 +528,11 @@ namespace TranspiredCollector {
                 state.dataTranspiredCollector->UTSC(Item).Correlation = Correlation_VanDeckerHollandsBrunger2001;
             } else {
                 ShowSevereError(state,
-                                std::format("{} has incorrect entry of {} in {} ={}",
-                                            state.dataIPShortCut->cAlphaFieldNames(10),
-                                            Alphas(9),
-                                            CurrentModuleObject,
-                                            state.dataTranspiredCollector->UTSC(Item).Name));
+                                EnergyPlus::format("{} has incorrect entry of {} in {} ={}",
+                                                   state.dataIPShortCut->cAlphaFieldNames(10),
+                                                   Alphas(9),
+                                                   CurrentModuleObject,
+                                                   state.dataTranspiredCollector->UTSC(Item).Name));
                 ErrorsFound = true;
                 continue;
             }
@@ -557,20 +561,21 @@ namespace TranspiredCollector {
             // Was it set?
             if (state.dataTranspiredCollector->UTSC(Item).CollRoughness == Material::SurfaceRoughness::Invalid) {
                 ShowSevereError(state,
-                                std::format("{} has incorrect entry of {} in {} ={}",
-                                            state.dataIPShortCut->cAlphaFieldNames(11),
-                                            Alphas(11),
-                                            CurrentModuleObject,
-                                            state.dataTranspiredCollector->UTSC(Item).Name));
+                                EnergyPlus::format("{} has incorrect entry of {} in {} ={}",
+                                                   state.dataIPShortCut->cAlphaFieldNames(11),
+                                                   Alphas(11),
+                                                   CurrentModuleObject,
+                                                   state.dataTranspiredCollector->UTSC(Item).Name));
                 ErrorsFound = true;
             }
 
             AlphaOffset = 11;
             state.dataTranspiredCollector->UTSC(Item).NumSurfs = NumAlphas - AlphaOffset;
             if (state.dataTranspiredCollector->UTSC(Item).NumSurfs == 0) {
-                ShowSevereError(
-                    state,
-                    std::format("No underlying surfaces specified in {} ={}", CurrentModuleObject, state.dataTranspiredCollector->UTSC(Item).Name));
+                ShowSevereError(state,
+                                EnergyPlus::format("No underlying surfaces specified in {} ={}",
+                                                   CurrentModuleObject,
+                                                   state.dataTranspiredCollector->UTSC(Item).Name));
                 ErrorsFound = true;
                 continue;
             }
@@ -580,57 +585,58 @@ namespace TranspiredCollector {
                 Found = Util::FindItemInList(Alphas(ThisSurf + AlphaOffset), state.dataSurface->Surface);
                 if (Found == 0) {
                     ShowSevereError(state,
-                                    std::format("Surface Name not found={} in {} ={}",
-                                                Alphas(ThisSurf + AlphaOffset),
-                                                CurrentModuleObject,
-                                                state.dataTranspiredCollector->UTSC(Item).Name));
+                                    EnergyPlus::format("Surface Name not found={} in {} ={}",
+                                                       Alphas(ThisSurf + AlphaOffset),
+                                                       CurrentModuleObject,
+                                                       state.dataTranspiredCollector->UTSC(Item).Name));
                     ErrorsFound = true;
                     continue;
                 }
                 // check that surface is appropriate, Heat transfer, Sun, Wind,
                 if (!state.dataSurface->Surface(Found).HeatTransSurf) {
                     ShowSevereError(state,
-                                    std::format("Surface {} not of Heat Transfer type in {} ={}",
-                                                Alphas(ThisSurf + AlphaOffset),
-                                                CurrentModuleObject,
-                                                state.dataTranspiredCollector->UTSC(Item).Name));
+                                    EnergyPlus::format("Surface {} not of Heat Transfer type in {} ={}",
+                                                       Alphas(ThisSurf + AlphaOffset),
+                                                       CurrentModuleObject,
+                                                       state.dataTranspiredCollector->UTSC(Item).Name));
                     ErrorsFound = true;
                     continue;
                 }
                 if (!state.dataSurface->Surface(Found).ExtSolar) {
                     ShowSevereError(state,
-                                    std::format("Surface {} not exposed to sun in {} ={}",
-                                                Alphas(ThisSurf + AlphaOffset),
-                                                CurrentModuleObject,
-                                                state.dataTranspiredCollector->UTSC(Item).Name));
+                                    EnergyPlus::format("Surface {} not exposed to sun in {} ={}",
+                                                       Alphas(ThisSurf + AlphaOffset),
+                                                       CurrentModuleObject,
+                                                       state.dataTranspiredCollector->UTSC(Item).Name));
                     ErrorsFound = true;
                     continue;
                 }
                 if (!state.dataSurface->Surface(Found).ExtWind) {
                     ShowSevereError(state,
-                                    std::format("Surface {} not exposed to wind in {} ={}",
-                                                Alphas(ThisSurf + AlphaOffset),
-                                                CurrentModuleObject,
-                                                state.dataTranspiredCollector->UTSC(Item).Name));
+                                    EnergyPlus::format("Surface {} not exposed to wind in {} ={}",
+                                                       Alphas(ThisSurf + AlphaOffset),
+                                                       CurrentModuleObject,
+                                                       state.dataTranspiredCollector->UTSC(Item).Name));
                     ErrorsFound = true;
                     continue;
                 }
                 if (state.dataSurface->Surface(Found).ExtBoundCond != OtherSideCondModeledExt) {
                     ShowSevereError(state,
-                                    std::format("Surface {} does not have OtherSideConditionsModel for exterior boundary conditions in {} ={}",
-                                                Alphas(ThisSurf + AlphaOffset),
-                                                CurrentModuleObject,
-                                                state.dataTranspiredCollector->UTSC(Item).Name));
+                                    EnergyPlus::format("Surface {} does not have OtherSideConditionsModel for exterior boundary conditions in {} ={}",
+                                                       Alphas(ThisSurf + AlphaOffset),
+                                                       CurrentModuleObject,
+                                                       state.dataTranspiredCollector->UTSC(Item).Name));
                     ErrorsFound = true;
                     continue;
                 }
                 // check surface orientation, warn if upside down
                 if ((state.dataSurface->Surface(Found).Tilt < -95.0) || (state.dataSurface->Surface(Found).Tilt > 95.0)) {
-                    ShowWarningError(state, std::format("Suspected input problem with collector surface = {}", Alphas(ThisSurf + AlphaOffset)));
+                    ShowWarningError(state,
+                                     EnergyPlus::format("Suspected input problem with collector surface = {}", Alphas(ThisSurf + AlphaOffset)));
                     ShowContinueError(state,
-                                      std::format("Entered in {} = {}",
-                                                  state.dataIPShortCut->cCurrentModuleObject,
-                                                  state.dataTranspiredCollector->UTSC(Item).Name));
+                                      EnergyPlus::format("Entered in {} = {}",
+                                                         state.dataIPShortCut->cCurrentModuleObject,
+                                                         state.dataTranspiredCollector->UTSC(Item).Name));
                     ShowContinueError(state, "Surface used for solar collector faces down");
                     ShowContinueError(state,
                                       EnergyPlus::format("Surface tilt angle (degrees from ground outward normal) = {:.2R}",

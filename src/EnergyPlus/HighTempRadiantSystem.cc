@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -146,26 +147,26 @@ namespace HighTempRadiantSystem {
         if (CompIndex == 0) {
             RadSysNum = Util::FindItemInList(CompName, state.dataHighTempRadSys->HighTempRadSys);
             if (RadSysNum == 0) {
-                ShowFatalError(state, std::format("SimHighTempRadiantSystem: Unit not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimHighTempRadiantSystem: Unit not found={}", CompName));
             }
             CompIndex = RadSysNum;
         } else {
             RadSysNum = CompIndex;
             if (RadSysNum > state.dataHighTempRadSys->NumOfHighTempRadSys || RadSysNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimHighTempRadiantSystem:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                           RadSysNum,
-                                           state.dataHighTempRadSys->NumOfHighTempRadSys,
-                                           CompName));
+                               EnergyPlus::format("SimHighTempRadiantSystem:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                                  RadSysNum,
+                                                  state.dataHighTempRadSys->NumOfHighTempRadSys,
+                                                  CompName));
             }
             if (state.dataHighTempRadSys->CheckEquipName(RadSysNum)) {
                 if (CompName != state.dataHighTempRadSys->HighTempRadSys(RadSysNum).Name) {
                     ShowFatalError(
                         state,
-                        std::format("SimHighTempRadiantSystem: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                    RadSysNum,
-                                    CompName,
-                                    state.dataHighTempRadSys->HighTempRadSys(RadSysNum).Name));
+                        EnergyPlus::format("SimHighTempRadiantSystem: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                           RadSysNum,
+                                           CompName,
+                                           state.dataHighTempRadSys->HighTempRadSys(RadSysNum).Name));
                 }
                 state.dataHighTempRadSys->CheckEquipName(RadSysNum) = false;
             }
@@ -273,9 +274,9 @@ namespace HighTempRadiantSystem {
 
             highTempRadSys.ZonePtr = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(3), state.dataHeatBal->Zone);
             if (highTempRadSys.ZonePtr == 0) {
-                ShowSevereError(state,
-                                std::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
-                ShowContinueError(state, std::format("Occurs for {} = {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(
+                    state, EnergyPlus::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
+                ShowContinueError(state, EnergyPlus::format("Occurs for {} = {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
 
@@ -288,55 +289,55 @@ namespace HighTempRadiantSystem {
                 if (!state.dataIPShortCut->lNumericFieldBlanks(iHeatDesignCapacityNumericNum)) {
                     highTempRadSys.ScaledHeatingCapacity = state.dataIPShortCut->rNumericArgs(iHeatDesignCapacityNumericNum);
                     if (highTempRadSys.ScaledHeatingCapacity < 0.0 && highTempRadSys.ScaledHeatingCapacity != DataSizing::AutoSize) {
-                        ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
+                        ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
+                                          EnergyPlus::format("Illegal {} = {:.7f}",
                                                              state.dataIPShortCut->cNumericFieldNames(iHeatDesignCapacityNumericNum),
                                                              state.dataIPShortCut->rNumericArgs(iHeatDesignCapacityNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {
-                    ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
+                    ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
                     ShowContinueError(state,
-                                      std::format("Input for {} = {}",
-                                                  state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                  state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
-                    ShowContinueError(
-                        state,
-                        std::format("Blank field not allowed for {}", state.dataIPShortCut->cNumericFieldNames(iHeatDesignCapacityNumericNum)));
+                                      EnergyPlus::format("Input for {} = {}",
+                                                         state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                         state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("Blank field not allowed for {}",
+                                                         state.dataIPShortCut->cNumericFieldNames(iHeatDesignCapacityNumericNum)));
                     ErrorsFound = true;
                 }
             } else if (highTempRadSys.HeatingCapMethod == DataSizing::DesignSizingType::CapacityPerFloorArea) {
                 if (!state.dataIPShortCut->lNumericFieldBlanks(iHeatCapacityPerFloorAreaNumericNum)) {
                     highTempRadSys.ScaledHeatingCapacity = state.dataIPShortCut->rNumericArgs(iHeatCapacityPerFloorAreaNumericNum);
                     if (highTempRadSys.ScaledHeatingCapacity <= 0.0) {
-                        ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
+                        ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
                         ShowContinueError(state,
-                                          std::format("Input for {} = {}",
-                                                      state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                      state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                                          EnergyPlus::format("Input for {} = {}",
+                                                             state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                             state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
+                                          EnergyPlus::format("Illegal {} = {:.7f}",
                                                              state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum),
                                                              state.dataIPShortCut->rNumericArgs(iHeatCapacityPerFloorAreaNumericNum)));
                         ErrorsFound = true;
                     } else if (highTempRadSys.ScaledHeatingCapacity == DataSizing::AutoSize) {
-                        ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
+                        ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
                         ShowContinueError(state,
-                                          std::format("Input for {} = {}",
-                                                      state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                      state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
-                        ShowContinueError(
-                            state,
-                            std::format("Illegal {} = Autosize", state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum)));
+                                          EnergyPlus::format("Input for {} = {}",
+                                                             state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                             state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Illegal {} = Autosize",
+                                                             state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {
-                    ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
+                    ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
                     ShowContinueError(state,
-                                      std::format("Input for {} = {}",
-                                                  state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                  state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                                      EnergyPlus::format("Input for {} = {}",
+                                                         state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                         state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
                     ShowContinueError(
                         state,
                         std::format("Blank field not allowed for {}", state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum)));
@@ -348,9 +349,9 @@ namespace HighTempRadiantSystem {
                     if (highTempRadSys.ScaledHeatingCapacity < 0.0) {
                         ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, highTempRadSys.Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
-                                                             state.dataIPShortCut->cNumericFieldNames(iHeatFracOfAutosizedCapacityNumericNum),
-                                                             state.dataIPShortCut->rNumericArgs(iHeatFracOfAutosizedCapacityNumericNum)));
+                                          std::format("Illegal {} = {:.7f}",
+                                                      state.dataIPShortCut->cNumericFieldNames(iHeatFracOfAutosizedCapacityNumericNum),
+                                                      state.dataIPShortCut->rNumericArgs(iHeatFracOfAutosizedCapacityNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {
@@ -552,14 +553,14 @@ namespace HighTempRadiantSystem {
                                 std::format("Fraction of radiation distributed to surfaces and people sums up to less than 1 for {}",
                                             state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "This would result in some of the radiant energy delivered by the high temp radiant heater being lost.");
-                ShowContinueError(state, EnergyPlus::format("The sum of all radiation fractions to surfaces = {:.5T}", TotalFracToSurfs));
-                ShowContinueError(state, EnergyPlus::format("The radiant fraction to people = {:.5T}", highTempRadSys.FracDistribPerson));
-                ShowContinueError(state, EnergyPlus::format("So, all radiant fractions including surfaces and people = {:.5T}", AllFracsSummed));
+                ShowContinueError(state, std::format("The sum of all radiation fractions to surfaces = {:.5f}", TotalFracToSurfs));
+                ShowContinueError(state, std::format("The radiant fraction to people = {:.5f}", highTempRadSys.FracDistribPerson));
+                ShowContinueError(state, std::format("So, all radiant fractions including surfaces and people = {:.5f}", AllFracsSummed));
                 ShowContinueError(
                     state,
-                    EnergyPlus::format("This means that the fraction of radiant energy that would be lost from the high temperature radiant heater "
-                                       "would be = {:.5T}",
-                                       FracOfRadPotentiallyLost));
+                    std::format("This means that the fraction of radiant energy that would be lost from the high temperature radiant heater "
+                                "would be = {:.5f}",
+                                FracOfRadPotentiallyLost));
                 ShowContinueError(state,
                                   std::format("Please check and correct this so that all radiant energy is accounted for in {} = {}",
                                               cCurrentModuleObject,

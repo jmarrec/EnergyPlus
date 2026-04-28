@@ -49,6 +49,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -192,13 +193,13 @@ void DayltgAveInteriorReflectance(EnergyPlusData &state, int const enclNum) // E
         // Error if window has multiplier > 1 since this causes incorrect illuminance calc
         if (IType == SurfaceClass::Window && surf.Multiplier > 1.0) {
             if (thisEnclosure.TotalEnclosureDaylRefPoints > 0) {
-                ShowSevereError(state,
-                                std::format("DayltgAveInteriorReflectance: Multiplier > 1.0 for window {} in Zone={}", surf.Name, surf.ZoneName));
+                ShowSevereError(
+                    state, EnergyPlus::format("DayltgAveInteriorReflectance: Multiplier > 1.0 for window {} in Zone={}", surf.Name, surf.ZoneName));
                 ShowContinueError(state, "...not allowed since it is in a zone or enclosure with daylighting.");
                 ShowFatalError(state, "Program terminates due to preceding conditions.");
             } else {
-                ShowSevereError(state,
-                                std::format("DayltgAveInteriorReflectance: Multiplier > 1.0 for window {} in Zone={}", surf.Name, surf.ZoneName));
+                ShowSevereError(
+                    state, EnergyPlus::format("DayltgAveInteriorReflectance: Multiplier > 1.0 for window {} in Zone={}", surf.Name, surf.ZoneName));
                 ShowContinueError(state, "...an adjacent Zone has daylighting. Simulation cannot proceed.");
                 ShowFatalError(state, "Program terminates due to preceding conditions.");
             }
@@ -232,8 +233,8 @@ void DayltgAveInteriorReflectance(EnergyPlusData &state, int const enclNum) // E
 
     // Average inside surface reflectance of enclosure
     if (AInsTot <= 0.0) {
-        ShowSevereError(state,
-                        std::format("DayltgAveInteriorReflectance: Total opaque surface area is <=0.0 in solar enclosure={}", thisEnclosure.Name));
+        ShowSevereError(
+            state, EnergyPlus::format("DayltgAveInteriorReflectance: Total opaque surface area is <=0.0 in solar enclosure={}", thisEnclosure.Name));
         ShowFatalError(state, "Program terminates due to preceding conditions.");
     }
     dl->enclDaylight(enclNum).aveVisDiffReflect = ARHTOT / AInsTot;
@@ -448,8 +449,8 @@ void CalcDayltgCoefficients(EnergyPlusData &state)
                 for (int daylightCtrlNum : thisEnclDaylight.daylightControlIndexes) {
                     if (dl->daylightControl(daylightCtrlNum).TotalDaylRefPoints > 0) {
                         ShowWarningError(state,
-                                         std::format("Detailed daylighting will not be done for Daylighting:Controls={}",
-                                                     dl->daylightControl(daylightCtrlNum).Name));
+                                         EnergyPlus::format("Detailed daylighting will not be done for Daylighting:Controls={}",
+                                                            dl->daylightControl(daylightCtrlNum).Name));
                         ShowContinueError(state, "because it has no associated exterior windows.");
                     }
                 }
@@ -696,8 +697,8 @@ void CalcDayltgCoeffsRefMapPoints(EnergyPlusData &state)
                 int PipeNum = s_surf->SurfWinTDDPipeNum(IWin);
                 if (PipeNum == 0) {
                     ShowSevereError(state,
-                                    std::format("GetTDDInput: Surface={}, TDD:Dome object does not reference a valid Diffuser object.",
-                                                s_surf->Surface(IWin).Name));
+                                    EnergyPlus::format("GetTDDInput: Surface={}, TDD:Dome object does not reference a valid Diffuser object.",
+                                                       s_surf->Surface(IWin).Name));
                     ShowContinueError(state, "...needs DaylightingDevice:Tubular of same name as Surface.");
                     ErrorsFound = true;
                 }
@@ -726,15 +727,15 @@ void CalcDayltgCoeffsRefMapPoints(EnergyPlusData &state)
         if ((int)dl->illumMaps.size() > 0) {
             for (int MapNum = 1; MapNum <= (int)dl->illumMaps.size(); ++MapNum) {
                 int mapZoneNum = dl->illumMaps(MapNum).zoneIndex;
-                std::string name = std::format("Zone={}", state.dataHeatBal->Zone(mapZoneNum).Name);
+                std::string name = EnergyPlus::format("Zone={}", state.dataHeatBal->Zone(mapZoneNum).Name);
                 int mapSpaceNum = dl->illumMaps(MapNum).spaceIndex;
                 if (mapSpaceNum > 0) {
-                    name = std::format("Space={}", state.dataHeatBal->space(mapSpaceNum).Name);
+                    name = EnergyPlus::format("Space={}", state.dataHeatBal->space(mapSpaceNum).Name);
                 }
                 if (state.dataGlobal->WarmupFlag) {
-                    DisplayString(state, std::format("Calculating Daylighting Coefficients (Map Points), {}", name));
+                    DisplayString(state, EnergyPlus::format("Calculating Daylighting Coefficients (Map Points), {}", name));
                 } else {
-                    DisplayString(state, std::format("Updating Daylighting Coefficients (Map Points), {}", name));
+                    DisplayString(state, EnergyPlus::format("Updating Daylighting Coefficients (Map Points), {}", name));
                 }
                 CalcDayltgCoeffsMapPoints(state, MapNum);
             }
@@ -1633,7 +1634,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
             if (D1a > 0.0 && D1b > 0.0 && D1b <= HW && D1a <= WW) {
                 ShowSevereError(
                     state,
-                    std::format(
+                    EnergyPlus::format(
                         "CalcDaylightCoeffRefPoints: Daylighting calculation cannot be done for Daylighting:Controls={} because reference point "
                         "#{} is less than 0.15m (6\") from window plane {}",
                         dl->daylightControl(daylightCtrlNum).Name,
@@ -1646,11 +1647,11 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
             if (dl->RefErrIndex(iRefPoint, IWin) == 0) { // only show error message once
                 ShowWarningError(
                     state,
-                    std::format("CalcDaylightCoeffRefPoints: For Daylghting:Controls=\"{}\" External Window=\"{}\"in Zone=\"{}\" reference "
-                                "point is less than 0.15m (6\") from window plane ",
-                                dl->daylightControl(daylightCtrlNum).Name,
-                                surf.Name,
-                                state.dataHeatBal->Zone(surf.Zone).Name));
+                    EnergyPlus::format("CalcDaylightCoeffRefPoints: For Daylghting:Controls=\"{}\" External Window=\"{}\"in Zone=\"{}\" reference "
+                                       "point is less than 0.15m (6\") from window plane ",
+                                       dl->daylightControl(daylightCtrlNum).Name,
+                                       surf.Name,
+                                       state.dataHeatBal->Zone(surf.Zone).Name));
                 ShowContinueError(
                     state,
                     EnergyPlus::format("Distance=[{:.1R} m] to ref point=[{:.1R},{:.1R},{:.1R}], Inaccuracy in Daylighting Calcs may result.",
@@ -1666,11 +1667,11 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
             if (dl->MapErrIndex(iRefPoint, IWin) == 0) { // only show error message once
                 ShowWarningError(
                     state,
-                    std::format("CalcDaylightCoeffMapPoints: For Zone=\"{}\" External Window=\"{}\"in Zone=\"{}\" map point is less than "
-                                "0.15m (6\") from window plane ",
-                                state.dataHeatBal->Zone(zoneNum).Name,
-                                surf.Name,
-                                state.dataHeatBal->Zone(surf.Zone).Name));
+                    EnergyPlus::format("CalcDaylightCoeffMapPoints: For Zone=\"{}\" External Window=\"{}\"in Zone=\"{}\" map point is less than "
+                                       "0.15m (6\") from window plane ",
+                                       state.dataHeatBal->Zone(zoneNum).Name,
+                                       surf.Name,
+                                       state.dataHeatBal->Zone(surf.Zone).Name));
                 ShowContinueError(
                     state,
                     EnergyPlus::format(
@@ -3885,9 +3886,10 @@ void GetDaylightingParametersInput(EnergyPlusData &state)
         if (s_surf->WindowShadingControl(surf.activeWindowShadingControl).GlareControlIsActive) {
             // Error if GlareControlIsActive but window is not in a Daylighting:Detailed zone
             if (thisSurfEnclosure.TotalEnclosureDaylRefPoints == 0) {
-                ShowSevereError(state, std::format("Window={} has Window Shading Control with", surf.Name));
+                ShowSevereError(state, EnergyPlus::format("Window={} has Window Shading Control with", surf.Name));
                 ShowContinueError(state, "GlareControlIsActive = Yes but it is not in a Daylighting zone or enclosure.");
-                ShowContinueError(state, std::format("Zone or enclosure indicated={}", state.dataViewFactor->EnclSolInfo(surf.SolarEnclIndex).Name));
+                ShowContinueError(state,
+                                  EnergyPlus::format("Zone or enclosure indicated={}", state.dataViewFactor->EnclSolInfo(surf.SolarEnclIndex).Name));
                 ErrorsFound = true;
             }
             // Error if GlareControlIsActive and window is in a Daylighting:Detailed zone/enclosure with
@@ -3898,10 +3900,10 @@ void GetDaylightingParametersInput(EnergyPlusData &state)
                     if (s_surf->Surface(intWin).Class == SurfaceClass::Window && SurfNumAdj > 0) {
                         auto &adjSurfEnclosure(state.dataViewFactor->EnclSolInfo(s_surf->Surface(SurfNumAdj).SolarEnclIndex));
                         if (adjSurfEnclosure.TotalEnclosureDaylRefPoints > 0) {
-                            ShowSevereError(state, std::format("Window={} has Window Shading Control with", surf.Name));
+                            ShowSevereError(state, EnergyPlus::format("Window={} has Window Shading Control with", surf.Name));
                             ShowContinueError(state, "GlareControlIsActive = Yes and is in a Daylighting zone or enclosure");
                             ShowContinueError(state, "that shares an interior window with another Daylighting zone or enclosure");
-                            ShowContinueError(state, std::format("Adjacent Zone or Enclosure indicated={}", adjSurfEnclosure.Name));
+                            ShowContinueError(state, EnergyPlus::format("Adjacent Zone or Enclosure indicated={}", adjSurfEnclosure.Name));
                             ErrorsFound = true;
                         }
                     }
@@ -3916,9 +3918,9 @@ void GetDaylightingParametersInput(EnergyPlusData &state)
         // Error if window has shadingControlType = MeetDaylightingIlluminanceSetpoint &
         // but is not in a Daylighting:Detailed zone
         if (thisSurfEnclosure.TotalEnclosureDaylRefPoints == 0) {
-            ShowSevereError(state, std::format("Window={} has Window Shading Control with", surf.Name));
+            ShowSevereError(state, EnergyPlus::format("Window={} has Window Shading Control with", surf.Name));
             ShowContinueError(state, "MeetDaylightingIlluminanceSetpoint but it is not in a Daylighting zone or enclosure.");
-            ShowContinueError(state, std::format("Zone or enclosure indicated={}", thisSurfEnclosure.Name));
+            ShowContinueError(state, EnergyPlus::format("Zone or enclosure indicated={}", thisSurfEnclosure.Name));
             ErrorsFound = true;
             continue;
         }

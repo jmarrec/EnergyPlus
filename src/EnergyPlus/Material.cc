@@ -45,6 +45,9 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// C++ Headers
+#include <format>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 
@@ -219,7 +222,7 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             if (mat->Conductivity > 0.0) {
                 mat->Resistance = mat->NominalR = mat->Thickness / mat->Conductivity;
             } else {
-                ShowSevereError(state, std::format("Positive thermal conductivity required for material {}", mat->Name));
+                ShowSevereError(state, EnergyPlus::format("Positive thermal conductivity required for material {}", mat->Name));
                 ErrorsFound = true;
             }
         }
@@ -313,7 +316,7 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         for (int Loop = 1; Loop <= TotFfactorConstructs + TotCfactorConstructs; ++Loop) {
             auto *mat = new MaterialBase;
             mat->group = Group::Regular;
-            mat->Name = std::format("~FC_Insulation_{}", Loop);
+            mat->Name = EnergyPlus::format("~FC_Insulation_{}", Loop);
 
             s_mat->materials.push_back(mat);
             mat->Num = s_mat->materials.isize();
@@ -476,14 +479,15 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             mat->Resistance = mat->NominalR = mat->Thickness / mat->Conductivity;
         } else {
             ErrorsFound = true;
-            ShowSevereError(state, std::format("Window glass material {} has Conductivity = 0.0, must be >0.0, default = .9", mat->Name));
+            ShowSevereError(state, EnergyPlus::format("Window glass material {} has Conductivity = 0.0, must be >0.0, default = .9", mat->Name));
         }
 
         mat->windowOpticalData = static_cast<Window::OpticalDataModel>(getEnumValue(Window::opticalDataModelNamesUC, s_ipsc->cAlphaArgs(2)));
 
         if (mat->windowOpticalData == Window::OpticalDataModel::Spectral) {
             if (s_ipsc->lAlphaFieldBlanks(3)) {
-                ShowSevereCustom(state, eoh, std::format("{} = Spectral but {} is blank.", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaFieldNames(3)));
+                ShowSevereCustom(
+                    state, eoh, EnergyPlus::format("{} = Spectral but {} is blank.", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaFieldNames(3)));
                 ErrorsFound = true;
             } else if ((mat->GlassSpectralDataPtr = Util::FindItemInList(s_ipsc->cAlphaArgs(3), s_mat->SpectralData)) == 0) {
                 ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3));
@@ -496,71 +500,71 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
 
             if (s_ipsc->rNumericArgs(2) + s_ipsc->rNumericArgs(3) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(2), s_ipsc->cNumericFieldNames(3)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(2), s_ipsc->cNumericFieldNames(3)));
             }
 
             if (s_ipsc->rNumericArgs(2) + s_ipsc->rNumericArgs(4) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(2), s_ipsc->cNumericFieldNames(4)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(2), s_ipsc->cNumericFieldNames(4)));
             }
 
             if (s_ipsc->rNumericArgs(5) + s_ipsc->rNumericArgs(6) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(5), s_ipsc->cNumericFieldNames(6)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(5), s_ipsc->cNumericFieldNames(6)));
             }
 
             if (s_ipsc->rNumericArgs(5) + s_ipsc->rNumericArgs(7) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(5), s_ipsc->cNumericFieldNames(7)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(5), s_ipsc->cNumericFieldNames(7)));
             }
 
             if (s_ipsc->rNumericArgs(8) + s_ipsc->rNumericArgs(9) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(8), s_ipsc->cNumericFieldNames(9)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(8), s_ipsc->cNumericFieldNames(9)));
             }
 
             if (s_ipsc->rNumericArgs(8) + s_ipsc->rNumericArgs(10) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(8), s_ipsc->cNumericFieldNames(10)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} + {} not <= 1.0", s_ipsc->cNumericFieldNames(8), s_ipsc->cNumericFieldNames(10)));
             }
 
             if (s_ipsc->rNumericArgs(2) < 0.0) {
-                ShowSevereCustom(state, eoh, std::format("{} not >= 0.0", s_ipsc->cNumericFieldNames(2)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} not >= 0.0", s_ipsc->cNumericFieldNames(2)));
                 ErrorsFound = true;
             }
 
             if (s_ipsc->rNumericArgs(2) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} not <= 1.0", s_ipsc->cNumericFieldNames(2)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} not <= 1.0", s_ipsc->cNumericFieldNames(2)));
             }
 
             if (s_ipsc->rNumericArgs(3) < 0.0 || s_ipsc->rNumericArgs(3) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(3)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(3)));
             }
 
             if (s_ipsc->rNumericArgs(4) < 0.0 || s_ipsc->rNumericArgs(4) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(4)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(4)));
             }
 
             if (s_ipsc->rNumericArgs(5) < 0.0) {
-                ShowWarningCustom(state, eoh, std::format("{} not >= 0.0", s_ipsc->cNumericFieldNames(5)));
+                ShowWarningCustom(state, eoh, EnergyPlus::format("{} not >= 0.0", s_ipsc->cNumericFieldNames(5)));
             }
 
             if (s_ipsc->rNumericArgs(5) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} not <= 1.0", s_ipsc->cNumericFieldNames(5)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} not <= 1.0", s_ipsc->cNumericFieldNames(5)));
             }
 
             if (s_ipsc->rNumericArgs(6) < 0.0 || s_ipsc->rNumericArgs(6) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(6)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(6)));
             }
 
             if (s_ipsc->rNumericArgs(7) < 0.0 || s_ipsc->rNumericArgs(7) > 1.0) {
                 ErrorsFound = true;
-                ShowSevereCustom(state, eoh, std::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(7)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} not >= 0.0 and <= 1.0", s_ipsc->cNumericFieldNames(7)));
             }
         }
 
@@ -2297,10 +2301,10 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             ShowContinueError(
                 state,
                 std::format("{} is greater than {}. It must be less or equal.", s_ipsc->cNumericFieldNames(15), s_ipsc->cNumericFieldNames(13)));
-            ShowContinueError(state, EnergyPlus::format("{} = {:.3T}.", s_ipsc->cNumericFieldNames(13), mat->Porosity));
-            ShowContinueError(state, EnergyPlus::format("{} = {:.3T}.", s_ipsc->cNumericFieldNames(15), mat->InitMoisture));
-            ShowContinueError(
-                state, EnergyPlus::format("{} is reset to the maximum (saturation) value = {:.3T}.", s_ipsc->cNumericFieldNames(15), mat->Porosity));
+            ShowContinueError(state, std::format("{} = {:.3f}.", s_ipsc->cNumericFieldNames(13), mat->Porosity));
+            ShowContinueError(state, std::format("{} = {:.3f}.", s_ipsc->cNumericFieldNames(15), mat->InitMoisture));
+            ShowContinueError(state,
+                              std::format("{} is reset to the maximum (saturation) value = {:.3f}.", s_ipsc->cNumericFieldNames(15), mat->Porosity));
             ShowContinueError(state, "Simulation continues.");
             mat->InitMoisture = mat->Porosity;
         }
@@ -3040,18 +3044,17 @@ void GetWindowGlassSpectralData(EnergyPlusData &state, bool &ErrorsFound) // set
                 ErrorsFound = true;
                 ShowSevereError(state, std::format("{}{}=\"{}\" invalid set.", routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("... Wavelengths not in increasing order. at wavelength#={}, value=[{:.4T}], next is [{:.4T}].",
-                                                     LamNum,
-                                                     Lam,
-                                                     specData.WaveLength(LamNum + 1)));
+                                  std::format("... Wavelengths not in increasing order. at wavelength#={}, value=[{:.4f}], next is [{:.4f}].",
+                                              LamNum,
+                                              Lam,
+                                              specData.WaveLength(LamNum + 1)));
             }
 
             if (Lam < 0.1 || Lam > 4.0) {
                 ErrorsFound = true;
                 ShowSevereError(state, std::format("{}{}=\"{}\" invalid value.", routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(
-                    state,
-                    EnergyPlus::format("... A wavelength is not in the range 0.1 to 4.0 microns; at wavelength#={}, value=[{:.4T}].", LamNum, Lam));
+                    state, std::format("... A wavelength is not in the range 0.1 to 4.0 microns; at wavelength#={}, value=[{:.4f}].", LamNum, Lam));
             }
 
             // TH 2/15/2011. CR 8343
@@ -3060,16 +3063,14 @@ void GetWindowGlassSpectralData(EnergyPlusData &state, bool &ErrorsFound) // set
             if (Tau > 1.01) {
                 ErrorsFound = true;
                 ShowSevereError(state, std::format("{}: {}=\"{}\" invalid value.", routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                ShowContinueError(state, EnergyPlus::format("... A transmittance is > 1.0; at wavelength#={}, value=[{:.4T}].", LamNum, Tau));
+                ShowContinueError(state, std::format("... A transmittance is > 1.0; at wavelength#={}, value=[{:.4f}].", LamNum, Tau));
             }
 
             if (RhoF < 0.0 || RhoF > 1.02 || RhoB < 0.0 || RhoB > 1.02) {
                 ErrorsFound = true;
                 ShowSevereError(state, std::format("{}: {}=\"{}\" invalid value.", routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  EnergyPlus::format("... A reflectance is < 0.0 or > 1.0; at wavelength#={}, RhoF value=[{:.4T}].", LamNum, RhoF));
-                ShowContinueError(state,
-                                  EnergyPlus::format("... A reflectance is < 0.0 or > 1.0; at wavelength#={}, RhoB value=[{:.4T}].", LamNum, RhoB));
+                ShowContinueError(state, std::format("... A reflectance is < 0.0 or > 1.0; at wavelength#={}, RhoF value=[{:.4f}].", LamNum, RhoF));
+                ShowContinueError(state, std::format("... A reflectance is < 0.0 or > 1.0; at wavelength#={}, RhoB value=[{:.4f}].", LamNum, RhoB));
             }
 
             if ((Tau + RhoF) > 1.03 || (Tau + RhoB) > 1.03) {
@@ -3078,7 +3079,7 @@ void GetWindowGlassSpectralData(EnergyPlusData &state, bool &ErrorsFound) // set
                 ShowContinueError(
                     state,
                     std::format("... Transmittance + reflectance) > 1.0 for an entry; at wavelength#={}",
-                                EnergyPlus::format("{}, value(Tau+RhoF)=[{:.4T}], value(Tau+RhoB)=[{:.4T}].", LamNum, (Tau + RhoF), (Tau + RhoB))));
+                                std::format("{}, value(Tau+RhoF)=[{:.4f}], value(Tau+RhoB)=[{:.4f}].", LamNum, (Tau + RhoF), (Tau + RhoB))));
             }
         }
     }

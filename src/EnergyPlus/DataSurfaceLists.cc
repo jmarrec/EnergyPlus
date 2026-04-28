@@ -130,15 +130,15 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                 NameConflict = Util::FindItemInList(SurfList(Item).Name, state.dataSurface->Surface);
                 if (NameConflict > 0) { // A surface list has the same name as a surface--not allowed
                     ShowSevereError(state,
-                                    std::format("{}{}",
-                                                CurrentModuleObject1,
-                                                " = " + SurfList(Item).Name + " has the same name as a surface; this is not allowed."));
+                                    EnergyPlus::format("{}{}",
+                                                       CurrentModuleObject1,
+                                                       " = " + SurfList(Item).Name + " has the same name as a surface; this is not allowed."));
                     ErrorsFound = true;
                 }
 
                 if (SurfList(Item).NumOfSurfaces < 1) {
-                    ShowSevereError(state,
-                                    std::format("{}{}", CurrentModuleObject1, " = " + SurfList(Item).Name + " does not have any surfaces listed."));
+                    ShowSevereError(
+                        state, EnergyPlus::format("{}{}", CurrentModuleObject1, " = " + SurfList(Item).Name + " does not have any surfaces listed."));
                     ErrorsFound = true;
                 } else {
                     SurfList(Item).SurfName.allocate(SurfList(Item).NumOfSurfaces);
@@ -157,7 +157,7 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                     if (SurfList(Item).SurfPtr(SurfNum) == 0) {
                         ShowSevereError(
                             state,
-                            std::format(
+                            EnergyPlus::format(
                                 "{} in {} statement not found = {}", surfaceNameFieldName, CurrentModuleObject1, SurfList(Item).SurfName(SurfNum)));
                         ErrorsFound = true;
                     } else { // Make sure that all of the surfaces are located in the same zone
@@ -167,8 +167,9 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                         }
                         if (SurfNum > 1) {
                             if (ZoneForSurface != state.dataSurface->Surface(SurfList(Item).SurfPtr(SurfNum)).Zone && showSameZoneWarning) {
-                                ShowWarningError(state,
-                                                 std::format("Not all surfaces in same zone for {} = {}", CurrentModuleObject1, SurfList(Item).Name));
+                                ShowWarningError(
+                                    state,
+                                    EnergyPlus::format("Not all surfaces in same zone for {} = {}", CurrentModuleObject1, SurfList(Item).Name));
                                 if (!state.dataGlobal->DisplayExtraWarnings) {
                                     ShowContinueError(state,
                                                       "If this is intentionally a radiant system with surfaces in more than one thermal zone,");
@@ -183,9 +184,9 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                         inputProcessor->getRealFieldValue(surfaceFraction, surfaceFractionSchemaProps, "flow_fraction_for_surface");
                     if (SurfList(Item).SurfFlowFrac(SurfNum) < SurfListMinFlowFrac) {
                         ShowSevereError(state,
-                                        std::format("The Flow Fraction for Surface {} in Surface Group {} is too low",
-                                                    SurfList(Item).SurfName(SurfNum),
-                                                    SurfList(Item).Name));
+                                        EnergyPlus::format("The Flow Fraction for Surface {} in Surface Group {} is too low",
+                                                           SurfList(Item).SurfName(SurfNum),
+                                                           SurfList(Item).Name));
                         ShowContinueError(state,
                                           EnergyPlus::format("Flow fraction of {:.6R} is less than minimum criteria = {:.6R}",
                                                              SurfList(Item).SurfFlowFrac(SurfNum),
@@ -199,15 +200,15 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                 }
 
                 if (std::abs(SumOfAllFractions - 1.0) > FlowFractionTolerance) {
-                    ShowSevereError(state,
-                                    std::format("{}{}", CurrentModuleObject1, " flow fractions do not add up to unity for " + SurfList(Item).Name));
+                    ShowSevereError(
+                        state, EnergyPlus::format("{}{}", CurrentModuleObject1, " flow fractions do not add up to unity for " + SurfList(Item).Name));
                     ErrorsFound = true;
                 }
             }
         }
 
         if (ErrorsFound) {
-            ShowSevereError(state, std::format("{}{}", CurrentModuleObject1, " errors found getting input. Program will terminate."));
+            ShowSevereError(state, EnergyPlus::format("{}{}", CurrentModuleObject1, " errors found getting input. Program will terminate."));
         }
     }
 
@@ -234,15 +235,15 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                 NameConflict = Util::FindItemInList(SlabList(Item).Name, state.dataSurface->Surface);
                 if (NameConflict > 0) { // A surface list has the same name as a surface--not allowed
                     ShowSevereError(state,
-                                    std::format("{}{}",
-                                                CurrentModuleObject2,
-                                                " = " + SlabList(Item).Name + " has the same name as a slab; this is not allowed."));
+                                    EnergyPlus::format("{}{}",
+                                                       CurrentModuleObject2,
+                                                       " = " + SlabList(Item).Name + " has the same name as a slab; this is not allowed."));
                     ErrorsFound = true;
                 }
 
                 if (SlabList(Item).NumOfSurfaces < 1) {
-                    ShowSevereError(state,
-                                    std::format("{}{}", CurrentModuleObject2, " = " + SlabList(Item).Name + " does not have any slabs listed."));
+                    ShowSevereError(
+                        state, EnergyPlus::format("{}{}", CurrentModuleObject2, " = " + SlabList(Item).Name + " does not have any slabs listed."));
                     ErrorsFound = true;
                 } else {
                     SlabList(Item).ZoneName.allocate(SlabList(Item).NumOfSurfaces);
@@ -264,7 +265,8 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                     if (SlabList(Item).ZonePtr(SurfNum) == 0) {
                         ShowSevereError(
                             state,
-                            std::format("{} in {} Zone not found = {}", zoneNameFieldName, CurrentModuleObject2, SlabList(Item).ZoneName(SurfNum)));
+                            EnergyPlus::format(
+                                "{} in {} Zone not found = {}", zoneNameFieldName, CurrentModuleObject2, SlabList(Item).ZoneName(SurfNum)));
                         ErrorsFound = true;
                     }
 
@@ -273,10 +275,10 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                     SlabList(Item).SurfPtr(SurfNum) = Util::FindItemInList(SlabList(Item).SurfName(SurfNum), state.dataSurface->Surface);
                     if (SlabList(Item).SurfPtr(SurfNum) == 0) {
                         ShowSevereError(state,
-                                        std::format("{} in {} statement not found = {}",
-                                                    slabSurfaceNameFieldName,
-                                                    CurrentModuleObject2,
-                                                    SlabList(Item).SurfName(SurfNum)));
+                                        EnergyPlus::format("{} in {} statement not found = {}",
+                                                           slabSurfaceNameFieldName,
+                                                           CurrentModuleObject2,
+                                                           SlabList(Item).SurfName(SurfNum)));
                         ErrorsFound = true;
                     }
                     for (int SrfList = 1; SrfList <= NumOfSurfaceLists; ++SrfList) {
@@ -284,10 +286,13 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                             Util::FindItemInList(SlabList(Item).SurfName(SurfNum), SurfList(SrfList).SurfName, SurfList(SrfList).NumOfSurfaces);
                         if (NameConflict > 0) { // A slab list includes a surface on a surface list--not allowed
                             ShowSevereError(
-                                state, std::format("{}{}", CurrentModuleObject2, "=\"" + SlabList(Item).Name + "\", invalid surface specified."));
-                            ShowContinueError(state, std::format("Surface=\"{}\" is also on a Surface List.", SlabList(Item).SurfName(SurfNum)));
+                                state,
+                                EnergyPlus::format("{}{}", CurrentModuleObject2, "=\"" + SlabList(Item).Name + "\", invalid surface specified."));
+                            ShowContinueError(state,
+                                              EnergyPlus::format("Surface=\"{}\" is also on a Surface List.", SlabList(Item).SurfName(SurfNum)));
                             ShowContinueError(
-                                state, std::format("{}{}", CurrentModuleObject1, "=\"" + SurfList(SrfList).Name + "\" has this surface also."));
+                                state,
+                                EnergyPlus::format("{}{}", CurrentModuleObject1, "=\"" + SurfList(SrfList).Name + "\" has this surface also."));
                             ShowContinueError(state, "A surface cannot be on both lists. The models cannot operate correctly.");
                             ErrorsFound = true;
                         }
@@ -309,7 +314,7 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
         }
 
         if (ErrorsFound) {
-            ShowSevereError(state, std::format("{}{}", CurrentModuleObject2, " errors found getting input. Program will terminate."));
+            ShowSevereError(state, EnergyPlus::format("{}{}", CurrentModuleObject2, " errors found getting input. Program will terminate."));
         }
     }
 

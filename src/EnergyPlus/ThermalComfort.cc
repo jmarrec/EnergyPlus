@@ -47,12 +47,15 @@
 
 // C++ Headers
 #include <algorithm>
-#include <boost/math/tools/roots.hpp>
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/string.functions.hh>
+
+// Third Party Headers
+#include <boost/math/tools/roots.hpp>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Construction.hh>

@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -734,12 +735,12 @@ void GetRefrigerationInput(EnergyPlusData &state)
 
             if (RefrigCase(CaseNum).ActualZoneNum == 0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", invalid  {} not valid: {}",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cAlphaFieldNames(3),
-                                            Alphas(3)));
+                                EnergyPlus::format("{}{}=\"{}\", invalid  {} not valid: {}",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cAlphaFieldNames(3),
+                                                   Alphas(3)));
                 ErrorsFound = true;
             } else {
                 state.dataRefrigCase->RefrigPresentInZone(RefrigCase(CaseNum).ActualZoneNum) = true;
@@ -750,22 +751,22 @@ void GetRefrigerationInput(EnergyPlusData &state)
             RefrigCase(CaseNum).RatedAmbientTemp = Numbers(1);
             if (Numbers(1) <= 0.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be greater than 0 C",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(1)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be greater than 0 C",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(1)));
                 ErrorsFound = true;
             }
 
             RefrigCase(CaseNum).RatedAmbientRH = Numbers(2);
             if (Numbers(2) <= 0.0 || Numbers(2) >= 100.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be greater than 0% and less than 100%",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(2)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be greater than 0% and less than 100%",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(2)));
                 ErrorsFound = true;
             }
             RefrigCase(CaseNum).RatedAmbientDewPoint = Psychrometrics::PsyTdpFnWPb(
@@ -777,11 +778,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
             RefrigCase(CaseNum).RateTotCapPerLength = Numbers(3);
             if (Numbers(3) <= 0.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be greater than 0 W/m",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(3)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be greater than 0 W/m",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(3)));
                 ErrorsFound = true;
             }
 
@@ -789,7 +790,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
             if (Numbers(4) < 0.0 || Numbers(4) > 1.0) {
                 ShowSevereError(
                     state,
-                    std::format(
+                    EnergyPlus::format(
                         "{}{}=\"{}\", {} must be >= 0 and <= 1", RoutineName, CurrentModuleObject, RefrigCase(CaseNum).Name, cNumericFieldNames(4)));
                 ErrorsFound = true;
             }
@@ -797,34 +798,34 @@ void GetRefrigerationInput(EnergyPlusData &state)
             RefrigCase(CaseNum).RatedRTF = Numbers(5);
             if (Numbers(5) <= 0.0 || Numbers(5) > 1.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be > 0 and <= to 1",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(5)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be > 0 and <= to 1",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(5)));
                 ErrorsFound = true;
             }
 
             RefrigCase(CaseNum).Length = Numbers(6);
             if (Numbers(6) <= 0.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be greater than 0 m",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(6)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be greater than 0 m",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(6)));
                 ErrorsFound = true;
             }
 
             RefrigCase(CaseNum).Temperature = Numbers(7);
             if (RefrigCase(CaseNum).Temperature >= RefrigCase(CaseNum).RatedAmbientTemp) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be below {}",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(7),
-                                            cNumericFieldNames(1)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be below {}",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(7),
+                                                   cNumericFieldNames(1)));
                 ErrorsFound = true;
             }
 
@@ -853,11 +854,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
                 RefrigCase(CaseNum).STDFanPower = Numbers(NumNum);
                 if (Numbers(NumNum) < 0.0) {
                     ShowSevereError(state,
-                                    std::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
-                                                RoutineName,
-                                                CurrentModuleObject,
-                                                RefrigCase(CaseNum).Name,
-                                                cNumericFieldNames(NumNum)));
+                                    EnergyPlus::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
+                                                       RoutineName,
+                                                       CurrentModuleObject,
+                                                       RefrigCase(CaseNum).Name,
+                                                       cNumericFieldNames(NumNum)));
                     ErrorsFound = true;
                 }
             } else { // blank use default of 75 W/m
@@ -869,11 +870,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
                 RefrigCase(CaseNum).OperatingFanPower = Numbers(NumNum);
                 if (Numbers(NumNum) < 0.0) {
                     ShowSevereError(state,
-                                    std::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
-                                                RoutineName,
-                                                CurrentModuleObject,
-                                                RefrigCase(CaseNum).Name,
-                                                cNumericFieldNames(NumNum)));
+                                    EnergyPlus::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
+                                                       RoutineName,
+                                                       CurrentModuleObject,
+                                                       RefrigCase(CaseNum).Name,
+                                                       cNumericFieldNames(NumNum)));
                     ErrorsFound = true;
                 }
             } else { // if blank set = to std fan power
@@ -885,11 +886,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
                 RefrigCase(CaseNum).RatedLightingPower = Numbers(NumNum);
                 if (Numbers(NumNum) < 0.0) {
                     ShowSevereError(state,
-                                    std::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
-                                                RoutineName,
-                                                CurrentModuleObject,
-                                                RefrigCase(CaseNum).Name,
-                                                cNumericFieldNames(NumNum)));
+                                    EnergyPlus::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
+                                                       RoutineName,
+                                                       CurrentModuleObject,
+                                                       RefrigCase(CaseNum).Name,
+                                                       cNumericFieldNames(NumNum)));
                     ErrorsFound = true;
                 }
             } else { // blank input - use default of 90 W/m
@@ -901,11 +902,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
                 RefrigCase(CaseNum).LightingPower = Numbers(NumNum);
                 if (Numbers(NumNum) < 0.0) {
                     ShowSevereError(state,
-                                    std::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
-                                                RoutineName,
-                                                CurrentModuleObject,
-                                                RefrigCase(CaseNum).Name,
-                                                cNumericFieldNames(NumNum)));
+                                    EnergyPlus::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
+                                                       RoutineName,
+                                                       CurrentModuleObject,
+                                                       RefrigCase(CaseNum).Name,
+                                                       cNumericFieldNames(NumNum)));
                     ErrorsFound = true;
                 }
             } else { // blank input so set lighting power equal to rated/std lighting power
@@ -930,11 +931,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
             //   check lighting fraction to case input
             if (RefrigCase(CaseNum).LightingFractionToCase < 0.0 || RefrigCase(CaseNum).LightingFractionToCase > 1.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} has a value outside the valid range",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(NumNum)));
+                                EnergyPlus::format("{}{}=\"{}\", {} has a value outside the valid range",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(NumNum)));
                 ShowContinueError(state, "  Minimum should be >= 0.0 and Maximum should be <= 1.0");
                 ErrorsFound = true;
             }
@@ -943,11 +944,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
             RefrigCase(CaseNum).AntiSweatPower = Numbers(NumNum);
             if (Numbers(NumNum) < 0.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(NumNum)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(NumNum)));
                 ErrorsFound = true;
             }
 
@@ -955,11 +956,11 @@ void GetRefrigerationInput(EnergyPlusData &state)
             RefrigCase(CaseNum).MinimumASPower = Numbers(NumNum);
             if (Numbers(NumNum) < 0.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(NumNum)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be greater than or equal to 0 W/m",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(NumNum)));
                 ErrorsFound = true;
             }
 
@@ -975,12 +976,12 @@ void GetRefrigerationInput(EnergyPlusData &state)
             if (RefrigCase(CaseNum).Temperature >= RefrigCase(CaseNum).RatedAmbientDewPoint &&
                 RefrigCase(CaseNum).AntiSweatControlType == ASHtrCtrlType::DewPoint) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be below the Rated Ambient Dew Point when {} is Dew Point Method",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(7),
-                                            cAlphaFieldNames(7)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be below the Rated Ambient Dew Point when {} is Dew Point Method",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(7),
+                                                   cAlphaFieldNames(7)));
                 ErrorsFound = true;
             }
 
@@ -992,13 +993,13 @@ void GetRefrigerationInput(EnergyPlusData &state)
             if (RefrigCase(CaseNum).HumAtZeroAS >= RefrigCase(CaseNum).RatedAmbientRH &&
                 RefrigCase(CaseNum).AntiSweatControlType == ASHtrCtrlType::Linear) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", {} must be less than {}",
-                                            RoutineName,
-                                            CurrentModuleObject,
-                                            RefrigCase(CaseNum).Name,
-                                            cNumericFieldNames(NumNum),
-                                            cNumericFieldNames(2)));
-                ShowContinueError(state, std::format(" for Linear {}.", cAlphaFieldNames(7)));
+                                EnergyPlus::format("{}{}=\"{}\", {} must be less than {}",
+                                                   RoutineName,
+                                                   CurrentModuleObject,
+                                                   RefrigCase(CaseNum).Name,
+                                                   cNumericFieldNames(NumNum),
+                                                   cNumericFieldNames(2)));
+                ShowContinueError(state, EnergyPlus::format(" for Linear {}.", cAlphaFieldNames(7)));
                 ErrorsFound = true;
             }
 

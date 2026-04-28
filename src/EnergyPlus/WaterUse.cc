@@ -165,7 +165,8 @@ namespace WaterUse {
                     if (!state.dataGlobal->WarmupFlag) {
                         if (waterConnection.MaxIterationsErrorIndex == 0) {
                             ShowWarningError(
-                                state, std::format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", waterConnection.Name));
+                                state,
+                                EnergyPlus::format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", waterConnection.Name));
                             ShowContinueErrorTimeStamp(state, "");
                         }
                         ShowRecurringWarningErrorAtEnd(state,
@@ -199,7 +200,8 @@ namespace WaterUse {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(state, std::format("LocalWaterUseConnectionFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(state,
+                       EnergyPlus::format("LocalWaterUseConnectionFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -262,7 +264,8 @@ namespace WaterUse {
             if (NumIteration > MaxIterations) {
                 if (!state.dataGlobal->WarmupFlag) {
                     if (this->MaxIterationsErrorIndex == 0) {
-                        ShowWarningError(state, std::format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", this->Name));
+                        ShowWarningError(state,
+                                         EnergyPlus::format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", this->Name));
                         ShowContinueErrorTimeStamp(state, "");
                     }
                     ShowRecurringWarningErrorAtEnd(state,
@@ -371,7 +374,7 @@ namespace WaterUse {
             } // WaterEquipNum
 
             if (ErrorsFound) {
-                ShowFatalError(state, std::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+                ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
             }
         }
 
@@ -471,8 +474,10 @@ namespace WaterUse {
                         static_cast<HeatRecovHX>(getEnumValue(HeatRecoverHXNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(8))));
                     if (waterConnection.HeatRecoveryHX == HeatRecovHX::Invalid) {
                         ShowSevereError(
-                            state, std::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(8), state.dataIPShortCut->cAlphaArgs(8)));
-                        ShowContinueError(state, std::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
+                            state,
+                            EnergyPlus::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(8), state.dataIPShortCut->cAlphaArgs(8)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
                         ErrorsFound = true;
                     }
 
@@ -480,8 +485,10 @@ namespace WaterUse {
                         static_cast<HeatRecovConfig>(getEnumValue(HeatRecoveryConfigNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(9))));
                     if (waterConnection.HeatRecoveryConfig == HeatRecovConfig::Invalid) {
                         ShowSevereError(
-                            state, std::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(9), state.dataIPShortCut->cAlphaArgs(9)));
-                        ShowContinueError(state, std::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
+                            state,
+                            EnergyPlus::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(9), state.dataIPShortCut->cAlphaArgs(9)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
                         ErrorsFound = true;
                     }
                 }
@@ -495,18 +502,19 @@ namespace WaterUse {
 
                     if (WaterEquipNum == 0) {
                         ShowSevereError(state,
-                                        std::format("Invalid {} = {}",
-                                                    state.dataIPShortCut->cAlphaFieldNames(AlphaNum),
-                                                    state.dataIPShortCut->cAlphaArgs(AlphaNum)));
-                        ShowContinueError(state, std::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
+                                        EnergyPlus::format("Invalid {} = {}",
+                                                           state.dataIPShortCut->cAlphaFieldNames(AlphaNum),
+                                                           state.dataIPShortCut->cAlphaArgs(AlphaNum)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
                         ErrorsFound = true;
                     } else {
                         if (state.dataWaterUse->WaterEquipment(WaterEquipNum).Connections > 0) {
                             ShowSevereError(state,
-                                            std::format("{} = {}:  WaterUse:Equipment = {} is already referenced by another object.",
-                                                        state.dataIPShortCut->cCurrentModuleObject,
-                                                        waterConnection.Name,
-                                                        state.dataIPShortCut->cAlphaArgs(AlphaNum)));
+                                            EnergyPlus::format("{} = {}:  WaterUse:Equipment = {} is already referenced by another object.",
+                                                               state.dataIPShortCut->cCurrentModuleObject,
+                                                               waterConnection.Name,
+                                                               state.dataIPShortCut->cAlphaArgs(AlphaNum)));
                             ErrorsFound = true;
                         } else {
                             state.dataWaterUse->WaterEquipment(WaterEquipNum).Connections = WaterConnNum;
@@ -523,7 +531,7 @@ namespace WaterUse {
             } // WaterConnNum
 
             if (ErrorsFound) {
-                ShowFatalError(state, std::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+                ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
             }
 
             if (state.dataWaterUse->numWaterConnections > 0) {
@@ -1049,7 +1057,7 @@ namespace WaterUse {
                     } else {
                         ShowRecurringWarningErrorAtEnd(
                             state,
-                            std::format(
+                            EnergyPlus::format(
                                 "\"{}\" - Target water temperature should be greater than or equal to the cold water temperature error continues...",
                                 this->Name),
                             this->TargetCWTempErrIndex,
@@ -1082,8 +1090,9 @@ namespace WaterUse {
                         } else {
                             ShowRecurringWarningErrorAtEnd(
                                 state,
-                                std::format("\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
-                                            this->Name),
+                                EnergyPlus::format(
+                                    "\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
+                                    this->Name),
                                 this->CWHWTempErrIndex,
                                 TempDiff,
                                 TempDiff);
@@ -1105,13 +1114,14 @@ namespace WaterUse {
                                               "...Target water temperature should be less than or equal to the hot water temperature. "
                                               "Verify temperature setpoints and schedules.");
                         } else {
-                            ShowRecurringWarningErrorAtEnd(state,
-                                                           std::format("\"{}\" - Target water temperature should be less than or equal to the hot "
-                                                                       "water temperature error continues...",
-                                                                       this->Name),
-                                                           this->TargetHWTempErrIndex,
-                                                           TempDiff,
-                                                           TempDiff);
+                            ShowRecurringWarningErrorAtEnd(
+                                state,
+                                EnergyPlus::format("\"{}\" - Target water temperature should be less than or equal to the hot "
+                                                   "water temperature error continues...",
+                                                   this->Name),
+                                this->TargetHWTempErrIndex,
+                                TempDiff,
+                                TempDiff);
                         }
                     }
                 }
@@ -1140,8 +1150,9 @@ namespace WaterUse {
                         } else {
                             ShowRecurringWarningErrorAtEnd(
                                 state,
-                                std::format("\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
-                                            this->Name),
+                                EnergyPlus::format(
+                                    "\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
+                                    this->Name),
                                 this->CWHWTempErrIndex,
                                 TempDiff,
                                 TempDiff);

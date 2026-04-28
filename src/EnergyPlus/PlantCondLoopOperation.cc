@@ -49,6 +49,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <vector>
 
 // ObjexxFCL Headers
@@ -232,9 +233,9 @@ void ManagePlantLoadDistribution(EnergyPlusData &state,
     }
     default: {
         // No controls specified.  This is a fatal error
-        ShowFatalError(
-            state,
-            std::format("Invalid Operation Scheme Type Requested={}, in ManagePlantLoadDistribution", plantLoc.loop->OpScheme(CurSchemePtr).TypeOf));
+        ShowFatalError(state,
+                       EnergyPlus::format("Invalid Operation Scheme Type Requested={}, in ManagePlantLoadDistribution",
+                                          plantLoc.loop->OpScheme(CurSchemePtr).TypeOf));
     }
     }
 
@@ -438,12 +439,12 @@ void GetPlantOperationInput(EnergyPlusData &state, bool &GetInputOK)
                             state.dataPlnt->PlantLoop(LoopNum).OpScheme(Num).Type = OpScheme::Uncontrolled;
                         } else { // invalid op scheme type for plant loop
                             ShowSevereError(state,
-                                            std::format("{}Invalid {}={}, entered in {}={}",
-                                                        RoutineName,
-                                                        state.dataIPShortCut->cAlphaFieldNames(Num * 3 - 1),
-                                                        state.dataIPShortCut->cAlphaArgs(Num * 3 - 1),
-                                                        CurrentModuleObject,
-                                                        state.dataIPShortCut->cAlphaArgs(1)));
+                                            EnergyPlus::format("{}Invalid {}={}, entered in {}={}",
+                                                               RoutineName,
+                                                               state.dataIPShortCut->cAlphaFieldNames(Num * 3 - 1),
+                                                               state.dataIPShortCut->cAlphaArgs(Num * 3 - 1),
+                                                               CurrentModuleObject,
+                                                               state.dataIPShortCut->cAlphaArgs(1)));
                             ErrorsFound = true;
                         }
                     }
@@ -459,25 +460,25 @@ void GetPlantOperationInput(EnergyPlusData &state, bool &GetInputOK)
                 }
             } else {
                 ShowSevereError(state,
-                                std::format("{} = \"{}\", requires at least {}, {} and {} to be specified.",
-                                            CurrentModuleObject,
-                                            state.dataIPShortCut->cAlphaArgs(1),
-                                            state.dataIPShortCut->cAlphaFieldNames(2),
-                                            state.dataIPShortCut->cAlphaFieldNames(3),
-                                            state.dataIPShortCut->cAlphaFieldNames(4)));
+                                EnergyPlus::format("{} = \"{}\", requires at least {}, {} and {} to be specified.",
+                                                   CurrentModuleObject,
+                                                   state.dataIPShortCut->cAlphaArgs(1),
+                                                   state.dataIPShortCut->cAlphaFieldNames(2),
+                                                   state.dataIPShortCut->cAlphaFieldNames(3),
+                                                   state.dataIPShortCut->cAlphaFieldNames(4)));
                 ErrorsFound = true;
             }
         } else {
-            ShowSevereError(state, std::format("{}{}={} is expecting", RoutineName, PlantLoopObject, state.dataPlnt->PlantLoop(LoopNum).Name));
-            ShowContinueError(state, std::format("{}={}, but not found.", CurrentModuleObject, PlantOpSchemeName));
+            ShowSevereError(state, EnergyPlus::format("{}{}={} is expecting", RoutineName, PlantLoopObject, state.dataPlnt->PlantLoop(LoopNum).Name));
+            ShowContinueError(state, EnergyPlus::format("{}={}, but not found.", CurrentModuleObject, PlantOpSchemeName));
             ErrorsFound = true;
         }
     }
 
     if (ErrorsFound) {
-        ShowFatalError(
-            state,
-            std::format("{}Errors found in getting input for PlantEquipmentOperationSchemes or CondenserEquipmentOperationSchemes", RoutineName));
+        ShowFatalError(state,
+                       EnergyPlus::format("{}Errors found in getting input for PlantEquipmentOperationSchemes or CondenserEquipmentOperationSchemes",
+                                          RoutineName));
     }
 }
 
@@ -717,10 +718,10 @@ void GetOperationSchemeInput(EnergyPlusData &state)
                 } else { // invalid op scheme type for plant loop
                     // Seems like the alpha args below is incorrect....
                     ShowSevereError(state,
-                                    std::format("Invalid operation scheme type = \"{}\", entered in {}={}",
-                                                state.dataIPShortCut->cAlphaArgs(Num * 3 - 1),
-                                                CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaArgs(1)));
+                                    EnergyPlus::format("Invalid operation scheme type = \"{}\", entered in {}={}",
+                                                       state.dataIPShortCut->cAlphaArgs(Num * 3 - 1),
+                                                       CurrentModuleObject,
+                                                       state.dataIPShortCut->cAlphaArgs(1)));
                     ErrorsFound = true;
                 }
             }
@@ -736,7 +737,7 @@ void GetOperationSchemeInput(EnergyPlusData &state)
 
     // Validate that component names/types in each list correspond to a valid component in input file
     if (ErrorsFound) {
-        ShowFatalError(state, std::format("{}Errors found getting inputs. Previous error(s) cause program termination.", RoutineName));
+        ShowFatalError(state, EnergyPlus::format("{}Errors found getting inputs. Previous error(s) cause program termination.", RoutineName));
     }
 }
 
@@ -815,11 +816,11 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
             }
             if (Num == NumSchemes) {
                 ShowSevereError(state,
-                                std::format("{} = \"{}\", could not find {} = \"{}\".",
-                                            LoopOpSchemeObj,
-                                            state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                            CurrentModuleObject,
-                                            state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                                EnergyPlus::format("{} = \"{}\", could not find {} = \"{}\".",
+                                                   LoopOpSchemeObj,
+                                                   state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                                   CurrentModuleObject,
+                                                   state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
                 ErrorsFound = true;
                 SchemeNameFound = false;
             }
@@ -827,7 +828,7 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
         if (SchemeNameFound) {
             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).NumEquipLists = (NumAlphas - 1);
             if (state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).NumEquipLists <= 0) {
-                ShowSevereError(state, std::format("{} = \"{}\", specified without equipment list.", CurrentModuleObject, AlphArray(1)));
+                ShowSevereError(state, EnergyPlus::format("{} = \"{}\", specified without equipment list.", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             } else {
                 int ListNum;
@@ -852,11 +853,11 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
                         if (state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).RangeLowerLimit >
                             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).RangeUpperLimit) {
                             ShowSevereError(state,
-                                            std::format("{} = \"{}\", found a lower limit that is higher than an upper limit in {} = \"{}\".",
-                                                        LoopOpSchemeObj,
-                                                        state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                                        CurrentModuleObject,
-                                                        state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                                            EnergyPlus::format("{} = \"{}\", found a lower limit that is higher than an upper limit in {} = \"{}\".",
+                                                               LoopOpSchemeObj,
+                                                               state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                                               CurrentModuleObject,
+                                                               state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
                             ErrorsFound = true;
                         }
 
@@ -875,11 +876,11 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
                             // Check if inner list has a lower limit that is between an outer's lower and upper limit
                             if (InnerListNumLowerLimit > OuterListNumLowerLimit && InnerListNumLowerLimit < OuterListNumUpperLimit) {
                                 ShowWarningError(state,
-                                                 std::format("{} = \"{}\", detected overlapping ranges in {} = \"{}\".",
-                                                             LoopOpSchemeObj,
-                                                             state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                                             CurrentModuleObject,
-                                                             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                                                 EnergyPlus::format("{} = \"{}\", detected overlapping ranges in {} = \"{}\".",
+                                                                    LoopOpSchemeObj,
+                                                                    state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                                                    CurrentModuleObject,
+                                                                    state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
                                 ShowContinueError(state,
                                                   EnergyPlus::format("Range # {} Lower limit = {:.1R} lies within the Range # {} ({:.1R} to {:.1R}).",
                                                                      InnerListNum,
@@ -893,11 +894,11 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
                             // Check if inner list has an upper limit that is between an outer's lower and upper limit
                             if (InnerListNumUpperLimit > OuterListNumLowerLimit && InnerListNumUpperLimit < OuterListNumUpperLimit) {
                                 ShowWarningError(state,
-                                                 std::format("{} = \"{}\", detected overlapping ranges in {} = \"{}\".",
-                                                             LoopOpSchemeObj,
-                                                             state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                                             CurrentModuleObject,
-                                                             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                                                 EnergyPlus::format("{} = \"{}\", detected overlapping ranges in {} = \"{}\".",
+                                                                    LoopOpSchemeObj,
+                                                                    state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                                                    CurrentModuleObject,
+                                                                    state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
                                 ShowContinueError(state,
                                                   EnergyPlus::format("Range # {} Upper limit = {:.1R} lies within Range # {} ({:.1R} to {:.1R}).",
                                                                      InnerListNum,
@@ -915,11 +916,11 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
         }
     } else {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", could not find {} = \"{}\".",
-                                    LoopOpSchemeObj,
-                                    state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                    CurrentModuleObject,
-                                    state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                        EnergyPlus::format("{} = \"{}\", could not find {} = \"{}\".",
+                                           LoopOpSchemeObj,
+                                           state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                           CurrentModuleObject,
+                                           state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
         ErrorsFound = true;
     }
 
@@ -1004,11 +1005,11 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
             }
             if (Num == NumSchemes) {
                 ShowSevereError(state,
-                                std::format("{} = \"{}\", could not find {} = \"{}\".",
-                                            LoopOpSchemeObj,
-                                            state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                            cmoStr,
-                                            state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                                EnergyPlus::format("{} = \"{}\", could not find {} = \"{}\".",
+                                                   LoopOpSchemeObj,
+                                                   state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                                   cmoStr,
+                                                   state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
                 ErrorsFound = true;
                 SchemeNameFound = false;
             }
@@ -1016,7 +1017,7 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
         if (SchemeNameFound) {
             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).NumEquipLists = (NumAlphas - 2);
             if (state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).NumEquipLists <= 0) {
-                ShowSevereError(state, std::format("{} = \"{}\", specified without equipment list.", cmoStr, AlphArray(1)));
+                ShowSevereError(state, EnergyPlus::format("{} = \"{}\", specified without equipment list.", cmoStr, AlphArray(1)));
                 ErrorsFound = true;
             } else {
                 state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList.allocate(
@@ -1040,11 +1041,11 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
                     if (state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).RangeLowerLimit >
                         state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).RangeUpperLimit) {
                         ShowSevereError(state,
-                                        std::format("{} = \"{}\", found a lower limit that is higher than an upper limit in {} = \"{}\".",
-                                                    LoopOpSchemeObj,
-                                                    state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                                    cmoStr,
-                                                    state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                                        EnergyPlus::format("{} = \"{}\", found a lower limit that is higher than an upper limit in {} = \"{}\".",
+                                                           LoopOpSchemeObj,
+                                                           state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                                           cmoStr,
+                                                           state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
                         ErrorsFound = true;
                     }
                     LoadEquipList(state, LoopNum, SchemeNum, ListNum, ErrorsFound);
@@ -1053,11 +1054,11 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
         }
     } else {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", could not find {} = \"{}\".",
-                                    LoopOpSchemeObj,
-                                    state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
-                                    cmoStr,
-                                    state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
+                        EnergyPlus::format("{} = \"{}\", could not find {} = \"{}\".",
+                                           LoopOpSchemeObj,
+                                           state.dataPlnt->PlantLoop(LoopNum).OperationScheme,
+                                           cmoStr,
+                                           state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).Name));
         ErrorsFound = true;
     }
 

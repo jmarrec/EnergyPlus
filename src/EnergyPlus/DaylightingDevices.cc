@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Fmath.hh>
@@ -473,71 +474,71 @@ namespace Dayltg {
                 int SurfNum = Util::FindItemInList(ipsc->cAlphaArgs(2), state.dataSurface->Surface);
 
                 if (SurfNum == 0) {
-                    ShowSevereError(state,
-                                    std::format("{} = {}:  Dome {} not found.", cCurrentModuleObject, ipsc->cAlphaArgs(1), ipsc->cAlphaArgs(2)));
+                    ShowSevereError(
+                        state, EnergyPlus::format("{} = {}:  Dome {} not found.", cCurrentModuleObject, ipsc->cAlphaArgs(1), ipsc->cAlphaArgs(2)));
                     state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                 } else {
                     if (FindTDDPipe(state, SurfNum) > 0) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Dome {} is referenced by more than one TDD.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(2)));
+                                        EnergyPlus::format("{} = {}:  Dome {} is referenced by more than one TDD.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(2)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataSurface->Surface(SurfNum).Class != SurfaceClass::TDD_Dome) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Dome {} is not of surface type TubularDaylightDome.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(2)));
+                                        EnergyPlus::format("{} = {}:  Dome {} is not of surface type TubularDaylightDome.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(2)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).TotGlassLayers > 1) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Dome {} construction ({}) must have only 1 glass layer.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(2),
-                                                    state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).Name));
+                                        EnergyPlus::format("{} = {}:  Dome {} construction ({}) must have only 1 glass layer.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(2),
+                                                           state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).Name));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataSurface->Surface(SurfNum).HasShadeControl) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Dome {} must not have a shading control.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(2)));
+                                        EnergyPlus::format("{} = {}:  Dome {} must not have a shading control.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(2)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataSurface->Surface(SurfNum).FrameDivider > 0) {
                         ShowSevereError(
                             state,
-                            std::format(
+                            EnergyPlus::format(
                                 "{} = {}:  Dome {} must not have a frame/divider.", cCurrentModuleObject, ipsc->cAlphaArgs(1), ipsc->cAlphaArgs(2)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).WindowTypeEQL) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Dome {} Equivalent Layer Window is not supported.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(2)));
+                                        EnergyPlus::format("{} = {}:  Dome {} Equivalent Layer Window is not supported.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(2)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
                     // Window multiplier is already handled in SurfaceGeometry.cc
 
                     if (!state.dataSurface->Surface(SurfNum).ExtSolar) {
                         ShowWarningError(state,
-                                         std::format("{} = {}:  Dome {} is not exposed to exterior radiation.",
-                                                     cCurrentModuleObject,
-                                                     ipsc->cAlphaArgs(1),
-                                                     ipsc->cAlphaArgs(2)));
+                                         EnergyPlus::format("{} = {}:  Dome {} is not exposed to exterior radiation.",
+                                                            cCurrentModuleObject,
+                                                            ipsc->cAlphaArgs(1),
+                                                            ipsc->cAlphaArgs(2)));
                     }
 
                     state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome = SurfNum;
@@ -548,45 +549,46 @@ namespace Dayltg {
                 SurfNum = Util::FindItemInList(ipsc->cAlphaArgs(3), state.dataSurface->Surface);
 
                 if (SurfNum == 0) {
-                    ShowSevereError(state,
-                                    std::format("{} = {}:  Diffuser {} not found.", cCurrentModuleObject, ipsc->cAlphaArgs(1), ipsc->cAlphaArgs(3)));
+                    ShowSevereError(
+                        state,
+                        EnergyPlus::format("{} = {}:  Diffuser {} not found.", cCurrentModuleObject, ipsc->cAlphaArgs(1), ipsc->cAlphaArgs(3)));
                     state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                 } else {
                     if (FindTDDPipe(state, SurfNum) > 0) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Diffuser {} is referenced by more than one TDD.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(3)));
+                                        EnergyPlus::format("{} = {}:  Diffuser {} is referenced by more than one TDD.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(3)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataSurface->Surface(SurfNum).OriginalClass != SurfaceClass::TDD_Diffuser) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Diffuser {} is not of surface type TubularDaylightDiffuser.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(3)));
+                                        EnergyPlus::format("{} = {}:  Diffuser {} is not of surface type TubularDaylightDiffuser.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(3)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).TotGlassLayers > 1) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Diffuser {} construction ({}) must have only 1 glass layer.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(3),
-                                                    state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).Name));
+                                        EnergyPlus::format("{} = {}:  Diffuser {} construction ({}) must have only 1 glass layer.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(3),
+                                                           state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).Name));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).TransDiff <= 1.0e-10) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Diffuser {} construction ({}) invalid value.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(3),
-                                                    state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).Name));
+                                        EnergyPlus::format("{} = {}:  Diffuser {} construction ({}) invalid value.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(3),
+                                                           state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).Name));
                         ShowContinueError(
                             state,
                             EnergyPlus::format("Diffuse solar transmittance of construction [{:.4R}] too small for calculations.",
@@ -602,9 +604,9 @@ namespace Dayltg {
                                                 state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area) >
                             0.1) { // greater than 10%
                             ShowSevereError(state,
-                                            std::format("{} = {}:  Dome and diffuser areas are significantly different (>10%).",
-                                                        cCurrentModuleObject,
-                                                        ipsc->cAlphaArgs(1)));
+                                            EnergyPlus::format("{} = {}:  Dome and diffuser areas are significantly different (>10%).",
+                                                               cCurrentModuleObject,
+                                                               ipsc->cAlphaArgs(1)));
                             ShowContinueError(
                                 state,
                                 EnergyPlus::format("...Diffuser Area=[{:.4R}]; Dome Area=[{:.4R}].",
@@ -612,9 +614,9 @@ namespace Dayltg {
                                                    state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
                             state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                         } else {
-                            ShowWarningError(
-                                state,
-                                std::format("{} = {}:  Dome and diffuser areas differ by > .1 m2.", cCurrentModuleObject, ipsc->cAlphaArgs(1)));
+                            ShowWarningError(state,
+                                             EnergyPlus::format(
+                                                 "{} = {}:  Dome and diffuser areas differ by > .1 m2.", cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                             ShowContinueError(
                                 state,
                                 EnergyPlus::format("...Diffuser Area=[{:.4R}]; Dome Area=[{:.4R}].",
@@ -625,28 +627,28 @@ namespace Dayltg {
 
                     if (state.dataSurface->Surface(SurfNum).HasShadeControl) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Diffuser {} must not have a shading control.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(3)));
+                                        EnergyPlus::format("{} = {}:  Diffuser {} must not have a shading control.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(3)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataSurface->Surface(SurfNum).FrameDivider > 0) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Diffuser {} must not have a frame/divider.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(3)));
+                                        EnergyPlus::format("{} = {}:  Diffuser {} must not have a frame/divider.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(3)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
                     if (state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).WindowTypeEQL) {
                         ShowSevereError(state,
-                                        std::format("{} = {}:  Diffuser {} Equivalent Layer Window is not supported.",
-                                                    cCurrentModuleObject,
-                                                    ipsc->cAlphaArgs(1),
-                                                    ipsc->cAlphaArgs(2)));
+                                        EnergyPlus::format("{} = {}:  Diffuser {} Equivalent Layer Window is not supported.",
+                                                           cCurrentModuleObject,
+                                                           ipsc->cAlphaArgs(1),
+                                                           ipsc->cAlphaArgs(2)));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 

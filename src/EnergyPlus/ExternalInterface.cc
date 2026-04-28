@@ -45,20 +45,21 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// FMI-Related Headers
-extern "C" {
-#include <BCVTB/utilSocket.h>
-#include <BCVTB/utilXml.h>
-#include <FMI/main.h>
-}
-
 // C++ Headers
+#include <format>
 #include <string>
 #include <vector>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/string.functions.hh>
+
+// Third Party Headers
+extern "C" {
+#include <BCVTB/utilSocket.h>
+#include <BCVTB/utilXml.h>
+#include <FMI/main.h>
+}
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -126,7 +127,7 @@ void ExternalInterfaceExchangeVariables(EnergyPlusData &state)
         char *errorMessagePtr(errorMessage.data());
         const int retValErrMsg = checkOperatingSystem(errorMessagePtr);
         if (retValErrMsg != 0) {
-            ShowSevereError(state, std::format("ExternalInterface/ExternalInterfaceExchangeVariables:{}", errorMessagePtr));
+            ShowSevereError(state, EnergyPlus::format("ExternalInterface/ExternalInterfaceExchangeVariables:{}", errorMessagePtr));
             state.dataExternalInterface->ErrorsFound = true;
             StopExternalInterfaceIfError(state);
         }
@@ -401,11 +402,13 @@ void InitExternalInterface(EnergyPlusData &state)
             state.dataExternalInterface->socketFD = establishclientsocket(FileSystem::toString(state.dataExternalInterface->socCfgFilPath).c_str());
             if (state.dataExternalInterface->socketFD < 0) {
                 ShowSevereError(
-                    state, std::format("ExternalInterface: Could not open socket. File descriptor = {}.", state.dataExternalInterface->socketFD));
+                    state,
+                    EnergyPlus::format("ExternalInterface: Could not open socket. File descriptor = {}.", state.dataExternalInterface->socketFD));
                 state.dataExternalInterface->ErrorsFound = true;
             }
         } else {
-            ShowSevereError(state, std::format("ExternalInterface: Did not find file \"{}\".", state.dataExternalInterface->socCfgFilPath.string()));
+            ShowSevereError(state,
+                            EnergyPlus::format("ExternalInterface: Did not find file \"{}\".", state.dataExternalInterface->socCfgFilPath.string()));
             ShowContinueError(state, "This file needs to be in same directory as in.idf.");
             ShowContinueError(state, "Check the documentation for the ExternalInterface.");
             state.dataExternalInterface->ErrorsFound = true;
@@ -481,7 +484,7 @@ void InitExternalInterface(EnergyPlusData &state)
 
         } else {
 
-            ShowSevereError(state, std::format("ExternalInterface: Did not find file \"{}\".", simCfgFilNam));
+            ShowSevereError(state, EnergyPlus::format("ExternalInterface: Did not find file \"{}\".", simCfgFilNam));
             ShowContinueError(state, "This file needs to be in same directory as in.idf.");
             ShowContinueError(state, "Check the documentation for the ExternalInterface.");
             state.dataExternalInterface->ErrorsFound = true;
@@ -490,9 +493,9 @@ void InitExternalInterface(EnergyPlusData &state)
 
         if (state.dataExternalInterface->nOutVal + state.dataExternalInterface->nInpVar > maxVar) {
             ShowSevereError(state, "ExternalInterface: Too many variables to be exchanged.");
-            ShowContinueError(state, std::format("Attempted to exchange {} outputs", state.dataExternalInterface->nOutVal));
-            ShowContinueError(state, std::format("plus {} inputs.", state.dataExternalInterface->nOutVal));
-            ShowContinueError(state, std::format("Maximum allowed is sum is {}.", maxVar));
+            ShowContinueError(state, EnergyPlus::format("Attempted to exchange {} outputs", state.dataExternalInterface->nOutVal));
+            ShowContinueError(state, EnergyPlus::format("plus {} inputs.", state.dataExternalInterface->nOutVal));
+            ShowContinueError(state, EnergyPlus::format("Maximum allowed is sum is {}.", maxVar));
             ShowContinueError(state, "To fix, increase maxVar in ExternalInterface.cc");
             state.dataExternalInterface->ErrorsFound = true;
         }
@@ -515,8 +518,8 @@ void InitExternalInterface(EnergyPlusData &state)
         }
         StopExternalInterfaceIfError(state);
 
-        DisplayString(state, std::format("Number of outputs in ExternalInterface = {}", state.dataExternalInterface->nOutVal));
-        DisplayString(state, std::format("Number of inputs  in ExternalInterface = {}", state.dataExternalInterface->nInpVar));
+        DisplayString(state, EnergyPlus::format("Number of outputs in ExternalInterface = {}", state.dataExternalInterface->nOutVal));
+        DisplayString(state, EnergyPlus::format("Number of inputs  in ExternalInterface = {}", state.dataExternalInterface->nInpVar));
 
         state.dataExternalInterface->InitExternalInterfacefirstCall = false;
 
@@ -542,9 +545,9 @@ void InitExternalInterface(EnergyPlusData &state)
             }
             if (state.dataExternalInterface->varInd(i) <= 0) {
                 ShowSevereError(state,
-                                std::format("ExternalInterface: Error, xml file \"{}\" declares variable \"{}\",",
-                                            simCfgFilNam,
-                                            state.dataExternalInterface->inpVarNames(i)));
+                                EnergyPlus::format("ExternalInterface: Error, xml file \"{}\" declares variable \"{}\",",
+                                                   simCfgFilNam,
+                                                   state.dataExternalInterface->inpVarNames(i)));
                 ShowContinueError(state, "but variable was not found in idf file.");
                 state.dataExternalInterface->ErrorsFound = true;
             }
@@ -556,9 +559,9 @@ void InitExternalInterface(EnergyPlusData &state)
                 state.dataExternalInterface->useEMS = true;
                 if (!RuntimeLanguageProcessor::isExternalInterfaceErlVariable(state, state.dataExternalInterface->varInd(i))) {
                     ShowSevereError(state,
-                                    std::format("ExternalInterface: Error, xml file \"{}\" declares variable \"{}\",",
-                                                simCfgFilNam,
-                                                state.dataExternalInterface->inpVarNames(i)));
+                                    EnergyPlus::format("ExternalInterface: Error, xml file \"{}\" declares variable \"{}\",",
+                                                       simCfgFilNam,
+                                                       state.dataExternalInterface->inpVarNames(i)));
                     ShowContinueError(state, "But this variable is an ordinary Erl variable, not an ExternalInterface variable.");
                     ShowContinueError(state, "You must specify a variable of type \"ExternalInterface:Variable\".");
                     state.dataExternalInterface->ErrorsFound = true;
@@ -567,9 +570,9 @@ void InitExternalInterface(EnergyPlusData &state)
                 state.dataExternalInterface->useEMS = true;
                 if (!RuntimeLanguageProcessor::isExternalInterfaceErlVariable(state, state.dataExternalInterface->varInd(i))) {
                     ShowSevereError(state,
-                                    std::format("ExternalInterface: Error, xml file \"{}\" declares variable \"{}\",",
-                                                simCfgFilNam,
-                                                state.dataExternalInterface->inpVarNames(i)));
+                                    EnergyPlus::format("ExternalInterface: Error, xml file \"{}\" declares variable \"{}\",",
+                                                       simCfgFilNam,
+                                                       state.dataExternalInterface->inpVarNames(i)));
                     ShowContinueError(state, "But this variable is an ordinary Erl actuator, not an ExternalInterface actuator.");
                     ShowContinueError(state, "You must specify a variable of type \"ExternalInterface:Actuator\".");
                     state.dataExternalInterface->ErrorsFound = true;
@@ -637,7 +640,7 @@ void GetSetVariablesAndDoStepFMUImport(EnergyPlusData &state)
 
                     if (fmuInst.fmistatus != fmiOK) {
                         ShowSevereError(state, "ExternalInterface/GetSetVariablesAndDoStepFMUImport: Error when trying to get outputs");
-                        ShowContinueError(state, std::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
+                        ShowContinueError(state, EnergyPlus::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
                         ShowContinueError(state, EnergyPlus::format("Error Code = \"{}\"", fmuInst.fmistatus));
                         state.dataExternalInterface->ErrorsFound = true;
                         StopExternalInterfaceIfError(state);
@@ -665,7 +668,7 @@ void GetSetVariablesAndDoStepFMUImport(EnergyPlusData &state)
 
                     if (fmuInst.fmistatus != fmiOK) {
                         ShowSevereError(state, "ExternalInterface/GetSetVariablesAndDoStepFMUImport: Error when trying to get outputs");
-                        ShowContinueError(state, std::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
+                        ShowContinueError(state, EnergyPlus::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
                         ShowContinueError(state, EnergyPlus::format("Error Code = \"{}\"", fmuInst.fmistatus));
                         state.dataExternalInterface->ErrorsFound = true;
                         StopExternalInterfaceIfError(state);
@@ -693,7 +696,7 @@ void GetSetVariablesAndDoStepFMUImport(EnergyPlusData &state)
 
                     if (fmuInst.fmistatus != fmiOK) {
                         ShowSevereError(state, "ExternalInterface/GetSetVariablesAndDoStepFMUImport: Error when trying to get outputs");
-                        ShowContinueError(state, std::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
+                        ShowContinueError(state, EnergyPlus::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
                         ShowContinueError(state, EnergyPlus::format("Error Code = \"{}\"", fmuInst.fmistatus));
                         state.dataExternalInterface->ErrorsFound = true;
                         StopExternalInterfaceIfError(state);
@@ -753,7 +756,7 @@ void GetSetVariablesAndDoStepFMUImport(EnergyPlusData &state)
 
                 if (fmuInst.fmistatus != fmiOK) {
                     ShowSevereError(state, "ExternalInterface/GetSetVariablesAndDoStepFMUImport: Error when trying to set inputs");
-                    ShowContinueError(state, std::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
+                    ShowContinueError(state, EnergyPlus::format("in instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
                     ShowContinueError(state, EnergyPlus::format("Error Code = \"{}\"", fmuInst.fmistatus));
                     state.dataExternalInterface->ErrorsFound = true;
                     StopExternalInterfaceIfError(state);
@@ -765,8 +768,8 @@ void GetSetVariablesAndDoStepFMUImport(EnergyPlusData &state)
                 &fmuInst.fmicomponent, &state.dataExternalInterface->tComm, &state.dataExternalInterface->hStep, &localfmitrue, &fmuInst.Index);
             if (fmuInst.fmistatus != fmiOK) {
                 ShowSevereError(state, "ExternalInterface/GetSetVariablesAndDoStepFMUImport: Error when trying to");
-                ShowContinueError(state, std::format("do the coSimulation with instance \"{}\"", fmuInst.Name));
-                ShowContinueError(state, std::format("of FMU \"{}\"", fmu.Name));
+                ShowContinueError(state, EnergyPlus::format("do the coSimulation with instance \"{}\"", fmuInst.Name));
+                ShowContinueError(state, EnergyPlus::format("of FMU \"{}\"", fmu.Name));
                 ShowContinueError(state, EnergyPlus::format("Error Code = \"{}\"", fmuInst.fmistatus));
                 state.dataExternalInterface->ErrorsFound = true;
                 StopExternalInterfaceIfError(state);
@@ -2134,9 +2137,9 @@ void CalcExternalInterface(EnergyPlusData &state)
     // Socket asked to terminate simulation, but simulation continues
     if (state.dataExternalInterface->noMoreValues && state.dataExternalInterface->showContinuationWithoutUpdate) {
         if (state.dataExternalInterface->haveExternalInterfaceBCVTB) {
-            ShowWarningError(state,
-                             EnergyPlus::format("ExternalInterface: Continue simulation without updated values from server at t ={:.2T} hours",
-                                                preSimTim / 3600.0));
+            ShowWarningError(
+                state,
+                std::format("ExternalInterface: Continue simulation without updated values from server at t ={:.2f} hours", preSimTim / 3600.0));
         }
         state.dataExternalInterface->showContinuationWithoutUpdate = false;
     }
@@ -2195,9 +2198,9 @@ void CalcExternalInterface(EnergyPlusData &state)
             if (retVal != 0) {
                 continueSimulation = false;
                 ShowSevereError(state,
-                                EnergyPlus::format("ExternalInterface: Socket communication received error value \"{:2}\" at time = {:.2T} hours.",
-                                                   retVal,
-                                                   preSimTim / 3600));
+                                std::format("ExternalInterface: Socket communication received error value \"{:2}\" at time = {:.2f} hours.",
+                                            retVal,
+                                            preSimTim / 3600));
                 ShowContinueError(state, std::format("ExternalInterface: Flag from server \"{:2}\".", flaRea));
                 state.dataExternalInterface->ErrorsFound = true;
                 StopExternalInterfaceIfError(state);
@@ -2210,8 +2213,7 @@ void CalcExternalInterface(EnergyPlusData &state)
             // Added a check since the FMUExport  is terminated with the flaRea set to 1.
             state.dataExternalInterface->noMoreValues = true;
             if (state.dataExternalInterface->haveExternalInterfaceBCVTB) {
-                ShowSevereError(state,
-                                EnergyPlus::format("ExternalInterface: Received end of simulation flag at time = {:.2T} hours.", preSimTim / 3600));
+                ShowSevereError(state, std::format("ExternalInterface: Received end of simulation flag at time = {:.2f} hours.", preSimTim / 3600));
                 StopExternalInterfaceIfError(state);
             }
         }

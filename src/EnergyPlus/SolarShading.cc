@@ -49,12 +49,16 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <memory>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Vector3.hh>
 #include <ObjexxFCL/member.functions.hh>
+
+// Third Party Headers
+#include <WCEMultiLayerOptics.hpp>
 
 // EnergyPlus Headers
 #include <EnergyPlus/CommandLineInterface.hh>
@@ -95,7 +99,6 @@
 #include <EnergyPlus/WindowManagerExteriorData.hh>
 #include <EnergyPlus/WindowModel.hh>
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
-#include <WCEMultiLayerOptics.hpp>
 
 namespace EnergyPlus::SolarShading {
 
@@ -187,8 +190,8 @@ void InitSolarCalculations(EnergyPlusData &state)
                 std::make_unique<std::fstream>(state.dataStrGlobals->outputShdFilePath, std::ios_base::out | std::ios_base::trunc);
             if (!state.dataSolarShading->shd_stream) {
                 ShowFatalError(state,
-                               std::format("InitSolarCalculations: Could not open file \"{}\" for output (write).",
-                                           state.dataStrGlobals->outputShdFilePath.string()));
+                               EnergyPlus::format("InitSolarCalculations: Could not open file \"{}\" for output (write).",
+                                                  state.dataStrGlobals->outputShdFilePath.string()));
             }
         } else {
             state.dataSolarShading->shd_stream = std::make_unique<std::iostream>(nullptr);
@@ -404,9 +407,9 @@ void checkShadingSurfaceSchedules(EnergyPlusData &state)
         } else if (!thisSurface.MirroredSurf) {
             // Warning moved here from shading surface input processing (skip warning for mirrored surfaces)
             ShowWarningError(state,
-                             std::format(R"(Shading Surface="{}", Transmittance Schedule Name="{}", is always transparent.)",
-                                         thisSurface.Name,
-                                         thisSurface.shadowSurfSched->Name));
+                             EnergyPlus::format(R"(Shading Surface="{}", Transmittance Schedule Name="{}", is always transparent.)",
+                                                thisSurface.Name,
+                                                thisSurface.shadowSurfSched->Name));
             ShowContinueError(state, "This shading surface will be ignored.");
         }
     }
@@ -441,7 +444,8 @@ void GetShadowingInput(EnergyPlusData &state)
     NumAlphas = 0;
     NumNumbers = 0;
     if (NumItems > 1) {
-        ShowWarningError(state, std::format("{}: More than 1 occurrence of this object found, only first will be used.", cCurrentModuleObject));
+        ShowWarningError(state,
+                         EnergyPlus::format("{}: More than 1 occurrence of this object found, only first will be used.", cCurrentModuleObject));
     }
 
     if (NumItems != 0) {
@@ -465,7 +469,7 @@ void GetShadowingInput(EnergyPlusData &state)
         state.dataSolarShading->ShadowingCalcFrequency = 20;
     }
     if (state.dataSolarShading->ShadowingCalcFrequency > 31) {
-        ShowWarningError(state, std::format("{}: suspect {}", cCurrentModuleObject, state.dataIPShortCut->cNumericFieldNames(1)));
+        ShowWarningError(state, EnergyPlus::format("{}: suspect {}", cCurrentModuleObject, state.dataIPShortCut->cNumericFieldNames(1)));
         ShowContinueError(
             state, EnergyPlus::format("Value entered=[{:.0R}], Shadowing Calculations will be inaccurate.", state.dataIPShortCut->rNumericArgs(1)));
     }
@@ -487,11 +491,11 @@ void GetShadowingInput(EnergyPlusData &state)
                 state.dataSysVars->shadingMethod = ShadingMethod::Imported;
                 state.dataIPShortCut->cAlphaArgs(aNum) = "Imported";
             } else {
-                ShowWarningError(state, std::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
+                ShowWarningError(state, EnergyPlus::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
                 ShowContinueError(
                     state,
-                    std::format("Value entered=\"{}\" while no Schedule:File:Shading object is defined, InternalCalculation will be used.",
-                                state.dataIPShortCut->cAlphaArgs(aNum)));
+                    EnergyPlus::format("Value entered=\"{}\" while no Schedule:File:Shading object is defined, InternalCalculation will be used.",
+                                       state.dataIPShortCut->cAlphaArgs(aNum)));
             }
         } else if (Util::SameString(state.dataIPShortCut->cAlphaArgs(aNum), "PolygonClipping")) {
             state.dataSysVars->shadingMethod = ShadingMethod::PolygonClipping;
@@ -503,8 +507,8 @@ void GetShadowingInput(EnergyPlusData &state)
                 pixelRes = (unsigned)state.dataIPShortCut->rNumericArgs(3);
             }
 #ifdef EP_NO_OPENGL
-            ShowWarningError(state, std::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
-            ShowContinueError(state, std::format("Value entered=\"{}\"", state.dataIPShortCut->cAlphaArgs(aNum)));
+            ShowWarningError(state, EnergyPlus::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
+            ShowContinueError(state, EnergyPlus::format("Value entered=\"{}\"", state.dataIPShortCut->cAlphaArgs(aNum)));
             ShowContinueError(state, "This version of EnergyPlus was not compiled to use OpenGL (required for PixelCounting)");
             ShowContinueError(state, "PolygonClipping will be used instead");
             state.dataSysVars->shadingMethod = ShadingMethod::PolygonClipping;
@@ -523,8 +527,9 @@ void GetShadowingInput(EnergyPlusData &state)
             }
 #endif
         } else {
-            ShowWarningError(state, std::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
-            ShowContinueError(state, std::format("Value entered=\"{}\", PolygonClipping will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
+            ShowWarningError(state, EnergyPlus::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
+            ShowContinueError(state,
+                              EnergyPlus::format("Value entered=\"{}\", PolygonClipping will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
         }
     } else {
         state.dataIPShortCut->cAlphaArgs(aNum) = "PolygonClipping";
@@ -540,8 +545,8 @@ void GetShadowingInput(EnergyPlusData &state)
             state.dataSysVars->DetailedSolarTimestepIntegration = true;
             state.dataIPShortCut->cAlphaArgs(aNum) = "Timestep";
         } else {
-            ShowWarningError(state, std::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
-            ShowContinueError(state, std::format("Value entered=\"{}\", Periodic will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
+            ShowWarningError(state, EnergyPlus::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
+            ShowContinueError(state, EnergyPlus::format("Value entered=\"{}\", Periodic will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
             state.dataSysVars->DetailedSolarTimestepIntegration = false;
             state.dataIPShortCut->cAlphaArgs(aNum) = "Periodic";
         }
@@ -573,18 +578,18 @@ void GetShadowingInput(EnergyPlusData &state)
                 }
             }
         } else {
-            ShowWarningError(state, std::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
+            ShowWarningError(state, EnergyPlus::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
             if (!state.dataSysVars->SutherlandHodgman) {
-                ShowContinueError(state,
-                                  std::format("Value entered=\"{}\", ConvexWeilerAtherton will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Value entered=\"{}\", ConvexWeilerAtherton will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
             } else {
                 if (!state.dataSysVars->SlaterBarsky) {
-                    ShowContinueError(state,
-                                      std::format("Value entered=\"{}\", SutherlandHodgman will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
-                } else {
                     ShowContinueError(
-                        state,
-                        std::format("Value entered=\"{}\", SlaterBarskyandSutherlandHodgman will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
+                        state, EnergyPlus::format("Value entered=\"{}\", SutherlandHodgman will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
+                } else {
+                    ShowContinueError(state,
+                                      EnergyPlus::format("Value entered=\"{}\", SlaterBarskyandSutherlandHodgman will be used.",
+                                                         state.dataIPShortCut->cAlphaArgs(aNum)));
                 }
             }
         }
@@ -612,9 +617,9 @@ void GetShadowingInput(EnergyPlusData &state)
             state.dataSysVars->DetailedSkyDiffuseAlgorithm = false;
             state.dataIPShortCut->cAlphaArgs(aNum) = "SimpleSkyDiffuseModeling";
         } else {
-            ShowWarningError(state, std::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
-            ShowContinueError(state,
-                              std::format("Value entered=\"{}\", SimpleSkyDiffuseModeling will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
+            ShowWarningError(state, EnergyPlus::format("{}: invalid {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(aNum)));
+            ShowContinueError(
+                state, EnergyPlus::format("Value entered=\"{}\", SimpleSkyDiffuseModeling will be used.", state.dataIPShortCut->cAlphaArgs(aNum)));
         }
     } else {
         state.dataIPShortCut->cAlphaArgs(aNum) = "SimpleSkyDiffuseModeling";

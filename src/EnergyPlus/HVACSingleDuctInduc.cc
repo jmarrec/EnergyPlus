@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -127,26 +128,26 @@ namespace HVACSingleDuctInduc {
         if (CompIndex == 0) {
             IUNum = Util::FindItemInList(CompName, state.dataHVACSingleDuctInduc->IndUnit);
             if (IUNum == 0) {
-                ShowFatalError(state, std::format("SimIndUnit: Induction Unit not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimIndUnit: Induction Unit not found={}", CompName));
             }
             CompIndex = IUNum;
         } else {
             IUNum = CompIndex;
             if (IUNum > state.dataHVACSingleDuctInduc->NumIndUnits || IUNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimIndUnit: Invalid CompIndex passed={}, Number of Induction Units={}, System name={}",
-                                           CompIndex,
-                                           state.dataHVACSingleDuctInduc->NumIndUnits,
-                                           CompName));
+                               EnergyPlus::format("SimIndUnit: Invalid CompIndex passed={}, Number of Induction Units={}, System name={}",
+                                                  CompIndex,
+                                                  state.dataHVACSingleDuctInduc->NumIndUnits,
+                                                  CompName));
             }
             if (state.dataHVACSingleDuctInduc->CheckEquipName(IUNum)) {
                 if (CompName != state.dataHVACSingleDuctInduc->IndUnit(IUNum).Name) {
                     ShowFatalError(
                         state,
-                        std::format("SimIndUnit: Invalid CompIndex passed={}, Induction Unit name={}, stored Induction Unit for that index={}",
-                                    CompIndex,
-                                    CompName,
-                                    state.dataHVACSingleDuctInduc->IndUnit(IUNum).Name));
+                        EnergyPlus::format("SimIndUnit: Invalid CompIndex passed={}, Induction Unit name={}, stored Induction Unit for that index={}",
+                                           CompIndex,
+                                           CompName,
+                                           state.dataHVACSingleDuctInduc->IndUnit(IUNum).Name));
                 }
                 state.dataHVACSingleDuctInduc->CheckEquipName(IUNum) = false;
             }
@@ -166,8 +167,8 @@ namespace HVACSingleDuctInduc {
             SimFourPipeIndUnit(state, IUNum, ZoneNum, ZoneNodeNum, FirstHVACIteration);
         } break;
         default: {
-            ShowSevereError(state, std::format("Illegal Induction Unit Type used={}", indUnit.UnitType));
-            ShowContinueError(state, std::format("Occurs in Induction Unit={}", indUnit.Name));
+            ShowSevereError(state, EnergyPlus::format("Illegal Induction Unit Type used={}", indUnit.UnitType));
+            ShowContinueError(state, EnergyPlus::format("Occurs in Induction Unit={}", indUnit.Name));
             ShowFatalError(state, "Preceding condition causes termination.");
         } break;
         }
@@ -307,7 +308,7 @@ namespace HVACSingleDuctInduc {
             bool IsNotOK = false;
             indUnit.HWControlNode = WaterCoils::GetCoilWaterInletNode(state, indUnit.HCoilType, indUnit.HCoil, IsNotOK);
             if (IsNotOK) {
-                ShowContinueError(state, std::format("In {} = {}", CurrentModuleObject, indUnit.Name));
+                ShowContinueError(state, EnergyPlus::format("In {} = {}", CurrentModuleObject, indUnit.Name));
                 ShowContinueError(state, "..Only Coil:Heating:Water is allowed.");
                 ErrorsFound = true;
             }
@@ -327,7 +328,7 @@ namespace HVACSingleDuctInduc {
             IsNotOK = false;
             indUnit.CWControlNode = WaterCoils::GetCoilWaterInletNode(state, indUnit.CCoilType, indUnit.CCoil, IsNotOK);
             if (IsNotOK) {
-                ShowContinueError(state, std::format("In {} = {}", CurrentModuleObject, indUnit.Name));
+                ShowContinueError(state, EnergyPlus::format("In {} = {}", CurrentModuleObject, indUnit.Name));
                 ShowContinueError(state, "..Only Coil:Cooling:Water or Coil:Cooling:Water:DetailedGeometry is allowed.");
                 ErrorsFound = true;
             }
@@ -340,7 +341,7 @@ namespace HVACSingleDuctInduc {
             indUnit.MixerName = Alphas(10);
             MixerComponent::GetZoneMixerIndex(state, indUnit.MixerName, indUnit.Mixer_Num, errFlag, CurrentModuleObject);
             if (errFlag) {
-                ShowContinueError(state, std::format("...specified in {} = {}", CurrentModuleObject, indUnit.Name));
+                ShowContinueError(state, EnergyPlus::format("...specified in {} = {}", CurrentModuleObject, indUnit.Name));
                 ErrorsFound = true;
             }
 
@@ -364,9 +365,10 @@ namespace HVACSingleDuctInduc {
             }
             // one assumes if there isn't one assigned, it's an error?
             if (indUnit.ADUNum == 0) {
-                ShowSevereError(state,
-                                std::format("{}No matching Air Distribution Unit, for Unit = [{},{}].", RoutineName, indUnit.UnitType, indUnit.Name));
-                ShowContinueError(state, std::format("...should have outlet node={}", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("{}No matching Air Distribution Unit, for Unit = [{},{}].", RoutineName, indUnit.UnitType, indUnit.Name));
+                ShowContinueError(state, EnergyPlus::format("...should have outlet node={}", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
                 ErrorsFound = true;
             } else {
                 // Fill the Zone Equipment data with the supply air inlet node number of this unit.
@@ -382,8 +384,9 @@ namespace HVACSingleDuctInduc {
                             if (zoneEquipConfig.AirDistUnitCool(SupAirIn).OutNode > 0) {
                                 ShowSevereError(state, "Error in connecting a terminal unit to a zone");
                                 ShowContinueError(
-                                    state, std::format("{} already connects to another zone", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
-                                ShowContinueError(state, std::format("Occurs for terminal unit {} = {}", indUnit.UnitType, indUnit.Name));
+                                    state,
+                                    EnergyPlus::format("{} already connects to another zone", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
+                                ShowContinueError(state, EnergyPlus::format("Occurs for terminal unit {} = {}", indUnit.UnitType, indUnit.Name));
                                 ShowContinueError(state, "Check terminal unit node names for errors");
                                 ErrorsFound = true;
                             } else {
@@ -401,8 +404,8 @@ namespace HVACSingleDuctInduc {
                     }
                 }
                 if (!AirNodeFound) {
-                    ShowSevereError(state, std::format("The outlet air node from the {} = {}", CurrentModuleObject, indUnit.Name));
-                    ShowContinueError(state, std::format("did not have a matching Zone Equipment Inlet Node, Node ={}", Alphas(3)));
+                    ShowSevereError(state, EnergyPlus::format("The outlet air node from the {} = {}", CurrentModuleObject, indUnit.Name));
+                    ShowContinueError(state, EnergyPlus::format("did not have a matching Zone Equipment Inlet Node, Node ={}", Alphas(3)));
                     ErrorsFound = true;
                 }
             }
@@ -423,7 +426,7 @@ namespace HVACSingleDuctInduc {
         lAlphaBlanks.deallocate();
         lNumericBlanks.deallocate();
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}Errors found in getting input. Preceding conditions cause termination.", RoutineName));
+            ShowFatalError(state, EnergyPlus::format("{}Errors found in getting input. Preceding conditions cause termination.", RoutineName));
         }
     }
 
@@ -478,7 +481,7 @@ namespace HVACSingleDuctInduc {
                 PlantUtilities::ScanPlantLoopsForObject(state, indUnit.HCoil, indUnit.HeatingCoilType, indUnit.HWPlantLoc, errFlag, _, _, _, _, _);
             }
             if (errFlag) {
-                ShowContinueError(state, std::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
+                ShowContinueError(state, EnergyPlus::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
             }
             if (indUnit.CoolingCoilType == DataPlant::PlantEquipmentType::CoilWaterCooling ||
                 indUnit.CoolingCoilType == DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling) {
@@ -486,7 +489,7 @@ namespace HVACSingleDuctInduc {
                 PlantUtilities::ScanPlantLoopsForObject(state, indUnit.CCoil, indUnit.CoolingCoilType, indUnit.CWPlantLoc, errFlag, _, _, _, _, _);
             }
             if (errFlag) {
-                ShowContinueError(state, std::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
+                ShowContinueError(state, EnergyPlus::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
                 ShowFatalError(state, "InitIndUnit: Program terminated for previous conditions.");
             }
             state.dataHVACSingleDuctInduc->MyPlantScanFlag(IUNum) = false;
@@ -522,8 +525,8 @@ namespace HVACSingleDuctInduc {
                     continue;
                 }
                 ShowSevereError(state,
-                                std::format("InitIndUnit: ADU=[Air Distribution Unit,{}] is not on any ZoneHVAC:EquipmentList.",
-                                            state.dataDefineEquipment->AirDistUnit(state.dataHVACSingleDuctInduc->IndUnit(Loop).ADUNum).Name));
+                                EnergyPlus::format("InitIndUnit: ADU=[Air Distribution Unit,{}] is not on any ZoneHVAC:EquipmentList.",
+                                                   state.dataDefineEquipment->AirDistUnit(state.dataHVACSingleDuctInduc->IndUnit(Loop).ADUNum).Name));
                 ShowContinueError(state,
                                   std::format("...Unit=[{},{}] will not be simulated.",
                                               state.dataHVACSingleDuctInduc->IndUnit(Loop).UnitType,

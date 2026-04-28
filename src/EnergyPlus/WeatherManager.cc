@@ -49,6 +49,7 @@
 #include <array>
 #include <cmath>
 #include <cstdio>
+#include <format>
 #include <map>
 
 // ObjexxFCL Headers
@@ -5772,9 +5773,9 @@ namespace Weather {
             if (Duration(1) > 0) {
                 specialDay.Duration = int(Duration(1));
             } else {
-                ShowSevereError(state,
-                                EnergyPlus::format(
-                                    "{}: {} Invalid {}={:.0T}", ipsc->cCurrentModuleObject, AlphArray(1), ipsc->cNumericFieldNames(1), Duration(1)));
+                ShowSevereError(
+                    state,
+                    std::format("{}: {} Invalid {}={:.0f}", ipsc->cCurrentModuleObject, AlphArray(1), ipsc->cNumericFieldNames(1), Duration(1)));
                 ErrorsFound = true;
             }
 

@@ -45,11 +45,10 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <EnergyPlus/DataStringGlobals.hh>
-#include <EnergyPlus/PluginManager.hh>
-#include <EnergyPlus/PythonEngine.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
+// C++ Headers
+#include <format>
 
+// Third Party Headers
 #if LINK_WITH_PYTHON
 #    ifdef _DEBUG
 // We don't want to try to import a debug build of Python here
@@ -96,6 +95,12 @@ template <> struct formatter<PyStatus>
 } // namespace fmt
 
 #endif
+
+// EnergyPlus Headers
+#include <EnergyPlus/DataStringGlobals.hh>
+#include <EnergyPlus/PluginManager.hh>
+#include <EnergyPlus/PythonEngine.hh>
+#include <EnergyPlus/UtilityRoutines.hh>
 
 namespace EnergyPlus {
 
@@ -162,7 +167,7 @@ namespace Python {
                     if (!traceback_line.empty() && traceback_line[traceback_line.length() - 1] == '\n') {
                         traceback_line.erase(traceback_line.length() - 1);
                     }
-                    EnergyPlus::ShowContinueError(state, std::format(" >>> {}", traceback_line));
+                    EnergyPlus::ShowContinueError(state, EnergyPlus::format(" >>> {}", traceback_line));
                 }
                 // PyList_GetItem returns a borrowed reference, do not decrement
             }
@@ -194,7 +199,7 @@ namespace Python {
         }
         if (unicodeIncludePath == nullptr) {
             EnergyPlus::ShowFatalError(
-                state, std::format("ERROR converting the path \"{}\" for addition to the sys.path in Python", includePath.generic_string()));
+                state, EnergyPlus::format("ERROR converting the path \"{}\" for addition to the sys.path in Python", includePath.generic_string()));
         }
 
         PyObject *sysPath = PySys_GetObject("path"); // Borrowed reference
@@ -205,11 +210,12 @@ namespace Python {
             if (PyErr_Occurred() != nullptr) {
                 reportPythonError(state);
             }
-            EnergyPlus::ShowFatalError(state, std::format("ERROR adding \"{}\" to the sys.path in Python", includePath.generic_string()));
+            EnergyPlus::ShowFatalError(state, EnergyPlus::format("ERROR adding \"{}\" to the sys.path in Python", includePath.generic_string()));
         }
 
         if (userDefinedPath) {
-            EnergyPlus::ShowMessage(state, std::format("Successfully added path \"{}\" to the sys.path in Python", includePath.generic_string()));
+            EnergyPlus::ShowMessage(state,
+                                    EnergyPlus::format("Successfully added path \"{}\" to the sys.path in Python", includePath.generic_string()));
         }
 
         // PyRun_SimpleString)("print(' EPS : ' + str(sys.path))");
@@ -375,7 +381,7 @@ sys.argv.append("energyplus")
         fs::path const pathToPythonPackages = programDir / "python_lib";
         std::string sPathToPythonPackages = std::string(pathToPythonPackages.string());
         std::replace(sPathToPythonPackages.begin(), sPathToPythonPackages.end(), '\\', '/');
-        cmd += std::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
+        cmd += EnergyPlus::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
         return cmd;
     }
 
@@ -386,13 +392,13 @@ sys.argv.clear()
 sys.argv.append("energyplus")
 )python";
         for (const auto &arg : python_fwd_args) {
-            cmd += std::format("sys.argv.append(\"{}\")\n", arg);
+            cmd += EnergyPlus::format("sys.argv.append(\"{}\")\n", arg);
         }
         fs::path programDir = FileSystem::getParentDirectoryPath(FileSystem::getAbsolutePath(FileSystem::getProgramPath()));
         fs::path const pathToPythonPackages = programDir / "python_lib";
         std::string sPathToPythonPackages = std::string(pathToPythonPackages.string());
         std::replace(sPathToPythonPackages.begin(), sPathToPythonPackages.end(), '\\', '/');
-        cmd += std::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
+        cmd += EnergyPlus::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
         std::string tclConfigDir;
         std::string tkConfigDir;
         for (auto &p : std::filesystem::directory_iterator(pathToPythonPackages)) {
@@ -410,8 +416,8 @@ sys.argv.append("energyplus")
             }
         }
         cmd += "from os import environ\n";
-        cmd += std::format("environ[\'TCL_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tclConfigDir);
-        cmd += std::format("environ[\'TK_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tkConfigDir);
+        cmd += EnergyPlus::format("environ[\'TCL_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tclConfigDir);
+        cmd += EnergyPlus::format("environ[\'TK_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tkConfigDir);
         return cmd;
     }
 

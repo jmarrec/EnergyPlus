@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Fmath.hh>
@@ -132,7 +133,7 @@ void SimTESCoil(EnergyPlusData &state,
     if (CompIndex == 0) {
         TESCoilNum = Util::FindItemInList(CompName, state.dataPackagedThermalStorageCoil->TESCoil);
         if (TESCoilNum == 0) {
-            ShowFatalError(state, std::format("Thermal Energy Storage Cooling Coil not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("Thermal Energy Storage Cooling Coil not found={}", CompName));
         }
         CompIndex = TESCoilNum;
     } else {
@@ -140,18 +141,18 @@ void SimTESCoil(EnergyPlusData &state,
         if (TESCoilNum > state.dataPackagedThermalStorageCoil->NumTESCoils || TESCoilNum < 1) {
             ShowFatalError(
                 state,
-                std::format("SimTESCoil: Invalid CompIndex passed={}, Number of Thermal Energy Storage Cooling Coil Coils={}, Coil name={}",
-                            TESCoilNum,
-                            state.dataPackagedThermalStorageCoil->NumTESCoils,
-                            CompName));
+                EnergyPlus::format("SimTESCoil: Invalid CompIndex passed={}, Number of Thermal Energy Storage Cooling Coil Coils={}, Coil name={}",
+                                   TESCoilNum,
+                                   state.dataPackagedThermalStorageCoil->NumTESCoils,
+                                   CompName));
         }
         if (state.dataPackagedThermalStorageCoil->CheckEquipName(TESCoilNum)) {
             if (!CompName.empty() && CompName != state.dataPackagedThermalStorageCoil->TESCoil(TESCoilNum).Name) {
                 ShowFatalError(state,
-                               std::format("SimTESCoil: Invalid CompIndex passed={}, Coil name={}, stored Coil Name for that index={}",
-                                           TESCoilNum,
-                                           CompName,
-                                           state.dataPackagedThermalStorageCoil->TESCoil(TESCoilNum).Name));
+                               EnergyPlus::format("SimTESCoil: Invalid CompIndex passed={}, Coil name={}, stored Coil Name for that index={}",
+                                                  TESCoilNum,
+                                                  CompName,
+                                                  state.dataPackagedThermalStorageCoil->TESCoil(TESCoilNum).Name));
             }
             state.dataPackagedThermalStorageCoil->CheckEquipName(TESCoilNum) = false;
         }
@@ -252,8 +253,9 @@ void GetTESCoilInput(EnergyPlusData &state)
 
         thisTESCoil.ModeControlType = static_cast<PTSCCtrlType>(getEnumValue(modeControlStrings, state.dataIPShortCut->cAlphaArgs(3)));
         if (thisTESCoil.ModeControlType == PTSCCtrlType::Invalid) {
-            ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
-            ShowContinueError(state, std::format("...{}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
+            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+            ShowContinueError(state,
+                              EnergyPlus::format("...{}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
             ShowContinueError(state, "Available choices are ScheduledModes or EMSControlled");
             ErrorsFound = true;
         }
@@ -279,8 +281,9 @@ void GetTESCoilInput(EnergyPlusData &state)
             thisTESCoil.glycol = Fluid::GetWater(state);
             break;
         default:
-            ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
-            ShowContinueError(state, std::format("...{}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
+            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+            ShowContinueError(state,
+                              EnergyPlus::format("...{}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
             ShowContinueError(state, "Available choices are Ice, Water, or UserDefindedFluidType");
             ErrorsFound = true;
         }
@@ -302,8 +305,9 @@ void GetTESCoilInput(EnergyPlusData &state)
             if (!state.dataIPShortCut->lNumericFieldBlanks(1)) {
                 thisTESCoil.FluidStorageVolume = state.dataIPShortCut->rNumericArgs(1);
             } else {
-                ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
-                ShowContinueError(state, std::format("{} cannot be blank for Water storage type", state.dataIPShortCut->cNumericFieldNames(1)));
+                ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+                ShowContinueError(state,
+                                  EnergyPlus::format("{} cannot be blank for Water storage type", state.dataIPShortCut->cNumericFieldNames(1)));
                 ShowContinueError(state, "Enter fluid storage tank volume in m3/s.");
                 ErrorsFound = true;
             }
@@ -317,8 +321,8 @@ void GetTESCoilInput(EnergyPlusData &state)
                         state.dataIPShortCut->rNumericArgs(2) * gigaJoulesToJoules; // input in giga joules, used as joules internally
                 }
             } else if (state.dataIPShortCut->lNumericFieldBlanks(2)) {
-                ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
-                ShowContinueError(state, std::format("{} cannot be blank for Ice storage type", state.dataIPShortCut->cNumericFieldNames(2)));
+                ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("{} cannot be blank for Ice storage type", state.dataIPShortCut->cNumericFieldNames(2)));
                 ShowContinueError(state, "Enter ice storage tank capacity in GJ.");
                 ErrorsFound = true;
             }
@@ -383,8 +387,9 @@ void GetTESCoilInput(EnergyPlusData &state)
             break;
         default:
             thisTESCoil.CoolingOnlyModeIsAvailable = false;
-            ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
-            ShowContinueError(state, std::format("...{}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(10), state.dataIPShortCut->cAlphaArgs(10)));
+            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+            ShowContinueError(state,
+                              EnergyPlus::format("...{}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(10), state.dataIPShortCut->cAlphaArgs(10)));
             ShowContinueError(state, "Available choices are Yes or No.");
             ErrorsFound = true;
         }
@@ -398,12 +403,13 @@ void GetTESCoilInput(EnergyPlusData &state)
             thisTESCoil.CoolingOnlyCapFTempCurve = GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(11));
             if (thisTESCoil.CoolingOnlyCapFTempCurve == 0) {
                 if (state.dataIPShortCut->lAlphaFieldBlanks(11)) {
-                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
-                    ShowContinueError(state, std::format("Required {}is blank.", state.dataIPShortCut->cAlphaFieldNames(11)));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+                    ShowContinueError(state, EnergyPlus::format("Required {}is blank.", state.dataIPShortCut->cAlphaFieldNames(11)));
                 } else {
-                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
                     ShowContinueError(
-                        state, std::format("Not found {}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(11), state.dataIPShortCut->cAlphaArgs(11)));
+                        state,
+                        EnergyPlus::format("Not found {}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(11), state.dataIPShortCut->cAlphaArgs(11)));
                 }
                 ErrorsFound = true;
             } else {
@@ -420,7 +426,7 @@ void GetTESCoilInput(EnergyPlusData &state)
             thisTESCoil.CoolingOnlyCapFFlowCurve = GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(12));
             if (thisTESCoil.CoolingOnlyCapFFlowCurve == 0) {
                 if (state.dataIPShortCut->lAlphaFieldBlanks(12)) {
-                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));
                     ShowContinueError(state, std::format("Required {}is blank.", state.dataIPShortCut->cAlphaFieldNames(12)));
                 } else {
                     ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, thisTESCoil.Name));

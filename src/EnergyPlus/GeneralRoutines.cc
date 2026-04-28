@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -65,11 +66,8 @@
 #include <EnergyPlus/DataBranchAirLoopPlant.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
-#include <EnergyPlus/DataHeatBalSurface.hh>
-#include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataSizing.hh>
-#include <EnergyPlus/DataSurfaces.hh>
 #include <EnergyPlus/DataZoneEquipment.hh>
 #include <EnergyPlus/ExhaustAirSystemManager.hh>
 #include <EnergyPlus/FanCoilUnits.hh>
@@ -77,7 +75,6 @@
 #include <EnergyPlus/HVACSingleDuctInduc.hh>
 #include <EnergyPlus/HWBaseboardRadiator.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
-#include <EnergyPlus/Material.hh>
 #include <EnergyPlus/MixerComponent.hh>
 #include <EnergyPlus/OutdoorAirUnit.hh>
 #include <EnergyPlus/PlantUtilities.hh>
@@ -85,7 +82,6 @@
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/PurchasedAirManager.hh>
 #include <EnergyPlus/ScheduleManager.hh>
-#include <EnergyPlus/SolarCollectors.hh>
 #include <EnergyPlus/SplitterComponent.hh>
 #include <EnergyPlus/SteamBaseboardRadiator.hh>
 #include <EnergyPlus/UnitHeater.hh>
@@ -226,11 +222,11 @@ void ControlCompOutput(EnergyPlusData &state,
             state.dataLoopNodes->Node(ActuatedNode).MassFlowRateMinAvail = MinFlow;
             // Check to make sure that the Minimum Flow rate is less than the max.
             if (MinFlow > MaxFlow) {
-                ShowSevereError(state, std::format("ControlCompOutput:{}:{}, Min Control Flow is > Max Control Flow", CompType, CompName));
+                ShowSevereError(state, EnergyPlus::format("ControlCompOutput:{}:{}, Min Control Flow is > Max Control Flow", CompType, CompName));
                 ShowContinueError(
                     state,
                     EnergyPlus::format(
-                        "Acuated Node={} MinFlow=[{:.3T}], Max Flow={:.3T}", state.dataLoopNodes->NodeID(ActuatedNode), MinFlow, MaxFlow));
+                        "Acuated Node={} MinFlow=[{:.3f}], Max Flow={:.3f}", state.dataLoopNodes->NodeID(ActuatedNode), MinFlow, MaxFlow));
                 ShowContinueErrorTimeStamp(state, "");
                 ShowFatalError(state, "Program terminates due to preceding condition.");
             }
@@ -516,7 +512,7 @@ void ControlCompOutput(EnergyPlusData &state,
             break;
 
         default:
-            ShowFatalError(state, std::format("ControlCompOutput: Illegal Component Number argument =[{}]", SimCompNum));
+            ShowFatalError(state, EnergyPlus::format("ControlCompOutput: Illegal Component Number argument =[{}]", SimCompNum));
             break;
         }
 
@@ -548,11 +544,11 @@ void ControlCompOutput(EnergyPlusData &state,
         ++Iter;
         if ((Iter > MaxIter) && (!state.dataGlobal->WarmupFlag)) {
             // if ( CompErrIndex == 0 ) {
-            ShowWarningMessage(state, std::format("ControlCompOutput: Maximum iterations exceeded for {} = {}", CompType, CompName));
-            ShowContinueError(state, EnergyPlus::format("... Load met       = {:.5T} W.", LoadMet));
-            ShowContinueError(state, EnergyPlus::format("... Load requested = {:.5T} W.", QZnReq));
-            ShowContinueError(state, EnergyPlus::format("... Error          = {:.8T} %.", std::abs((LoadMet - QZnReq) * 100.0 / Denom)));
-            ShowContinueError(state, EnergyPlus::format("... Tolerance      = {:.8T} %.", ControlOffset * 100.0));
+            ShowWarningMessage(state, EnergyPlus::format("ControlCompOutput: Maximum iterations exceeded for {} = {}", CompType, CompName));
+            ShowContinueError(state, EnergyPlus::format("... Load met       = {:.5f} W.", LoadMet));
+            ShowContinueError(state, EnergyPlus::format("... Load requested = {:.5f} W.", QZnReq));
+            ShowContinueError(state, EnergyPlus::format("... Error          = {:.8f} %.", std::abs((LoadMet - QZnReq) * 100.0 / Denom)));
+            ShowContinueError(state, EnergyPlus::format("... Tolerance      = {:.8f} %.", ControlOffset * 100.0));
             ShowContinueError(state, "... Error          = (Load met - Load requested) / MAXIMUM(Load requested, 100)");
             ShowContinueError(
                 state, EnergyPlus::format("... Actuated Node Mass Flow Rate ={:.9R} kg/s", state.dataLoopNodes->Node(ActuatedNode).MassFlowRate));
@@ -639,7 +635,7 @@ void CheckSysSizing(EnergyPlusData &state,
     // Checks SysSizingRunDone flag. If false throws a fatal error.
 
     if (!state.dataSize->SysSizingRunDone) {
-        ShowSevereError(state, std::format("For autosizing of {} {}, a system sizing run must be done.", CompType, CompName));
+        ShowSevereError(state, EnergyPlus::format("For autosizing of {} {}, a system sizing run must be done.", CompType, CompName));
         if (state.dataSize->NumSysSizInput == 0) {
             ShowContinueError(state, "No \"Sizing:System\" objects were entered.");
         }
@@ -686,7 +682,7 @@ void CheckZoneSizing(EnergyPlusData &state,
     // Checks ZoneSizingRunDone flag. If false throws a fatal error.
 
     if (!state.dataSize->ZoneSizingRunDone) {
-        ShowSevereError(state, std::format("For autosizing of {} {}, a zone sizing run must be done.", CompType, CompName));
+        ShowSevereError(state, EnergyPlus::format("For autosizing of {} {}, a zone sizing run must be done.", CompType, CompName));
         if (state.dataSize->NumZoneSizingInput == 0) {
             ShowContinueError(state, "No \"Sizing:Zone\" objects were entered.");
         }
@@ -752,12 +748,12 @@ void ValidateComponent(EnergyPlusData &state,
     int ItemNum = state.dataInputProcessing->inputProcessor->getObjectItemNum(state, std::string{CompType}, CompName);
 
     if (ItemNum < 0) {
-        ShowSevereError(state, std::format("During {} Input, Invalid Component Type input={}", CallString, CompType));
-        ShowContinueError(state, std::format("Component name={}", CompName));
+        ShowSevereError(state, EnergyPlus::format("During {} Input, Invalid Component Type input={}", CallString, CompType));
+        ShowContinueError(state, EnergyPlus::format("Component name={}", CompName));
         IsNotOK = true;
     } else if (ItemNum == 0) {
-        ShowSevereError(state, std::format("During {} Input, Invalid Component Name input={}", CallString, CompName));
-        ShowContinueError(state, std::format("Component type={}", CompType));
+        ShowSevereError(state, EnergyPlus::format("During {} Input, Invalid Component Name input={}", CallString, CompName));
+        ShowContinueError(state, EnergyPlus::format("Component type={}", CompType));
         IsNotOK = true;
     }
 }
@@ -792,12 +788,12 @@ void ValidateComponent(EnergyPlusData &state,
     int ItemNum = state.dataInputProcessing->inputProcessor->getObjectItemNum(state, CompType, CompValType, CompName);
 
     if (ItemNum < 0) {
-        ShowSevereError(state, std::format("During {} Input, Invalid Component Type input={}", CallString, CompType));
-        ShowContinueError(state, std::format("Component name={}", CompName));
+        ShowSevereError(state, EnergyPlus::format("During {} Input, Invalid Component Type input={}", CallString, CompType));
+        ShowContinueError(state, EnergyPlus::format("Component name={}", CompName));
         IsNotOK = true;
     } else if (ItemNum == 0) {
-        ShowSevereError(state, std::format("During {} Input, Invalid Component Name input={}", CallString, CompName));
-        ShowContinueError(state, std::format("Component type={}", CompType));
+        ShowSevereError(state, EnergyPlus::format("During {} Input, Invalid Component Name input={}", CallString, CompName));
+        ShowContinueError(state, EnergyPlus::format("Component type={}", CompType));
         IsNotOK = true;
     }
 }

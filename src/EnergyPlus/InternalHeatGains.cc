@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 #include <map>
 #include <string>
 
@@ -545,11 +546,12 @@ namespace InternalHeatGains {
                             NoTCModelSelectedWithSchedules =
                                 CheckThermalComfortSchedules(IHGAlphaFieldBlanks(9), IHGAlphaFieldBlanks(12), IHGAlphaFieldBlanks(13));
                             if (NoTCModelSelectedWithSchedules) {
-                                ShowWarningError(state,
-                                                 std::format("{}{}=\"{}\" has comfort related schedules but no thermal comfort model selected.",
-                                                             RoutineName,
-                                                             peopleModuleObject,
-                                                             IHGAlphas(1)));
+                                ShowWarningError(
+                                    state,
+                                    EnergyPlus::format("{}{}=\"{}\" has comfort related schedules but no thermal comfort model selected.",
+                                                       RoutineName,
+                                                       peopleModuleObject,
+                                                       IHGAlphas(1)));
                                 ShowContinueError(state,
                                                   "If schedules are specified for air velocity, clothing insulation, and/or work efficiency but no "
                                                   "thermal comfort");
@@ -633,13 +635,13 @@ namespace InternalHeatGains {
                                 if (thisPeople.SurfacePtr == 0 && ModelWithAdditionalInputs) {
                                     if (Item1 == 1) {
                                         ShowSevereError(state,
-                                                        std::format("{}{}=\"{}\", {}={} invalid Surface Name={}",
-                                                                    RoutineName,
-                                                                    peopleModuleObject,
-                                                                    IHGAlphas(1),
-                                                                    IHGAlphaFieldNames(7),
-                                                                    IHGAlphas(7),
-                                                                    IHGAlphas(8)));
+                                                        EnergyPlus::format("{}{}=\"{}\", {}={} invalid Surface Name={}",
+                                                                           RoutineName,
+                                                                           peopleModuleObject,
+                                                                           IHGAlphas(1),
+                                                                           IHGAlphaFieldNames(7),
+                                                                           IHGAlphas(7),
+                                                                           IHGAlphas(8)));
                                         ErrorsFound = true;
                                     }
                                 } else {
@@ -647,17 +649,17 @@ namespace InternalHeatGains {
                                     int const thisPeopleRadEnclNum = state.dataHeatBal->space(thisPeople.spaceIndex).radiantEnclosureNum;
                                     if (surfRadEnclNum != thisPeopleRadEnclNum && ModelWithAdditionalInputs) {
                                         ShowSevereError(state,
-                                                        std::format("{}{}=\"{}\", Surface referenced in {}={} in different enclosure.",
-                                                                    RoutineName,
-                                                                    peopleModuleObject,
-                                                                    IHGAlphas(1),
-                                                                    IHGAlphaFieldNames(7),
-                                                                    IHGAlphas(7)));
+                                                        EnergyPlus::format("{}{}=\"{}\", Surface referenced in {}={} in different enclosure.",
+                                                                           RoutineName,
+                                                                           peopleModuleObject,
+                                                                           IHGAlphas(1),
+                                                                           IHGAlphaFieldNames(7),
+                                                                           IHGAlphas(7)));
                                         ShowContinueError(state,
-                                                          std::format("Surface is in Enclosure={} and {} is in Enclosure={}",
-                                                                      state.dataViewFactor->EnclRadInfo(surfRadEnclNum).Name,
-                                                                      peopleModuleObject,
-                                                                      state.dataViewFactor->EnclRadInfo(thisPeopleRadEnclNum).Name));
+                                                          EnergyPlus::format("Surface is in Enclosure={} and {} is in Enclosure={}",
+                                                                             state.dataViewFactor->EnclRadInfo(surfRadEnclNum).Name,
+                                                                             peopleModuleObject,
+                                                                             state.dataViewFactor->EnclRadInfo(thisPeopleRadEnclNum).Name));
                                         ErrorsFound = true;
                                     }
                                 }
@@ -670,12 +672,12 @@ namespace InternalHeatGains {
                             default: { // An invalid keyword was entered--warn but ignore
                                 if (Item1 == 1 && ModelWithAdditionalInputs) {
                                     ShowWarningError(state,
-                                                     std::format("{}{}=\"{}\", invalid {}={}",
-                                                                 RoutineName,
-                                                                 peopleModuleObject,
-                                                                 IHGAlphas(1),
-                                                                 IHGAlphaFieldNames(7),
-                                                                 IHGAlphas(7)));
+                                                     EnergyPlus::format("{}{}=\"{}\", invalid {}={}",
+                                                                        RoutineName,
+                                                                        peopleModuleObject,
+                                                                        IHGAlphas(1),
+                                                                        IHGAlphaFieldNames(7),
+                                                                        IHGAlphas(7)));
                                     ShowContinueError(state, "...Valid values are \"EnclosureAveraged\", \"SurfaceWeighted\", \"AngleFactor\".");
                                 }
                             } break;
@@ -854,7 +856,8 @@ namespace InternalHeatGains {
                     if (state.dataHeatBal->Zone(Loop).FloorArea > 0.0 &&
                         state.dataHeatBal->Zone(Loop).FloorArea / state.dataHeatBal->Zone(Loop).TotOccupants < 0.1) {
                         ShowWarningError(
-                            state, std::format("{}Zone=\"{}\" occupant density is extremely high.", RoutineName, state.dataHeatBal->Zone(Loop).Name));
+                            state,
+                            EnergyPlus::format("{}Zone=\"{}\" occupant density is extremely high.", RoutineName, state.dataHeatBal->Zone(Loop).Name));
                         if (state.dataHeatBal->Zone(Loop).FloorArea > 0.0) {
                             ShowContinueError(
                                 state,
@@ -880,9 +883,9 @@ namespace InternalHeatGains {
                     if (maxOccupLoad > state.dataHeatBal->Zone(Loop).TotOccupants) {
                         if (state.dataHeatBal->Zone(Loop).FloorArea > 0.0 && state.dataHeatBal->Zone(Loop).FloorArea / maxOccupLoad < 0.1) {
                             ShowWarningError(state,
-                                             std::format("{}Zone=\"{}\" occupant density at a maximum schedule value is extremely high.",
-                                                         RoutineName,
-                                                         state.dataHeatBal->Zone(Loop).Name));
+                                             EnergyPlus::format("{}Zone=\"{}\" occupant density at a maximum schedule value is extremely high.",
+                                                                RoutineName,
+                                                                state.dataHeatBal->Zone(Loop).Name));
                             if (state.dataHeatBal->Zone(Loop).FloorArea > 0.0) {
                                 ShowContinueError(state,
                                                   EnergyPlus::format("Occupant Density=[{:.0R}] person/m2.",
@@ -893,9 +896,9 @@ namespace InternalHeatGains {
                                 EnergyPlus::format("Occupant Density=[{:.3R}] m2/person. Problems in Temperature Out of Bounds may result.",
                                                    state.dataHeatBal->Zone(Loop).FloorArea / maxOccupLoad));
                             ShowContinueError(state,
-                                              std::format("Check values in People={}, Number of People Schedule={}",
-                                                          state.dataHeatBal->People(OptionNum).Name,
-                                                          state.dataHeatBal->People(OptionNum).sched->getCurrentVal()));
+                                              EnergyPlus::format("Check values in People={}, Number of People Schedule={}",
+                                                                 state.dataHeatBal->People(OptionNum).Name,
+                                                                 state.dataHeatBal->People(OptionNum).sched->getCurrentVal()));
                         }
                     }
                 }
@@ -1012,8 +1015,8 @@ namespace InternalHeatGains {
                     }
                     if (thisLights.FractionConvected < 0.0) {
                         if (Item1 == 1) {
-                            ShowSevereError(state,
-                                            std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, lightsModuleObject, thisLights.Name));
+                            ShowSevereError(
+                                state, EnergyPlus::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, lightsModuleObject, thisLights.Name));
                             ErrorsFound = true;
                         }
                     }
@@ -1039,12 +1042,12 @@ namespace InternalHeatGains {
                     } else if (IHGAlphas(6) != "YES" && IHGAlphas(6) != "NO") {
                         if (Item1 == 1) {
                             ShowWarningError(state,
-                                             std::format("{}{}=\"{}\", invalid {}, value  ={}",
-                                                         RoutineName,
-                                                         lightsModuleObject,
-                                                         thisLightsInput.Name,
-                                                         IHGAlphaFieldNames(6),
-                                                         IHGAlphas(6)));
+                                             EnergyPlus::format("{}{}=\"{}\", invalid {}, value  ={}",
+                                                                RoutineName,
+                                                                lightsModuleObject,
+                                                                thisLightsInput.Name,
+                                                                IHGAlphaFieldNames(6),
+                                                                IHGAlphas(6)));
                             ShowContinueError(state, ".. Return Air Fraction from Plenum will NOT be calculated.");
                         }
                         thisLights.FractionReturnAirIsCalculated = false;
@@ -1058,11 +1061,11 @@ namespace InternalHeatGains {
                     if (!IHGAlphaFieldBlanks(7)) {
                         if (thisLightsInput.ZoneListActive) {
                             ShowSevereError(state,
-                                            std::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
-                                                        RoutineName,
-                                                        lightsModuleObject,
-                                                        thisLightsInput.Name,
-                                                        IHGAlphaFieldNames(7)));
+                                            EnergyPlus::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
+                                                               RoutineName,
+                                                               lightsModuleObject,
+                                                               thisLightsInput.Name,
+                                                               IHGAlphaFieldNames(7)));
                             ErrorsFound = true;
                         } else {
                             thisLights.RetNodeName = IHGAlphas(7);
@@ -1075,7 +1078,7 @@ namespace InternalHeatGains {
                     if ((thisLights.ZoneReturnNum == 0) && (thisLights.FractionReturnAir > 0.0) && (!IHGAlphaFieldBlanks(7))) {
                         ShowSevereError(
                             state,
-                            std::format(
+                            EnergyPlus::format(
                                 "{}{}=\"{}\", invalid {} ={}", RoutineName, lightsModuleObject, IHGAlphas(1), IHGAlphaFieldNames(7), IHGAlphas(7)));
                         ShowContinueError(state, "No matching Zone Return Air Node found.");
                         ErrorsFound = true;
@@ -1085,11 +1088,11 @@ namespace InternalHeatGains {
                     if (!IHGAlphaFieldBlanks(8)) {
                         if (thisLightsInput.ZoneListActive) {
                             ShowSevereError(state,
-                                            std::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
-                                                        RoutineName,
-                                                        lightsModuleObject,
-                                                        thisLightsInput.Name,
-                                                        IHGAlphaFieldNames(8)));
+                                            EnergyPlus::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
+                                                               RoutineName,
+                                                               lightsModuleObject,
+                                                               thisLightsInput.Name,
+                                                               IHGAlphaFieldNames(8)));
                             ErrorsFound = true;
                         } else {
                             bool exhaustNodeError = false;
@@ -1108,12 +1111,12 @@ namespace InternalHeatGains {
                             }
                             if (exhaustNodeError) {
                                 ShowSevereError(state,
-                                                std::format("{}{}=\"{}\", invalid {} = {}",
-                                                            RoutineName,
-                                                            lightsModuleObject,
-                                                            IHGAlphas(1),
-                                                            IHGAlphaFieldNames(8),
-                                                            IHGAlphas(8)));
+                                                EnergyPlus::format("{}{}=\"{}\", invalid {} = {}",
+                                                                   RoutineName,
+                                                                   lightsModuleObject,
+                                                                   IHGAlphas(1),
+                                                                   IHGAlphaFieldNames(8),
+                                                                   IHGAlphas(8)));
                                 ShowContinueError(state, "No matching Zone Exhaust Air Node found.");
                                 ErrorsFound = true;
                             } else {
@@ -1123,12 +1126,12 @@ namespace InternalHeatGains {
                                     CheckSharedExhaustFlag = true;
                                 } else {
                                     ShowSevereError(state,
-                                                    std::format("{}{}=\"{}\", {} ={} is not used",
-                                                                RoutineName,
-                                                                lightsModuleObject,
-                                                                IHGAlphas(1),
-                                                                IHGAlphaFieldNames(8),
-                                                                IHGAlphas(8)));
+                                                    EnergyPlus::format("{}{}=\"{}\", {} ={} is not used",
+                                                                       RoutineName,
+                                                                       lightsModuleObject,
+                                                                       IHGAlphas(1),
+                                                                       IHGAlphaFieldNames(8),
+                                                                       IHGAlphas(8)));
                                     ShowContinueError(
                                         state, "No matching Zone Return Air Node found. The Exhaust Node requires Return Node to work together");
                                     ErrorsFound = true;
@@ -1232,14 +1235,14 @@ namespace InternalHeatGains {
                         if (ReturnNum == state.dataHeatBal->Lights(Loop1).ZoneReturnNum &&
                             ExhaustNodeNum != state.dataHeatBal->Lights(Loop1).ZoneExhaustNodeNum) {
                             ShowSevereError(state,
-                                            std::format("{}{}: Duplicated Return Air Node = {} is found, ",
-                                                        RoutineName,
-                                                        lightsModuleObject,
-                                                        state.dataHeatBal->Lights(Loop1).RetNodeName));
+                                            EnergyPlus::format("{}{}: Duplicated Return Air Node = {} is found, ",
+                                                               RoutineName,
+                                                               lightsModuleObject,
+                                                               state.dataHeatBal->Lights(Loop1).RetNodeName));
                             ShowContinueError(state,
-                                              std::format(" in both Lights objects = {} and {}.",
-                                                          state.dataHeatBal->Lights(Loop).Name,
-                                                          state.dataHeatBal->Lights(Loop1).Name));
+                                              EnergyPlus::format(" in both Lights objects = {} and {}.",
+                                                                 state.dataHeatBal->Lights(Loop).Name,
+                                                                 state.dataHeatBal->Lights(Loop1).Name));
                             ErrorsFound = true;
                             ReturnNodeShared(Loop1) = true;
                         }
@@ -1348,8 +1351,8 @@ namespace InternalHeatGains {
                         thisZoneElectric.FractionConvected = 0.0;
                     }
                     if (thisZoneElectric.FractionConvected < 0.0) {
-                        ShowSevereError(state,
-                                        std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, elecEqModuleObject, thisElecEqInput.Name));
+                        ShowSevereError(
+                            state, EnergyPlus::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, elecEqModuleObject, thisElecEqInput.Name));
                         ErrorsFound = true;
                     }
 

@@ -49,6 +49,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <numeric>
 #include <string>
 #include <unordered_map>

@@ -50,6 +50,7 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <iomanip>
 #include <map>
 #include <string_view>
@@ -66,12 +67,14 @@
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
 
-// Third-party Headers
+// Local Headers
+#include <AirflowNetwork/Solver.hpp>
+
+// Third Party Headers
 #include <fast_float/fast_float.h>
 #include <fmt/format.h>
 
 // EnergyPlus Headers
-#include <AirflowNetwork/Solver.hpp>
 #include <EnergyPlus/Boilers.hh>
 #include <EnergyPlus/ChillerElectricEIR.hh>
 #include <EnergyPlus/ChillerReformulatedEIR.hh>
@@ -201,7 +204,7 @@ std::ofstream &open_tbl_stream(EnergyPlusData &state, int const iStyle, fs::path
     if (output_to_file) {
         tbl_stream.open(filePath);
         if (!tbl_stream) {
-            ShowFatalError(state, std::format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath.string()));
+            ShowFatalError(state, EnergyPlus::format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath.string()));
         }
     } else {
         tbl_stream.setstate(std::ios_base::badbit);
@@ -252,7 +255,8 @@ void UpdateTabularReports(EnergyPlusData &state, OutputProcessor::TimeStepType t
                 } else {
                     if (state.dataHeatBal->Resilience(ZoneNum).ColdStressTempThresh != ColdTempThresh) {
                         ShowWarningMessage(
-                            state, std::format("Zone {} has multiple people objects with different Cold Stress Temperature Threshold.", ZoneNum));
+                            state,
+                            EnergyPlus::format("Zone {} has multiple people objects with different Cold Stress Temperature Threshold.", ZoneNum));
                     }
                 }
 
@@ -262,7 +266,8 @@ void UpdateTabularReports(EnergyPlusData &state, OutputProcessor::TimeStepType t
                 } else {
                     if (state.dataHeatBal->Resilience(ZoneNum).HeatStressTempThresh != HeatTempThresh) {
                         ShowWarningMessage(
-                            state, std::format("Zone {} has multiple people objects with different Heat Stress Temperature Threshold.", ZoneNum));
+                            state,
+                            EnergyPlus::format("Zone {} has multiple people objects with different Heat Stress Temperature Threshold.", ZoneNum));
                     }
                 }
             }
@@ -357,9 +362,10 @@ void GetInputTabularMonthly(EnergyPlusData &state)
         if (!state.dataGlobal->DoWeathSim) {
             ShowWarningError(
                 state,
-                std::format("{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
-                            CurrentModuleObject,
-                            CurrentModuleObject));
+                EnergyPlus::format(
+                    "{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
+                    CurrentModuleObject,
+                    CurrentModuleObject));
             return;
         }
     }
@@ -378,7 +384,7 @@ void GetInputTabularMonthly(EnergyPlusData &state)
         state.dataInputProcessing->inputProcessor->getObjectItem(state, CurrentModuleObject, TabNum, AlphArray, NumAlphas, NumArray, NumNums, IOStat);
 
         if (NumAlphas < 2) {
-            ShowSevereError(state, std::format("{}: No fields specified.", CurrentModuleObject));
+            ShowSevereError(state, EnergyPlus::format("{}: No fields specified.", CurrentModuleObject));
         }
 
         // add to the data structure
@@ -386,9 +392,9 @@ void GetInputTabularMonthly(EnergyPlusData &state)
         for (int jField = 2; jField <= NumAlphas; jField += 2) {
             if (AlphArray(jField).empty()) {
                 ShowWarningError(state,
-                                 std::format("{}: Blank column specified in '{}', need to provide a variable or meter name ",
-                                             CurrentModuleObject,
-                                             ort->MonthlyInput(TabNum).name));
+                                 EnergyPlus::format("{}: Blank column specified in '{}', need to provide a variable or meter name ",
+                                                    CurrentModuleObject,
+                                                    ort->MonthlyInput(TabNum).name));
                 continue;
             }
             std::string const curAggString = AlphArray(jField + 1);
@@ -396,9 +402,9 @@ void GetInputTabularMonthly(EnergyPlusData &state)
             AggType curAggType = static_cast<AggType>(getEnumValue(AggTypeNamesUC, Util::makeUPPER(curAggString)));
             // set accumulator values to default as appropriate for aggregation type
             if (curAggType == AggType::Invalid) {
-                ShowWarningError(state,
-                                 std::format("{}={}, Variable name={}", CurrentModuleObject, ort->MonthlyInput(TabNum).name, AlphArray(jField)));
-                ShowContinueError(state, std::format("Invalid aggregation type=\"{}\"  Defaulting to SumOrAverage.", curAggString));
+                ShowWarningError(
+                    state, EnergyPlus::format("{}={}, Variable name={}", CurrentModuleObject, ort->MonthlyInput(TabNum).name, AlphArray(jField)));
+                ShowContinueError(state, EnergyPlus::format("Invalid aggregation type=\"{}\"  Defaulting to SumOrAverage.", curAggString));
                 curAggType = AggType::SumOrAvg;
             }
             AddMonthlyFieldSetInput(state, curTable, AlphArray(jField), "", curAggType);
@@ -760,9 +766,10 @@ void InitializeTabularMonthly(EnergyPlusData &state)
             UnitsVar = ort->MonthlyFieldSetInput(FirstColumn + colNum - 1).varUnits;
 
             if (KeyCount == 0 && issueWarnings && !ort->MonthlyInput(TabNum).isNamedMonthly) {
-                ShowWarningError(
-                    state,
-                    std::format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'", ort->MonthlyInput(TabNum).name, curVariMeter));
+                ShowWarningError(state,
+                                 EnergyPlus::format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'",
+                                                    ort->MonthlyInput(TabNum).name,
+                                                    curVariMeter));
             }
             for (int iKey = 1; iKey <= KeyCount; ++iKey) {
                 found = 0;
@@ -921,12 +928,13 @@ void InitializeTabularMonthly(EnergyPlusData &state)
                     // fixing CR5878 removed the showing of the warning once about a specific variable.
                     if (issueWarnings && !ort->MonthlyInput(TabNum).isNamedMonthly) {
                         ShowWarningError(state,
-                                         std::format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'",
-                                                     ort->MonthlyInput(TabNum).name,
-                                                     curVariMeter));
-                        ShowContinueError(
-                            state,
-                            std::format("..i.e., Variable name={}:{} not valid for this simulation.", UniqueKeyNames(kUniqueKey), curVariMeter));
+                                         EnergyPlus::format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'",
+                                                            ort->MonthlyInput(TabNum).name,
+                                                            curVariMeter));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("..i.e., Variable name={}:{} not valid for this simulation.",
+                                                             UniqueKeyNames(kUniqueKey),
+                                                             curVariMeter));
                     }
                     ort->MonthlyColumns(mColumn).varName = curVariMeter;
                     ort->MonthlyColumns(mColumn).varNum = 0;
@@ -993,17 +1001,17 @@ bool isInvalidAggregationOrder(EnergyPlusData &state)
         if (missingMaxOrMinError) {
             ShowSevereError(
                 state,
-                std::format("The Output:Table:Monthly report named=\"{}\" has a valueWhenMaxMin aggregation type for a column without a "
-                            "previous column that uses either the minimum or maximum aggregation types. The report will not be generated.",
-                            ort->MonthlyInput(iInput).name));
+                EnergyPlus::format("The Output:Table:Monthly report named=\"{}\" has a valueWhenMaxMin aggregation type for a column without a "
+                                   "previous column that uses either the minimum or maximum aggregation types. The report will not be generated.",
+                                   ort->MonthlyInput(iInput).name));
             foundError = true;
         }
         if (missingHourAggError) {
             ShowSevereError(
                 state,
-                std::format("The Output:Table:Monthly report named=\"{}\" has a --DuringHoursShown aggregation type for a column without a "
-                            "previous field that uses one of the Hour-- aggregation types. The report will not be generated.",
-                            ort->MonthlyInput(iInput).name));
+                EnergyPlus::format("The Output:Table:Monthly report named=\"{}\" has a --DuringHoursShown aggregation type for a column without a "
+                                   "previous field that uses one of the Hour-- aggregation types. The report will not be generated.",
+                                   ort->MonthlyInput(iInput).name));
             foundError = true;
         }
     }
@@ -1077,9 +1085,10 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
         if (!state.dataGlobal->DoWeathSim) {
             ShowWarningError(
                 state,
-                std::format("{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
-                            CurrentModuleObject,
-                            CurrentModuleObject));
+                EnergyPlus::format(
+                    "{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
+                    CurrentModuleObject,
+                    CurrentModuleObject));
             return;
         }
     }
@@ -1115,9 +1124,9 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
             if (!(Util::SameString(AlphArray(4), "ENERGY") || Util::SameString(AlphArray(4), "DEMAND") ||
                   Util::SameString(AlphArray(4), "TEMPERATURE") || Util::SameString(AlphArray(4), "FLOWRATE"))) {
                 ShowWarningError(state,
-                                 std::format("In {} named {} the Variable Type was not energy, demand, temperature, or flowrate.",
-                                             CurrentModuleObject,
-                                             AlphArray(1)));
+                                 EnergyPlus::format("In {} named {} the Variable Type was not energy, demand, temperature, or flowrate.",
+                                                    CurrentModuleObject,
+                                                    AlphArray(1)));
             }
         }
         ort->OutputTableBinned(iInObj).intervalStart = NumArray(1);
@@ -1146,9 +1155,10 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
                                    ort->OutputTableBinned(iInObj).stepType,
                                    ort->OutputTableBinned(iInObj).units);
         if (ort->OutputTableBinned(iInObj).typeOfVar == OutputProcessor::VariableType::Invalid) {
-            ShowWarningError(
-                state,
-                std::format("{}: User specified meter or variable not found: {}", CurrentModuleObject, ort->OutputTableBinned(iInObj).varOrMeter));
+            ShowWarningError(state,
+                             EnergyPlus::format("{}: User specified meter or variable not found: {}",
+                                                CurrentModuleObject,
+                                                ort->OutputTableBinned(iInObj).varOrMeter));
         }
         // If only a single table key is requested than only one should be counted
         // later will reset the numTables array pointer but for now use it to know
@@ -1182,7 +1192,8 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
                 // check if valid meter or number
                 // Why is this here?
                 if (objVarIDs(iTable) == -1) {
-                    ShowWarningError(state, std::format("{}: Specified variable or meter not found: {}", CurrentModuleObject, objNames(iTable)));
+                    ShowWarningError(state,
+                                     EnergyPlus::format("{}: Specified variable or meter not found: {}", CurrentModuleObject, objNames(iTable)));
                 }
             }
         } else {
@@ -1231,10 +1242,10 @@ bool warningAboutKeyNotFound(EnergyPlusData &state, int foundIndex, int inObjInd
 {
     if (foundIndex == 0) {
         ShowWarningError(state,
-                         std::format("{}: Specified key not found: {} for variable: {}",
-                                     moduleName,
-                                     state.dataOutRptTab->OutputTableBinned(inObjIndex).keyValue,
-                                     state.dataOutRptTab->OutputTableBinned(inObjIndex).varOrMeter));
+                         EnergyPlus::format("{}: Specified key not found: {} for variable: {}",
+                                            moduleName,
+                                            state.dataOutRptTab->OutputTableBinned(inObjIndex).keyValue,
+                                            state.dataOutRptTab->OutputTableBinned(inObjIndex).varOrMeter));
         return true;
     }
     return false;
@@ -18649,10 +18660,10 @@ std::string DateToString(int const codedDate) // word containing encoded month, 
     //   Convert the coded date format into a usable
     //   string
 
-    int Month;  // month in integer format (1-12)
-    int Day;    // day in integer format (1-31)
-    int Hour;   // hour in integer format (1-24)
-    int Minute; // minute in integer format (0:59)
+    int Month;  // month in integer EnergyPlus::format(1-12)
+    int Day;    // day in integer EnergyPlus::format(1-31)
+    int Hour;   // hour in integer EnergyPlus::format(1-24)
+    int Minute; // minute in integer EnergyPlus::format(0:59)
     static constexpr std::array<std::string_view, 12> Months{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
     if (codedDate == 0) {

@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Fmath.hh>
@@ -134,7 +135,7 @@ namespace HVACHXAssistedCoolingCoil {
         if (CompIndex == 0) {
             HXAssistedCoilNum = Util::FindItemInList(HXAssistedCoilName, state.dataHVACAssistedCC->HXAssistedCoil);
             if (HXAssistedCoilNum == 0) {
-                ShowFatalError(state, std::format("HX Assisted Coil not found={}", HXAssistedCoilName));
+                ShowFatalError(state, EnergyPlus::format("HX Assisted Coil not found={}", HXAssistedCoilName));
             }
             CompIndex = HXAssistedCoilNum;
         } else {
@@ -142,19 +143,19 @@ namespace HVACHXAssistedCoolingCoil {
             if (HXAssistedCoilNum > state.dataHVACAssistedCC->TotalNumHXAssistedCoils || HXAssistedCoilNum < 1) {
                 ShowFatalError(
                     state,
-                    std::format("SimHXAssistedCoolingCoil: Invalid CompIndex passed={}, Number of HX Assisted Cooling Coils={}, Coil name={}",
-                                HXAssistedCoilNum,
-                                state.dataHVACAssistedCC->TotalNumHXAssistedCoils,
-                                HXAssistedCoilName));
+                    EnergyPlus::format("SimHXAssistedCoolingCoil: Invalid CompIndex passed={}, Number of HX Assisted Cooling Coils={}, Coil name={}",
+                                       HXAssistedCoilNum,
+                                       state.dataHVACAssistedCC->TotalNumHXAssistedCoils,
+                                       HXAssistedCoilName));
             }
             if (state.dataHVACAssistedCC->CheckEquipName(HXAssistedCoilNum)) {
                 if (!HXAssistedCoilName.empty() && HXAssistedCoilName != state.dataHVACAssistedCC->HXAssistedCoil(HXAssistedCoilNum).Name) {
                     ShowFatalError(
                         state,
-                        std::format("SimHXAssistedCoolingCoil: Invalid CompIndex passed={}, Coil name={}, stored Coil Name for that index={}",
-                                    HXAssistedCoilNum,
-                                    HXAssistedCoilName,
-                                    state.dataHVACAssistedCC->HXAssistedCoil(HXAssistedCoilNum).Name));
+                        EnergyPlus::format("SimHXAssistedCoolingCoil: Invalid CompIndex passed={}, Coil name={}, stored Coil Name for that index={}",
+                                           HXAssistedCoilNum,
+                                           HXAssistedCoilName,
+                                           state.dataHVACAssistedCC->HXAssistedCoil(HXAssistedCoilNum).Name));
                 }
                 state.dataHVACAssistedCC->CheckEquipName(HXAssistedCoilNum) = false;
             }
@@ -318,7 +319,7 @@ namespace HVACHXAssistedCoolingCoil {
                 int coolingCoilIndex_temp = CoilCoolingDX::factory(state, thisHXCoil.CoolingCoilName);
                 thisHXCoil.CoolingCoilIndex = coolingCoilIndex_temp;
                 if (coolingCoilIndex_temp < 0) {
-                    ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, AlphArray(5)));
+                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, AlphArray(5)));
                     CoolingCoilErrFlag = true;
                     ErrorsFound = true;
                 }
@@ -328,7 +329,7 @@ namespace HVACHXAssistedCoolingCoil {
                     CoolingCoilErrFlag = true;
                 }
                 if (CoolingCoilErrFlag) {
-                    ShowContinueError(state, std::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                    ShowContinueError(state, EnergyPlus::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                     ErrorsFound = true;
                 }
             } else if (Util::SameString(AlphArray(4), "Coil:Cooling:DX:SingleSpeed")) {
@@ -341,7 +342,7 @@ namespace HVACHXAssistedCoolingCoil {
                                         CoolingCoilErrFlag,
                                         HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType]);
                 if (CoolingCoilErrFlag) {
-                    ShowContinueError(state, std::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                    ShowContinueError(state, EnergyPlus::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                     ErrorsFound = true;
                 }
             } else if (Util::SameString(AlphArray(4), "Coil:Cooling:DX:VariableSpeed")) {
@@ -351,59 +352,60 @@ namespace HVACHXAssistedCoolingCoil {
                 thisHXCoil.CoolingCoilIndex = VariableSpeedCoils::GetCoilIndexVariableSpeed(state, AlphArray(4), AlphArray(5), CoolingCoilErrFlag);
 
                 if (CoolingCoilErrFlag) {
-                    ShowContinueError(state, std::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                    ShowContinueError(state, EnergyPlus::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                     ErrorsFound = true;
                 }
                 thisHXCoil.DXCoilNumOfSpeeds = VariableSpeedCoils::GetVSCoilNumOfSpeeds(state, thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 if (CoolingCoilErrFlag) {
-                    ShowContinueError(state, std::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                    ShowContinueError(state, EnergyPlus::format("...occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
                     ErrorsFound = true;
                 }
             } else {
-                ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, CurrentModuleObject, thisHXCoil.Name));
-                ShowContinueError(state, std::format("Invalid {}=\"{}\"", cAlphaFields(4), AlphArray(4)));
+                ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, CurrentModuleObject, thisHXCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("Invalid {}=\"{}\"", cAlphaFields(4), AlphArray(4)));
                 ErrorsFound = true;
             }
 
             HXErrFlag = false;
             SupplyAirInletNode = HeatRecovery::GetSupplyInletNode(state, thisHXCoil.HeatExchangerName, HXErrFlag);
             if (HXErrFlag) {
-                ShowContinueError(state, std::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
             }
 
             HXErrFlag = false;
             SupplyAirOutletNode = HeatRecovery::GetSupplyOutletNode(state, thisHXCoil.HeatExchangerName, HXErrFlag);
             if (HXErrFlag) {
-                ShowContinueError(state, std::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
             }
 
             HXErrFlag = false;
             SecondaryAirInletNode = HeatRecovery::GetSecondaryInletNode(state, thisHXCoil.HeatExchangerName, HXErrFlag);
             if (HXErrFlag) {
-                ShowContinueError(state, std::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
             }
 
             HXErrFlag = false;
             SecondaryAirOutletNode = HeatRecovery::GetSecondaryOutletNode(state, thisHXCoil.HeatExchangerName, HXErrFlag);
             if (HXErrFlag) {
-                ShowContinueError(state, std::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("...Occurs in {}=\"{}\"", CurrentModuleObject, thisHXCoil.Name));
             }
 
             if (Util::SameString(AlphArray(4), "Coil:Cooling:DX")) {
                 CoolingCoilInletNodeNum = state.dataCoilCoolingDX->coilCoolingDXs[thisHXCoil.CoolingCoilIndex].evapInletNodeIndex;
                 if (SupplyAirOutletNode != CoolingCoilInletNodeNum) {
-                    ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, CurrentModuleObject, thisHXCoil.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, CurrentModuleObject, thisHXCoil.Name));
                     ShowContinueError(state, "Node names are inconsistent in heat exchanger and cooling coil object.");
                     ShowContinueError(state,
-                                      std::format("The supply air outlet node name in heat exchanger {}=\"{}\"",
-                                                  HVAC::hxTypeNames[(int)thisHXCoil.hxType],
-                                                  thisHXCoil.HeatExchangerName));
+                                      EnergyPlus::format("The supply air outlet node name in heat exchanger {}=\"{}\"",
+                                                         HVAC::hxTypeNames[(int)thisHXCoil.hxType],
+                                                         thisHXCoil.HeatExchangerName));
                     ShowContinueError(state,
-                                      std::format("must match the cooling coil inlet node name in {}=\"{}\"",
-                                                  HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType],
-                                                  thisHXCoil.CoolingCoilName));
+                                      EnergyPlus::format("must match the cooling coil inlet node name in {}=\"{}\"",
+                                                         HVAC::coilTypeNames[(int)thisHXCoil.coolCoilType],
+                                                         thisHXCoil.CoolingCoilName));
                     ShowContinueError(
-                        state, std::format("Heat exchanger supply air outlet node name=\"{}\"", state.dataLoopNodes->NodeID(SupplyAirOutletNode)));
+                        state,
+                        EnergyPlus::format("Heat exchanger supply air outlet node name=\"{}\"", state.dataLoopNodes->NodeID(SupplyAirOutletNode)));
                     ShowContinueError(state,
                                       std::format("Cooling coil air inlet node name=\"{}\"", state.dataLoopNodes->NodeID(CoolingCoilInletNodeNum)));
                     ErrorsFound = true;

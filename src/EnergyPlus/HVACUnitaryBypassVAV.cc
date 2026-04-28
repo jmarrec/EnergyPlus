@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -154,25 +155,26 @@ namespace HVACUnitaryBypassVAV {
         if (CompIndex == 0) {
             CBVAVNum = Util::FindItemInList(CompName, state.dataHVACUnitaryBypassVAV->CBVAV);
             if (CBVAVNum == 0) {
-                ShowFatalError(state, std::format("SimUnitaryBypassVAV: Unit not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimUnitaryBypassVAV: Unit not found={}", CompName));
             }
             CompIndex = CBVAVNum;
         } else {
             CBVAVNum = CompIndex;
             if (CBVAVNum > state.dataHVACUnitaryBypassVAV->NumCBVAV || CBVAVNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimUnitaryBypassVAV:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                           CBVAVNum,
-                                           state.dataHVACUnitaryBypassVAV->NumCBVAV,
-                                           CompName));
+                               EnergyPlus::format("SimUnitaryBypassVAV:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                                  CBVAVNum,
+                                                  state.dataHVACUnitaryBypassVAV->NumCBVAV,
+                                                  CompName));
             }
             if (state.dataHVACUnitaryBypassVAV->CheckEquipName(CBVAVNum)) {
                 if (CompName != state.dataHVACUnitaryBypassVAV->CBVAV(CBVAVNum).Name) {
-                    ShowFatalError(state,
-                                   std::format("SimUnitaryBypassVAV: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                               CBVAVNum,
-                                               CompName,
-                                               state.dataHVACUnitaryBypassVAV->CBVAV(CBVAVNum).Name));
+                    ShowFatalError(
+                        state,
+                        EnergyPlus::format("SimUnitaryBypassVAV: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                           CBVAVNum,
+                                           CompName,
+                                           state.dataHVACUnitaryBypassVAV->CBVAV(CBVAVNum).Name));
                 }
                 state.dataHVACUnitaryBypassVAV->CheckEquipName(CBVAVNum) = false;
             }
@@ -379,47 +381,47 @@ namespace HVACUnitaryBypassVAV {
 
             cbvav.MaxCoolAirVolFlow = Numbers(1);
             if (cbvav.MaxCoolAirVolFlow <= 0.0 && cbvav.MaxCoolAirVolFlow != DataSizing::AutoSize) {
-                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7T}", CurrentModuleObject, cNumericFields(1), Numbers(1)));
-                ShowContinueError(state, std::format("{} must be greater than zero.", cNumericFields(1)));
-                ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
+                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7f}", CurrentModuleObject, cNumericFields(1), Numbers(1)));
+                ShowContinueError(state, EnergyPlus::format("{} must be greater than zero.", cNumericFields(1)));
+                ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
                 ErrorsFound = true;
             }
 
             cbvav.MaxHeatAirVolFlow = Numbers(2);
             if (cbvav.MaxHeatAirVolFlow <= 0.0 && cbvav.MaxHeatAirVolFlow != DataSizing::AutoSize) {
-                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7T}", CurrentModuleObject, cNumericFields(2), Numbers(2)));
-                ShowContinueError(state, std::format("{} must be greater than zero.", cNumericFields(2)));
-                ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
+                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7f}", CurrentModuleObject, cNumericFields(2), Numbers(2)));
+                ShowContinueError(state, EnergyPlus::format("{} must be greater than zero.", cNumericFields(2)));
+                ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
                 ErrorsFound = true;
             }
 
             cbvav.MaxNoCoolHeatAirVolFlow = Numbers(3);
             if (cbvav.MaxNoCoolHeatAirVolFlow < 0.0 && cbvav.MaxNoCoolHeatAirVolFlow != DataSizing::AutoSize) {
-                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7T}", CurrentModuleObject, cNumericFields(3), Numbers(3)));
-                ShowContinueError(state, std::format("{} must be greater than or equal to zero.", cNumericFields(3)));
-                ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
+                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7f}", CurrentModuleObject, cNumericFields(3), Numbers(3)));
+                ShowContinueError(state, EnergyPlus::format("{} must be greater than or equal to zero.", cNumericFields(3)));
+                ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
                 ErrorsFound = true;
             }
 
             cbvav.CoolOutAirVolFlow = Numbers(4);
             if (cbvav.CoolOutAirVolFlow < 0.0 && cbvav.CoolOutAirVolFlow != DataSizing::AutoSize) {
-                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7T}", CurrentModuleObject, cNumericFields(4), Numbers(4)));
-                ShowContinueError(state, std::format("{} must be greater than or equal to zero.", cNumericFields(4)));
-                ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
+                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7f}", CurrentModuleObject, cNumericFields(4), Numbers(4)));
+                ShowContinueError(state, EnergyPlus::format("{} must be greater than or equal to zero.", cNumericFields(4)));
+                ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
                 ErrorsFound = true;
             }
 
             cbvav.HeatOutAirVolFlow = Numbers(5);
             if (cbvav.HeatOutAirVolFlow < 0.0 && cbvav.HeatOutAirVolFlow != DataSizing::AutoSize) {
-                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7T}", CurrentModuleObject, cNumericFields(5), Numbers(5)));
-                ShowContinueError(state, std::format("{} must be greater than or equal to zero.", cNumericFields(5)));
-                ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
+                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7f}", CurrentModuleObject, cNumericFields(5), Numbers(5)));
+                ShowContinueError(state, EnergyPlus::format("{} must be greater than or equal to zero.", cNumericFields(5)));
+                ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
                 ErrorsFound = true;
             }
 
             cbvav.NoCoolHeatOutAirVolFlow = Numbers(6);
             if (cbvav.NoCoolHeatOutAirVolFlow < 0.0 && cbvav.NoCoolHeatOutAirVolFlow != DataSizing::AutoSize) {
-                ShowSevereError(state, EnergyPlus::format("{} illegal {} = {:.7T}", CurrentModuleObject, cNumericFields(6), Numbers(6)));
+                ShowSevereError(state, std::format("{} illegal {} = {:.7f}", CurrentModuleObject, cNumericFields(6), Numbers(6)));
                 ShowContinueError(state, std::format("{} must be greater than or equal to zero.", cNumericFields(6)));
                 ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
                 ErrorsFound = true;
@@ -621,11 +623,11 @@ namespace HVACUnitaryBypassVAV {
             if (cbvav.FanVolFlow != DataSizing::AutoSize) {
                 if (cbvav.FanVolFlow < cbvav.MaxCoolAirVolFlow && cbvav.MaxCoolAirVolFlow != DataSizing::AutoSize) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("{} - air flow rate = {:.7T} in {} = {} is less than the ",
-                                                        CurrentModuleObject,
-                                                        cbvav.FanVolFlow,
-                                                        cAlphaFields(11),
-                                                        cbvav.FanName) +
+                                     std::format("{} - air flow rate = {:.7f} in {} = {} is less than the ",
+                                                 CurrentModuleObject,
+                                                 cbvav.FanVolFlow,
+                                                 cAlphaFields(11),
+                                                 cbvav.FanName) +
                                          cNumericFields(1));
                     ShowContinueError(state, std::format(" {} is reset to the fan flow rate and the simulation continues.", cNumericFields(1)));
                     ShowContinueError(state, std::format(" Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
@@ -633,11 +635,11 @@ namespace HVACUnitaryBypassVAV {
                 }
                 if (cbvav.FanVolFlow < cbvav.MaxHeatAirVolFlow && cbvav.MaxHeatAirVolFlow != DataSizing::AutoSize) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("{} - air flow rate = {:.7T} in {} = {} is less than the ",
-                                                        CurrentModuleObject,
-                                                        cbvav.FanVolFlow,
-                                                        cAlphaFields(11),
-                                                        cbvav.FanName) +
+                                     std::format("{} - air flow rate = {:.7f} in {} = {} is less than the ",
+                                                 CurrentModuleObject,
+                                                 cbvav.FanVolFlow,
+                                                 cAlphaFields(11),
+                                                 cbvav.FanName) +
                                          cNumericFields(2));
                     ShowContinueError(state, std::format(" {} is reset to the fan flow rate and the simulation continues.", cNumericFields(2)));
                     ShowContinueError(state, std::format(" Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
@@ -798,11 +800,11 @@ namespace HVACUnitaryBypassVAV {
                 if (cbvav.FanVolFlow < cbvav.MaxNoCoolHeatAirVolFlow && cbvav.MaxNoCoolHeatAirVolFlow != DataSizing::AutoSize &&
                     cbvav.MaxNoCoolHeatAirVolFlow != 0.0) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("{} - air flow rate = {:.7T} in {} = {} is less than ",
-                                                        CurrentModuleObject,
-                                                        cbvav.FanVolFlow,
-                                                        cAlphaFields(11),
-                                                        cbvav.FanName) +
+                                     std::format("{} - air flow rate = {:.7f} in {} = {} is less than ",
+                                                 CurrentModuleObject,
+                                                 cbvav.FanVolFlow,
+                                                 cAlphaFields(11),
+                                                 cbvav.FanName) +
                                          cNumericFields(3));
                     ShowContinueError(state, std::format(" {} is reset to the fan flow rate and the simulation continues.", cNumericFields(3)));
                     ShowContinueError(state, std::format(" Occurs in {} = {}", CurrentModuleObject, cbvav.Name));
@@ -1500,12 +1502,12 @@ namespace HVACUnitaryBypassVAV {
                 if (cBVAV.FanVolFlow < cBVAV.MaxCoolAirVolFlow) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("{} - air flow rate = {:.7T} in fan object {} is less than the maximum CBVAV system air flow rate when "
-                                           "cooling is required ({:.7T}).",
-                                           CurrentModuleObject,
-                                           cBVAV.FanVolFlow,
-                                           cBVAV.FanName,
-                                           cBVAV.MaxCoolAirVolFlow));
+                        std::format("{} - air flow rate = {:.7f} in fan object {} is less than the maximum CBVAV system air flow rate when "
+                                    "cooling is required ({:.7f}).",
+                                    CurrentModuleObject,
+                                    cBVAV.FanVolFlow,
+                                    cBVAV.FanName,
+                                    cBVAV.MaxCoolAirVolFlow));
                     ShowContinueError(
                         state, " The CBVAV system flow rate when cooling is required is reset to the fan flow rate and the simulation continues.");
                     ShowContinueError(state, std::format(" Occurs in Changeover-bypass VAV system = {}", cBVAV.Name));
@@ -1514,12 +1516,12 @@ namespace HVACUnitaryBypassVAV {
                 if (cBVAV.FanVolFlow < cBVAV.MaxHeatAirVolFlow) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("{} - air flow rate = {:.7T} in fan object {} is less than the maximum CBVAV system air flow rate when "
-                                           "heating is required ({:.7T}).",
-                                           CurrentModuleObject,
-                                           cBVAV.FanVolFlow,
-                                           cBVAV.FanName,
-                                           cBVAV.MaxHeatAirVolFlow));
+                        std::format("{} - air flow rate = {:.7f} in fan object {} is less than the maximum CBVAV system air flow rate when "
+                                    "heating is required ({:.7f}).",
+                                    CurrentModuleObject,
+                                    cBVAV.FanVolFlow,
+                                    cBVAV.FanName,
+                                    cBVAV.MaxHeatAirVolFlow));
                     ShowContinueError(
                         state, " The CBVAV system flow rate when heating is required is reset to the fan flow rate and the simulation continues.");
                     ShowContinueError(state, std::format(" Occurs in Changeover-bypass VAV system = {}", cBVAV.Name));
@@ -1528,12 +1530,12 @@ namespace HVACUnitaryBypassVAV {
                 if (cBVAV.FanVolFlow < cBVAV.MaxNoCoolHeatAirVolFlow && cBVAV.MaxNoCoolHeatAirVolFlow != 0.0) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("{} - air flow rate = {:.7T} in fan object {} is less than the maximum CBVAV system air flow rate when "
-                                           "no heating or cooling is needed ({:.7T}).",
-                                           CurrentModuleObject,
-                                           cBVAV.FanVolFlow,
-                                           cBVAV.FanName,
-                                           cBVAV.MaxNoCoolHeatAirVolFlow));
+                        std::format("{} - air flow rate = {:.7f} in fan object {} is less than the maximum CBVAV system air flow rate when "
+                                    "no heating or cooling is needed ({:.7f}).",
+                                    CurrentModuleObject,
+                                    cBVAV.FanVolFlow,
+                                    cBVAV.FanName,
+                                    cBVAV.MaxNoCoolHeatAirVolFlow));
                     ShowContinueError(state,
                                       " The CBVAV system flow rate when no heating or cooling is needed is reset to the fan flow rate and the "
                                       "simulation continues.");
@@ -1544,12 +1546,12 @@ namespace HVACUnitaryBypassVAV {
                 if (cBVAV.FanVolFlow < cBVAV.CoolOutAirVolFlow) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("{} - air flow rate = {:.7T} in fan object {} is less than the maximum CBVAV outdoor air flow rate when "
-                                           "cooling is required ({:.7T}).",
-                                           CurrentModuleObject,
-                                           cBVAV.FanVolFlow,
-                                           cBVAV.FanName,
-                                           cBVAV.CoolOutAirVolFlow));
+                        std::format("{} - air flow rate = {:.7f} in fan object {} is less than the maximum CBVAV outdoor air flow rate when "
+                                    "cooling is required ({:.7f}).",
+                                    CurrentModuleObject,
+                                    cBVAV.FanVolFlow,
+                                    cBVAV.FanName,
+                                    cBVAV.CoolOutAirVolFlow));
                     ShowContinueError(
                         state, " The CBVAV outdoor flow rate when cooling is required is reset to the fan flow rate and the simulation continues.");
                     ShowContinueError(state, std::format(" Occurs in Changeover-bypass VAV system = {}", cBVAV.Name));
@@ -1558,12 +1560,12 @@ namespace HVACUnitaryBypassVAV {
                 if (cBVAV.FanVolFlow < cBVAV.HeatOutAirVolFlow) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("{} - air flow rate = {:.7T} in fan object {} is less than the maximum CBVAV outdoor air flow rate when "
-                                           "heating is required ({:.7T}).",
-                                           CurrentModuleObject,
-                                           cBVAV.FanVolFlow,
-                                           cBVAV.FanName,
-                                           cBVAV.HeatOutAirVolFlow));
+                        std::format("{} - air flow rate = {:.7f} in fan object {} is less than the maximum CBVAV outdoor air flow rate when "
+                                    "heating is required ({:.7f}).",
+                                    CurrentModuleObject,
+                                    cBVAV.FanVolFlow,
+                                    cBVAV.FanName,
+                                    cBVAV.HeatOutAirVolFlow));
                     ShowContinueError(
                         state, " The CBVAV outdoor flow rate when heating is required is reset to the fan flow rate and the simulation continues.");
                     ShowContinueError(state, std::format(" Occurs in Changeover-bypass VAV system = {}", cBVAV.Name));
@@ -1572,12 +1574,12 @@ namespace HVACUnitaryBypassVAV {
                 if (cBVAV.FanVolFlow < cBVAV.NoCoolHeatOutAirVolFlow) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("{} - air flow rate = {:.7T} in fan object {} is less than the maximum CBVAV outdoor air flow rate when "
-                                           "no heating or cooling is needed ({:.7T}).",
-                                           CurrentModuleObject,
-                                           cBVAV.FanVolFlow,
-                                           cBVAV.FanName,
-                                           cBVAV.NoCoolHeatOutAirVolFlow));
+                        std::format("{} - air flow rate = {:.7f} in fan object {} is less than the maximum CBVAV outdoor air flow rate when "
+                                    "no heating or cooling is needed ({:.7f}).",
+                                    CurrentModuleObject,
+                                    cBVAV.FanVolFlow,
+                                    cBVAV.FanName,
+                                    cBVAV.NoCoolHeatOutAirVolFlow));
                     ShowContinueError(state,
                                       " The CBVAV outdoor flow rate when no heating or cooling is needed is reset to the fan flow rate and the "
                                       "simulation continues.");

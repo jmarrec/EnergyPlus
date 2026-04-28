@@ -57,10 +57,6 @@
 #include <ostream>
 #include <vector>
 
-// EnergyPlus Headers
-#include <EnergyPlus/EnergyPlus.hh>
-#include <EnergyPlus/FileSystem.hh>
-
 // Third Party Headers
 #include <fmt/compile.h>
 #include <fmt/format.h>
@@ -69,6 +65,10 @@
 #include <fmt/printf.h>
 #include <fmt/ranges.h>
 #include <nlohmann/json.hpp>
+
+// EnergyPlus Headers
+#include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/FileSystem.hh>
 
 namespace {
 struct DoubleWrapper
@@ -304,31 +304,6 @@ public:
             auto str = fmt::format(fmt::runtime(spec_builder()), next_float(val));
             return fmt::format_to(ctx.out(), "{}", zero_pad_exponent(str));
         }
-        if (specs_.type == 'T') { // matches TrimSigDigits behavior
-            const auto fixed_output = should_be_fixed_output(val);
-
-            if (fixed_output) {
-                const auto magnitude = std::pow(10, specs_.precision);
-                const auto adjusted = (val * magnitude) + 0.0001;
-                const auto truncated = std::trunc(adjusted) / magnitude;
-                specs_.type = 'F';
-                return fmt::format_to(ctx.out(), fmt::runtime(spec_builder()), truncated);
-            }
-            specs_.type = 'E';
-            specs_.precision += 2;
-
-            // write the `E` formatted float to a std::string
-            auto str = fmt::format(fmt::runtime(spec_builder()), val);
-            str = zero_pad_exponent(str);
-
-            // Erase last 2 numbers to truncate the value
-            const auto E_itr = std::find(begin(str), end(str), 'E');
-            if (E_itr != str.end()) {
-                str.erase(std::prev(E_itr, 2), E_itr);
-            }
-
-            return fmt::format_to(ctx.out(), "{}", str);
-        }
         return fmt::format_to(ctx.out(), fmt::runtime(spec_builder()), val);
     }
 };
@@ -360,7 +335,6 @@ inline constexpr bool is_fortran_syntax(const std::string_view format_str)
             within_fmt_str = false;
             break;
         case 'R':
-        case 'T':
             if (within_fmt_str) {
                 return true;
             } else {
@@ -726,10 +700,6 @@ template <typename... Args> std::string vprint(std::string_view format_str, cons
 // Defines a custom formatting type 'R' (round_ which chooses between `E` and `G` depending
 // on the value being printed.
 // This is necessary for parity with the old "RoundSigDigits" utility function
-//
-// Defines a custom formatting type 'T' that that truncates the value
-// to match the behavior of TrimSigDigits utility function
-//
 
 namespace {
     template <typename... Args> void print_fortran_syntax(std::ostream &os, std::string_view format_str, const Args &...args)

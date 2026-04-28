@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cassert>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -318,7 +319,7 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
         for (int jFld = 1; jFld <= NumAlphas; ++jFld) {
             //  args are always turned to upper case but this is okay...
             if (hasi(s_ipsc->cAlphaArgs(jFld), "UtilityCost:")) {
-                ShowWarningError(state, std::format("{}{}=\"{}\".", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\".", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "... a field was found containing UtilityCost: which may indicate a missing comma.");
             }
         }
@@ -342,10 +343,11 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
         GetVariableKeyCountandType(state, tariff.reportMeter, KeyCount, TypeVar, AvgSumVar, StepTypeVar, UnitsVar);
         // if no meters found for that name
         if (KeyCount == 0) {
-            ShowWarningError(state, std::format("{}{}=\"{}\" missing meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              std::format("Meter referenced is not present due to a lack of equipment that uses that energy source/meter:\"{}\".",
-                                          tariff.reportMeter));
+            ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\" missing meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(
+                state,
+                EnergyPlus::format("Meter referenced is not present due to a lack of equipment that uses that energy source/meter:\"{}\".",
+                                   tariff.reportMeter));
             tariff.reportMeterIndx = -1;
         } else {
             NamesOfKeys.allocate(KeyCount);
@@ -353,7 +355,7 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
             GetVariableKeys(state, tariff.reportMeter, TypeVar, NamesOfKeys, IndexesForKeyVar);
             // although this retrieves all keys for a variable, we only need one so the first one is chosen
             if (KeyCount > 1) {
-                ShowWarningError(state, std::format("{}{}=\"{}\" multiple keys", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\" multiple keys", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "... Multiple keys for variable select. First key will be used.");
             }
             // assign the index
@@ -491,9 +493,9 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
                 tariff.demandConv = 0.00003412;
                 ShowWarningCustom(state,
                                   eoh,
-                                  std::format("{}=\"{}\", Therm is an unusual choice for an electric resource.",
-                                              s_ipsc->cAlphaFieldNames(3),
-                                              s_ipsc->cAlphaArgs(3)));
+                                  EnergyPlus::format("{}=\"{}\", Therm is an unusual choice for an electric resource.",
+                                                     s_ipsc->cAlphaFieldNames(3),
+                                                     s_ipsc->cAlphaArgs(3)));
             } break;
 
                 // Otherwise, default to kWh
@@ -651,10 +653,10 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
                 case 15: {
                     tariff.demandWindow = DemandWindow::Hour;
                     tariff.demWinTime = 1.00;
-                    ShowWarningError(state, std::format("{}{}=\"{}\" invalid data", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                    ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\" invalid data", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                     ShowContinueError(state,
-                                      std::format("Demand window of QuarterHour is not consistent with number of timesteps per hour [{}].",
-                                                  state.dataGlobal->TimeStepsInHour));
+                                      EnergyPlus::format("Demand window of QuarterHour is not consistent with number of timesteps per hour [{}].",
+                                                         state.dataGlobal->TimeStepsInHour));
                     ShowContinueError(state, "Demand window will be set to FullHour, and the simulation continues.");
                 } break;
                 case 2:
@@ -663,10 +665,10 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
                 case 30: {
                     tariff.demandWindow = DemandWindow::Half;
                     tariff.demWinTime = 0.50;
-                    ShowWarningError(state, std::format("{}{}=\"{}\" invalid data", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                    ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\" invalid data", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                     ShowContinueError(state,
-                                      std::format("Demand window of QuarterHour is not consistent with number of timesteps per hour [{}].",
-                                                  state.dataGlobal->TimeStepsInHour));
+                                      EnergyPlus::format("Demand window of QuarterHour is not consistent with number of timesteps per hour [{}].",
+                                                         state.dataGlobal->TimeStepsInHour));
                     ShowContinueError(state, "Demand window will be set to HalfHour, and the simulation continues.");
                 } break;
                 case 4:
@@ -690,10 +692,10 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
                 case 15: {
                     tariff.demandWindow = DemandWindow::Hour;
                     tariff.demWinTime = 1.00;
-                    ShowWarningError(state, std::format("{}{}=\"{}\" invalid data", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                    ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\" invalid data", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                     ShowContinueError(state,
-                                      std::format("Demand window of HalfHour is not consistent with number of timesteps per hour [{}].",
-                                                  state.dataGlobal->TimeStepsInHour));
+                                      EnergyPlus::format("Demand window of HalfHour is not consistent with number of timesteps per hour [{}].",
+                                                         state.dataGlobal->TimeStepsInHour));
                     ShowContinueError(state, "Demand window will be set to FullHour, and the simulation continues.");
                 } break;
                 case 2:
@@ -781,25 +783,27 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
         // check if meter is consistent with buy or sell option
         if (tariff.buyOrSell == BuySell::SellToUtility) {
             if (!Util::SameString(tariff.reportMeter, "ELECTRICITYSURPLUSSOLD:FACILITY")) {
-                ShowWarningError(state, std::format("{}{}=\"{}\" atypical meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  std::format("The meter chosen \"{}\" is not typically used with the sellToUtility option.", tariff.reportMeter));
+                ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\" atypical meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("The meter chosen \"{}\" is not typically used with the sellToUtility option.", tariff.reportMeter));
                 ShowContinueError(state, "Usually the ElectricitySurplusSold:Facility meter is selected when the sellToUtility option is used.");
             }
         } else if (tariff.buyOrSell == BuySell::NetMetering) {
             if (!Util::SameString(tariff.reportMeter, "ELECTRICITYNET:FACILITY")) {
-                ShowWarningError(state, std::format("{}{}=\"{}\" atypical meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  std::format("The meter chosen \"{}\" is not typically used with the netMetering option.", tariff.reportMeter));
+                ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\" atypical meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("The meter chosen \"{}\" is not typically used with the netMetering option.", tariff.reportMeter));
                 ShowContinueError(state, "Usually the ElectricityNet:Facility meter is selected when the netMetering option is used.");
             }
         } else if (tariff.buyOrSell == BuySell::BuyFromUtility) {
             if (hasi(tariff.reportMeter, "Elec")) { // test if electric meter
                 if (!(Util::SameString(tariff.reportMeter, "Electricity:Facility") ||
                       Util::SameString(tariff.reportMeter, "ElectricityPurchased:Facility"))) {
-                    ShowWarningError(state, std::format("{}{}=\"{}\" atypical meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                    ShowWarningError(state,
+                                     EnergyPlus::format("{}{}=\"{}\" atypical meter", RoutineName, CurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                     ShowContinueError(
-                        state, std::format("The meter chosen \"{}\" is not typically used with the buyFromUtility option.", tariff.reportMeter));
+                        state,
+                        EnergyPlus::format("The meter chosen \"{}\" is not typically used with the buyFromUtility option.", tariff.reportMeter));
                     ShowContinueError(state,
                                       "Usually the Electricity:Facility meter or the ElectricityPurchased:Facility is selected when the "
                                       "buyFromUtility option is used.");
@@ -878,7 +882,7 @@ void GetInputEconomicsQualify(EnergyPlusData &state, bool &ErrorsFound) // true 
         // check to make sure none of the values are another economic object
         for (jFld = 1; jFld <= NumAlphas; ++jFld) {
             if (hasi(s_ipsc->cAlphaArgs(jFld), "UtilityCost:")) {
-                ShowWarningError(state, std::format("{}{}=\"{}\".", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\".", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "... a field was found containing UtilityCost: which may indicate a missing comma.");
             }
         }

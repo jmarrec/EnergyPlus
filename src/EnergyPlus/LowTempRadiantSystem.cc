@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -208,7 +209,7 @@ namespace LowTempRadiantSystem {
         if (CompIndex == 0) {
             RadSysNum = Util::FindItemInList(CompName, state.dataLowTempRadSys->RadSysTypes);
             if (RadSysNum == 0) {
-                ShowFatalError(state, std::format("SimLowTempRadiantSystem: Unit not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimLowTempRadiantSystem: Unit not found={}", CompName));
             }
             CompIndex = RadSysNum;
             auto &radSysType = state.dataLowTempRadSys->RadSysTypes(RadSysNum);
@@ -232,19 +233,19 @@ namespace LowTempRadiantSystem {
             systemType = radSysType.systemType;
             if (RadSysNum > state.dataLowTempRadSys->TotalNumOfRadSystems || RadSysNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimLowTempRadiantSystem:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                           RadSysNum,
-                                           state.dataLowTempRadSys->TotalNumOfRadSystems,
-                                           CompName));
+                               EnergyPlus::format("SimLowTempRadiantSystem:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                                  RadSysNum,
+                                                  state.dataLowTempRadSys->TotalNumOfRadSystems,
+                                                  CompName));
             }
             if (state.dataLowTempRadSys->CheckEquipName(RadSysNum)) {
                 if (CompName != radSysType.Name) {
                     ShowFatalError(
                         state,
-                        std::format("SimLowTempRadiantSystem: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                    RadSysNum,
-                                    CompName,
-                                    radSysType.Name));
+                        EnergyPlus::format("SimLowTempRadiantSystem: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                           RadSysNum,
+                                           CompName,
+                                           radSysType.Name));
                 }
                 state.dataLowTempRadSys->CheckEquipName(RadSysNum) = false;
             }
@@ -267,7 +268,7 @@ namespace LowTempRadiantSystem {
             } else if (systemType == SystemType::Electric) {
                 baseSystem = &state.dataLowTempRadSys->ElecRadSys(radSysType.CompIndex);
             } else {
-                ShowFatalError(state, std::format("SimLowTempRadiantSystem: Illegal system type for system {}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimLowTempRadiantSystem: Illegal system type for system {}", CompName));
             }
 
             if ((systemType == SystemType::Hydronic) || (systemType == SystemType::ConstantFlow) || (systemType == SystemType::Electric)) {
@@ -504,20 +505,22 @@ namespace LowTempRadiantSystem {
                 if (!lNumericBlanks(4)) {
                     thisRadSysDesign.DesignScaledHeatingCapacity = Numbers(4);
                     if (thisRadSysDesign.DesignScaledHeatingCapacity <= 0.0) {
-                        ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
-                        ShowContinueError(state, std::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
-                        ShowContinueError(state, EnergyPlus::format("Illegal {} = {:.7T}", cNumericFields(4), Numbers(4)));
+                        ShowSevereError(state, EnergyPlus::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
+                        ShowContinueError(state, EnergyPlus::format("Illegal {} = {:.7f}", cNumericFields(4), Numbers(4)));
                         ErrorsFound = true;
                     } else if (thisRadSysDesign.DesignScaledHeatingCapacity == AutoSize) {
-                        ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
-                        ShowContinueError(state, std::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
-                        ShowContinueError(state, std::format("Illegal {} = Autosize", cNumericFields(4)));
+                        ShowSevereError(state, EnergyPlus::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
+                        ShowContinueError(state, EnergyPlus::format("Illegal {} = Autosize", cNumericFields(4)));
                         ErrorsFound = true;
                     }
                 } else {
-                    ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.Name));
-                    ShowContinueError(state, std::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
-                    ShowContinueError(state, std::format("Blank field not allowed for {}", cNumericFields(4)));
+                    ShowSevereError(state, EnergyPlus::format("{} = {}", CurrentModuleObject, thisRadSysDesign.Name));
+                    ShowContinueError(state, EnergyPlus::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
+                    ShowContinueError(state, EnergyPlus::format("Blank field not allowed for {}", cNumericFields(4)));
                     ErrorsFound = true;
                 }
             } else if (Util::SameString(thisRadSysDesign.DesignHeatingCapMethodInput, "FractionOfAutosizedHeatingCapacity")) {
@@ -525,14 +528,14 @@ namespace LowTempRadiantSystem {
                 if (!lNumericBlanks(5)) {
                     thisRadSysDesign.DesignScaledHeatingCapacity = Numbers(5);
                     if (thisRadSysDesign.DesignScaledHeatingCapacity < 0.0) {
-                        ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
-                        ShowContinueError(state, EnergyPlus::format("Illegal {} = {:.7T}", cNumericFields(5), Numbers(5)));
+                        ShowSevereError(state, EnergyPlus::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
+                        ShowContinueError(state, EnergyPlus::format("Illegal {} = {:.7f}", cNumericFields(5), Numbers(5)));
                         ErrorsFound = true;
                     }
                 } else {
-                    ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
-                    ShowContinueError(state, std::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
-                    ShowContinueError(state, std::format("Blank field not allowed for {}", cNumericFields(5)));
+                    ShowSevereError(state, EnergyPlus::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
+                    ShowContinueError(state, EnergyPlus::format("Input for {} = {}", cAlphaFields(5), thisRadSysDesign.DesignHeatingCapMethodInput));
+                    ShowContinueError(state, EnergyPlus::format("Blank field not allowed for {}", cNumericFields(5)));
                     ErrorsFound = true;
                 }
             } else {
@@ -560,8 +563,7 @@ namespace LowTempRadiantSystem {
                     if (thisRadSysDesign.DesignScaledCoolingCapacity <= 0.0) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
                         ShowContinueError(state, std::format("Input for {} = {}", cAlphaFields(7), thisRadSysDesign.DesignCoolingCapMethodInput));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}", cNumericFields(7), thisRadSysDesign.DesignScaledCoolingCapacity));
+                        ShowContinueError(state, std::format("Illegal {} = {:.7f}", cNumericFields(7), thisRadSysDesign.DesignScaledCoolingCapacity));
                         ErrorsFound = true;
                     } else if (thisRadSysDesign.DesignScaledCoolingCapacity == AutoSize) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
@@ -581,7 +583,7 @@ namespace LowTempRadiantSystem {
                     thisRadSysDesign.DesignScaledCoolingCapacity = Numbers(8);
                     if (thisRadSysDesign.DesignScaledCoolingCapacity < 0.0) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSysDesign.designName));
-                        ShowContinueError(state, EnergyPlus::format("Illegal {} = {:.7T}", cNumericFields(8), Numbers(8)));
+                        ShowContinueError(state, std::format("Illegal {} = {:.7f}", cNumericFields(8), Numbers(8)));
                         ErrorsFound = true;
                     }
                 } else {
@@ -744,7 +746,7 @@ namespace LowTempRadiantSystem {
                     thisRadSys.ScaledHeatingCapacity = Numbers(2);
                     if (thisRadSys.ScaledHeatingCapacity < 0.0 && thisRadSys.ScaledHeatingCapacity != AutoSize) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSys.Name));
-                        ShowContinueError(state, EnergyPlus::format("Illegal {} = {:.7T}", cNumericFields(2), Numbers(2)));
+                        ShowContinueError(state, std::format("Illegal {} = {:.7f}", cNumericFields(2), Numbers(2)));
                         ErrorsFound = true;
                     }
                 } else {
@@ -804,7 +806,7 @@ namespace LowTempRadiantSystem {
                     thisRadSys.ScaledCoolingCapacity = Numbers(4);
                     if (thisRadSys.ScaledCoolingCapacity < 0.0 && thisRadSys.ScaledCoolingCapacity != AutoSize) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisRadSys.Name));
-                        ShowContinueError(state, EnergyPlus::format("Illegal {} = {:.7T}", cNumericFields(4), Numbers(4)));
+                        ShowContinueError(state, std::format("Illegal {} = {:.7f}", cNumericFields(4), Numbers(4)));
                         ErrorsFound = true;
                     }
                 } else {
@@ -1283,9 +1285,9 @@ namespace LowTempRadiantSystem {
                     if (thisElecSys.ScaledHeatingCapacity < 0.0 && thisElecSys.ScaledHeatingCapacity != AutoSize) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisElecSys.Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
-                                                             cNumericFields(iHeatDesignCapacityNumericNum),
-                                                             Numbers(iHeatDesignCapacityNumericNum)));
+                                          std::format("Illegal {} = {:.7f}",
+                                                      cNumericFields(iHeatDesignCapacityNumericNum),
+                                                      Numbers(iHeatDesignCapacityNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {
@@ -1303,9 +1305,9 @@ namespace LowTempRadiantSystem {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisElecSys.Name));
                         ShowContinueError(state, std::format("Input for {} = {}", cAlphaFields(iHeatCAPMAlphaNum), Alphas(iHeatCAPMAlphaNum)));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
-                                                             cNumericFields(iHeatCapacityPerFloorAreaNumericNum),
-                                                             Numbers(iHeatCapacityPerFloorAreaNumericNum)));
+                                          std::format("Illegal {} = {:.7f}",
+                                                      cNumericFields(iHeatCapacityPerFloorAreaNumericNum),
+                                                      Numbers(iHeatCapacityPerFloorAreaNumericNum)));
                         ErrorsFound = true;
                     } else if (thisElecSys.ScaledHeatingCapacity == AutoSize) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisElecSys.Name));
@@ -1327,9 +1329,9 @@ namespace LowTempRadiantSystem {
                     if (thisElecSys.ScaledHeatingCapacity < 0.0) {
                         ShowSevereError(state, std::format("{} = {}", CurrentModuleObject, thisElecSys.Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
-                                                             cNumericFields(iHeatFracOfAutosizedCapacityNumericNum),
-                                                             Numbers(iHeatFracOfAutosizedCapacityNumericNum)));
+                                          std::format("Illegal {} = {:.7f}",
+                                                      cNumericFields(iHeatFracOfAutosizedCapacityNumericNum),
+                                                      Numbers(iHeatFracOfAutosizedCapacityNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {
@@ -4474,8 +4476,7 @@ namespace LowTempRadiantSystem {
             // Error check, just in case
             if (this->WaterRecircRate < 0.0) {
                 ShowWarningError(state, "Flow mismatch in radiant system--result will be an energy imbalance--should not get this error");
-                ShowContinueErrorTimeStamp(state,
-                                           EnergyPlus::format("WaterRecircRate={:.2T}, in Radiant System={},", this->WaterRecircRate, this->Name));
+                ShowContinueErrorTimeStamp(state, std::format("WaterRecircRate={:.2f}, in Radiant System={},", this->WaterRecircRate, this->Name));
                 this->WaterRecircRate = 0.0;
                 this->WaterInjectionRate = this->WaterMassFlowRate;
             }

@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cstddef>
+#include <format>
 #include <functional>
 #include <limits>
 
@@ -60,7 +61,7 @@
 #include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
+#include <EnergyPlus/Psychrometrics.hh>
 
 namespace EnergyPlus {
 
@@ -825,14 +826,15 @@ namespace Fluid {
                     glycolRaw->Num = df->glycolsRaw.isize();
                 }
             } else {
-                ShowSevereError(state, std::format("{}: {}=\"{}\", invalid type", routineName, CurrentModuleObject, Alphas(1)));
-                ShowContinueError(state, std::format("...entered value=\"{}, Only REFRIGERANT or GLYCOL allowed as {}", Alphas(2), cAlphaFields(2)));
+                ShowSevereError(state, EnergyPlus::format("{}: {}=\"{}\", invalid type", routineName, CurrentModuleObject, Alphas(1)));
+                ShowContinueError(state,
+                                  EnergyPlus::format("...entered value=\"{}, Only REFRIGERANT or GLYCOL allowed as {}", Alphas(2), cAlphaFields(2)));
                 ErrorsFound = true;
             }
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}: Previous errors in input cause program termination.", routineName));
+            ShowFatalError(state, EnergyPlus::format("{}: Previous errors in input cause program termination.", routineName));
         }
 
         // Read in all of the temperature arrays in the input file
@@ -864,9 +866,9 @@ namespace Fluid {
 
             for (int TempLoop = 2; TempLoop <= tempArray.NumOfTemps; ++TempLoop) {
                 if (tempArray.Temps(TempLoop) <= tempArray.Temps(TempLoop - 1)) {
-                    ShowSevereError(
-                        state,
-                        std::format("{}: {} name={}, lists must have data in ascending order", routineName, CurrentModuleObject, tempArray.Name));
+                    ShowSevereError(state,
+                                    EnergyPlus::format(
+                                        "{}: {} name={}, lists must have data in ascending order", routineName, CurrentModuleObject, tempArray.Name));
                     ShowContinueError(state,
                                       EnergyPlus::format("First out of order occurrence at Temperature #({}) {{{:.3R}}} >= Temp({}) {{{:.3R}}}",
                                                          TempLoop - 1,
@@ -928,14 +930,15 @@ namespace Fluid {
 
             // Make sure the number of points in the two arrays (temps and values) are the same
             if (NumNumbers != tempArray.NumOfTemps) {
-                ShowSevereError(state, std::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
+                ShowSevereError(state, EnergyPlus::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
                 ShowContinueError(state,
-                                  std::format("Temperature Name={}, Temperature array and fluid saturation pressure array must have the "
-                                              "same number of points",
-                                              tempArray.Name));
+                                  EnergyPlus::format("Temperature Name={}, Temperature array and fluid saturation pressure array must have the "
+                                                     "same number of points",
+                                                     tempArray.Name));
                 ShowContinueError(
                     state,
-                    std::format("Temperature # points={} whereas {} # {} points={}", tempArray.NumOfTemps, refrig->Name, Alphas(2), NumNumbers));
+                    EnergyPlus::format(
+                        "Temperature # points={} whereas {} # {} points={}", tempArray.NumOfTemps, refrig->Name, Alphas(2), NumNumbers));
                 ErrorsFound = true;
                 break; // the TempLoop DO Loop
             }
@@ -985,23 +988,25 @@ namespace Fluid {
 
             } else if (Alphas(3) == "FLUID") {
                 if (Alphas(2) != "ENTHALPY" && Alphas(2) != "SPECIFICHEAT" && Alphas(2) != "DENSITY") {
-                    ShowWarningError(state, std::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
-                    ShowContinueError(state, std::format(R"({}="FLUID", but {}="{}" is not valid.)", cAlphaFields(3), cAlphaFields(2), Alphas(2)));
-                    ShowContinueError(state, std::format(R"(Valid choices are "Enthalpy", "SpecificHeat", "Density".)"));
+                    ShowWarningError(state, EnergyPlus::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
+                    ShowContinueError(state,
+                                      EnergyPlus::format(R"({}="FLUID", but {}="{}" is not valid.)", cAlphaFields(3), cAlphaFields(2), Alphas(2)));
+                    ShowContinueError(state, EnergyPlus::format(R"(Valid choices are "Enthalpy", "SpecificHeat", "Density".)"));
                     ShowContinueError(state, "This fluid property will not be processed nor available for the simulation.");
                 }
 
             } else if (Alphas(3) == "FLUIDGAS") {
                 if (Alphas(2) != "PRESSURE" && Alphas(2) != "ENTHALPY" && Alphas(2) != "SPECIFICHEAT" && Alphas(2) != "DENSITY") {
-                    ShowWarningError(state, std::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
-                    ShowContinueError(state, std::format(R"({}="FluidGas", but {}="{}" is not valid.)", cAlphaFields(3), cAlphaFields(2), Alphas(2)));
-                    ShowContinueError(state, std::format(R"(Valid choices are "Pressure", "Enthalpy", "SpecificHeat", "Density".)"));
+                    ShowWarningError(state, EnergyPlus::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
+                    ShowContinueError(state,
+                                      EnergyPlus::format(R"({}="FluidGas", but {}="{}" is not valid.)", cAlphaFields(3), cAlphaFields(2), Alphas(2)));
+                    ShowContinueError(state, EnergyPlus::format(R"(Valid choices are "Pressure", "Enthalpy", "SpecificHeat", "Density".)"));
                     ShowContinueError(state, "This fluid property will not be processed nor available for the simulation.");
                 }
             } else {
-                ShowWarningError(state, std::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
-                ShowContinueError(state, std::format("{}=\"{}\" is not valid.", cAlphaFields(3), Alphas(3)));
-                ShowContinueError(state, std::format(R"(Valid choices are "Fluid", "GasFluid".)"));
+                ShowWarningError(state, EnergyPlus::format("{}: {} Name={}", routineName, CurrentModuleObject, refrig->Name));
+                ShowContinueError(state, EnergyPlus::format("{}=\"{}\" is not valid.", cAlphaFields(3), Alphas(3)));
+                ShowContinueError(state, EnergyPlus::format(R"(Valid choices are "Fluid", "GasFluid".)"));
                 ShowContinueError(state, "This fluid property will not be processed nor available for the simulation.");
             }
         } // for (inData)
@@ -1010,20 +1015,21 @@ namespace Fluid {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, refrig->Name};
             if (refrig->PsValues.empty()) {
-                ShowSevereCustom(state,
-                                 eoh,
-                                 std::format(R"(No Gas/Fluid Saturation Pressure found. Need properties with {}="Pressure" and {}="FluidGas".)",
-                                             cAlphaFields(2),
-                                             cAlphaFields(3)));
+                ShowSevereCustom(
+                    state,
+                    eoh,
+                    EnergyPlus::format(R"(No Gas/Fluid Saturation Pressure found. Need properties with {}="Pressure" and {}="FluidGas".)",
+                                       cAlphaFields(2),
+                                       cAlphaFields(3)));
                 ErrorsFound = true;
             }
 
             if (refrig->HfValues.empty()) {
                 ShowSevereCustom(state,
                                  eoh,
-                                 std::format(R"(No Saturated Fluid Enthalpy found. Need properties with {}="Enthalpy" and {}="Fluid".)",
-                                             cAlphaFields(2),
-                                             cAlphaFields(3)));
+                                 EnergyPlus::format(R"(No Saturated Fluid Enthalpy found. Need properties with {}="Enthalpy" and {}="Fluid".)",
+                                                    cAlphaFields(2),
+                                                    cAlphaFields(3)));
                 ErrorsFound = true;
             }
 

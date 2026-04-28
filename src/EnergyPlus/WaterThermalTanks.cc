@@ -45,6 +45,9 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// C++ Headers
+#include <format>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/floops.hh>
@@ -146,7 +149,7 @@ PlantComponent *WaterThermalTankData::factory(EnergyPlusData &state, std::string
         }
     }
     // If we didn't find it, fatal
-    ShowFatalError(state, std::format("LocalWaterTankFactory: Error getting inputs for tank named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, EnergyPlus::format("LocalWaterTankFactory: Error getting inputs for tank named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -203,26 +206,26 @@ int getTankIDX(EnergyPlusData &state, std::string_view CompName, int &CompIndex)
     if (CompIndex == 0) {
         CompNum = Util::FindItem(CompName, state.dataWaterThermalTanks->WaterThermalTank);
         if (CompNum == 0) {
-            ShowFatalError(state, std::format("SimWaterThermalTank_WaterTank:  Unit not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("SimWaterThermalTank_WaterTank:  Unit not found={}", CompName));
         }
         CompIndex = CompNum;
     } else {
         CompNum = CompIndex;
         if (CompNum > state.dataWaterThermalTanks->numWaterThermalTank || CompNum < 1) {
             ShowFatalError(state,
-                           std::format("SimWaterThermalTank_WaterTank:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                       CompNum,
-                                       state.dataWaterThermalTanks->numWaterThermalTank,
-                                       CompName));
+                           EnergyPlus::format("SimWaterThermalTank_WaterTank:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                              CompNum,
+                                              state.dataWaterThermalTanks->numWaterThermalTank,
+                                              CompName));
         }
         if (state.dataWaterThermalTanks->WaterThermalTank(CompNum).CheckWTTEquipName) {
             if (CompName != state.dataWaterThermalTanks->WaterThermalTank(CompNum).Name) {
                 ShowFatalError(
                     state,
-                    std::format("SimWaterThermalTank_WaterTank: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                CompNum,
-                                CompName,
-                                state.dataWaterThermalTanks->WaterThermalTank(CompNum).Name));
+                    EnergyPlus::format("SimWaterThermalTank_WaterTank: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                       CompNum,
+                                       CompName,
+                                       state.dataWaterThermalTanks->WaterThermalTank(CompNum).Name));
             }
             state.dataWaterThermalTanks->WaterThermalTank(CompNum).CheckWTTEquipName = false;
         }
@@ -243,26 +246,26 @@ int getHPTankIDX(EnergyPlusData &state, std::string_view CompName, int &CompInde
     if (CompIndex == 0) {
         CompNum = Util::FindItem(CompName, state.dataWaterThermalTanks->HPWaterHeater);
         if (CompNum == 0) {
-            ShowFatalError(state, std::format("SimWaterThermalTank_HeatPump:  Unit not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("SimWaterThermalTank_HeatPump:  Unit not found={}", CompName));
         }
         CompIndex = CompNum;
     } else {
         CompNum = CompIndex;
         if (CompNum > state.dataWaterThermalTanks->numWaterThermalTank || CompNum < 1) {
             ShowFatalError(state,
-                           std::format("SimWaterThermalTank_HeatPump:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                       CompNum,
-                                       state.dataWaterThermalTanks->numHeatPumpWaterHeater,
-                                       CompName));
+                           EnergyPlus::format("SimWaterThermalTank_HeatPump:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                              CompNum,
+                                              state.dataWaterThermalTanks->numHeatPumpWaterHeater,
+                                              CompName));
         }
         if (state.dataWaterThermalTanks->HPWaterHeater(CompNum).CheckHPWHEquipName) {
             if (CompName != state.dataWaterThermalTanks->HPWaterHeater(CompNum).Name) {
                 ShowFatalError(
                     state,
-                    std::format("SimWaterThermalTank_HeatPump: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                CompNum,
-                                CompName,
-                                state.dataWaterThermalTanks->HPWaterHeater(CompNum).Name));
+                    EnergyPlus::format("SimWaterThermalTank_HeatPump: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                       CompNum,
+                                       CompName,
+                                       state.dataWaterThermalTanks->HPWaterHeater(CompNum).Name));
             }
             state.dataWaterThermalTanks->HPWaterHeater(CompNum).CheckHPWHEquipName = false;
         }
@@ -335,7 +338,8 @@ PlantComponent *HeatPumpWaterHeaterData::factory(EnergyPlusData &state, std::str
         }
     }
     // If we didn't find it, fatal
-    ShowFatalError(state, std::format("LocalHeatPumpWaterHeaterFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state,
+                   EnergyPlus::format("LocalHeatPumpWaterHeaterFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -542,17 +546,17 @@ void SimHeatPumpWaterHeater(EnergyPlusData &state,
     if (CompIndex == 0) {
         HeatPumpNum = Util::FindItemInList(CompName, state.dataWaterThermalTanks->HPWaterHeater);
         if (HeatPumpNum == 0) {
-            ShowFatalError(state, std::format("SimHeatPumpWaterHeater: Unit not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("SimHeatPumpWaterHeater: Unit not found={}", CompName));
         }
         CompIndex = HeatPumpNum;
     } else {
         HeatPumpNum = CompIndex;
         if (HeatPumpNum > state.dataWaterThermalTanks->numHeatPumpWaterHeater || HeatPumpNum < 1) {
             ShowFatalError(state,
-                           std::format("SimHeatPumpWaterHeater:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                       HeatPumpNum,
-                                       state.dataWaterThermalTanks->numHeatPumpWaterHeater,
-                                       CompName));
+                           EnergyPlus::format("SimHeatPumpWaterHeater:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                              HeatPumpNum,
+                                              state.dataWaterThermalTanks->numHeatPumpWaterHeater,
+                                              CompName));
         }
     }
 
@@ -734,7 +738,7 @@ bool getDesuperHtrInput(EnergyPlusData &state)
         DesupHtr.DeadBandTempDiff = rNumericArgs(1);
         if (DesupHtr.DeadBandTempDiff <= 0.0 || DesupHtr.DeadBandTempDiff > 20.0) {
             ShowSevereError(state,
-                            EnergyPlus::format("{} = {}: {} must be > 0 and <= 20. {} = {:.1T}",
+                            EnergyPlus::format("{} = {}: {} must be > 0 and <= 20. {} = {:.1f}",
                                                cCurrentModuleObject,
                                                DesupHtr.Name,
                                                cNumericFieldNames(1),
@@ -752,8 +756,9 @@ bool getDesuperHtrInput(EnergyPlusData &state)
         if (!lAlphaFieldBlanks(4)) {
             DesupHtr.HEffFTemp = Curve::GetCurveIndex(state, cAlphaArgs(4));
             if (DesupHtr.HEffFTemp == 0) {
-                ShowSevereError(state,
-                                std::format("{} = {}:  {} not found = {}", cCurrentModuleObject, DesupHtr.Name, cAlphaFieldNames(4), cAlphaArgs(4)));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("{} = {}:  {} not found = {}", cCurrentModuleObject, DesupHtr.Name, cAlphaFieldNames(4), cAlphaArgs(4)));
                 ErrorsFound = true;
             } else {
                 ErrorsFound |= Curve::CheckCurveDims(state,
@@ -768,10 +773,10 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                         Real64 HEffFTemp = min(
                             1.0, max(0.0, Curve::CurveValue(state, DesupHtr.HEffFTemp, DesupHtr.RatedInletWaterTemp, DesupHtr.RatedOutdoorAirTemp)));
                         if (std::abs(HEffFTemp - 1.0) > 0.05) {
-                            ShowWarningError(state, std::format("{}, \"{}\":", cCurrentModuleObject, DesupHtr.Name));
-                            ShowContinueError(state, std::format("The {} should be normalized ", cAlphaFieldNames(4)));
+                            ShowWarningError(state, EnergyPlus::format("{}, \"{}\":", cCurrentModuleObject, DesupHtr.Name));
+                            ShowContinueError(state, EnergyPlus::format("The {} should be normalized ", cAlphaFieldNames(4)));
                             ShowContinueError(
-                                state, EnergyPlus::format(" to 1.0 at the rating point. Curve output at the rating point = {:.3T}", HEffFTemp));
+                                state, EnergyPlus::format(" to 1.0 at the rating point. Curve output at the rating point = {:.3f}", HEffFTemp));
                             ShowContinueError(state, " The simulation continues using the user-specified curve.");
                         }
                     }
@@ -806,8 +811,9 @@ bool getDesuperHtrInput(EnergyPlusData &state)
 
         if (!Util::SameString(DesupHtr.TankType, cMixedWHModuleObj) && !Util::SameString(DesupHtr.TankType, cStratifiedWHModuleObj)) {
 
-            ShowSevereError(state, std::format("{} = {}:", cCurrentModuleObject, state.dataWaterThermalTanks->HPWaterHeater(DesuperheaterNum).Name));
-            ShowContinueError(state, std::format("Desuperheater can only be used with {} or {}.", cMixedWHModuleObj, cStratifiedWHModuleObj));
+            ShowSevereError(state,
+                            EnergyPlus::format("{} = {}:", cCurrentModuleObject, state.dataWaterThermalTanks->HPWaterHeater(DesuperheaterNum).Name));
+            ShowContinueError(state, EnergyPlus::format("Desuperheater can only be used with {} or {}.", cMixedWHModuleObj, cStratifiedWHModuleObj));
             ErrorsFound = true;
         }
 
@@ -827,7 +833,7 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                 DesupHtr.HeatReclaimRecoveryEff = rNumericArgs(2);
                 if (DesupHtr.HeatReclaimRecoveryEff <= 0.0 || DesupHtr.HeatReclaimRecoveryEff > 0.9) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{} = {}: {} must be > 0.0 and <= 0.9, Efficiency = {:.3T}",
+                                    EnergyPlus::format("{} = {}: {} must be > 0.0 and <= 0.9, Efficiency = {:.3f}",
                                                        cCurrentModuleObject,
                                                        DesupHtr.Name,
                                                        cNumericFieldNames(2),
@@ -842,12 +848,12 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                 DesupHtr.HeatReclaimRecoveryEff = rNumericArgs(2);
                 if (DesupHtr.HeatReclaimRecoveryEff <= 0.0 || DesupHtr.HeatReclaimRecoveryEff > 0.3) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{} = {}: {} must be > 0.0 and <= 0.3, {} = {:.3T}",
-                                                       cCurrentModuleObject,
-                                                       DesupHtr.Name,
-                                                       cNumericFieldNames(2),
-                                                       cNumericFieldNames(2),
-                                                       DesupHtr.HeatReclaimRecoveryEff));
+                                    std::format("{} = {}: {} must be > 0.0 and <= 0.3, {} = {:.3f}",
+                                                cCurrentModuleObject,
+                                                DesupHtr.Name,
+                                                cNumericFieldNames(2),
+                                                cNumericFieldNames(2),
+                                                DesupHtr.HeatReclaimRecoveryEff));
                     ErrorsFound = true;
                 }
             } // Blank Num(2)
@@ -1065,37 +1071,37 @@ bool getDesuperHtrInput(EnergyPlusData &state)
         DesupHtr.OperatingWaterFlowRate = rNumericArgs(6);
         if (DesupHtr.OperatingWaterFlowRate <= 0.0) {
             ShowSevereError(state,
-                            EnergyPlus::format("{} = {}: {} must be greater than 0. {} = {:.6T}",
-                                               cCurrentModuleObject,
-                                               DesupHtr.Name,
-                                               cNumericFieldNames(6),
-                                               cNumericFieldNames(6),
-                                               rNumericArgs(6)));
+                            std::format("{} = {}: {} must be greater than 0. {} = {:.6f}",
+                                        cCurrentModuleObject,
+                                        DesupHtr.Name,
+                                        cNumericFieldNames(6),
+                                        cNumericFieldNames(6),
+                                        rNumericArgs(6)));
             ErrorsFound = true;
         }
 
         DesupHtr.PumpElecPower = rNumericArgs(7);
         if (DesupHtr.PumpElecPower < 0.0) {
             ShowSevereError(state,
-                            EnergyPlus::format("{} = {}: {} must be >= 0. {} = {:.2T}",
-                                               cCurrentModuleObject,
-                                               DesupHtr.Name,
-                                               cNumericFieldNames(7),
-                                               cNumericFieldNames(7),
-                                               rNumericArgs(7)));
+                            std::format("{} = {}: {} must be >= 0. {} = {:.2f}",
+                                        cCurrentModuleObject,
+                                        DesupHtr.Name,
+                                        cNumericFieldNames(7),
+                                        cNumericFieldNames(7),
+                                        rNumericArgs(7)));
             ErrorsFound = true;
         }
 
         if ((DesupHtr.PumpElecPower / DesupHtr.OperatingWaterFlowRate) > 7.9264e6) {
             ShowWarningError(state,
-                             EnergyPlus::format("{} = {}: {} to {} ratio > 7.9264E6. {} to {} = {:.3T}",
-                                                cCurrentModuleObject,
-                                                DesupHtr.Name,
-                                                cNumericFieldNames(7),
-                                                cNumericFieldNames(6),
-                                                cNumericFieldNames(7),
-                                                cNumericFieldNames(6),
-                                                (DesupHtr.PumpElecPower / DesupHtr.OperatingWaterFlowRate)));
+                             std::format("{} = {}: {} to {} ratio > 7.9264E6. {} to {} = {:.3f}",
+                                         cCurrentModuleObject,
+                                         DesupHtr.Name,
+                                         cNumericFieldNames(7),
+                                         cNumericFieldNames(6),
+                                         cNumericFieldNames(7),
+                                         cNumericFieldNames(6),
+                                         (DesupHtr.PumpElecPower / DesupHtr.OperatingWaterFlowRate)));
             ShowContinueError(state, std::format(" Suggest reducing {} or increasing {}.", cNumericFieldNames(7), cNumericFieldNames(6)));
             ShowContinueError(state, " The simulation will continue using the user defined values.");
         }
@@ -1103,36 +1109,36 @@ bool getDesuperHtrInput(EnergyPlusData &state)
         DesupHtr.PumpFracToWater = rNumericArgs(8);
         if (DesupHtr.PumpFracToWater < 0.0 || DesupHtr.PumpFracToWater > 1.0) {
             ShowSevereError(state,
-                            EnergyPlus::format("{} = {}: {} must be >= 0 or <= 1. {} = {:.3T}",
-                                               cCurrentModuleObject,
-                                               DesupHtr.Name,
-                                               cNumericFieldNames(8),
-                                               cNumericFieldNames(8),
-                                               rNumericArgs(8)));
+                            std::format("{} = {}: {} must be >= 0 or <= 1. {} = {:.3f}",
+                                        cCurrentModuleObject,
+                                        DesupHtr.Name,
+                                        cNumericFieldNames(8),
+                                        cNumericFieldNames(8),
+                                        rNumericArgs(8)));
             ErrorsFound = true;
         }
 
         DesupHtr.OnCycParaLoad = rNumericArgs(9);
         if (DesupHtr.OnCycParaLoad < 0.0) {
             ShowSevereError(state,
-                            EnergyPlus::format("{} = {}: {} must be >= 0. {} = {:.2T}",
-                                               cCurrentModuleObject,
-                                               DesupHtr.Name,
-                                               cNumericFieldNames(9),
-                                               cNumericFieldNames(9),
-                                               rNumericArgs(9)));
+                            std::format("{} = {}: {} must be >= 0. {} = {:.2f}",
+                                        cCurrentModuleObject,
+                                        DesupHtr.Name,
+                                        cNumericFieldNames(9),
+                                        cNumericFieldNames(9),
+                                        rNumericArgs(9)));
             ErrorsFound = true;
         }
 
         DesupHtr.OffCycParaLoad = rNumericArgs(10);
         if (DesupHtr.OffCycParaLoad < 0.0) {
             ShowSevereError(state,
-                            EnergyPlus::format("{} = {}: {} must be >= 0. {} = {:.2T}",
-                                               cCurrentModuleObject,
-                                               DesupHtr.Name,
-                                               cNumericFieldNames(10),
-                                               cNumericFieldNames(10),
-                                               rNumericArgs(10)));
+                            std::format("{} = {}: {} must be >= 0. {} = {:.2f}",
+                                        cCurrentModuleObject,
+                                        DesupHtr.Name,
+                                        cNumericFieldNames(10),
+                                        cNumericFieldNames(10),
+                                        rNumericArgs(10)));
             ErrorsFound = true;
         }
     }
@@ -1259,11 +1265,10 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
         HPWH.DeadBandTempDiff = hpwhNumeric[1 + nNumericOffset];
         if (HPWH.DeadBandTempDiff <= 0.0 || HPWH.DeadBandTempDiff > 20.0) {
             ShowSevereError(state, std::format("{}=\"{}\", ", state.dataIPShortCut->cCurrentModuleObject, HPWH.Name));
-            ShowContinueError(
-                state,
-                std::format("{}{}",
-                            hpwhNumericFieldNames[1 + nNumericOffset],
-                            EnergyPlus::format(" difference must be > 0 and <= 20. Dead band = {:.1T}", hpwhNumeric[1 + nNumericOffset])));
+            ShowContinueError(state,
+                              std::format("{}{}",
+                                          hpwhNumericFieldNames[1 + nNumericOffset],
+                                          std::format(" difference must be > 0 and <= 20. Dead band = {:.1f}", hpwhNumeric[1 + nNumericOffset])));
             ErrorsFound = true;
         }
 
@@ -1296,8 +1301,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
             if (HPWH.OperatingWaterFlowRate <= 0.0 && hpwhNumeric[2] != Constant::AutoCalculate) {
                 ShowSevereError(state, std::format("{}=\"{}\", ", state.dataIPShortCut->cCurrentModuleObject, HPWH.Name));
                 ShowContinueError(
-                    state,
-                    EnergyPlus::format("{} must be greater than 0. Condenser water flow rate = {:.6T}", hpwhNumericFieldNames[2], hpwhNumeric[2]));
+                    state, std::format("{} must be greater than 0. Condenser water flow rate = {:.6f}", hpwhNumericFieldNames[2], hpwhNumeric[2]));
                 ErrorsFound = true;
             }
 
@@ -1310,20 +1314,20 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
             if (HPWH.WrappedCondenserBottomLocation < 0.0) {
                 ShowSevereError(state, std::format("{}=\"{}\", ", state.dataIPShortCut->cCurrentModuleObject, HPWH.Name));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} must be greater than 0. Condenser bottom location = {:.6T}",
-                                                     hpwhNumericFieldNames[2],
-                                                     HPWH.WrappedCondenserBottomLocation));
+                                  std::format("{} must be greater than 0. Condenser bottom location = {:.6f}",
+                                              hpwhNumericFieldNames[2],
+                                              HPWH.WrappedCondenserBottomLocation));
                 ErrorsFound = true;
             }
 
             if (HPWH.WrappedCondenserBottomLocation >= HPWH.WrappedCondenserTopLocation) {
                 ShowSevereError(state, std::format("{}=\"{}\", ", state.dataIPShortCut->cCurrentModuleObject, HPWH.Name));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} ({:.6T}) must be greater than {} ({:.6T}).",
-                                                     HPWH.WrappedCondenserTopLocation,
-                                                     hpwhNumericFieldNames[2],
-                                                     hpwhNumericFieldNames[3],
-                                                     HPWH.WrappedCondenserBottomLocation));
+                                  std::format("{} ({:.6f}) must be greater than {} ({:.6f}).",
+                                              hpwhNumericFieldNames[3],
+                                              HPWH.WrappedCondenserTopLocation,
+                                              hpwhNumericFieldNames[2],
+                                              HPWH.WrappedCondenserBottomLocation));
                 ErrorsFound = true;
             }
 
@@ -1343,7 +1347,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                 state,
                 std::format("{}{}",
                             hpwhNumericFieldNames[3 + nNumericOffset],
-                            EnergyPlus::format(" must be greater than 0. Evaporator air flow rate = {:.6T}", hpwhNumeric[3 + nNumericOffset])));
+                            std::format(" must be greater than 0. Evaporator air flow rate = {:.6f}", hpwhNumeric[3 + nNumericOffset])));
             ErrorsFound = true;
         }
 
@@ -1556,8 +1560,8 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                          state.dataIPShortCut->cCurrentModuleObject,
                                          HPWH.Name));
             ShowContinueError(state, "must be greater than the minimum inlet air temperature for heat pump compressor operation.");
-            ShowContinueError(state, EnergyPlus::format("...Minimum inlet air temperature = {:.1T}", HPWH.MinAirTempForHPOperation));
-            ShowContinueError(state, EnergyPlus::format("...Maximum inlet air temperature = {:.1T}", HPWH.MaxAirTempForHPOperation));
+            ShowContinueError(state, std::format("...Minimum inlet air temperature = {:.1f}", HPWH.MinAirTempForHPOperation));
+            ShowContinueError(state, std::format("...Maximum inlet air temperature = {:.1f}", HPWH.MaxAirTempForHPOperation));
         }
 
         // Compressor Location
@@ -1656,10 +1660,10 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
         if (FanVolFlow != DataSizing::AutoSize && !errFlag) {
             if (FanVolFlow < HPWH.OperatingAirFlowRate) {
                 ShowSevereError(state,
-                                EnergyPlus::format("{} - air flow rate = {:.7T} in fan object {} is less than the  HPWHs evaporator air flow rate.",
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   FanVolFlow,
-                                                   HPWH.FanName));
+                                std::format("{} - air flow rate = {:.7f} in fan object {} is less than the  HPWHs evaporator air flow rate.",
+                                            state.dataIPShortCut->cCurrentModuleObject,
+                                            FanVolFlow,
+                                            HPWH.FanName));
                 ShowContinueError(state, " The fan flow rate must be >= to the HPWHs evaporator volumetric air flow rate.");
                 ShowContinueError(state, std::format(" Occurs in unit = {}", HPWH.Name));
                 ErrorsFound = true;
@@ -1683,12 +1687,12 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                 0.1422) {
                 ShowWarningError(
                     state,
-                    std::format("{}= {}{}",
-                                HVAC::coilTypeNames[(int)state.dataDXCoils->DXCoil(HPWH.DXCoilNum).coilType],
-                                state.dataDXCoils->DXCoil(HPWH.DXCoilNum).Name,
-                                EnergyPlus::format(
-                                    ": Rated condenser pump power per watt of rated heating capacity has exceeded the recommended maximum of 0.1422 "
-                                    "W/W (41.67 watt/MBH). Condenser pump power per watt = {:.4T}",
+                    std::format(
+                        "{}= {}{}",
+                        HVAC::coilTypeNames[(int)state.dataDXCoils->DXCoil(HPWH.DXCoilNum).coilType],
+                        state.dataDXCoils->DXCoil(HPWH.DXCoilNum).Name,
+                        std::format(": Rated condenser pump power per watt of rated heating capacity has exceeded the recommended maximum of 0.1422 "
+                                    "W/W (41.67 watt/MBH). Condenser pump power per watt = {:.4f}",
                                     (state.dataDXCoils->DXCoil(HPWH.DXCoilNum).HPWHCondPumpElecNomPower /
                                      state.dataDXCoils->DXCoil(HPWH.DXCoilNum).RatedTotCap2))));
             }
@@ -1726,7 +1730,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                               std::format("{} must be >= 0. {}{}",
                                           hpwhNumericFieldNames[6 + nNumericOffset],
                                           hpwhNumericFieldNames[6 + nNumericOffset],
-                                          EnergyPlus::format(" = {:.2T}", hpwhNumeric[6 + nNumericOffset])));
+                                          std::format(" = {:.2f}", hpwhNumeric[6 + nNumericOffset])));
             ErrorsFound = true;
         }
 
@@ -1738,7 +1742,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                               std::format("{} must be >= 0. {}{}",
                                           hpwhNumericFieldNames[7 + nNumericOffset],
                                           hpwhNumericFieldNames[2 + nNumericOffset],
-                                          EnergyPlus::format(" = {:.2T}", hpwhNumeric[7 + nNumericOffset])));
+                                          std::format(" = {:.2f}", hpwhNumeric[7 + nNumericOffset])));
             ErrorsFound = true;
         }
 
@@ -4109,7 +4113,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
         Tank.AdditionalLossCoeff.allocate(Tank.Nodes);
         Tank.AdditionalLossCoeff = 0.0;
         for (int NodeNum = 1; NodeNum <= Tank.Nodes; ++NodeNum) {
-            auto const &AdditionalLossCoeffNode = fields.find(format("node_{}_additional_loss_coefficient", NodeNum));
+            auto const &AdditionalLossCoeffNode = fields.find(EnergyPlus::format("node_{}_additional_loss_coefficient", NodeNum));
             if (AdditionalLossCoeffNode != fields.end()) {
                 Tank.AdditionalLossCoeff(NodeNum) = AdditionalLossCoeffNode.value();
             } else {
@@ -4117,7 +4121,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
             }
         }
 
-        if (fields.find(format("node_{}_additional_loss_coefficient", Tank.Nodes + 1)) != fields.end()) {
+        if (fields.find(EnergyPlus::format("node_{}_additional_loss_coefficient", Tank.Nodes + 1)) != fields.end()) {
             ShowWarningError(
                 state,
                 std::format("{} = {}:  More Additional Loss Coefficients were entered than the number of nodes; extra coefficients will not be used",
@@ -4404,10 +4408,10 @@ void GetWaterThermalTankInput(EnergyPlusData &state)
                     // check that water heater source side effectiveness is greater than 0
                     if (Tank.SourceEffectiveness <= 0.0) {
                         ShowSevereError(state,
-                                        EnergyPlus::format("{} = {}:  Invalid source side effectiveness for heat pump water heater = {:.3T}",
-                                                           state.dataIPShortCut->cCurrentModuleObject,
-                                                           HPWH.Name,
-                                                           Tank.SourceEffectiveness));
+                                        std::format("{} = {}:  Invalid source side effectiveness for heat pump water heater = {:.3f}",
+                                                    state.dataIPShortCut->cCurrentModuleObject,
+                                                    HPWH.Name,
+                                                    Tank.SourceEffectiveness));
                         ShowContinueError(state, " water heater source effectiveness will default to 1.0 and simulation continues.");
                         Tank.SourceEffectiveness = 1.0;
                     }
@@ -5156,7 +5160,7 @@ void WaterThermalTankData::setupHotWaterTankOutputVars(EnergyPlusData &state)
 
     for (int NodeNum = 1; NodeNum <= this->Nodes; ++NodeNum) {
         // fixme: change this chilled water term
-        static constexpr std::string_view Format_724("Hot Water Tank Stratified Node Information,{},{:.4T},{:.4T},{:.4T},{},{}\n");
+        static constexpr std::string_view Format_724("Hot Water Tank Stratified Node Information,{},{:.4f},{:.4f},{:.4f},{},{}\n");
 
         print(state.files.eio,
               Format_724,
@@ -5355,7 +5359,7 @@ void WaterThermalTankData::setupChilledWaterTankOutputVars(EnergyPlusData &state
 
         for (int NodeNum = 1; NodeNum <= this->Nodes; ++NodeNum) {
             // fixme: change this chilled water term
-            static constexpr std::string_view Format_724("Chilled Water Tank Stratified Node Information,{},{:.4T},{:.4T},{:.4T},{},{}\n");
+            static constexpr std::string_view Format_724("Chilled Water Tank Stratified Node Information,{},{:.4f},{:.4f},{:.4f},{},{}\n");
 
             print(state.files.eio,
                   Format_724,
@@ -5986,7 +5990,7 @@ void WaterThermalTankData::setupWaterHeaterOutputVars(EnergyPlusData &state)
     if (this->WaterThermalTankType == DataPlant::PlantEquipmentType::WtrHeaterStratified) {
 
         for (int NodeNum = 1; NodeNum <= this->Nodes; ++NodeNum) {
-            static constexpr std::string_view Format_723("Water Heater Stratified Node Information,{},{:.4T},{:.4T},{:.3T},{:.4T},{:.4T},{},{}\n");
+            static constexpr std::string_view Format_723("Water Heater Stratified Node Information,{},{:.4f},{:.4f},{:.3f},{:.4f},{:.4f},{},{}\n");
             print(state.files.eio,
                   Format_723,
                   NodeNum,
@@ -6571,11 +6575,10 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
                         state,
                         std::format("Water heater = {}:  Water heater tank set point temperature is greater than the maximum tank temperature limit.",
                                     this->Name));
-                    ShowContinueErrorTimeStamp(
-                        state,
-                        EnergyPlus::format("Water heater tank set point temperature is reset to Tank Temperature Limit minus 1 C "
-                                           "({:.2T}) and simulation continues.",
-                                           this->SetPointTemp));
+                    ShowContinueErrorTimeStamp(state,
+                                               std::format("Water heater tank set point temperature is reset to Tank Temperature Limit minus 1 C "
+                                                           "({:.2f}) and simulation continues.",
+                                                           this->SetPointTemp));
                     this->ShowSetPointWarning = false;
                 }
             }
@@ -6590,11 +6593,10 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
                         std::format(
                             "Chilled Water Tank = {}:  Water heater tank set point temperature is lower than the minimum tank temperature limit.",
                             this->Name));
-                    ShowContinueErrorTimeStamp(
-                        state,
-                        EnergyPlus::format("Chilled water tank set point temperature is reset to Tank Temperature Limit plus 1 C "
-                                           "({:.2T}) and simulation continues.",
-                                           this->SetPointTemp));
+                    ShowContinueErrorTimeStamp(state,
+                                               std::format("Chilled water tank set point temperature is reset to Tank Temperature Limit plus 1 C "
+                                                           "({:.2f}) and simulation continues.",
+                                                           this->SetPointTemp));
                     this->ShowSetPointWarning = false;
                 }
             }
@@ -6646,11 +6648,10 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
                         std::format("Heat Pump Water Heater = {}:  Heat Pump water heater set point temperature is equal to or greater than "
                                     "the maximum tank temperature limit.",
                                     state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).Name));
-                    ShowContinueErrorTimeStamp(
-                        state,
-                        EnergyPlus::format("Heat Pump water heater tank set point temperature is reset to Tank Temperature Limit "
-                                           "minus 1 C ({:.2T}) and simulation continues.",
-                                           state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).SetPointTemp));
+                    ShowContinueErrorTimeStamp(state,
+                                               std::format("Heat Pump water heater tank set point temperature is reset to Tank Temperature Limit "
+                                                           "minus 1 C ({:.2f}) and simulation continues.",
+                                                           state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).SetPointTemp));
                     state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).ShowSetPointWarning = false;
                 }
             }
@@ -6980,11 +6981,11 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
 
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("InitWaterThermalTank: -air flow rate = {:.7T} in fan object  is less than the MSHP system air flow rate "
-                                       "when waterheating is required({:.7T}).",
-                                       FanVolFlow,
-                                       state.dataWaterThermalTanks->HPWaterHeater(HPNum).HPWHAirVolFlowRate(
-                                           state.dataWaterThermalTanks->HPWaterHeater(HPNum).NumofSpeed)));
+                    std::format("InitWaterThermalTank: -air flow rate = {:.7f} in fan object  is less than the MSHP system air flow rate "
+                                "when waterheating is required({:.7f}).",
+                                FanVolFlow,
+                                state.dataWaterThermalTanks->HPWaterHeater(HPNum).HPWHAirVolFlowRate(
+                                    state.dataWaterThermalTanks->HPWaterHeater(HPNum).NumofSpeed)));
                 ShowContinueError(state,
                                   " The MSHP system flow rate when waterheating is required is reset to the"
                                   " fan flow rate and the simulation continues.");
@@ -13043,10 +13044,10 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
             MaxCapacity_loc = this->MaxCapacity;
         }
 
-        static constexpr std::string_view Format_720("Water Heater Information,{},{},{:.4T},{:.1T},{:.3T},{:.4T}\n");
+        static constexpr std::string_view Format_720("Water Heater Information,{},{},{:.4f},{:.1f},{:.3f},{:.4f}\n");
         print(state.files.eio, Format_720, this->Type, this->Name, this->Volume, MaxCapacity_loc, RecoveryEfficiency, EnergyFactor);
     } else {
-        static constexpr std::string_view Format_721("Heat Pump Water Heater Information,{},{},{:.4T},{:.1T},{:.3T},{:.4T},{:.0T}\n");
+        static constexpr std::string_view Format_721("Heat Pump Water Heater Information,{},{},{:.4f},{:.1f},{:.3f},{:.4f},{:.0f}\n");
         print(state.files.eio,
               Format_721,
               state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).Type,
@@ -13082,7 +13083,7 @@ void WaterThermalTankData::ReportCWTankInits(EnergyPlusData &state)
         return;
     }
 
-    static constexpr std::string_view Format_728("Chilled Water Tank Information,{},{},{:.4T},{:.4T},{:.4T}\n");
+    static constexpr std::string_view Format_728("Chilled Water Tank Information,{},{},{:.4f},{:.4f},{:.4f}\n");
     print(state.files.eio, Format_728, this->Type, this->Name, this->Volume, this->UseDesignVolFlowRate, this->SourceDesignVolFlowRate);
 
     this->AlreadyReported = true;

@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -453,12 +454,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         thisZoneAirBalance.ZonePtr = Util::FindItemInList(cAlphaArgs(2), state.dataHeatBal->Zone);
         if (thisZoneAirBalance.ZonePtr == 0) {
             ShowSevereError(state,
-                            std::format(R"({}{}="{}", invalid (not found) {}="{}".)",
-                                        RoutineName,
-                                        cCurrentModuleObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(2),
-                                        cAlphaArgs(2)));
+                            EnergyPlus::format(R"({}{}="{}", invalid (not found) {}="{}".)",
+                                               RoutineName,
+                                               cCurrentModuleObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(2),
+                                               cAlphaArgs(2)));
             ErrorsFound = true;
         } else {
             state.dataHeatBal->Zone(thisZoneAirBalance.ZonePtr).zoneOABalanceIndex = Loop;
@@ -467,13 +468,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             state, cAlphaArgs(2), cCurrentModuleObject, cAlphaFieldNames(2), state.dataHeatBalAirMgr->UniqueZoneNames, IsNotOK);
         if (IsNotOK) {
             ShowSevereError(state,
-                            std::format(R"({}{}="{}", a duplicated object {}="{}" is found.)",
-                                        RoutineName,
-                                        cCurrentModuleObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(2),
-                                        cAlphaArgs(2)));
-            ShowContinueError(state, std::format("A zone can only have one {} object.", cCurrentModuleObject));
+                            EnergyPlus::format(R"({}{}="{}", a duplicated object {}="{}" is found.)",
+                                               RoutineName,
+                                               cCurrentModuleObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(2),
+                                               cAlphaArgs(2)));
+            ShowContinueError(state, EnergyPlus::format("A zone can only have one {} object.", cCurrentModuleObject));
             ErrorsFound = true;
         }
 
@@ -484,12 +485,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             if (thisZoneAirBalance.BalanceMethod == DataHeatBalance::AirBalance::Invalid) {
                 thisZoneAirBalance.BalanceMethod = DataHeatBalance::AirBalance::None;
                 ShowWarningError(state,
-                                 std::format("{}{} = {} not valid choice for {}={}",
-                                             RoutineName,
-                                             cAlphaFieldNames(3),
-                                             cAlphaArgs(3),
-                                             cCurrentModuleObject,
-                                             cAlphaArgs(1)));
+                                 EnergyPlus::format("{}{} = {} not valid choice for {}={}",
+                                                    RoutineName,
+                                                    cAlphaFieldNames(3),
+                                                    cAlphaArgs(3),
+                                                    cCurrentModuleObject,
+                                                    cAlphaArgs(1)));
                 ShowContinueError(state, "The default choice \"NONE\" is assigned");
             }
         }
@@ -521,10 +522,11 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             thisZoneAirBalance.BalanceMethod = DataHeatBalance::AirBalance::None;
             ShowWarningError(
                 state,
-                std::format("{} = {}: This Zone ({}) is controlled by AvailabilityManager:HybridVentilation with Simple Airflow Control Type option.",
-                            cCurrentModuleObject,
-                            thisZoneAirBalance.Name,
-                            cAlphaArgs(2)));
+                EnergyPlus::format(
+                    "{} = {}: This Zone ({}) is controlled by AvailabilityManager:HybridVentilation with Simple Airflow Control Type option.",
+                    cCurrentModuleObject,
+                    thisZoneAirBalance.Name,
+                    cAlphaArgs(2)));
             ShowContinueError(state,
                               "Air balance method type QUADRATURE and Simple Airflow Control Type cannot co-exist. The NONE method is assigned");
         }
@@ -724,12 +726,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 case AirflowSpec::FlowPerZone:
                     if (lNumericFieldBlanks(1)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
-                                                     RoutineName,
-                                                     cCurrentModuleObject,
-                                                     thisInfiltration.Name,
-                                                     cAlphaFieldNames(4),
-                                                     cNumericFieldNames(1)));
+                                         EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
+                                                            RoutineName,
+                                                            cCurrentModuleObject,
+                                                            thisInfiltration.Name,
+                                                            cAlphaFieldNames(4),
+                                                            cNumericFieldNames(1)));
                     } else {
                         Real64 spaceFrac = 1.0;
                         if (!thisInfiltrationInput.spaceListActive && (thisInfiltrationInput.numOfSpaces > 1)) {
@@ -737,10 +739,11 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                             if (zoneVolume > 0.0) {
                                 spaceFrac = thisSpace.Volume / zoneVolume;
                             } else {
-                                ShowSevereError(state, std::format("{}Zone volume is zero when allocating Infiltration to Spaces.", RoutineName));
+                                ShowSevereError(state,
+                                                EnergyPlus::format("{}Zone volume is zero when allocating Infiltration to Spaces.", RoutineName));
                                 ShowContinueError(
                                     state,
-                                    std::format(
+                                    EnergyPlus::format(
                                         "Occurs for {}=\"{}\" in Zone=\"{}\".", cCurrentModuleObject, thisInfiltrationInput.Name, thisZone.Name));
                                 ErrorsFound = true;
                             }
@@ -758,12 +761,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 if (thisSpace.FloorArea <= 0.0) {
                                     ShowWarningError(
                                         state,
-                                        std::format("{}{}=\"{}\", {} specifies {}, but Space Floor Area = 0.  0 Infiltration will result.",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    thisInfiltration.Name,
-                                                    cAlphaFieldNames(4),
-                                                    cNumericFieldNames(2)));
+                                        EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but Space Floor Area = 0.  0 Infiltration will result.",
+                                                           RoutineName,
+                                                           cCurrentModuleObject,
+                                                           thisInfiltration.Name,
+                                                           cAlphaFieldNames(4),
+                                                           cNumericFieldNames(2)));
                                 }
                             }
                         } else {
@@ -778,12 +781,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(2)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
-                                                     RoutineName,
-                                                     cCurrentModuleObject,
-                                                     thisInfiltration.Name,
-                                                     cAlphaFieldNames(4),
-                                                     cNumericFieldNames(2)));
+                                         EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
+                                                            RoutineName,
+                                                            cCurrentModuleObject,
+                                                            thisInfiltration.Name,
+                                                            cAlphaFieldNames(4),
+                                                            cNumericFieldNames(2)));
                     }
                     break;
 
@@ -794,12 +797,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                             if (thisSpace.ExteriorTotalSurfArea <= 0.0) {
                                 ShowWarningError(
                                     state,
-                                    std::format("{}{}=\"{}\", {} specifies {}, but Exterior Surface Area = 0.  0 Infiltration will result.",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                thisInfiltration.Name,
-                                                cAlphaFieldNames(4),
-                                                cNumericFieldNames(3)));
+                                    EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but Exterior Surface Area = 0.  0 Infiltration will result.",
+                                                       RoutineName,
+                                                       cCurrentModuleObject,
+                                                       thisInfiltration.Name,
+                                                       cAlphaFieldNames(4),
+                                                       cNumericFieldNames(3)));
                             }
                         } else {
                             ShowSevereError(state,
@@ -813,12 +816,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(3)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
-                                                     RoutineName,
-                                                     cCurrentModuleObject,
-                                                     thisInfiltration.Name,
-                                                     cAlphaFieldNames(4),
-                                                     cNumericFieldNames(3)));
+                                         EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
+                                                            RoutineName,
+                                                            cCurrentModuleObject,
+                                                            thisInfiltration.Name,
+                                                            cAlphaFieldNames(4),
+                                                            cNumericFieldNames(3)));
                     }
                     break;
 
@@ -827,13 +830,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                         if (rNumericArgs(3) >= 0.0) {
                             thisInfiltration.DesignLevel = rNumericArgs(3) * thisSpace.ExtGrossWallArea;
                             if (thisSpace.ExtGrossWallArea <= 0.0) {
-                                ShowWarningError(state,
-                                                 std::format("{}{}=\"{}\", {} specifies {}, but Exterior Wall Area = 0.  0 Infiltration will result.",
-                                                             RoutineName,
-                                                             cCurrentModuleObject,
-                                                             thisInfiltration.Name,
-                                                             cAlphaFieldNames(4),
-                                                             cNumericFieldNames(3)));
+                                ShowWarningError(
+                                    state,
+                                    EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but Exterior Wall Area = 0.  0 Infiltration will result.",
+                                                       RoutineName,
+                                                       cCurrentModuleObject,
+                                                       thisInfiltration.Name,
+                                                       cAlphaFieldNames(4),
+                                                       cNumericFieldNames(3)));
                             }
                         } else {
                             ShowSevereError(state,
@@ -847,12 +851,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(3)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
-                                                     RoutineName,
-                                                     cCurrentModuleObject,
-                                                     thisInfiltration.Name,
-                                                     cAlphaFieldNames(4),
-                                                     cNumericFieldNames(3)));
+                                         EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
+                                                            RoutineName,
+                                                            cCurrentModuleObject,
+                                                            thisInfiltration.Name,
+                                                            cAlphaFieldNames(4),
+                                                            cNumericFieldNames(3)));
                     }
                     break;
 
@@ -861,13 +865,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                         if (rNumericArgs(4) >= 0.0) {
                             thisInfiltration.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::rSecsInHour;
                             if (thisSpace.Volume <= 0.0) {
-                                ShowWarningError(state,
-                                                 std::format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0.  0 Infiltration will result.",
-                                                             RoutineName,
-                                                             cCurrentModuleObject,
-                                                             thisInfiltration.Name,
-                                                             cAlphaFieldNames(4),
-                                                             cNumericFieldNames(4)));
+                                ShowWarningError(
+                                    state,
+                                    EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0.  0 Infiltration will result.",
+                                                       RoutineName,
+                                                       cCurrentModuleObject,
+                                                       thisInfiltration.Name,
+                                                       cAlphaFieldNames(4),
+                                                       cNumericFieldNames(4)));
                             }
                         } else {
                             ShowSevereError(state,
@@ -881,12 +886,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(4)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
-                                                     RoutineName,
-                                                     cCurrentModuleObject,
-                                                     thisInfiltrationInput.Name,
-                                                     cAlphaFieldNames(4),
-                                                     cNumericFieldNames(4)));
+                                         EnergyPlus::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
+                                                            RoutineName,
+                                                            cCurrentModuleObject,
+                                                            thisInfiltrationInput.Name,
+                                                            cAlphaFieldNames(4),
+                                                            cNumericFieldNames(4)));
                     }
                     break;
 
@@ -894,7 +899,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     if (Item1 == 1) {
                         ShowSevereError(
                             state,
-                            std::format(
+                            EnergyPlus::format(
                                 "{}{}=\"{}\", invalid calculation method={}", RoutineName, cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(4)));
                         ErrorsFound = true;
                     }
@@ -910,7 +915,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     if (Item1 == 1) {
                         ShowWarningError(
                             state,
-                            std::format(
+                            EnergyPlus::format(
                                 R"({}{}="{}", in {}="{}".)", RoutineName, cCurrentModuleObject, cAlphaArgs(1), cAlphaFieldNames(2), cAlphaArgs(2)));
                         ShowContinueError(state, "Infiltration Coefficients are all zero.  No Infiltration will be reported.");
                     }

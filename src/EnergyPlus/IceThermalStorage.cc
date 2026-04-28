@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Fmath.hh>
@@ -135,7 +136,8 @@ namespace IceThermalStorage {
         }
         // If we didn't find it, fatal
         ShowFatalError(
-            state, std::format("LocalSimpleIceStorageFactory: Error getting inputs for simple ice storage named: {}", objectName)); // LCOV_EXCL_LINE
+            state,
+            EnergyPlus::format("LocalSimpleIceStorageFactory: Error getting inputs for simple ice storage named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -156,8 +158,8 @@ namespace IceThermalStorage {
         }
         // If we didn't find it, fatal
         ShowFatalError(state,
-                       std::format("LocalDetailedIceStorageFactory: Error getting inputs for detailed ice storage named: {}",
-                                   objectName)); // LCOV_EXCL_LINE
+                       EnergyPlus::format("LocalDetailedIceStorageFactory: Error getting inputs for detailed ice storage named: {}",
+                                          objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -512,7 +514,7 @@ namespace IceThermalStorage {
                         ++this->ChargeIterErrors;
                         if (this->ChargeIterErrors <= 25) {
                             ShowWarningError(state, "Detailed Ice Storage model exceeded its internal charging maximum iteration limit");
-                            ShowContinueError(state, std::format("Detailed Ice Storage System Name = {}", this->Name));
+                            ShowContinueError(state, EnergyPlus::format("Detailed Ice Storage System Name = {}", this->Name));
                             ShowContinueErrorTimeStamp(state, "");
                         } else {
                             ShowRecurringWarningErrorAtEnd(state,
@@ -646,7 +648,7 @@ namespace IceThermalStorage {
                         ++this->DischargeIterErrors;
                         if (this->DischargeIterErrors <= 25) {
                             ShowWarningError(state, "Detailed Ice Storage model exceeded its internal discharging maximum iteration limit");
-                            ShowContinueError(state, std::format("Detailed Ice Storage System Name = {}", this->Name));
+                            ShowContinueError(state, EnergyPlus::format("Detailed Ice Storage System Name = {}", this->Name));
                             ShowContinueErrorTimeStamp(state, "");
                         } else {
                             ShowRecurringWarningErrorAtEnd(state,
@@ -741,14 +743,14 @@ namespace IceThermalStorage {
             if (state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).onPeakEnd <=
                 state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).onPeakStart) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\"",
-                                            routineName,
-                                            state.dataIPShortCut->cCurrentModuleObject,
-                                            state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).name));
+                                EnergyPlus::format("{}{}=\"{}\"",
+                                                   routineName,
+                                                   state.dataIPShortCut->cCurrentModuleObject,
+                                                   state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).name));
                 ShowContinueError(state,
-                                  std::format("Invalid start {} and end times {}. End time must be greater than start time.",
-                                              state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).onPeakStart,
-                                              state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).onPeakEnd));
+                                  EnergyPlus::format("Invalid start {} and end times {}. End time must be greater than start time.",
+                                                     state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).onPeakStart,
+                                                     state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).onPeakEnd));
             }
         }
 
@@ -787,9 +789,9 @@ namespace IceThermalStorage {
             } else if (Util::SameString(state.dataIceThermalStorage->SimpleIceStorage(iceNum).ITSType, "IceOnCoilExternal")) {
                 state.dataIceThermalStorage->SimpleIceStorage(iceNum).ITSType_Num = ITSType::IceOnCoilExternal;
             } else {
-                ShowSevereError(state, std::format("{}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  std::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
+                ShowSevereError(state, EnergyPlus::format("{}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
                 ErrorsFound = true;
             }
 
@@ -798,7 +800,7 @@ namespace IceThermalStorage {
             if (state.dataIPShortCut->rNumericArgs(1) == DataSizing::AutoSize) {
                 state.dataIceThermalStorage->SimpleIceStorage(iceNum).NomCapacityWasAutoSized = true;
             } else if (state.dataIPShortCut->rNumericArgs(1) == 0.0) {
-                ShowSevereError(state, std::format("{}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state, EnergyPlus::format("{}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(
                     state,
                     EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), state.dataIPShortCut->rNumericArgs(1)));
@@ -841,13 +843,14 @@ namespace IceThermalStorage {
                 state.dataIPShortCut->cAlphaArgs(5), state.dataIceThermalStorage->ThermalStorageSizing, &ThermalStorageSizingData::name);
             if (state.dataIceThermalStorage->SimpleIceStorage(iceNum).TESSizingIndex == 0 &&
                 state.dataIceThermalStorage->SimpleIceStorage(iceNum).NomCapacityWasAutoSized) {
-                ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state,
-                                  std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  std::format("Input field {} must be entered when input field {} is autosized",
-                                              state.dataIPShortCut->cAlphaFieldNames(5),
-                                              state.dataIPShortCut->cNumericFieldNames(1)));
+                                  EnergyPlus::format("Input field {} must be entered when input field {} is autosized",
+                                                     state.dataIPShortCut->cAlphaFieldNames(5),
+                                                     state.dataIPShortCut->cNumericFieldNames(1)));
                 ErrorsFound = true;
             }
 
@@ -866,7 +869,7 @@ namespace IceThermalStorage {
         } // IceNum
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
         }
 
         ErrorsFound = false; // Always need to reset this since there are multiple types of ice storage systems
@@ -922,8 +925,8 @@ namespace IceThermalStorage {
                 ShowSevereError(
                     state,
                     EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), state.dataIPShortCut->rNumericArgs(1)));
-                ShowContinueError(state,
-                                  std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
 
@@ -964,19 +967,20 @@ namespace IceThermalStorage {
             state.dataIceThermalStorage->DetailedIceStorage(iceNum).DischargeCurveNum =
                 Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(6));
             if (state.dataIceThermalStorage->DetailedIceStorage(iceNum).DischargeCurveNum <= 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(6), state.dataIPShortCut->cAlphaArgs(6)));
-                ShowContinueError(state,
-                                  std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(6), state.dataIPShortCut->cAlphaArgs(6)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
 
             int dischargeCurveDim =
                 state.dataCurveManager->curves(state.dataIceThermalStorage->DetailedIceStorage(iceNum).DischargeCurveNum)->numDims;
             if (dischargeCurveDim != 2) {
-                ShowSevereError(state,
-                                std::format("{}: Discharge curve must have 2 independent variables", state.dataIPShortCut->cCurrentModuleObject));
-                ShowContinueError(state,
-                                  std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(
+                    state, EnergyPlus::format("{}: Discharge curve must have 2 independent variables", state.dataIPShortCut->cCurrentModuleObject));
+                ShowContinueError(
+                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state,
                                   std::format("{} does not have 2 independent variables and thus cannot be used for detailed ice storage",
                                               state.dataIPShortCut->cAlphaArgs(6)));

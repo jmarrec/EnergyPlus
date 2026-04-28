@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Fmath.hh>
@@ -161,25 +162,26 @@ namespace HeatRecovery {
         if (CompIndex == 0) {
             HeatExchNum = Util::FindItemInList(CompName, state.dataHeatRecovery->ExchCond);
             if (HeatExchNum == 0) {
-                ShowFatalError(state, std::format("SimHeatRecovery: Unit not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimHeatRecovery: Unit not found={}", CompName));
             }
             CompIndex = HeatExchNum;
         } else {
             HeatExchNum = CompIndex;
             if (HeatExchNum > state.dataHeatRecovery->NumHeatExchangers || HeatExchNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimHeatRecovery:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                           HeatExchNum,
-                                           state.dataHeatRecovery->NumHeatExchangers,
-                                           CompName));
+                               EnergyPlus::format("SimHeatRecovery:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                                  HeatExchNum,
+                                                  state.dataHeatRecovery->NumHeatExchangers,
+                                                  CompName));
             }
             if (state.dataHeatRecovery->CheckEquipName(HeatExchNum)) {
                 if (CompName != state.dataHeatRecovery->ExchCond(HeatExchNum).Name) {
-                    ShowFatalError(state,
-                                   std::format("SimHeatRecovery: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                               HeatExchNum,
-                                               CompName,
-                                               state.dataHeatRecovery->ExchCond(HeatExchNum).Name));
+                    ShowFatalError(
+                        state,
+                        EnergyPlus::format("SimHeatRecovery: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                           HeatExchNum,
+                                           CompName,
+                                           state.dataHeatRecovery->ExchCond(HeatExchNum).Name));
                 }
                 state.dataHeatRecovery->CheckEquipName(HeatExchNum) = false;
             }
@@ -331,7 +333,8 @@ namespace HeatRecovery {
                 "COUNTERFLOW", "PARALLELFLOW", "CROSSFLOWBOTHUNMIXED", "CROSS_FLOW_OTHER_NOT_USED"};
             thisExchanger.FlowArr = static_cast<HXConfiguration>(getEnumValue(hxConfigurationNamesUC, state.dataIPShortCut->cAlphaArgs(3)));
             if (thisExchanger.FlowArr == HXConfiguration::Invalid) {
-                ShowSevereError(state, std::format("{}: incorrect flow arrangement: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(3)));
+                ShowSevereError(state,
+                                EnergyPlus::format("{}: incorrect flow arrangement: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(3)));
                 ErrorsFound = true;
             }
 
@@ -340,7 +343,8 @@ namespace HeatRecovery {
             } else {
                 BooleanSwitch toggle = getYesNoValue(state.dataIPShortCut->cAlphaArgs(4));
                 if (toggle == BooleanSwitch::Invalid) {
-                    ShowSevereError(state, std::format("{}: incorrect econo lockout: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(4)));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("{}: incorrect econo lockout: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(4)));
                 }
                 thisExchanger.EconoLockOut = static_cast<bool>(toggle);
             }
@@ -484,7 +488,7 @@ namespace HeatRecovery {
             } else {
                 if (!Util::SameString(state.dataIPShortCut->cAlphaArgs(7), "No")) {
                     ShowSevereError(state, "Rotary HX Speed Modulation or Plate Bypass for Temperature Control for ");
-                    ShowContinueError(state, std::format("{} must be set to Yes or No", thisExchanger.Name));
+                    ShowContinueError(state, EnergyPlus::format("{} must be set to Yes or No", thisExchanger.Name));
                     ErrorsFound = true;
                 }
             }
@@ -505,8 +509,8 @@ namespace HeatRecovery {
             } else {
                 BooleanSwitch toggle = getYesNoValue(state.dataIPShortCut->cAlphaArgs(10));
                 if (toggle == BooleanSwitch::Invalid) {
-                    ShowSevereError(state,
-                                    std::format("{}: incorrect econo lockout: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(10)));
+                    ShowSevereError(
+                        state, EnergyPlus::format("{}: incorrect econo lockout: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(10)));
                 }
                 thisExchanger.EconoLockOut = static_cast<bool>(toggle);
             }
@@ -629,7 +633,8 @@ namespace HeatRecovery {
             } else {
                 BooleanSwitch toggle = getYesNoValue(state.dataIPShortCut->cAlphaArgs(9));
                 if (toggle == BooleanSwitch::Invalid) {
-                    ShowSevereError(state, std::format("{}: incorrect econo lockout: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(9)));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("{}: incorrect econo lockout: {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(9)));
                 }
                 thisExchanger.EconoLockOut = static_cast<bool>(toggle);
             }
@@ -662,7 +667,7 @@ namespace HeatRecovery {
             thisPerfData.NomSupAirVolFlow = state.dataIPShortCut->rNumericArgs(1);
             // check validity
             if (thisPerfData.NomSupAirVolFlow <= 0.0 && thisPerfData.NomSupAirVolFlow != DataSizing::AutoSize) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Nominal air flow rate must be greater than zero.");
                 ShowContinueError(state, EnergyPlus::format("... value entered = {:.6R}", thisPerfData.NomSupAirVolFlow));
                 ErrorsFound = true;
@@ -672,7 +677,7 @@ namespace HeatRecovery {
             // check validity
             if ((thisPerfData.NomProcAirFaceVel <= 0.0 && thisPerfData.NomProcAirFaceVel != DataSizing::AutoSize) ||
                 thisPerfData.NomProcAirFaceVel > 6.0) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Nominal air face velocity cannot be less than or equal to zero or greater than 6 m/s.");
                 ShowContinueError(state, EnergyPlus::format("... value entered = {:.6R}", thisPerfData.NomProcAirFaceVel));
                 ErrorsFound = true;
@@ -680,7 +685,7 @@ namespace HeatRecovery {
             thisPerfData.NomElecPower = state.dataIPShortCut->rNumericArgs(3);
             // check validity
             if (thisPerfData.NomElecPower < 0.0) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Nominal electric power cannot be less than zero.");
                 ShowContinueError(state, EnergyPlus::format("... value entered = {:.6R}", thisPerfData.NomElecPower));
                 ErrorsFound = true;
@@ -695,7 +700,7 @@ namespace HeatRecovery {
             thisPerfData.T_MinRegenAirInHumRat = state.dataIPShortCut->rNumericArgs(12);
             thisPerfData.T_MaxRegenAirInHumRat = state.dataIPShortCut->rNumericArgs(13);
             if (thisPerfData.T_MinRegenAirInHumRat >= thisPerfData.T_MaxRegenAirInHumRat) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Error found in min/max boundary for the regen outlet air temperature equation.");
                 ShowContinueError(state, "... the minimum value of regeneration inlet air humidity ratio must be less than the maximum.");
                 ShowContinueError(state, EnergyPlus::format("... minimum value entered by user = {:.6R}", thisPerfData.T_MinRegenAirInHumRat));
@@ -703,14 +708,14 @@ namespace HeatRecovery {
                 ErrorsFound = true;
             }
             if (thisPerfData.T_MinRegenAirInHumRat < 0.0) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Error found in min boundary for the regen outlet air temperature equation.");
                 ShowContinueError(state, "... the minimum value of regeneration inlet air humidity ratio must be greater than or equal to 0.");
                 ShowContinueError(state, EnergyPlus::format("... minimum value entered by user = {:.6R}", thisPerfData.T_MinRegenAirInHumRat));
                 ErrorsFound = true;
             }
             if (thisPerfData.T_MaxRegenAirInHumRat > 1.0) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Error found in max boundary for the regen outlet air temperature equation.");
                 ShowContinueError(state, "... the maximum value of regeneration inlet air humidity ratio must be less than or equal to 1.");
                 ShowContinueError(state, EnergyPlus::format("... maximum value entered by user = {:.6R}", thisPerfData.T_MaxRegenAirInHumRat));
@@ -720,7 +725,7 @@ namespace HeatRecovery {
             thisPerfData.T_MinRegenAirInTemp = state.dataIPShortCut->rNumericArgs(14);
             thisPerfData.T_MaxRegenAirInTemp = state.dataIPShortCut->rNumericArgs(15);
             if (thisPerfData.T_MinRegenAirInTemp >= thisPerfData.T_MaxRegenAirInTemp) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Error found in min/max boundary for the regen outlet air temperature equation.");
                 ShowContinueError(state, "... the minimum value of regeneration inlet air temperature must be less than the maximum.");
                 ShowContinueError(state, EnergyPlus::format("... minimum value entered = {:.6R}", thisPerfData.T_MinRegenAirInTemp));
@@ -731,7 +736,7 @@ namespace HeatRecovery {
             thisPerfData.T_MinProcAirInHumRat = state.dataIPShortCut->rNumericArgs(16);
             thisPerfData.T_MaxProcAirInHumRat = state.dataIPShortCut->rNumericArgs(17);
             if (thisPerfData.T_MinProcAirInHumRat >= thisPerfData.T_MaxProcAirInHumRat) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Error found in min/max boundary for the regen outlet air temperature equation.");
                 ShowContinueError(state, "... the minimum value of process inlet air humidity ratio must be less than the maximum.");
                 ShowContinueError(state, EnergyPlus::format("... minimum value entered by user = {:.6R}", thisPerfData.T_MinProcAirInHumRat));
@@ -739,14 +744,14 @@ namespace HeatRecovery {
                 ErrorsFound = true;
             }
             if (thisPerfData.T_MinProcAirInHumRat < 0.0) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Error found in min boundary for the regen outlet air temperature equation.");
                 ShowContinueError(state, "... the minimum value of process inlet air humidity ratio must be greater than or equal to 0.");
                 ShowContinueError(state, EnergyPlus::format("... minimum value entered by user = {:.6R}", thisPerfData.T_MinProcAirInHumRat));
                 ErrorsFound = true;
             }
             if (thisPerfData.T_MaxProcAirInHumRat > 1.0) {
-                ShowSevereError(state, std::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
+                ShowSevereError(state, EnergyPlus::format("{} \"{}\"", cCurrentModuleObject, thisPerfData.Name));
                 ShowContinueError(state, "Error found in max boundary for the regen outlet air temperature equation.");
                 ShowContinueError(state, "... the maximum value of process inlet air humidity ratio must be less than or equal to 1.");
                 ShowContinueError(state, EnergyPlus::format("... maximum value entered by user = {:.6R}", thisPerfData.T_MaxProcAirInHumRat));

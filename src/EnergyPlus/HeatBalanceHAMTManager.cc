@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -284,14 +285,15 @@ namespace HeatBalanceHAMTManager {
             auto *mat = s_mat->materials(matNum);
 
             if (mat->group != Material::Group::Regular) {
-                ShowSevereCustom(state, eoh, std::format("{} = \"{}\" is not a regular material.", cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("{} = \"{}\" is not a regular material.", cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
 
             if (mat->ROnly) {
                 ShowWarningError(
-                    state, std::format("{} {}=\"{}\" is defined as an R-only value material.", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                    state,
+                    EnergyPlus::format("{} {}=\"{}\" is defined as an R-only value material.", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 continue;
             }
 
@@ -333,7 +335,8 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustom(state, eoh, std::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(
+                    state, eoh, EnergyPlus::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -395,7 +398,7 @@ namespace HeatBalanceHAMTManager {
                 }
             }
             if (isoerrrise) {
-                ShowWarningError(state, std::format("{}: data not rising - Check material {}", cHAMTObject2, matHAMT->Name));
+                ShowWarningError(state, EnergyPlus::format("{}: data not rising - Check material {}", cHAMTObject2, matHAMT->Name));
                 ShowContinueError(state, "Isotherm data has been fixed, and the simulation continues.");
             }
         }
@@ -427,7 +430,8 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustom(state, eoh, std::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(
+                    state, eoh, EnergyPlus::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -474,7 +478,8 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustom(state, eoh, std::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(
+                    state, eoh, EnergyPlus::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -521,7 +526,8 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustom(state, eoh, std::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(
+                    state, eoh, EnergyPlus::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -570,7 +576,8 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustom(state, eoh, std::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(
+                    state, eoh, EnergyPlus::format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -693,8 +700,8 @@ namespace HeatBalanceHAMTManager {
             for (int lid = 1; lid <= constr.TotLayers; ++lid) {
                 auto *mat = s_mat->materials(constr.LayerPoint(lid));
                 if (mat->ROnly) {
-                    ShowSevereError(state, std::format("{}Construction={} cannot contain R-only value materials.", RoutineName, constr.Name));
-                    ShowContinueError(state, std::format("Reference Material=\"{}\".", mat->Name));
+                    ShowSevereError(state, EnergyPlus::format("{}Construction={} cannot contain R-only value materials.", RoutineName, constr.Name));
+                    ShowContinueError(state, EnergyPlus::format("Reference Material=\"{}\".", mat->Name));
                     ++errorCount;
                     continue;
                 }
@@ -703,32 +710,33 @@ namespace HeatBalanceHAMTManager {
                 assert(matHAMT != nullptr);
 
                 if (matHAMT->nmu < 0) {
-                    ShowSevereError(state, std::format("{}Construction={}", RoutineName, constr.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}Construction={}", RoutineName, constr.Name));
                     ShowContinueError(
                         state,
-                        std::format("Reference Material=\"{}\" does not have required Water Vapor Diffusion Resistance Factor (mu) data.",
-                                    matHAMT->Name));
+                        EnergyPlus::format("Reference Material=\"{}\" does not have required Water Vapor Diffusion Resistance Factor (mu) data.",
+                                           matHAMT->Name));
                     ++errorCount;
                 }
 
                 if (matHAMT->niso < 0) {
-                    ShowSevereError(state, std::format("{}Construction={}", RoutineName, constr.Name));
-                    ShowContinueError(state, std::format("Reference Material=\"{}\" does not have required isotherm data.", matHAMT->Name));
+                    ShowSevereError(state, EnergyPlus::format("{}Construction={}", RoutineName, constr.Name));
+                    ShowContinueError(state, EnergyPlus::format("Reference Material=\"{}\" does not have required isotherm data.", matHAMT->Name));
                     ++errorCount;
                 }
                 if (matHAMT->nsuc < 0) {
-                    ShowSevereError(state, std::format("{}Construction={}", RoutineName, constr.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}Construction={}", RoutineName, constr.Name));
                     ShowContinueError(
                         state,
-                        std::format("Reference Material=\"{}\" does not have required liquid transport coefficient (suction) data.", mat->Name));
+                        EnergyPlus::format("Reference Material=\"{}\" does not have required liquid transport coefficient (suction) data.",
+                                           mat->Name));
                     ++errorCount;
                 }
                 if (matHAMT->nred < 0) {
-                    ShowSevereError(state, std::format("{}Construction={}", RoutineName, constr.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}Construction={}", RoutineName, constr.Name));
                     ShowContinueError(
                         state,
-                        std::format("Reference Material=\"{}\" does not have required liquid transport coefficient (redistribution) data.",
-                                    mat->Name));
+                        EnergyPlus::format("Reference Material=\"{}\" does not have required liquid transport coefficient (redistribution) data.",
+                                           mat->Name));
                     ++errorCount;
                 }
                 if (matHAMT->ntc < 0) {

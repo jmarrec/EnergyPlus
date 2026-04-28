@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -118,8 +119,8 @@ IndirectAbsorberSpecs *IndirectAbsorberSpecs::factory(EnergyPlusData &state, std
         return thisObj;
     }
     // If we didn't find it, fatal
-    ShowFatalError(state,
-                   std::format("LocalIndirectAbsorptionChillerFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(
+        state, EnergyPlus::format("LocalIndirectAbsorptionChillerFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -161,14 +162,15 @@ void IndirectAbsorberSpecs::simulate(
                                                                     FirstHVACIteration);
 
     } else {
-        ShowFatalError(state,
-                       std::format("SimIndirectAbsorber: Invalid LoopNum passed={}, Unit name={}, stored chilled water loop={}, stored condenser "
-                                   "water loop={}, stored generator loop={}",
-                                   calledFromLocation.loopNum,
-                                   this->Name,
-                                   this->CWPlantLoc.loopNum,
-                                   this->CDPlantLoc.loopNum,
-                                   this->GenPlantLoc.loopNum));
+        ShowFatalError(
+            state,
+            EnergyPlus::format("SimIndirectAbsorber: Invalid LoopNum passed={}, Unit name={}, stored chilled water loop={}, stored condenser "
+                               "water loop={}, stored generator loop={}",
+                               calledFromLocation.loopNum,
+                               this->Name,
+                               this->CWPlantLoc.loopNum,
+                               this->CDPlantLoc.loopNum,
+                               this->GenPlantLoc.loopNum));
     }
 }
 
@@ -228,7 +230,7 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
     int NumIndirectAbsorbers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
 
     if (NumIndirectAbsorbers <= 0) {
-        ShowSevereError(state, std::format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
+        ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
         // See if load distribution manager has already gotten the input
         ErrorsFound = true;
     }
@@ -274,8 +276,8 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
         if (state.dataIPShortCut->rNumericArgs(1) == 0.0) {
             ShowSevereError(
                 state, EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), state.dataIPShortCut->rNumericArgs(1)));
-            ShowContinueError(state,
-                              std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(
+                state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ErrorsFound = true;
         }
         // Assign Node Numbers to specified nodes
@@ -362,9 +364,10 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
                 thisChiller.GenHeatSourceType = Node::FluidType::Steam;
                 thisChiller.steam = Fluid::GetSteam(state);
             } else {
-                ShowWarningError(state, std::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowWarningError(state,
+                                 EnergyPlus::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "...Generator heat source type must be Steam or Hot Water.");
-                ShowContinueError(state, std::format("...Entered generator heat source type = {}", state.dataIPShortCut->cAlphaArgs(16)));
+                ShowContinueError(state, EnergyPlus::format("...Entered generator heat source type = {}", state.dataIPShortCut->cAlphaArgs(16)));
                 ErrorsFound = true;
             }
         } else {
@@ -432,15 +435,17 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
                                   "Steam Nodes");
             }
         } else if (state.dataIPShortCut->cAlphaArgs(9).empty() != state.dataIPShortCut->cAlphaArgs(10).empty()) {
-            ShowWarningError(state, std::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowWarningError(state,
+                             EnergyPlus::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(state, "...Generator fluid nodes must both be entered (or both left blank).");
-            ShowContinueError(state, std::format("...Generator fluid inlet node  = {}", state.dataIPShortCut->cAlphaArgs(9)));
-            ShowContinueError(state, std::format("...Generator fluid outlet node = {}", state.dataIPShortCut->cAlphaArgs(10)));
+            ShowContinueError(state, EnergyPlus::format("...Generator fluid inlet node  = {}", state.dataIPShortCut->cAlphaArgs(9)));
+            ShowContinueError(state, EnergyPlus::format("...Generator fluid outlet node = {}", state.dataIPShortCut->cAlphaArgs(10)));
             ErrorsFound = true;
         } else {
             //     Generator fluid type must be steam if generator inlet/outlet nodes are not used
             if (thisChiller.GenHeatSourceType == Node::FluidType::Water) {
-                ShowWarningError(state, std::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowWarningError(state,
+                                 EnergyPlus::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "...Generator fluid type must be Steam if generator inlet/outlet nodes are blank.");
                 ShowContinueError(state, "...Generator fluid type is set to Steam and the simulation continues.");
                 thisChiller.GenHeatSourceType = Node::FluidType::Steam;
@@ -451,9 +456,10 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
             thisChiller.FlowMode = static_cast<DataPlant::FlowMode>(getEnumValue(DataPlant::FlowModeNamesUC, state.dataIPShortCut->cAlphaArgs(6)));
             if (thisChiller.FlowMode == DataPlant::FlowMode::Invalid) {
                 ShowSevereError(
-                    state, std::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  std::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(6), state.dataIPShortCut->cAlphaArgs(6)));
+                    state,
+                    EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(6), state.dataIPShortCut->cAlphaArgs(6)));
                 ShowContinueError(state, "Available choices are ConstantFlow, NotModulated, or LeavingSetpointModulated");
                 ShowContinueError(state, "Flow mode NotModulated is assumed and the simulation continues.");
                 thisChiller.FlowMode = DataPlant::FlowMode::NotModulated;
@@ -543,7 +549,8 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
         }
 
         if (thisChiller.GeneratorVolFlowRate == 0.0 && thisChiller.GenHeatSourceType == Node::FluidType::Water) {
-            ShowWarningError(state, std::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowWarningError(state,
+                             EnergyPlus::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(state, "...Generator water flow rate must be greater than 0 when absorber generator fluid type is hot water.");
             ErrorsFound = true;
         }
@@ -839,8 +846,8 @@ void IndirectAbsorberSpecs::oneTimeInit(EnergyPlusData &state)
             (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi == Node::SensedNodeFlagValue)) {
             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 if (!this->ModulatedFlowErrDone) {
-                    ShowWarningError(state,
-                                     std::format("Missing temperature setpoint for LeavingSetpointModulated mode chiller named {}", this->Name));
+                    ShowWarningError(
+                        state, EnergyPlus::format("Missing temperature setpoint for LeavingSetpointModulated mode chiller named {}", this->Name));
                     ShowContinueError(
                         state, "  A temperature setpoint is needed at the outlet node of a chiller in variable flow mode, use a SetpointManager");
                     ShowContinueError(state, "  The overall loop setpoint will be assumed for chiller. The simulation continues ... ");
@@ -853,8 +860,8 @@ void IndirectAbsorberSpecs::oneTimeInit(EnergyPlusData &state)
                 state.dataLoopNodes->NodeSetpointCheck(this->EvapOutletNodeNum).needsSetpointChecking = false;
                 if (FatalError) {
                     if (!this->ModulatedFlowErrDone) {
-                        ShowWarningError(state,
-                                         std::format("Missing temperature setpoint for LeavingSetpointModulated mode chiller named {}", this->Name));
+                        ShowWarningError(
+                            state, EnergyPlus::format("Missing temperature setpoint for LeavingSetpointModulated mode chiller named {}", this->Name));
                         ShowContinueError(state,
                                           "  A temperature setpoint is needed at the outlet node of a chiller evaporator in variable flow mode");
                         ShowContinueError(state, "  use a Setpoint Manager to establish a setpoint at the chiller evaporator outlet node ");
@@ -1082,8 +1089,9 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                                      NomCapUser);
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                                ShowMessage(state,
-                                            std::format("SizeChillerAbsorptionIndirect: Potential issue with equipment sizing for {}", this->Name));
+                                ShowMessage(
+                                    state,
+                                    EnergyPlus::format("SizeChillerAbsorptionIndirect: Potential issue with equipment sizing for {}", this->Name));
                                 ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
                                 ShowContinueError(state, EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
@@ -1099,7 +1107,7 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
         if (this->NomCapWasAutoSized) {
             if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                 ShowSevereError(state, "Autosizing of Absorption Chiller nominal capacity requires a loop Sizing:Plant object");
-                ShowContinueError(state, std::format("Occurs in Chiller:Absorption:Indirect object={}", this->Name));
+                ShowContinueError(state, EnergyPlus::format("Occurs in Chiller:Absorption:Indirect object={}", this->Name));
                 ErrorsFound = true;
             }
         } else {
@@ -1139,8 +1147,8 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                                  NomPumpPowerUser);
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(tmpNomPumpPower - NomPumpPowerUser) / NomPumpPowerUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                            ShowMessage(state,
-                                        std::format("SizeChillerAbsorptionIndirect: Potential issue with equipment sizing for {}", this->Name));
+                            ShowMessage(
+                                state, EnergyPlus::format("SizeChillerAbsorptionIndirect: Potential issue with equipment sizing for {}", this->Name));
                             ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Pumping Power of {:.2R} [W]", NomPumpPowerUser));
                             ShowContinueError(state,
                                               EnergyPlus::format("differs from Design Size Nominal Pumping Power of {:.2R} [W]", tmpNomPumpPower));

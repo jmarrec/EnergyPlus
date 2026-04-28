@@ -45,12 +45,8 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// FMI-Related Headers
-extern "C" {
-#include <FMI/main.h>
-}
-
 // C++ Headers
+#include <format>
 #include <memory>
 #include <string>
 
@@ -59,6 +55,11 @@ extern "C" {
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/environment.hh>
 #include <ObjexxFCL/string.functions.hh>
+
+// Third Party Headers
+extern "C" {
+#include <FMI/main.h>
+}
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchInputManager.hh>
@@ -132,6 +133,85 @@ extern "C" {
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
 #include <EnergyPlus/api/datatransfer.h>
 
+extern "C" {
+}
+
+// C++ Headers
+#include <memory>
+#include <string>
+
+// ObjexxFCL Headers
+#include <ObjexxFCL/Array1D.hh>
+
+// EnergyPlus Headers
+#include <EnergyPlus/BranchInputManager.hh>
+#include <EnergyPlus/BranchNodeConnections.hh>
+#include <EnergyPlus/CostEstimateManager.hh>
+#include <EnergyPlus/CurveManager.hh>
+#include <EnergyPlus/Data/EnergyPlusData.hh>
+#include <EnergyPlus/DataBranchNodeConnections.hh>
+#include <EnergyPlus/DataConvergParams.hh>
+#include <EnergyPlus/DataErrorTracking.hh>
+#include <EnergyPlus/DataGlobalConstants.hh>
+#include <EnergyPlus/DataHVACGlobals.hh>
+#include <EnergyPlus/DataHeatBalFanSys.hh>
+#include <EnergyPlus/DataHeatBalance.hh>
+#include <EnergyPlus/DataIPShortCuts.hh>
+#include <EnergyPlus/DataLoopNode.hh>
+#include <EnergyPlus/DataOutputs.hh>
+#include <EnergyPlus/DataReportingFlags.hh>
+#include <EnergyPlus/DataRuntimeLanguage.hh>
+#include <EnergyPlus/DataStringGlobals.hh>
+#include <EnergyPlus/DataSurfaces.hh>
+#include <EnergyPlus/DataSystemVariables.hh>
+#include <EnergyPlus/DataZoneEquipment.hh>
+#include <EnergyPlus/DemandManager.hh>
+#include <EnergyPlus/DisplayRoutines.hh>
+#include <EnergyPlus/DualDuct.hh>
+#include <EnergyPlus/EMSManager.hh>
+#include <EnergyPlus/EconomicLifeCycleCost.hh>
+#include <EnergyPlus/EconomicTariff.hh>
+#include <EnergyPlus/ElectricPowerServiceManager.hh>
+#include <EnergyPlus/ExteriorEnergyUse.hh>
+#include <EnergyPlus/ExternalInterface.hh>
+#include <EnergyPlus/FaultsManager.hh>
+#include <EnergyPlus/FileSystem.hh>
+#include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/GeneralRoutines.hh>
+#include <EnergyPlus/HVACControllers.hh>
+#include <EnergyPlus/HVACManager.hh>
+#include <EnergyPlus/HVACSizingSimulationManager.hh>
+#include <EnergyPlus/HeatBalanceAirManager.hh>
+#include <EnergyPlus/HeatBalanceIntRadExchange.hh>
+#include <EnergyPlus/HeatBalanceManager.hh>
+#include <EnergyPlus/HeatBalanceSurfaceManager.hh>
+#include <EnergyPlus/InputProcessing/InputProcessor.hh>
+#include <EnergyPlus/MixedAir.hh>
+#include <EnergyPlus/NodeInputManager.hh>
+#include <EnergyPlus/OutAirNodeManager.hh>
+#include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/OutputReportPredefined.hh>
+#include <EnergyPlus/OutputReportTabular.hh>
+#include <EnergyPlus/OutputReports.hh>
+#include <EnergyPlus/Plant/PlantManager.hh>
+#include <EnergyPlus/PlantPipingSystemsManager.hh>
+#include <EnergyPlus/PluginManager.hh>
+#include <EnergyPlus/PollutionModule.hh>
+#include <EnergyPlus/Psychrometrics.hh>
+#include <EnergyPlus/RefrigeratedCase.hh>
+#include <EnergyPlus/ReportCoilSelection.hh>
+#include <EnergyPlus/ResultsFramework.hh>
+#include <EnergyPlus/SetPointManager.hh>
+#include <EnergyPlus/SimulationManager.hh>
+#include <EnergyPlus/SizingManager.hh>
+#include <EnergyPlus/SolarShading.hh>
+#include <EnergyPlus/SurfaceGeometry.hh>
+#include <EnergyPlus/SystemReports.hh>
+#include <EnergyPlus/UtilityRoutines.hh>
+#include <EnergyPlus/WeatherManager.hh>
+#include <EnergyPlus/ZoneContaminantPredictorCorrector.hh>
+#include <EnergyPlus/ZoneEquipmentManager.hh>
+#include <EnergyPlus/ZoneTempPredictorCorrector.hh>
 namespace EnergyPlus {
 namespace SimulationManager {
 

@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -154,7 +155,7 @@ namespace PlantChillers {
                 return &thisChiller;
             }
         }
-        ShowFatalError(state, std::format("Could not locate electric chiller with name: {}", chillerName));
+        ShowFatalError(state, EnergyPlus::format("Could not locate electric chiller with name: {}", chillerName));
         return nullptr;
     }
 
@@ -181,7 +182,7 @@ namespace PlantChillers {
             state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
 
         if (state.dataPlantChillers->NumElectricChillers <= 0) {
-            ShowSevereError(state, std::format("No {} Equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
+            ShowSevereError(state, EnergyPlus::format("No {} Equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
             ErrorsFound = true;
         }
 
@@ -229,9 +230,10 @@ namespace PlantChillers {
             case DataPlant::CondenserType::EvapCooled:
                 break;
             default: {
-                ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
-                ShowContinueError(state,
-                                  std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
             }
@@ -244,8 +246,8 @@ namespace PlantChillers {
                 ShowSevereError(
                     state,
                     EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), state.dataIPShortCut->rNumericArgs(1)));
-                ShowContinueError(state,
-                                  std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
             thisChiller.COP = state.dataIPShortCut->rNumericArgs(2);
@@ -253,8 +255,8 @@ namespace PlantChillers {
                 ShowSevereError(
                     state,
                     EnergyPlus::format("Invalid {}={:.3R}", state.dataIPShortCut->cNumericFieldNames(2), state.dataIPShortCut->rNumericArgs(2)));
-                ShowContinueError(state,
-                                  std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
             thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
@@ -316,9 +318,9 @@ namespace PlantChillers {
                 OutAirNodeManager::CheckAndAddAirNodeNumber(state, thisChiller.CondInletNodeNum, Okay);
                 if (!Okay) {
                     ShowWarningError(state,
-                                     std::format("{}, Adding OutdoorAir:Node={}",
-                                                 state.dataIPShortCut->cCurrentModuleObject,
-                                                 state.dataIPShortCut->cAlphaArgs(5)));
+                                     EnergyPlus::format("{}, Adding OutdoorAir:Node={}",
+                                                        state.dataIPShortCut->cCurrentModuleObject,
+                                                        state.dataIPShortCut->cAlphaArgs(5)));
                 }
 
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
@@ -357,14 +359,16 @@ namespace PlantChillers {
                                   "Condenser Water Nodes");
                 // Condenser Inlet node name is necessary for Water Cooled
                 if (state.dataIPShortCut->lAlphaFieldBlanks(5)) {
-                    ShowSevereError(state, std::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
                     ShowContinueError(
-                        state, std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                        state,
+                        EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                     ErrorsFound = true;
                 } else if (state.dataIPShortCut->lAlphaFieldBlanks(6)) {
-                    ShowSevereError(state, std::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(6)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(6)));
                     ShowContinueError(
-                        state, std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                        state,
+                        EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                     ErrorsFound = true;
                 }
             } else {
@@ -394,14 +398,16 @@ namespace PlantChillers {
                                   "Condenser (unknown?) Nodes");
                 // Condenser Inlet node name is necessary
                 if (state.dataIPShortCut->lAlphaFieldBlanks(5)) {
-                    ShowSevereError(state, std::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
                     ShowContinueError(
-                        state, std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                        state,
+                        EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                     ErrorsFound = true;
                 } else if (state.dataIPShortCut->lAlphaFieldBlanks(6)) {
-                    ShowSevereError(state, std::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(6)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(6)));
                     ShowContinueError(
-                        state, std::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                        state,
+                        EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                     ErrorsFound = true;
                 }
             }
@@ -427,9 +433,9 @@ namespace PlantChillers {
             thisChiller.CapRatCoef(3) = state.dataIPShortCut->rNumericArgs(13);
             if ((state.dataIPShortCut->rNumericArgs(11) + state.dataIPShortCut->rNumericArgs(12) + state.dataIPShortCut->rNumericArgs(13)) == 0.0) {
                 ShowSevereError(state,
-                                std::format("{}: Sum of Capacity Ratio Coef = 0.0, chiller={}",
-                                            state.dataIPShortCut->cCurrentModuleObject,
-                                            state.dataIPShortCut->cAlphaArgs(1)));
+                                EnergyPlus::format("{}: Sum of Capacity Ratio Coef = 0.0, chiller={}",
+                                                   state.dataIPShortCut->cCurrentModuleObject,
+                                                   state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
             thisChiller.PowerRatCoef(1) = state.dataIPShortCut->rNumericArgs(14);
@@ -447,9 +453,10 @@ namespace PlantChillers {
             thisChiller.FlowMode = static_cast<DataPlant::FlowMode>(getEnumValue(DataPlant::FlowModeNamesUC, state.dataIPShortCut->cAlphaArgs(7)));
             if (thisChiller.FlowMode == DataPlant::FlowMode::Invalid) {
                 ShowSevereError(
-                    state, std::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  std::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(7), state.dataIPShortCut->cAlphaArgs(7)));
+                    state,
+                    EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(7), state.dataIPShortCut->cAlphaArgs(7)));
                 ShowContinueError(state, "Available choices are ConstantFlow, NotModulated, or LeavingSetpointModulated");
                 ShowContinueError(state, "Flow mode NotModulated is assumed and the simulation continues.");
                 thisChiller.FlowMode = DataPlant::FlowMode::NotModulated;

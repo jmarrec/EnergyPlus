@@ -47,12 +47,15 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Fmath.hh>
 
-// EnergyPlus Headers
+// Local Headers
 #include <AirflowNetwork/Solver.hpp>
+
+// EnergyPlus Headers
 #include <EnergyPlus/AirLoopHVACDOAS.hh>
 #include <EnergyPlus/Autosizing/SystemAirFlowSizing.hh>
 #include <EnergyPlus/BranchNodeConnections.hh>
@@ -317,9 +320,9 @@ void GetFanInput(EnergyPlusData &state)
         fan->maxAirFlowRate = rNumericArgs(3);
         if (fan->maxAirFlowRate == 0.0) {
             ShowWarningError(state,
-                             std::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
-                                         cCurrentModuleObject,
-                                         fan->Name));
+                             EnergyPlus::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
+                                                cCurrentModuleObject,
+                                                fan->Name));
         }
         fan->maxAirFlowRateIsAutosized = true;
         fan->motorEff = rNumericArgs(4);
@@ -350,7 +353,7 @@ void GetFanInput(EnergyPlusData &state)
         Node::TestCompSet(state, cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(3), cAlphaArgs(4), "Air Nodes");
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
+            ShowFatalError(state, EnergyPlus::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
         }
     } // for (iFanConstant)
 
@@ -397,9 +400,9 @@ void GetFanInput(EnergyPlusData &state)
         fan->maxAirFlowRate = rNumericArgs(3);
         if (fan->maxAirFlowRate == 0.0) {
             ShowWarningError(state,
-                             std::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
-                                         cCurrentModuleObject,
-                                         fan->Name));
+                             EnergyPlus::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
+                                                cCurrentModuleObject,
+                                                fan->Name));
         }
         fan->maxAirFlowRateIsAutosized = true;
         fan->minAirFracMethod = static_cast<MinFlowFracMethod>(getEnumValue(minFlowFracMethodNamesUC, cAlphaArgs(3)));
@@ -415,7 +418,7 @@ void GetFanInput(EnergyPlusData &state)
         fan->coeffs[4] = rNumericArgs(12);
         if (fan->coeffs[0] == 0.0 && fan->coeffs[1] == 0.0 && fan->coeffs[2] == 0.0 && fan->coeffs[3] == 0.0 && fan->coeffs[4] == 0.0) {
             ShowWarningError(state, "Fan Coefficients are all zero.  No Fan power will be reported.");
-            ShowContinueError(state, std::format("For {}, Fan={}", cCurrentModuleObject, cAlphaArgs(1)));
+            ShowContinueError(state, EnergyPlus::format("For {}, Fan={}", cCurrentModuleObject, cAlphaArgs(1)));
         }
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
                                                     cAlphaArgs(4),
@@ -441,7 +444,7 @@ void GetFanInput(EnergyPlusData &state)
         Node::TestCompSet(state, cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(4), cAlphaArgs(5), "Air Nodes");
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
+            ShowFatalError(state, EnergyPlus::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
         }
     } // for (iFanVAV)
 
@@ -482,10 +485,11 @@ void GetFanInput(EnergyPlusData &state)
             ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(2), cAlphaArgs(2));
             ErrorsFound = true;
         } else if (fan->availSched->hasFractionalVal(state)) {
-            ShowWarningCustom(
-                state,
-                eoh,
-                std::format("{}={} has fracdtional values. Only 0.0 in the schedule value turns the fan off.", cAlphaFieldNames(2), cAlphaArgs(2)));
+            ShowWarningCustom(state,
+                              eoh,
+                              EnergyPlus::format("{}={} has fracdtional values. Only 0.0 in the schedule value turns the fan off.",
+                                                 cAlphaFieldNames(2),
+                                                 cAlphaArgs(2)));
         }
 
         fan->totalEff = rNumericArgs(1);
@@ -500,9 +504,9 @@ void GetFanInput(EnergyPlusData &state)
 
         if (fan->maxAirFlowRate == 0.0) {
             ShowWarningError(state,
-                             std::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
-                                         cCurrentModuleObject,
-                                         fan->Name));
+                             EnergyPlus::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
+                                                cCurrentModuleObject,
+                                                fan->Name));
         }
 
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
@@ -556,13 +560,13 @@ void GetFanInput(EnergyPlusData &state)
         } else if (state.dataHeatBal->ZoneAirMassFlow.ZoneFlowAdjustment != DataHeatBalance::AdjustmentType::NoAdjustReturnAndMixing) {
             // do not include adjusted for "balanced" exhaust flow in the zone total return calculation
             ShowWarningError(state,
-                             std::format("{}: {}: invalid {} = {} for {}={}",
-                                         routineName,
-                                         cCurrentModuleObject,
-                                         cAlphaFieldNames(9),
-                                         cAlphaArgs(9),
-                                         cAlphaFieldNames(1),
-                                         cAlphaArgs(1)));
+                             EnergyPlus::format("{}: {}: invalid {} = {} for {}={}",
+                                                routineName,
+                                                cCurrentModuleObject,
+                                                cAlphaFieldNames(9),
+                                                cAlphaArgs(9),
+                                                cAlphaFieldNames(1),
+                                                cAlphaArgs(1)));
             ShowContinueError(state, "When zone air mass flow balance is enforced, this input field should be left blank.");
             ShowContinueError(state, "This schedule will be ignored in the simulation.");
             fan->balancedFractSched = nullptr;
@@ -574,7 +578,7 @@ void GetFanInput(EnergyPlusData &state)
             ErrorsFound = true;
         }
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
+            ShowFatalError(state, EnergyPlus::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
         }
     } // for (iFanExhaust)
 
@@ -621,9 +625,9 @@ void GetFanInput(EnergyPlusData &state)
         fan->maxAirFlowRate = rNumericArgs(3);
         if (fan->maxAirFlowRate == 0.0) {
             ShowWarningError(state,
-                             std::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
-                                         cCurrentModuleObject,
-                                         fan->Name));
+                             EnergyPlus::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
+                                                cCurrentModuleObject,
+                                                fan->Name));
         }
         fan->maxAirFlowRateIsAutosized = true;
         //       the following two structure variables are set here, as well as in InitFan, for the Heat Pump:Water Heater object
@@ -667,7 +671,7 @@ void GetFanInput(EnergyPlusData &state)
         Node::TestCompSet(state, cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(3), cAlphaArgs(4), "Air Nodes");
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
+            ShowFatalError(state, EnergyPlus::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
         }
     } // for (iFanOnOff)
 
@@ -784,9 +788,9 @@ void GetFanInput(EnergyPlusData &state)
         fan->maxAirFlowRate = rNumericArgs(1);
         if (fan->maxAirFlowRate == 0.0) {
             ShowWarningError(state,
-                             std::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
-                                         cCurrentModuleObject,
-                                         fan->Name));
+                             EnergyPlus::format("{}=\"{}\" has specified 0.0 max air flow rate. It will not be used in the simulation.",
+                                                cCurrentModuleObject,
+                                                fan->Name));
         }
         fan->maxAirFlowRateIsAutosized = true;
         fan->minAirFlowRate = rNumericArgs(2);
@@ -835,7 +839,7 @@ void GetFanInput(EnergyPlusData &state)
         fan->endUseSubcategoryName = (NumAlphas > 18) ? cAlphaArgs(19) : "General";
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
+            ShowFatalError(state, EnergyPlus::format("{}: Errors found in input for fan name = {}.  Program terminates.", routineName, fan->Name));
         }
     } // end Number of Component Model FAN Loop
 
@@ -912,8 +916,8 @@ void GetFanInput(EnergyPlusData &state)
         fan->minPowerFlowFrac = rNumericArgs(2);
         fan->deltaPress = rNumericArgs(3);
         if (fan->deltaPress <= 0.0) {
-            ShowSevereError(state,
-                            std::format("{}: {} zero or negative, invalid entry in {}", routineName, cCurrentModuleObject, cNumericFieldNames(3)));
+            ShowSevereError(
+                state, EnergyPlus::format("{}: {} zero or negative, invalid entry in {}", routineName, cCurrentModuleObject, cNumericFieldNames(3)));
             ErrorsFound = true;
         }
         fan->motorEff = rNumericArgs(4);
@@ -935,9 +939,9 @@ void GetFanInput(EnergyPlusData &state)
 
         if (lAlphaFieldBlanks(7)) {
             if (fan->speedControl == SpeedControl::Continuous) {
-                ShowWarningError(state, std::format("{}{}=\"{}\", invalid entry.", routineName, cCurrentModuleObject, cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  std::format("Continuous speed control requires a fan power curve in {} = {}", cAlphaFieldNames(7), cAlphaArgs(7)));
+                ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\", invalid entry.", routineName, cCurrentModuleObject, cAlphaArgs(1)));
+                ShowContinueError(
+                    state, EnergyPlus::format("Continuous speed control requires a fan power curve in {} = {}", cAlphaFieldNames(7), cAlphaArgs(7)));
                 ErrorsFound = true;
             }
         } else if ((fan->powerModFuncFlowFracCurveNum = Curve::GetCurveIndex(state, cAlphaArgs(7))) == 0) {
@@ -991,7 +995,7 @@ void GetFanInput(EnergyPlusData &state)
                 }
             } else {
                 // field set input does not match number of speeds, throw warning
-                ShowSevereError(state, std::format("{}: {}=\"{}\", invalid entry.", routineName, cCurrentModuleObject, cAlphaArgs(1)));
+                ShowSevereError(state, EnergyPlus::format("{}: {}=\"{}\", invalid entry.", routineName, cCurrentModuleObject, cAlphaArgs(1)));
                 ShowContinueError(state, "Fan with Discrete speed control does not have input for speed data that matches the number of speeds.");
                 ErrorsFound = true;
             }
@@ -1003,7 +1007,7 @@ void GetFanInput(EnergyPlusData &state)
                 }
             }
             if (increasingOrderError) {
-                ShowSevereError(state, std::format("{}: {}=\"{}\", invalid entry.", routineName, cCurrentModuleObject, cAlphaArgs(1)));
+                ShowSevereError(state, EnergyPlus::format("{}: {}=\"{}\", invalid entry.", routineName, cCurrentModuleObject, cAlphaArgs(1)));
                 ShowContinueError(state,
                                   "Fan with Discrete speed control and multiple speed levels does not have input with flow fractions arranged in "
                                   "increasing order.");
@@ -2006,8 +2010,7 @@ void FanComponent::simulateOnOff(EnergyPlusData &state, ObjexxFCL::Optional<Real
                     if (oneTimePowerRatioCheck && !state.dataGlobal->WarmupFlag) {
                         ShowSevereError(state, std::format("{} = {}\"", HVAC::fanTypeNames[(int)type], Name));
                         ShowContinueError(state, "Error in Fan Power Ratio curve. Curve output less than 0.0.");
-                        ShowContinueError(state,
-                                          EnergyPlus::format("Curve output = {:.5T}, fan speed ratio = {:.5T}", _speedRaisedToPower, _speedRatio));
+                        ShowContinueError(state, std::format("Curve output = {:.5f}, fan speed ratio = {:.5f}", _speedRaisedToPower, _speedRatio()));
                         ShowContinueError(state, "Check curve coefficients to ensure proper power ratio as a function of fan speed ratio.");
                         ShowContinueError(state, "Resetting Fan Power Ratio curve output to 0.0 and the simulation continues.");
                         ShowContinueErrorTimeStamp(state, "Occurrence info:");
@@ -2021,8 +2024,8 @@ void FanComponent::simulateOnOff(EnergyPlusData &state, ObjexxFCL::Optional<Real
                         if (oneTimeEffRatioCheck && !state.dataGlobal->WarmupFlag) {
                             ShowSevereError(state, std::format("{} = {}\"", HVAC::fanTypeNames[(int)type], Name));
                             ShowContinueError(state, "Error in Fan Efficiency Ratio curve. Curve output less than 0.01.");
-                            ShowContinueError(
-                                state, EnergyPlus::format("Curve output = {:.5T}, fan speed ratio = {:.5T}", _effRatioAtSpeedRatio, _speedRatio));
+                            ShowContinueError(state,
+                                              std::format("Curve output = {:.5f}, fan speed ratio = {:.5f}", _effRatioAtSpeedRatio, _speedRatio()));
                             ShowContinueError(state, "Check curve coefficients to ensure proper efficiency ratio as a function of fan speed ratio.");
                             ShowContinueError(state, "Resetting Fan Efficiency Ratio curve output to 0.01 and the simulation continues.");
                             ShowContinueErrorTimeStamp(state, "Occurrence info:");

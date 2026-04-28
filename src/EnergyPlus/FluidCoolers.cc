@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -112,7 +113,7 @@ FluidCoolerspecs *FluidCoolerspecs::factory(EnergyPlusData &state, DataPlant::Pl
     }
 
     // If we didn't find it, fatal
-    ShowFatalError(state, std::format("FluidCooler::factory: Error getting inputs for cooler named: {}", objectName));
+    ShowFatalError(state, EnergyPlus::format("FluidCooler::factory: Error getting inputs for cooler named: {}", objectName));
     // Shut up the compiler
     return nullptr;
 }
@@ -494,68 +495,70 @@ bool FluidCoolerspecs::validateSingleSpeedInputs(EnergyPlusData &state,
     //   wetbulb temperature must be specified for the both the performance input methods
     if (this->DesignEnteringWaterTemp <= 0.0) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(3)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(3)));
         ErrorsFound = true;
     }
     if (this->DesignEnteringAirTemp <= 0.0) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(4)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(4)));
         ErrorsFound = true;
     }
     if (this->DesignEnteringAirWetBulbTemp <= 0.0) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(5)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(5)));
         ErrorsFound = true;
     }
     if (this->DesignEnteringWaterTemp <= this->DesignEnteringAirTemp) {
         ShowSevereError(
             state,
-            std::format("{}= \"{}\",{} must be greater than {}.", cCurrentModuleObject, AlphArray(1), cNumericFieldNames(3), cNumericFieldNames(4)));
+            EnergyPlus::format(
+                "{}= \"{}\",{} must be greater than {}.", cCurrentModuleObject, AlphArray(1), cNumericFieldNames(3), cNumericFieldNames(4)));
         ErrorsFound = true;
     }
     if (this->DesignEnteringAirTemp <= this->DesignEnteringAirWetBulbTemp) {
         ShowSevereError(
             state,
-            std::format("{}= \"{}\",{} must be greater than {}.", cCurrentModuleObject, AlphArray(1), cNumericFieldNames(4), cNumericFieldNames(5)));
+            EnergyPlus::format(
+                "{}= \"{}\",{} must be greater than {}.", cCurrentModuleObject, AlphArray(1), cNumericFieldNames(4), cNumericFieldNames(5)));
         ErrorsFound = true;
     }
     if (this->HighSpeedAirFlowRate <= 0.0 && this->HighSpeedAirFlowRate != DataSizing::AutoSize) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(7),
-                                    cAlphaFieldNames(4),
-                                    AlphArray(4)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(7),
+                                           cAlphaFieldNames(4),
+                                           AlphArray(4)));
         ErrorsFound = true;
     }
     if (this->DesignWaterFlowRate <= 0.0 && !this->DesignWaterFlowRateWasAutoSized) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(6),
-                                    cAlphaFieldNames(4),
-                                    AlphArray(4)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(6),
+                                           cAlphaFieldNames(4),
+                                           AlphArray(4)));
         ErrorsFound = true;
     }
     if (this->HighSpeedFanPower <= 0.0 && this->HighSpeedFanPower != DataSizing::AutoSize) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(8),
-                                    cAlphaFieldNames(4),
-                                    AlphArray(4)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(8),
+                                           cAlphaFieldNames(4),
+                                           AlphArray(4)));
         ErrorsFound = true;
     }
 
@@ -564,38 +567,38 @@ bool FluidCoolerspecs::validateSingleSpeedInputs(EnergyPlusData &state,
         this->PerformanceInputMethod_Num = PerfInputMethod::U_FACTOR;
         if (this->HighSpeedFluidCoolerUA <= 0.0 && this->HighSpeedFluidCoolerUA != DataSizing::AutoSize) {
             ShowSevereError(state,
-                            std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
-                                        cCurrentModuleObject,
-                                        AlphArray(1),
-                                        cNumericFieldNames(1),
-                                        cAlphaFieldNames(4),
-                                        AlphArray(4)));
+                            EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
+                                               cCurrentModuleObject,
+                                               AlphArray(1),
+                                               cNumericFieldNames(1),
+                                               cAlphaFieldNames(4),
+                                               AlphArray(4)));
             ErrorsFound = true;
         }
     } else if (Util::SameString(AlphArray(4), "NominalCapacity")) {
         this->PerformanceInputMethod_Num = PerfInputMethod::NOMINAL_CAPACITY;
         if (this->FluidCoolerNominalCapacity <= 0.0) {
             ShowSevereError(state,
-                            std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
-                                        cCurrentModuleObject,
-                                        AlphArray(1),
-                                        cNumericFieldNames(2),
-                                        cAlphaFieldNames(4),
-                                        AlphArray(4)));
+                            EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
+                                               cCurrentModuleObject,
+                                               AlphArray(1),
+                                               cNumericFieldNames(2),
+                                               cAlphaFieldNames(4),
+                                               AlphArray(4)));
             ErrorsFound = true;
         }
         if (this->HighSpeedFluidCoolerUA != 0.0) {
             if (this->HighSpeedFluidCoolerUA > 0.0) {
                 ShowWarningError(state,
-                                 std::format("{}= \"{}\". Nominal fluid cooler capacity and design fluid cooler UA have been specified.",
-                                             cCurrentModuleObject,
-                                             this->Name));
+                                 EnergyPlus::format("{}= \"{}\". Nominal fluid cooler capacity and design fluid cooler UA have been specified.",
+                                                    cCurrentModuleObject,
+                                                    this->Name));
             } else {
                 ShowWarningError(
                     state,
-                    std::format("{}= \"{}\". Nominal fluid cooler capacity has been specified and design fluid cooler UA is being autosized.",
-                                cCurrentModuleObject,
-                                this->Name));
+                    EnergyPlus::format("{}= \"{}\". Nominal fluid cooler capacity has been specified and design fluid cooler UA is being autosized.",
+                                       cCurrentModuleObject,
+                                       this->Name));
             }
             ShowContinueError(state,
                               "Design fluid cooler UA field must be left blank when nominal fluid cooler capacity performance input method is used.");
@@ -603,8 +606,8 @@ bool FluidCoolerspecs::validateSingleSpeedInputs(EnergyPlusData &state,
             this->HighSpeedFluidCoolerUA = 0.0;
         }
     } else { // Fluid cooler performance input method is not specified as a valid "choice"
-        ShowSevereError(state,
-                        std::format("{}= \"{}\", invalid {} = \"{}\".", cCurrentModuleObject, AlphArray(1), cAlphaFieldNames(4), AlphArray(4)));
+        ShowSevereError(
+            state, EnergyPlus::format("{}= \"{}\", invalid {} = \"{}\".", cCurrentModuleObject, AlphArray(1), cAlphaFieldNames(4), AlphArray(4)));
         ShowContinueError(state, R"(... must be "UFactorTimesAreaAndDesignWaterFlowRate" or "NominalCapacity".)");
         ErrorsFound = true;
     }
@@ -636,32 +639,32 @@ bool FluidCoolerspecs::validateTwoSpeedInputs(EnergyPlusData &state,
     //   wetbulb temperature must be specified for the both the performance input methods
     if (this->DesignEnteringWaterTemp <= 0.0) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(7)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(7)));
         ErrorsFound = true;
     }
     if (this->DesignEnteringAirTemp <= 0.0) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(8)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(8)));
         ErrorsFound = true;
     }
     if (this->DesignEnteringAirWetBulbTemp <= 0.0) {
         ShowSevereError(state,
-                        std::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
-                                    cCurrentModuleObject,
-                                    AlphArray(1),
-                                    cNumericFieldNames(9)));
+                        EnergyPlus::format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 ",
+                                           cCurrentModuleObject,
+                                           AlphArray(1),
+                                           cNumericFieldNames(9)));
         ErrorsFound = true;
     }
     if (this->DesignEnteringWaterTemp <= this->DesignEnteringAirTemp) {
         ShowSevereError(
             state,
-            std::format(
+            EnergyPlus::format(
                 "{} = \"{}\", {} must be greater than {}.", cCurrentModuleObject, AlphArray(1), cNumericFieldNames(7), cNumericFieldNames(8)));
         ErrorsFound = true;
     }
@@ -1951,9 +1954,8 @@ void FluidCoolerspecs::update(EnergyPlusData &state)
         if (this->HighMassFlowErrorCount < 2) {
             ShowWarningError(state, std::format("{} \"{}\"", DataPlant::PlantEquipTypeNames[static_cast<int>(this->FluidCoolerType)], this->Name));
             ShowContinueError(state, " Condenser Loop Mass Flow Rate is much greater than the fluid coolers design mass flow rate.");
-            ShowContinueError(state,
-                              EnergyPlus::format(" Condenser Loop Mass Flow Rate = {:.6T}", state.dataLoopNodes->Node(waterOutletNode).MassFlowRate));
-            ShowContinueError(state, EnergyPlus::format(" Fluid Cooler Design Mass Flow Rate   = {:.6T}", this->DesWaterMassFlowRate));
+            ShowContinueError(state, std::format(" Condenser Loop Mass Flow Rate = {:.6f}", state.dataLoopNodes->Node(waterOutletNode).MassFlowRate));
+            ShowContinueError(state, std::format(" Fluid Cooler Design Mass Flow Rate   = {:.6f}", this->DesWaterMassFlowRate));
             ShowContinueErrorTimeStamp(state, "");
         } else {
             ShowRecurringWarningErrorAtEnd(
@@ -2000,7 +2002,7 @@ void FluidCoolerspecs::update(EnergyPlusData &state)
             ShowWarningError(state, std::format("{} \"{}\"", DataPlant::PlantEquipTypeNames[static_cast<int>(this->FluidCoolerType)], this->Name));
             ShowContinueError(state, " Fluid cooler water mass flow rate near zero.");
             ShowContinueErrorTimeStamp(state, "");
-            ShowContinueError(state, EnergyPlus::format("Actual Mass flow = {:.2T}", this->WaterMassFlowRate));
+            ShowContinueError(state, std::format("Actual Mass flow = {:.2f}", this->WaterMassFlowRate));
         } else {
             ShowRecurringWarningErrorAtEnd(state,
                                            std::format("{} \"{}\"  Fluid cooler water mass flow rate is near zero. Error continues...",

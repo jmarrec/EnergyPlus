@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -152,25 +153,26 @@ namespace OutdoorAirUnit {
         if (CompIndex == 0) {
             OAUnitNum = Util::FindItemInList(CompName, state.dataOutdoorAirUnit->OutAirUnit);
             if (OAUnitNum == 0) {
-                ShowFatalError(state, std::format("ZoneHVAC:OutdoorAirUnit not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("ZoneHVAC:OutdoorAirUnit not found={}", CompName));
             }
             CompIndex = OAUnitNum;
         } else {
             OAUnitNum = CompIndex;
             if (OAUnitNum > state.dataOutdoorAirUnit->NumOfOAUnits || OAUnitNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimOutdoorAirUnit:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                           OAUnitNum,
-                                           state.dataOutdoorAirUnit->NumOfOAUnits,
-                                           CompName));
+                               EnergyPlus::format("SimOutdoorAirUnit:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                                  OAUnitNum,
+                                                  state.dataOutdoorAirUnit->NumOfOAUnits,
+                                                  CompName));
             }
             if (state.dataOutdoorAirUnit->CheckEquipName(OAUnitNum)) {
                 if (CompName != state.dataOutdoorAirUnit->OutAirUnit(OAUnitNum).Name) {
-                    ShowFatalError(state,
-                                   std::format("SimOutdoorAirUnit: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                               OAUnitNum,
-                                               CompName,
-                                               state.dataOutdoorAirUnit->OutAirUnit(OAUnitNum).Name));
+                    ShowFatalError(
+                        state,
+                        EnergyPlus::format("SimOutdoorAirUnit: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                           OAUnitNum,
+                                           CompName,
+                                           state.dataOutdoorAirUnit->OutAirUnit(OAUnitNum).Name));
                 }
                 state.dataOutdoorAirUnit->CheckEquipName(OAUnitNum) = false;
             }
@@ -322,17 +324,17 @@ namespace OutdoorAirUnit {
             if (thisOutAirUnit.ZonePtr == 0) {
                 if (lAlphaBlanks(3)) {
                     ShowSevereError(state,
-                                    std::format("{}=\"{}\" invalid {} is required but input is blank.",
-                                                CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                state.dataIPShortCut->cAlphaArgs(3)));
+                                    EnergyPlus::format("{}=\"{}\" invalid {} is required but input is blank.",
+                                                       CurrentModuleObject,
+                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                       state.dataIPShortCut->cAlphaArgs(3)));
                 } else {
                     ShowSevereError(state,
-                                    std::format("{}=\"{}\" invalid {}=\"{}\" not found.",
-                                                CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                state.dataIPShortCut->cAlphaArgs(3),
-                                                state.dataIPShortCut->cAlphaArgs(3)));
+                                    EnergyPlus::format("{}=\"{}\" invalid {}=\"{}\" not found.",
+                                                       CurrentModuleObject,
+                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                       state.dataIPShortCut->cAlphaArgs(3),
+                                                       state.dataIPShortCut->cAlphaArgs(3)));
                 }
                 ErrorsFound = true;
             }
@@ -376,7 +378,8 @@ namespace OutdoorAirUnit {
                 thisOutAirUnit.ExtFan = false;
                 if (!state.dataHeatBal->ZoneAirMassFlow.EnforceZoneMassBalance) {
                     ShowWarningError(
-                        state, std::format("{}=\"{}\", {} is blank.", CurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1), cAlphaFields(7)));
+                        state,
+                        EnergyPlus::format("{}=\"{}\", {} is blank.", CurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1), cAlphaFields(7)));
                     ShowContinueError(state,
                                       "Unbalanced mass flow rates between supply from outdoor air and exhaust from zone air will be introduced.");
                 }
@@ -406,11 +409,11 @@ namespace OutdoorAirUnit {
             if ((thisOutAirUnit.ExtFan) && (!state.dataHeatBal->ZoneAirMassFlow.EnforceZoneMassBalance)) {
                 if (NumArray(2) != NumArray(1)) {
                     ShowWarningError(state,
-                                     std::format("{}=\"{}\", {} and {} are not equal. This may cause unbalanced flow.",
-                                                 CurrentModuleObject,
-                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                 cNumericFields(1),
-                                                 cNumericFields(2)));
+                                     EnergyPlus::format("{}=\"{}\", {} and {} are not equal. This may cause unbalanced flow.",
+                                                        CurrentModuleObject,
+                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                        cNumericFields(1),
+                                                        cNumericFields(2)));
                     ShowContinueError(state,
                                       EnergyPlus::format("{}={:.3R}= and {}{:.3R}", cNumericFields(1), NumArray(1), cNumericFields(2), NumArray(2)));
                 }
@@ -429,15 +432,16 @@ namespace OutdoorAirUnit {
                            (!state.dataHeatBal->ZoneAirMassFlow.EnforceZoneMassBalance)) {
                     ShowWarningError(
                         state,
-                        std::format("{}=\"{}\", different schedule inputs for outdoor air and exhaust air schedules may cause unbalanced mass flow.",
-                                    CurrentModuleObject,
-                                    state.dataIPShortCut->cAlphaArgs(1)));
+                        EnergyPlus::format(
+                            "{}=\"{}\", different schedule inputs for outdoor air and exhaust air schedules may cause unbalanced mass flow.",
+                            CurrentModuleObject,
+                            state.dataIPShortCut->cAlphaArgs(1)));
                     ShowContinueError(state,
-                                      std::format("{}={} and {}={}",
-                                                  cAlphaFields(4),
-                                                  state.dataIPShortCut->cAlphaArgs(4),
-                                                  cAlphaFields(8),
-                                                  state.dataIPShortCut->cAlphaArgs(8)));
+                                      EnergyPlus::format("{}={} and {}={}",
+                                                         cAlphaFields(4),
+                                                         state.dataIPShortCut->cAlphaArgs(4),
+                                                         cAlphaFields(8),
+                                                         state.dataIPShortCut->cAlphaArgs(8)));
                 }
 
                 SetUpCompSets(
@@ -501,10 +505,10 @@ namespace OutdoorAirUnit {
             } else {
                 if (thisOutAirUnit.ExtFan) {
                     ShowSevereError(state,
-                                    std::format("{}=\"{}\" invalid {} cannot be blank when there is an exhaust fan.",
-                                                CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                cAlphaFields(14)));
+                                    EnergyPlus::format("{}=\"{}\" invalid {} cannot be blank when there is an exhaust fan.",
+                                                       CurrentModuleObject,
+                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                       cAlphaFields(14)));
                     ErrorsFound = true;
                 }
             }
@@ -534,10 +538,10 @@ namespace OutdoorAirUnit {
                 CheckAndAddAirNodeNumber(state, thisOutAirUnit.OutsideAirNode, IsValid);
                 if (!IsValid) {
                     ShowWarningError(state,
-                                     std::format("{}=\"{}\", Adding OutdoorAir:Node={}",
-                                                 CurrentModuleObject,
-                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                 state.dataIPShortCut->cAlphaArgs(12)));
+                                     EnergyPlus::format("{}=\"{}\", Adding OutdoorAir:Node={}",
+                                                        CurrentModuleObject,
+                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                        state.dataIPShortCut->cAlphaArgs(12)));
                 }
             }
 
@@ -721,10 +725,10 @@ namespace OutdoorAirUnit {
                         }
                         default: {
                             ShowSevereError(state,
-                                            std::format("{}= \"{}\" invalid Outside Air Component=\"{}\".",
-                                                        CurrentModuleObject,
-                                                        AlphArray(1),
-                                                        CompTypeNames[static_cast<int>(oaEquip.Type)]));
+                                            EnergyPlus::format("{}= \"{}\" invalid Outside Air Component=\"{}\".",
+                                                               CurrentModuleObject,
+                                                               AlphArray(1),
+                                                               CompTypeNames[static_cast<int>(oaEquip.Type)]));
                             ErrorsFound = true;
                         }
                         }
@@ -804,19 +808,19 @@ namespace OutdoorAirUnit {
 
                 } else { // when ListNum<0
                     ShowSevereError(state,
-                                    std::format("{} = \"{}\" invalid {}=\"{}\" not found.",
-                                                CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                cAlphaFields(16),
-                                                state.dataIPShortCut->cAlphaArgs(16)));
+                                    EnergyPlus::format("{} = \"{}\" invalid {}=\"{}\" not found.",
+                                                       CurrentModuleObject,
+                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                       cAlphaFields(16),
+                                                       state.dataIPShortCut->cAlphaArgs(16)));
                     ErrorsFound = true;
                 }
             } else { // when Equipment list is left blanked
                 ShowSevereError(state,
-                                std::format("{} = \"{}\" invalid {} is blank and must be entered.",
-                                            CurrentModuleObject,
-                                            state.dataIPShortCut->cAlphaArgs(1),
-                                            cAlphaFields(16)));
+                                EnergyPlus::format("{} = \"{}\" invalid {} is blank and must be entered.",
+                                                   CurrentModuleObject,
+                                                   state.dataIPShortCut->cAlphaArgs(1),
+                                                   cAlphaFields(16)));
                 ErrorsFound = true;
             }
             if (!lAlphaBlanks(17)) {
@@ -825,7 +829,7 @@ namespace OutdoorAirUnit {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}Errors found in getting {}.", RoutineName, CurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("{}Errors found in getting {}.", RoutineName, CurrentModuleObject));
         }
 
         AlphArray.deallocate();
@@ -1070,9 +1074,10 @@ namespace OutdoorAirUnit {
                 }
                 ShowSevereError(
                     state,
-                    std::format("InitOutdoorAirUnit: Zone Outdoor Air Unit=[{},{}] is not on any ZoneHVAC:EquipmentList.  It will not be simulated.",
-                                CurrentModuleObject,
-                                state.dataOutdoorAirUnit->OutAirUnit(Loop).Name));
+                    EnergyPlus::format(
+                        "InitOutdoorAirUnit: Zone Outdoor Air Unit=[{},{}] is not on any ZoneHVAC:EquipmentList.  It will not be simulated.",
+                        CurrentModuleObject,
+                        state.dataOutdoorAirUnit->OutAirUnit(Loop).Name));
             }
         }
 
@@ -1312,9 +1317,10 @@ namespace OutdoorAirUnit {
                             if ((std::abs(OutAirVolFlowDes - OutAirVolFlowUser) / OutAirVolFlowUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                 BaseSizer::reportSizerOutput(
                                     state, ZoneHVACOAUnit, thisOutAirUnit.Name, "Design Size Outdoor Air Flow Rate [m3/s]", OutAirVolFlowDes);
-                                ShowMessage(state,
-                                            std::format("SizeOutdoorAirUnit: Potential issue with equipment sizing for ZoneHVAC:OutdoorAirUnit {}",
-                                                        thisOutAirUnit.Name));
+                                ShowMessage(
+                                    state,
+                                    EnergyPlus::format("SizeOutdoorAirUnit: Potential issue with equipment sizing for ZoneHVAC:OutdoorAirUnit {}",
+                                                       thisOutAirUnit.Name));
                                 ShowContinueError(state,
                                                   EnergyPlus::format("User-Specified Outdoor Air Flow Rate of {:.5R} [m3/s]", OutAirVolFlowUser));
                                 ShowContinueError(
@@ -1354,9 +1360,10 @@ namespace OutdoorAirUnit {
                             if ((std::abs(ExtAirVolFlowDes - ExtAirVolFlowUser) / ExtAirVolFlowUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                 BaseSizer::reportSizerOutput(
                                     state, ZoneHVACOAUnit, thisOutAirUnit.Name, "Design Size Exhaust Air Flow Rate [m3/s]", ExtAirVolFlowDes);
-                                ShowMessage(state,
-                                            std::format("SizeOutdoorAirUnit: Potential issue with equipment sizing for ZoneHVAC:OutdoorAirUnit {}",
-                                                        thisOutAirUnit.Name));
+                                ShowMessage(
+                                    state,
+                                    EnergyPlus::format("SizeOutdoorAirUnit: Potential issue with equipment sizing for ZoneHVAC:OutdoorAirUnit {}",
+                                                       thisOutAirUnit.Name));
                                 ShowContinueError(state,
                                                   EnergyPlus::format("User-Specified Exhaust Air Flow Rate of {:.5R} [m3/s]", ExtAirVolFlowUser));
                                 ShowContinueError(

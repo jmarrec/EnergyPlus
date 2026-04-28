@@ -507,9 +507,10 @@ namespace PCMStorage {
 
         int matNum = Material::GetMaterialNum(state, state.dataIPShortCut->cAlphaArgs(7));
         if (matNum == 0) {
-            ShowSevereError(
-                state,
-                std::format("{}: Invalid PCM material name: {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(7)));
+            ShowSevereError(state,
+                            EnergyPlus::format("{}: Invalid PCM material name: {}",
+                                               state.dataIPShortCut->cCurrentModuleObject,
+                                               state.dataIPShortCut->cAlphaArgs(7)));
             ErrorsFound = true;
         } else {
             // Obtains conduction FD related parameters from input file
@@ -522,7 +523,8 @@ namespace PCMStorage {
 
             if (!mat->hasPCM) {
                 ShowSevereError(
-                    state, std::format("{}: Material {} is not a phase change material.", state.dataIPShortCut->cCurrentModuleObject, mat->Name));
+                    state,
+                    EnergyPlus::format("{}: Material {} is not a phase change material.", state.dataIPShortCut->cCurrentModuleObject, mat->Name));
                 ErrorsFound = true;
             } else {
                 PCM.PCMMaterialNum = matNum;
@@ -629,7 +631,7 @@ namespace PCMStorage {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
         }
     }
 } // namespace PCMStorage

@@ -48,10 +48,10 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-// #include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Autosizing/Base.hh>
@@ -146,7 +146,7 @@ void SimPumps(EnergyPlusData &state,
     if (PumpIndex == 0) {
         PumpNum = Util::FindItemInList(PumpName, state.dataPumps->PumpEquip); // Determine which pump to simulate
         if (PumpNum == 0) {
-            ShowFatalError(state, std::format("ManagePumps: Pump requested not found ={}", PumpName)); // Catch any bad names before crashing
+            ShowFatalError(state, EnergyPlus::format("ManagePumps: Pump requested not found ={}", PumpName)); // Catch any bad names before crashing
         }
         PumpIndex = PumpNum;
     } else {
@@ -155,15 +155,15 @@ void SimPumps(EnergyPlusData &state,
             if (PumpNum > state.dataPumps->NumPumps || PumpNum < 1) {
                 ShowFatalError(
                     state,
-                    std::format(
+                    EnergyPlus::format(
                         "ManagePumps: Invalid PumpIndex passed={}, Number of Pumps={}, Pump name={}", PumpNum, state.dataPumps->NumPumps, PumpName));
             }
             if (PumpName != state.dataPumps->PumpEquip(PumpNum).Name) {
                 ShowFatalError(state,
-                               std::format("ManagePumps: Invalid PumpIndex passed={}, Pump name={}, stored Pump Name for that index={}",
-                                           PumpNum,
-                                           PumpName,
-                                           state.dataPumps->PumpEquip(PumpNum).Name));
+                               EnergyPlus::format("ManagePumps: Invalid PumpIndex passed={}, Pump name={}, stored Pump Name for that index={}",
+                                                  PumpNum,
+                                                  PumpName,
+                                                  state.dataPumps->PumpEquip(PumpNum).Name));
             }
             state.dataPumps->PumpEquip(PumpNum).CheckEquipName = false;
         }
@@ -314,11 +314,12 @@ void GetPumpInput(EnergyPlusData &state)
         thisPump.PumpControl = static_cast<PumpControlType>(getEnumValue(pumpCtrlTypeNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(4))));
         if (thisPump.PumpControl == PumpControlType::Invalid) {
             ShowWarningError(
-                state, std::format("{}{}=\"{}\", Invalid {}", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaFieldNames(4)));
+                state,
+                EnergyPlus::format("{}{}=\"{}\", Invalid {}", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaFieldNames(4)));
             ShowContinueError(state,
-                              std::format("Entered Value=[{}]. {} has been set to Continuous for this pump.",
-                                          thisInput->cAlphaArgs(4),
-                                          thisInput->cAlphaFieldNames(4)));
+                              EnergyPlus::format("Entered Value=[{}]. {} has been set to Continuous for this pump.",
+                                                 thisInput->cAlphaArgs(4),
+                                                 thisInput->cAlphaFieldNames(4)));
             thisPump.PumpControl = PumpControlType::Continuous;
         }
 
@@ -350,16 +351,17 @@ void GetPumpInput(EnergyPlusData &state)
         } else if (!thisPump.NomVolFlowRateWasAutoSized && (thisPump.MinVolFlowRate > (minToMaxRatioMax * thisPump.NomVolFlowRate))) {
             // Check that the minimum isn't greater than the maximum
             ShowWarningError(
-                state, std::format("{}{}=\"{}\", Invalid '{}'", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cNumericFieldNames(10)));
+                state,
+                EnergyPlus::format("{}{}=\"{}\", Invalid '{}'", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cNumericFieldNames(10)));
             ShowContinueError(state,
-                              EnergyPlus::format("Entered Value=[{:.5T}] is above or too close (equal) to the {}=[{:.5T}].",
+                              EnergyPlus::format("Entered Value=[{:.5f}] is above or too close (equal) to the {}=[{:.5f}].",
                                                  thisPump.MinVolFlowRate,
                                                  thisInput->cNumericFieldNames(1),
                                                  thisPump.NomVolFlowRate));
             ShowContinueError(state,
-                              std::format("Resetting value of '{}' to the value of 99% of '{}'.",
-                                          thisInput->cNumericFieldNames(10),
-                                          thisInput->cNumericFieldNames(1)));
+                              EnergyPlus::format("Resetting value of '{}' to the value of 99% of '{}'.",
+                                                 thisInput->cNumericFieldNames(10),
+                                                 thisInput->cNumericFieldNames(1)));
             // Set min to roughly max, but not quite, otherwise it can't turn on, ever
             thisPump.MinVolFlowRate = minToMaxRatioMax * thisPump.NomVolFlowRate;
         }
@@ -454,10 +456,10 @@ void GetPumpInput(EnergyPlusData &state)
 
             default: {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", VFD Control type entered is invalid.  Use one of the key choice entries.",
-                                            RoutineName,
-                                            cCurrentModuleObject,
-                                            thisPump.Name));
+                                EnergyPlus::format("{}{}=\"{}\", VFD Control type entered is invalid.  Use one of the key choice entries.",
+                                                   RoutineName,
+                                                   cCurrentModuleObject,
+                                                   thisPump.Name));
                 ErrorsFound = true;
             } break;
             }
@@ -472,11 +474,11 @@ void GetPumpInput(EnergyPlusData &state)
                 }
             } else {
                 ShowSevereError(state,
-                                std::format("{}=\"{}\" invalid {}=\"{}\" not found.",
-                                            cCurrentModuleObject,
-                                            thisPump.Name,
-                                            thisInput->cAlphaFieldNames(13),
-                                            thisInput->cAlphaArgs(13)));
+                                EnergyPlus::format("{}=\"{}\" invalid {}=\"{}\" not found.",
+                                                   cCurrentModuleObject,
+                                                   thisPump.Name,
+                                                   thisInput->cAlphaFieldNames(13),
+                                                   thisInput->cAlphaArgs(13)));
                 ErrorsFound = true;
             }
         }
@@ -486,10 +488,10 @@ void GetPumpInput(EnergyPlusData &state)
                 static_cast<PowerSizingMethod>(getEnumValue(powerSizingMethodNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(14))));
             if (thisPump.powerSizingMethod == PowerSizingMethod::Invalid) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", sizing method type entered is invalid.  Use one of the key choice entries.",
-                                            RoutineName,
-                                            cCurrentModuleObject,
-                                            thisPump.Name));
+                                EnergyPlus::format("{}{}=\"{}\", sizing method type entered is invalid.  Use one of the key choice entries.",
+                                                   RoutineName,
+                                                   cCurrentModuleObject,
+                                                   thisPump.Name));
                 ErrorsFound = true;
             }
         }
@@ -589,11 +591,12 @@ void GetPumpInput(EnergyPlusData &state)
 
         if (thisPump.PumpControl == PumpControlType::Invalid) {
             ShowWarningError(
-                state, std::format("{}{}=\"{}\", Invalid {}", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaFieldNames(4)));
+                state,
+                EnergyPlus::format("{}{}=\"{}\", Invalid {}", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaFieldNames(4)));
             ShowContinueError(state,
-                              std::format("Entered Value=[{}]. {} has been set to Continuous for this pump.",
-                                          thisInput->cAlphaArgs(4),
-                                          thisInput->cAlphaFieldNames(4)));
+                              EnergyPlus::format("Entered Value=[{}]. {} has been set to Continuous for this pump.",
+                                                 thisInput->cAlphaArgs(4),
+                                                 thisInput->cAlphaFieldNames(4)));
             thisPump.PumpControl = PumpControlType::Continuous;
         }
 
@@ -641,11 +644,11 @@ void GetPumpInput(EnergyPlusData &state)
                 }
             } else {
                 ShowSevereError(state,
-                                std::format("{}=\"{}\" invalid {}=\"{}\" not found.",
-                                            cCurrentModuleObject,
-                                            thisPump.Name,
-                                            thisInput->cAlphaFieldNames(7),
-                                            thisInput->cAlphaArgs(7)));
+                                EnergyPlus::format("{}=\"{}\" invalid {}=\"{}\" not found.",
+                                                   cCurrentModuleObject,
+                                                   thisPump.Name,
+                                                   thisInput->cAlphaFieldNames(7),
+                                                   thisInput->cAlphaArgs(7)));
                 ErrorsFound = true;
             }
         }
@@ -655,10 +658,10 @@ void GetPumpInput(EnergyPlusData &state)
                 static_cast<PowerSizingMethod>(getEnumValue(powerSizingMethodNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(8))));
             if (thisPump.powerSizingMethod == PowerSizingMethod::Invalid) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", sizing method type entered is invalid.  Use one of the key choice entries.",
-                                            RoutineName,
-                                            cCurrentModuleObject,
-                                            thisPump.Name));
+                                EnergyPlus::format("{}{}=\"{}\", sizing method type entered is invalid.  Use one of the key choice entries.",
+                                                   RoutineName,
+                                                   cCurrentModuleObject,
+                                                   thisPump.Name));
                 ErrorsFound = true;
             }
         }
@@ -759,11 +762,11 @@ void GetPumpInput(EnergyPlusData &state)
                 }
             } else {
                 ShowSevereError(state,
-                                std::format("{}=\"{}\" invalid {}=\"{}\" not found.",
-                                            cCurrentModuleObject,
-                                            thisPump.Name,
-                                            thisInput->cAlphaFieldNames(5),
-                                            thisInput->cAlphaArgs(5)));
+                                EnergyPlus::format("{}=\"{}\" invalid {}=\"{}\" not found.",
+                                                   cCurrentModuleObject,
+                                                   thisPump.Name,
+                                                   thisInput->cAlphaFieldNames(5),
+                                                   thisInput->cAlphaArgs(5)));
                 ErrorsFound = true;
             }
         }
@@ -787,10 +790,10 @@ void GetPumpInput(EnergyPlusData &state)
                 static_cast<PowerSizingMethod>(getEnumValue(powerSizingMethodNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(6))));
             if (thisPump.powerSizingMethod == PowerSizingMethod::Invalid) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}\", sizing method type entered is invalid.  Use one of the key choice entries.",
-                                            RoutineName,
-                                            cCurrentModuleObject,
-                                            thisPump.Name));
+                                EnergyPlus::format("{}{}=\"{}\", sizing method type entered is invalid.  Use one of the key choice entries.",
+                                                   RoutineName,
+                                                   cCurrentModuleObject,
+                                                   thisPump.Name));
                 ErrorsFound = true;
             }
         }
@@ -865,7 +868,8 @@ void GetPumpInput(EnergyPlusData &state)
             thisPump.SequencingScheme = PumpBankControlSeq::UserDefined;
         } else {
             ShowWarningError(
-                state, std::format("{}{}=\"{}\", Invalid {}", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaFieldNames(4)));
+                state,
+                EnergyPlus::format("{}{}=\"{}\", Invalid {}", RoutineName, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaFieldNames(4)));
             ShowContinueError(state,
                               std::format("Entered Value=[{}]. {} has been set to Sequential for this pump.",
                                           thisInput->cAlphaArgs(4),

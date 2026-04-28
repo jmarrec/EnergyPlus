@@ -189,8 +189,9 @@ void LinesOut(EnergyPlusData &state, std::string const &option)
 
     if (state.dataOutputReports->optiondone) {
         ShowWarningError(
-            state, std::format("Report of Surfaces/Lines Option has already been completed with option={}", state.dataOutputReports->lastoption));
-        ShowContinueError(state, std::format("..option=\"{}\" will not be done this time.", option));
+            state,
+            EnergyPlus::format("Report of Surfaces/Lines Option has already been completed with option={}", state.dataOutputReports->lastoption));
+        ShowContinueError(state, EnergyPlus::format("..option=\"{}\" will not be done this time.", option));
         return;
     }
 
@@ -407,7 +408,7 @@ static void WriteDXFCommon(EnergyPlusData &state, InputOutputFile &of, const std
     print(of, Format_710, "Zone Names");
 
     for (int zones = 1; zones <= state.dataGlobal->NumOfZones; ++zones) {
-        print<check_syntax(Format_710)>(of, Format_710, std::format("Zone={}:{}", zones, normalizeName(state.dataHeatBal->Zone(zones).Name)));
+        print<check_syntax(Format_710)>(of, Format_710, EnergyPlus::format("Zone={}:{}", zones, normalizeName(state.dataHeatBal->Zone(zones).Name)));
     }
 }
 
@@ -503,7 +504,7 @@ void DXFOut(EnergyPlusData &state,
         ThickPolyline = false;
         PolylineWidth = " 0";
     } else {
-        ShowWarningError(state, std::format("DXFOut: Illegal key specified for Surfaces with > 4 sides={}", PolygonAction));
+        ShowWarningError(state, EnergyPlus::format("DXFOut: Illegal key specified for Surfaces with > 4 sides={}", PolygonAction));
         ShowContinueError(state, R"(...Valid keys are: "ThickPolyline", "RegularPolyline", "Triangulate3DFace".)");
         ShowContinueError(state, "\"Triangulate3DFace\" will be used for any surfaces with > 4 sides.");
         TriangulateFace = true;
@@ -817,7 +818,7 @@ void DXFOut(EnergyPlusData &state,
             }
             int numRefPt = 0;
             for (auto const &refPt : illumMap.refPts) {
-                print(dxffile, Format_710, std::format("{}:MapRefPt:{}", state.dataHeatBal->Zone(zones).Name, ++numRefPt));
+                print(dxffile, Format_710, EnergyPlus::format("{}:MapRefPt:{}", state.dataHeatBal->Zone(zones).Name, ++numRefPt));
                 print(dxffile,
                       Format_709,
                       normalizeName(state.dataHeatBal->Zone(zones).Name),
@@ -907,7 +908,7 @@ void DXFOutWireFrame(EnergyPlusData &state, std::string const &ColorScheme)
             print(dxffile, Format_710, "Building Shading:" + thisSurface.Name);
         }
         ++surfcount;
-        ShadeType += std::format("_{}", surfcount);
+        ShadeType += EnergyPlus::format("_{}", surfcount);
         Real64 minz = 99999.0;
         for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
             minz = min(minz, thisSurface.Vertex(vert).z);
@@ -965,7 +966,7 @@ void DXFOutWireFrame(EnergyPlusData &state, std::string const &ColorScheme)
             ++surfcount;
 
             print(dxffile, Format_710, thisSurface.ZoneName + ':' + thisSurface.Name);
-            std::string const TempZoneName = std::format("{}_{}", SaveZoneName, surfcount);
+            std::string const TempZoneName = EnergyPlus::format("{}_{}", SaveZoneName, surfcount);
             Real64 minz = 99999.0;
             for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                 minz = min(minz, thisSurface.Vertex(vert).z);
@@ -995,7 +996,7 @@ void DXFOutWireFrame(EnergyPlusData &state, std::string const &ColorScheme)
             ++surfcount;
 
             print(dxffile, Format_710, thisSurface.ZoneName + ':' + thisSurface.Name);
-            std::string const TempZoneName = std::format("{}_{}", SaveZoneName, surfcount);
+            std::string const TempZoneName = EnergyPlus::format("{}_{}", SaveZoneName, surfcount);
             Real64 minz = 99999.0;
             for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                 minz = min(minz, thisSurface.Vertex(vert).z);
@@ -1541,7 +1542,7 @@ void VRMLOut(EnergyPlusData &state, const std::string &PolygonAction, const std:
         RegularPolyline = true;
         PolylineWidth = " 0";
     } else {
-        ShowWarningError(state, std::format("VRMLOut: Illegal key specified for Surfaces with > 4 sides={}", PolygonAction));
+        ShowWarningError(state, EnergyPlus::format("VRMLOut: Illegal key specified for Surfaces with > 4 sides={}", PolygonAction));
         ShowContinueError(state, "\"TRIANGULATE 3DFACE\" will be used for any surfaces with > 4 sides.");
         TriangulateFace = true;
     }

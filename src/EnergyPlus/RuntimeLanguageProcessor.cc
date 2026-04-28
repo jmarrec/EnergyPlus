@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -683,7 +684,7 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
     if (NestedIfDepth == 1) {
         AddError(state, StackNum, 0, "Missing an ENDIF instruction needed to terminate an earlier IF instruction.");
     } else if (NestedIfDepth > 1) {
-        AddError(state, StackNum, 0, std::format("Missing {} ENDIF instructions needed to terminate earlier IF instructions.", NestedIfDepth));
+        AddError(state, StackNum, 0, EnergyPlus::format("Missing {} ENDIF instructions needed to terminate earlier IF instructions.", NestedIfDepth));
     }
 
     //  ALLOCATE(DummyError(ErlStack(StackNum)%NumErrors))
@@ -788,7 +789,7 @@ void AddError(EnergyPlusData &state,
 
     ErrorNum = thisErlStack.NumErrors;
     if (LineNum > 0) {
-        thisErlStack.Error(ErrorNum) = std::format("Line {}:  {} \"{}\"", LineNum, Error, thisErlStack.Line(LineNum));
+        thisErlStack.Error(ErrorNum) = EnergyPlus::format("Line {}:  {} \"{}\"", LineNum, Error, thisErlStack.Line(LineNum));
     } else {
         thisErlStack.Error(ErrorNum) = Error;
     }
@@ -1024,10 +1025,10 @@ void WriteTrace(EnergyPlusData &state, int const StackNum, int const Instruction
 
     if (seriousErrorFound) { // throw EnergyPlus severe then fatal
         ShowSevereError(state, "Problem found in EMS EnergyPlus Runtime Language.");
-        ShowContinueError(state, std::format("Erl program name: {}", NameString));
-        ShowContinueError(state, std::format("Erl program line number: {}", LineNumString));
-        ShowContinueError(state, std::format("Erl program line text: {}", LineString));
-        ShowContinueError(state, std::format("Error message: {}", cValueString));
+        ShowContinueError(state, EnergyPlus::format("Erl program name: {}", NameString));
+        ShowContinueError(state, EnergyPlus::format("Erl program line number: {}", LineNumString));
+        ShowContinueError(state, EnergyPlus::format("Erl program line text: {}", LineString));
+        ShowContinueError(state, EnergyPlus::format("Error message: {}", cValueString));
         ShowContinueErrorTimeStamp(state, "");
         ShowFatalError(state, "Previous EMS error caused program termination.");
     }
@@ -1109,9 +1110,9 @@ void ParseExpression(EnergyPlusData &state,
         char NextChar;
         ++CountDoLooping;
         if (CountDoLooping > MaxDoLoopCounts) {
-            ShowSevereError(state, std::format("EMS ParseExpression: Entity={}", state.dataRuntimeLang->ErlStack(StackNum).Name));
-            ShowContinueError(state, std::format("...Line={}", Line));
-            ShowContinueError(state, std::format("...Failed to process String=\"{}\".", String));
+            ShowSevereError(state, EnergyPlus::format("EMS ParseExpression: Entity={}", state.dataRuntimeLang->ErlStack(StackNum).Name));
+            ShowContinueError(state, EnergyPlus::format("...Line={}", Line));
+            ShowContinueError(state, EnergyPlus::format("...Failed to process String=\"{}\".", String));
             ShowFatalError(state, "...program terminates due to preceding condition.");
         }
         NextChar = String[Pos];
@@ -1147,9 +1148,10 @@ void ParseExpression(EnergyPlusData &state,
                     if (NextChar == '.') {
                         if (PeriodFound) {
                             // ERROR:  two periods appearing in a number literal!
-                            ShowSevereError(state, std::format("EMS Parse Expression, for \"{}\".", state.dataRuntimeLang->ErlStack(StackNum).Name));
-                            ShowContinueError(state, std::format("...Line=\"{}\".", Line));
-                            ShowContinueError(state, std::format("...Bad String=\"{}\".", String));
+                            ShowSevereError(state,
+                                            EnergyPlus::format("EMS Parse Expression, for \"{}\".", state.dataRuntimeLang->ErlStack(StackNum).Name));
+                            ShowContinueError(state, EnergyPlus::format("...Line=\"{}\".", Line));
+                            ShowContinueError(state, EnergyPlus::format("...Bad String=\"{}\".", String));
                             ShowContinueError(state, "...Two decimal points detected in String.");
                             ++NumErrors;
                             ErrorFlag = true;
@@ -1160,9 +1162,10 @@ void ParseExpression(EnergyPlusData &state,
                     if (is_any_of(NextChar, "eEdD")) {
                         StringToken += NextChar;
                         if (LastED) {
-                            ShowSevereError(state, std::format("EMS Parse Expression, for \"{}\".", state.dataRuntimeLang->ErlStack(StackNum).Name));
-                            ShowContinueError(state, std::format("...Line=\"{}\".", Line));
-                            ShowContinueError(state, std::format("...Bad String=\"{}\".", String));
+                            ShowSevereError(state,
+                                            EnergyPlus::format("EMS Parse Expression, for \"{}\".", state.dataRuntimeLang->ErlStack(StackNum).Name));
+                            ShowContinueError(state, EnergyPlus::format("...Line=\"{}\".", Line));
+                            ShowContinueError(state, EnergyPlus::format("...Bad String=\"{}\".", String));
                             ShowContinueError(state, "...Two D/E in numeric String.");
                             ++NumErrors;
                             ErrorFlag = true;
@@ -1209,9 +1212,9 @@ void ParseExpression(EnergyPlusData &state,
                 }
                 if (ErrorFlag) {
                     // Error: something wrong with this number!
-                    ShowSevereError(state, std::format("EMS Parse Expression, for \"{}\".", state.dataRuntimeLang->ErlStack(StackNum).Name));
-                    ShowContinueError(state, std::format("...Line=\"{}\".", Line));
-                    ShowContinueError(state, std::format("...Bad String=\"{}\".", String));
+                    ShowSevereError(state, EnergyPlus::format("EMS Parse Expression, for \"{}\".", state.dataRuntimeLang->ErlStack(StackNum).Name));
+                    ShowContinueError(state, EnergyPlus::format("...Line=\"{}\".", Line));
+                    ShowContinueError(state, EnergyPlus::format("...Bad String=\"{}\".", String));
                     ShowContinueError(state, std::format("Invalid numeric=\"{}\".", StringToken));
                     ++NumErrors;
                 }
@@ -1948,9 +1951,9 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                         // throw Error
                         ReturnValue.Type = Value::Error;
                         ReturnValue.Error =
-                            EnergyPlus::format("EvaluateExpression: Attempted to raise to power with incompatible numbers: {:.6T} raised to {:.6T}",
-                                               Operand(1).Number,
-                                               Operand(2).Number);
+                            std::format("EvaluateExpression: Attempted to raise to power with incompatible numbers: {:.6f} raised to {:.6f}",
+                                        Operand(1).Number,
+                                        Operand(2).Number);
                         if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
                             seriousErrorFound = true;
                         }
@@ -2019,8 +2022,8 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     ReturnValue = SetErlValueNumber(0.0);
                 } else {
                     // throw Error
-                    ReturnValue.Error = EnergyPlus::format(
-                        "EvaluateExpression: Attempted to calculate exponential value of too large a number: {:.4T}", Operand(1).Number);
+                    ReturnValue.Error =
+                        std::format("EvaluateExpression: Attempted to calculate exponential value of too large a number: {:.4f}", Operand(1).Number);
                     ReturnValue.Type = Value::Error;
                     if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
                         seriousErrorFound = true;
@@ -2034,8 +2037,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 } else {
                     // throw error,
                     ReturnValue.Type = Value::Error;
-                    ReturnValue.Error =
-                        EnergyPlus::format("EvaluateExpression: Natural Log of zero or less! ln of value = {:.4T}", Operand(1).Number);
+                    ReturnValue.Error = std::format("EvaluateExpression: Natural Log of zero or less! ln of value = {:.4f}", Operand(1).Number);
                     if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
                         seriousErrorFound = true;
                     }
@@ -2303,18 +2305,18 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
             case ErlFunc::FatalHaltEp:
                 ShowSevereError(state, "EMS user program found serious problem and is halting simulation");
                 ShowContinueErrorTimeStamp(state, "");
-                ShowFatalError(state, EnergyPlus::format("EMS user program halted simulation with error code = {:.2T}", Operand(1).Number));
+                ShowFatalError(state, std::format("EMS user program halted simulation with error code = {:.2f}", Operand(1).Number));
                 ReturnValue = SetErlValueNumber(Operand(1).Number); // returns back the error code
                 break;
 
             case ErlFunc::SevereWarnEp:
-                ShowSevereError(state, EnergyPlus::format("EMS user program issued severe warning with error code = {:.2T}", Operand(1).Number));
+                ShowSevereError(state, std::format("EMS user program issued severe warning with error code = {:.2f}", Operand(1).Number));
                 ShowContinueErrorTimeStamp(state, "");
                 ReturnValue = SetErlValueNumber(Operand(1).Number); // returns back the error code
                 break;
 
             case ErlFunc::WarnEp:
-                ShowWarningError(state, EnergyPlus::format("EMS user program issued warning with error code = {:.2T}", Operand(1).Number));
+                ShowWarningError(state, std::format("EMS user program issued warning with error code = {:.2f}", Operand(1).Number));
                 ShowContinueErrorTimeStamp(state, "");
                 ReturnValue = SetErlValueNumber(Operand(1).Number); // returns back the error code
                 break;
@@ -3256,7 +3258,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     }
                 } else {
                     ShowSevereError(state, std::format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
-                    ShowContinueError(state, EnergyPlus::format("Invalid {}={:.2T}", cNumericFieldNames(1), rNumericArgs(1)));
+                    ShowContinueError(state, std::format("Invalid {}={:.2f}", cNumericFieldNames(1), rNumericArgs(1)));
                     ShowContinueError(state, "must be greater than zero");
                     ErrorsFound = true;
                 }
@@ -3854,7 +3856,7 @@ std::string ValueToString(ErlValueType const &Value)
         if (Value.Number == 0.0) {
             String = "0.0";
         } else {
-            String = EnergyPlus::format("{:.6T}", Value.Number); //(String)
+            String = std::format("{:.6f}", Value.Number); //(String)
         }
         break;
 

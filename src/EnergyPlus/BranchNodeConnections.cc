@@ -45,10 +45,10 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// ObjexxFCL Headers
-
+// C++ Headers
 #include <format>
 
+// ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/member.functions.hh>
 #include <ObjexxFCL/string.functions.hh>
@@ -681,7 +681,7 @@ void RegisterNodeConnection(EnergyPlusData &state,
 
     if ((ObjectType == Node::ConnectionObjectType::Invalid) || (ObjectType == Node::ConnectionObjectType::Num)) {
         ShowSevereError(state, "Developer Error: Invalid ObjectType");
-        ShowContinueError(state, std::format("Occurs for Node={}, ObjectName={}", std::string{NodeName}, std::string{ObjectName}));
+        ShowContinueError(state, EnergyPlus::format("Occurs for Node={}, ObjectName={}", std::string{NodeName}, std::string{ObjectName}));
         ErrorsFoundHere = true;
     }
 
@@ -690,7 +690,7 @@ void RegisterNodeConnection(EnergyPlusData &state,
 
     if ((ConnectionType == Node::ConnectionType::Invalid) || (ConnectionType == Node::ConnectionType::Num)) {
         ShowSevereError(state, EnergyPlus::format("{}{}{}", RoutineName, "Invalid ConnectionType=", ConnectionType));
-        ShowContinueError(state, std::format("Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, objTypeStr, ObjectName));
+        ShowContinueError(state, EnergyPlus::format("Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, objTypeStr, ObjectName));
         ErrorsFoundHere = true;
     }
 
@@ -713,7 +713,7 @@ void RegisterNodeConnection(EnergyPlusData &state,
         }
         if ((state.dataBranchNodeConnections->NodeConnections(Count).ObjectIsParent && !IsParent) ||
             (!state.dataBranchNodeConnections->NodeConnections(Count).ObjectIsParent && IsParent)) {
-            ShowSevereError(state, std::format("{}{}", RoutineName, "Node registered for both Parent and \"not\" Parent"));
+            ShowSevereError(state, EnergyPlus::format("{}{}", RoutineName, "Node registered for both Parent and \"not\" Parent"));
             ShowContinueError(
                 state, EnergyPlus::format("{}{}{}{}{}{}", "Occurs for Node=", NodeName, ", ObjectType=", ObjectType, ", ObjectName=", ObjectName));
             ErrorsFoundHere = true;
@@ -759,22 +759,23 @@ void RegisterNodeConnection(EnergyPlusData &state,
                                              &Node::EqNodeConnectionDef::NodeName,
                                              state.dataBranchNodeConnections->NumOfAirTerminalNodes - 1);
             if (Found != 0) { // Nodename already used
-                ShowSevereError(state, std::format("{}{}=\"{}\" node name duplicated", RoutineName, objTypeStr, ObjectName));
-                ShowContinueError(state, std::format("NodeName=\"{}\", entered as type={}", NodeName, conTypeStr));
-                ShowContinueError(state, std::format("In Field={}", InputFieldName));
-                ShowContinueError(
-                    state,
-                    std::format("NodeName=\"{}\", entered as type={}", NodeName, Node::ConnectionTypeNamesUC[static_cast<int>(ConnectionType)]));
-                ShowContinueError(state, std::format("In Field={}", InputFieldName));
+                ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\" node name duplicated", RoutineName, objTypeStr, ObjectName));
+                ShowContinueError(state, EnergyPlus::format("NodeName=\"{}\", entered as type={}", NodeName, conTypeStr));
+                ShowContinueError(state, EnergyPlus::format("In Field={}", InputFieldName));
                 ShowContinueError(state,
-                                  std::format("Already used in {}=\"{}\".",
-                                              objTypeStr,
-                                              state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).ObjectName));
+                                  EnergyPlus::format("NodeName=\"{}\", entered as type={}",
+                                                     NodeName,
+                                                     Node::ConnectionTypeNamesUC[static_cast<int>(ConnectionType)]));
+                ShowContinueError(state, EnergyPlus::format("In Field={}", InputFieldName));
                 ShowContinueError(state,
-                                  std::format(" as type={}, In Field={}",
-                                              Node::ConnectionTypeNamesUC[static_cast<int>(
-                                                  state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).ConnectionType)],
-                                              state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).InputFieldName));
+                                  EnergyPlus::format("Already used in {}=\"{}\".",
+                                                     objTypeStr,
+                                                     state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).ObjectName));
+                ShowContinueError(state,
+                                  EnergyPlus::format(" as type={}, In Field={}",
+                                                     Node::ConnectionTypeNamesUC[static_cast<int>(
+                                                         state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).ConnectionType)],
+                                                     state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).InputFieldName));
                 ErrorsFoundHere = true;
             } else {
                 state.dataBranchNodeConnections->AirTerminalNodeConnections(state.dataBranchNodeConnections->NumOfAirTerminalNodes).NodeName =
@@ -789,7 +790,7 @@ void RegisterNodeConnection(EnergyPlusData &state,
                     InputFieldName;
             }
         } else {
-            ShowSevereError(state, std::format("{}{} , Developer Error: Input Field Name not included.", RoutineName, objTypeStr));
+            ShowSevereError(state, EnergyPlus::format("{}{} , Developer Error: Input Field Name not included.", RoutineName, objTypeStr));
             ShowContinueError(state, "Node names not checked for duplication.");
         }
     }
@@ -826,7 +827,7 @@ void OverrideNodeConnectionType(EnergyPlusData &state,
         ShowSevereError(state, EnergyPlus::format("{}{}{}", RoutineName, "Invalid ConnectionType=", ConnectionType));
         ShowContinueError(
             state,
-            std::format(
+            EnergyPlus::format(
                 "Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, Node::ConnectionTypeNames[static_cast<int>(ObjectType)], ObjectName));
         errFlag = true;
     }
@@ -855,10 +856,10 @@ void OverrideNodeConnectionType(EnergyPlusData &state,
     if (Found > 0) {
         state.dataBranchNodeConnections->NodeConnections(Found).ConnectionType = ConnectionType;
     } else {
-        ShowSevereError(state, std::format("{}{}", RoutineName, "Existing node connection not found."));
+        ShowSevereError(state, EnergyPlus::format("{}{}", RoutineName, "Existing node connection not found."));
         ShowContinueError(
             state,
-            std::format(
+            EnergyPlus::format(
                 "Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, Node::ConnectionTypeNames[static_cast<int>(ObjectType)], ObjectName));
         errFlag = true;
     }
@@ -940,15 +941,15 @@ void CheckNodeConnections(EnergyPlusData &state, bool &ErrorsFound)
         if (!IsValid) {
             ShowSevereError(
                 state,
-                std::format("Node Connection Error, Node=\"{}\", Sensor node did not find a matching node of appropriate type (other than "
-                            "Actuator or Sensor).",
-                            state.dataBranchNodeConnections->NodeConnections(Loop1).NodeName));
+                EnergyPlus::format("Node Connection Error, Node=\"{}\", Sensor node did not find a matching node of appropriate type (other than "
+                                   "Actuator or Sensor).",
+                                   state.dataBranchNodeConnections->NodeConnections(Loop1).NodeName));
 
             ShowContinueError(
                 state,
-                std::format("Reference Object={}, Name={}",
-                            ConnectionObjectTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectType)],
-                            state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectName));
+                EnergyPlus::format("Reference Object={}, Name={}",
+                                   ConnectionObjectTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectType)],
+                                   state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectName));
             ++ErrorCounter;
             ErrorsFound = true;
         }
@@ -979,15 +980,15 @@ void CheckNodeConnections(EnergyPlusData &state, bool &ErrorsFound)
         if (!IsValid) {
             ShowSevereError(
                 state,
-                std::format("Node Connection Error, Node=\"{}\", Actuator node did not find a matching node of appropriate type (other than "
-                            "Actuator, Sensor, OutsideAir).",
-                            state.dataBranchNodeConnections->NodeConnections(Loop1).NodeName));
+                EnergyPlus::format("Node Connection Error, Node=\"{}\", Actuator node did not find a matching node of appropriate type (other than "
+                                   "Actuator, Sensor, OutsideAir).",
+                                   state.dataBranchNodeConnections->NodeConnections(Loop1).NodeName));
 
             ShowContinueError(
                 state,
-                std::format("Reference Object={}, Name={}",
-                            ConnectionObjectTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectType)],
-                            state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectName));
+                EnergyPlus::format("Reference Object={}, Name={}",
+                                   ConnectionObjectTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectType)],
+                                   state.dataBranchNodeConnections->NodeConnections(Loop1).ObjectName));
             ++ErrorCounter;
             ErrorsFound = true;
         }

@@ -108,7 +108,7 @@ BoilerSpecs *BoilerSpecs::factory(EnergyPlusData &state, std::string const &obje
     }
 
     // If we didn't find it, fatal
-    ShowFatalError(state, std::format("LocalBoilerFactory: Error getting inputs for boiler named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, EnergyPlus::format("LocalBoilerFactory: Error getting inputs for boiler named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -174,7 +174,7 @@ void GetBoilerInput(EnergyPlusData &state)
     int numBoilers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject);
 
     if (numBoilers <= 0) {
-        ShowSevereError(state, std::format("No {} Equipment specified in input file", s_ipsc->cCurrentModuleObject));
+        ShowSevereError(state, EnergyPlus::format("No {} Equipment specified in input file", s_ipsc->cCurrentModuleObject));
         ErrorsFound = true;
     }
 
@@ -216,7 +216,7 @@ void GetBoilerInput(EnergyPlusData &state)
 
         thisBoiler.NomCap = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "nominal_capacity");
         if (thisBoiler.NomCap == 0.0) {
-            ShowSevereError(state, std::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
+            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
             ShowContinueError(state, EnergyPlus::format("Invalid {}={:.2R}", "Nominal Capacity", thisBoiler.NomCap));
             ShowContinueError(state, "...Nominal Capacity must be greater than 0.0");
             ErrorsFound = true;
@@ -227,17 +227,17 @@ void GetBoilerInput(EnergyPlusData &state)
 
         thisBoiler.NomEffic = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "nominal_thermal_efficiency");
         if (thisBoiler.NomEffic == 0.0) {
-            ShowSevereError(state, std::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
+            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
             ShowContinueError(state, EnergyPlus::format("Invalid {}={:.3R}", "Nominal Thermal Efficiency", thisBoiler.NomEffic));
             ShowContinueError(state, "...Nominal Thermal Efficiency must be greater than 0.0");
             ErrorsFound = true;
         } else if (thisBoiler.NomEffic > 1.0) {
             ShowWarningError(state,
-                             std::format("{} = {}: {}={} should not typically be greater than 1.",
-                                         s_ipsc->cCurrentModuleObject,
-                                         boilerName,
-                                         "Nominal Thermal Efficiency",
-                                         thisBoiler.NomEffic));
+                             EnergyPlus::format("{} = {}: {}={} should not typically be greater than 1.",
+                                                s_ipsc->cCurrentModuleObject,
+                                                boilerName,
+                                                "Nominal Thermal Efficiency",
+                                                thisBoiler.NomEffic));
         }
 
         if (efficiencyCurveTempEvalVar == "ENTERINGBOILER") {
@@ -264,20 +264,20 @@ void GetBoilerInput(EnergyPlusData &state)
         } else if (thisBoiler.EfficiencyCurve->numDims == 2) {
             if (thisBoiler.CurveTempMode == TempMode::NOTSET) {
                 if (!efficiencyCurveTempEvalVar.empty()) {
-                    ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
+                    ShowContinueError(
+                        state, EnergyPlus::format("Invalid {}={}", "Efficiency Curve Temperature Evaluation Variable", efficiencyCurveTempEvalVar));
                     ShowContinueError(state,
-                                      std::format("Invalid {}={}", "Efficiency Curve Temperature Evaluation Variable", efficiencyCurveTempEvalVar));
-                    ShowContinueError(state,
-                                      std::format("boilers.Boiler using curve type of {} must specify {}",
-                                                  Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType],
-                                                  "Efficiency Curve Temperature Evaluation Variable"));
+                                      EnergyPlus::format("boilers.Boiler using curve type of {} must specify {}",
+                                                         Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType],
+                                                         "Efficiency Curve Temperature Evaluation Variable"));
                     ShowContinueError(state, "Available choices are EnteringBoiler or LeavingBoiler");
                 } else {
-                    ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
-                    ShowContinueError(state, std::format("Field {} is blank", "Efficiency Curve Temperature Evaluation Variable"));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
+                    ShowContinueError(state, EnergyPlus::format("Field {} is blank", "Efficiency Curve Temperature Evaluation Variable"));
                     ShowContinueError(state,
-                                      std::format("boilers.Boiler using curve type of {} must specify either EnteringBoiler or LeavingBoiler",
-                                                  Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType]));
+                                      EnergyPlus::format("boilers.Boiler using curve type of {} must specify either EnteringBoiler or LeavingBoiler",
+                                                         Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType]));
                 }
                 ErrorsFound = true;
             }
@@ -321,8 +321,8 @@ void GetBoilerInput(EnergyPlusData &state)
 
         thisBoiler.ParasiticFuelCapacity = getOptionalNumericField("off_cycle_parasitic_fuel_load");
         if (thisBoiler.FuelType == Constant::eFuel::Electricity && thisBoiler.ParasiticFuelCapacity > 0) {
-            ShowWarningError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
-            ShowContinueError(state, std::format("{} should be zero when the fuel type is electricity.", "Parasitic Fuel Capacity"));
+            ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
+            ShowContinueError(state, EnergyPlus::format("{} should be zero when the fuel type is electricity.", "Parasitic Fuel Capacity"));
             ShowContinueError(state, "It will be ignored and the simulation continues.");
             thisBoiler.ParasiticFuelCapacity = 0.0;
         }
@@ -359,8 +359,8 @@ void GetBoilerInput(EnergyPlusData &state)
         } else if (boilerFlowMode == "NOTMODULATED" || boilerFlowMode.empty()) {
             thisBoiler.FlowMode = DataPlant::FlowMode::NotModulated;
         } else {
-            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
-            ShowContinueError(state, std::format("Invalid {}={}", "Boiler Flow Mode", boilerFlowMode));
+            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
+            ShowContinueError(state, EnergyPlus::format("Invalid {}={}", "Boiler Flow Mode", boilerFlowMode));
             ShowContinueError(state, "Available choices are ConstantFlow, NotModulated, or LeavingSetpointModulated");
             ShowContinueError(state, "Flow mode NotModulated is assumed and the simulation continues.");
             thisBoiler.FlowMode = DataPlant::FlowMode::NotModulated;
@@ -375,7 +375,7 @@ void GetBoilerInput(EnergyPlusData &state)
     }
 
     if (ErrorsFound) {
-        ShowFatalError(state, std::format("{}{}", RoutineName, "Errors found in processing " + s_ipsc->cCurrentModuleObject + " input."));
+        ShowFatalError(state, EnergyPlus::format("{}{}", RoutineName, "Errors found in processing " + s_ipsc->cCurrentModuleObject + " input."));
     }
 }
 
@@ -400,14 +400,14 @@ void BoilerSpecs::SetupOutputVars(EnergyPlusData &state)
                         OutputProcessor::Group::Plant,
                         OutputProcessor::EndUseCat::Boilers);
     SetupOutputVariable(state,
-                        std::format("Boiler {} Rate", sFuelType),
+                        EnergyPlus::format("Boiler {} Rate", sFuelType),
                         Constant::Units::W,
                         this->FuelUsed,
                         OutputProcessor::TimeStepType::System,
                         OutputProcessor::StoreType::Average,
                         this->Name);
     SetupOutputVariable(state,
-                        std::format("Boiler {} Energy", sFuelType),
+                        EnergyPlus::format("Boiler {} Energy", sFuelType),
                         Constant::Units::J,
                         this->FuelConsumed,
                         OutputProcessor::TimeStepType::System,
@@ -937,21 +937,21 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
                 ++this->EffCurveOutputError;
                 ShowWarningError(state, std::format("Boiler:HotWater \"{}\"", this->Name));
                 ShowContinueError(state, "...Normalized Boiler Efficiency Curve output is less than or equal to 0.");
-                ShowContinueError(state, EnergyPlus::format("...Curve input x value (PLR)     = {:.5T}", this->BoilerPLR));
+                ShowContinueError(state, std::format("...Curve input x value (PLR)     = {:.5f}", this->BoilerPLR));
                 if (this->EfficiencyCurve->numDims == 2) {
                     if (this->CurveTempMode == TempMode::ENTERINGBOILERTEMP) {
-                        ShowContinueError(
-                            state, EnergyPlus::format("...Curve input y value (Tinlet) = {:.2T}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
+                        ShowContinueError(state,
+                                          std::format("...Curve input y value (Tinlet) = {:.2f}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
                     } else if (this->CurveTempMode == TempMode::LEAVINGBOILERTEMP) {
-                        ShowContinueError(state, EnergyPlus::format("...Curve input y value (Toutlet) = {:.2T}", this->BoilerOutletTemp));
+                        ShowContinueError(state, std::format("...Curve input y value (Toutlet) = {:.2f}", this->BoilerOutletTemp));
                     }
                 }
-                ShowContinueError(state, EnergyPlus::format("...Curve output (normalized eff) = {:.5T}", EffCurveOutput));
+                ShowContinueError(state, std::format("...Curve output (normalized eff) = {:.5f}", EffCurveOutput));
                 ShowContinueError(
                     state,
-                    EnergyPlus::format("...Calculated Boiler efficiency  = {:.5T} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
-                                       "Boiler Efficiency Curve output)",
-                                       BoilerEff));
+                    std::format("...Calculated Boiler efficiency  = {:.5f} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
+                                "Boiler Efficiency Curve output)",
+                                BoilerEff));
                 ShowContinueErrorTimeStamp(state, "...Curve output reset to 0.01 and simulation continues.");
             } else {
                 ShowRecurringWarningErrorAtEnd(state,
@@ -974,21 +974,21 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
                 ShowWarningError(state, std::format("Boiler:HotWater \"{}\"", this->Name));
                 ShowContinueError(state, "...Calculated Boiler Efficiency is greater than 1.1.");
                 ShowContinueError(state, "...Boiler Efficiency calculations shown below.");
-                ShowContinueError(state, EnergyPlus::format("...Curve input x value (PLR)     = {:.5T}", this->BoilerPLR));
+                ShowContinueError(state, std::format("...Curve input x value (PLR)     = {:.5f}", this->BoilerPLR));
                 if (this->EfficiencyCurve->numDims == 2) {
                     if (this->CurveTempMode == TempMode::ENTERINGBOILERTEMP) {
-                        ShowContinueError(
-                            state, EnergyPlus::format("...Curve input y value (Tinlet) = {:.2T}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
+                        ShowContinueError(state,
+                                          std::format("...Curve input y value (Tinlet) = {:.2f}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
                     } else if (this->CurveTempMode == TempMode::LEAVINGBOILERTEMP) {
-                        ShowContinueError(state, EnergyPlus::format("...Curve input y value (Toutlet) = {:.2T}", this->BoilerOutletTemp));
+                        ShowContinueError(state, std::format("...Curve input y value (Toutlet) = {:.2f}", this->BoilerOutletTemp));
                     }
                 }
-                ShowContinueError(state, EnergyPlus::format("...Curve output (normalized eff) = {:.5T}", EffCurveOutput));
+                ShowContinueError(state, std::format("...Curve output (normalized eff) = {:.5f}", EffCurveOutput));
                 ShowContinueError(
                     state,
-                    EnergyPlus::format("...Calculated Boiler efficiency  = {:.5T} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
-                                       "Boiler Efficiency Curve output)",
-                                       BoilerEff));
+                    std::format("...Calculated Boiler efficiency  = {:.5f} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
+                                "Boiler Efficiency Curve output)",
+                                BoilerEff));
                 ShowContinueErrorTimeStamp(state, "...Curve output reset to 1.1 and simulation continues.");
             } else {
                 ShowRecurringWarningErrorAtEnd(state,

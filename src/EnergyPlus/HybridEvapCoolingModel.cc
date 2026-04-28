@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -464,8 +465,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(TEMP_CURVE, -1);
             } else {
@@ -482,8 +483,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(W_CURVE, -1);
             } else {
@@ -498,8 +499,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(POWER_CURVE, -1);
             } else {
@@ -514,8 +515,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(SUPPLY_FAN_POWER, -1);
             } else {
@@ -530,8 +531,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(EXTERNAL_STATIC_PRESSURE, -1);
             } else {
@@ -547,8 +548,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(SECOND_FUEL_USE, -1);
             } else {
@@ -563,8 +564,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(THIRD_FUEL_USE, -1);
             } else {
@@ -579,8 +580,8 @@ namespace HybridEvapCoolingModel {
         } else {
             curveID = GetCurveIndex(state, Alphas(inter_Alpha));
             if (curveID == 0) {
-                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
-                ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFields(inter_Alpha), Alphas(inter_Alpha)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
                 ErrorsFound = true;
                 InitializeCurve(WATER_USE, -1);
             } else {
@@ -595,8 +596,8 @@ namespace HybridEvapCoolingModel {
         // N9, \field Mode1  Maximum Outdoor Air Temperature
         bool ok = InitializeOutdoorAirTemperatureConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
         if (!ok) {
-            ShowSevereError(state, std::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
+            ShowSevereError(state, EnergyPlus::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
+            ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
             ErrorsFound = true;
         }
         inter_Number = inter_Number + 2;

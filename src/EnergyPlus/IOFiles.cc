@@ -45,19 +45,24 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// C++ Headers
+#include <algorithm>
+#include <format>
+#include <memory>
+
+// Third Party Headers
+#include <embedded/EmbeddedEpJSONSchema.hh>
+
+// EnergyPlus Headers
 #include <EnergyPlus/IOFiles.hh>
 
+// Local Headers
 #include "Data/EnergyPlusData.hh"
 #include "DataStringGlobals.hh"
 #include "FileSystem.hh"
 #include "InputProcessing/InputProcessor.hh"
 #include "ResultsFramework.hh"
 #include "UtilityRoutines.hh"
-#include <embedded/EmbeddedEpJSONSchema.hh>
-
-#include <algorithm>
-#include <format>
-#include <memory>
 
 namespace EnergyPlus {
 
@@ -67,7 +72,7 @@ InputFile &InputFile::ensure_open(EnergyPlusData &state, const std::string &call
         open(false, output_to_file);
     }
     if (!good()) {
-        ShowFatalError(state, std::format("{}: Could not open file {} for input (read).", caller, filePath.string()));
+        ShowFatalError(state, EnergyPlus::format("{}: Could not open file {} for input (read).", caller, filePath.string()));
     }
     return *this;
 }
@@ -214,7 +219,7 @@ InputOutputFile &InputOutputFile::ensure_open(EnergyPlusData &state, const std::
         open(false, output_to_file);
     }
     if (!good()) {
-        ShowFatalError(state, std::format("{}: Could not open file {} for output (write).", caller, filePath.string()));
+        ShowFatalError(state, EnergyPlus::format("{}: Could not open file {} for output (write).", caller, filePath.string()));
     }
     return *this;
 }

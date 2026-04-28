@@ -135,25 +135,26 @@ namespace HVACDuct {
         if (CompIndex == 0) {
             DuctNum = Util::FindItemInList(CompName, state.dataHVACDuct->Duct);
             if (DuctNum == 0) {
-                ShowFatalError(state, std::format("SimDuct: Component not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimDuct: Component not found={}", CompName));
             }
             CompIndex = DuctNum;
         } else {
             DuctNum = CompIndex;
             if (DuctNum > state.dataHVACDuct->NumDucts || DuctNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimDuct:  Invalid CompIndex passed={}, Number of Components={}, Entered Component name={}",
-                                           DuctNum,
-                                           state.dataHVACDuct->NumDucts,
-                                           CompName));
+                               EnergyPlus::format("SimDuct:  Invalid CompIndex passed={}, Number of Components={}, Entered Component name={}",
+                                                  DuctNum,
+                                                  state.dataHVACDuct->NumDucts,
+                                                  CompName));
             }
             if (state.dataHVACDuct->CheckEquipName(DuctNum)) {
                 if (CompName != state.dataHVACDuct->Duct(DuctNum).Name) {
-                    ShowFatalError(state,
-                                   std::format("SimDuct: Invalid CompIndex passed={}, Component name={}, stored Component Name for that index={}",
-                                               DuctNum,
-                                               CompName,
-                                               state.dataHVACDuct->Duct(DuctNum).Name));
+                    ShowFatalError(
+                        state,
+                        EnergyPlus::format("SimDuct: Invalid CompIndex passed={}, Component name={}, stored Component Name for that index={}",
+                                           DuctNum,
+                                           CompName,
+                                           state.dataHVACDuct->Duct(DuctNum).Name));
                 }
                 state.dataHVACDuct->CheckEquipName(DuctNum) = false;
             }
@@ -242,7 +243,7 @@ namespace HVACDuct {
         // No output variables
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{} Errors found in input", RoutineName));
+            ShowFatalError(state, EnergyPlus::format("{} Errors found in input", RoutineName));
         }
     }
 

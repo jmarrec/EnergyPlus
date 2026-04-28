@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -152,25 +153,26 @@ namespace VentilatedSlab {
         if (CompIndex == 0) {
             Item = Util::FindItemInList(CompName, state.dataVentilatedSlab->VentSlab);
             if (Item == 0) {
-                ShowFatalError(state, std::format("SimVentilatedSlab: system not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("SimVentilatedSlab: system not found={}", CompName));
             }
             CompIndex = Item;
         } else {
             Item = CompIndex;
             if (Item > state.dataVentilatedSlab->NumOfVentSlabs || Item < 1) {
                 ShowFatalError(state,
-                               std::format("SimVentilatedSlab:  Invalid CompIndex passed={}, Number of Systems={}, Entered System name={}",
-                                           Item,
-                                           state.dataVentilatedSlab->NumOfVentSlabs,
-                                           CompName));
+                               EnergyPlus::format("SimVentilatedSlab:  Invalid CompIndex passed={}, Number of Systems={}, Entered System name={}",
+                                                  Item,
+                                                  state.dataVentilatedSlab->NumOfVentSlabs,
+                                                  CompName));
             }
             if (state.dataVentilatedSlab->CheckEquipName(Item)) {
                 if (CompName != state.dataVentilatedSlab->VentSlab(Item).Name) {
-                    ShowFatalError(state,
-                                   std::format("SimVentilatedSlab: Invalid CompIndex passed={}, System name={}, stored System Name for that index={}",
-                                               Item,
-                                               CompName,
-                                               state.dataVentilatedSlab->VentSlab(Item).Name));
+                    ShowFatalError(
+                        state,
+                        EnergyPlus::format("SimVentilatedSlab: Invalid CompIndex passed={}, System name={}, stored System Name for that index={}",
+                                           Item,
+                                           CompName,
+                                           state.dataVentilatedSlab->VentSlab(Item).Name));
                 }
                 state.dataVentilatedSlab->CheckEquipName(Item) = false;
             }
@@ -311,14 +313,15 @@ namespace VentilatedSlab {
                 if (lAlphaBlanks(3)) {
                     ShowSevereError(
                         state,
-                        std::format(R"({}="{}" invalid {} is required but input is blank.)", CurrentModuleObject, ventSlab.Name, cAlphaFields(3)));
+                        EnergyPlus::format(
+                            R"({}="{}" invalid {} is required but input is blank.)", CurrentModuleObject, ventSlab.Name, cAlphaFields(3)));
                 } else {
                     ShowSevereError(state,
-                                    std::format(R"({}="{}" invalid {}="{}" not found.)",
-                                                CurrentModuleObject,
-                                                ventSlab.Name,
-                                                cAlphaFields(3),
-                                                state.dataIPShortCut->cAlphaArgs(3)));
+                                    EnergyPlus::format(R"({}="{}" invalid {}="{}" not found.)",
+                                                       CurrentModuleObject,
+                                                       ventSlab.Name,
+                                                       cAlphaFields(3),
+                                                       state.dataIPShortCut->cAlphaArgs(3)));
                 }
                 ErrorsFound = true;
             }
@@ -369,18 +372,18 @@ namespace VentilatedSlab {
                 // Error checking for single surfaces
                 if (ventSlab.SurfacePtr(1) == 0) {
                     ShowSevereError(state,
-                                    std::format(R"({}="{}" invalid {}="{}" not found.)",
-                                                CurrentModuleObject,
-                                                ventSlab.Name,
-                                                cAlphaFields(4),
-                                                state.dataIPShortCut->cAlphaArgs(4)));
+                                    EnergyPlus::format(R"({}="{}" invalid {}="{}" not found.)",
+                                                       CurrentModuleObject,
+                                                       ventSlab.Name,
+                                                       cAlphaFields(4),
+                                                       state.dataIPShortCut->cAlphaArgs(4)));
                     ErrorsFound = true;
                 } else if (state.dataSurface->SurfIsRadSurfOrVentSlabOrPool(ventSlab.SurfacePtr(1))) {
-                    ShowSevereError(state, std::format("{}=\"{}\", invalid Surface", CurrentModuleObject, ventSlab.Name));
+                    ShowSevereError(state, EnergyPlus::format("{}=\"{}\", invalid Surface", CurrentModuleObject, ventSlab.Name));
                     ShowContinueError(state,
-                                      std::format("{}=\"{}\" has been used in another radiant system or ventilated slab.",
-                                                  cAlphaFields(4),
-                                                  state.dataIPShortCut->cAlphaArgs(4)));
+                                      EnergyPlus::format("{}=\"{}\" has been used in another radiant system or ventilated slab.",
+                                                         cAlphaFields(4),
+                                                         state.dataIPShortCut->cAlphaArgs(4)));
                     ErrorsFound = true;
                 }
                 if (ventSlab.SurfacePtr(1) != 0) {
@@ -408,12 +411,13 @@ namespace VentilatedSlab {
                     }
                     if (!thisConstruct.SourceSinkPresent) {
                         ShowSevereError(state,
-                                        std::format("{}=\"{}\" invalid surface=\"{}\".",
-                                                    CurrentModuleObject,
-                                                    ventSlab.Name,
-                                                    state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Name));
+                                        EnergyPlus::format("{}=\"{}\" invalid surface=\"{}\".",
+                                                           CurrentModuleObject,
+                                                           ventSlab.Name,
+                                                           state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Name));
                         ShowContinueError(
-                            state, std::format("Surface Construction does not have a source/sink, Construction name= \"{}\".", thisConstruct.Name));
+                            state,
+                            EnergyPlus::format("Surface Construction does not have a source/sink, Construction name= \"{}\".", thisConstruct.Name));
                         ErrorsFound = true;
                     }
                 }
@@ -429,15 +433,16 @@ namespace VentilatedSlab {
                     }
                     if (state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Zone != ventSlab.ZonePtr) {
                         ShowSevereError(state,
-                                        std::format("{}=\"{}\" invalid surface=\"{}\".",
-                                                    CurrentModuleObject,
-                                                    ventSlab.Name,
-                                                    state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Name));
-                        ShowContinueError(state,
-                                          std::format("Surface in Zone={} {} in Zone={}",
-                                                      state.dataHeatBal->Zone(state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Zone).Name,
-                                                      CurrentModuleObject,
-                                                      state.dataIPShortCut->cAlphaArgs(3)));
+                                        EnergyPlus::format("{}=\"{}\" invalid surface=\"{}\".",
+                                                           CurrentModuleObject,
+                                                           ventSlab.Name,
+                                                           state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Name));
+                        ShowContinueError(
+                            state,
+                            EnergyPlus::format("Surface in Zone={} {} in Zone={}",
+                                               state.dataHeatBal->Zone(state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Zone).Name,
+                                               CurrentModuleObject,
+                                               state.dataIPShortCut->cAlphaArgs(3)));
                         ErrorsFound = true;
                     }
                     if (state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Construction == 0) {
@@ -445,12 +450,13 @@ namespace VentilatedSlab {
                     }
                     if (!thisConstruct.SourceSinkPresent) {
                         ShowSevereError(state,
-                                        std::format("{}=\"{}\" invalid surface=\"{}\".",
-                                                    CurrentModuleObject,
-                                                    ventSlab.Name,
-                                                    state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Name));
+                                        EnergyPlus::format("{}=\"{}\" invalid surface=\"{}\".",
+                                                           CurrentModuleObject,
+                                                           ventSlab.Name,
+                                                           state.dataSurface->Surface(ventSlab.SurfacePtr(SurfNum)).Name));
                         ShowContinueError(
-                            state, std::format("Surface Construction does not have a source/sink, Construction name= \"{}\".", thisConstruct.Name));
+                            state,
+                            EnergyPlus::format("Surface Construction does not have a source/sink, Construction name= \"{}\".", thisConstruct.Name));
                         ErrorsFound = true;
                     }
                 }
@@ -506,7 +512,7 @@ namespace VentilatedSlab {
             default: {
                 ShowSevereError(
                     state,
-                    std::format(
+                    EnergyPlus::format(
                         R"({}="{}" invalid {}="{}".)", CurrentModuleObject, ventSlab.Name, cAlphaFields(5), state.dataIPShortCut->cAlphaArgs(5)));
             } break;
             } // switch (outsideAirControlType)
@@ -532,9 +538,9 @@ namespace VentilatedSlab {
             if (Util::SameString(state.dataIPShortCut->cAlphaArgs(8), "SurfaceListNames")) {
                 if (!lNumericBlanks(4)) {
                     ShowWarningError(state,
-                                     std::format("{}=\"{}\"  Core Diameter is not needed for the series slabs configuration- ignored.",
-                                                 CurrentModuleObject,
-                                                 ventSlab.Name));
+                                     EnergyPlus::format("{}=\"{}\"  Core Diameter is not needed for the series slabs configuration- ignored.",
+                                                        CurrentModuleObject,
+                                                        ventSlab.Name));
                     ShowContinueError(state, "...It has been assigned on SlabGroup.");
                 }
             }
@@ -542,9 +548,9 @@ namespace VentilatedSlab {
             if (Util::SameString(state.dataIPShortCut->cAlphaArgs(8), "SurfaceListNames")) {
                 if (!lNumericBlanks(5)) {
                     ShowWarningError(state,
-                                     std::format("{}=\"{}\"  Core Length is not needed for the series slabs configuration- ignored.",
-                                                 CurrentModuleObject,
-                                                 ventSlab.Name));
+                                     EnergyPlus::format("{}=\"{}\"  Core Length is not needed for the series slabs configuration- ignored.",
+                                                        CurrentModuleObject,
+                                                        ventSlab.Name));
                     ShowContinueError(state, "...It has been assigned on SlabGroup.");
                 }
             }
@@ -552,9 +558,9 @@ namespace VentilatedSlab {
             if (Util::SameString(state.dataIPShortCut->cAlphaArgs(8), "SurfaceListNames")) {
                 if (!lNumericBlanks(6)) {
                     ShowWarningError(state,
-                                     std::format("{}=\"{}\"  Core Numbers is not needed for the series slabs configuration- ignored.",
-                                                 CurrentModuleObject,
-                                                 ventSlab.Name));
+                                     EnergyPlus::format("{}=\"{}\"  Core Numbers is not needed for the series slabs configuration- ignored.",
+                                                        CurrentModuleObject,
+                                                        ventSlab.Name));
                     ShowContinueError(state, "...It has been assigned on SlabGroup.");
                 }
             }

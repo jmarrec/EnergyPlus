@@ -45,8 +45,10 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 
+// EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/EnergyPlus.hh>
@@ -338,25 +340,25 @@ namespace Material {
 
             auto *mat = s_mat->materials(matNum);
             if (mat->group != Group::Regular) {
-                ShowSevereCustom(state, eoh, std::format("Material {} is not a Regular material.", mat->Name));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} is not a Regular material.", mat->Name));
                 ErrorsFound = true;
                 continue;
             }
 
             if (mat->hasPCM) {
-                ShowSevereCustom(state, eoh, std::format("Material {} already has {} properties defined.", mat->Name, currentModuleObject));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} already has {} properties defined.", mat->Name, currentModuleObject));
                 ErrorsFound = true;
                 continue;
             }
 
             if (mat->hasEMPD) {
-                ShowSevereCustom(state, eoh, std::format("Material {} already has EMPD properties defined.", mat->Name));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} already has EMPD properties defined.", mat->Name));
                 ErrorsFound = true;
                 continue;
             }
 
             if (mat->hasHAMT) {
-                ShowSevereCustom(state, eoh, std::format("Material {} already has HAMT properties defined.", mat->Name));
+                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} already has HAMT properties defined.", mat->Name));
                 ErrorsFound = true;
                 continue;
             }

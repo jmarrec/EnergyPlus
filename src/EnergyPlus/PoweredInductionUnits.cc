@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -158,25 +159,25 @@ void SimPIU(EnergyPlusData &state,
     if (CompIndex == 0) {
         PIUNum = Util::FindItemInList(CompName, state.dataPowerInductionUnits->PIU);
         if (PIUNum == 0) {
-            ShowFatalError(state, std::format("SimPIU: PIU Unit not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("SimPIU: PIU Unit not found={}", CompName));
         }
         CompIndex = PIUNum;
     } else {
         PIUNum = CompIndex;
         if (PIUNum > state.dataPowerInductionUnits->NumPIUs || PIUNum < 1) {
             ShowFatalError(state,
-                           std::format("SimPIU: Invalid CompIndex passed={}, Number of PIU Units={}, PIU Unit name={}",
-                                       CompIndex,
-                                       state.dataPowerInductionUnits->NumPIUs,
-                                       CompName));
+                           EnergyPlus::format("SimPIU: Invalid CompIndex passed={}, Number of PIU Units={}, PIU Unit name={}",
+                                              CompIndex,
+                                              state.dataPowerInductionUnits->NumPIUs,
+                                              CompName));
         }
         if (state.dataPowerInductionUnits->CheckEquipName(PIUNum)) {
             if (CompName != state.dataPowerInductionUnits->PIU(PIUNum).Name) {
                 ShowFatalError(state,
-                               std::format("SimPIU: Invalid CompIndex passed={}, PIU Unit name={}, stored PIU Unit Name for that index={}",
-                                           CompIndex,
-                                           CompName,
-                                           state.dataPowerInductionUnits->PIU(PIUNum).Name));
+                               EnergyPlus::format("SimPIU: Invalid CompIndex passed={}, PIU Unit name={}, stored PIU Unit Name for that index={}",
+                                                  CompIndex,
+                                                  CompName,
+                                                  state.dataPowerInductionUnits->PIU(PIUNum).Name));
             }
             state.dataPowerInductionUnits->CheckEquipName(PIUNum) = false;
         }
@@ -203,8 +204,8 @@ void SimPIU(EnergyPlusData &state,
         break;
     }
     default:
-        ShowSevereError(state, std::format("Illegal PI Unit Type used={}", state.dataPowerInductionUnits->PIU(PIUNum).UnitType));
-        ShowContinueError(state, std::format("Occurs in PI Unit={}", state.dataPowerInductionUnits->PIU(PIUNum).Name));
+        ShowSevereError(state, EnergyPlus::format("Illegal PI Unit Type used={}", state.dataPowerInductionUnits->PIU(PIUNum).UnitType));
+        ShowContinueError(state, EnergyPlus::format("Occurs in PI Unit={}", state.dataPowerInductionUnits->PIU(PIUNum).Name));
         ShowFatalError(state, "Preceding condition causes termination.");
         break;
     }
@@ -330,7 +331,7 @@ void GetPIUs(EnergyPlusData &state)
                     thisPIU.HCoil_PlantType = DataPlant::PlantEquipmentType::CoilSteamAirHeating;
                     thisPIU.HCoil_fluid = Fluid::GetSteam(state);
                     if (thisPIU.HCoil_fluid == nullptr) {
-                        ShowSevereError(state, std::format("{} Steam Properties for {} not found.", RoutineName, thisPIU.Name));
+                        ShowSevereError(state, EnergyPlus::format("{} Steam Properties for {} not found.", RoutineName, thisPIU.Name));
                         if (SteamMessageNeeded) {
                             ShowContinueError(state, "Steam Fluid Properties should have been included in the input file.");
                         }
@@ -340,8 +341,8 @@ void GetPIUs(EnergyPlusData &state)
                     break;
                 }
                 default: {
-                    ShowSevereError(state, std::format("Illegal Reheat Coil Type = {}", HVAC::coilTypeNames[(int)thisPIU.heatCoilType]));
-                    ShowContinueError(state, std::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
+                    ShowSevereError(state, EnergyPlus::format("Illegal Reheat Coil Type = {}", HVAC::coilTypeNames[(int)thisPIU.heatCoilType]));
+                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
                     ErrorsFound = true;
                 }
                 }
@@ -448,7 +449,7 @@ void GetPIUs(EnergyPlusData &state)
                                   IsNotOK,
                                   cCurrentModuleObject + " - Heating Coil");
                 if (IsNotOK) {
-                    ShowContinueError(state, std::format("In {} = {}", cCurrentModuleObject, thisPIU.Name));
+                    ShowContinueError(state, EnergyPlus::format("In {} = {}", cCurrentModuleObject, thisPIU.Name));
                     ErrorsFound = true;
                 }
                 thisPIU.MaxVolHotWaterFlow = ip->getRealFieldValue(fields, objectSchemaProps, "maximum_hot_water_or_steam_flow_rate");
@@ -464,15 +465,15 @@ void GetPIUs(EnergyPlusData &state)
                 thisPIU.fanControlType = static_cast<FanCntrlType>(getEnumValue(fanCntrlTypeNamesUC, Util::makeUPPER(fan_control_type)));
 
                 if (thisPIU.fanControlType == FanCntrlType::Invalid) {
-                    ShowSevereError(state, std::format("Illegal Fan Control Type = {}", fan_control_type));
-                    ShowContinueError(state, std::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
+                    ShowSevereError(state, EnergyPlus::format("Illegal Fan Control Type = {}", fan_control_type));
+                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
                     ErrorsFound = true;
                 }
                 if (thisPIU.fanControlType == FanCntrlType::VariableSpeedFan) {
                     if (thisPIU.fanType != HVAC::FanType::SystemModel) {
                         ErrorsFound = true;
-                        ShowSevereError(state, std::format("Fan type must be Fan:SystemModel when Fan Control Type = {}", fan_control_type));
-                        ShowContinueError(state, std::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
+                        ShowSevereError(state, EnergyPlus::format("Fan type must be Fan:SystemModel when Fan Control Type = {}", fan_control_type));
+                        ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
                     }
                     // Heating Control Type is only applicable for variable speed fans
                     thisPIU.heatingControlType = static_cast<HeatCntrlBehaviorType>(getEnumValue(
@@ -480,7 +481,7 @@ void GetPIUs(EnergyPlusData &state)
 
                     if (thisPIU.heatingControlType == HeatCntrlBehaviorType::Invalid) {
                         ShowSevereError(state, "Heating Control Type should either be Staged or Modulated");
-                        ShowContinueError(state, std::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
+                        ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", cCurrentModuleObject, thisPIU.Name));
                         ErrorsFound = true;
                     }
                 }
@@ -534,8 +535,9 @@ void GetPIUs(EnergyPlusData &state)
                 // one assumes if there isn't one assigned, it's an error?
                 if (thisPIU.ADUNum == 0) {
                     ShowSevereError(
-                        state, std::format("{}No matching Air Distribution Unit, for PIU = [{},{}].", RoutineName, thisPIU.UnitType, thisPIU.Name));
-                    ShowContinueError(state, std::format("...should have outlet node = {}", state.dataLoopNodes->NodeID(thisPIU.OutAirNode)));
+                        state,
+                        EnergyPlus::format("{}No matching Air Distribution Unit, for PIU = [{},{}].", RoutineName, thisPIU.UnitType, thisPIU.Name));
+                    ShowContinueError(state, EnergyPlus::format("...should have outlet node = {}", state.dataLoopNodes->NodeID(thisPIU.OutAirNode)));
                     ErrorsFound = true;
                 } else {
 
@@ -560,9 +562,10 @@ void GetPIUs(EnergyPlusData &state)
                         }
                     }
                     if (!AirNodeFound) {
-                        ShowSevereError(state, std::format("The outlet air node from the {} Unit = {}", cCurrentModuleObject, thisPIU.Name));
+                        ShowSevereError(state, EnergyPlus::format("The outlet air node from the {} Unit = {}", cCurrentModuleObject, thisPIU.Name));
                         ShowContinueError(
-                            state, std::format("did not have a matching Zone Equipment Inlet Node, Node = {}", state.dataIPShortCut->cAlphaArgs(5)));
+                            state,
+                            EnergyPlus::format("did not have a matching Zone Equipment Inlet Node, Node = {}", state.dataIPShortCut->cAlphaArgs(5)));
                         ErrorsFound = true;
                     }
                 }

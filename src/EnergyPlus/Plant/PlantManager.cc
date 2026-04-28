@@ -48,6 +48,7 @@
 // C++ Headers
 #include <algorithm>
 #include <cassert>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -646,12 +647,13 @@ void GetPlantLoopData(EnergyPlusData &state)
                     ShowContinueError(
                         state, "Invalid " + state.dataIPShortCut->cAlphaFieldNames(PressSimAlphaIndex) + "=\"" + Alpha(PressSimAlphaIndex) + "\".");
                     ShowContinueError(state, "Currently only options are: ");
-                    ShowContinueError(state,
-                                      "  - " + std::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::NoPressure)]));
                     ShowContinueError(
-                        state, "  - " + std::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::PumpPowerCorrection)]));
-                    ShowContinueError(state,
-                                      "  - " + std::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::FlowCorrection)]));
+                        state, "  - " + EnergyPlus::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::NoPressure)]));
+                    ShowContinueError(
+                        state,
+                        "  - " + EnergyPlus::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::PumpPowerCorrection)]));
+                    ShowContinueError(
+                        state, "  - " + EnergyPlus::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::FlowCorrection)]));
                     ErrorsFound = true;
                 }
             }
@@ -1424,7 +1426,7 @@ void GetPlantInput(EnergyPlusData &state)
                     }
 
                     if (this_comp.compPtr == nullptr) {
-                        ShowFatalError(state, std::format(" Plant component \"{}\" was not assigned a pointer.", this_comp_type));
+                        ShowFatalError(state, EnergyPlus::format(" Plant component \"{}\" was not assigned a pointer.", this_comp_type));
                     }
 
                     this_comp.Name = CompNames(CompNum);
@@ -2160,9 +2162,9 @@ void fillPlantCondenserTopology(EnergyPlusData &state, DataPlant::PlantLoopData 
         // s->pdchTopPlantCompName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Component Name");
         // s->pdchTopPlantMixName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Mixer Name");
 
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, std::format("{}", rowCounter), loopType);
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, std::format("{}", rowCounter), thisLoop.Name);
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, std::format("{}", rowCounter), loopSide);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), thisLoop.Name);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), loopSide);
         ++rowCounter;
 
         // Report for first branch
@@ -2217,10 +2219,10 @@ void fillPlantToplogySplitterRow2(EnergyPlusData &state,
 {
     auto &orp = state.dataOutRptPredefined;
     // s->pdchTopPlantSplitName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Splitter Name");
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, std::format("{}", rowCounter), loopType);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, std::format("{}", rowCounter), loopName);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, std::format("{}", rowCounter), side);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSplitName2, std::format("{}", rowCounter), splitterName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), loopName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), side);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSplitName2, EnergyPlus::format("{}", rowCounter), splitterName);
 }
 void fillPlantToplogyMixerRow2(EnergyPlusData &state,
                                const std::string_view &loopType,
@@ -2231,10 +2233,10 @@ void fillPlantToplogyMixerRow2(EnergyPlusData &state,
 {
     auto &orp = state.dataOutRptPredefined;
     // s->pdchTopPlantMixName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Mixer Name");
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, std::format("{}", rowCounter), loopType);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, std::format("{}", rowCounter), loopName);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, std::format("{}", rowCounter), side);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantMixName2, std::format("{}", rowCounter), mixerName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), loopName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), side);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantMixName2, EnergyPlus::format("{}", rowCounter), mixerName);
 }
 void fillPlantToplogyComponentRow2(EnergyPlusData &state,
                                    const std::string_view &loopType,
@@ -2249,9 +2251,9 @@ void fillPlantToplogyComponentRow2(EnergyPlusData &state,
     // s->pdchTopPlantBranchName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Branch Name");
     // s->pdchTopPlantCompType2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Component Type");
     // s->pdchTopPlantCompName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Component Name");
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, std::format("{}", rowCounter), loopType);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, std::format("{}", rowCounter), loopName);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, std::format("{}", rowCounter), side);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), loopName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), side);
     OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantBranchName2, std::format("{}", rowCounter), branchName);
     OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompType2, std::format("{}", rowCounter), compType);
     OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompName2, std::format("{}", rowCounter), compName);

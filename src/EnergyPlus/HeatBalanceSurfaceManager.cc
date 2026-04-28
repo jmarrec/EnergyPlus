@@ -49,6 +49,8 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <format>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array1D.hh>
@@ -56,8 +58,14 @@
 #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/string.functions.hh>
 
-// EnergyPlus Headers
+// Third Party Headers
 #include <AirflowNetwork/Solver.hpp>
+#include <WCECommon.hpp>
+#include <WCEMultiLayerOptics.hpp>
+#include <WCESingleLayerOptics.hpp>
+#include <WCETarcog.hpp>
+
+// EnergyPlus Headers
 #include <EnergyPlus/ChilledCeilingPanelSimple.hh>
 #include <EnergyPlus/Construction.hh>
 #include <EnergyPlus/ConvectionCoefficients.hh>
@@ -119,10 +127,6 @@
 #include <EnergyPlus/WindowManagerExteriorData.hh>
 #include <EnergyPlus/WindowManagerExteriorThermal.hh>
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
-#include <WCECommon.hpp>
-#include <WCEMultiLayerOptics.hpp>
-#include <WCESingleLayerOptics.hpp>
-#include <WCETarcog.hpp>
 
 namespace EnergyPlus::HeatBalanceSurfaceManager {
 

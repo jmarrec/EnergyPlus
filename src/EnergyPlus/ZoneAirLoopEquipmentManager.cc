@@ -156,25 +156,26 @@ namespace ZoneAirLoopEquipmentManager {
         if (CompIndex == 0) {
             AirDistUnitNum = Util::FindItemInList(ZoneAirLoopEquipName, state.dataDefineEquipment->AirDistUnit);
             if (AirDistUnitNum == 0) {
-                ShowFatalError(state, std::format("ManageZoneAirLoopEquipment: Unit not found={}", ZoneAirLoopEquipName));
+                ShowFatalError(state, EnergyPlus::format("ManageZoneAirLoopEquipment: Unit not found={}", ZoneAirLoopEquipName));
             }
             CompIndex = AirDistUnitNum;
         } else {
             AirDistUnitNum = CompIndex;
             if (AirDistUnitNum > (int)state.dataDefineEquipment->AirDistUnit.size() || AirDistUnitNum < 1) {
-                ShowFatalError(state,
-                               std::format("ManageZoneAirLoopEquipment:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                           AirDistUnitNum,
-                                           (int)state.dataDefineEquipment->AirDistUnit.size(),
-                                           ZoneAirLoopEquipName));
+                ShowFatalError(
+                    state,
+                    EnergyPlus::format("ManageZoneAirLoopEquipment:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                       AirDistUnitNum,
+                                       (int)state.dataDefineEquipment->AirDistUnit.size(),
+                                       ZoneAirLoopEquipName));
             }
             if (ZoneAirLoopEquipName != state.dataDefineEquipment->AirDistUnit(AirDistUnitNum).Name) {
                 ShowFatalError(
                     state,
-                    std::format("ManageZoneAirLoopEquipment: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                AirDistUnitNum,
-                                ZoneAirLoopEquipName,
-                                state.dataDefineEquipment->AirDistUnit(AirDistUnitNum).Name));
+                    EnergyPlus::format("ManageZoneAirLoopEquipment: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                       AirDistUnitNum,
+                                       ZoneAirLoopEquipName,
+                                       state.dataDefineEquipment->AirDistUnit(AirDistUnitNum).Name));
             }
         }
         state.dataSize->CurTermUnitSizingNum = state.dataDefineEquipment->AirDistUnit(AirDistUnitNum).TermUnitSizingNum;
@@ -269,7 +270,7 @@ namespace ZoneAirLoopEquipmentManager {
                 airDistUnit.EquipName(AirDistCompUnitNum) = AlphArray(4);
                 ValidateComponent(state, AlphArray(3), AlphArray(4), IsNotOK, CurrentModuleObject);
                 if (IsNotOK) {
-                    ShowContinueError(state, std::format("In {} = {}", CurrentModuleObject, AlphArray(1)));
+                    ShowContinueError(state, EnergyPlus::format("In {} = {}", CurrentModuleObject, AlphArray(1)));
                     ErrorsFound = true;
                 }
                 airDistUnit.UpStreamLeakFrac = NumArray(1);
@@ -279,8 +280,8 @@ namespace ZoneAirLoopEquipmentManager {
                 } else if (airDistUnit.DownStreamLeakFrac < 1.0 && airDistUnit.DownStreamLeakFrac > 0.0) {
                     airDistUnit.LeakLoadMult = 1.0 / (1.0 - airDistUnit.DownStreamLeakFrac);
                 } else {
-                    ShowSevereError(state, std::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
-                    ShowContinueError(state, std::format("{} must be less than 1.0", cNumericFields(2)));
+                    ShowSevereError(state, EnergyPlus::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
+                    ShowContinueError(state, EnergyPlus::format("{} must be less than 1.0", cNumericFields(2)));
                     ErrorsFound = true;
                 }
                 if (airDistUnit.UpStreamLeakFrac > 0.0) {
@@ -299,8 +300,8 @@ namespace ZoneAirLoopEquipmentManager {
                 if (!lAlphaBlanks(5)) {
                     airDistUnit.AirTerminalSizingSpecIndex = Util::FindItemInList(AlphArray(5), state.dataSize->AirTerminalSizingSpec);
                     if (airDistUnit.AirTerminalSizingSpecIndex == 0) {
-                        ShowSevereError(state, std::format("{} = {} not found.", cAlphaFields(5), AlphArray(5)));
-                        ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, airDistUnit.Name));
+                        ShowSevereError(state, EnergyPlus::format("{} = {} not found.", cAlphaFields(5), AlphArray(5)));
+                        ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, airDistUnit.Name));
                         ErrorsFound = true;
                     }
                 }
@@ -320,22 +321,22 @@ namespace ZoneAirLoopEquipmentManager {
                 case DataDefineEquip::ZnAirLoopEquipType::SingleDuctUserDefined:
                 case DataDefineEquip::ZnAirLoopEquipType::SingleDuctATMixer:
                     if (airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak) {
-                        ShowSevereError(state, std::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
+                        ShowSevereError(state, EnergyPlus::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
                         ShowContinueError(state,
-                                          std::format("Simple duct leakage model not available for {} = {}",
-                                                      cAlphaFields(3),
-                                                      airDistUnit.EquipType(AirDistCompUnitNum)));
+                                          EnergyPlus::format("Simple duct leakage model not available for {} = {}",
+                                                             cAlphaFields(3),
+                                                             airDistUnit.EquipType(AirDistCompUnitNum)));
                         ErrorsFound = true;
                     }
                     break;
                 case DataDefineEquip::ZnAirLoopEquipType::SingleDuctConstVolFourPipeBeam:
                     airDistUnit.airTerminalPtr = FourPipeBeam::HVACFourPipeBeam::fourPipeBeamFactory(state, airDistUnit.EquipName(1));
                     if (airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak) {
-                        ShowSevereError(state, std::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
+                        ShowSevereError(state, EnergyPlus::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
                         ShowContinueError(state,
-                                          std::format("Simple duct leakage model not available for {} = {}",
-                                                      cAlphaFields(3),
-                                                      airDistUnit.EquipType(AirDistCompUnitNum)));
+                                          EnergyPlus::format("Simple duct leakage model not available for {} = {}",
+                                                             cAlphaFields(3),
+                                                             airDistUnit.EquipType(AirDistCompUnitNum)));
                         ErrorsFound = true;
                     }
                     break;
@@ -349,8 +350,8 @@ namespace ZoneAirLoopEquipmentManager {
                     airDistUnit.IsConstLeakageRate = true;
                     break;
                 default:
-                    ShowSevereError(state, std::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
-                    ShowContinueError(state, std::format("Invalid {} = {}", cAlphaFields(3), airDistUnit.EquipType(AirDistCompUnitNum)));
+                    ShowSevereError(state, EnergyPlus::format("Error found in {} = {}", CurrentModuleObject, airDistUnit.Name));
+                    ShowContinueError(state, EnergyPlus::format("Invalid {} = {}", cAlphaFields(3), airDistUnit.EquipType(AirDistCompUnitNum)));
                     ErrorsFound = true;
                     break;
                 } // end switch
@@ -439,7 +440,7 @@ namespace ZoneAirLoopEquipmentManager {
             }
         }
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}Errors found in getting {} Input", RoutineName, CurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("{}Errors found in getting {} Input", RoutineName, CurrentModuleObject));
         }
     }
 
@@ -744,8 +745,8 @@ namespace ZoneAirLoopEquipmentManager {
                 ProvideSysOutput = false;
             } break;
             default: {
-                ShowSevereError(state, std::format("Error found in ZoneHVAC:AirDistributionUnit={}", airDistUnit.Name));
-                ShowContinueError(state, std::format("Invalid Component={}", airDistUnit.EquipType(AirDistCompNum)));
+                ShowSevereError(state, EnergyPlus::format("Error found in ZoneHVAC:AirDistributionUnit={}", airDistUnit.Name));
+                ShowContinueError(state, EnergyPlus::format("Invalid Component={}", airDistUnit.EquipType(AirDistCompNum)));
                 ShowFatalError(state, "Preceding condition causes termination.");
             } break;
             }

@@ -45,8 +45,6 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "AirflowNetwork/Solver.hpp"
-
 // C++ Headers
 #include <algorithm>
 #include <cmath>
@@ -57,8 +55,11 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 
+// Local Headers
+#include "AirflowNetwork/Elements.hpp"
+#include "AirflowNetwork/Solver.hpp"
+
 // EnergyPlus Headers
-#include <AirflowNetwork/Elements.hpp>
 #include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/Coils/CoilCoolingDX.hh>
 #include <EnergyPlus/Construction.hh>
@@ -363,10 +364,10 @@ namespace AirflowNetwork {
                     }
                     if (pressure <= 31000.0) {
                         ShowSevereError(m_state,
-                                        std::format("{}: {}: {}. Reference Barometric Pressure must be greater than 31000 Pa.",
-                                                    RoutineName,
-                                                    CurrentModuleObject,
-                                                    thisObjectName));
+                                        EnergyPlus::format("{}: {}: {}. Reference Barometric Pressure must be greater than 31000 Pa.",
+                                                           RoutineName,
+                                                           CurrentModuleObject,
+                                                           thisObjectName));
                         success = false;
                     }
                 }
@@ -422,11 +423,11 @@ namespace AirflowNetwork {
 
                         if (result == referenceConditions.end()) {
                             ShowSevereError(m_state,
-                                            std::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
-                                                        RoutineName,
-                                                        CurrentModuleObject,
-                                                        thisObjectName,
-                                                        refCrackCondName));
+                                            EnergyPlus::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
+                                                               RoutineName,
+                                                               CurrentModuleObject,
+                                                               thisObjectName,
+                                                               refCrackCondName));
                             success = false;
                         } else {
                             refT = result->second.temperature;
@@ -478,7 +479,7 @@ namespace AirflowNetwork {
                 if (fanIndex == 0) {
                     ShowSevereError(
                         m_state,
-                        std::format("{}: {} = {} is not found in Fan:ZoneExhaust objects.", RoutineName, CurrentModuleObject, thisObjectName));
+                        EnergyPlus::format("{}: {} = {} is not found in Fan:ZoneExhaust objects.", RoutineName, CurrentModuleObject, thisObjectName));
                     success = false;
                 }
 
@@ -491,10 +492,10 @@ namespace AirflowNetwork {
                 HVAC::FanType fanType = fan->type;
                 if (fanType != HVAC::FanType::Exhaust) {
                     ShowSevereError(m_state,
-                                    std::format("{}: {} = {}. The specified Name is not found as a valid Fan:ZoneExhaust object.",
-                                                RoutineName,
-                                                CurrentModuleObject,
-                                                thisObjectName));
+                                    EnergyPlus::format("{}: {} = {}. The specified Name is not found as a valid Fan:ZoneExhaust object.",
+                                                       RoutineName,
+                                                       CurrentModuleObject,
+                                                       thisObjectName));
                     success = false;
                 }
 
@@ -507,11 +508,11 @@ namespace AirflowNetwork {
                         auto result = referenceConditions.find(Util::makeUPPER(refCrackCondName));
                         if (result == referenceConditions.end()) {
                             ShowSevereError(m_state,
-                                            std::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
-                                                        RoutineName,
-                                                        CurrentModuleObject,
-                                                        thisObjectName,
-                                                        fields.at("reference_crack_conditions").get<std::string>()));
+                                            EnergyPlus::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
+                                                               RoutineName,
+                                                               CurrentModuleObject,
+                                                               thisObjectName,
+                                                               fields.at("reference_crack_conditions").get<std::string>()));
                             success = false;
                         } else {
                             refT = result->second.temperature;
@@ -541,7 +542,7 @@ namespace AirflowNetwork {
                 } else {
                     ShowSevereError(
                         m_state,
-                        std::format(
+                        EnergyPlus::format(
                             "{}: {}: Duplicated airflow element names are found = \"{}\".", RoutineName, CurrentModuleObject, thisObjectName));
                     // ShowContinueError(state, "A unique component name is required in both objects " + CompName(1) + " and " + CompName(2));
                     success = false;
@@ -574,11 +575,11 @@ namespace AirflowNetwork {
                 int OAMixerNum = MixedAir::GetOAMixerNumber(m_state, mixer_name);
                 if (OAMixerNum == 0) {
                     ShowSevereError(m_state,
-                                    std::format("{}: {}: {}. Invalid Outdoor Air Mixer Name \"{}\" given.",
-                                                RoutineName,
-                                                CurrentModuleObject,
-                                                thisObjectName,
-                                                mixer_name));
+                                    EnergyPlus::format("{}: {}: {}. Invalid Outdoor Air Mixer Name \"{}\" given.",
+                                                       RoutineName,
+                                                       CurrentModuleObject,
+                                                       thisObjectName,
+                                                       mixer_name));
                     success = false;
                 }
 
@@ -591,11 +592,11 @@ namespace AirflowNetwork {
                         auto result = referenceConditions.find(Util::makeUPPER(refCrackCondName));
                         if (result == referenceConditions.end()) {
                             ShowSevereError(m_state,
-                                            std::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
-                                                        RoutineName,
-                                                        CurrentModuleObject,
-                                                        thisObjectName,
-                                                        refCrackCondName));
+                                            EnergyPlus::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
+                                                               RoutineName,
+                                                               CurrentModuleObject,
+                                                               thisObjectName,
+                                                               refCrackCondName));
                             success = false;
                         } else {
                             refT = result->second.temperature;
@@ -623,7 +624,7 @@ namespace AirflowNetwork {
                 } else {
                     ShowSevereError(
                         m_state,
-                        std::format(
+                        EnergyPlus::format(
                             "{}: {}: Duplicated airflow element names are found = \"{}\".", RoutineName, CurrentModuleObject, thisObjectName));
                     // ShowContinueError(state, "A unique component name is required in both objects " + CompName(1) + " and " + CompName(2));
                     success = false;
@@ -656,7 +657,7 @@ namespace AirflowNetwork {
                 int OAMixerNum{MixedAir::GetOAMixerNumber(m_state, mixer_name)};
                 if (OAMixerNum == 0) {
                     ShowSevereError(m_state,
-                                    std::format(RoutineName) + ": " + CurrentModuleObject + " object " + thisObjectName + ". Invalid " +
+                                    EnergyPlus::format(RoutineName) + ": " + CurrentModuleObject + " object " + thisObjectName + ". Invalid " +
                                         "Outdoor Air Mixer Name" + " \"" + mixer_name + "\" given.");
                     success = false;
                 }
@@ -670,11 +671,11 @@ namespace AirflowNetwork {
                         auto result = referenceConditions.find(Util::makeUPPER(refCrackCondName));
                         if (result == referenceConditions.end()) {
                             ShowSevereError(m_state,
-                                            std::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
-                                                        RoutineName,
-                                                        CurrentModuleObject,
-                                                        thisObjectName,
-                                                        refCrackCondName));
+                                            EnergyPlus::format("{}: {}: {}. Cannot find reference crack conditions object \"{}\".",
+                                                               RoutineName,
+                                                               CurrentModuleObject,
+                                                               thisObjectName,
+                                                               refCrackCondName));
                             success = false;
                         } else {
                             refT = result->second.temperature;
@@ -700,7 +701,7 @@ namespace AirflowNetwork {
                 } else {
                     ShowSevereError(
                         m_state,
-                        std::format(
+                        EnergyPlus::format(
                             "{}: {}: Duplicated airflow element names are found = \"{}\".", RoutineName, CurrentModuleObject, thisObjectName));
                     // ShowContinueError(state, "A unique component name is required in both objects " + CompName(1) + " and " + CompName(2));
                     success = false;
@@ -741,8 +742,8 @@ namespace AirflowNetwork {
                     } else {
                         // Code will never be executed, validation will catch invalid input
                         ShowSevereError(m_state,
-                                        std::format(RoutineName) + "Invalid Type of Rectangular Large Vertical Opening (LVO) = " + LVOstring + "in " +
-                                            CurrentModuleObject + " = " + thisObjectName);
+                                        EnergyPlus::format(RoutineName) + "Invalid Type of Rectangular Large Vertical Opening (LVO) = " + LVOstring +
+                                            "in " + CurrentModuleObject + " = " + thisObjectName);
                         ShowContinueError(m_state, "Valid choices are NonPivoted and HorizontallyPivoted.");
                         success = false;
                     }
@@ -897,7 +898,7 @@ namespace AirflowNetwork {
                 MultizoneCompDetOpeningData(i).StartHFac4 = 0.0;  // Start height factor for opening factor #4
                 if (N == 2) {
                     if (factors[1] != 1.0) {
-                        ShowWarningError(m_state, std::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
+                        ShowWarningError(m_state, EnergyPlus::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
                         ShowContinueError(
                             m_state,
                             "..This object specifies that only 3 opening factors will be used. So, the value of Opening Factor #2 is set to 1.0.");
@@ -913,7 +914,7 @@ namespace AirflowNetwork {
                     if (N >= 4) {
                         MultizoneCompDetOpeningData(i).OpenFac4 = factors[3]; // Opening factor #4
                         if (factors[3] != 1.0) {
-                            ShowWarningError(m_state, std::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
+                            ShowWarningError(m_state, EnergyPlus::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
                             ShowContinueError(m_state,
                                               "..This object specifies that 4 opening factors will be used. So, the value of Opening Factor #4 "
                                               "is set to 1.0.");
@@ -926,7 +927,7 @@ namespace AirflowNetwork {
                         MultizoneCompDetOpeningData(i).StartHFac4 = start_height_factors[3]; // Start height factor for opening factor #4
                     } else {
                         if (factors[2] != 1.0) {
-                            ShowWarningError(m_state, std::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
+                            ShowWarningError(m_state, EnergyPlus::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
                             ShowContinueError(m_state,
                                               "..This object specifies that only 3 opening factors will be used. So, the value of Opening Factor #3 "
                                               "is set to 1.0.");
@@ -938,13 +939,13 @@ namespace AirflowNetwork {
 
                 // Sanity checks, check sum of Height Factor and the Start Height Factor
                 if (MultizoneCompDetOpeningData(i).HeightFac1 + MultizoneCompDetOpeningData(i).StartHFac1 > 1.0) {
-                    ShowSevereError(m_state, std::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
+                    ShowSevereError(m_state, EnergyPlus::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
                     ShowContinueError(
                         m_state, "..The sum of Height Factor for Opening Factor 1 and Start Height Factor for Opening Factor 1 is greater than 1.0");
                     success = false;
                 }
                 if (MultizoneCompDetOpeningData(i).HeightFac2 + MultizoneCompDetOpeningData(i).StartHFac2 > 1.0) {
-                    ShowSevereError(m_state, std::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
+                    ShowSevereError(m_state, EnergyPlus::format("{}: {} = {}", RoutineName, CurrentModuleObject, thisObjectName));
                     ShowContinueError(
                         m_state, "..The sum of Height Factor for Opening Factor 2 and Start Height Factor for Opening Factor 2 is greater than 1.0");
                     success = false;

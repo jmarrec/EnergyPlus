@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -128,25 +129,25 @@ void SimStandAloneERV(EnergyPlusData &state,
     if (CompIndex == 0) {
         StandAloneERVNum = Util::FindItem(CompName, state.dataHVACStandAloneERV->StandAloneERV);
         if (StandAloneERVNum == 0) {
-            ShowFatalError(state, std::format("SimStandAloneERV: Unit not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("SimStandAloneERV: Unit not found={}", CompName));
         }
         CompIndex = StandAloneERVNum;
     } else {
         StandAloneERVNum = CompIndex;
         if (StandAloneERVNum > state.dataHVACStandAloneERV->NumStandAloneERVs || StandAloneERVNum < 1) {
             ShowFatalError(state,
-                           std::format("SimStandAloneERV:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                       StandAloneERVNum,
-                                       state.dataHVACStandAloneERV->NumStandAloneERVs,
-                                       CompName));
+                           EnergyPlus::format("SimStandAloneERV:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                              StandAloneERVNum,
+                                              state.dataHVACStandAloneERV->NumStandAloneERVs,
+                                              CompName));
         }
         if (state.dataHVACStandAloneERV->CheckEquipName(StandAloneERVNum)) {
             if (CompName != state.dataHVACStandAloneERV->StandAloneERV(StandAloneERVNum).Name) {
                 ShowFatalError(state,
-                               std::format("SimStandAloneERV: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                           StandAloneERVNum,
-                                           CompName,
-                                           state.dataHVACStandAloneERV->StandAloneERV(StandAloneERVNum).Name));
+                               EnergyPlus::format("SimStandAloneERV: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                                  StandAloneERVNum,
+                                                  CompName,
+                                                  state.dataHVACStandAloneERV->StandAloneERV(StandAloneERVNum).Name));
             }
             state.dataHVACStandAloneERV->CheckEquipName(StandAloneERVNum) = false;
         }
@@ -264,14 +265,14 @@ void GetStandAloneERV(EnergyPlusData &state)
         standAloneERV.hxType =
             HeatRecovery::GetHeatExchangerObjectTypeNum(state, standAloneERV.HeatExchangerName, standAloneERV.HeatExchangerIndex, errFlag);
         if (errFlag) {
-            ShowContinueError(state, std::format("... occurs in {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
+            ShowContinueError(state, EnergyPlus::format("... occurs in {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
             ErrorsFound = true;
         }
 
         errFlag = false;
         HXSupAirFlowRate = HeatRecovery::GetSupplyAirFlowRate(state, standAloneERV.HeatExchangerName, errFlag);
         if (errFlag) {
-            ShowContinueError(state, std::format("... occurs in {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
+            ShowContinueError(state, EnergyPlus::format("... occurs in {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
             ErrorsFound = true;
         }
         standAloneERV.DesignHXVolFlowRate = HXSupAirFlowRate;
@@ -312,7 +313,7 @@ void GetStandAloneERV(EnergyPlusData &state)
         standAloneERV.SupplyAirInletNode = HeatRecovery::GetSupplyInletNode(state, standAloneERV.HeatExchangerName, errFlag);
         standAloneERV.ExhaustAirInletNode = HeatRecovery::GetSecondaryInletNode(state, standAloneERV.HeatExchangerName, errFlag);
         if (errFlag) {
-            ShowContinueError(state, std::format("... occurs in {} ={}", CurrentModuleObject, standAloneERV.Name));
+            ShowContinueError(state, EnergyPlus::format("... occurs in {} ={}", CurrentModuleObject, standAloneERV.Name));
             ErrorsFound = true;
         }
         standAloneERV.SupplyAirInletNode = GetOnlySingleNode(state,
@@ -354,10 +355,10 @@ void GetStandAloneERV(EnergyPlusData &state)
 
         //   Check that supply air inlet node is an OA node
         if (!OutAirNodeManager::CheckOutAirNodeNumber(state, standAloneERV.SupplyAirInletNode)) {
-            ShowSevereError(state, std::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
+            ShowSevereError(state, EnergyPlus::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
             ShowContinueError(state,
-                              std::format(" Node name of supply air inlet node not valid Outdoor Air Node = {}",
-                                          state.dataLoopNodes->NodeID(standAloneERV.SupplyAirInletNode)));
+                              EnergyPlus::format(" Node name of supply air inlet node not valid Outdoor Air Node = {}",
+                                                 state.dataLoopNodes->NodeID(standAloneERV.SupplyAirInletNode)));
             ShowContinueError(state, "...does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.");
             ErrorsFound = true;
         }
@@ -386,34 +387,36 @@ void GetStandAloneERV(EnergyPlusData &state)
             }
         }
         if (!ZoneInletNodeFound) {
-            ShowSevereError(state, std::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
+            ShowSevereError(state, EnergyPlus::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
             ShowContinueError(state, "... Node name of supply air outlet node does not appear in a ZoneHVAC:EquipmentConnections object.");
-            ShowContinueError(state, std::format("... Supply air outlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.SupplyAirOutletNode)));
+            ShowContinueError(state,
+                              EnergyPlus::format("... Supply air outlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.SupplyAirOutletNode)));
             ErrorsFound = true;
         }
         if (!ZoneExhaustNodeFound) {
-            ShowSevereError(state, std::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
+            ShowSevereError(state, EnergyPlus::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
             ShowContinueError(state, "... Node name of exhaust air inlet node does not appear in a ZoneHVAC:EquipmentConnections object.");
-            ShowContinueError(state, std::format("... Exhaust air inlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.ExhaustAirInletNode)));
+            ShowContinueError(state,
+                              EnergyPlus::format("... Exhaust air inlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.ExhaustAirInletNode)));
             ErrorsFound = true;
         }
         //   If nodes are found, make sure they are in the same zone
         if (ZoneInletNodeFound && ZoneExhaustNodeFound) {
             if (ZoneInletCZN != ZoneExhaustCZN) {
-                ShowSevereError(state, std::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
+                ShowSevereError(state, EnergyPlus::format("For {} \"{}\"", CurrentModuleObject, standAloneERV.Name));
                 ShowContinueError(state,
                                   "... Node name of supply air outlet node and exhasut air inlet node must appear in the same "
                                   "ZoneHVAC:EquipmentConnections object.");
-                ShowContinueError(state,
-                                  std::format("... Supply air outlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.SupplyAirOutletNode)));
                 ShowContinueError(
-                    state,
-                    std::format("... ZoneHVAC:EquipmentConnections Zone Name = {}", state.dataZoneEquip->ZoneEquipConfig(ZoneInletCZN).ZoneName));
+                    state, EnergyPlus::format("... Supply air outlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.SupplyAirOutletNode)));
                 ShowContinueError(state,
-                                  std::format("... Exhaust air inlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.ExhaustAirInletNode)));
+                                  EnergyPlus::format("... ZoneHVAC:EquipmentConnections Zone Name = {}",
+                                                     state.dataZoneEquip->ZoneEquipConfig(ZoneInletCZN).ZoneName));
                 ShowContinueError(
-                    state,
-                    std::format("... ZoneHVAC:EquipmentConnections Zone Name = {}", state.dataZoneEquip->ZoneEquipConfig(ZoneExhaustCZN).ZoneName));
+                    state, EnergyPlus::format("... Exhaust air inlet node = {}", state.dataLoopNodes->NodeID(standAloneERV.ExhaustAirInletNode)));
+                ShowContinueError(state,
+                                  EnergyPlus::format("... ZoneHVAC:EquipmentConnections Zone Name = {}",
+                                                     state.dataZoneEquip->ZoneEquipConfig(ZoneExhaustCZN).ZoneName));
                 ErrorsFound = true;
             }
         }
@@ -434,9 +437,10 @@ void GetStandAloneERV(EnergyPlusData &state)
 
             if (state.dataInputProcessing->inputProcessor->getObjectItemNum(
                     state, "ZoneHVAC:EnergyRecoveryVentilator:Controller", standAloneERV.ControllerName) <= 0) {
-                ShowSevereError(
-                    state,
-                    std::format("{} controller type ZoneHVAC:EnergyRecoveryVentilator:Controller not found = {}", CurrentModuleObject, Alphas(6)));
+                ShowSevereError(state,
+                                EnergyPlus::format("{} controller type ZoneHVAC:EnergyRecoveryVentilator:Controller not found = {}",
+                                                   CurrentModuleObject,
+                                                   Alphas(6)));
                 ErrorsFound = true;
                 standAloneERV.ControllerNameDefined = false;
             } else {

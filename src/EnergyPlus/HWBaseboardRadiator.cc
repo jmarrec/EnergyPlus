@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -138,25 +139,25 @@ namespace HWBaseboardRadiator {
         if (CompIndex == 0) {
             BaseboardNum = Util::FindItemInList(EquipName, state.dataHWBaseboardRad->HWBaseboard, &HWBaseboardParams::Name);
             if (BaseboardNum == 0) {
-                ShowFatalError(state, std::format("SimHWBaseboard: Unit not found={}", EquipName));
+                ShowFatalError(state, EnergyPlus::format("SimHWBaseboard: Unit not found={}", EquipName));
             }
             CompIndex = BaseboardNum;
         } else {
             BaseboardNum = CompIndex;
             if (BaseboardNum > NumHWBaseboards || BaseboardNum < 1) {
                 ShowFatalError(state,
-                               std::format("SimHWBaseboard:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                           BaseboardNum,
-                                           NumHWBaseboards,
-                                           EquipName));
+                               EnergyPlus::format("SimHWBaseboard:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                                  BaseboardNum,
+                                                  NumHWBaseboards,
+                                                  EquipName));
             }
             if (state.dataHWBaseboardRad->CheckEquipName(BaseboardNum)) {
                 if (EquipName != state.dataHWBaseboardRad->HWBaseboard(BaseboardNum).Name) {
                     ShowFatalError(state,
-                                   std::format("SimHWBaseboard: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                               BaseboardNum,
-                                               EquipName,
-                                               state.dataHWBaseboardRad->HWBaseboard(BaseboardNum).Name));
+                                   EnergyPlus::format("SimHWBaseboard: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                                      BaseboardNum,
+                                                      EquipName,
+                                                      state.dataHWBaseboardRad->HWBaseboard(BaseboardNum).Name));
                 }
                 state.dataHWBaseboardRad->CheckEquipName(BaseboardNum) = false;
             }
@@ -204,7 +205,7 @@ namespace HWBaseboardRadiator {
                                   HWBaseboard.plantLoc);
             } break;
             default: {
-                ShowSevereError(state, std::format("SimBaseboard: Errors in Baseboard={}", HWBaseboard.Name));
+                ShowSevereError(state, EnergyPlus::format("SimBaseboard: Errors in Baseboard={}", HWBaseboard.Name));
                 ShowContinueError(state, EnergyPlus::format("Invalid or unimplemented equipment type={}", HWBaseboard.EquipType));
                 ShowFatalError(state, "Preceding condition causes termination.");
             } break;
@@ -217,7 +218,7 @@ namespace HWBaseboardRadiator {
             ReportHWBaseboard(state, BaseboardNum);
 
         } else {
-            ShowFatalError(state, std::format("SimHWBaseboard: Unit not found={}", EquipName));
+            ShowFatalError(state, EnergyPlus::format("SimHWBaseboard: Unit not found={}", EquipName));
         }
     }
 
@@ -310,55 +311,60 @@ namespace HWBaseboardRadiator {
                 if (!state.dataIPShortCut->lNumericFieldBlanks(iHeatCapacityPerFloorAreaNumericNum)) {
                     thisHWBaseboardDesign.ScaledHeatingCapacity = state.dataIPShortCut->rNumericArgs(iHeatCapacityPerFloorAreaNumericNum);
                     if (thisHWBaseboardDesign.ScaledHeatingCapacity <= 0.0) {
-                        ShowSevereError(state, std::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
+                        ShowSevereError(state,
+                                        EnergyPlus::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
                         ShowContinueError(state,
-                                          std::format("Input for {} = {}",
-                                                      state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                      state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                                          EnergyPlus::format("Input for {} = {}",
+                                                             state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                             state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
+                                          EnergyPlus::format("Illegal {} = {:.7f}",
                                                              state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum),
                                                              state.dataIPShortCut->rNumericArgs(iHeatCapacityPerFloorAreaNumericNum)));
                         ErrorsFound = true;
                     } else if (thisHWBaseboardDesign.ScaledHeatingCapacity == DataSizing::AutoSize) {
-                        ShowSevereError(state, std::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
+                        ShowSevereError(state,
+                                        EnergyPlus::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
                         ShowContinueError(state,
-                                          std::format("Input for {} = {}",
-                                                      state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                      state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
-                        ShowContinueError(
-                            state,
-                            std::format("Illegal {} = Autosize", state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum)));
+                                          EnergyPlus::format("Input for {} = {}",
+                                                             state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                             state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Illegal {} = Autosize",
+                                                             state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {
-                    ShowSevereError(state, std::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
                     ShowContinueError(state,
-                                      std::format("Input for {} = {}",
-                                                  state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                  state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
-                    ShowContinueError(
-                        state,
-                        std::format("Blank field not allowed for {}", state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum)));
+                                      EnergyPlus::format("Input for {} = {}",
+                                                         state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                         state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("Blank field not allowed for {}",
+                                                         state.dataIPShortCut->cNumericFieldNames(iHeatCapacityPerFloorAreaNumericNum)));
                     ErrorsFound = true;
                 }
             } else if (thisHWBaseboardDesign.HeatingCapMethod == DataSizing::DesignSizingType::FractionOfAutosizedHeatingCapacity) {
                 if (!state.dataIPShortCut->lNumericFieldBlanks(iHeatFracOfAutosizedCapacityNumericNum)) {
                     thisHWBaseboardDesign.ScaledHeatingCapacity = state.dataIPShortCut->rNumericArgs(iHeatFracOfAutosizedCapacityNumericNum);
                     if (thisHWBaseboardDesign.ScaledHeatingCapacity < 0.0) {
-                        ShowSevereError(state, std::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
+                        ShowSevereError(state,
+                                        EnergyPlus::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
+                                          EnergyPlus::format("Illegal {} = {:.7f}",
                                                              state.dataIPShortCut->cNumericFieldNames(iHeatFracOfAutosizedCapacityNumericNum),
                                                              state.dataIPShortCut->rNumericArgs(iHeatFracOfAutosizedCapacityNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {
-                    ShowSevereError(state, std::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboardDesign.designName));
                     ShowContinueError(state,
-                                      std::format("Input for {} = {}",
-                                                  state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
-                                                  state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
+                                      EnergyPlus::format("Input for {} = {}",
+                                                         state.dataIPShortCut->cAlphaFieldNames(iHeatCAPMAlphaNum),
+                                                         state.dataIPShortCut->cAlphaArgs(iHeatCAPMAlphaNum)));
                     ShowContinueError(state,
                                       std::format("Blank field not allowed for {}",
                                                   state.dataIPShortCut->cNumericFieldNames(iHeatFracOfAutosizedCapacityNumericNum)));
@@ -546,9 +552,9 @@ namespace HWBaseboardRadiator {
                     if (thisHWBaseboard.ScaledHeatingCapacity < 0.0 && thisHWBaseboard.ScaledHeatingCapacity != DataSizing::AutoSize) {
                         ShowSevereError(state, std::format("{} = {}", state.dataIPShortCut->cCurrentModuleObject, thisHWBaseboard.Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Illegal {} = {:.7T}",
-                                                             state.dataIPShortCut->cNumericFieldNames(iHeatDesignCapacityNumericNum),
-                                                             state.dataIPShortCut->rNumericArgs(iHeatDesignCapacityNumericNum)));
+                                          std::format("Illegal {} = {:.7f}",
+                                                      state.dataIPShortCut->cNumericFieldNames(iHeatDesignCapacityNumericNum),
+                                                      state.dataIPShortCut->rNumericArgs(iHeatDesignCapacityNumericNum)));
                         ErrorsFound = true;
                     }
                 } else {

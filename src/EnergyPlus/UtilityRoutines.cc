@@ -45,13 +45,9 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// FMI-Related Headers
-extern "C" {
-#include <FMI/main.h>
-}
-
 // C++ Headers
 #include <cstdlib>
+#include <format>
 #include <iostream>
 
 // ObjexxFCL Headers
@@ -59,6 +55,12 @@ extern "C" {
 #include <ObjexxFCL/Array1S.hh>
 #include <ObjexxFCL/char.functions.hh>
 #include <ObjexxFCL/string.functions.hh>
+
+// Third Party Headers
+extern "C" {
+#include <FMI/main.h>
+}
+#include <fast_float/fast_float.h>
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchInputManager.hh>
@@ -83,9 +85,6 @@ extern "C" {
 #include <EnergyPlus/SystemReports.hh>
 #include <EnergyPlus/Timer.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
-
-// Third Party Headers
-#include <fast_float/fast_float.h>
 
 namespace EnergyPlus {
 
@@ -285,10 +284,10 @@ namespace Util {
         // sent to this routine.
         if (ptrToBeSet <= 0) { // No valid pointer--error in user input
             errorFound = true;
-            ShowSevereError(state,
-                            std::format("Object = {} with the Name = {} has an invalid Design Object Name = {}.", itemType, itemName, nameToBeSet));
+            ShowSevereError(
+                state, EnergyPlus::format("Object = {} with the Name = {} has an invalid Design Object Name = {}.", itemType, itemName, nameToBeSet));
             ShowContinueError(state, "  The Design Object Name was not found or was left blank.  This is not allowed.");
-            ShowContinueError(state, std::format("  A valid Design Object Name must be provided for any {} object.", itemType));
+            ShowContinueError(state, EnergyPlus::format("  A valid Design Object Name must be provided for any {} object.", itemType));
         }
     }
 
@@ -326,8 +325,8 @@ namespace Util {
                     fsPerfLog.open(state.dataStrGlobals->outputPerfLogFilePath, std::fstream::out); // open file normally
                     if (!fsPerfLog) {
                         ShowFatalError(state,
-                                       std::format("appendPerfLog: Could not open file \"{}\" for output (write).",
-                                                   state.dataStrGlobals->outputPerfLogFilePath.string()));
+                                       EnergyPlus::format("appendPerfLog: Could not open file \"{}\" for output (write).",
+                                                          state.dataStrGlobals->outputPerfLogFilePath.string()));
                     }
                     fsPerfLog << state.dataUtilityRoutines->appendPerfLog_headerRow << std::endl;
                     fsPerfLog << state.dataUtilityRoutines->appendPerfLog_valuesRow << std::endl;
@@ -337,8 +336,8 @@ namespace Util {
                     fsPerfLog.open(state.dataStrGlobals->outputPerfLogFilePath, std::fstream::app); // append to already existing file
                     if (!fsPerfLog) {
                         ShowFatalError(state,
-                                       std::format("appendPerfLog: Could not open file \"{}\" for output (append).",
-                                                   state.dataStrGlobals->outputPerfLogFilePath.string()));
+                                       EnergyPlus::format("appendPerfLog: Could not open file \"{}\" for output (append).",
+                                                          state.dataStrGlobals->outputPerfLogFilePath.string()));
                     }
                     fsPerfLog << state.dataUtilityRoutines->appendPerfLog_valuesRow << std::endl;
                 }
@@ -438,22 +437,22 @@ int AbortEnergyPlus(EnergyPlusData &state)
     state.dataResultsFramework->resultsFramework->SimulationInformation.setNumErrorsSizing(NumWarningsDuringSizing, NumSevereDuringSizing);
     state.dataResultsFramework->resultsFramework->SimulationInformation.setNumErrorsSummary(NumWarnings, NumSevere);
 
-    ShowMessage(
-        state,
-        std::format("EnergyPlus Warmup Error Summary. During Warmup: {} Warning; {} Severe Errors.", NumWarningsDuringWarmup, NumSevereDuringWarmup));
-    ShowMessage(
-        state,
-        std::format("EnergyPlus Sizing Error Summary. During Sizing: {} Warning; {} Severe Errors.", NumWarningsDuringSizing, NumSevereDuringSizing));
-    ShowMessage(
-        state,
-        std::format("EnergyPlus Terminated--Fatal Error Detected. {} Warning; {} Severe Errors; Elapsed Time={}", NumWarnings, NumSevere, Elapsed));
+    ShowMessage(state,
+                EnergyPlus::format(
+                    "EnergyPlus Warmup Error Summary. During Warmup: {} Warning; {} Severe Errors.", NumWarningsDuringWarmup, NumSevereDuringWarmup));
+    ShowMessage(state,
+                EnergyPlus::format(
+                    "EnergyPlus Sizing Error Summary. During Sizing: {} Warning; {} Severe Errors.", NumWarningsDuringSizing, NumSevereDuringSizing));
+    ShowMessage(state,
+                EnergyPlus::format(
+                    "EnergyPlus Terminated--Fatal Error Detected. {} Warning; {} Severe Errors; Elapsed Time={}", NumWarnings, NumSevere, Elapsed));
     DisplayString(state, "EnergyPlus Run Time=" + Elapsed);
 
     {
         auto tempfl = state.files.endFile.try_open(state.files.outputControl.end);
 
         if (!tempfl.good()) {
-            DisplayString(state, std::format("AbortEnergyPlus: Could not open file {} for output (write).", tempfl.filePath.string()));
+            DisplayString(state, EnergyPlus::format("AbortEnergyPlus: Could not open file {} for output (write).", tempfl.filePath.string()));
         }
         print(
             tempfl, "EnergyPlus Terminated--Fatal Error Detected. {} Warning; {} Severe Errors; Elapsed Time={}\n", NumWarnings, NumSevere, Elapsed);
@@ -559,20 +558,21 @@ int EndEnergyPlus(EnergyPlusData &state)
         Util::appendPerfLog(state, "Number of Warnings", NumWarnings);
         Util::appendPerfLog(state, "Number of Severe", NumSevere, true); // last item so write the perfLog file
     }
-    ShowMessage(
-        state,
-        std::format("EnergyPlus Warmup Error Summary. During Warmup: {} Warning; {} Severe Errors.", NumWarningsDuringWarmup, NumSevereDuringWarmup));
-    ShowMessage(
-        state,
-        std::format("EnergyPlus Sizing Error Summary. During Sizing: {} Warning; {} Severe Errors.", NumWarningsDuringSizing, NumSevereDuringSizing));
     ShowMessage(state,
-                std::format("EnergyPlus Completed Successfully-- {} Warning; {} Severe Errors; Elapsed Time={}", NumWarnings, NumSevere, Elapsed));
+                EnergyPlus::format(
+                    "EnergyPlus Warmup Error Summary. During Warmup: {} Warning; {} Severe Errors.", NumWarningsDuringWarmup, NumSevereDuringWarmup));
+    ShowMessage(state,
+                EnergyPlus::format(
+                    "EnergyPlus Sizing Error Summary. During Sizing: {} Warning; {} Severe Errors.", NumWarningsDuringSizing, NumSevereDuringSizing));
+    ShowMessage(
+        state,
+        EnergyPlus::format("EnergyPlus Completed Successfully-- {} Warning; {} Severe Errors; Elapsed Time={}", NumWarnings, NumSevere, Elapsed));
     DisplayString(state, "EnergyPlus Run Time=" + Elapsed);
 
     {
         auto tempfl = state.files.endFile.try_open(state.files.outputControl.end);
         if (!tempfl.good()) {
-            DisplayString(state, std::format("EndEnergyPlus: Could not open file {} for output (write).", tempfl.filePath.string()));
+            DisplayString(state, EnergyPlus::format("EndEnergyPlus: Could not open file {} for output (write).", tempfl.filePath.string()));
         }
         print(tempfl, "EnergyPlus Completed Successfully-- {} Warning; {} Severe Errors; Elapsed Time={}\n", NumWarnings, NumSevere, Elapsed);
     }
@@ -773,12 +773,13 @@ ShowFatalError(EnergyPlusData &state, std::string const &ErrorMessage, OptionalO
 
     using namespace DataErrorTracking;
 
-    ShowErrorMessage(state, std::format(" **  Fatal  ** {}", ErrorMessage), OutUnit1, OutUnit2);
+    ShowErrorMessage(state, EnergyPlus::format(" **  Fatal  ** {}", ErrorMessage), OutUnit1, OutUnit2);
     DisplayString(state, "**FATAL:" + ErrorMessage);
 
     ShowErrorMessage(state, " ...Summary of Errors that led to program termination:", OutUnit1, OutUnit2);
-    ShowErrorMessage(state, std::format(" ..... Reference severe error count={}", state.dataErrTracking->TotalSevereErrors), OutUnit1, OutUnit2);
-    ShowErrorMessage(state, std::format(" ..... Last severe error={}", state.dataErrTracking->LastSevereError), OutUnit1, OutUnit2);
+    ShowErrorMessage(
+        state, EnergyPlus::format(" ..... Reference severe error count={}", state.dataErrTracking->TotalSevereErrors), OutUnit1, OutUnit2);
+    ShowErrorMessage(state, EnergyPlus::format(" ..... Last severe error={}", state.dataErrTracking->LastSevereError), OutUnit1, OutUnit2);
     if (state.dataSQLiteProcedures->sqlite) {
         state.dataSQLiteProcedures->sqlite->createSQLiteErrorRecord(1, 2, ErrorMessage, 1);
         if (state.dataSQLiteProcedures->sqlite->sqliteWithinTransaction()) {
@@ -819,7 +820,7 @@ void ShowSevereError(EnergyPlusData &state, std::string const &ErrorMessage, Opt
     if (state.dataGlobal->DoingSizing) {
         ++state.dataErrTracking->TotalSevereErrorsDuringSizing;
     }
-    ShowErrorMessage(state, std::format(" ** Severe  ** {}", ErrorMessage), OutUnit1, OutUnit2);
+    ShowErrorMessage(state, EnergyPlus::format(" ** Severe  ** {}", ErrorMessage), OutUnit1, OutUnit2);
     state.dataErrTracking->LastSevereError = ErrorMessage;
 
     //  Could set a variable here that gets checked at some point?
@@ -852,7 +853,7 @@ void ShowSevereMessage(EnergyPlusData &state, std::string const &ErrorMessage, O
         }
     }
 
-    ShowErrorMessage(state, std::format(" ** Severe  ** {}", ErrorMessage), OutUnit1, OutUnit2);
+    ShowErrorMessage(state, EnergyPlus::format(" ** Severe  ** {}", ErrorMessage), OutUnit1, OutUnit2);
     state.dataErrTracking->LastSevereError = ErrorMessage;
 
     //  Could set a variable here that gets checked at some point?
@@ -878,7 +879,7 @@ void ShowContinueError(EnergyPlusData &state, std::string const &Message, Option
     // METHODOLOGY EMPLOYED:
     // Calls ShowErrorMessage utility routine.
 
-    ShowErrorMessage(state, std::format(" **   ~~~   ** {}", Message), OutUnit1, OutUnit2);
+    ShowErrorMessage(state, EnergyPlus::format(" **   ~~~   ** {}", Message), OutUnit1, OutUnit2);
     if (state.dataSQLiteProcedures->sqlite) {
         state.dataSQLiteProcedures->sqlite->updateSQLiteErrorRecord(Message);
     }

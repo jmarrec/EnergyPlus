@@ -275,7 +275,7 @@ namespace ExteriorEnergyUse {
                                         OutputProcessor::StoreType::Average,
                                         exteriorEquip.Name);
                     SetupOutputVariable(state,
-                                        std::format("Exterior Equipment {} Energy", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
+                                        EnergyPlus::format("Exterior Equipment {} Energy", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
                                         Constant::Units::J,
                                         exteriorEquip.CurrentUse,
                                         OutputProcessor::TimeStepType::Zone,
@@ -294,7 +294,7 @@ namespace ExteriorEnergyUse {
                                         OutputProcessor::StoreType::Average,
                                         exteriorEquip.Name);
                     SetupOutputVariable(state,
-                                        std::format("Exterior Equipment {} Volume", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
+                                        EnergyPlus::format("Exterior Equipment {} Volume", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
                                         Constant::Units::m3,
                                         exteriorEquip.CurrentUse,
                                         OutputProcessor::TimeStepType::Zone,
@@ -399,7 +399,7 @@ namespace ExteriorEnergyUse {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}Errors found in input.  Program terminates.", routineName));
+            ShowFatalError(state, EnergyPlus::format("{}Errors found in input.  Program terminates.", routineName));
         }
     } // GetExteriorEnergyUseInput()
 

@@ -48,6 +48,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -123,7 +124,7 @@ GasAbsorberSpecs *GasAbsorberSpecs::factory(EnergyPlusData &state, std::string c
         return thisObj;
     }
     // If we didn't find it, fatal
-    ShowFatalError(state, std::format("LocalGasAbsorberFactory: Error getting inputs for comp named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, EnergyPlus::format("LocalGasAbsorberFactory: Error getting inputs for comp named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -184,7 +185,7 @@ void GasAbsorberSpecs::simulate(
         }
     } else {
         // Error, nodes do not match
-        ShowSevereError(state, std::format("Invalid call to Gas Absorber Chiller {}", this->Name));
+        ShowSevereError(state, EnergyPlus::format("Invalid call to Gas Absorber Chiller {}", this->Name));
         ShowContinueError(state, "Node connections in branch are not consistent with object nodes.");
         ShowFatalError(state, "Preceding conditions cause termination.");
     }
@@ -228,7 +229,7 @@ void GasAbsorberSpecs::getDesignCapacities(
 
     if (!matchfound) {
         // Error, nodes do not match
-        ShowSevereError(state, std::format("SimGasAbsorber: Invalid call to Gas Absorption Chiller-Heater {}", this->Name));
+        ShowSevereError(state, EnergyPlus::format("SimGasAbsorber: Invalid call to Gas Absorption Chiller-Heater {}", this->Name));
         ShowContinueError(state, "Node connections in branch are not consistent with object nodes.");
         ShowFatalError(state, "Preceding conditions cause termination.");
     } // Operate as Chiller or Heater
@@ -253,7 +254,7 @@ void GasAbsorberSpecs::onInitLoopEquip(EnergyPlusData &state, const PlantLocatio
     } else if (BranchInletNodeNum == this->CondReturnNodeNum) { // called from condenser loop
                                                                 // don't do anything here
     } else {                                                    // Error, nodes do not match
-        ShowSevereError(state, std::format("SimGasAbsorber: Invalid call to Gas Absorption Chiller-Heater {}", this->Name));
+        ShowSevereError(state, EnergyPlus::format("SimGasAbsorber: Invalid call to Gas Absorption Chiller-Heater {}", this->Name));
         ShowContinueError(state, "Node connections in branch are not consistent with object nodes.");
         ShowFatalError(state, "Preceding conditions cause termination.");
     } // Operate as Chiller or Heater
@@ -286,7 +287,7 @@ void GetGasAbsorberInput(EnergyPlusData &state)
     NumGasAbsorbers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject);
 
     if (NumGasAbsorbers <= 0) {
-        ShowSevereError(state, std::format("No {} equipment found in input file", s_ipsc->cCurrentModuleObject));
+        ShowSevereError(state, EnergyPlus::format("No {} equipment found in input file", s_ipsc->cCurrentModuleObject));
         Get_ErrorsFound = true;
     }
 
@@ -380,8 +381,8 @@ void GetGasAbsorberInput(EnergyPlusData &state)
         Node::TestCompSet(
             state, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(6), s_ipsc->cAlphaArgs(7), "Hot Water Nodes");
         if (Get_ErrorsFound) {
-            ShowFatalError(state,
-                           std::format("Errors found in processing node input for {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowFatalError(
+                state, EnergyPlus::format("Errors found in processing node input for {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             Get_ErrorsFound = false;
         }
 
@@ -466,8 +467,8 @@ void GetGasAbsorberInput(EnergyPlusData &state)
         }
 
         if (Get_ErrorsFound) {
-            ShowFatalError(state,
-                           std::format("Errors found in processing curve input for {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowFatalError(
+                state, EnergyPlus::format("Errors found in processing curve input for {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             Get_ErrorsFound = false;
         }
         if (Util::SameString(s_ipsc->cAlphaArgs(15), "LeavingCondenser")) {
@@ -476,8 +477,8 @@ void GetGasAbsorberInput(EnergyPlusData &state)
             thisChiller.isEnterCondensTemp = true;
         } else {
             thisChiller.isEnterCondensTemp = true;
-            ShowWarningError(state, std::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, std::format("Invalid {}=\"{}\"", s_ipsc->cAlphaFieldNames(15), s_ipsc->cAlphaArgs(15)));
+            ShowWarningError(state, EnergyPlus::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, EnergyPlus::format("Invalid {}=\"{}\"", s_ipsc->cAlphaFieldNames(15), s_ipsc->cAlphaArgs(15)));
             ShowContinueError(state, "resetting to EnteringCondenser, simulation continues");
         }
         // Assign Other Parameters
@@ -487,19 +488,19 @@ void GetGasAbsorberInput(EnergyPlusData &state)
             thisChiller.isWaterCooled = true;
         } else {
             thisChiller.isWaterCooled = true;
-            ShowWarningError(state, std::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, std::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(16), s_ipsc->cAlphaArgs(16)));
+            ShowWarningError(state, EnergyPlus::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(16), s_ipsc->cAlphaArgs(16)));
             ShowContinueError(state, "resetting to WaterCooled, simulation continues");
         }
         if (!thisChiller.isEnterCondensTemp && !thisChiller.isWaterCooled) {
             thisChiller.isEnterCondensTemp = true;
-            ShowWarningError(state, std::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowWarningError(state, EnergyPlus::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             ShowContinueError(state, "Invalid to have both LeavingCondenser and AirCooled.");
             ShowContinueError(state, "resetting to EnteringCondenser, simulation continues");
         }
         if (thisChiller.isWaterCooled) {
             if (s_ipsc->lAlphaFieldBlanks(5)) {
-                ShowSevereError(state, std::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                ShowSevereError(state, EnergyPlus::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "For WaterCooled chiller the condenser outlet node is required.");
                 Get_ErrorsFound = true;
             }
@@ -537,7 +538,7 @@ void GetGasAbsorberInput(EnergyPlusData &state)
             // Connection not required for air or evap cooled condenser so no call to TestCompSet here
             OutAirNodeManager::CheckAndAddAirNodeNumber(state, thisChiller.CondReturnNodeNum, Okay);
             if (!Okay) {
-                ShowWarningError(state, std::format("{}, Adding OutdoorAir:Node={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(4)));
+                ShowWarningError(state, EnergyPlus::format("{}, Adding OutdoorAir:Node={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(4)));
             }
         }
         thisChiller.CHWLowLimitTemp = s_ipsc->rNumericArgs(15);
@@ -547,8 +548,8 @@ void GetGasAbsorberInput(EnergyPlusData &state)
         // Validate fuel type input
         thisChiller.FuelType = static_cast<Constant::eFuel>(getEnumValue(Constant::eFuelNamesUC, s_ipsc->cAlphaArgs(17)));
         if (thisChiller.FuelType == Constant::eFuel::Invalid) {
-            ShowSevereError(state, std::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, std::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(17), s_ipsc->cAlphaArgs(17)));
+            ShowSevereError(state, EnergyPlus::format("{}=\"{}\", invalid value", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(17), s_ipsc->cAlphaArgs(17)));
             ShowContinueError(
                 state, "Valid choices are Electricity, NaturalGas, Propane, Diesel, Gasoline, FuelOilNo1, FuelOilNo2,OtherFuel1 or OtherFuel2");
             Get_ErrorsFound = true;
@@ -556,7 +557,7 @@ void GetGasAbsorberInput(EnergyPlusData &state)
     }
 
     if (Get_ErrorsFound) {
-        ShowFatalError(state, std::format("Errors found in processing input for {}", s_ipsc->cCurrentModuleObject));
+        ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", s_ipsc->cCurrentModuleObject));
     }
 }
 
@@ -619,7 +620,7 @@ void GasAbsorberSpecs::setupOutputVariables(EnergyPlusData &state)
                         OutputProcessor::EndUseCat::HeatRejection);
 
     SetupOutputVariable(state,
-                        std::format("Chiller Heater {} Rate", sFuelType),
+                        EnergyPlus::format("Chiller Heater {} Rate", sFuelType),
                         Constant::Units::W,
                         this->FuelUseRate,
                         OutputProcessor::TimeStepType::System,

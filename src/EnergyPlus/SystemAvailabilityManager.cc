@@ -48,14 +48,17 @@
 // C++ Headers
 #include <algorithm>
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
 
-// EnergyPlus Headers
+// Local Headers
 #include <AirflowNetwork/Elements.hpp>
 #include <AirflowNetwork/Solver.hpp>
+
+// EnergyPlus Headers
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataAirLoop.hh>
@@ -910,8 +913,8 @@ namespace Avail {
                 }
 
                 if (diffThermoMgr.TempDiffOff > diffThermoMgr.TempDiffOn) {
-                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
-                    ShowContinueError(state, std::format("The {} is greater than the {}.", cNumericFieldNames(2), cNumericFieldNames(1)));
+                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowContinueError(state, EnergyPlus::format("The {} is greater than the {}.", cNumericFieldNames(2), cNumericFieldNames(1)));
                     ErrorsFound = true;
                 }
 
@@ -1212,7 +1215,7 @@ namespace Avail {
         lNumericFieldBlanks.deallocate();
 
         if (ErrorsFound) {
-            ShowFatalError(state, std::format("{}Errors found in input.  Preceding condition(s) cause termination.", RoutineName));
+            ShowFatalError(state, EnergyPlus::format("{}Errors found in input.  Preceding condition(s) cause termination.", RoutineName));
         }
     } // GetSysAvailManagerInputs()
 
@@ -1335,18 +1338,19 @@ namespace Avail {
                 if (am.type == ManagerType::DiffThermo && Num != availMgr.NumAvailManagers) {
                     ShowWarningError(
                         state,
-                        std::format("GetPlantLoopData/GetPlantAvailabilityManager: AvailabilityManager:DifferentialThermostat=\"{}\".", am.Name));
+                        EnergyPlus::format("GetPlantLoopData/GetPlantAvailabilityManager: AvailabilityManager:DifferentialThermostat=\"{}\".",
+                                           am.Name));
                     ShowContinueError(
                         state, "...is not the last manager on the AvailabilityManagerAssignmentList.  Any remaining managers will not be used.");
-                    ShowContinueError(state, std::format("Occurs in AvailabilityManagerAssignmentList =\"{}\".", AvailabilityListName));
+                    ShowContinueError(state, EnergyPlus::format("Occurs in AvailabilityManagerAssignmentList =\"{}\".", AvailabilityListName));
                 }
                 if (am.type == ManagerType::NightVent || am.type == ManagerType::NightCycle) {
                     ShowSevereError(
                         state,
-                        std::format("GetPlantLoopData/GetPlantAvailabilityManager: Invalid System Availability Manager Type entered=\"{}\".",
-                                    managerTypeNames[(int)am.type]));
+                        EnergyPlus::format("GetPlantLoopData/GetPlantAvailabilityManager: Invalid System Availability Manager Type entered=\"{}\".",
+                                           managerTypeNames[(int)am.type]));
                     ShowContinueError(state, "...this manager is not used in a Plant Loop.");
-                    ShowContinueError(state, std::format("Occurs in AvailabilityManagerAssignmentList=\"{}\".", AvailabilityListName));
+                    ShowContinueError(state, EnergyPlus::format("Occurs in AvailabilityManagerAssignmentList=\"{}\".", AvailabilityListName));
                     ErrorsFound = true;
                 }
             } // End of Num Loop
@@ -1355,9 +1359,9 @@ namespace Avail {
             if (!AvailabilityListName.empty()) {
                 ShowWarningError(
                     state,
-                    std::format("GetPlantLoopData/GetPlantAvailabilityManager: AvailabilityManagerAssignmentList={} not found in lists.  No "
-                                "availability will be used.",
-                                AvailabilityListName));
+                    EnergyPlus::format("GetPlantLoopData/GetPlantAvailabilityManager: AvailabilityManagerAssignmentList={} not found in lists.  No "
+                                       "availability will be used.",
+                                       AvailabilityListName));
             }
             availMgr.NumAvailManagers = 0;
             availMgr.availStatus = Status::NoAction;
@@ -1417,10 +1421,11 @@ namespace Avail {
                 if (am.type == ManagerType::DiffThermo && Num != availMgr.NumAvailManagers) {
                     ShowWarningError(
                         state,
-                        std::format("GetAirPathData/GetAirLoopAvailabilityManager: AvailabilityManager:DifferentialThermostat=\"{}\".", am.Name));
+                        EnergyPlus::format("GetAirPathData/GetAirLoopAvailabilityManager: AvailabilityManager:DifferentialThermostat=\"{}\".",
+                                           am.Name));
                     ShowContinueError(
                         state, "...is not the last manager on the AvailabilityManagerAssignmentList.  Any remaining managers will not be used.");
-                    ShowContinueError(state, std::format("Occurs in AvailabilityManagerAssignmentList=\"{}\".", am.Name));
+                    ShowContinueError(state, EnergyPlus::format("Occurs in AvailabilityManagerAssignmentList=\"{}\".", am.Name));
                 }
             } // End of Num Loop
 
@@ -1428,9 +1433,9 @@ namespace Avail {
             if (!AvailabilityListName.empty()) {
                 ShowWarningError(
                     state,
-                    std::format("GetAirPathData/GetAirLoopAvailabilityManager: AvailabilityManagerAssignmentList={} not found in lists.  No "
-                                "availability will be used.",
-                                AvailabilityListName));
+                    EnergyPlus::format("GetAirPathData/GetAirLoopAvailabilityManager: AvailabilityManagerAssignmentList={} not found in lists.  No "
+                                       "availability will be used.",
+                                       AvailabilityListName));
             }
             availMgr.NumAvailManagers = 0;
             availMgr.availStatus = Status::NoAction;
@@ -1489,11 +1494,11 @@ namespace Avail {
                     assert(am.type != ManagerType::Invalid);
 
                     if (am.type == ManagerType::DiffThermo && Num != availMgr.NumAvailManagers) {
-                        ShowWarningError(state,
-                                         std::format("GetZoneEqAvailabilityManager: AvailabilityManager:DifferentialThermostat=\"{}\".", am.Name));
+                        ShowWarningError(
+                            state, EnergyPlus::format("GetZoneEqAvailabilityManager: AvailabilityManager:DifferentialThermostat=\"{}\".", am.Name));
                         ShowContinueError(
                             state, "...is not the last manager on the AvailabilityManagerAssignmentList.  Any remaining managers will not be used.");
-                        ShowContinueError(state, std::format("Occurs in AvailabilityManagerAssignmentList=\"{}\".", am.Name));
+                        ShowContinueError(state, EnergyPlus::format("Occurs in AvailabilityManagerAssignmentList=\"{}\".", am.Name));
                     }
                 } // End of Num Loop
             }
@@ -1703,7 +1708,7 @@ namespace Avail {
             if (SysAvailNum > 0) {
                 availStatus = CalcSchedSysAvailMgr(state, SysAvailNum);
             } else {
-                ShowFatalError(state, std::format("SimSysAvailManager: AvailabilityManager:Scheduled not found: {}", SysAvailName));
+                ShowFatalError(state, EnergyPlus::format("SimSysAvailManager: AvailabilityManager:Scheduled not found: {}", SysAvailName));
             }
 
         } break;
@@ -1714,7 +1719,7 @@ namespace Avail {
             if (SysAvailNum > 0) {
                 availStatus = CalcSchedOnSysAvailMgr(state, SysAvailNum);
             } else {
-                ShowFatalError(state, std::format("SimSysAvailManager: AvailabilityManager:ScheduledOn not found: {}", SysAvailName));
+                ShowFatalError(state, EnergyPlus::format("SimSysAvailManager: AvailabilityManager:ScheduledOn not found: {}", SysAvailName));
             }
 
         } break;
@@ -1725,7 +1730,7 @@ namespace Avail {
             if (SysAvailNum > 0) {
                 availStatus = CalcSchedOffSysAvailMgr(state, SysAvailNum);
             } else {
-                ShowFatalError(state, std::format("SimSysAvailManager: AvailabilityManager:ScheduledOff not found: {}", SysAvailName));
+                ShowFatalError(state, EnergyPlus::format("SimSysAvailManager: AvailabilityManager:ScheduledOff not found: {}", SysAvailName));
             }
 
         } break;
@@ -1736,7 +1741,7 @@ namespace Avail {
             if (SysAvailNum > 0) {
                 availStatus = CalcNCycSysAvailMgr(state, SysAvailNum, PriAirSysNum, ZoneEquipType, CompNum);
             } else {
-                ShowFatalError(state, std::format("SimSysAvailManager: AvailabilityManager:NightCycle not found: {}", SysAvailName));
+                ShowFatalError(state, EnergyPlus::format("SimSysAvailManager: AvailabilityManager:NightCycle not found: {}", SysAvailName));
             }
 
         } break;
@@ -1747,7 +1752,7 @@ namespace Avail {
             if (SysAvailNum > 0) {
                 availStatus = CalcOptStartSysAvailMgr(state, SysAvailNum, PriAirSysNum, zoneNum, ZoneEquipType, CompNum);
             } else {
-                ShowFatalError(state, std::format("SimSysAvailManager: AvailabilityManager:OptimumStart not found: {}", SysAvailName));
+                ShowFatalError(state, EnergyPlus::format("SimSysAvailManager: AvailabilityManager:OptimumStart not found: {}", SysAvailName));
             }
 
         } break;
@@ -3844,22 +3849,20 @@ namespace Avail {
                                        "All zones using this schedule have no hybrid ventilation control.");
             }
             if (SchedMax > 7.0) {
-                ShowSevereCustomField(
-                    state,
-                    eoh,
-                    ipsc->cAlphaFieldNames(4),
-                    ipsc->cAlphaArgs(4),
-                    EnergyPlus::format("Maximum value should be 7. However, the maximum value in the schedule is {:.1T}", SchedMax));
+                ShowSevereCustomField(state,
+                                      eoh,
+                                      ipsc->cAlphaFieldNames(4),
+                                      ipsc->cAlphaArgs(4),
+                                      std::format("Maximum value should be 7. However, the maximum value in the schedule is {:.1f}", SchedMax));
                 ErrorsFound = true;
             }
 
             if (SchedMin < 0.0) {
-                ShowSevereCustomField(
-                    state,
-                    eoh,
-                    ipsc->cAlphaFieldNames(4),
-                    ipsc->cAlphaArgs(4),
-                    EnergyPlus::format("Minimum value should be 0. However, the minimum value in the schedule is {:.1T}", SchedMin));
+                ShowSevereCustomField(state,
+                                      eoh,
+                                      ipsc->cAlphaFieldNames(4),
+                                      ipsc->cAlphaArgs(4),
+                                      std::format("Minimum value should be 0. However, the minimum value in the schedule is {:.1f}", SchedMin));
                 ErrorsFound = true;
             }
 
@@ -3888,8 +3891,8 @@ namespace Avail {
                 if (ipsc->rNumericArgs(1) > 40.0 || ipsc->rNumericArgs(1) < 0.0) {
                     ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                     ShowContinueError(state, std::format("{} is beyond the range.", ipsc->cNumericFieldNames(1)));
-                    ShowContinueError(
-                        state, EnergyPlus::format("The input value is {:.0T}. The allowed value must be >= 0 and <= 40 m/s", ipsc->rNumericArgs(1)));
+                    ShowContinueError(state,
+                                      std::format("The input value is {:.0f}. The allowed value must be >= 0 and <= 40 m/s", ipsc->rNumericArgs(1)));
                     ErrorsFound = true;
                 }
             }
@@ -3901,8 +3904,7 @@ namespace Avail {
                     ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                     ShowContinueError(state, std::format("{} is beyond the range.", ipsc->cNumericFieldNames(2)));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("The input value is {:.0T}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(2)));
+                        state, std::format("The input value is {:.0f}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(2)));
                     ErrorsFound = true;
                 }
             }
@@ -3912,8 +3914,7 @@ namespace Avail {
                     ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                     ShowContinueError(state, std::format("{} is beyond the range.", ipsc->cNumericFieldNames(3)));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("The input value is {:.0T}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(3)));
+                        state, std::format("The input value is {:.0f}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(3)));
                     ErrorsFound = true;
                 }
             }
@@ -3927,11 +3928,11 @@ namespace Avail {
                                             ipsc->cNumericFieldNames(2),
                                             ipsc->cNumericFieldNames(3)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("The {} is {:.0T}. The {} is {:.0T}.",
-                                                     ipsc->cNumericFieldNames(2),
-                                                     ipsc->rNumericArgs(2),
-                                                     ipsc->cNumericFieldNames(3),
-                                                     ipsc->rNumericArgs(3)));
+                                  std::format("The {} is {:.0f}. The {} is {:.0f}.",
+                                              ipsc->cNumericFieldNames(2),
+                                              ipsc->rNumericArgs(2),
+                                              ipsc->cNumericFieldNames(3),
+                                              ipsc->rNumericArgs(3)));
                 ErrorsFound = true;
             }
 
@@ -3942,8 +3943,7 @@ namespace Avail {
                     ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                     ShowContinueError(state, std::format("{} is beyond the range.", ipsc->cNumericFieldNames(4)));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("The input value is {:.0T}. The allowed value must be between 0 and 300000 J/kg", ipsc->rNumericArgs(4)));
+                        state, std::format("The input value is {:.0f}. The allowed value must be between 0 and 300000 J/kg", ipsc->rNumericArgs(4)));
                     ErrorsFound = true;
                 }
             }
@@ -3953,8 +3953,7 @@ namespace Avail {
                     ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                     ShowContinueError(state, std::format("{} is beyond the range.", ipsc->cNumericFieldNames(5)));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("The input value is {:.0T}. The allowed value must be between 0 and 300000 J/kg", ipsc->rNumericArgs(5)));
+                        state, std::format("The input value is {:.0f}. The allowed value must be between 0 and 300000 J/kg", ipsc->rNumericArgs(5)));
                     ErrorsFound = true;
                 }
             }
@@ -3968,11 +3967,11 @@ namespace Avail {
                                             ipsc->cNumericFieldNames(4),
                                             ipsc->cNumericFieldNames(5)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("The {} is {:.0T}. The {} is {:.0T}.",
-                                                     ipsc->cNumericFieldNames(4),
-                                                     ipsc->rNumericArgs(4),
-                                                     ipsc->cNumericFieldNames(5),
-                                                     ipsc->rNumericArgs(5)));
+                                  std::format("The {} is {:.0f}. The {} is {:.0f}.",
+                                              ipsc->cNumericFieldNames(4),
+                                              ipsc->rNumericArgs(4),
+                                              ipsc->cNumericFieldNames(5),
+                                              ipsc->rNumericArgs(5)));
                 ErrorsFound = true;
             }
 
@@ -3983,8 +3982,7 @@ namespace Avail {
                     ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                     ShowContinueError(state, std::format("{} is beyond the range.", ipsc->cNumericFieldNames(6)));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("The input value is {:.0T}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(6)));
+                        state, std::format("The input value is {:.0f}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(6)));
                     ErrorsFound = true;
                 }
             }
@@ -3994,8 +3992,7 @@ namespace Avail {
                     ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                     ShowContinueError(state, std::format("{} is beyond the range.", ipsc->cNumericFieldNames(7)));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("The input value is {:.0T}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(7)));
+                        state, std::format("The input value is {:.0f}. The allowed value must be between -100 C and +100 C", ipsc->rNumericArgs(7)));
                     ErrorsFound = true;
                 }
             }
@@ -4009,11 +4006,11 @@ namespace Avail {
                                             ipsc->cNumericFieldNames(6),
                                             ipsc->cNumericFieldNames(7)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("The {} is {:.0T}. The {} is {:.0T}.",
-                                                     ipsc->cNumericFieldNames(6),
-                                                     ipsc->rNumericArgs(6),
-                                                     ipsc->cNumericFieldNames(7),
-                                                     ipsc->rNumericArgs(7)));
+                                  std::format("The {} is {:.0f}. The {} is {:.0f}.",
+                                              ipsc->cNumericFieldNames(6),
+                                              ipsc->rNumericArgs(6),
+                                              ipsc->cNumericFieldNames(7),
+                                              ipsc->rNumericArgs(7)));
                 ErrorsFound = true;
             }
 
@@ -4052,7 +4049,7 @@ namespace Avail {
                             std::format("The minimum value of {} must be greater than or equal to 0.0 at the minimum value of wind speed.",
                                         ipsc->cAlphaFieldNames(7)));
                         ShowContinueError(state, std::format("{}=\"{}\".", ipsc->cAlphaFieldNames(7), ipsc->cAlphaArgs(7)));
-                        ShowContinueError(state, EnergyPlus::format("Curve output at the minimum wind speed = {:.3T}", CurveVal));
+                        ShowContinueError(state, std::format("Curve output at the minimum wind speed = {:.3f}", CurveVal));
                         ErrorsFound = true;
                     }
                     CurveVal = CurveValue(state, hybridVentMgr.OpeningFactorFWS, CurveMax);
@@ -4062,7 +4059,7 @@ namespace Avail {
                                           std::format("The maximum value of {} must be less than or equal to 1.0 at the maximum value of wind speed.",
                                                       ipsc->cAlphaFieldNames(7)));
                         ShowContinueError(state, std::format("{}=\"{}\".", ipsc->cAlphaFieldNames(7), ipsc->cAlphaArgs(7)));
-                        ShowContinueError(state, EnergyPlus::format("Curve output at the maximum wind speed = {:.3T}", CurveVal));
+                        ShowContinueError(state, std::format("Curve output at the maximum wind speed = {:.3f}", CurveVal));
                         ErrorsFound = true;
                     }
                     // Check curve type

@@ -49,6 +49,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <string>
 #include <unordered_map>
 
@@ -2350,9 +2351,10 @@ void CreateEnergyReportStructure(EnergyPlusData &state)
                                 thisSubSubComponent.NodeNumOut = OutletNodeNumbers(SubSubCompNum);
                                 NumLeft = Node::GetNumChildren(state, SubCompTypes(SubSubCompNum), SubCompNames(SubSubCompNum));
                                 if (NumLeft > 0) {
-                                    ShowSevereError(
-                                        state,
-                                        std::format("Hanging Children for component={}:{}", thisSubSubComponent.TypeOf, SubCompNames(SubSubCompNum)));
+                                    ShowSevereError(state,
+                                                    EnergyPlus::format("Hanging Children for component={}:{}",
+                                                                       thisSubSubComponent.TypeOf,
+                                                                       SubCompNames(SubSubCompNum)));
                                 }
                             }
                         }
@@ -4942,14 +4944,15 @@ void reportAirLoopToplogy(EnergyPlusData &state)
     int rowCounter = 1;
     for (int airLoopNum = 1; airLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys; ++airLoopNum) {
         auto &pas = state.dataAirSystemsData->PrimaryAirSystems(airLoopNum);
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirLoopName, std::format("{}", rowCounter), pas.Name);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirLoopName, EnergyPlus::format("{}", rowCounter), pas.Name);
         ++rowCounter;
         for (int BranchNum = 1; BranchNum <= pas.NumBranches; ++BranchNum) {
             auto &pasBranch = pas.Branch(BranchNum);
             if (pas.Splitter.Exists) {
                 for (int outNum : pas.Splitter.BranchNumOut) {
                     if (outNum == BranchNum) {
-                        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirSplitName, std::format("{}", rowCounter), pas.Splitter.Name);
+                        OutputReportPredefined::PreDefTableEntry(
+                            state, orp->pdchTopAirSplitName, EnergyPlus::format("{}", rowCounter), pas.Splitter.Name);
                         break;
                     }
                 }
@@ -4961,20 +4964,21 @@ void reportAirLoopToplogy(EnergyPlusData &state)
                 for (int SubCompNum = 1; SubCompNum <= pasBranchComp.NumSubComps; ++SubCompNum) {
                     auto &pasBranchSubComp = pasBranchComp.SubComp(SubCompNum);
                     OutputReportPredefined::PreDefTableEntry(
-                        state, orp->pdchTopAirSubCompType, std::format("{}", rowCounter), pasBranchSubComp.TypeOf);
-                    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirSubCompName, std::format("{}", rowCounter), pasBranchSubComp.Name);
+                        state, orp->pdchTopAirSubCompType, EnergyPlus::format("{}", rowCounter), pasBranchSubComp.TypeOf);
+                    OutputReportPredefined::PreDefTableEntry(
+                        state, orp->pdchTopAirSubCompName, EnergyPlus::format("{}", rowCounter), pasBranchSubComp.Name);
                     fillAirloopToplogyComponentRow(
                         state, pas.Name, pasBranch.Name, pasBranch.DuctType, pasBranchComp.TypeOf, pasBranchComp.Name, rowCounter);
                     for (int SubSubCompNum = 1; SubSubCompNum <= pasBranchSubComp.NumSubSubComps; ++SubSubCompNum) {
                         auto &pasBranchSubSubComp = pasBranchSubComp.SubSubComp(SubSubCompNum);
                         OutputReportPredefined::PreDefTableEntry(
-                            state, orp->pdchTopAirSubCompType, std::format("{}", rowCounter), pasBranchSubComp.TypeOf);
+                            state, orp->pdchTopAirSubCompType, EnergyPlus::format("{}", rowCounter), pasBranchSubComp.TypeOf);
                         OutputReportPredefined::PreDefTableEntry(
-                            state, orp->pdchTopAirSubCompName, std::format("{}", rowCounter), pasBranchSubComp.Name);
+                            state, orp->pdchTopAirSubCompName, EnergyPlus::format("{}", rowCounter), pasBranchSubComp.Name);
                         OutputReportPredefined::PreDefTableEntry(
-                            state, orp->pdchTopAirSubSubCompType, std::format("{}", rowCounter), pasBranchSubSubComp.TypeOf);
+                            state, orp->pdchTopAirSubSubCompType, EnergyPlus::format("{}", rowCounter), pasBranchSubSubComp.TypeOf);
                         OutputReportPredefined::PreDefTableEntry(
-                            state, orp->pdchTopAirSubSubCompName, std::format("{}", rowCounter), pasBranchSubSubComp.Name);
+                            state, orp->pdchTopAirSubSubCompName, EnergyPlus::format("{}", rowCounter), pasBranchSubSubComp.Name);
                         fillAirloopToplogyComponentRow(
                             state, pas.Name, pasBranch.Name, pasBranch.DuctType, pasBranchComp.TypeOf, pasBranchComp.Name, rowCounter);
                     }
@@ -4983,7 +4987,8 @@ void reportAirLoopToplogy(EnergyPlusData &state)
             if (pas.Mixer.Exists) {
                 for (int inNum : pas.Mixer.BranchNumIn) {
                     if (inNum == BranchNum) {
-                        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirMixName, std::format("{}", rowCounter - 1), pas.Mixer.Name);
+                        OutputReportPredefined::PreDefTableEntry(
+                            state, orp->pdchTopAirMixName, EnergyPlus::format("{}", rowCounter - 1), pas.Mixer.Name);
                         break;
                     }
                 }
@@ -5006,7 +5011,7 @@ void reportAirLoopToplogy(EnergyPlusData &state)
     for (int airLoopNum = 1; airLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys; ++airLoopNum) {
         auto &pas = state.dataAirSystemsData->PrimaryAirSystems(airLoopNum);
         auto &thisAtoZInfo = state.dataAirLoop->AirToZoneNodeInfo(airLoopNum);
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirDemandName, std::format("{}", rowCounter), thisAtoZInfo.AirLoopName);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirDemandName, EnergyPlus::format("{}", rowCounter), thisAtoZInfo.AirLoopName);
         ++rowCounter;
         for (int ductNum = 1; ductNum <= thisAtoZInfo.NumSupplyNodes; ++ductNum) {
             auto &thisBranch = pas.Branch(thisAtoZInfo.SupplyDuctBranchNum(ductNum));
@@ -5014,14 +5019,15 @@ void reportAirLoopToplogy(EnergyPlusData &state)
                 auto &thisSupplyPath = state.dataZoneEquip->SupplyAirPath(thisAtoZInfo.SupplyAirPathNum(ductNum));
                 for (int compNum = 1; compNum <= thisSupplyPath.NumOfComponents; ++compNum) {
                     OutputReportPredefined::PreDefTableEntry(
-                        state, orp->pdchTopAirDemandName, std::format("{}", rowCounter), thisAtoZInfo.AirLoopName);
-                    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopAirSupplyBranchName, std::format("{}", rowCounter), thisBranch.Name);
+                        state, orp->pdchTopAirDemandName, EnergyPlus::format("{}", rowCounter), thisAtoZInfo.AirLoopName);
                     OutputReportPredefined::PreDefTableEntry(
-                        state, orp->pdchTopAirSupplyDuctType, std::format("{}", rowCounter), HVAC::airDuctTypeNames[(int)thisBranch.DuctType]);
+                        state, orp->pdchTopAirSupplyBranchName, EnergyPlus::format("{}", rowCounter), thisBranch.Name);
                     OutputReportPredefined::PreDefTableEntry(
-                        state, orp->pdchTopAirSupplyPCompType, std::format("{}", rowCounter), thisSupplyPath.ComponentType(compNum));
+                        state, orp->pdchTopAirSupplyDuctType, EnergyPlus::format("{}", rowCounter), HVAC::airDuctTypeNames[(int)thisBranch.DuctType]);
                     OutputReportPredefined::PreDefTableEntry(
-                        state, orp->pdchTopAirSupplyPCompName, std::format("{}", rowCounter), thisSupplyPath.ComponentName(compNum));
+                        state, orp->pdchTopAirSupplyPCompType, EnergyPlus::format("{}", rowCounter), thisSupplyPath.ComponentType(compNum));
+                    OutputReportPredefined::PreDefTableEntry(
+                        state, orp->pdchTopAirSupplyPCompName, EnergyPlus::format("{}", rowCounter), thisSupplyPath.ComponentName(compNum));
                     ++rowCounter;
                 }
                 if (thisBranch.DuctType == HVAC::AirDuctType::Cooling || thisBranch.DuctType == HVAC::AirDuctType::Main) {
@@ -5037,10 +5043,14 @@ void reportAirLoopToplogy(EnergyPlusData &state)
                             }
                             if (thisCoolADU.SupplyAirPathExists) {
                                 int spCompNum = thisSupplyPath.OutletNodeSupplyPathCompNum(thisCoolADU.SupplyAirPathOutNodeIndex);
-                                OutputReportPredefined::PreDefTableEntry(
-                                    state, orp->pdchTopAirSupplyPCompType, std::format("{}", rowCounter), thisSupplyPath.ComponentType(spCompNum));
-                                OutputReportPredefined::PreDefTableEntry(
-                                    state, orp->pdchTopAirSupplyPCompName, std::format("{}", rowCounter), thisSupplyPath.ComponentName(spCompNum));
+                                OutputReportPredefined::PreDefTableEntry(state,
+                                                                         orp->pdchTopAirSupplyPCompType,
+                                                                         EnergyPlus::format("{}", rowCounter),
+                                                                         thisSupplyPath.ComponentType(spCompNum));
+                                OutputReportPredefined::PreDefTableEntry(state,
+                                                                         orp->pdchTopAirSupplyPCompName,
+                                                                         EnergyPlus::format("{}", rowCounter),
+                                                                         thisSupplyPath.ComponentName(spCompNum));
                             }
                             OutputReportPredefined::PreDefTableEntry(
                                 state, orp->pdchTopAirDemandName, std::format("{}", rowCounter), thisAtoZInfo.AirLoopName);

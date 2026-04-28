@@ -45,6 +45,9 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// C++ Headers
+#include <format>
+
 // EnergyPlus Headers
 #include <EnergyPlus/Boilers.hh>
 #include <EnergyPlus/ChillerAbsorption.hh>
@@ -381,7 +384,8 @@ namespace FaultsManager {
             if (lAlphaFieldBlanks(4)) {
                 ShowSevereError(
                     state,
-                    std::format("{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(4), cAlphaArgs(4)));
+                    EnergyPlus::format(
+                        "{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(4), cAlphaArgs(4)));
                 state.dataFaultsMgr->ErrorsFound = true;
             }
 
@@ -390,7 +394,8 @@ namespace FaultsManager {
             if (lAlphaFieldBlanks(5)) {
                 ShowSevereError(
                     state,
-                    std::format("{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
+                    EnergyPlus::format(
+                        "{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                 state.dataFaultsMgr->ErrorsFound = true;
             }
 
@@ -408,7 +413,7 @@ namespace FaultsManager {
                 if (EvapCoolerNum <= 0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} = \"{}\" invalid {} = \"{}\" not found.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
@@ -465,7 +470,8 @@ namespace FaultsManager {
             if (lAlphaFieldBlanks(4)) {
                 ShowSevereError(
                     state,
-                    std::format("{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(4), cAlphaArgs(4)));
+                    EnergyPlus::format(
+                        "{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(4), cAlphaArgs(4)));
                 state.dataFaultsMgr->ErrorsFound = true;
             }
 
@@ -474,7 +480,8 @@ namespace FaultsManager {
             if (lAlphaFieldBlanks(5)) {
                 ShowSevereError(
                     state,
-                    std::format("{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
+                    EnergyPlus::format(
+                        "{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                 state.dataFaultsMgr->ErrorsFound = true;
             }
 
@@ -496,7 +503,7 @@ namespace FaultsManager {
                 if (ChillerNum <= 0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} = \"{}\" invalid {} = \"{}\" not found.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
@@ -505,12 +512,12 @@ namespace FaultsManager {
                         // The fault model is only applicable to the chillers with water based condensers
                         ShowWarningError(
                             state,
-                            std::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
-                                        "fault model will not be applied.",
-                                        cFaultCurrentObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(5),
-                                        cAlphaArgs(5)));
+                            EnergyPlus::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
+                                               "fault model will not be applied.",
+                                               cFaultCurrentObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(5),
+                                               cAlphaArgs(5)));
 
                     } else {
                         // Link the chiller with the fault model
@@ -531,7 +538,7 @@ namespace FaultsManager {
                 if (ChillerNum <= 0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} = \"{}\" invalid {} = \"{}\" not found.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
@@ -540,12 +547,12 @@ namespace FaultsManager {
                         // The fault model is only applicable to the chillers with water based condensers
                         ShowWarningError(
                             state,
-                            std::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
-                                        "fault model will not be applied.",
-                                        cFaultCurrentObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(5),
-                                        cAlphaArgs(5)));
+                            EnergyPlus::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
+                                               "fault model will not be applied.",
+                                               cFaultCurrentObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(5),
+                                               cAlphaArgs(5)));
 
                     } else {
                         // Link the chiller with the fault model
@@ -566,7 +573,7 @@ namespace FaultsManager {
                 if (ChillerNum <= 0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} = \"{}\" invalid {} = \"{}\" not found.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
@@ -575,12 +582,12 @@ namespace FaultsManager {
                         // The fault model is only applicable to the chillers with water based condensers
                         ShowWarningError(
                             state,
-                            std::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
-                                        "fault model will not be applied.",
-                                        cFaultCurrentObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(5),
-                                        cAlphaArgs(5)));
+                            EnergyPlus::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
+                                               "fault model will not be applied.",
+                                               cFaultCurrentObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(5),
+                                               cAlphaArgs(5)));
 
                     } else {
                         // Link the chiller with the fault model
@@ -602,7 +609,7 @@ namespace FaultsManager {
                 if (ChillerNum <= 0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} = \"{}\" invalid {} = \"{}\" not found.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
@@ -611,12 +618,12 @@ namespace FaultsManager {
                         // The fault model is only applicable to the chillers with water based condensers
                         ShowWarningError(
                             state,
-                            std::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
-                                        "fault model will not be applied.",
-                                        cFaultCurrentObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(5),
-                                        cAlphaArgs(5)));
+                            EnergyPlus::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
+                                               "fault model will not be applied.",
+                                               cFaultCurrentObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(5),
+                                               cAlphaArgs(5)));
 
                     } else {
                         // Link the chiller with the fault model
@@ -638,7 +645,7 @@ namespace FaultsManager {
                 if (ChillerNum <= 0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} = \"{}\" invalid {} = \"{}\" not found.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
@@ -647,12 +654,12 @@ namespace FaultsManager {
                         // The fault model is only applicable to the chillers with water based condensers
                         ShowWarningError(
                             state,
-                            std::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
-                                        "fault model will not be applied.",
-                                        cFaultCurrentObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(5),
-                                        cAlphaArgs(5)));
+                            EnergyPlus::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
+                                               "fault model will not be applied.",
+                                               cFaultCurrentObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(5),
+                                               cAlphaArgs(5)));
 
                     } else {
                         // Link the fault model with the water cooled chiller
@@ -674,7 +681,7 @@ namespace FaultsManager {
                 if (ChillerNum <= 0) {
                     ShowSevereError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "{} = \"{}\" invalid {} = \"{}\" not found.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(5), cAlphaArgs(5)));
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
@@ -682,12 +689,12 @@ namespace FaultsManager {
                         // The fault model is only applicable to the chillers with water based condensers
                         ShowWarningError(
                             state,
-                            std::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
-                                        "fault model will not be applied.",
-                                        cFaultCurrentObject,
-                                        cAlphaArgs(1),
-                                        cAlphaFieldNames(5),
-                                        cAlphaArgs(5)));
+                            EnergyPlus::format("{} = \"{}\" invalid {} = \"{}\". The specified chiller is not water cooled. The chiller fouling "
+                                               "fault model will not be applied.",
+                                               cFaultCurrentObject,
+                                               cAlphaArgs(1),
+                                               cAlphaFieldNames(5),
+                                               cAlphaArgs(5)));
 
                     } else {
                         // Link the fault model with the water cooled chiller
@@ -747,7 +754,8 @@ namespace FaultsManager {
             if (lAlphaFieldBlanks(4)) {
                 ShowSevereError(
                     state,
-                    std::format("{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(4), cAlphaArgs(4)));
+                    EnergyPlus::format(
+                        "{} = \"{}\" invalid {} = \"{}\" blank.", cFaultCurrentObject, cAlphaArgs(1), cAlphaFieldNames(4), cAlphaArgs(4)));
                 state.dataFaultsMgr->ErrorsFound = true;
             }
 

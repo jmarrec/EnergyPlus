@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
@@ -262,7 +263,7 @@ void ManageOutsideAirSystem(EnergyPlusData &state, std::string const &OASysName,
     if (OASysNum == 0) {
         OASysNum = Util::FindItemInList(OASysName, state.dataAirLoop->OutsideAirSys);
         if (OASysNum == 0) {
-            ShowFatalError(state, std::format("ManageOutsideAirSystem: AirLoopHVAC:OutdoorAirSystem not found={}", OASysName));
+            ShowFatalError(state, EnergyPlus::format("ManageOutsideAirSystem: AirLoopHVAC:OutdoorAirSystem not found={}", OASysName));
         }
     }
 
@@ -361,8 +362,8 @@ void SimOutsideAirSys(EnergyPlusData &state, int const OASysNum, bool const Firs
         bool FatalErrorFlag(false);
         if (CurrentOASystem.NumControllers - CurrentOASystem.NumSimpleControllers > 1) {
             ShowWarningError(state,
-                             std::format("AirLoopHVAC:OutdoorAirSystem {} has more than 1 outside air controller; only the 1st will be used",
-                                         CurrentOASystem.Name));
+                             EnergyPlus::format("AirLoopHVAC:OutdoorAirSystem {} has more than 1 outside air controller; only the 1st will be used",
+                                                CurrentOASystem.Name));
         }
         for (int CompNum = 1; CompNum <= CurrentOASystem.NumComponents; ++CompNum) {
             auto &CompType = CurrentOASystem.ComponentType(CompNum);
@@ -371,48 +372,48 @@ void SimOutsideAirSys(EnergyPlusData &state, int const OASysNum, bool const Firs
                 int OAMixerNum = Util::FindItemInList(CompName, state.dataMixedAir->OAMixer);
                 int OAControllerNum = CurrentOASystem.OAControllerIndex;
                 if (state.dataMixedAir->OAController(OAControllerNum).MixNode != state.dataMixedAir->OAMixer(OAMixerNum).MixNode) {
-                    ShowSevereError(
-                        state,
-                        std::format("The mixed air node of Controller:OutdoorAir=\"{}\"", state.dataMixedAir->OAController(OAControllerNum).Name));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("The mixed air node of Controller:OutdoorAir=\"{}\"",
+                                                       state.dataMixedAir->OAController(OAControllerNum).Name));
                     ShowContinueError(state,
-                                      std::format("should be the same node as the mixed air node of OutdoorAir:Mixer=\"{}\".",
-                                                  state.dataMixedAir->OAMixer(OAMixerNum).Name));
+                                      EnergyPlus::format("should be the same node as the mixed air node of OutdoorAir:Mixer=\"{}\".",
+                                                         state.dataMixedAir->OAMixer(OAMixerNum).Name));
                     ShowContinueError(state,
-                                      std::format("Controller:OutdoorAir mixed air node=\"{}\".",
-                                                  state.dataLoopNodes->NodeID(state.dataMixedAir->OAController(OAControllerNum).MixNode)));
+                                      EnergyPlus::format("Controller:OutdoorAir mixed air node=\"{}\".",
+                                                         state.dataLoopNodes->NodeID(state.dataMixedAir->OAController(OAControllerNum).MixNode)));
                     ShowContinueError(state,
-                                      std::format("OutdoorAir:Mixer mixed air node=\"{}\".",
-                                                  state.dataLoopNodes->NodeID(state.dataMixedAir->OAMixer(OAMixerNum).MixNode)));
+                                      EnergyPlus::format("OutdoorAir:Mixer mixed air node=\"{}\".",
+                                                         state.dataLoopNodes->NodeID(state.dataMixedAir->OAMixer(OAMixerNum).MixNode)));
                     FatalErrorFlag = true;
                 }
                 if (state.dataMixedAir->OAController(OAControllerNum).RelNode != state.dataMixedAir->OAMixer(OAMixerNum).RelNode) {
-                    ShowSevereError(
-                        state,
-                        std::format("The relief air node of Controller:OutdoorAir=\"{}\"", state.dataMixedAir->OAController(OAControllerNum).Name));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("The relief air node of Controller:OutdoorAir=\"{}\"",
+                                                       state.dataMixedAir->OAController(OAControllerNum).Name));
                     ShowContinueError(state,
-                                      std::format("should be the same node as the relief air node of OutdoorAir:Mixer=\"{}\".",
-                                                  state.dataMixedAir->OAMixer(OAMixerNum).Name));
+                                      EnergyPlus::format("should be the same node as the relief air node of OutdoorAir:Mixer=\"{}\".",
+                                                         state.dataMixedAir->OAMixer(OAMixerNum).Name));
                     ShowContinueError(state,
-                                      std::format("Controller:OutdoorAir relief air node=\"{}\".",
-                                                  state.dataLoopNodes->NodeID(state.dataMixedAir->OAController(OAControllerNum).RelNode)));
+                                      EnergyPlus::format("Controller:OutdoorAir relief air node=\"{}\".",
+                                                         state.dataLoopNodes->NodeID(state.dataMixedAir->OAController(OAControllerNum).RelNode)));
                     ShowContinueError(state,
-                                      std::format("OutdoorAir:Mixer relief air node=\"{}\".",
-                                                  state.dataLoopNodes->NodeID(state.dataMixedAir->OAMixer(OAMixerNum).RelNode)));
+                                      EnergyPlus::format("OutdoorAir:Mixer relief air node=\"{}\".",
+                                                         state.dataLoopNodes->NodeID(state.dataMixedAir->OAMixer(OAMixerNum).RelNode)));
                     FatalErrorFlag = true;
                 }
                 if (state.dataMixedAir->OAController(OAControllerNum).RetNode != state.dataMixedAir->OAMixer(OAMixerNum).RetNode) {
-                    ShowSevereError(
-                        state,
-                        std::format("The return air node of Controller:OutdoorAir=\"{}\"", state.dataMixedAir->OAController(OAControllerNum).Name));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("The return air node of Controller:OutdoorAir=\"{}\"",
+                                                       state.dataMixedAir->OAController(OAControllerNum).Name));
                     ShowContinueError(state,
-                                      std::format("should be the same node as the return air node of OutdoorAir:Mixer=\"{}\".",
-                                                  state.dataMixedAir->OAMixer(OAMixerNum).Name));
+                                      EnergyPlus::format("should be the same node as the return air node of OutdoorAir:Mixer=\"{}\".",
+                                                         state.dataMixedAir->OAMixer(OAMixerNum).Name));
                     ShowContinueError(state,
-                                      std::format("Controller:OutdoorAir return air node=\"{}\".",
-                                                  state.dataLoopNodes->NodeID(state.dataMixedAir->OAController(OAControllerNum).RetNode)));
+                                      EnergyPlus::format("Controller:OutdoorAir return air node=\"{}\".",
+                                                         state.dataLoopNodes->NodeID(state.dataMixedAir->OAController(OAControllerNum).RetNode)));
                     ShowContinueError(state,
-                                      std::format("OutdoorAir:Mixer return air node=\"{}\".",
-                                                  state.dataLoopNodes->NodeID(state.dataMixedAir->OAMixer(OAMixerNum).RetNode)));
+                                      EnergyPlus::format("OutdoorAir:Mixer return air node=\"{}\".",
+                                                         state.dataLoopNodes->NodeID(state.dataMixedAir->OAMixer(OAMixerNum).RetNode)));
                     FatalErrorFlag = true;
                 }
             }
@@ -733,7 +734,7 @@ void SimOAComponent(EnergyPlusData &state,
         }
     } break;
     default:
-        ShowFatalError(state, std::format("Invalid Outside Air Component={}", CompType));
+        ShowFatalError(state, EnergyPlus::format("Invalid Outside Air Component={}", CompType));
     }
 }
 
@@ -759,7 +760,7 @@ void SimOAMixer(EnergyPlusData &state, std::string const &CompName, int &CompInd
         OAMixerNum = Util::FindItemInList(CompName, state.dataMixedAir->OAMixer);
         CompIndex = OAMixerNum;
         if (OAMixerNum == 0) {
-            ShowFatalError(state, std::format("SimOAMixer: OutdoorAir:Mixer not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("SimOAMixer: OutdoorAir:Mixer not found={}", CompName));
         }
     } else {
         OAMixerNum = CompIndex;
@@ -823,7 +824,7 @@ void SimOAController(EnergyPlusData &state, std::string const &CtrlName, int &Ct
                 if (!sensLoadCtrlUnitarySystemFound) {
                     ShowWarningError(
                         state,
-                        std::format(
+                        EnergyPlus::format(
                             "SimOAController: EconomizerFirst was selected in the \"{}\" Controller:OutdoorAir object but the air loop it belongs to "
                             "does not include an AirLoopHVAC:UnitarySystem with a \"Load\" Control Type input and cooling coil of one of the "
                             "following types: Coil:Cooling:DX:MultiSpeed,"
@@ -843,7 +844,7 @@ void SimOAController(EnergyPlusData &state, std::string const &CtrlName, int &Ct
         }
         CtrlIndex = OAControllerNum;
         if (OAControllerNum == 0) {
-            ShowFatalError(state, std::format("SimOAController: Outside Air Controller not found={}", CtrlName));
+            ShowFatalError(state, EnergyPlus::format("SimOAController: Outside Air Controller not found={}", CtrlName));
         }
     } else {
         OAControllerNum = CtrlIndex;
@@ -2323,15 +2324,12 @@ void ProcessOAControllerInputs(EnergyPlusData &state,
                         std::format("... The {} is less than the ratio of the outside air controllers minimum to maximum outside air flow rate.",
                                     cNumericFields(7)));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("... Controller {} = {:.4T} m3/s.", cNumericFields(1), state.dataMixedAir->OAController(OutAirNum).MinOA));
+                        state, std::format("... Controller {} = {:.4f} m3/s.", cNumericFields(1), state.dataMixedAir->OAController(OutAirNum).MinOA));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("... Controller {} = {:.4T} m3/s.", cNumericFields(2), state.dataMixedAir->OAController(OutAirNum).MaxOA));
-                    ShowContinueError(state, EnergyPlus::format("... Controller minimum to maximum flow ratio = {:.4T}.", OAFlowRatio));
+                        state, std::format("... Controller {} = {:.4f} m3/s.", cNumericFields(2), state.dataMixedAir->OAController(OutAirNum).MaxOA));
+                    ShowContinueError(state, std::format("... Controller minimum to maximum flow ratio = {:.4f}.", OAFlowRatio));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("... {} = {:.4T}.", cNumericFields(7), state.dataMixedAir->OAController(OutAirNum).HighRHOAFlowRatio));
+                        state, std::format("... {} = {:.4f}.", cNumericFields(7), state.dataMixedAir->OAController(OutAirNum).HighRHOAFlowRatio));
                 }
             }
         }
@@ -4747,10 +4745,10 @@ void OAControllerProps::SizeOAController(EnergyPlusData &state)
                     ShowContinueError(state,
                                       "... The High Humidity Outdoor Air Flow Ratio is less than the ratio of the outdoor air controllers "
                                       "minimum to maximum outside air flow rate.");
-                    ShowContinueError(state, EnergyPlus::format("... Controller minimum flow rate = {:.4T} m3/s.", this->MinOA));
-                    ShowContinueError(state, EnergyPlus::format("... Controller maximum flow rate = {:.4T} m3/s.", this->MaxOA));
-                    ShowContinueError(state, EnergyPlus::format("... Controller minimum to maximum flow ratio = {:.4T}.", OAFlowRatio));
-                    ShowContinueError(state, EnergyPlus::format("... High humidity control flow ratio = {:.4T}.", this->HighRHOAFlowRatio));
+                    ShowContinueError(state, std::format("... Controller minimum flow rate = {:.4f} m3/s.", this->MinOA));
+                    ShowContinueError(state, std::format("... Controller maximum flow rate = {:.4f} m3/s.", this->MaxOA));
+                    ShowContinueError(state, std::format("... Controller minimum to maximum flow ratio = {:.4f}.", OAFlowRatio));
+                    ShowContinueError(state, std::format("... High humidity control flow ratio = {:.4f}.", this->HighRHOAFlowRatio));
                 }
             }
         }

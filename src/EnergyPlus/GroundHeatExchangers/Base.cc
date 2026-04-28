@@ -45,6 +45,10 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// C++ Headers
+#include <format>
+
+// EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataSystemVariables.hh>
@@ -53,8 +57,6 @@
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/PlantUtilities.hh>
-
-#include <format>
 
 namespace EnergyPlus::GroundHeatExchangers {
 
@@ -365,11 +367,11 @@ void GLHEBase::updateGHX(EnergyPlusData &state)
         Real64 fluidDensity = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getDensity(state, this->inletTemp, RoutineName);
         this->designMassFlow = this->designFlow * fluidDensity;
         ShowWarningError(state, "Check GLHE design inputs & g-functions for consistency");
-        ShowContinueError(state, std::format("For GroundHeatExchanger: {}GLHE delta Temp > 100C.", this->name));
+        ShowContinueError(state, EnergyPlus::format("For GroundHeatExchanger: {}GLHE delta Temp > 100C.", this->name));
         ShowContinueError(state, "This can be encountered in cases where the GLHE mass flow rate is either significantly");
         ShowContinueError(state, " lower than the design value, or cases where the mass flow rate rapidly changes.");
         ShowContinueError(
-            state, EnergyPlus::format("GLHE Current Flow Rate={:.3T}; GLHE Design Flow Rate={:.3T}", this->massFlowRate, this->designMassFlow));
+            state, EnergyPlus::format("GLHE Current Flow Rate={:.3f}; GLHE Design Flow Rate={:.3f}", this->massFlowRate, this->designMassFlow));
         ++this->numErrorCalls;
     }
 }
@@ -482,7 +484,7 @@ GLHEBase *GLHEBase::factory(EnergyPlusData &state, DataPlant::PlantEquipmentType
     }
 
     // If we didn't find it, fatal
-    ShowFatalError(state, std::format("Ground Heat Exchanger Factory: Error getting inputs for GHX named: {}", objectName));
+    ShowFatalError(state, EnergyPlus::format("Ground Heat Exchanger Factory: Error getting inputs for GHX named: {}", objectName));
 }
 
 void GLHEBase::setupOutput(EnergyPlusData &state)
@@ -621,7 +623,8 @@ void GetGroundHeatExchangerInput(EnergyPlusData &state)
         auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(GLHEVertProps::moduleName);
         if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
             ShowSevereError(
-                state, std::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVertProps::moduleName)); // LCOV_EXCL_LINE
+                state,
+                EnergyPlus::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVertProps::moduleName)); // LCOV_EXCL_LINE
         }
         auto &instancesValue = instances.value();
         for (auto it = instancesValue.begin(); it != instancesValue.end(); ++it) {
@@ -638,8 +641,8 @@ void GetGroundHeatExchangerInput(EnergyPlusData &state)
         auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(GLHEResponseFactors::moduleName);
         if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
             ShowSevereError(state,
-                            std::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0",
-                                        GLHEResponseFactors::moduleName)); // LCOV_EXCL_LINE
+                            EnergyPlus::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0",
+                                               GLHEResponseFactors::moduleName)); // LCOV_EXCL_LINE
         }
         auto &instancesValue = instances.value();
         for (auto it = instancesValue.begin(); it != instancesValue.end(); ++it) {
@@ -656,7 +659,8 @@ void GetGroundHeatExchangerInput(EnergyPlusData &state)
         auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(GLHEVertArray::moduleName);
         if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
             ShowSevereError(
-                state, std::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVertArray::moduleName)); // LCOV_EXCL_LINE
+                state,
+                EnergyPlus::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVertArray::moduleName)); // LCOV_EXCL_LINE
         }
         auto &instancesValue = instances.value();
         for (auto it = instancesValue.begin(); it != instancesValue.end(); ++it) {
@@ -673,7 +677,8 @@ void GetGroundHeatExchangerInput(EnergyPlusData &state)
         auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(GLHEVertSingle::moduleName);
         if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
             ShowSevereError(
-                state, std::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVertSingle::moduleName)); // LCOV_EXCL_LINE
+                state,
+                EnergyPlus::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVertSingle::moduleName)); // LCOV_EXCL_LINE
         }
         auto &instancesValue = instances.value();
         for (auto it = instancesValue.begin(); it != instancesValue.end(); ++it) {
@@ -689,8 +694,8 @@ void GetGroundHeatExchangerInput(EnergyPlusData &state)
     if (state.dataGroundHeatExchanger->numVerticalGLHEs > 0) {
         auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(GLHEVert::moduleName);
         if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            ShowSevereError(state,
-                            std::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVert::moduleName)); // LCOV_EXCL_LINE
+            ShowSevereError(
+                state, EnergyPlus::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHEVert::moduleName)); // LCOV_EXCL_LINE
         }
         auto &instancesValue = instances.value();
         for (auto it = instancesValue.begin(); it != instancesValue.end(); ++it) {
@@ -705,8 +710,9 @@ void GetGroundHeatExchangerInput(EnergyPlusData &state)
     if (state.dataGroundHeatExchanger->numSlinkyGLHEs > 0) {
         auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(GLHESlinky::moduleName);
         if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            ShowSevereError(state,
-                            std::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHESlinky::moduleName)); // LCOV_EXCL_LINE
+            ShowSevereError(
+                state,
+                EnergyPlus::format("{}: Somehow getNumObjectsFound was > 0 but epJSON.find found 0", GLHESlinky::moduleName)); // LCOV_EXCL_LINE
         }
         auto &instancesValue = instances.value();
         for (auto it = instancesValue.begin(); it != instancesValue.end(); ++it) {
