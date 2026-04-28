@@ -2704,7 +2704,7 @@
     Air Velo Sch;            !- Air Velocity Schedule Name
 
   People:Definition,
-    West Zone PEOPLE Definition, !- Name
+    West Zone PEOPLE Definition,  !- Name
     people,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
@@ -2773,7 +2773,7 @@
     Air Velo Sch;            !- Air Velocity Schedule Name
 
   People:Definition,
-    East Zone PEOPLE Definition, !- Name
+    East Zone PEOPLE Definition,  !- Name
     people,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
@@ -2866,7 +2866,7 @@
     GeneralLights;           !- End-Use Subcategory
 
   Lights:Definition,
-    West Zone Lights Definition, !- Name
+    West Zone Lights Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     284,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2883,7 +2883,7 @@
     MiscPlug;                !- End-Use Subcategory
 
   ElectricEquipment:Definition,
-    West Zone_MiscPlug_Equip Definition, !- Name
+    West Zone_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0.,                      !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2894,14 +2894,24 @@
 
   ElectricEquipment:ITE:AirCooled,
     WestDataCenter_Equip,    !- Name
+    WestDataCenter_Equip Definition, !- ElectricEquipment ITE AirCooled Definition Name
     West Zone,               !- Zone or Space Name
+    ,                        !- Number of Units
+    Data Center Operation Schedule, !- Design Power Input Schedule Name
+    Data Center CPU Loading Schedule, !- CPU Loading  Schedule Name
+    ,                        !- Air Inlet Room Air Model Node Name
+    ,                        !- Air Outlet Room Air Model Node Name
+    West Zone Inlet Node,    !- Supply Air Node Name
+    ITE-CPU,                 !- CPU End-Use Subcategory
+    ITE-Fans,                !- Fan End-Use Subcategory
+    ITE-UPS;                 !- Electric Power Supply End-Use Subcategory
+
+  ElectricEquipment:ITE:AirCooled:Definition,
+    WestDataCenter_Equip Definition,  !- Name
     FlowFromSystem,          !- Air Flow Calculation Method
     Watts/Area,              !- Design Power Input Calculation Method
     ,                        !- Watts per Unit {W}
-    ,                        !- Number of Units
     200,                     !- Watts per Floor Area {W/m2}
-    Data Center Operation Schedule,  !- Design Power Input Schedule Name
-    Data Center CPU Loading Schedule,  !- CPU Loading  Schedule Name
     Data Center Servers Power fLoadTemp,  !- CPU Power Input Function of Loading and Air Temperature Curve Name
     0.4,                     !- Design Fan Power Input Fraction
     0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}
@@ -2910,17 +2920,11 @@
     15,                      !- Design Entering Air Temperature {C}
     A1,                      !- Environmental Class
     AdjustedSupply,          !- Air Inlet Connection Type
-    ,                        !- Air Inlet Room Air Model Node Name
-    ,                        !- Air Outlet Room Air Model Node Name
-    West Zone Inlet Node,    !- Supply Air Node Name
     0.1,                     !- Design Recirculation Fraction
     Data Center Recirculation fLoadTemp,  !- Recirculation Function of Loading and Supply Temperature Curve Name
     0.9,                     !- Design Electric Power Supply Efficiency
     UPS Efficiency fPLR,     !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
-    1,                       !- Fraction of Electric Power Supply Losses to Zone
-    ITE-CPU,                 !- CPU End-Use Subcategory
-    ITE-Fans,                !- Fan End-Use Subcategory
-    ITE-UPS;                 !- Electric Power Supply End-Use Subcategory
+    1;                       !- Fraction of Electric Power Supply Losses to Zone
 
   Curve:Quadratic,
     ECM FanPower fFlow,      !- Name
@@ -3015,7 +3019,7 @@
     GeneralLights;           !- End-Use Subcategory
 
   Lights:Definition,
-    East Zone Lights Definition, !- Name
+    East Zone Lights Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     284,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -3032,7 +3036,7 @@
     MiscPlug;                !- End-Use Subcategory
 
   ElectricEquipment:Definition,
-    East Zone_MiscPlug_Equip Definition, !- Name
+    East Zone_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0.,                      !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -3043,14 +3047,24 @@
 
   ElectricEquipment:ITE:AirCooled,
     EastDataCenter_Equip,    !- Name
+    EastDataCenter_Equip Definition, !- ElectricEquipment ITE AirCooled Definition Name
     East Zone,               !- Zone or Space Name
+    ,                        !- Number of Units
+    Data Center Operation Schedule, !- Design Power Input Schedule Name
+    Data Center CPU Loading Schedule, !- CPU Loading  Schedule Name
+    ,                        !- Air Inlet Room Air Model Node Name
+    ,                        !- Air Outlet Room Air Model Node Name
+    East Zone Inlet Node,    !- Supply Air Node Name
+    ITE-CPU,                 !- CPU End-Use Subcategory
+    ITE-Fans,                !- Fan End-Use Subcategory
+    ITE-UPS;                 !- Electric Power Supply End-Use Subcategory
+
+  ElectricEquipment:ITE:AirCooled:Definition,
+    EastDataCenter_Equip Definition,  !- Name
     FlowControlWithApproachTemperatures,  !- Air Flow Calculation Method
     Watts/Area,              !- Design Power Input Calculation Method
     ,                        !- Watts per Unit {W}
-    ,                        !- Number of Units
     200,                     !- Watts per Floor Area {W/m2}
-    Data Center Operation Schedule,  !- Design Power Input Schedule Name
-    Data Center CPU Loading Schedule,  !- CPU Loading  Schedule Name
     Data Center Servers Power fLoadTemp,  !- CPU Power Input Function of Loading and Air Temperature Curve Name
     0.4,                     !- Design Fan Power Input Fraction
     0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}
@@ -3059,17 +3073,11 @@
     15,                      !- Design Entering Air Temperature {C}
     A2,                      !- Environmental Class
     AdjustedSupply,          !- Air Inlet Connection Type
-    ,                        !- Air Inlet Room Air Model Node Name
-    ,                        !- Air Outlet Room Air Model Node Name
-    East Zone Inlet Node,    !- Supply Air Node Name
     0.1,                     !- Design Recirculation Fraction
     Data Center Recirculation fLoadTemp,  !- Recirculation Function of Loading and Supply Temperature Curve Name
     0.9,                     !- Design Electric Power Supply Efficiency
     UPS Efficiency fPLR,     !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
     1,                       !- Fraction of Electric Power Supply Losses to Zone
-    ITE-CPU,                 !- CPU End-Use Subcategory
-    ITE-Fans,                !- Fan End-Use Subcategory
-    ITE-UPS,                 !- Electric Power Supply End-Use Subcategory
     2,                       !- Supply Temperature Difference {deltaC}
     ,                        !- Supply Temperature Difference Schedule
     0,                       !- Return Temperature Difference {deltaC}
