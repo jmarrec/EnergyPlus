@@ -1921,6 +1921,9 @@ namespace InternalHeatGains {
 
         if (state.dataHeatBal->TotITEquip > 0) {
             state.dataHeatBal->ZoneITEq.allocate(state.dataHeatBal->TotITEquip);
+
+            std::vector<ITEquipDefinitionData> iteLoadDefs = GetITEAirCooledDefinition(state);
+
             int itEqNum = 0;
             for (int itEqInputNum = 1; itEqInputNum <= numZoneITEqStatements; ++itEqInputNum) {
 
@@ -1938,25 +1941,38 @@ namespace InternalHeatGains {
                                                                          IHGNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, itEqModuleObject, IHGAlphas(1)};
-                Sched::Schedule *opSchedPtr = Sched::GetSchedule(state, IHGAlphas(5));
-                if (IHGAlphaFieldBlanks(5)) {
-                    opSchedPtr = Sched::GetScheduleAlwaysOn(state); // Not an availability schedule, but default is constant-1.0
+
+                // A2: Definition Name lookup
+                std::string defName = Util::makeUPPER(IHGAlphas(2));
+                auto iteDefIt =
+                    std::find_if(iteLoadDefs.begin(), iteLoadDefs.end(), [&defName](ITEquipDefinitionData const &d) { return d.Name == defName; });
+                if (iteDefIt == iteLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
+                }
+
+                // A4: Design Power Input Schedule
+                Sched::Schedule *opSchedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    opSchedPtr = Sched::GetScheduleAlwaysOn(state);
                 } else if (opSchedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
                     ErrorsFound = true;
                 } else if (!opSchedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
                     ErrorsFound = true;
                 }
 
-                Sched::Schedule *cpuSchedPtr = Sched::GetSchedule(state, IHGAlphas(6));
-                if (IHGAlphaFieldBlanks(6)) {
-                    cpuSchedPtr = Sched::GetScheduleAlwaysOn(state); // not an availability schedule, but default is constant-1.0
+                // A5: CPU Loading Schedule
+                Sched::Schedule *cpuSchedPtr = Sched::GetSchedule(state, IHGAlphas(5));
+                if (IHGAlphaFieldBlanks(5)) {
+                    cpuSchedPtr = Sched::GetScheduleAlwaysOn(state);
                 } else if (cpuSchedPtr == nullptr) {
-                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(6), IHGAlphas(6));
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5));
                     ErrorsFound = true;
                 } else if (!cpuSchedPtr->checkMinVal(state, Clusive::In, 0.0)) {
-                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(6), IHGAlphas(6), Clusive::In, 0.0);
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5), Clusive::In, 0.0);
                     ErrorsFound = true;
                 }
 
@@ -1972,46 +1988,43 @@ namespace InternalHeatGains {
                     thisZoneITEq.operSched = opSchedPtr;
                     thisZoneITEq.cpuLoadSched = cpuSchedPtr;
 
-                    // IT equipment design level calculation method.
-                    if (IHGAlphaFieldBlanks(3)) {
-                        thisZoneITEq.FlowControlWithApproachTemps = false;
-                    } else {
-                        if (Util::SameString(IHGAlphas(3), "FlowFromSystem")) {
-                            thisZoneITEq.FlowControlWithApproachTemps = false;
-                        } else if (Util::SameString(IHGAlphas(3), "FlowControlWithApproachTemperatures")) {
-                            thisZoneITEq.FlowControlWithApproachTemps = true;
-                            state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).HasAdjustedReturnTempByITE = true;
-                            state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).NoHeatToReturnAir = false;
-                        } else {
-                            ShowSevereError(
-                                state,
-                                std::format(
-                                    "{}{}=\"{}\": invalid calculation method: {}", RoutineName, itEqModuleObject, IHGAlphas(1), IHGAlphas(3)));
-                            ErrorsFound = true;
-                        }
+                    // Copy definition fields to instance
+                    thisZoneITEq.FlowControlWithApproachTemps = iteDefIt->FlowControlWithApproachTemps;
+                    if (thisZoneITEq.FlowControlWithApproachTemps) {
+                        state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).HasAdjustedReturnTempByITE = true;
+                        state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).NoHeatToReturnAir = false;
                     }
 
+                    // Design total power: definition level value × instance N1 (Number of Units) or floor area
                     {
-                        std::string const &equipmentLevel = IHGAlphas(4);
-                        if (equipmentLevel == "WATTS/UNIT") {
-                            Real64 spaceFrac = 1.0;
-                            if (thisITEqInput.numOfSpaces > 1) {
-                                Real64 const zoneArea = state.dataHeatBal->Zone(zoneNum).FloorArea;
-                                if (zoneArea > 0.0) {
-                                    spaceFrac = state.dataHeatBal->space(spaceNum).FloorArea / zoneArea;
-                                } else {
-                                    ShowSevereError(
-                                        state,
-                                        std::format("{}Zone floor area is zero when allocating ElectricEquipment:ITE:AirCooled loads to Spaces.",
-                                                    RoutineName));
-                                    ShowContinueError(state,
-                                                      std::format("Occurs for ElectricEquipment:ITE:AirCooled object ={} in Zone={}",
-                                                                  thisITEqInput.Name,
-                                                                  state.dataHeatBal->Zone(zoneNum).Name));
-                                    ErrorsFound = true;
-                                }
+                        Real64 spaceFrac = 1.0;
+                        if (thisITEqInput.numOfSpaces > 1) {
+                            Real64 const zoneArea = state.dataHeatBal->Zone(zoneNum).FloorArea;
+                            if (zoneArea > 0.0) {
+                                spaceFrac = state.dataHeatBal->space(spaceNum).FloorArea / zoneArea;
+                            } else {
+                                ShowSevereError(
+                                    state,
+                                    std::format("{}Zone floor area is zero when allocating ElectricEquipment:ITE:AirCooled loads to Spaces.",
+                                                RoutineName));
+                                ShowContinueError(state,
+                                                  std::format("Occurs for ElectricEquipment:ITE:AirCooled object ={} in Zone={}",
+                                                              thisITEqInput.Name,
+                                                              state.dataHeatBal->Zone(zoneNum).Name));
+                                ErrorsFound = true;
                             }
-                            thisZoneITEq.DesignTotalPower = IHGNumbers(1) * IHGNumbers(2) * spaceFrac;
+                        }
+                        if (iteDefIt->designLevelMethod == DesignLevelMethod::EquipmentLevel) {
+                            // Watts/Unit: DesignTotalPower = WattsPerUnit * NumberOfUnits * spaceFrac
+                            thisZoneITEq.DesignTotalPower = iteDefIt->levelValue * IHGNumbers(1) * spaceFrac;
+                            if (iteDefIt->levelIsBlank) {
+                                ShowWarningError(
+                                    state,
+                                    std::format("{}{}=\"{}\", specifies Watts/Unit, but Watts per Unit is blank.  0 IT Equipment will result.",
+                                                RoutineName,
+                                                itEqModuleObject,
+                                                IHGAlphas(1)));
+                            }
                             if (IHGNumericFieldBlanks(1)) {
                                 ShowWarningError(state,
                                                  std::format("{}{}=\"{}\", specifies {}, but that field is blank.  0 IT Equipment will result.",
@@ -2020,312 +2033,192 @@ namespace InternalHeatGains {
                                                              IHGAlphas(1),
                                                              IHGNumericFieldNames(1)));
                             }
-                            if (IHGNumericFieldBlanks(2)) {
-                                ShowWarningError(state,
-                                                 std::format("{}{}=\"{}\", specifies {}, but that field is blank.  0 IT Equipment will result.",
-                                                             RoutineName,
-                                                             itEqModuleObject,
-                                                             IHGAlphas(1),
-                                                             IHGNumericFieldNames(2)));
-                            }
-
-                        } else if (equipmentLevel == "WATTS/AREA") {
+                        } else {
+                            // Watts/Area: DesignTotalPower = WattsPerFloorArea * spaceFloorArea
                             if (thisZoneITEq.ZonePtr != 0) {
-                                if (IHGNumbers(3) >= 0.0) {
+                                if (iteDefIt->levelValue >= 0.0) {
                                     if (spaceNum > 0) {
-                                        thisZoneITEq.DesignTotalPower = IHGNumbers(3) * state.dataHeatBal->space(spaceNum).FloorArea;
+                                        thisZoneITEq.DesignTotalPower = iteDefIt->levelValue * state.dataHeatBal->space(spaceNum).FloorArea;
                                         if ((state.dataHeatBal->space(spaceNum).FloorArea <= 0.0) &&
                                             !state.dataHeatBal->space(spaceNum).isRemainderSpace) {
                                             ShowWarningError(
                                                 state,
-                                                std::format("{}{}=\"{}\", specifies {}, but Space Floor Area = 0.  0 IT Equipment will result.",
-                                                            RoutineName,
-                                                            itEqModuleObject,
-                                                            IHGAlphas(1),
-                                                            IHGNumericFieldNames(3)));
+                                                std::format(
+                                                    "{}{}=\"{}\", specifies Watts/Area, but Space Floor Area = 0.  0 IT Equipment will result.",
+                                                    RoutineName,
+                                                    itEqModuleObject,
+                                                    IHGAlphas(1)));
                                         }
-                                    } else {
-                                        ShowSevereError(state,
-                                                        std::format("{}{}=\"{}\", invalid {}, value  [<0.0]={:.3f}",
-                                                                    RoutineName,
-                                                                    itEqModuleObject,
-                                                                    IHGAlphas(1),
-                                                                    IHGNumericFieldNames(3),
-                                                                    IHGNumbers(3)));
-                                        ErrorsFound = true;
                                     }
-                                }
-                                if (IHGNumericFieldBlanks(3)) {
-                                    ShowWarningError(state,
-                                                     std::format("{}{}=\"{}\", specifies {}, but that field is blank.  0 IT Equipment will result.",
-                                                                 RoutineName,
-                                                                 itEqModuleObject,
-                                                                 IHGAlphas(1),
-                                                                 IHGNumericFieldNames(3)));
-                                }
-
-                            } else {
-                                ShowSevereError(state,
-                                                std::format("{}{}=\"{}\", invalid {}, value  ={}",
-                                                            RoutineName,
-                                                            itEqModuleObject,
-                                                            IHGAlphas(1),
-                                                            IHGAlphaFieldNames(4),
-                                                            IHGAlphas(4)));
-                                ShowContinueError(state, "...Valid values are \"Watts/Unit\" or \"Watts/Area\".");
-                                ErrorsFound = true;
-                            }
-                        }
-
-                        // Calculate nominal min/max equipment level
-                        thisZoneITEq.NomMinDesignLevel = thisZoneITEq.DesignTotalPower * thisZoneITEq.cpuLoadSched->getMinVal(state);
-                        thisZoneITEq.NomMaxDesignLevel = thisZoneITEq.DesignTotalPower * thisZoneITEq.cpuLoadSched->getMaxVal(state);
-
-                        thisZoneITEq.DesignFanPowerFrac = IHGNumbers(4);
-                        thisZoneITEq.DesignFanPower = thisZoneITEq.DesignFanPowerFrac * thisZoneITEq.DesignTotalPower;
-                        thisZoneITEq.DesignCPUPower = (1.0 - thisZoneITEq.DesignFanPowerFrac) * thisZoneITEq.DesignTotalPower;
-                        thisZoneITEq.DesignAirVolFlowRate = IHGNumbers(5) * thisZoneITEq.DesignTotalPower;
-                        thisZoneITEq.DesignTAirIn = IHGNumbers(6);
-                        thisZoneITEq.DesignRecircFrac = IHGNumbers(7);
-                        thisZoneITEq.DesignUPSEfficiency = IHGNumbers(8);
-                        thisZoneITEq.UPSLossToZoneFrac = IHGNumbers(9);
-                        thisZoneITEq.SupplyApproachTemp = IHGNumbers(10);
-                        thisZoneITEq.ReturnApproachTemp = IHGNumbers(11);
-
-                        bool hasSupplyApproachTemp = !IHGNumericFieldBlanks(10);
-                        bool hasReturnApproachTemp = !IHGNumericFieldBlanks(11);
-
-                        // Performance curves
-                        thisZoneITEq.CPUPowerFLTCurve = GetCurveIndex(state, IHGAlphas(7));
-                        if (thisZoneITEq.CPUPowerFLTCurve == 0) {
-                            ShowSevereError(state, std::format("{}{} \"{}\"", RoutineName, itEqModuleObject, IHGAlphas(1)));
-                            ShowContinueError(state, std::format("Invalid {}={}", IHGAlphaFieldNames(7), IHGAlphas(7)));
-                            ErrorsFound = true;
-                        }
-
-                        thisZoneITEq.AirFlowFLTCurve = GetCurveIndex(state, IHGAlphas(8));
-                        if (thisZoneITEq.AirFlowFLTCurve == 0) {
-                            ShowSevereError(state, std::format("{}{} \"{}\"", RoutineName, itEqModuleObject, IHGAlphas(1)));
-                            ShowContinueError(state, std::format("Invalid {}={}", IHGAlphaFieldNames(8), IHGAlphas(8)));
-                            ErrorsFound = true;
-                        }
-
-                        thisZoneITEq.FanPowerFFCurve = GetCurveIndex(state, IHGAlphas(9));
-                        if (thisZoneITEq.FanPowerFFCurve == 0) {
-                            ShowSevereError(state, std::format("{}{} \"{}\"", RoutineName, itEqModuleObject, IHGAlphas(1)));
-                            ShowContinueError(state, std::format("Invalid {}={}", IHGAlphaFieldNames(9), IHGAlphas(9)));
-                            ErrorsFound = true;
-                        }
-
-                        if (!IHGAlphaFieldBlanks(15)) {
-                            // If this field isn't blank, it must point to a valid curve
-                            thisZoneITEq.RecircFLTCurve = GetCurveIndex(state, IHGAlphas(15));
-                            if (thisZoneITEq.RecircFLTCurve == 0) {
-                                ShowSevereError(state, std::format("{}{} \"{}\"", RoutineName, itEqModuleObject, IHGAlphas(1)));
-                                ShowContinueError(state, std::format("Invalid {}={}", IHGAlphaFieldNames(15), IHGAlphas(15)));
-                                ErrorsFound = true;
-                            }
-                        } else {
-                            // If this curve is left blank, then the curve is assumed to always equal 1.0.
-                            thisZoneITEq.RecircFLTCurve = 0;
-                        }
-
-                        if (!IHGAlphaFieldBlanks(16)) {
-                            // If this field isn't blank, it must point to a valid curve
-                            thisZoneITEq.UPSEfficFPLRCurve = GetCurveIndex(state, IHGAlphas(16));
-                            if (thisZoneITEq.UPSEfficFPLRCurve == 0) {
-                                ShowSevereError(state, std::format("{}{} \"{}\"", RoutineName, itEqModuleObject, IHGAlphas(1)));
-                                ShowContinueError(state, std::format("Invalid {}={}", IHGAlphaFieldNames(16), IHGAlphas(16)));
-                                ErrorsFound = true;
-                            }
-                        } else {
-                            // If this curve is left blank, then the curve is assumed to always equal 1.0.
-                            thisZoneITEq.UPSEfficFPLRCurve = 0;
-                        }
-
-                        // Environmental class
-                        thisZoneITEq.Class = static_cast<ITEClass>(getEnumValue(ITEClassNamesUC, Util::makeUPPER(IHGAlphas(10))));
-                        ErrorsFound = ErrorsFound || (thisZoneITEq.Class == ITEClass::Invalid);
-
-                        // Air and supply inlet connections
-                        thisZoneITEq.AirConnectionType =
-                            static_cast<ITEInletConnection>(getEnumValue(ITEInletConnectionNamesUC, Util::makeUPPER(IHGAlphas(11))));
-                        if (thisZoneITEq.AirConnectionType == ITEInletConnection::RoomAirModel) {
-                            // ZoneITEq(Loop).AirConnectionType = ITEInletConnection::RoomAirModel;
-                            ShowWarningError(
-                                state,
-                                std::format("{}{}=\"{}Air Inlet Connection Type = RoomAirModel is not implemented yet, using ZoneAirNode",
-                                            RoutineName,
-                                            itEqModuleObject,
-                                            IHGAlphas(1)));
-                            thisZoneITEq.AirConnectionType = ITEInletConnection::ZoneAirNode;
-                        }
-                        ErrorsFound = ErrorsFound || (thisZoneITEq.AirConnectionType == ITEInletConnection::Invalid);
-
-                        if (IHGAlphaFieldBlanks(14)) {
-                            if (thisZoneITEq.AirConnectionType == ITEInletConnection::AdjustedSupply) {
-                                ShowSevereError(state, std::format("{}{}: {}", RoutineName, itEqModuleObject, IHGAlphas(1)));
-                                ShowContinueError(state,
-                                                  std::format("For {}= AdjustedSupply, {} is required, but this field is blank.",
-                                                              IHGAlphaFieldNames(11),
-                                                              IHGAlphaFieldNames(14)));
-                                ErrorsFound = true;
-                            } else if (thisZoneITEq.FlowControlWithApproachTemps) {
-                                ShowSevereError(state, std::format("{}{}: {}", RoutineName, itEqModuleObject, IHGAlphas(1)));
-                                ShowContinueError(state,
-                                                  std::format("For {}= FlowControlWithApproachTemperatures, {} is required, but this field is blank.",
-                                                              IHGAlphaFieldNames(3),
-                                                              IHGAlphaFieldNames(14)));
-                                ErrorsFound = true;
-                            }
-                        } else {
-                            thisZoneITEq.SupplyAirNodeNum = GetOnlySingleNode(state,
-                                                                              IHGAlphas(14),
-                                                                              ErrorsFound,
-                                                                              Node::ConnectionObjectType::ElectricEquipmentITEAirCooled,
-                                                                              IHGAlphas(1),
-                                                                              Node::FluidType::Air,
-                                                                              Node::ConnectionType::Sensor,
-                                                                              Node::CompFluidStream::Primary,
-                                                                              Node::ObjectIsNotParent);
-                        }
-
-                        // check supply air node for matches with zone equipment supply air node
-                        int zoneEqIndex = DataZoneEquipment::GetControlledZoneIndex(state, state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).Name);
-                        if (zoneEqIndex > 0) { // zoneEqIndex could be zero in the case of an uncontrolled zone
-                            auto itStart = state.dataZoneEquip->ZoneEquipConfig(zoneEqIndex).InletNode.begin();
-                            auto itEnd = state.dataZoneEquip->ZoneEquipConfig(zoneEqIndex).InletNode.end();
-                            int key = thisZoneITEq.SupplyAirNodeNum;
-                            thisZoneITEq.inControlledZone = true;
-                            bool supplyNodeFound = false;
-                            if (std::find(itStart, itEnd, key) != itEnd) {
-                                supplyNodeFound = true;
-                            }
-
-                            if (thisZoneITEq.AirConnectionType == ITEInletConnection::AdjustedSupply && !supplyNodeFound) {
-                                // supply air node must match zone equipment supply air node for these conditions
-                                ShowSevereError(state, std::format("{}: ElectricEquipment:ITE:AirCooled {}", RoutineName, thisZoneITEq.Name));
-                                ShowContinueError(state, "Air Inlet Connection Type = AdjustedSupply but no Supply Air Node is specified.");
-                                ErrorsFound = true;
-                            } else if (thisZoneITEq.FlowControlWithApproachTemps && !supplyNodeFound) {
-                                // supply air node must match zone equipment supply air node for these conditions
-                                ShowSevereError(state, std::format("{}: ElectricEquipment:ITE:AirCooled {}", RoutineName, thisZoneITEq.Name));
-                                ShowContinueError(state, "Air Inlet Connection Type = AdjustedSupply but no Supply Air Node is specified.");
-                                ErrorsFound = true;
-                            } else if (thisZoneITEq.SupplyAirNodeNum != 0 && !supplyNodeFound) {
-                                // the given supply air node does not match any zone equipment supply air nodes
-                                ShowWarningError(
-                                    state,
-                                    std::format("{}name: '{}. Supply Air Node Name '{}' does not match any ZoneHVAC:EquipmentConnections objects.",
-                                                itEqModuleObject,
-                                                IHGAlphas(1),
-                                                IHGAlphas(14)));
-                            }
-                        } // end of if block for zoneEqIndex > 0
-
-                        // End-Use subcategories
-                        if (IHGNumAlphas > 16) {
-                            thisZoneITEq.EndUseSubcategoryCPU = IHGAlphas(17);
-                        } else {
-                            thisZoneITEq.EndUseSubcategoryCPU = "ITE-CPU";
-                        }
-
-                        if (IHGNumAlphas > 17) {
-                            thisZoneITEq.EndUseSubcategoryFan = IHGAlphas(18);
-                        } else {
-                            thisZoneITEq.EndUseSubcategoryFan = "ITE-Fans";
-                        }
-                        if (thisZoneITEq.ZonePtr <= 0) {
-                            continue; // Error, will be caught and terminated later
-                        }
-
-                        if (IHGNumAlphas > 18) {
-                            thisZoneITEq.EndUseSubcategoryUPS = IHGAlphas(19);
-                        } else {
-                            thisZoneITEq.EndUseSubcategoryUPS = "ITE-UPS";
-                        }
-                        if (thisZoneITEq.FlowControlWithApproachTemps) {
-                            if (IHGAlphaFieldBlanks(20)) {
-                                if (!hasSupplyApproachTemp) {
-                                    ShowSevereCustom(
-                                        state,
-                                        eoh,
-                                        std::format(
-                                            "For {}= FlowControlWithApproachTemperatures, either {} or {} is required, but both are left blank.",
-                                            IHGAlphaFieldNames(3),
-                                            IHGNumericFieldNames(10),
-                                            IHGAlphaFieldNames(20)));
+                                } else {
+                                    ShowSevereError(state,
+                                                    std::format("{}{}=\"{}\", invalid Watts per Floor Area, value  [<0.0]={:.3f}",
+                                                                RoutineName,
+                                                                itEqModuleObject,
+                                                                IHGAlphas(1),
+                                                                iteDefIt->levelValue));
                                     ErrorsFound = true;
                                 }
-                            } else if ((thisZoneITEq.supplyApproachTempSched = Sched::GetSchedule(state, IHGAlphas(20))) == nullptr) {
-                                ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(20), IHGAlphas(20));
-                                ErrorsFound = true;
                             }
-
-                            if (IHGAlphaFieldBlanks(21)) {
-                                if (!hasReturnApproachTemp) {
-                                    ShowSevereCustom(
-                                        state,
-                                        eoh,
-                                        std::format(
-                                            "For {}= FlowControlWithApproachTemperatures, either {} or {} is required, but both are left blank.",
-                                            IHGAlphaFieldNames(3),
-                                            IHGNumericFieldNames(11),
-                                            IHGAlphaFieldNames(21)));
-                                    ErrorsFound = true;
-                                }
-                            } else if ((thisZoneITEq.returnApproachTempSched = Sched::GetSchedule(state, IHGAlphas(21))) == nullptr) {
-                                ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(20), IHGAlphas(20));
-                                ErrorsFound = true;
-                            }
-                        }
-
-                        if (thisZoneITEq.FlowControlWithApproachTemps) {
-                            Real64 TAirInSizing = 0.0;
-                            // Set the TAirInSizing to the maximum setpoint value to do sizing based on the maximum fan and cpu power of the ite
-                            // object
-                            SetPointManager::GetSetPointManagerInputs(state);
-                            for (auto *spm : state.dataSetPointManager->spms) {
-                                if (spm->type != SetPointManager::SPMType::SZCooling) {
-                                    continue;
-                                }
-                                auto const *spmSZC = dynamic_cast<SetPointManager::SPMSingleZoneTemp *>(spm);
-                                assert(spmSZC != nullptr);
-                                if (spmSZC->ctrlZoneNum == zoneNum) {
-                                    TAirInSizing = spmSZC->maxSetTemp;
-                                }
-                            }
-
-                            thisZoneITEq.SizingTAirIn = max(TAirInSizing, thisZoneITEq.DesignTAirIn);
-                        }
-
-                        // MJW - EMS Not in place yet
-                        // if ( AnyEnergyManagementSystemInModel ) {
-                        // SetupEMSActuator( "ElectricEquipment", ZoneITEq( Loop ).Name, "Electric Power Level", "[W]", ZoneITEq( Loop
-                        // ).EMSZoneEquipOverrideOn, ZoneITEq( Loop ).EMSEquipPower ); SetupEMSInternalVariable( "Plug and Process Power Design
-                        // Level", ZoneITEq( Loop ).Name, "[W]", ZoneITEq( Loop ).DesignTotalPower ); } // EMS
-
-                        if (!ErrorsFound) {
-                            SetupSpaceInternalGain(state,
-                                                   thisZoneITEq.spaceIndex,
-                                                   1.0,
-                                                   thisZoneITEq.Name,
-                                                   DataHeatBalance::IntGainType::ElectricEquipmentITEAirCooled,
-                                                   &thisZoneITEq.PowerRpt[(int)PERptVars::ConGainToZone]);
                         }
                     }
-                } // for itEqInputNum.NumOfSpaces
+
+                    thisZoneITEq.NomMinDesignLevel = thisZoneITEq.DesignTotalPower * thisZoneITEq.cpuLoadSched->getMinVal(state);
+                    thisZoneITEq.NomMaxDesignLevel = thisZoneITEq.DesignTotalPower * thisZoneITEq.cpuLoadSched->getMaxVal(state);
+
+                    thisZoneITEq.DesignFanPowerFrac = iteDefIt->DesignFanPowerFrac;
+                    thisZoneITEq.DesignFanPower = thisZoneITEq.DesignFanPowerFrac * thisZoneITEq.DesignTotalPower;
+                    thisZoneITEq.DesignCPUPower = (1.0 - thisZoneITEq.DesignFanPowerFrac) * thisZoneITEq.DesignTotalPower;
+                    thisZoneITEq.DesignAirVolFlowRate = iteDefIt->DesignFanAirFlowPerPower * thisZoneITEq.DesignTotalPower;
+                    thisZoneITEq.DesignTAirIn = iteDefIt->DesignTAirIn;
+                    thisZoneITEq.DesignRecircFrac = iteDefIt->DesignRecircFrac;
+                    thisZoneITEq.DesignUPSEfficiency = iteDefIt->DesignUPSEfficiency;
+                    thisZoneITEq.UPSLossToZoneFrac = iteDefIt->UPSLossToZoneFrac;
+                    thisZoneITEq.SupplyApproachTemp = iteDefIt->SupplyApproachTemp;
+                    thisZoneITEq.ReturnApproachTemp = iteDefIt->ReturnApproachTemp;
+                    thisZoneITEq.supplyApproachTempSched = iteDefIt->supplyApproachTempSched;
+                    thisZoneITEq.returnApproachTempSched = iteDefIt->returnApproachTempSched;
+
+                    // Performance curves (from definition)
+                    thisZoneITEq.CPUPowerFLTCurve = iteDefIt->CPUPowerFLTCurve;
+                    thisZoneITEq.AirFlowFLTCurve = iteDefIt->AirFlowFLTCurve;
+                    thisZoneITEq.FanPowerFFCurve = iteDefIt->FanPowerFFCurve;
+                    thisZoneITEq.RecircFLTCurve = iteDefIt->RecircFLTCurve;
+                    thisZoneITEq.UPSEfficFPLRCurve = iteDefIt->UPSEfficFPLRCurve;
+
+                    // Environmental class and air connection type (from definition)
+                    thisZoneITEq.Class = iteDefIt->Class;
+                    ErrorsFound = ErrorsFound || (thisZoneITEq.Class == DataHeatBalance::ITEClass::Invalid);
+                    thisZoneITEq.AirConnectionType = iteDefIt->AirConnectionType;
+                    ErrorsFound = ErrorsFound || (thisZoneITEq.AirConnectionType == DataHeatBalance::ITEInletConnection::Invalid);
+
+                    // A8: Supply Air Node Name (instance)
+                    if (IHGAlphaFieldBlanks(8)) {
+                        if (thisZoneITEq.AirConnectionType == DataHeatBalance::ITEInletConnection::AdjustedSupply) {
+                            ShowSevereError(state, std::format("{}{}: {}", RoutineName, itEqModuleObject, IHGAlphas(1)));
+                            ShowContinueError(state,
+                                              std::format("For {}= AdjustedSupply, {} is required, but this field is blank.",
+                                                          IHGAlphaFieldNames(8),
+                                                          IHGAlphaFieldNames(8)));
+                            ErrorsFound = true;
+                        } else if (thisZoneITEq.FlowControlWithApproachTemps) {
+                            ShowSevereError(state, std::format("{}{}: {}", RoutineName, itEqModuleObject, IHGAlphas(1)));
+                            ShowContinueError(
+                                state,
+                                std::format(
+                                    "For Air Flow Calculation Method = FlowControlWithApproachTemperatures, {} is required, but this field is blank.",
+                                    IHGAlphaFieldNames(8)));
+                            ErrorsFound = true;
+                        }
+                    } else {
+                        thisZoneITEq.SupplyAirNodeNum = GetOnlySingleNode(state,
+                                                                          IHGAlphas(8),
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::ElectricEquipmentITEAirCooled,
+                                                                          IHGAlphas(1),
+                                                                          Node::FluidType::Air,
+                                                                          Node::ConnectionType::Sensor,
+                                                                          Node::CompFluidStream::Primary,
+                                                                          Node::ObjectIsNotParent);
+                    }
+
+                    // check supply air node for matches with zone equipment supply air node
+                    int zoneEqIndex = DataZoneEquipment::GetControlledZoneIndex(state, state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).Name);
+                    if (zoneEqIndex > 0) {
+                        auto itStart = state.dataZoneEquip->ZoneEquipConfig(zoneEqIndex).InletNode.begin();
+                        auto itEnd = state.dataZoneEquip->ZoneEquipConfig(zoneEqIndex).InletNode.end();
+                        int key = thisZoneITEq.SupplyAirNodeNum;
+                        thisZoneITEq.inControlledZone = true;
+                        bool supplyNodeFound = false;
+                        if (std::find(itStart, itEnd, key) != itEnd) {
+                            supplyNodeFound = true;
+                        }
+
+                        if (thisZoneITEq.AirConnectionType == DataHeatBalance::ITEInletConnection::AdjustedSupply && !supplyNodeFound) {
+                            ShowSevereError(state, std::format("{}: ElectricEquipment:ITE:AirCooled {}", RoutineName, thisZoneITEq.Name));
+                            ShowContinueError(state, "Air Inlet Connection Type = AdjustedSupply but no Supply Air Node is specified.");
+                            ErrorsFound = true;
+                        } else if (thisZoneITEq.FlowControlWithApproachTemps && !supplyNodeFound) {
+                            ShowSevereError(state, std::format("{}: ElectricEquipment:ITE:AirCooled {}", RoutineName, thisZoneITEq.Name));
+                            ShowContinueError(state, "Air Inlet Connection Type = AdjustedSupply but no Supply Air Node is specified.");
+                            ErrorsFound = true;
+                        } else if (thisZoneITEq.SupplyAirNodeNum != 0 && !supplyNodeFound) {
+                            ShowWarningError(
+                                state,
+                                std::format("{}name: '{}. Supply Air Node Name '{}' does not match any ZoneHVAC:EquipmentConnections objects.",
+                                            itEqModuleObject,
+                                            IHGAlphas(1),
+                                            IHGAlphas(8)));
+                        }
+                    }
+
+                    // End-Use subcategories: A9 = CPU, A10 = Fan, A11 = EPS (instance, all have IDD defaults)
+                    thisZoneITEq.EndUseSubcategoryCPU = IHGNumAlphas > 8 ? IHGAlphas(9) : "ITE-CPU";
+                    thisZoneITEq.EndUseSubcategoryFan = IHGNumAlphas > 9 ? IHGAlphas(10) : "ITE-Fans";
+
+                    if (thisZoneITEq.ZonePtr <= 0) {
+                        continue; // Error, will be caught and terminated later
+                    }
+
+                    thisZoneITEq.EndUseSubcategoryUPS = IHGNumAlphas > 10 ? IHGAlphas(11) : "ITE-UPS";
+
+                    if (thisZoneITEq.FlowControlWithApproachTemps) {
+                        if (!iteDefIt->supplyApproachTempProvided && iteDefIt->supplyApproachTempSched == nullptr) {
+                            ShowSevereCustom(
+                                state,
+                                eoh,
+                                std::format(
+                                    "For Air Flow Calculation Method = FlowControlWithApproachTemperatures, either Supply Temperature Difference "
+                                    "or Supply Temperature Difference Schedule in the definition is required, but both are blank."));
+                            ErrorsFound = true;
+                        }
+                        if (!iteDefIt->returnApproachTempProvided && iteDefIt->returnApproachTempSched == nullptr) {
+                            ShowSevereCustom(
+                                state,
+                                eoh,
+                                std::format(
+                                    "For Air Flow Calculation Method = FlowControlWithApproachTemperatures, either Return Temperature Difference "
+                                    "or Return Temperature Difference Schedule in the definition is required, but both are blank."));
+                            ErrorsFound = true;
+                        }
+                    }
+
+                    if (thisZoneITEq.FlowControlWithApproachTemps) {
+                        Real64 TAirInSizing = 0.0;
+                        SetPointManager::GetSetPointManagerInputs(state);
+                        for (auto *spm : state.dataSetPointManager->spms) {
+                            if (spm->type != SetPointManager::SPMType::SZCooling) {
+                                continue;
+                            }
+                            auto const *spmSZC = dynamic_cast<SetPointManager::SPMSingleZoneTemp *>(spm);
+                            assert(spmSZC != nullptr);
+                            if (spmSZC->ctrlZoneNum == zoneNum) {
+                                TAirInSizing = spmSZC->maxSetTemp;
+                            }
+                        }
+
+                        thisZoneITEq.SizingTAirIn = max(TAirInSizing, thisZoneITEq.DesignTAirIn);
+                    }
+
+                    if (!ErrorsFound) {
+                        SetupSpaceInternalGain(state,
+                                               thisZoneITEq.spaceIndex,
+                                               1.0,
+                                               thisZoneITEq.Name,
+                                               DataHeatBalance::IntGainType::ElectricEquipmentITEAirCooled,
+                                               &thisZoneITEq.PowerRpt[(int)PERptVars::ConGainToZone]);
+                    }
+                } // for Item1.numOfSpaces
             } // for itEqInputNum
             for (int Loop = 1; Loop <= state.dataHeatBal->TotITEquip; ++Loop) {
                 if (state.dataHeatBal->Zone(state.dataHeatBal->ZoneITEq(Loop).ZonePtr).HasAdjustedReturnTempByITE &&
                     (!state.dataHeatBal->ZoneITEq(Loop).FlowControlWithApproachTemps)) {
                     ShowSevereError(state,
-                                    std::format("{}{}=\"{}\": invalid calculation method {} for Zone: {}",
+                                    std::format("{}{}=\"{}\": invalid calculation method for Zone: {}",
                                                 RoutineName,
                                                 itEqModuleObject,
-                                                IHGAlphas(1),
-                                                IHGAlphas(3),
-                                                IHGAlphas(2)));
+                                                state.dataHeatBal->ZoneITEq(Loop).Name,
+                                                state.dataHeatBal->Zone(state.dataHeatBal->ZoneITEq(Loop).ZonePtr).Name));
                     ShowContinueError(state, "...Multiple flow control methods apply to one zone. ");
                     ErrorsFound = true;
                 }
@@ -3505,6 +3398,155 @@ namespace InternalHeatGains {
         }
 
         return lightsDefs;
+    }
+
+    std::vector<ITEquipDefinitionData> GetITEAirCooledDefinition(EnergyPlusData &state)
+    {
+        constexpr std::string_view routineName = "GetITEAirCooledDefinition: ";
+        const std::string defObjectType = "ElectricEquipment:ITE:AirCooled:Definition";
+
+        std::vector<ITEquipDefinitionData> iteDefs;
+
+        auto &ip = state.dataInputProcessing->inputProcessor;
+        auto const instances = ip->epJSON.find(defObjectType);
+        if (instances == ip->epJSON.end()) {
+            return iteDefs;
+        }
+
+        auto const &objectSchemaProps = ip->getObjectSchemaProps(state, defObjectType);
+        auto &instancesValue = instances.value();
+        iteDefs.reserve(instancesValue.size());
+
+        for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
+            auto &iteDef = iteDefs.emplace_back();
+            auto const &objectFields = instance.value();
+            ip->markObjectAsUsed(defObjectType, instance.key());
+
+            iteDef.Name = Util::makeUPPER(instance.key());
+            ErrorObjectHeader eoh{routineName, defObjectType, iteDef.Name};
+
+            // Air Flow Calculation Method
+            std::string const airFlowMethod = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "air_flow_calculation_method", true);
+            iteDef.FlowControlWithApproachTemps = Util::SameString(airFlowMethod, "FlowControlWithApproachTemperatures");
+
+            // Design Power Input Calculation Method + level value (single field, method-dependent)
+            std::string const designPowerMethod =
+                ip->getAlphaFieldValue(objectFields, objectSchemaProps, "design_power_input_calculation_method", true);
+            if (Util::SameString(designPowerMethod, "Watts/Unit")) {
+                iteDef.designLevelMethod = DesignLevelMethod::EquipmentLevel;
+                iteDef.levelField = "watts_per_unit";
+            } else {
+                iteDef.designLevelMethod = DesignLevelMethod::WattsPerArea;
+                iteDef.levelField = "watts_per_floor_area";
+            }
+            if (objectFields.find(iteDef.levelField) == objectFields.end()) {
+                ShowWarningError(state,
+                                 std::format("{}{}=\"{}\", specifies Method={}, but the corresponding field \"{}\" is blank. 0 will result.",
+                                             routineName,
+                                             defObjectType,
+                                             iteDef.Name,
+                                             designPowerMethod,
+                                             iteDef.levelField));
+                iteDef.levelIsBlank = true;
+            }
+            iteDef.levelValue = ip->getRealFieldValue(objectFields, objectSchemaProps, iteDef.levelField);
+
+            // Performance curves (required)
+            std::string curveName =
+                ip->getAlphaFieldValue(objectFields, objectSchemaProps, "cpu_power_input_function_of_loading_and_air_temperature_curve_name");
+            iteDef.CPUPowerFLTCurve = Curve::GetCurveIndex(state, curveName);
+            if (iteDef.CPUPowerFLTCurve == 0) {
+                ShowSevereError(state, std::format("{}{} \"{}\"", routineName, defObjectType, iteDef.Name));
+                ShowContinueError(state, std::format("Invalid CPU Power Input Function curve: {}", curveName));
+            }
+
+            iteDef.DesignFanPowerFrac = ip->getRealFieldValue(objectFields, objectSchemaProps, "design_fan_power_input_fraction");
+            iteDef.DesignFanAirFlowPerPower = ip->getRealFieldValue(objectFields, objectSchemaProps, "design_fan_air_flow_rate_per_power_input");
+
+            curveName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "air_flow_function_of_loading_and_air_temperature_curve_name");
+            iteDef.AirFlowFLTCurve = Curve::GetCurveIndex(state, curveName);
+            if (iteDef.AirFlowFLTCurve == 0) {
+                ShowSevereError(state, std::format("{}{} \"{}\"", routineName, defObjectType, iteDef.Name));
+                ShowContinueError(state, std::format("Invalid Air Flow Function curve: {}", curveName));
+            }
+
+            curveName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "fan_power_input_function_of_flow_curve_name");
+            iteDef.FanPowerFFCurve = Curve::GetCurveIndex(state, curveName);
+            if (iteDef.FanPowerFFCurve == 0) {
+                ShowSevereError(state, std::format("{}{} \"{}\"", routineName, defObjectType, iteDef.Name));
+                ShowContinueError(state, std::format("Invalid Fan Power Input Function of Flow curve: {}", curveName));
+            }
+
+            iteDef.DesignTAirIn = ip->getRealFieldValue(objectFields, objectSchemaProps, "design_entering_air_temperature");
+
+            std::string const envClass = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "environmental_class", true);
+            iteDef.Class = static_cast<DataHeatBalance::ITEClass>(getEnumValue(DataHeatBalance::ITEClassNamesUC, envClass));
+
+            std::string const connType = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "air_inlet_connection_type", true);
+            iteDef.AirConnectionType =
+                static_cast<DataHeatBalance::ITEInletConnection>(getEnumValue(DataHeatBalance::ITEInletConnectionNamesUC, connType));
+            if (iteDef.AirConnectionType == DataHeatBalance::ITEInletConnection::RoomAirModel) {
+                ShowWarningError(state,
+                                 std::format("{}{}=\"{}\": Air Inlet Connection Type = RoomAirModel is not implemented yet, using ZoneAirNode",
+                                             routineName,
+                                             defObjectType,
+                                             iteDef.Name));
+                iteDef.AirConnectionType = DataHeatBalance::ITEInletConnection::ZoneAirNode;
+            }
+
+            iteDef.DesignRecircFrac = ip->getRealFieldValue(objectFields, objectSchemaProps, "design_recirculation_fraction");
+
+            curveName =
+                ip->getAlphaFieldValue(objectFields, objectSchemaProps, "recirculation_function_of_loading_and_supply_temperature_curve_name", true);
+            if (!curveName.empty()) {
+                iteDef.RecircFLTCurve = Curve::GetCurveIndex(state, curveName);
+                if (iteDef.RecircFLTCurve == 0) {
+                    ShowSevereError(state, std::format("{}{} \"{}\"", routineName, defObjectType, iteDef.Name));
+                    ShowContinueError(state, std::format("Invalid Recirculation Function curve: {}", curveName));
+                }
+            }
+
+            iteDef.DesignUPSEfficiency = ip->getRealFieldValue(objectFields, objectSchemaProps, "design_electric_power_supply_efficiency");
+
+            curveName = ip->getAlphaFieldValue(
+                objectFields, objectSchemaProps, "electric_power_supply_efficiency_function_of_part_load_ratio_curve_name", true);
+            if (!curveName.empty()) {
+                iteDef.UPSEfficFPLRCurve = Curve::GetCurveIndex(state, curveName);
+                if (iteDef.UPSEfficFPLRCurve == 0) {
+                    ShowSevereError(state, std::format("{}{} \"{}\"", routineName, defObjectType, iteDef.Name));
+                    ShowContinueError(state, std::format("Invalid UPS Efficiency Function of PLR curve: {}", curveName));
+                }
+            }
+
+            iteDef.UPSLossToZoneFrac = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_of_electric_power_supply_losses_to_zone");
+
+            // Approach temperatures (optional; only used when FlowControlWithApproachTemperatures)
+            if (objectFields.find("supply_temperature_difference") != objectFields.end()) {
+                iteDef.SupplyApproachTemp = ip->getRealFieldValue(objectFields, objectSchemaProps, "supply_temperature_difference");
+                iteDef.supplyApproachTempProvided = true;
+            }
+            std::string schedName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "supply_temperature_difference_schedule", true);
+            if (!schedName.empty()) {
+                iteDef.supplyApproachTempSched = Sched::GetSchedule(state, schedName);
+                if (iteDef.supplyApproachTempSched == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, "Supply Temperature Difference Schedule", schedName);
+                }
+            }
+
+            if (objectFields.find("return_temperature_difference") != objectFields.end()) {
+                iteDef.ReturnApproachTemp = ip->getRealFieldValue(objectFields, objectSchemaProps, "return_temperature_difference");
+                iteDef.returnApproachTempProvided = true;
+            }
+            schedName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "return_temperature_difference_schedule", true);
+            if (!schedName.empty()) {
+                iteDef.returnApproachTempSched = Sched::GetSchedule(state, schedName);
+                if (iteDef.returnApproachTempSched == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, "Return Temperature Difference Schedule", schedName);
+                }
+            }
+        }
+
+        return iteDefs;
     }
 
     void setupIHGZonesAndSpaces(EnergyPlusData &state,
