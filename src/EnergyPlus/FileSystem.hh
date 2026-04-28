@@ -48,8 +48,9 @@
 #ifndef FileSystem_hh_INCLUDED
 #define FileSystem_hh_INCLUDED
 
-#include <algorithm>
-#include <fmt/format.h>
+#include <format>
+
+// #include <fmt/format.h>
 #include <fmt/os.h>
 #include <fmt/ostream.h>
 #include <fmt/ranges.h>
@@ -244,7 +245,7 @@ namespace FileSystem {
             auto close_file = [](FILE *f) { fclose(f); };
             auto holder = std::unique_ptr<FILE, decltype(close_file)>(fopen(path, "wb"), close_file);
             if (!holder) {
-                throw FatalError(fmt::format("Could not open file: {}", path));
+                throw FatalError(std::format("Could not open file: {}", static_cast<std::string>(path)));
             }
 
             auto f = holder.get();

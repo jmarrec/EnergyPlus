@@ -127,26 +127,26 @@ namespace HVACSingleDuctInduc {
         if (CompIndex == 0) {
             IUNum = Util::FindItemInList(CompName, state.dataHVACSingleDuctInduc->IndUnit);
             if (IUNum == 0) {
-                ShowFatalError(state, EnergyPlus::format("SimIndUnit: Induction Unit not found={}", CompName));
+                ShowFatalError(state, std::format("SimIndUnit: Induction Unit not found={}", CompName));
             }
             CompIndex = IUNum;
         } else {
             IUNum = CompIndex;
             if (IUNum > state.dataHVACSingleDuctInduc->NumIndUnits || IUNum < 1) {
                 ShowFatalError(state,
-                               EnergyPlus::format("SimIndUnit: Invalid CompIndex passed={}, Number of Induction Units={}, System name={}",
-                                                  CompIndex,
-                                                  state.dataHVACSingleDuctInduc->NumIndUnits,
-                                                  CompName));
+                               std::format("SimIndUnit: Invalid CompIndex passed={}, Number of Induction Units={}, System name={}",
+                                           CompIndex,
+                                           state.dataHVACSingleDuctInduc->NumIndUnits,
+                                           CompName));
             }
             if (state.dataHVACSingleDuctInduc->CheckEquipName(IUNum)) {
                 if (CompName != state.dataHVACSingleDuctInduc->IndUnit(IUNum).Name) {
                     ShowFatalError(
                         state,
-                        EnergyPlus::format("SimIndUnit: Invalid CompIndex passed={}, Induction Unit name={}, stored Induction Unit for that index={}",
-                                           CompIndex,
-                                           CompName,
-                                           state.dataHVACSingleDuctInduc->IndUnit(IUNum).Name));
+                        std::format("SimIndUnit: Invalid CompIndex passed={}, Induction Unit name={}, stored Induction Unit for that index={}",
+                                    CompIndex,
+                                    CompName,
+                                    state.dataHVACSingleDuctInduc->IndUnit(IUNum).Name));
                 }
                 state.dataHVACSingleDuctInduc->CheckEquipName(IUNum) = false;
             }
@@ -166,8 +166,8 @@ namespace HVACSingleDuctInduc {
             SimFourPipeIndUnit(state, IUNum, ZoneNum, ZoneNodeNum, FirstHVACIteration);
         } break;
         default: {
-            ShowSevereError(state, EnergyPlus::format("Illegal Induction Unit Type used={}", indUnit.UnitType));
-            ShowContinueError(state, EnergyPlus::format("Occurs in Induction Unit={}", indUnit.Name));
+            ShowSevereError(state, std::format("Illegal Induction Unit Type used={}", indUnit.UnitType));
+            ShowContinueError(state, std::format("Occurs in Induction Unit={}", indUnit.Name));
             ShowFatalError(state, "Preceding condition causes termination.");
         } break;
         }
@@ -307,7 +307,7 @@ namespace HVACSingleDuctInduc {
             bool IsNotOK = false;
             indUnit.HWControlNode = WaterCoils::GetCoilWaterInletNode(state, indUnit.HCoilType, indUnit.HCoil, IsNotOK);
             if (IsNotOK) {
-                ShowContinueError(state, EnergyPlus::format("In {} = {}", CurrentModuleObject, indUnit.Name));
+                ShowContinueError(state, std::format("In {} = {}", CurrentModuleObject, indUnit.Name));
                 ShowContinueError(state, "..Only Coil:Heating:Water is allowed.");
                 ErrorsFound = true;
             }
@@ -327,7 +327,7 @@ namespace HVACSingleDuctInduc {
             IsNotOK = false;
             indUnit.CWControlNode = WaterCoils::GetCoilWaterInletNode(state, indUnit.CCoilType, indUnit.CCoil, IsNotOK);
             if (IsNotOK) {
-                ShowContinueError(state, EnergyPlus::format("In {} = {}", CurrentModuleObject, indUnit.Name));
+                ShowContinueError(state, std::format("In {} = {}", CurrentModuleObject, indUnit.Name));
                 ShowContinueError(state, "..Only Coil:Cooling:Water or Coil:Cooling:Water:DetailedGeometry is allowed.");
                 ErrorsFound = true;
             }
@@ -340,7 +340,7 @@ namespace HVACSingleDuctInduc {
             indUnit.MixerName = Alphas(10);
             MixerComponent::GetZoneMixerIndex(state, indUnit.MixerName, indUnit.Mixer_Num, errFlag, CurrentModuleObject);
             if (errFlag) {
-                ShowContinueError(state, EnergyPlus::format("...specified in {} = {}", CurrentModuleObject, indUnit.Name));
+                ShowContinueError(state, std::format("...specified in {} = {}", CurrentModuleObject, indUnit.Name));
                 ErrorsFound = true;
             }
 
@@ -364,10 +364,9 @@ namespace HVACSingleDuctInduc {
             }
             // one assumes if there isn't one assigned, it's an error?
             if (indUnit.ADUNum == 0) {
-                ShowSevereError(
-                    state,
-                    EnergyPlus::format("{}No matching Air Distribution Unit, for Unit = [{},{}].", RoutineName, indUnit.UnitType, indUnit.Name));
-                ShowContinueError(state, EnergyPlus::format("...should have outlet node={}", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
+                ShowSevereError(state,
+                                std::format("{}No matching Air Distribution Unit, for Unit = [{},{}].", RoutineName, indUnit.UnitType, indUnit.Name));
+                ShowContinueError(state, std::format("...should have outlet node={}", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
                 ErrorsFound = true;
             } else {
                 // Fill the Zone Equipment data with the supply air inlet node number of this unit.
@@ -383,9 +382,8 @@ namespace HVACSingleDuctInduc {
                             if (zoneEquipConfig.AirDistUnitCool(SupAirIn).OutNode > 0) {
                                 ShowSevereError(state, "Error in connecting a terminal unit to a zone");
                                 ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("{} already connects to another zone", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
-                                ShowContinueError(state, EnergyPlus::format("Occurs for terminal unit {} = {}", indUnit.UnitType, indUnit.Name));
+                                    state, std::format("{} already connects to another zone", state.dataLoopNodes->NodeID(indUnit.OutAirNode)));
+                                ShowContinueError(state, std::format("Occurs for terminal unit {} = {}", indUnit.UnitType, indUnit.Name));
                                 ShowContinueError(state, "Check terminal unit node names for errors");
                                 ErrorsFound = true;
                             } else {
@@ -403,8 +401,8 @@ namespace HVACSingleDuctInduc {
                     }
                 }
                 if (!AirNodeFound) {
-                    ShowSevereError(state, EnergyPlus::format("The outlet air node from the {} = {}", CurrentModuleObject, indUnit.Name));
-                    ShowContinueError(state, EnergyPlus::format("did not have a matching Zone Equipment Inlet Node, Node ={}", Alphas(3)));
+                    ShowSevereError(state, std::format("The outlet air node from the {} = {}", CurrentModuleObject, indUnit.Name));
+                    ShowContinueError(state, std::format("did not have a matching Zone Equipment Inlet Node, Node ={}", Alphas(3)));
                     ErrorsFound = true;
                 }
             }
@@ -425,7 +423,7 @@ namespace HVACSingleDuctInduc {
         lAlphaBlanks.deallocate();
         lNumericBlanks.deallocate();
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("{}Errors found in getting input. Preceding conditions cause termination.", RoutineName));
+            ShowFatalError(state, std::format("{}Errors found in getting input. Preceding conditions cause termination.", RoutineName));
         }
     }
 
@@ -480,7 +478,7 @@ namespace HVACSingleDuctInduc {
                 PlantUtilities::ScanPlantLoopsForObject(state, indUnit.HCoil, indUnit.HeatingCoilType, indUnit.HWPlantLoc, errFlag, _, _, _, _, _);
             }
             if (errFlag) {
-                ShowContinueError(state, EnergyPlus::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
+                ShowContinueError(state, std::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
             }
             if (indUnit.CoolingCoilType == DataPlant::PlantEquipmentType::CoilWaterCooling ||
                 indUnit.CoolingCoilType == DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling) {
@@ -488,7 +486,7 @@ namespace HVACSingleDuctInduc {
                 PlantUtilities::ScanPlantLoopsForObject(state, indUnit.CCoil, indUnit.CoolingCoilType, indUnit.CWPlantLoc, errFlag, _, _, _, _, _);
             }
             if (errFlag) {
-                ShowContinueError(state, EnergyPlus::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
+                ShowContinueError(state, std::format("Reference Unit=\"{}\", type={}", indUnit.Name, indUnit.UnitType));
                 ShowFatalError(state, "InitIndUnit: Program terminated for previous conditions.");
             }
             state.dataHVACSingleDuctInduc->MyPlantScanFlag(IUNum) = false;
@@ -524,12 +522,12 @@ namespace HVACSingleDuctInduc {
                     continue;
                 }
                 ShowSevereError(state,
-                                EnergyPlus::format("InitIndUnit: ADU=[Air Distribution Unit,{}] is not on any ZoneHVAC:EquipmentList.",
-                                                   state.dataDefineEquipment->AirDistUnit(state.dataHVACSingleDuctInduc->IndUnit(Loop).ADUNum).Name));
+                                std::format("InitIndUnit: ADU=[Air Distribution Unit,{}] is not on any ZoneHVAC:EquipmentList.",
+                                            state.dataDefineEquipment->AirDistUnit(state.dataHVACSingleDuctInduc->IndUnit(Loop).ADUNum).Name));
                 ShowContinueError(state,
-                                  EnergyPlus::format("...Unit=[{},{}] will not be simulated.",
-                                                     state.dataHVACSingleDuctInduc->IndUnit(Loop).UnitType,
-                                                     state.dataHVACSingleDuctInduc->IndUnit(Loop).Name));
+                                  std::format("...Unit=[{},{}] will not be simulated.",
+                                              state.dataHVACSingleDuctInduc->IndUnit(Loop).UnitType,
+                                              state.dataHVACSingleDuctInduc->IndUnit(Loop).Name));
             }
         }
 
@@ -695,9 +693,9 @@ namespace HVACSingleDuctInduc {
                             if ((std::abs(MaxTotAirVolFlowDes - MaxTotAirVolFlowUser) / MaxTotAirVolFlowUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state,
-                                            EnergyPlus::format("SizeHVACSingleDuctInduction: Potential issue with equipment sizing for {} = \"{}\".",
-                                                               indUnit.UnitType,
-                                                               indUnit.Name));
+                                            std::format("SizeHVACSingleDuctInduction: Potential issue with equipment sizing for {} = \"{}\".",
+                                                        indUnit.UnitType,
+                                                        indUnit.Name));
                                 ShowContinueError(
                                     state, EnergyPlus::format("User-Specified Maximum Total Air Flow Rate of {:.5R} [m3/s]", MaxTotAirVolFlowUser));
                                 ShowContinueError(
@@ -764,7 +762,7 @@ namespace HVACSingleDuctInduc {
                             }
                         } else {
                             ShowSevereError(state, "Autosizing of water flow requires a heating loop Sizing:Plant object");
-                            ShowContinueError(state, EnergyPlus::format("Occurs in {} Object={}", indUnit.UnitType, indUnit.Name));
+                            ShowContinueError(state, std::format("Occurs in {} Object={}", indUnit.UnitType, indUnit.Name));
                             ErrorsFound = true;
                         }
                         indUnit.MaxVolHotWaterFlow = MaxVolHotWaterFlowDes;
@@ -795,11 +793,10 @@ namespace HVACSingleDuctInduc {
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(MaxVolHotWaterFlowDes - MaxVolHotWaterFlowUser) / MaxVolHotWaterFlowUser) >
                                     state.dataSize->AutoVsHardSizingThreshold) {
-                                    ShowMessage(
-                                        state,
-                                        EnergyPlus::format("SizeHVACSingleDuctInduction: Potential issue with equipment sizing for {} = \"{}\".",
-                                                           indUnit.UnitType,
-                                                           indUnit.Name));
+                                    ShowMessage(state,
+                                                std::format("SizeHVACSingleDuctInduction: Potential issue with equipment sizing for {} = \"{}\".",
+                                                            indUnit.UnitType,
+                                                            indUnit.Name));
                                     ShowContinueError(
                                         state,
                                         EnergyPlus::format("User-Specified Maximum Hot Water Flow Rate of {:.5R} [m3/s]", MaxVolHotWaterFlowUser));
@@ -871,7 +868,7 @@ namespace HVACSingleDuctInduc {
                             }
                         } else {
                             ShowSevereError(state, "Autosizing of water flow requires a cooling loop Sizing:Plant object");
-                            ShowContinueError(state, EnergyPlus::format("Occurs in {} Object={}", indUnit.UnitType, indUnit.Name));
+                            ShowContinueError(state, std::format("Occurs in {} Object={}", indUnit.UnitType, indUnit.Name));
                             ErrorsFound = true;
                         }
                         indUnit.MaxVolColdWaterFlow = MaxVolColdWaterFlowDes;
@@ -890,11 +887,10 @@ namespace HVACSingleDuctInduc {
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(MaxVolColdWaterFlowDes - MaxVolColdWaterFlowUser) / MaxVolColdWaterFlowUser) >
                                     state.dataSize->AutoVsHardSizingThreshold) {
-                                    ShowMessage(
-                                        state,
-                                        EnergyPlus::format("SizeHVACSingleDuctInduction: Potential issue with equipment sizing for {} = \"{}\".",
-                                                           indUnit.UnitType,
-                                                           indUnit.Name));
+                                    ShowMessage(state,
+                                                std::format("SizeHVACSingleDuctInduction: Potential issue with equipment sizing for {} = \"{}\".",
+                                                            indUnit.UnitType,
+                                                            indUnit.Name));
                                     ShowContinueError(
                                         state,
                                         EnergyPlus::format("User-Specified Maximum Cold Water Flow Rate of {:.5R} [m3/s]", MaxVolColdWaterFlowUser));
@@ -1032,28 +1028,26 @@ namespace HVACSingleDuctInduc {
                     General::SolveRoot(state, ErrTolerance, SolveMaxIter, SolFlag, HWFlow, f, MinHotWaterFlow, MaxHotWaterFlow);
                     if (SolFlag == -1) {
                         if (indUnit.HWCoilFailNum1 == 0) {
-                            ShowWarningMessage(state,
-                                               EnergyPlus::format("SimFourPipeIndUnit: Hot water coil control failed for {}=\"{}\"",
-                                                                  indUnit.UnitType,
-                                                                  indUnit.Name));
+                            ShowWarningMessage(
+                                state,
+                                std::format("SimFourPipeIndUnit: Hot water coil control failed for {}=\"{}\"", indUnit.UnitType, indUnit.Name));
                             ShowContinueErrorTimeStamp(state, "");
-                            ShowContinueError(
-                                state, EnergyPlus::format("  Iteration limit [{}] exceeded in calculating hot water mass flow rate", SolveMaxIter));
+                            ShowContinueError(state,
+                                              std::format("  Iteration limit [{}] exceeded in calculating hot water mass flow rate", SolveMaxIter));
                         }
                         ShowRecurringWarningErrorAtEnd(
                             state,
-                            EnergyPlus::format("SimFourPipeIndUnit: Hot water coil control failed (iteration limit [{}]) for {}=\"{}\"",
-                                               SolveMaxIter,
-                                               indUnit.UnitType,
-                                               indUnit.Name),
+                            std::format("SimFourPipeIndUnit: Hot water coil control failed (iteration limit [{}]) for {}=\"{}\"",
+                                        SolveMaxIter,
+                                        indUnit.UnitType,
+                                        indUnit.Name),
                             indUnit.HWCoilFailNum1);
                     } else if (SolFlag == -2) {
                         if (indUnit.HWCoilFailNum2 == 0) {
-                            ShowWarningMessage(
-                                state,
-                                EnergyPlus::format("SimFourPipeIndUnit: Hot water coil control failed (maximum flow limits) for {}=\"{}\"",
-                                                   indUnit.UnitType,
-                                                   indUnit.Name));
+                            ShowWarningMessage(state,
+                                               std::format("SimFourPipeIndUnit: Hot water coil control failed (maximum flow limits) for {}=\"{}\"",
+                                                           indUnit.UnitType,
+                                                           indUnit.Name));
                             ShowContinueErrorTimeStamp(state, "");
                             ShowContinueError(state, "...Bad hot water maximum flow rate limits");
                             ShowContinueError(state, EnergyPlus::format("...Given minimum water flow rate={:.3R} kg/s", MinHotWaterFlow));
@@ -1085,28 +1079,26 @@ namespace HVACSingleDuctInduc {
                     General::SolveRoot(state, ErrTolerance, SolveMaxIter, SolFlag, CWFlow, f, MinColdWaterFlow, MaxColdWaterFlow);
                     if (SolFlag == -1) {
                         if (indUnit.CWCoilFailNum1 == 0) {
-                            ShowWarningMessage(state,
-                                               EnergyPlus::format("SimFourPipeIndUnit: Cold water coil control failed for {}=\"{}\"",
-                                                                  indUnit.UnitType,
-                                                                  indUnit.Name));
+                            ShowWarningMessage(
+                                state,
+                                std::format("SimFourPipeIndUnit: Cold water coil control failed for {}=\"{}\"", indUnit.UnitType, indUnit.Name));
                             ShowContinueErrorTimeStamp(state, "");
-                            ShowContinueError(
-                                state, EnergyPlus::format("  Iteration limit [{}] exceeded in calculating cold water mass flow rate", SolveMaxIter));
+                            ShowContinueError(state,
+                                              std::format("  Iteration limit [{}] exceeded in calculating cold water mass flow rate", SolveMaxIter));
                         }
                         ShowRecurringWarningErrorAtEnd(
                             state,
-                            EnergyPlus::format("SimFourPipeIndUnit: Cold water coil control failed (iteration limit [{}]) for {}=\"{}",
-                                               SolveMaxIter,
-                                               indUnit.UnitType,
-                                               indUnit.Name),
+                            std::format("SimFourPipeIndUnit: Cold water coil control failed (iteration limit [{}]) for {}=\"{}",
+                                        SolveMaxIter,
+                                        indUnit.UnitType,
+                                        indUnit.Name),
                             indUnit.CWCoilFailNum1);
                     } else if (SolFlag == -2) {
                         if (indUnit.CWCoilFailNum2 == 0) {
-                            ShowWarningMessage(
-                                state,
-                                EnergyPlus::format("SimFourPipeIndUnit: Cold water coil control failed (maximum flow limits) for {}=\"{}\"",
-                                                   indUnit.UnitType,
-                                                   indUnit.Name));
+                            ShowWarningMessage(state,
+                                               std::format("SimFourPipeIndUnit: Cold water coil control failed (maximum flow limits) for {}=\"{}\"",
+                                                           indUnit.UnitType,
+                                                           indUnit.Name));
                             ShowContinueErrorTimeStamp(state, "");
                             ShowContinueError(state, "...Bad cold water maximum flow rate limits");
                             ShowContinueError(state, EnergyPlus::format("...Given minimum water flow rate={:.3R} kg/s", MinColdWaterFlow));

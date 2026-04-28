@@ -338,25 +338,25 @@ namespace Material {
 
             auto *mat = s_mat->materials(matNum);
             if (mat->group != Group::Regular) {
-                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} is not a Regular material.", mat->Name));
+                ShowSevereCustom(state, eoh, std::format("Material {} is not a Regular material.", mat->Name));
                 ErrorsFound = true;
                 continue;
             }
 
             if (mat->hasPCM) {
-                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} already has {} properties defined.", mat->Name, currentModuleObject));
+                ShowSevereCustom(state, eoh, std::format("Material {} already has {} properties defined.", mat->Name, currentModuleObject));
                 ErrorsFound = true;
                 continue;
             }
 
             if (mat->hasEMPD) {
-                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} already has EMPD properties defined.", mat->Name));
+                ShowSevereCustom(state, eoh, std::format("Material {} already has EMPD properties defined.", mat->Name));
                 ErrorsFound = true;
                 continue;
             }
 
             if (mat->hasHAMT) {
-                ShowSevereCustom(state, eoh, EnergyPlus::format("Material {} already has HAMT properties defined.", mat->Name));
+                ShowSevereCustom(state, eoh, std::format("Material {} already has HAMT properties defined.", mat->Name));
                 ErrorsFound = true;
                 continue;
             }

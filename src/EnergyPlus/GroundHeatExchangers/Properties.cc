@@ -58,7 +58,7 @@ GLHEVertProps::GLHEVertProps(EnergyPlusData &state, std::string const &objName, 
     // Check for duplicates
     for (const auto &existingObj : state.dataGroundHeatExchanger->vertPropsVector) {
         if (objName == existingObj->name) {
-            ShowFatalError(state, EnergyPlus::format("Invalid input for {} object: Duplicate name found: {}", moduleName, existingObj->name));
+            ShowFatalError(state, std::format("Invalid input for {} object: Duplicate name found: {}", moduleName, existingObj->name));
         }
     }
 
@@ -97,7 +97,7 @@ std::shared_ptr<GLHEVertProps> GLHEVertProps::GetVertProps(EnergyPlusData &state
     if (thisObj != state.dataGroundHeatExchanger->vertPropsVector.end()) {
         return *thisObj;
     }
-    ShowSevereError(state, fmt::format("Object=GroundHeatExchanger:Vertical:Properties, Name={} - not found.", objectName));
+    ShowSevereError(state, std::format("Object=GroundHeatExchanger:Vertical:Properties, Name={} - not found.", objectName));
     ShowFatalError(state, "Preceding errors cause program termination");
 }
 

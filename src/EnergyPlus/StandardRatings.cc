@@ -601,10 +601,10 @@ namespace StandardRatings {
                     General::SolveRoot(state, Acc, IterMax, SolFla, CondenserOutletTemp, f, CondenserOutletTemp0, CondenserOutletTemp1);
                     if (SolFla == -1) {
                         ShowWarningError(state, "Iteration limit exceeded in calculating Reform Chiller IPLV");
-                        ShowContinueError(state, EnergyPlus::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
+                        ShowContinueError(state, std::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
                     } else if (SolFla == -2) {
                         ShowWarningError(state, "Bad starting values for calculating Reform Chiller IPLV");
-                        ShowContinueError(state, EnergyPlus::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
+                        ShowContinueError(state, std::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
                     }
 
                     if (RedCapNum == 0) {
@@ -674,15 +674,15 @@ namespace StandardRatings {
                 } else {
                     {
                         if (ChillerType == DataPlant::PlantEquipmentType::Chiller_ElectricEIR) {
-                            ShowWarningError(state,
-                                             EnergyPlus::format("Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.",
-                                                                ChillerName));
+                            ShowWarningError(
+                                state,
+                                std::format("Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.", ChillerName));
                         } else if (ChillerType == DataPlant::PlantEquipmentType::Chiller_ElectricReformEIR) {
 
                             ShowWarningError(
                                 state,
-                                EnergyPlus::format("Chiller:Electric:ReformulatedEIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.",
-                                                   ChillerName));
+                                std::format("Chiller:Electric:ReformulatedEIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.",
+                                            ChillerName));
                         }
                     }
                     if (RefCap <= 0.0) {
@@ -698,17 +698,17 @@ namespace StandardRatings {
                     if (ChillerCapFT <= 0.0) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
-                                               Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                               GetCurveName(state, CapFTempCurveIndex)));
+                            std::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, CapFTempCurveIndex)));
                         ShowContinueError(state, EnergyPlus::format(" ..ChillerCapFT value at standard test condition = {:.2R}", ChillerCapFT));
                     }
                     if (ChillerEIRFT <= 0.0) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
-                                               Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                               GetCurveName(state, EIRFTempCurveIndex)));
+                            std::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, EIRFTempCurveIndex)));
                         ShowContinueError(state, EnergyPlus::format(" ..ChillerEIRFT value at standard test condition = {:.2R}", ChillerEIRFT));
                     }
                     IPLV = 0.0;
@@ -859,30 +859,27 @@ namespace StandardRatings {
 
                     ShowWarningError(
                         state,
-                        EnergyPlus::format(
-                            "Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) calculated is not at the AHRI test condition.",
-                            ChillerName));
+                        std::format("Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) calculated is not at the AHRI test condition.",
+                                    ChillerName));
                 } else if (ChillerType == DataPlant::PlantEquipmentType::Chiller_ElectricReformEIR) {
 
                     ShowWarningError(
                         state,
-                        EnergyPlus::format(
+                        std::format(
                             "Chiller:Electric:ReformulatedEIR = {}:  Integrated Part Load Value (IPLV) calculated is not at the AHRI test condition.",
                             ChillerName));
                 }
                 if (CapCurveIPLVLimitsExceeded) {
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                           Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                           GetCurveName(state, CapFTempCurveIndex)));
+                    ShowContinueError(state,
+                                      std::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                                  Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                                  GetCurveName(state, CapFTempCurveIndex)));
                 }
                 if (EIRCurveIPLVLimitsExceeded) {
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                           Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                           GetCurveName(state, EIRFTempCurveIndex)));
+                    ShowContinueError(state,
+                                      std::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                                  Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                                  GetCurveName(state, EIRFTempCurveIndex)));
                 }
             }
         }
@@ -3776,12 +3773,11 @@ namespace StandardRatings {
             }
 
         } else {
-            ShowSevereError(
-                state,
-                EnergyPlus::format("Standard Ratings: {} {} has esither zero rated total cooling capacity or zero rated air volume flow rate. "
-                                   "Standard ratings cannot be calculated.",
-                                   HVAC::coilTypeNames[(int)coilType],
-                                   DXCoilName));
+            ShowSevereError(state,
+                            std::format("Standard Ratings: {} {} has esither zero rated total cooling capacity or zero rated air volume flow rate. "
+                                        "Standard ratings cannot be calculated.",
+                                        HVAC::coilTypeNames[(int)coilType],
+                                        DXCoilName));
         }
         return StandarRatingResults;
     }
@@ -3884,11 +3880,10 @@ namespace StandardRatings {
                 }
             }
         } else {
-            ShowSevereError(
-                state,
-                EnergyPlus::format("Standard Ratings: {} {} has zero rated total cooling capacity. Capacity and Power cannot be calculated.",
-                                   HVAC::coilTypeNames[(int)coilType],
-                                   DXCoilName));
+            ShowSevereError(state,
+                            std::format("Standard Ratings: {} {} has zero rated total cooling capacity. Capacity and Power cannot be calculated.",
+                                        HVAC::coilTypeNames[(int)coilType],
+                                        DXCoilName));
         }
     }
 
@@ -5661,9 +5656,9 @@ namespace StandardRatings {
 
         } else {
             ShowSevereError(state,
-                            EnergyPlus::format("Standard Ratings: Coil:Cooling:DX {}"
-                                               " has zero rated total cooling capacity. Standard ratings cannot be calculated.",
-                                               DXCoilName)); // TODO: Use dynamic COIL TYPE and COIL INSTANCE name later);
+                            std::format("Standard Ratings: Coil:Cooling:DX {}"
+                                        " has zero rated total cooling capacity. Standard ratings cannot be calculated.",
+                                        DXCoilName)); // TODO: Use dynamic COIL TYPE and COIL INSTANCE name later);
         }
 
         // From SEER2 implementation
@@ -7103,8 +7098,8 @@ namespace StandardRatings {
             }
             for (int ClassNum = 1; ClassNum <= 4; ++ClassNum) {
                 int Num = (ClassNum - 1) * 4;
-                std::string ClassName = EnergyPlus::format("Class {}", ClassNum);
-                std::string CompNameNew = fmt::format("{}({})", CompName, ClassName);
+                std::string ClassName = std::format("Class {}", ClassNum);
+                std::string CompNameNew = std::format("{}({})", CompName, ClassName);
                 static constexpr std::string_view Format_102(
                     " DX Cooling Coil ASHRAE 127 Standard Ratings Information, {}, {}, {}, {:.1R}, {:.1R}, {:.1R}, "
                     "{:.1R}, {:.1R}, {:.1R}, {:.1R}, {:.1R}\n");
@@ -7302,16 +7297,15 @@ namespace StandardRatings {
 
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
-                                       HVAC::coilTypeNames[(int)coilType],
-                                       DXCoilName));
+                    std::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
+                                HVAC::coilTypeNames[(int)coilType],
+                                DXCoilName));
                 ShowContinueError(state,
                                   " Review the Standard Ratings calculations in the Engineering Reference for this coil type. Also, use "
                                   "Output:Diagnostics, DisplayExtraWarnings for further guidance.");
 
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    ShowContinueError(state,
-                                      EnergyPlus::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
+                    ShowContinueError(state, std::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
                     ShowContinueError(state,
                                       " do not include the AHRI test conditions required to calculate one or more of the Standard Rating values.");
                 }
@@ -7320,21 +7314,20 @@ namespace StandardRatings {
                 if (CapCurveHighOATLimitsExceeded || CapCurveFlowLimitsExceeded) {
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         ShowContinueError(state,
-                                          EnergyPlus::format("{}={}:  Standard Rating Cooling Capacity calculated is not at the AHRI test condition.",
-                                                             HVAC::coilTypeNames[(int)coilType],
-                                                             DXCoilName));
+                                          std::format("{}={}:  Standard Rating Cooling Capacity calculated is not at the AHRI test condition.",
+                                                      HVAC::coilTypeNames[(int)coilType],
+                                                      DXCoilName));
                         if (CapCurveHighOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                                std::format(" Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, CapFTempCurveIndex)));
                         }
                         if (CapCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     " Check limits in Total Cooling Capacity Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
                                     Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFFlowCurveIndex)->curveType)],
                                     GetCurveName(state, CapFFlowCurveIndex)));
@@ -7346,21 +7339,20 @@ namespace StandardRatings {
                 if (CapCurveHighOATLimitsExceeded || CapCurveFlowLimitsExceeded || EIRCurveHighOATLimitsExceeded || EIRCurveFlowLimitsExceeded) {
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         ShowContinueError(state,
-                                          EnergyPlus::format("{}={}:  Energy Efficiency Ratio (EER) calculated is not at the AHRI test condition.",
-                                                             HVAC::coilTypeNames[(int)coilType],
-                                                             DXCoilName));
+                                          std::format("{}={}:  Energy Efficiency Ratio (EER) calculated is not at the AHRI test condition.",
+                                                      HVAC::coilTypeNames[(int)coilType],
+                                                      DXCoilName));
                         if (CapCurveHighOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                                std::format(" Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, CapFTempCurveIndex)));
                         }
                         if (CapCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     " Check limits in Total Cooling Capacity Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
                                     Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFFlowCurveIndex)->curveType)],
                                     GetCurveName(state, CapFFlowCurveIndex)));
@@ -7368,18 +7360,16 @@ namespace StandardRatings {
                         if (EIRCurveHighOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Energy Input Ratio Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, EIRFTempCurveIndex)));
+                                std::format(" Check limits in Energy Input Ratio Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFTempCurveIndex)));
                         }
                         if (EIRCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
-                                    GetCurveName(state, EIRFFlowCurveIndex)));
+                                std::format(" Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFFlowCurveIndex)));
                         }
                     }
                 }
@@ -7388,23 +7378,21 @@ namespace StandardRatings {
                 if (CapCurveMidOATLimitsExceeded || EIRCurveMidOATLimitsExceeded || CapCurveFlowLimitsExceeded || EIRCurveFlowLimitsExceeded ||
                     PLFfPLRforSEERLimitsExceeded) {
                     if (state.dataGlobal->DisplayExtraWarnings) {
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("{}={}:  Seasonal Energy Efficiency Ratio (SEER) calculated is not at the AHRI test condition.",
-                                               HVAC::coilTypeNames[(int)coilType],
-                                               DXCoilName));
+                        ShowContinueError(state,
+                                          std::format("{}={}:  Seasonal Energy Efficiency Ratio (SEER) calculated is not at the AHRI test condition.",
+                                                      HVAC::coilTypeNames[(int)coilType],
+                                                      DXCoilName));
                         if (CapCurveMidOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                                std::format(" Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, CapFTempCurveIndex)));
                         }
                         if (CapCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     " Check limits in Total Cooling Capacity Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
                                     Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFFlowCurveIndex)->curveType)],
                                     GetCurveName(state, CapFFlowCurveIndex)));
@@ -7412,25 +7400,23 @@ namespace StandardRatings {
                         if (EIRCurveMidOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Energy Input Ratio Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, EIRFTempCurveIndex)));
+                                std::format(" Check limits in Energy Input Ratio Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFTempCurveIndex)));
                         }
                         if (EIRCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
-                                    GetCurveName(state, EIRFFlowCurveIndex)));
+                                std::format(" Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFFlowCurveIndex)));
                         }
                         if (PLFfPLRforSEERLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(" Check limits in Part Load Fraction Correlation Curve, Curve Type = {}, Curve Name = {}",
-                                                   Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(PLFFPLRCurveIndex)->curveType)],
-                                                   GetCurveName(state, PLFFPLRCurveIndex)));
+                                std::format(" Check limits in Part Load Fraction Correlation Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(PLFFPLRCurveIndex)->curveType)],
+                                            GetCurveName(state, PLFFPLRCurveIndex)));
                         }
                     }
                 }
@@ -7440,39 +7426,37 @@ namespace StandardRatings {
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format("{}={}:  Integrated Energy Efficiency Ratio (IEER) calculated is not at the AHRI test condition.",
-                                               HVAC::coilTypeNames[(int)coilType],
-                                               DXCoilName));
+                            std::format("{}={}:  Integrated Energy Efficiency Ratio (IEER) calculated is not at the AHRI test condition.",
+                                        HVAC::coilTypeNames[(int)coilType],
+                                        DXCoilName));
                         if (CapCurveIEERLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                                std::format(" Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, CapFTempCurveIndex)));
                         }
                         if (CapCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     " Check limits in Total Cooling Capacity Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
                                     Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFFlowCurveIndex)->curveType)],
                                     GetCurveName(state, CapFFlowCurveIndex)));
                         }
                         if (EIRCurveIEERLimitsExceeded) {
-                            ShowContinueError(state,
-                                              EnergyPlus::format(
-                                                  " Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                                  Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                                  GetCurveName(state, EIRFTempCurveIndex)));
+                            ShowContinueError(
+                                state,
+                                std::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFTempCurveIndex)));
                         }
                         if (EIRCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
-                                    GetCurveName(state, EIRFFlowCurveIndex)));
+                                std::format(" Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFFlowCurveIndex)));
                         }
                     }
                 }
@@ -7526,38 +7510,36 @@ namespace StandardRatings {
             if (HeatingCapCurveHSPFLimitsExceeded || HeatingEIRCurveHSPFLimitsExceeded) {
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
-                                       HVAC::coilTypeNames[(int)coilType],
-                                       DXCoilName));
+                    std::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
+                                HVAC::coilTypeNames[(int)coilType],
+                                DXCoilName));
                 ShowContinueError(state,
                                   " Review the Standard Ratings calculations in the Engineering Reference for this coil type. Also, use "
                                   "Output:Diagnostics, DisplayExtraWarnings for further guidance.");
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    ShowContinueError(state,
-                                      EnergyPlus::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
+                    ShowContinueError(state, std::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
                     ShowContinueError(state,
                                       " do not include the AHRI test conditions required to calculate one or more of the Standard Rating values.");
                 }
                 if (state.dataGlobal->DisplayExtraWarnings) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("{}={}:  Heating Seasonal Performance Factor calculated is not at the AHRI test condition.",
-                                                        HVAC::coilTypeNames[(int)coilType],
-                                                        DXCoilName));
+                                     std::format("{}={}:  Heating Seasonal Performance Factor calculated is not at the AHRI test condition.",
+                                                 HVAC::coilTypeNames[(int)coilType],
+                                                 DXCoilName));
                     ShowContinueError(state, " Review the Standard Ratings calculations in the Engineering Reference for this coil type.");
                     if (HeatingCapCurveHSPFLimitsExceeded) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(
-                                " Check limits in Total Heating Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                GetCurveName(state, CapFTempCurveIndex)));
+                            std::format(" Check limits in Total Heating Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, CapFTempCurveIndex)));
                     }
                     if (HeatingEIRCurveHSPFLimitsExceeded) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                               Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                               GetCurveName(state, EIRFTempCurveIndex)));
+                            std::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, EIRFTempCurveIndex)));
                     }
                 }
             }
@@ -7607,16 +7589,15 @@ namespace StandardRatings {
 
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
-                                       HVAC::coilTypeNames[(int)coilType],
-                                       DXCoilName));
+                    std::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
+                                HVAC::coilTypeNames[(int)coilType],
+                                DXCoilName));
                 ShowContinueError(state,
                                   " Review the Standard Ratings calculations in the Engineering Reference for this coil type. Also, use "
                                   "Output:Diagnostics, DisplayExtraWarnings for further guidance.");
 
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    ShowContinueError(state,
-                                      EnergyPlus::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
+                    ShowContinueError(state, std::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
                     ShowContinueError(state,
                                       " do not include the AHRI test conditions required to calculate one or more of the Standard Rating values.");
                 }
@@ -7624,23 +7605,21 @@ namespace StandardRatings {
                 // For Standard Rating Cooling Capacity:
                 if (CapCurveHighOATLimitsExceeded || CapCurveFlowLimitsExceeded) {
                     if (state.dataGlobal->DisplayExtraWarnings) {
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("{}={}:  The Standard Rating Cooling Capacity calculated is not at the AHRI test condition.",
-                                               HVAC::coilTypeNames[(int)coilType],
-                                               DXCoilName));
+                        ShowContinueError(state,
+                                          std::format("{}={}:  The Standard Rating Cooling Capacity calculated is not at the AHRI test condition.",
+                                                      HVAC::coilTypeNames[(int)coilType],
+                                                      DXCoilName));
                         if (CapCurveHighOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                                std::format(" Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, CapFTempCurveIndex)));
                         }
                         if (CapCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     " Check limits in Total Cooling Capacity Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
                                     Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFFlowCurveIndex)->curveType)],
                                     GetCurveName(state, CapFFlowCurveIndex)));
@@ -7654,21 +7633,20 @@ namespace StandardRatings {
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format("{}={}:  The Seasonal Energy Efficiency Ratio (SEER) calculated is not at the AHRI test condition.",
-                                               HVAC::coilTypeNames[(int)coilType],
-                                               DXCoilName));
+                            std::format("{}={}:  The Seasonal Energy Efficiency Ratio (SEER) calculated is not at the AHRI test condition.",
+                                        HVAC::coilTypeNames[(int)coilType],
+                                        DXCoilName));
                         if (CapCurveLowOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                                std::format(" Check limits in Total Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, CapFTempCurveIndex)));
                         }
                         if (CapCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     " Check limits in Total Cooling Capacity Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
                                     Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFFlowCurveIndex)->curveType)],
                                     GetCurveName(state, CapFFlowCurveIndex)));
@@ -7676,18 +7654,16 @@ namespace StandardRatings {
                         if (EIRCurveLowOATLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Energy Input Ratio Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, EIRFTempCurveIndex)));
+                                std::format(" Check limits in Energy Input Ratio Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFTempCurveIndex)));
                         }
                         if (EIRCurveFlowLimitsExceeded) {
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
-                                    " Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
-                                    GetCurveName(state, EIRFFlowCurveIndex)));
+                                std::format(" Check limits in Energy Input Ratio Function of Flow Fraction Curve, Curve Type = {}, Curve Name = {}",
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFFlowCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFFlowCurveIndex)));
                         }
                     }
                 }
@@ -7753,16 +7729,15 @@ namespace StandardRatings {
 
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
-                                       HVAC::coilTypeNames[(int)coilType],
-                                       DXCoilName));
+                    std::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
+                                HVAC::coilTypeNames[(int)coilType],
+                                DXCoilName));
                 ShowContinueError(state,
                                   " Review the Standard Ratings calculations in the Engineering Reference for this coil type. Also, use "
                                   "Output:Diagnostics, DisplayExtraWarnings for further guidance.");
 
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    ShowContinueError(state,
-                                      EnergyPlus::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
+                    ShowContinueError(state, std::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
                     ShowContinueError(state,
                                       " do not include the AHRI test conditions required to calculate one or more of the Standard Rating values.");
                 }
@@ -7770,38 +7745,36 @@ namespace StandardRatings {
             if (CapCurveOATLimitsExceeded) {
                 if (state.dataGlobal->DisplayExtraWarnings) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("{}={}:  The Net Heating Capacity Calculated is not at the AHRI test condition.",
-                                                        HVAC::coilTypeNames[(int)coilType],
-                                                        DXCoilName));
+                                     std::format("{}={}:  The Net Heating Capacity Calculated is not at the AHRI test condition.",
+                                                 HVAC::coilTypeNames[(int)coilType],
+                                                 DXCoilName));
                     ShowContinueError(
                         state,
-                        EnergyPlus::format(" Check limits in Total Heating Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                           Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                           GetCurveName(state, CapFTempCurveIndex)));
+                        std::format(" Check limits in Total Heating Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                    GetCurveName(state, CapFTempCurveIndex)));
                 }
             }
 
             if (HeatingCapCurveHSPFLimitsExceeded || HeatingEIRCurveHSPFLimitsExceeded) {
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format("{}={}:  The Heating Seasonal Performance Factor calculated is not at the AHRI test condition.",
-                                           HVAC::coilTypeNames[(int)coilType],
-                                           DXCoilName));
+                    ShowWarningError(state,
+                                     std::format("{}={}:  The Heating Seasonal Performance Factor calculated is not at the AHRI test condition.",
+                                                 HVAC::coilTypeNames[(int)coilType],
+                                                 DXCoilName));
                     if (HeatingCapCurveHSPFLimitsExceeded) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(
-                                " Check limits in Total Heating Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                GetCurveName(state, CapFTempCurveIndex)));
+                            std::format(" Check limits in Total Heating Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, CapFTempCurveIndex)));
                     }
                     if (HeatingEIRCurveHSPFLimitsExceeded) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                               Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                               GetCurveName(state, EIRFTempCurveIndex)));
+                            std::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, EIRFTempCurveIndex)));
                     }
                 }
             }

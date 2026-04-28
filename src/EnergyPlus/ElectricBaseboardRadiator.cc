@@ -130,19 +130,18 @@ namespace ElectricBaseboardRadiator {
             BaseboardNum = CompIndex;
             if (BaseboardNum > NumElecBaseboards || BaseboardNum < 1) {
                 ShowFatalError(state,
-                               EnergyPlus::format("SimElectricBaseboard:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                                  BaseboardNum,
-                                                  NumElecBaseboards,
-                                                  EquipName));
+                               std::format("SimElectricBaseboard:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                           BaseboardNum,
+                                           NumElecBaseboards,
+                                           EquipName));
             }
             if (state.dataElectBaseboardRad->ElecBaseboard(BaseboardNum).CheckEquipName) {
                 if (EquipName != state.dataElectBaseboardRad->ElecBaseboard(BaseboardNum).EquipName) {
-                    ShowFatalError(
-                        state,
-                        EnergyPlus::format("SimElectricBaseboard: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                           BaseboardNum,
-                                           EquipName,
-                                           state.dataElectBaseboardRad->ElecBaseboard(BaseboardNum).EquipName));
+                    ShowFatalError(state,
+                                   std::format("SimElectricBaseboard: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                               BaseboardNum,
+                                               EquipName,
+                                               state.dataElectBaseboardRad->ElecBaseboard(BaseboardNum).EquipName));
                 }
                 state.dataElectBaseboardRad->ElecBaseboard(BaseboardNum).CheckEquipName = false;
             }
@@ -259,7 +258,7 @@ namespace ElectricBaseboardRadiator {
                         elecBaseboard.ScaledHeatingCapacity =
                             inputProcessor->getRealFieldValue(elecBaseboardFields, elecBaseboardSchemaProps, "heating_design_capacity");
                         if (elecBaseboard.ScaledHeatingCapacity < 0.0 && elecBaseboard.ScaledHeatingCapacity != DataSizing::AutoSize) {
-                            ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
+                            ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
                             ShowContinueError(state,
                                               EnergyPlus::format("Illegal {} = {:.7T}",
                                                                  numericFieldNames[iHeatDesignCapacityNumericNum - 1],
@@ -267,11 +266,9 @@ namespace ElectricBaseboardRadiator {
                             ErrorsFound = true;
                         }
                     } else {
-                        ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatDesignCapacityNumericNum - 1]));
+                        ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
+                        ShowContinueError(state, std::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                        ShowContinueError(state, std::format("Blank field not allowed for {}", numericFieldNames[iHeatDesignCapacityNumericNum - 1]));
                         ErrorsFound = true;
                     }
                 } else if (Util::SameString(heatingDesignCapacityMethod, "CapacityPerFloorArea")) {
@@ -281,28 +278,27 @@ namespace ElectricBaseboardRadiator {
                         elecBaseboard.ScaledHeatingCapacity = inputProcessor->getRealFieldValue(
                             elecBaseboardFields, elecBaseboardSchemaProps, "heating_design_capacity_per_floor_area");
                         if (elecBaseboard.ScaledHeatingCapacity <= 0.0) {
-                            ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
-                            ShowContinueError(
-                                state, EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                            ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
+                            ShowContinueError(state,
+                                              std::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
                             ShowContinueError(state,
                                               EnergyPlus::format("Illegal {} = {:.7T}",
                                                                  numericFieldNames[iHeatCapacityPerFloorAreaNumericNum - 1],
                                                                  elecBaseboard.ScaledHeatingCapacity));
                             ErrorsFound = true;
                         } else if (elecBaseboard.ScaledHeatingCapacity == DataSizing::AutoSize) {
-                            ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
-                            ShowContinueError(
-                                state, EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
-                            ShowContinueError(
-                                state, EnergyPlus::format("Illegal {} = Autosize", numericFieldNames[iHeatCapacityPerFloorAreaNumericNum - 1]));
+                            ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
+                            ShowContinueError(state,
+                                              std::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                            ShowContinueError(state,
+                                              std::format("Illegal {} = Autosize", numericFieldNames[iHeatCapacityPerFloorAreaNumericNum - 1]));
                             ErrorsFound = true;
                         }
                     } else {
-                        ShowSevereError(state, EnergyPlus::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
+                        ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, elecBaseboard.EquipName));
+                        ShowContinueError(state, std::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
-                        ShowContinueError(
-                            state, EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatCapacityPerFloorAreaNumericNum - 1]));
+                                          std::format("Blank field not allowed for {}", numericFieldNames[iHeatCapacityPerFloorAreaNumericNum - 1]));
                         ErrorsFound = true;
                     }
                 } else if (Util::SameString(heatingDesignCapacityMethod, "FractionOfAutosizedHeatingCapacity")) {
@@ -321,17 +317,14 @@ namespace ElectricBaseboardRadiator {
                         }
                     } else {
                         ShowSevereError(state, cCurrentModuleObject + " = " + elecBaseboard.EquipName);
-                        ShowContinueError(state,
-                                          EnergyPlus::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                        ShowContinueError(state, std::format("Input for {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("Blank field not allowed for {}", numericFieldNames[iHeatFracOfAutosizedCapacityNumericNum - 1]));
+                            state, std::format("Blank field not allowed for {}", numericFieldNames[iHeatFracOfAutosizedCapacityNumericNum - 1]));
                         ErrorsFound = true;
                     }
                 } else {
                     ShowSevereError(state, cCurrentModuleObject + " = " + elecBaseboard.EquipName);
-                    ShowContinueError(state,
-                                      EnergyPlus::format("Illegal {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
+                    ShowContinueError(state, std::format("Illegal {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
                     ErrorsFound = true;
                 }
 
@@ -386,7 +379,7 @@ namespace ElectricBaseboardRadiator {
                     ShowSevereError(state,
                                     std::string{RoutineName} + cCurrentModuleObject + "=\"" + elecBaseboardName +
                                         "\", the number of surface/radiant fraction groups entered was less than the allowable minimum.");
-                    ShowContinueError(state, EnergyPlus::format("...the minimum that must be entered=[{}].", MinDistribSurfaces));
+                    ShowContinueError(state, std::format("...the minimum that must be entered=[{}].", MinDistribSurfaces));
                     ErrorsFound = true;
                     elecBaseboard.TotSurfToDistrib = 0;
                 }
@@ -620,7 +613,7 @@ namespace ElectricBaseboardRadiator {
             int SizingMethod = HVAC::HeatingCapacitySizing; // Integer representation of sizing method name (e.g., CoolingAirflowSizing)
             int FieldNum = 1;                               // IDD numeric field number where input field description is found
             std::string const SizingString =
-                EnergyPlus::format("{} [W]", state.dataElectBaseboardRad->ElecBaseboardNumericFields(BaseboardNum).FieldNames(FieldNum));
+                std::format("{} [W]", state.dataElectBaseboardRad->ElecBaseboardNumericFields(BaseboardNum).FieldNames(FieldNum));
             // capacity sizing methods (e.g., HeatingDesignCapacity, CapacityPerFloorArea, FractionOfAutosizedCoolingCapacity)
             int CapSizingMethod = elecBaseboard.HeatingCapMethod;
             zoneEqSizing.SizingMethod(SizingMethod) = CapSizingMethod;

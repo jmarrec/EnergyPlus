@@ -56,9 +56,8 @@
 #include <embedded/EmbeddedEpJSONSchema.hh>
 
 #include <algorithm>
-#include <fmt/format.h>
+#include <format>
 #include <memory>
-#include <stdexcept>
 
 namespace EnergyPlus {
 
@@ -68,7 +67,7 @@ InputFile &InputFile::ensure_open(EnergyPlusData &state, const std::string &call
         open(false, output_to_file);
     }
     if (!good()) {
-        ShowFatalError(state, fmt::format("{}: Could not open file {} for input (read).", caller, filePath));
+        ShowFatalError(state, std::format("{}: Could not open file {} for input (read).", caller, filePath.string()));
     }
     return *this;
 }
@@ -215,7 +214,7 @@ InputOutputFile &InputOutputFile::ensure_open(EnergyPlusData &state, const std::
         open(false, output_to_file);
     }
     if (!good()) {
-        ShowFatalError(state, fmt::format("{}: Could not open file {} for output (write).", caller, filePath));
+        ShowFatalError(state, std::format("{}: Could not open file {} for output (write).", caller, filePath.string()));
     }
     return *this;
 }

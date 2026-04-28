@@ -870,10 +870,10 @@ namespace ReportCoilSelection {
                     }
                     // throw error  coil type does not match coil name, check for unique names across coil types
                     ShowWarningError(state,
-                                     EnergyPlus::format("check for unique coil names across different coil types: {} occurs in both {} and {}",
-                                                        coilName,
-                                                        HVAC::coilTypeNamesUC[(int)coilType],
-                                                        HVAC::coilTypeNamesUC[(int)c->coilType]));
+                                     std::format("check for unique coil names across different coil types: {} occurs in both {} and {}",
+                                                 coilName,
+                                                 HVAC::coilTypeNamesUC[(int)coilType],
+                                                 HVAC::coilTypeNamesUC[(int)c->coilType]));
                 }
             }
         }
@@ -981,7 +981,7 @@ namespace ReportCoilSelection {
         } // for (equipLoop)
 
         if (c->typeHVACname == "Unknown") {
-            ShowWarningError(state, EnergyPlus::format("Parent object not found for zone coil = {}", c->coilName_));
+            ShowWarningError(state, std::format("Parent object not found for zone coil = {}", c->coilName_));
         }
     }
 
@@ -1175,7 +1175,7 @@ namespace ReportCoilSelection {
 
     std::string PeakHrMinString(EnergyPlusData &state, const int designDay, const int timeStepAtPeak)
     {
-        return fmt::format("{}/{} {}",
+        return std::format("{}/{} {}",
                            state.dataWeather->DesDayInput(designDay).Month,
                            state.dataWeather->DesDayInput(designDay).DayOfMonth,
                            getTimeText(state, timeStepAtPeak));

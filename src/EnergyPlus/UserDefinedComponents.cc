@@ -103,9 +103,8 @@ namespace UserDefinedComponents {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(
-            state,
-            EnergyPlus::format("LocalUserDefinedPlantComponentFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(state,
+                       std::format("LocalUserDefinedPlantComponentFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -261,21 +260,20 @@ namespace UserDefinedComponents {
         } else {
             CompNum = CompIndex;
             if (CompNum < 1 || CompNum > state.dataUserDefinedComponents->NumUserCoils) {
-                ShowFatalError(
-                    state,
-                    EnergyPlus::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
-                                       CompNum,
-                                       state.dataUserDefinedComponents->NumUserCoils,
-                                       EquipName));
+                ShowFatalError(state,
+                               std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
+                                           CompNum,
+                                           state.dataUserDefinedComponents->NumUserCoils,
+                                           EquipName));
             }
             if (state.dataUserDefinedComponents->CheckUserCoilName(CompNum)) {
                 if (EquipName != state.dataUserDefinedComponents->UserCoil(CompNum).Name) {
-                    ShowFatalError(state,
-                                   EnergyPlus::format(
-                                       "SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
-                                       CompNum,
-                                       EquipName,
-                                       state.dataUserDefinedComponents->UserCoil(CompNum).Name));
+                    ShowFatalError(
+                        state,
+                        std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
+                                    CompNum,
+                                    EquipName,
+                                    state.dataUserDefinedComponents->UserCoil(CompNum).Name));
                 }
                 state.dataUserDefinedComponents->CheckUserCoilName(CompNum) = false;
             }
@@ -373,21 +371,20 @@ namespace UserDefinedComponents {
         } else {
             CompNum = CompIndex;
             if (CompNum < 1 || CompNum > state.dataUserDefinedComponents->NumUserZoneAir) {
-                ShowFatalError(
-                    state,
-                    EnergyPlus::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
-                                       CompNum,
-                                       state.dataUserDefinedComponents->NumUserZoneAir,
-                                       CompName));
+                ShowFatalError(state,
+                               std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
+                                           CompNum,
+                                           state.dataUserDefinedComponents->NumUserZoneAir,
+                                           CompName));
             }
             if (state.dataUserDefinedComponents->CheckUserZoneAirName(CompNum)) {
                 if (CompName != state.dataUserDefinedComponents->UserZoneAirHVAC(CompNum).Name) {
-                    ShowFatalError(state,
-                                   EnergyPlus::format(
-                                       "SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
-                                       CompNum,
-                                       CompName,
-                                       state.dataUserDefinedComponents->UserZoneAirHVAC(CompNum).Name));
+                    ShowFatalError(
+                        state,
+                        std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
+                                    CompNum,
+                                    CompName,
+                                    state.dataUserDefinedComponents->UserZoneAirHVAC(CompNum).Name));
                 }
                 state.dataUserDefinedComponents->CheckUserZoneAirName(CompNum) = false;
             }
@@ -497,21 +494,20 @@ namespace UserDefinedComponents {
         } else {
             CompNum = CompIndex;
             if (CompNum < 1 || CompNum > state.dataUserDefinedComponents->NumUserAirTerminals) {
-                ShowFatalError(
-                    state,
-                    EnergyPlus::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
-                                       CompNum,
-                                       state.dataUserDefinedComponents->NumUserAirTerminals,
-                                       CompName));
+                ShowFatalError(state,
+                               std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Number of units ={}, Entered Unit name = {}",
+                                           CompNum,
+                                           state.dataUserDefinedComponents->NumUserAirTerminals,
+                                           CompName));
             }
             if (state.dataUserDefinedComponents->CheckUserAirTerminal(CompNum)) {
                 if (CompName != state.dataUserDefinedComponents->UserAirTerminal(CompNum).Name) {
-                    ShowFatalError(state,
-                                   EnergyPlus::format(
-                                       "SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
-                                       CompNum,
-                                       CompName,
-                                       state.dataUserDefinedComponents->UserAirTerminal(CompNum).Name));
+                    ShowFatalError(
+                        state,
+                        std::format("SimUserDefinedPlantComponent: Invalid CompIndex passed={}, Unit name={}, stored unit name for that index={}",
+                                    CompNum,
+                                    CompName,
+                                    state.dataUserDefinedComponents->UserAirTerminal(CompNum).Name));
                 }
                 state.dataUserDefinedComponents->CheckUserAirTerminal(CompNum) = false;
             }
@@ -625,8 +621,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserPlantComp(CompLoop).simCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(2));
                             if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).simCallbackIndex == -1) {
-                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
-                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
+                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback or a Python Plugin Instance object.");
@@ -713,9 +709,9 @@ namespace UserDefinedComponents {
                                     state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initCallbackIndex =
                                         state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(aArgCount + 4));
                                     if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initCallbackIndex == -1) {
-                                        ShowSevereError(
-                                            state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
-                                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                        ShowSevereError(state,
+                                                        std::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
+                                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                         ShowContinueError(state,
                                                           "Program Manager Name not found as an EMS Program Manager, API callback, or a Python "
                                                           "Plugin Instance object.");
@@ -737,9 +733,9 @@ namespace UserDefinedComponents {
                                     state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simCallbackIndex =
                                         state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(aArgCount + 5));
                                     if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simCallbackIndex == -1) {
-                                        ShowSevereError(
-                                            state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
-                                        ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                        ShowSevereError(state,
+                                                        std::format("Invalid {}={}", cAlphaFieldNames(aArgCount + 4), cAlphaArgs(aArgCount + 4)));
+                                        ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                         ShowContinueError(state, "Program Manager Name not found as EMS Program, API callback, or Python Plugin.");
                                         ErrorsFound = true;
                                     }
@@ -954,8 +950,7 @@ namespace UserDefinedComponents {
                         Util::FindItemInList(cAlphaArgs(31), state.dataHeatBal->Zone);
                     if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Zone.ZoneNum == 0) {
                         ShowSevereError(
-                            state,
-                            EnergyPlus::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(31)));
+                            state, std::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(31)));
                         ErrorsFound = true;
                     } else {
                         state.dataUserDefinedComponents->UserPlantComp(CompLoop).Zone.DeviceHasInternalGains = true;
@@ -1049,7 +1044,7 @@ namespace UserDefinedComponents {
                     }
                 }
                 if (MgrCountTest == 0) {
-                    ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, std::format("Invalid {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, "At least one program calling manager is needed.");
                     ErrorsFound = true;
                 }
@@ -1057,7 +1052,7 @@ namespace UserDefinedComponents {
         } // NumUserPlantComps > 0
 
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
+            ShowFatalError(state, std::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
         }
 
         cCurrentModuleObject = "Coil:UserDefined";
@@ -1104,8 +1099,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserCoil(CompLoop).simCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(2));
                             if (state.dataUserDefinedComponents->UserCoil(CompLoop).simCallbackIndex == -1) {
-                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
-                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
+                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback, or a Python Plugin Instance object.");
@@ -1127,8 +1122,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserCoil(CompLoop).initCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(3));
                             if (state.dataUserDefinedComponents->UserCoil(CompLoop).initCallbackIndex == -1) {
-                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(3), cAlphaArgs(3)));
-                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(3), cAlphaArgs(3)));
+                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback or a Python Plugin Instance object.");
@@ -1362,9 +1357,9 @@ namespace UserDefinedComponents {
                         state.dataUserDefinedComponents->UserCoil(CompLoop).Zone.ZoneNum =
                             Util::FindItemInList(cAlphaArgs(13), state.dataHeatBal->Zone);
                         if (state.dataUserDefinedComponents->UserCoil(CompLoop).Zone.ZoneNum == 0) {
-                            ShowSevereError(state,
-                                            EnergyPlus::format(
-                                                "{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(13)));
+                            ShowSevereError(
+                                state,
+                                std::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(13)));
                             ErrorsFound = true;
                         } else {
                             state.dataUserDefinedComponents->UserCoil(CompLoop).Zone.DeviceHasInternalGains = true;
@@ -1437,7 +1432,7 @@ namespace UserDefinedComponents {
         } // NumUserCoils > 0
 
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
+            ShowFatalError(state, std::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
         }
     }
 
@@ -1506,8 +1501,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserZoneAirHVAC(CompLoop).simCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(2));
                             if (state.dataUserDefinedComponents->UserZoneAirHVAC(CompLoop).simCallbackIndex == -1) {
-                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
-                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
+                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback or a Python Plugin Instance object.");
@@ -1529,8 +1524,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserZoneAirHVAC(CompLoop).initCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(3));
                             if (state.dataUserDefinedComponents->UserZoneAirHVAC(CompLoop).initCallbackIndex == -1) {
-                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(3), cAlphaArgs(3)));
-                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(3), cAlphaArgs(3)));
+                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback or a Python Plugin Instance object.");
@@ -1851,8 +1846,7 @@ namespace UserDefinedComponents {
                         Util::FindItemInList(cAlphaArgs(16), state.dataHeatBal->Zone);
                     if (state.dataUserDefinedComponents->UserZoneAirHVAC(CompLoop).Zone.ZoneNum == 0) {
                         ShowSevereError(
-                            state,
-                            EnergyPlus::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(16)));
+                            state, std::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(16)));
                         ErrorsFound = true;
                     } else {
                         state.dataUserDefinedComponents->UserZoneAirHVAC(CompLoop).Zone.DeviceHasInternalGains = true;
@@ -1923,7 +1917,7 @@ namespace UserDefinedComponents {
         } // NumUserZoneAir > 0
 
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
+            ShowFatalError(state, std::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
         }
     }
 
@@ -1988,8 +1982,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserAirTerminal(CompLoop).simCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(2));
                             if (state.dataUserDefinedComponents->UserAirTerminal(CompLoop).simCallbackIndex == -1) {
-                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
-                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
+                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback or a Python Plugin Instance object.");
@@ -2011,8 +2005,8 @@ namespace UserDefinedComponents {
                             state.dataUserDefinedComponents->UserAirTerminal(CompLoop).initCallbackIndex =
                                 state.dataPluginManager->pluginManager->getUserDefinedCallbackIndex(state, cAlphaArgs(3));
                             if (state.dataUserDefinedComponents->UserAirTerminal(CompLoop).initCallbackIndex == -1) {
-                                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", cAlphaFieldNames(3), cAlphaArgs(3)));
-                                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
+                                ShowSevereError(state, std::format("Invalid {}={}", cAlphaFieldNames(3), cAlphaArgs(3)));
+                                ShowContinueError(state, std::format("Entered in {}={}", cCurrentModuleObject, cAlphaArgs(1)));
                                 ShowContinueError(
                                     state,
                                     "Program Manager Name not found as an EMS Program Manager, API callback or a Python Plugin Instance object.");
@@ -2128,14 +2122,13 @@ namespace UserDefinedComponents {
                     // one assumes if there isn't one assigned, it's an error?
                     if (state.dataUserDefinedComponents->UserAirTerminal(CompLoop).ADUNum == 0) {
                         ShowSevereError(state,
-                                        EnergyPlus::format("GetUserDefinedComponents: No matching Air Distribution Unit for {} = {}",
-                                                           cCurrentModuleObject,
-                                                           state.dataUserDefinedComponents->UserAirTerminal(CompLoop).Name));
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format(
-                                "...should have outlet node={}",
-                                state.dataLoopNodes->NodeID(state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirConnection.OutletNodeNum)));
+                                        std::format("GetUserDefinedComponents: No matching Air Distribution Unit for {} = {}",
+                                                    cCurrentModuleObject,
+                                                    state.dataUserDefinedComponents->UserAirTerminal(CompLoop).Name));
+                        ShowContinueError(state,
+                                          std::format("...should have outlet node={}",
+                                                      state.dataLoopNodes->NodeID(
+                                                          state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirConnection.OutletNodeNum)));
                         //          ErrorsFound=.TRUE.
                     }
 
@@ -2151,14 +2144,13 @@ namespace UserDefinedComponents {
                                     ShowSevereError(state, "Error in connecting a terminal unit to a zone");
                                     ShowContinueError(
                                         state,
-                                        EnergyPlus::format(
-                                            "{} already connects to another zone",
-                                            state.dataLoopNodes->NodeID(
-                                                state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirConnection.OutletNodeNum)));
+                                        std::format("{} already connects to another zone",
+                                                    state.dataLoopNodes->NodeID(
+                                                        state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirConnection.OutletNodeNum)));
                                     ShowContinueError(state,
-                                                      EnergyPlus::format("Occurs for terminal unit {} = {}",
-                                                                         cCurrentModuleObject,
-                                                                         state.dataUserDefinedComponents->UserAirTerminal(CompLoop).Name));
+                                                      std::format("Occurs for terminal unit {} = {}",
+                                                                  cCurrentModuleObject,
+                                                                  state.dataUserDefinedComponents->UserAirTerminal(CompLoop).Name));
                                     ShowContinueError(state, "Check terminal unit node names for errors");
                                     ErrorsFound = true;
                                 } else {
@@ -2401,8 +2393,7 @@ namespace UserDefinedComponents {
                         Util::FindItemInList(cAlphaArgs(14), state.dataHeatBal->Zone);
                     if (state.dataUserDefinedComponents->UserAirTerminal(CompLoop).Zone.ZoneNum == 0) {
                         ShowSevereError(
-                            state,
-                            EnergyPlus::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(14)));
+                            state, std::format("{} = {}:  Ambient Zone Name not found = {}", cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(14)));
                         ErrorsFound = true;
                     } else {
                         state.dataUserDefinedComponents->UserAirTerminal(CompLoop).Zone.DeviceHasInternalGains = true;
@@ -2473,7 +2464,7 @@ namespace UserDefinedComponents {
         } // NumUserZoneAir > 0
 
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
+            ShowFatalError(state, std::format("GetUserDefinedComponents: Errors found in processing {} input.", cCurrentModuleObject));
         }
     }
 
@@ -2982,8 +2973,7 @@ namespace UserDefinedComponents {
         }
 
         if (CoilIndex == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("{}, GetUserDefinedCoilIndex: User Defined Cooling Coil not found={}", CurrentModuleObject, CoilName));
+            ShowSevereError(state, std::format("{}, GetUserDefinedCoilIndex: User Defined Cooling Coil not found={}", CurrentModuleObject, CoilName));
             ErrorsFound = true;
         }
     }
@@ -3017,7 +3007,7 @@ namespace UserDefinedComponents {
         }
 
         if (CoilIndex == 0) {
-            ShowSevereError(state, EnergyPlus::format("{}, GetTESCoilIndex: TES Cooling Coil not found={}", CurrentModuleObject, CoilName));
+            ShowSevereError(state, std::format("{}, GetTESCoilIndex: TES Cooling Coil not found={}", CurrentModuleObject, CoilName));
             ErrorsFound = true;
             CoilAirInletNode = 0;
         } else {
@@ -3054,7 +3044,7 @@ namespace UserDefinedComponents {
         }
 
         if (CoilIndex == 0) {
-            ShowSevereError(state, EnergyPlus::format("{}, GetTESCoilIndex: TES Cooling Coil not found={}", CurrentModuleObject, CoilName));
+            ShowSevereError(state, std::format("{}, GetTESCoilIndex: TES Cooling Coil not found={}", CurrentModuleObject, CoilName));
             ErrorsFound = true;
             CoilAirOutletNode = 0;
         } else {

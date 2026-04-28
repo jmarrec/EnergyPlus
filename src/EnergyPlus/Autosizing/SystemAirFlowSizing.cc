@@ -45,6 +45,8 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include <format>
+
 #include <EnergyPlus/Autosizing/SystemAirFlowSizing.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
@@ -87,7 +89,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -97,7 +99,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -112,7 +114,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -123,7 +125,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -134,7 +136,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -145,7 +147,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -158,7 +160,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                     this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                     DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -168,7 +170,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                     this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                     DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -182,7 +184,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                     this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                     DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -192,7 +194,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                     this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                     DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -207,44 +209,44 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneHeatingOnlyFan) {
                         this->autoSizedValue = this->dataFracOfAutosizedHeatingAirflow * this->finalZoneSizing(this->curZoneEqNum).DesHeatVolFlow;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow) {
                         this->autoSizedValue = this->dataFracOfAutosizedCoolingAirflow * this->zoneEqSizing(this->curZoneEqNum).CoolingAirVolFlow;
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue = this->dataFracOfAutosizedHeatingAirflow * this->zoneEqSizing(this->curZoneEqNum).HeatingAirVolFlow;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue =
@@ -255,7 +257,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -266,7 +268,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -282,7 +284,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -293,7 +295,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -307,44 +309,44 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneHeatingOnlyFan) {
                         this->autoSizedValue = this->dataFracOfAutosizedHeatingAirflow * this->finalZoneSizing(this->curZoneEqNum).DesHeatVolFlow;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow) {
                         this->autoSizedValue = this->dataFracOfAutosizedCoolingAirflow * this->zoneEqSizing(this->curZoneEqNum).CoolingAirVolFlow;
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue = this->dataFracOfAutosizedHeatingAirflow * this->zoneEqSizing(this->curZoneEqNum).HeatingAirVolFlow;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue =
@@ -355,7 +357,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -366,7 +368,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -382,7 +384,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -393,7 +395,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -407,44 +409,44 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneHeatingOnlyFan) {
                         this->autoSizedValue = this->dataFlowPerHeatingCapacity * this->dataAutosizedHeatingCapacity;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow) {
                         this->autoSizedValue = this->dataFlowPerCoolingCapacity * this->dataAutosizedCoolingCapacity;
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue = this->dataFlowPerHeatingCapacity * this->dataAutosizedHeatingCapacity;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue = max(this->dataFlowPerCoolingCapacity * this->dataAutosizedCoolingCapacity,
@@ -453,7 +455,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -463,7 +465,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -477,7 +479,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -487,7 +489,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -501,44 +503,44 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneHeatingOnlyFan) {
                         this->autoSizedValue = this->dataFlowPerHeatingCapacity * this->dataAutosizedHeatingCapacity;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow) {
                         this->autoSizedValue = this->dataFlowPerCoolingCapacity * this->dataAutosizedCoolingCapacity;
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue = this->dataFlowPerHeatingCapacity * this->dataAutosizedHeatingCapacity;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue = max(this->dataFlowPerCoolingCapacity * this->dataAutosizedCoolingCapacity,
@@ -547,7 +549,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -557,7 +559,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -571,7 +573,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -581,7 +583,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -595,22 +597,22 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                         if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtCoolMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && !this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue = this->zoneEqSizing(this->curZoneEqNum).HeatingAirVolFlow;
                         if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                             this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                             DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                            dateTimeFanPeak = EnergyPlus::format(
-                                "{}/{} {}",
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
-                                state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
-                                ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
+                            dateTimeFanPeak =
+                                std::format("{}/{} {}",
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
+                                            state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
+                                            ReportCoilSelection::getTimeText(state, this->finalZoneSizing(this->curZoneEqNum).TimeStepNumAtHeatMax));
                         }
                     } else if (this->zoneEqSizing(this->curZoneEqNum).HeatingAirFlow && this->zoneEqSizing(this->curZoneEqNum).CoolingAirFlow) {
                         this->autoSizedValue =
@@ -619,7 +621,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -629,7 +631,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -646,7 +648,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -657,7 +659,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                             if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                 this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                 DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                dateTimeFanPeak = EnergyPlus::format(
+                                dateTimeFanPeak = std::format(
                                     "{}/{} {}",
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                     state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -670,7 +672,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (this->finalZoneSizing(this->curZoneEqNum).CoolDDNum > 0 &&
                                     this->finalZoneSizing(this->curZoneEqNum).CoolDDNum <= state.dataEnvrn->TotDesDays) {
                                     DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).Month,
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).CoolDDNum).DayOfMonth,
@@ -680,7 +682,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (this->finalZoneSizing(this->curZoneEqNum).HeatDDNum > 0 &&
                                     this->finalZoneSizing(this->curZoneEqNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                     DDNameFanPeak = state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).Month,
                                         state.dataWeather->DesDayInput(this->finalZoneSizing(this->curZoneEqNum).HeatDDNum).DayOfMonth,
@@ -771,7 +773,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                     this->finalSysSizing(this->curSysNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                     auto &desDayInput = state.dataWeather->DesDayInput(this->finalSysSizing(this->curSysNum).HeatDDNum);
                                     DDNameFanPeak = desDayInput.Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         desDayInput.Month,
                                         desDayInput.DayOfMonth,
@@ -782,12 +784,11 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (sysSizPeakDDNum.CoolFlowPeakDD > 0 && sysSizPeakDDNum.CoolFlowPeakDD <= state.dataEnvrn->TotDesDays) {
                                     auto &desDayInput = state.dataWeather->DesDayInput(sysSizPeakDDNum.CoolFlowPeakDD);
                                     DDNameFanPeak = desDayInput.Title;
-                                    dateTimeFanPeak =
-                                        EnergyPlus::format("{}/{} {}",
-                                                           desDayInput.Month,
-                                                           desDayInput.DayOfMonth,
-                                                           ReportCoilSelection::getTimeText(
-                                                               state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
+                                    dateTimeFanPeak = std::format("{}/{} {}",
+                                                                  desDayInput.Month,
+                                                                  desDayInput.DayOfMonth,
+                                                                  ReportCoilSelection::getTimeText(
+                                                                      state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
                                 }
                             }
                         }
@@ -803,11 +804,11 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                         auto &desDayInput = state.dataWeather->DesDayInput(sysSizPeakDDNum.CoolFlowPeakDD);
                                         DDNameFanPeak = desDayInput.Title;
                                         dateTimeFanPeak =
-                                            EnergyPlus::format("{}/{} {}",
-                                                               desDayInput.Month,
-                                                               desDayInput.DayOfMonth,
-                                                               ReportCoilSelection::getTimeText(
-                                                                   state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
+                                            std::format("{}/{} {}",
+                                                        desDayInput.Month,
+                                                        desDayInput.DayOfMonth,
+                                                        ReportCoilSelection::getTimeText(
+                                                            state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
                                     }
 
                                 } else if (this->autoSizedValue == unitarysysEqSizing.HeatingAirVolFlow) {
@@ -815,7 +816,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                         this->finalSysSizing(this->curSysNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                         auto &desDayInput = state.dataWeather->DesDayInput(this->finalSysSizing(this->curSysNum).HeatDDNum);
                                         DDNameFanPeak = desDayInput.Title;
-                                        dateTimeFanPeak = EnergyPlus::format(
+                                        dateTimeFanPeak = std::format(
                                             "{}/{} {}",
                                             desDayInput.Month,
                                             desDayInput.DayOfMonth,
@@ -827,12 +828,11 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (sysSizPeakDDNum.CoolFlowPeakDD > 0 && sysSizPeakDDNum.CoolFlowPeakDD <= state.dataEnvrn->TotDesDays) {
                                     auto &desDayInput = state.dataWeather->DesDayInput(sysSizPeakDDNum.CoolFlowPeakDD);
                                     DDNameFanPeak = state.dataWeather->DesDayInput(sysSizPeakDDNum.CoolFlowPeakDD).Title;
-                                    dateTimeFanPeak =
-                                        EnergyPlus::format("{}/{} {}",
-                                                           desDayInput.Month,
-                                                           desDayInput.DayOfMonth,
-                                                           ReportCoilSelection::getTimeText(
-                                                               state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
+                                    dateTimeFanPeak = std::format("{}/{} {}",
+                                                                  desDayInput.Month,
+                                                                  desDayInput.DayOfMonth,
+                                                                  ReportCoilSelection::getTimeText(
+                                                                      state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
                                 }
                             } else if (unitarysysEqSizing.HeatingAirFlow) {
                                 this->autoSizedValue = unitarysysEqSizing.HeatingAirVolFlow;
@@ -840,7 +840,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                     this->finalSysSizing(this->curSysNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                     auto &desDayInput = state.dataWeather->DesDayInput(this->finalSysSizing(this->curSysNum).HeatDDNum);
                                     DDNameFanPeak = desDayInput.Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         desDayInput.Month,
                                         desDayInput.DayOfMonth,
@@ -854,7 +854,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                         this->finalSysSizing(this->curSysNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                         auto &desDayInput = state.dataWeather->DesDayInput(this->finalSysSizing(this->curSysNum).HeatDDNum);
                                         DDNameFanPeak = desDayInput.Title;
-                                        dateTimeFanPeak = EnergyPlus::format(
+                                        dateTimeFanPeak = std::format(
                                             "{}/{} {}",
                                             desDayInput.Month,
                                             desDayInput.DayOfMonth,
@@ -865,11 +865,11 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                         auto &desDayInput = state.dataWeather->DesDayInput(sysSizPeakDDNum.CoolFlowPeakDD);
                                         DDNameFanPeak = desDayInput.Title;
                                         dateTimeFanPeak =
-                                            EnergyPlus::format("{}/{} {}",
-                                                               desDayInput.Month,
-                                                               desDayInput.DayOfMonth,
-                                                               ReportCoilSelection::getTimeText(
-                                                                   state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
+                                            std::format("{}/{} {}",
+                                                        desDayInput.Month,
+                                                        desDayInput.DayOfMonth,
+                                                        ReportCoilSelection::getTimeText(
+                                                            state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
                                     }
                                 }
                             }
@@ -880,7 +880,7 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                     this->finalSysSizing(this->curSysNum).HeatDDNum <= state.dataEnvrn->TotDesDays) {
                                     auto &desDayInput = state.dataWeather->DesDayInput(this->finalSysSizing(this->curSysNum).HeatDDNum);
                                     DDNameFanPeak = desDayInput.Title;
-                                    dateTimeFanPeak = EnergyPlus::format(
+                                    dateTimeFanPeak = std::format(
                                         "{}/{} {}",
                                         desDayInput.Month,
                                         desDayInput.DayOfMonth,
@@ -890,12 +890,11 @@ Real64 SystemAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, bo
                                 if (sysSizPeakDDNum.CoolFlowPeakDD > 0 && sysSizPeakDDNum.CoolFlowPeakDD <= state.dataEnvrn->TotDesDays) {
                                     auto &desDayInput = state.dataWeather->DesDayInput(sysSizPeakDDNum.CoolFlowPeakDD);
                                     DDNameFanPeak = desDayInput.Title;
-                                    dateTimeFanPeak =
-                                        EnergyPlus::format("{}/{} {}",
-                                                           desDayInput.Month,
-                                                           desDayInput.DayOfMonth,
-                                                           ReportCoilSelection::getTimeText(
-                                                               state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
+                                    dateTimeFanPeak = std::format("{}/{} {}",
+                                                                  desDayInput.Month,
+                                                                  desDayInput.DayOfMonth,
+                                                                  ReportCoilSelection::getTimeText(
+                                                                      state, sysSizPeakDDNum.TimeStepAtCoolFlowPk(sysSizPeakDDNum.CoolFlowPeakDD)));
                                 }
                             }
                         }

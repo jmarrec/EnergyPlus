@@ -139,7 +139,7 @@ namespace ZoneDehumidifier {
         if (CompIndex == 0) {
             ZoneDehumidNum = Util::FindItemInList(CompName, state.dataZoneDehumidifier->ZoneDehumid);
             if (ZoneDehumidNum == 0) {
-                ShowFatalError(state, EnergyPlus::format("SimZoneDehumidifier: Unit not found= {}", CompName));
+                ShowFatalError(state, std::format("SimZoneDehumidifier: Unit not found= {}", CompName));
             }
             CompIndex = ZoneDehumidNum;
         } else {
@@ -147,19 +147,18 @@ namespace ZoneDehumidifier {
             int NumDehumidifiers = (int)state.dataZoneDehumidifier->ZoneDehumid.size();
             if (ZoneDehumidNum > NumDehumidifiers || ZoneDehumidNum < 1) {
                 ShowFatalError(state,
-                               EnergyPlus::format("SimZoneDehumidifier:  Invalid CompIndex passed= {}, Number of Units= {}, Entered Unit name= {}",
-                                                  ZoneDehumidNum,
-                                                  NumDehumidifiers,
-                                                  CompName));
+                               std::format("SimZoneDehumidifier:  Invalid CompIndex passed= {}, Number of Units= {}, Entered Unit name= {}",
+                                           ZoneDehumidNum,
+                                           NumDehumidifiers,
+                                           CompName));
             }
             if (state.dataZoneDehumidifier->ZoneDehumid(ZoneDehumidNum).CheckEquipName) {
                 if (CompName != state.dataZoneDehumidifier->ZoneDehumid(ZoneDehumidNum).Name) {
-                    ShowFatalError(
-                        state,
-                        EnergyPlus::format("SimZoneDehumidifier: Invalid CompIndex passed={}, Unit name= {}, stored Unit Name for that index= {}",
-                                           ZoneDehumidNum,
-                                           CompName,
-                                           state.dataZoneDehumidifier->ZoneDehumid(ZoneDehumidNum).Name));
+                    ShowFatalError(state,
+                                   std::format("SimZoneDehumidifier: Invalid CompIndex passed={}, Unit name= {}, stored Unit Name for that index= {}",
+                                               ZoneDehumidNum,
+                                               CompName,
+                                               state.dataZoneDehumidifier->ZoneDehumid(ZoneDehumidNum).Name));
                 }
                 state.dataZoneDehumidifier->ZoneDehumid(ZoneDehumidNum).CheckEquipName = false;
             }
@@ -272,7 +271,7 @@ namespace ZoneDehumidifier {
                 if (dehumid.RatedWaterRemoval <= 0.0) {
                     ShowSevereError(state, "Rated Water Removal must be greater than zero.");
                     ShowContinueError(state, EnergyPlus::format("Value specified = {:.5T}", dehumid.RatedWaterRemoval));
-                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
+                    ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
                     ErrorsFound = true;
                 }
 
@@ -281,7 +280,7 @@ namespace ZoneDehumidifier {
                 if (dehumid.RatedEnergyFactor <= 0.0) {
                     ShowSevereError(state, "Rated Energy Factor must be greater than zero.");
                     ShowContinueError(state, EnergyPlus::format("Value specified = {:.5T}", dehumid.RatedEnergyFactor));
-                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
+                    ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
                     ErrorsFound = true;
                 }
 
@@ -290,7 +289,7 @@ namespace ZoneDehumidifier {
                 if (dehumid.RatedAirVolFlow <= 0.0) {
                     ShowSevereError(state, "Rated Air Flow Rate must be greater than zero.");
                     ShowContinueError(state, EnergyPlus::format("Value specified = {:.5T}", dehumid.RatedAirVolFlow));
-                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
+                    ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
                     ErrorsFound = true;
                 }
 
@@ -309,7 +308,7 @@ namespace ZoneDehumidifier {
                     Real64 CurveVal = dehumid.WaterRemovalCurve->value(state, RatedInletAirTemp, RatedInletAirRH);
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
                         ShowWarningError(state, "Water Removal Curve Name output is not equal to 1.0");
-                        ShowContinueError(state, EnergyPlus::format("(+ or -10%) at rated conditions for {} = {}", CurrentModuleObject, dehumidName));
+                        ShowContinueError(state, std::format("(+ or -10%) at rated conditions for {} = {}", CurrentModuleObject, dehumidName));
                         ShowContinueError(state, EnergyPlus::format("Curve output at rated conditions = {:.3T}", CurveVal));
                     }
                 }
@@ -329,7 +328,7 @@ namespace ZoneDehumidifier {
                     Real64 CurveVal = dehumid.EnergyFactorCurve->value(state, RatedInletAirTemp, RatedInletAirRH);
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
                         ShowWarningError(state, "Energy Factor Curve Name output is not equal to 1.0");
-                        ShowContinueError(state, EnergyPlus::format("(+ or -10%) at rated conditions for {} = {}", CurrentModuleObject, dehumidName));
+                        ShowContinueError(state, std::format("(+ or -10%) at rated conditions for {} = {}", CurrentModuleObject, dehumidName));
                         ShowContinueError(state, EnergyPlus::format("Curve output at rated conditions = {:.3T}", CurveVal));
                     }
                 }
@@ -370,7 +369,7 @@ namespace ZoneDehumidifier {
                                       EnergyPlus::format("{} specified = {:.1T}",
                                                          "Minimum Dry-Bulb Temperature for Dehumidifier Operation",
                                                          dehumid.MinInletAirTemp));
-                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
+                    ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
                     ErrorsFound = true;
                 }
 
@@ -381,7 +380,7 @@ namespace ZoneDehumidifier {
                 if (dehumid.OffCycleParasiticLoad < 0.0) {
                     ShowSevereError(state, "Off-Cycle Parasitic Electric Load must be >= zero.");
                     ShowContinueError(state, EnergyPlus::format("Value specified = {:.2T}", dehumid.OffCycleParasiticLoad));
-                    ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
+                    ShowContinueError(state, std::format("Occurs in {} = {}", CurrentModuleObject, dehumid.Name));
                     ErrorsFound = true;
                 }
 
@@ -406,7 +405,7 @@ namespace ZoneDehumidifier {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("{}:{}: Errors found in input.", routineName, CurrentModuleObject));
+            ShowFatalError(state, std::format("{}:{}: Errors found in input.", routineName, CurrentModuleObject));
         }
 
         for (ZoneDehumidIndex = 1; ZoneDehumidIndex <= NumDehumidifiers; ++ZoneDehumidIndex) {
@@ -551,10 +550,9 @@ namespace ZoneDehumidifier {
             if (!CheckZoneEquipmentList(state, dehumid.UnitType, dehumid.Name)) {
                 ShowSevereError(
                     state,
-                    EnergyPlus::format(
-                        "InitZoneDehumidifier: Zone Dehumidifier=\"{},{}\" is not on any ZoneHVAC:EquipmentList.  It will not be simulated.",
-                        dehumid.UnitType,
-                        dehumid.Name));
+                    std::format("InitZoneDehumidifier: Zone Dehumidifier=\"{},{}\" is not on any ZoneHVAC:EquipmentList.  It will not be simulated.",
+                                dehumid.UnitType,
+                                dehumid.Name));
             }
         }
 
@@ -697,7 +695,7 @@ namespace ZoneDehumidifier {
             if (WaterRemovalRateFactor <= 0.0) {
                 if (dehumid.WaterRemovalCurveErrorCount < 1) {
                     ++dehumid.WaterRemovalCurveErrorCount;
-                    ShowWarningError(state, EnergyPlus::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
+                    ShowWarningError(state, std::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
                     ShowContinueError(state, EnergyPlus::format(" Water Removal Rate Curve output is <= 0.0 ({:.5T}).", WaterRemovalRateFactor));
                     ShowContinueError(
                         state,
@@ -736,7 +734,7 @@ namespace ZoneDehumidifier {
             if (EnergyFactorAdjFactor <= 0.0) {
                 if (dehumid.EnergyFactorCurveErrorCount < 1) {
                     ++dehumid.EnergyFactorCurveErrorCount;
-                    ShowWarningError(state, EnergyPlus::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
+                    ShowWarningError(state, std::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
                     ShowContinueError(state, EnergyPlus::format(" Energy Factor Curve output is <= 0.0 ({:.5T}).", EnergyFactorAdjFactor));
                     ShowContinueError(
                         state,
@@ -769,7 +767,7 @@ namespace ZoneDehumidifier {
                 if (PLF < 0.7) {
                     if (dehumid.LowPLFErrorCount < 1) {
                         ++dehumid.LowPLFErrorCount;
-                        ShowWarningError(state, EnergyPlus::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
+                        ShowWarningError(state, std::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
                         ShowContinueError(state,
                                           EnergyPlus::format(
                                               " The Part Load Fraction Correlation Curve output is ({:.2T}) at a part-load ratio ={:.3T}", PLF, PLR));
@@ -789,7 +787,7 @@ namespace ZoneDehumidifier {
                 if (PLF > 1.0) {
                     if (dehumid.HighPLFErrorCount < 1) {
                         ++dehumid.HighPLFErrorCount;
-                        ShowWarningError(state, EnergyPlus::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
+                        ShowWarningError(state, std::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
                         ShowContinueError(state,
                                           EnergyPlus::format(
                                               " The Part Load Fraction Correlation Curve output is ({:.2T}) at a part-load ratio ={:.3T}", PLF, PLR));
@@ -798,7 +796,7 @@ namespace ZoneDehumidifier {
                     } else {
                         ShowRecurringWarningErrorAtEnd(
                             state,
-                            EnergyPlus::format(
+                            std::format(
                                 "{} \"{}\": Part Load Fraction Correlation Curve output > 1.0 warning continues...", dehumid.UnitType, dehumid.Name),
                             dehumid.HighPLFErrorIndex,
                             PLF,
@@ -812,7 +810,7 @@ namespace ZoneDehumidifier {
                 } else {
                     if (dehumid.PLFPLRErrorCount < 1) {
                         ++dehumid.PLFPLRErrorCount;
-                        ShowWarningError(state, EnergyPlus::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
+                        ShowWarningError(state, std::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
                         ShowContinueError(
                             state,
                             EnergyPlus::format(
@@ -833,7 +831,7 @@ namespace ZoneDehumidifier {
                 if (RunTimeFraction > 1.0 && std::abs(RunTimeFraction - 1.0) > 0.001) {
                     if (dehumid.HighRTFErrorCount < 1) {
                         ++dehumid.HighRTFErrorCount;
-                        ShowWarningError(state, EnergyPlus::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
+                        ShowWarningError(state, std::format("{} \"{}\":", dehumid.UnitType, dehumid.Name));
                         ShowContinueError(
                             state, EnergyPlus::format("The runtime fraction for this zone dehumidifier exceeded 1.0 [{:.4T}].", RunTimeFraction));
                         ShowContinueError(state, "Runtime fraction reset to 1 and the simulation will continue.");

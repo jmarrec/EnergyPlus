@@ -111,8 +111,7 @@ PlantComponent *WrapperSpecs::factory(EnergyPlusData &state, std::string const &
         }
     }
     // If we didn't find it, fatal
-    ShowFatalError(state,
-                   EnergyPlus::format("LocalPlantCentralGSHPFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, std::format("LocalPlantCentralGSHPFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -280,10 +279,9 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(tmpEvapVolFlowRate - EvapVolFlowRateUser) / EvapVolFlowRateUser) >
                                     state.dataSize->AutoVsHardSizingThreshold) {
-                                    ShowMessage(
-                                        state,
-                                        EnergyPlus::format("SizeChillerHeaterPerformanceElectricEIR: Potential issue with equipment sizing for {}",
-                                                           chillerHeater.Name));
+                                    ShowMessage(state,
+                                                std::format("SizeChillerHeaterPerformanceElectricEIR: Potential issue with equipment sizing for {}",
+                                                            chillerHeater.Name));
                                     ShowContinueError(
                                         state,
                                         EnergyPlus::format("User-Specified Reference Chilled Water Flow Rate of {:.5R} [m3/s]", EvapVolFlowRateUser));
@@ -302,7 +300,7 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                 if (chillerHeater.EvapVolFlowRateWasAutoSized) {
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         ShowSevereError(state, "Autosizing of CGSHP Chiller Heater evap flow rate requires a loop Sizing:Plant object");
-                        ShowContinueError(state, EnergyPlus::format("Occurs in CGSHP Chiller Heater Performance object={}", chillerHeater.Name));
+                        ShowContinueError(state, std::format("Occurs in CGSHP Chiller Heater Performance object={}", chillerHeater.Name));
                         ErrorsFound = true;
                     }
                 } else {
@@ -372,10 +370,9 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                             tmpNomCap = NomCapUser;
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(tmpNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                                    ShowMessage(
-                                        state,
-                                        EnergyPlus::format("SizeChillerHeaterPerformanceElectricEIR: Potential issue with equipment sizing for {}",
-                                                           chillerHeater.Name));
+                                    ShowMessage(state,
+                                                std::format("SizeChillerHeaterPerformanceElectricEIR: Potential issue with equipment sizing for {}",
+                                                            chillerHeater.Name));
                                     ShowContinueError(state, EnergyPlus::format("User-Specified Reference Capacity of {:.2R} [W]", NomCapUser));
                                     ShowContinueError(state,
                                                       EnergyPlus::format("differs from Design Size Reference Capacity of {:.2R} [W]", tmpNomCap));
@@ -389,8 +386,7 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
             } else {
                 if (chillerHeater.RefCapCoolingWasAutoSized) {
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
-                        ShowSevereError(state,
-                                        EnergyPlus::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.", chillerHeater.Name));
+                        ShowSevereError(state, std::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.", chillerHeater.Name));
                         ShowContinueError(state, "Autosizing of CGSHP Chiller Heater reference capacity requires");
                         ShowContinueError(state, "a cooling loop Sizing:Plant object.");
                         ErrorsFound = true;
@@ -459,10 +455,9 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(tmpCondVolFlowRate - CondVolFlowRateUser) / CondVolFlowRateUser) >
                                     state.dataSize->AutoVsHardSizingThreshold) {
-                                    ShowMessage(
-                                        state,
-                                        EnergyPlus::format("SizeChillerHeaterPerformanceElectricEIR: Potential issue with equipment sizing for {}",
-                                                           chillerHeater.Name));
+                                    ShowMessage(state,
+                                                std::format("SizeChillerHeaterPerformanceElectricEIR: Potential issue with equipment sizing for {}",
+                                                            chillerHeater.Name));
                                     ShowContinueError(state,
                                                       EnergyPlus::format("User-Specified Reference Condenser Water Flow Rate of {:.5R} [m3/s]",
                                                                          CondVolFlowRateUser));
@@ -480,8 +475,7 @@ void WrapperSpecs::SizeWrapper(EnergyPlusData &state)
             } else {
                 if (chillerHeater.CondVolFlowRateWasAutoSized) {
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
-                        ShowSevereError(state,
-                                        EnergyPlus::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.", chillerHeater.Name));
+                        ShowSevereError(state, std::format("Size ChillerHeaterPerformance:Electric:EIR=\"{}\", autosize error.", chillerHeater.Name));
                         ShowContinueError(state, "Autosizing of CGSHP Chiller Heater condenser flow rate requires");
                         ShowContinueError(state, "a condenser loop Sizing:Plant object.");
                         ErrorsFound = true;
@@ -556,7 +550,7 @@ void GetWrapperInput(EnergyPlusData &state)
         state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
 
     if (state.dataPlantCentralGSHP->numWrappers <= 0) {
-        ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
+        ShowSevereError(state, std::format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
     }
 
     state.dataPlantCentralGSHP->Wrapper.allocate(state.dataPlantCentralGSHP->numWrappers);
@@ -673,8 +667,8 @@ void GetWrapperInput(EnergyPlusData &state)
         wrapper.WrapperComp.allocate(NumberOfComp);
 
         if (wrapper.NumOfComp == 0) {
-            ShowSevereError(
-                state, EnergyPlus::format("GetWrapperInput: No component names on {}={}", state.dataIPShortCut->cCurrentModuleObject, wrapper.Name));
+            ShowSevereError(state,
+                            std::format("GetWrapperInput: No component names on {}={}", state.dataIPShortCut->cCurrentModuleObject, wrapper.Name));
             ErrorsFound = true;
         } else {
             int Comp = 0;
@@ -717,17 +711,16 @@ void GetWrapperInput(EnergyPlusData &state)
 
         if (ErrorsFound) {
             ShowFatalError(state,
-                           EnergyPlus::format("GetWrapperInput: Invalid {} Input, preceding condition(s) cause termination.",
-                                              state.dataIPShortCut->cCurrentModuleObject));
+                           std::format("GetWrapperInput: Invalid {} Input, preceding condition(s) cause termination.",
+                                       state.dataIPShortCut->cCurrentModuleObject));
         }
 
         // ALLOCATE ARRAYS
         if ((state.dataPlantCentralGSHP->numChillerHeaters == 0) && (wrapper.ControlMode == CondenserType::SmartMixing)) {
-            ShowFatalError(
-                state,
-                EnergyPlus::format("SmartMixing Control Mode in object {} : {} need to apply to ChillerHeaterPerformance:Electric:EIR object(s).",
-                                   state.dataIPShortCut->cCurrentModuleObject,
-                                   wrapper.Name));
+            ShowFatalError(state,
+                           std::format("SmartMixing Control Mode in object {} : {} need to apply to ChillerHeaterPerformance:Electric:EIR object(s).",
+                                       state.dataIPShortCut->cCurrentModuleObject,
+                                       wrapper.Name));
         }
     }
 
@@ -749,8 +742,7 @@ void GetWrapperInput(EnergyPlusData &state)
                 int CompIndex = Util::FindItemInList(CompName, state.dataPlantCentralGSHP->ChillerHeater);
                 // User may enter invalid name rather than selecting one from the object list
                 if (CompIndex <= 0) {
-                    ShowSevereError(state,
-                                    EnergyPlus::format("GetWrapperInput: Invalid Chiller Heater Modules Performance Component Name ={}", CompName));
+                    ShowSevereError(state, std::format("GetWrapperInput: Invalid Chiller Heater Modules Performance Component Name ={}", CompName));
                     ShowContinueError(state, "Select the name of ChillerHeaterPerformance:Electric:EIR object(s) from the object list.");
                     ShowFatalError(state, "Program terminates due to preceding condition.");
                 }
@@ -951,7 +943,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
         for (int ChillerHeaterNum = 1; ChillerHeaterNum <= this->ChillerHeaterNums; ++ChillerHeaterNum) {
             auto &chillerHeater = this->ChillerHeater(ChillerHeaterNum);
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Operation Mode Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Operation Mode Unit {}", ChillerHeaterNum),
                                 Constant::Units::None,
                                 chillerHeater.Report.CurrentMode,
                                 OutputProcessor::TimeStepType::System,
@@ -959,7 +951,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Part Load Ratio Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Part Load Ratio Unit {}", ChillerHeaterNum),
                                 Constant::Units::None,
                                 chillerHeater.Report.ChillerPartLoadRatio,
                                 OutputProcessor::TimeStepType::System,
@@ -967,7 +959,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Cycling Ratio Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Cycling Ratio Unit {}", ChillerHeaterNum),
                                 Constant::Units::None,
                                 chillerHeater.Report.ChillerCyclingRatio,
                                 OutputProcessor::TimeStepType::System,
@@ -975,7 +967,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Cooling Electricity Rate Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Cooling Electricity Rate Unit {}", ChillerHeaterNum),
                                 Constant::Units::W,
                                 chillerHeater.Report.CoolingPower,
                                 OutputProcessor::TimeStepType::System,
@@ -983,7 +975,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Heating Electricity Rate Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Heating Electricity Rate Unit {}", ChillerHeaterNum),
                                 Constant::Units::W,
                                 chillerHeater.Report.HeatingPower,
                                 OutputProcessor::TimeStepType::System,
@@ -991,7 +983,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Cooling Electricity Energy Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Cooling Electricity Energy Unit {}", ChillerHeaterNum),
                                 Constant::Units::J,
                                 chillerHeater.Report.CoolingEnergy,
                                 OutputProcessor::TimeStepType::System,
@@ -999,7 +991,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Heating Electricity Energy Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Heating Electricity Energy Unit {}", ChillerHeaterNum),
                                 Constant::Units::J,
                                 chillerHeater.Report.HeatingEnergy,
                                 OutputProcessor::TimeStepType::System,
@@ -1007,7 +999,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Cooling Rate Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Cooling Rate Unit {}", ChillerHeaterNum),
                                 Constant::Units::W,
                                 chillerHeater.Report.QEvap,
                                 OutputProcessor::TimeStepType::System,
@@ -1015,7 +1007,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Cooling Energy Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Cooling Energy Unit {}", ChillerHeaterNum),
                                 Constant::Units::J,
                                 chillerHeater.Report.EvapEnergy,
                                 OutputProcessor::TimeStepType::System,
@@ -1023,7 +1015,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater False Load Heat Transfer Rate Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater False Load Heat Transfer Rate Unit {}", ChillerHeaterNum),
                                 Constant::Units::W,
                                 chillerHeater.Report.ChillerFalseLoadRate,
                                 OutputProcessor::TimeStepType::System,
@@ -1031,7 +1023,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater False Load Heat Transfer Energy Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater False Load Heat Transfer Energy Unit {}", ChillerHeaterNum),
                                 Constant::Units::J,
                                 chillerHeater.Report.ChillerFalseLoad,
                                 OutputProcessor::TimeStepType::System,
@@ -1039,7 +1031,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Evaporator Inlet Temperature Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Evaporator Inlet Temperature Unit {}", ChillerHeaterNum),
                                 Constant::Units::C,
                                 chillerHeater.Report.EvapInletTemp,
                                 OutputProcessor::TimeStepType::System,
@@ -1047,7 +1039,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Evaporator Outlet Temperature Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Evaporator Outlet Temperature Unit {}", ChillerHeaterNum),
                                 Constant::Units::C,
                                 chillerHeater.Report.EvapOutletTemp,
                                 OutputProcessor::TimeStepType::System,
@@ -1055,7 +1047,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Evaporator Mass Flow Rate Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Evaporator Mass Flow Rate Unit {}", ChillerHeaterNum),
                                 Constant::Units::kg_s,
                                 chillerHeater.Report.Evapmdot,
                                 OutputProcessor::TimeStepType::System,
@@ -1063,7 +1055,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Condenser Heat Transfer Rate Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Condenser Heat Transfer Rate Unit {}", ChillerHeaterNum),
                                 Constant::Units::W,
                                 chillerHeater.Report.QCond,
                                 OutputProcessor::TimeStepType::System,
@@ -1071,7 +1063,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Condenser Heat Transfer Energy Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Condenser Heat Transfer Energy Unit {}", ChillerHeaterNum),
                                 Constant::Units::J,
                                 chillerHeater.Report.CondEnergy,
                                 OutputProcessor::TimeStepType::System,
@@ -1079,7 +1071,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater COP Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater COP Unit {}", ChillerHeaterNum),
                                 Constant::Units::W_W,
                                 chillerHeater.Report.ActualCOP,
                                 OutputProcessor::TimeStepType::System,
@@ -1087,7 +1079,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Capacity Temperature Modifier Multiplier Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Capacity Temperature Modifier Multiplier Unit {}", ChillerHeaterNum),
                                 Constant::Units::None,
                                 chillerHeater.Report.ChillerCapFT,
                                 OutputProcessor::TimeStepType::System,
@@ -1095,7 +1087,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater EIR Temperature Modifier Multiplier Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater EIR Temperature Modifier Multiplier Unit {}", ChillerHeaterNum),
                                 Constant::Units::None,
                                 chillerHeater.Report.ChillerEIRFT,
                                 OutputProcessor::TimeStepType::System,
@@ -1103,7 +1095,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater EIR Part Load Modifier Multiplier Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater EIR Part Load Modifier Multiplier Unit {}", ChillerHeaterNum),
                                 Constant::Units::None,
                                 chillerHeater.Report.ChillerEIRFPLR,
                                 OutputProcessor::TimeStepType::System,
@@ -1111,7 +1103,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Condenser Inlet Temperature Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Condenser Inlet Temperature Unit {}", ChillerHeaterNum),
                                 Constant::Units::C,
                                 chillerHeater.Report.CondInletTemp,
                                 OutputProcessor::TimeStepType::System,
@@ -1119,7 +1111,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Condenser Outlet Temperature Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Condenser Outlet Temperature Unit {}", ChillerHeaterNum),
                                 Constant::Units::C,
                                 chillerHeater.Report.CondOutletTemp,
                                 OutputProcessor::TimeStepType::System,
@@ -1127,7 +1119,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
                                 chillerHeater.Name);
 
             SetupOutputVariable(state,
-                                EnergyPlus::format("Chiller Heater Condenser Mass Flow Rate Unit {}", ChillerHeaterNum),
+                                std::format("Chiller Heater Condenser Mass Flow Rate Unit {}", ChillerHeaterNum),
                                 Constant::Units::kg_s,
                                 chillerHeater.Report.Condmdot,
                                 OutputProcessor::TimeStepType::System,
@@ -1158,7 +1150,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
 
     if (state.dataPlantCentralGSHP->numChillerHeaters <= 0) {
-        ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
+        ShowSevereError(state, std::format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
         CHErrorsFound = true;
     }
 
@@ -1195,30 +1187,24 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerCapFTCoolingIDX =
             Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(5));
         if (state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerCapFTCoolingIDX == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
             CHErrorsFound = true;
         }
 
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFTCoolingIDX =
             Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(6));
         if (state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFTCoolingIDX == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(6), state.dataIPShortCut->cAlphaArgs(6)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(6), state.dataIPShortCut->cAlphaArgs(6)));
             CHErrorsFound = true;
         }
 
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFPLRCoolingIDX =
             Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(7));
         if (state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFPLRCoolingIDX == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(7), state.dataIPShortCut->cAlphaArgs(7)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(7), state.dataIPShortCut->cAlphaArgs(7)));
             CHErrorsFound = true;
         }
 
@@ -1232,30 +1218,26 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerCapFTHeatingIDX =
             Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(9));
         if (state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerCapFTHeatingIDX == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(9), state.dataIPShortCut->cAlphaArgs(9)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(9), state.dataIPShortCut->cAlphaArgs(9)));
             CHErrorsFound = true;
         }
 
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFTHeatingIDX =
             Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(10));
         if (state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFTHeatingIDX == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(
-                state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(10), state.dataIPShortCut->cAlphaArgs(10)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state,
+                              std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(10), state.dataIPShortCut->cAlphaArgs(10)));
             CHErrorsFound = true;
         }
 
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFPLRHeatingIDX =
             Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(11));
         if (state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ChillerEIRFPLRHeatingIDX == 0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(
-                state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(11), state.dataIPShortCut->cAlphaArgs(11)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state,
+                              std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(11), state.dataIPShortCut->cAlphaArgs(11)));
             CHErrorsFound = true;
         }
 
@@ -1268,10 +1250,8 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         } else { // Assume a constant flow chiller if none is specified
             state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ConstantFlow = true;
             state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).VariableFlow = false;
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
             ShowContinueError(state, "simulation assumes CONSTANTFLOW and continues..");
         }
 
@@ -1280,11 +1260,11 @@ void GetChillerHeaterInput(EnergyPlusData &state)
                 state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum - 1).ConstantFlow) {
                 state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ConstantFlow = true;
                 ShowWarningError(state,
-                                 EnergyPlus::format("Water flow mode is different from the other chiller heater(s) {}={}",
-                                                    state.dataIPShortCut->cCurrentModuleObject,
-                                                    state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(
-                    state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
+                                 std::format("Water flow mode is different from the other chiller heater(s) {}={}",
+                                             state.dataIPShortCut->cCurrentModuleObject,
+                                             state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(state,
+                                  std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
                 ShowContinueError(state, "Simulation assumes CONSTANTFLOW and continues..");
             }
         }
@@ -1292,10 +1272,8 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         if (Util::SameString(state.dataIPShortCut->cAlphaArgs(3), "WaterCooled")) {
             state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).condenserType = CondenserType::WaterCooled;
         } else {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Entered in {}={}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
             ShowContinueError(state, "Valid entries is WaterCooled");
             CHErrorsFound = true;
         }
@@ -1306,8 +1284,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).RefCapCoolingWasAutoSized = true;
         }
         if (state.dataIPShortCut->rNumericArgs(1) == 0.0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(
                 state,
                 EnergyPlus::format("Entered in {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), state.dataIPShortCut->rNumericArgs(1)));
@@ -1315,8 +1292,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         }
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).RefCOPCooling = state.dataIPShortCut->rNumericArgs(2);
         if (state.dataIPShortCut->rNumericArgs(2) == 0.0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(
                 state,
                 EnergyPlus::format("Entered in {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(2), state.dataIPShortCut->rNumericArgs(2)));
@@ -1330,8 +1306,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         // Reference Heating Mode Ratios for Capacity and Power
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ClgHtgToCoolingCapRatio = state.dataIPShortCut->rNumericArgs(6);
         if (state.dataIPShortCut->rNumericArgs(6) == 0.0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(
                 state,
                 EnergyPlus::format("Entered in {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(6), state.dataIPShortCut->rNumericArgs(6)));
@@ -1340,8 +1315,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
 
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).ClgHtgtoCogPowerRatio = state.dataIPShortCut->rNumericArgs(7);
         if (state.dataIPShortCut->rNumericArgs(7) == 0.0) {
-            ShowSevereError(state,
-                            EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+            ShowSevereError(state, std::format("Invalid {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(
                 state,
                 EnergyPlus::format("Entered in {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(7), state.dataIPShortCut->rNumericArgs(7)));
@@ -1386,12 +1360,11 @@ void GetChillerHeaterInput(EnergyPlusData &state)
         if (state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).OpenMotorEff < 0.0 ||
             state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).OpenMotorEff > 1.0) {
             ShowSevereError(
-                state,
-                EnergyPlus::format("GetCurveInput: For {}: {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                state, std::format("GetCurveInput: For {}: {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(
                 state, EnergyPlus::format("{} = {:.3R}", state.dataIPShortCut->cNumericFieldNames(14), state.dataIPShortCut->rNumericArgs(14)));
-            ShowContinueError(state, EnergyPlus::format("{} must be greater than or equal to zero", state.dataIPShortCut->cNumericFieldNames(14)));
-            ShowContinueError(state, EnergyPlus::format("{} must be less than or equal to one", state.dataIPShortCut->cNumericFieldNames(14)));
+            ShowContinueError(state, std::format("{} must be greater than or equal to zero", state.dataIPShortCut->cNumericFieldNames(14)));
+            ShowContinueError(state, std::format("{} must be less than or equal to one", state.dataIPShortCut->cNumericFieldNames(14)));
             CHErrorsFound = true;
         }
 
@@ -1404,9 +1377,9 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             if (CurveVal > 1.10 || CurveVal < 0.90) {
                 ShowWarningError(state, "Capacity ratio as a function of temperature curve output is not equal to 1.0");
                 ShowContinueError(state,
-                                  EnergyPlus::format("(+ or - 10%) at reference conditions for {}= {}",
-                                                     state.dataIPShortCut->cCurrentModuleObject,
-                                                     state.dataIPShortCut->cAlphaArgs(1)));
+                                  std::format("(+ or - 10%) at reference conditions for {}= {}",
+                                              state.dataIPShortCut->cCurrentModuleObject,
+                                              state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, EnergyPlus::format("Curve output at reference conditions = {:.3T}", CurveVal));
             }
         }
@@ -1419,9 +1392,9 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             if (CurveVal > 1.10 || CurveVal < 0.90) {
                 ShowWarningError(state, "Energy input ratio as a function of temperature curve output is not equal to 1.0");
                 ShowContinueError(state,
-                                  EnergyPlus::format("(+ or - 10%) at reference conditions for {}= {}",
-                                                     state.dataIPShortCut->cCurrentModuleObject,
-                                                     state.dataIPShortCut->cAlphaArgs(1)));
+                                  std::format("(+ or - 10%) at reference conditions for {}= {}",
+                                              state.dataIPShortCut->cCurrentModuleObject,
+                                              state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, EnergyPlus::format("Curve output at reference conditions = {:.3T}", CurveVal));
             }
         }
@@ -1432,9 +1405,9 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             if (CurveVal > 1.10 || CurveVal < 0.90) {
                 ShowWarningError(state, "Energy input ratio as a function of part-load ratio curve output is not equal to 1.0");
                 ShowContinueError(state,
-                                  EnergyPlus::format("(+ or - 10%) at reference conditions for {}= {}",
-                                                     state.dataIPShortCut->cCurrentModuleObject,
-                                                     state.dataIPShortCut->cAlphaArgs(1)));
+                                  std::format("(+ or - 10%) at reference conditions for {}= {}",
+                                              state.dataIPShortCut->cCurrentModuleObject,
+                                              state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, EnergyPlus::format("Curve output at reference conditions = {:.3T}", CurveVal));
             }
         }
@@ -1451,8 +1424,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             }
             if (FoundNegValue) {
                 ShowWarningError(state, "Energy input ratio as a function of part-load ratio curve shows negative values ");
-                ShowContinueError(state,
-                                  EnergyPlus::format("for {}= {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(state, std::format("for {}= {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "EIR as a function of PLR curve output at various part-load ratios shown below:");
                 ShowContinueError(state, "PLR   =  0.00   0.10   0.20   0.30   0.40   0.50   0.60   0.70   0.80   0.90   1.00");
 
@@ -1470,9 +1442,9 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             if (CurveVal > 1.10 || CurveVal < 0.90) {
                 ShowWarningError(state, "Capacity ratio as a function of temperature curve output is not equal to 1.0");
                 ShowContinueError(state,
-                                  EnergyPlus::format("(+ or - 10%) at reference conditions for {}= {}",
-                                                     state.dataIPShortCut->cCurrentModuleObject,
-                                                     state.dataIPShortCut->cAlphaArgs(1)));
+                                  std::format("(+ or - 10%) at reference conditions for {}= {}",
+                                              state.dataIPShortCut->cCurrentModuleObject,
+                                              state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, EnergyPlus::format("Curve output at reference conditions = {:.3T}", CurveVal));
             }
         }
@@ -1485,9 +1457,9 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             if (CurveVal > 1.10 || CurveVal < 0.90) {
                 ShowWarningError(state, "Energy input ratio as a function of temperature curve output is not equal to 1.0");
                 ShowContinueError(state,
-                                  EnergyPlus::format("(+ or - 10%) at reference conditions for {}= {}",
-                                                     state.dataIPShortCut->cCurrentModuleObject,
-                                                     state.dataIPShortCut->cAlphaArgs(1)));
+                                  std::format("(+ or - 10%) at reference conditions for {}= {}",
+                                              state.dataIPShortCut->cCurrentModuleObject,
+                                              state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, EnergyPlus::format("Curve output at reference conditions = {:.3T}", CurveVal));
             }
         }
@@ -1498,9 +1470,9 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             if (CurveVal > 1.10 || CurveVal < 0.90) {
                 ShowWarningError(state, "Energy input ratio as a function of part-load ratio curve output is not equal to 1.0");
                 ShowContinueError(state,
-                                  EnergyPlus::format("(+ or - 10%) at reference conditions for {}= {}",
-                                                     state.dataIPShortCut->cCurrentModuleObject,
-                                                     state.dataIPShortCut->cAlphaArgs(1)));
+                                  std::format("(+ or - 10%) at reference conditions for {}= {}",
+                                              state.dataIPShortCut->cCurrentModuleObject,
+                                              state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, EnergyPlus::format("Curve output at reference conditions = {:.3T}", CurveVal));
             }
         }
@@ -1517,8 +1489,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
             }
             if (FoundNegValue) {
                 ShowWarningError(state, "Energy input ratio as a function of part-load ratio curve shows negative values ");
-                ShowContinueError(state,
-                                  EnergyPlus::format("for {}= {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(state, std::format("for {}= {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "EIR as a function of PLR curve output at various part-load ratios shown below:");
                 ShowContinueError(state, "PLR          =    0.00   0.10   0.20   0.30   0.40   0.50   0.60   0.70   0.80   0.90   1.00");
 
@@ -1541,7 +1512,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
     }
 
     if (CHErrorsFound) {
-        ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+        ShowFatalError(state, std::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
     }
 }
 
@@ -1626,8 +1597,8 @@ void WrapperSpecs::initialize(EnergyPlusData &state,
             if (state.dataLoopNodes->Node(this->CHWOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) {
                 if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                     if (!this->CoolSetPointErrDone) {
-                        ShowWarningError(
-                            state, EnergyPlus::format("Missing temperature setpoint on cooling side for CentralHeatPumpSystem named {}", this->Name));
+                        ShowWarningError(state,
+                                         std::format("Missing temperature setpoint on cooling side for CentralHeatPumpSystem named {}", this->Name));
                         ShowContinueError(state,
                                           "  A temperature setpoint is needed at the outlet node of a CentralHeatPumpSystem, use a SetpointManager");
                         ShowContinueError(state,
@@ -1642,8 +1613,7 @@ void WrapperSpecs::initialize(EnergyPlusData &state,
                     if (FatalError) {
                         if (!this->CoolSetPointErrDone) {
                             ShowWarningError(
-                                state,
-                                EnergyPlus::format("Missing temperature setpoint on cooling side for CentralHeatPumpSystem named {}", this->Name));
+                                state, std::format("Missing temperature setpoint on cooling side for CentralHeatPumpSystem named {}", this->Name));
                             ShowContinueError(state, "A temperature setpoint is needed at the outlet node of a CentralHeatPumpSystem ");
                             ShowContinueError(state, "use a Setpoint Manager to establish a setpoint at the chiller side outlet node ");
                             ShowContinueError(state, "or use an EMS actuator to establish a setpoint at the outlet node ");
@@ -1660,8 +1630,8 @@ void WrapperSpecs::initialize(EnergyPlusData &state,
             if (state.dataLoopNodes->Node(this->HWOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) {
                 if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                     if (!this->HeatSetPointErrDone) {
-                        ShowWarningError(
-                            state, EnergyPlus::format("Missing temperature setpoint on heating side for CentralHeatPumpSystem named {}", this->Name));
+                        ShowWarningError(state,
+                                         std::format("Missing temperature setpoint on heating side for CentralHeatPumpSystem named {}", this->Name));
                         ShowContinueError(state,
                                           "  A temperature setpoint is needed at the outlet node of a CentralHeatPumpSystem, use a SetpointManager");
                         ShowContinueError(state,
@@ -1676,8 +1646,7 @@ void WrapperSpecs::initialize(EnergyPlusData &state,
                     if (FatalError) {
                         if (!this->HeatSetPointErrDone) {
                             ShowWarningError(
-                                state,
-                                EnergyPlus::format("Missing temperature setpoint on heating side for CentralHeatPumpSystem named {}", this->Name));
+                                state, std::format("Missing temperature setpoint on heating side for CentralHeatPumpSystem named {}", this->Name));
                             ShowContinueError(state, "A temperature setpoint is needed at the outlet node of a CentralHeatPumpSystem ");
                             ShowContinueError(state, "use a Setpoint Manager to establish a setpoint at the chiller side outlet node ");
                             ShowContinueError(state, "or use an EMS actuator to establish a setpoint at the outlet node ");
@@ -1908,8 +1877,8 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
         }
 
         if (CompNum > this->NumOfComp) {
-            ShowSevereError(state, EnergyPlus::format("CalcChillerModel: ChillerHeater=\"{}\", calculated component number too big.", this->Name));
-            ShowContinueError(state, EnergyPlus::format("Max number of components=[{}], indicated component number=[{}].", this->NumOfComp, CompNum));
+            ShowSevereError(state, std::format("CalcChillerModel: ChillerHeater=\"{}\", calculated component number too big.", this->Name));
+            ShowContinueError(state, std::format("Max number of components=[{}], indicated component number=[{}].", this->NumOfComp, CompNum));
             ShowFatalError(state, "Program terminates due to preceding condition.");
         }
 
@@ -2087,7 +2056,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
                 Cp = this->GLHEPlantLoc.loop->glycol->getSpecificHeat(state, CondInletTemp, RoutineNameElecEIRChiller);
                 CondOutletTemp = QCondenser / CondMassFlowRate / Cp + CondInletTemp;
             } else {
-                ShowSevereError(state, EnergyPlus::format("CalcChillerheaterModel: Condenser flow = 0, for Chillerheater={}", chillerHeater.Name));
+                ShowSevereError(state, std::format("CalcChillerheaterModel: Condenser flow = 0, for Chillerheater={}", chillerHeater.Name));
                 ShowContinueErrorTimeStamp(state, "");
             }
 
@@ -2286,9 +2255,9 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
 
             if (CondDeltaTemp < 0.0) { // Hot water temperature is greater than the maximum
                 if (chillerHeater.ChillerEIRRefTempErrorIndex == 0) {
-                    ShowSevereMessage(state,
-                                      EnergyPlus::format("CalcChillerHeaterModel: ChillerHeaterPerformance:Electric:EIR=\"{}\", DeltaTemp < 0",
-                                                         chillerHeater.Name));
+                    ShowSevereMessage(
+                        state,
+                        std::format("CalcChillerHeaterModel: ChillerHeaterPerformance:Electric:EIR=\"{}\", DeltaTemp < 0", chillerHeater.Name));
                     ShowContinueError(state,
                                       EnergyPlus::format(" Reference Simultaneous Cooling-Heating Mode Leaving Condenser Water Temperature [{:.1R}]",
                                                          CondOutletTemp));
@@ -2629,7 +2598,7 @@ Real64 WrapperSpecs::calcChillerCapFT(EnergyPlusData &state, int const numChille
     if (chillCapFT < 0) {
         if (this->ChillerHeater(numChillerHeater).ChillerCapFTError < 1 && !state.dataGlobal->WarmupFlag) {
             ++this->ChillerHeater(numChillerHeater).ChillerCapFTError;
-            ShowWarningError(state, EnergyPlus::format("ChillerHeaterPerformance:Electric:EIR \"{}\":", this->ChillerHeater(numChillerHeater).Name));
+            ShowWarningError(state, std::format("ChillerHeaterPerformance:Electric:EIR \"{}\":", this->ChillerHeater(numChillerHeater).Name));
             ShowContinueError(
                 state, EnergyPlus::format(" ChillerHeater Capacity as a Function of Temperature curve output is negative ({:.3R}).", chillCapFT));
             ShowContinueError(

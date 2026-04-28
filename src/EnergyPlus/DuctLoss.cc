@@ -242,11 +242,11 @@ namespace DuctLoss {
                 thisDuctLoss.LinkageNum = Util::FindItemInList(LinkageName, state.afn->AirflowNetworkLinkageData);
                 if (thisDuctLoss.LinkageNum == 0) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{}, \"{}\" {} not found: {}",
-                                                       CurrentModuleObject,
-                                                       thisDuctLoss.Name,
-                                                       "Airflownetwork:Distribution:Linkage = ",
-                                                       LinkageName));
+                                    std::format("{}, \"{}\" {} not found: {}",
+                                                CurrentModuleObject,
+                                                thisDuctLoss.Name,
+                                                "Airflownetwork:Distribution:Linkage = ",
+                                                LinkageName));
                     errorsFound = true;
                 }
                 std::string EnvType = Util::makeUPPER(fields.at("environment_type").get<std::string>());
@@ -256,8 +256,7 @@ namespace DuctLoss {
                     thisDuctLoss.EnvType = EnvironmentType::Zone;
                 } else {
                     ShowSevereError(
-                        state,
-                        EnergyPlus::format("{}, \"{}\" {} not found: {}", CurrentModuleObject, thisDuctLoss.Name, "Environment Type = ", EnvType));
+                        state, std::format("{}, \"{}\" {} not found: {}", CurrentModuleObject, thisDuctLoss.Name, "Environment Type = ", EnvType));
                     errorsFound = true;
                 }
                 if (thisDuctLoss.EnvType == EnvironmentType::Schedule) {
@@ -307,11 +306,11 @@ namespace DuctLoss {
                 thisDuctLoss.LinkageNum = Util::FindItemInList(LinkageName, state.afn->AirflowNetworkLinkageData);
                 if (thisDuctLoss.LinkageNum == 0) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{}, \"{}\" {} not found: {}",
-                                                       CurrentModuleObject,
-                                                       thisDuctLoss.Name,
-                                                       "Airflownetwork:Distribution:Linkage = ",
-                                                       LinkageName));
+                                    std::format("{}, \"{}\" {} not found: {}",
+                                                CurrentModuleObject,
+                                                thisDuctLoss.Name,
+                                                "Airflownetwork:Distribution:Linkage = ",
+                                                LinkageName));
                     errorsFound = true;
                 }
                 thisDuctLoss.LossType = DuctLossType::Leakage;
@@ -343,11 +342,11 @@ namespace DuctLoss {
                 thisDuctLoss.LinkageNum = Util::FindItemInList(LinkageName, state.afn->AirflowNetworkLinkageData);
                 if (thisDuctLoss.LinkageNum == 0) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{}, \"{}\" {} not found: {}",
-                                                       CurrentModuleObject,
-                                                       thisDuctLoss.Name,
-                                                       "Airflownetwork:Distribution:Linkage = ",
-                                                       LinkageName));
+                                    std::format("{}, \"{}\" {} not found: {}",
+                                                CurrentModuleObject,
+                                                thisDuctLoss.Name,
+                                                "Airflownetwork:Distribution:Linkage = ",
+                                                LinkageName));
                     errorsFound = true;
                 }
                 thisDuctLoss.LossType = DuctLossType::MakeupAir;
@@ -732,7 +731,7 @@ namespace DuctLoss {
                 if (thisDuctLoss.AirLoopNum == 0) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
+                        std::format(
                             "{}, \"{}\" {} not found: {}", CurrentModuleObject, thisDuctLoss.Name, "AirLoopHVAC = ", thisDuctLoss.AirLoopName));
                     errorsFound = true;
                 }
@@ -874,11 +873,11 @@ namespace DuctLoss {
                         }
                     } else {
                         ShowSevereError(state,
-                                        EnergyPlus::format("{}, \"{}\" {} not found: {}",
-                                                           "Duct:Loss:MakeupAir",
-                                                           thisDuctLoss.Name,
-                                                           "Incorrect input, not Zone, OUTDOORAIR:NODELIST, and OUTDOORAIR:NODE = ",
-                                                           state.afn->DisSysNodeData(AFNNodeNum1).Name));
+                                        std::format("{}, \"{}\" {} not found: {}",
+                                                    "Duct:Loss:MakeupAir",
+                                                    thisDuctLoss.Name,
+                                                    "Incorrect input, not Zone, OUTDOORAIR:NODELIST, and OUTDOORAIR:NODE = ",
+                                                    state.afn->DisSysNodeData(AFNNodeNum1).Name));
                         errorsFound = true;
                     }
                     if (Util::SameString(state.afn->DisSysNodeData(AFNNodeNum2).EPlusType, "ZONE")) {
@@ -892,11 +891,11 @@ namespace DuctLoss {
                         }
                     } else {
                         ShowSevereError(state,
-                                        EnergyPlus::format("{}, \"{}\" {} not found: {}",
-                                                           "Duct:Loss:MakeupAir",
-                                                           thisDuctLoss.Name,
-                                                           "Incorrect input, not Zone, OUTDOORAIR:NODELIST, and OUTDOORAIR:NODE = ",
-                                                           state.afn->DisSysNodeData(AFNNodeNum2).Name));
+                                        std::format("{}, \"{}\" {} not found: {}",
+                                                    "Duct:Loss:MakeupAir",
+                                                    thisDuctLoss.Name,
+                                                    "Incorrect input, not Zone, OUTDOORAIR:NODELIST, and OUTDOORAIR:NODE = ",
+                                                    state.afn->DisSysNodeData(AFNNodeNum2).Name));
                         errorsFound = true;
                     }
                 }

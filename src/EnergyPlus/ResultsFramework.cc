@@ -375,9 +375,9 @@ namespace ResultsFramework {
         // fmt::format("YYYY-{:02d}/{:02d}T{:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin);
         // fmt::format("{:02d}/{:02d} {:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin);
         if (iso8601) {
-            TS.emplace_back(fmt::format("{:04d}-{:02d}-{:02d}T{:02d}:{:02d}:00", calendarYear, month, dayOfMonth, hourOfDay, curMin));
+            TS.emplace_back(std::format("{:04d}-{:02d}-{:02d}T{:02d}:{:02d}:00", calendarYear, month, dayOfMonth, hourOfDay, curMin));
         } else {
-            TS.emplace_back(fmt::format("{:02d}/{:02d} {:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin));
+            TS.emplace_back(std::format("{:02d}/{:02d} {:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin));
         }
     }
 
@@ -729,15 +729,15 @@ namespace ResultsFramework {
         auto const &columns = data.at("Cols");
         for (auto const &column : columns) {
             std::string search_string =
-                fmt::format("{0} [{1}]({2})", column.at("Variable").get<std::string>(), column.at("Units").get<std::string>(), reportFrequency);
+                std::format("{0} [{1}]({2})", column.at("Variable").get<std::string>(), column.at("Units").get<std::string>(), reportFrequency);
             auto found = std::find(outputVariables.begin(), outputVariables.end(), search_string);
             if (found == outputVariables.end()) {
                 search_string =
-                    fmt::format("{0} [{1}]({2})", column.at("Variable").get<std::string>(), column.at("Units").get<std::string>(), "Each Call");
+                    std::format("{0} [{1}]({2})", column.at("Variable").get<std::string>(), column.at("Units").get<std::string>(), "Each Call");
                 found = std::find(outputVariables.begin(), outputVariables.end(), search_string);
             }
             if (found == outputVariables.end()) {
-                ShowFatalError(state, fmt::format("Output variable ({0}) not found output variable list", search_string));
+                ShowFatalError(state, std::format("Output variable ({0}) not found output variable list", search_string));
             }
             outputVariableIndices[std::distance(outputVariables.begin(), found)] = true;
             indices.emplace_back(std::distance(outputVariables.begin(), found));
@@ -1181,12 +1181,12 @@ namespace ResultsFramework {
                                              std::string_view const units,
                                              OutputProcessor::ReportFreq const freq)
     {
-        outputVariables.emplace_back(fmt::format("{0}:{1} [{2}]({3})", keyedValue, variableName, units, reportFreqNames[(int)freq]));
+        outputVariables.emplace_back(std::format("{0}:{1} [{2}]({3})", keyedValue, variableName, units, reportFreqNames[(int)freq]));
     }
 
     void ResultsFramework::addReportMeter(std::string const &meter, std::string_view units, OutputProcessor::ReportFreq const freq)
     {
-        outputVariables.emplace_back(fmt::format("{0} [{1}]({2})", meter, units, reportFreqNames[(int)freq]));
+        outputVariables.emplace_back(std::format("{0} [{1}]({2})", meter, units, reportFreqNames[(int)freq]));
     }
 
 } // namespace ResultsFramework

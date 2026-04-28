@@ -280,7 +280,7 @@ namespace RoomAir {
 
                         // error check for debugging
                         if (!AirNodeFoundFlag) {
-                            ShowSevereError(state, EnergyPlus::format("InitMundtModel: Air Node in Zone=\"{}\" is not found.", thisZone.Name));
+                            ShowSevereError(state, std::format("InitMundtModel: Air Node in Zone=\"{}\" is not found.", thisZone.Name));
                             ErrorsFound = true;
                             continue;
                         }
@@ -351,7 +351,7 @@ namespace RoomAir {
         ZoneEquipConfigNum = ZoneNum;
         // check whether this zone is a controlled zone or not
         if (!Zone(ZoneNum).IsControlled) {
-            ShowFatalError(state, EnergyPlus::format("Zones must be controlled for Mundt air model. No system serves zone {}", Zone(ZoneNum).Name));
+            ShowFatalError(state, std::format("Zones must be controlled for Mundt air model. No system serves zone {}", Zone(ZoneNum).Name));
             return;
         }
 
@@ -514,8 +514,7 @@ namespace RoomAir {
                     state.dataMundtSimMgr->MundtAirSurf(state.dataMundtSimMgr->FloorSurfSetIDs(SurfNum), state.dataMundtSimMgr->MundtZoneNum).Area;
             }
         } else {
-            ShowSevereError(state,
-                            EnergyPlus::format("SetupMundtModel: Mundt model has no FloorAirNode, Zone={}", state.dataHeatBal->Zone(ZoneNum).Name));
+            ShowSevereError(state, std::format("SetupMundtModel: Mundt model has no FloorAirNode, Zone={}", state.dataHeatBal->Zone(ZoneNum).Name));
             ErrorsFound = true;
         }
     }

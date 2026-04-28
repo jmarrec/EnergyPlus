@@ -100,8 +100,7 @@ PlantComponent *OutsideEnergySourceSpecs::factory(EnergyPlusData &state, DataPla
         }
     }
     // If we didn't find it, fatal
-    ShowFatalError(state,
-                   EnergyPlus::format("OutsideEnergySourceSpecsFactory: Error getting inputs for source named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, std::format("OutsideEnergySourceSpecsFactory: Error getting inputs for source named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -293,8 +292,8 @@ void GetOutsideEnergySourcesInput(EnergyPlusData &state)
 
     if (ErrorsFound) {
         ShowFatalError(state,
-                       EnergyPlus::format("Errors found in processing input for {}, Preceding condition caused termination.",
-                                          state.dataIPShortCut->cCurrentModuleObject));
+                       std::format("Errors found in processing input for {}, Preceding condition caused termination.",
+                                   state.dataIPShortCut->cCurrentModuleObject));
     }
 }
 
@@ -365,14 +364,14 @@ void OutsideEnergySourceSpecs::size(EnergyPlusData &state)
         Real64 NomCapDes;
         if (this->EnergyType == DataPlant::PlantEquipmentType::PurchChilledWater ||
             this->EnergyType == DataPlant::PlantEquipmentType::PurchHotWater) {
-            Real64 const rho = loop.glycol->getDensity(state, Constant::InitConvTemp, EnergyPlus::format("Size {}", typeName));
-            Real64 const Cp = loop.glycol->getSpecificHeat(state, Constant::InitConvTemp, EnergyPlus::format("Size {}", typeName));
+            Real64 const rho = loop.glycol->getDensity(state, Constant::InitConvTemp, std::format("Size {}", typeName));
+            Real64 const Cp = loop.glycol->getSpecificHeat(state, Constant::InitConvTemp, std::format("Size {}", typeName));
             NomCapDes = Cp * rho * state.dataSize->PlantSizData(PltSizNum).DeltaT * state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate;
         } else { // this->EnergyType == DataPlant::TypeOf_PurchSteam
-            Real64 const tempSteam = loop.steam->getSatTemperature(state, state.dataEnvrn->StdBaroPress, EnergyPlus::format("Size {}", typeName));
-            Real64 const rhoSteam = loop.steam->getSatDensity(state, tempSteam, 1.0, EnergyPlus::format("Size {}", typeName));
-            Real64 const EnthSteamDry = loop.steam->getSatEnthalpy(state, tempSteam, 1.0, EnergyPlus::format("Size {}", typeName));
-            Real64 const EnthSteamWet = loop.steam->getSatEnthalpy(state, tempSteam, 0.0, EnergyPlus::format("Size {}", typeName));
+            Real64 const tempSteam = loop.steam->getSatTemperature(state, state.dataEnvrn->StdBaroPress, std::format("Size {}", typeName));
+            Real64 const rhoSteam = loop.steam->getSatDensity(state, tempSteam, 1.0, std::format("Size {}", typeName));
+            Real64 const EnthSteamDry = loop.steam->getSatEnthalpy(state, tempSteam, 1.0, std::format("Size {}", typeName));
+            Real64 const EnthSteamWet = loop.steam->getSatEnthalpy(state, tempSteam, 0.0, std::format("Size {}", typeName));
             Real64 const LatentHeatSteam = EnthSteamDry - EnthSteamWet;
             NomCapDes = rhoSteam * state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate * LatentHeatSteam;
         }
@@ -398,7 +397,7 @@ void OutsideEnergySourceSpecs::size(EnergyPlusData &state)
                                                      NomCapUser);
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(NomCapDes - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                                ShowMessage(state, EnergyPlus::format("Size {}: Potential issue with equipment sizing for {}", typeName, this->Name));
+                                ShowMessage(state, std::format("Size {}: Potential issue with equipment sizing for {}", typeName, this->Name));
                                 ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
                                 ShowContinueError(state, EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", NomCapDes));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
@@ -411,8 +410,8 @@ void OutsideEnergySourceSpecs::size(EnergyPlusData &state)
         }
     } else {
         if (this->NomCapWasAutoSized && state.dataPlnt->PlantFirstSizesOkayToFinalize) {
-            ShowSevereError(state, EnergyPlus::format("Autosizing of {} nominal capacity requires a loop Sizing:Plant object", typeName));
-            ShowContinueError(state, EnergyPlus::format("Occurs in {} object={}", typeName, this->Name));
+            ShowSevereError(state, std::format("Autosizing of {} nominal capacity requires a loop Sizing:Plant object", typeName));
+            ShowContinueError(state, std::format("Occurs in {} object={}", typeName, this->Name));
             ErrorsFound = true;
         }
         if (!this->NomCapWasAutoSized && this->NomCap > 0.0 && state.dataPlnt->PlantFinalSizesOkayToReport) {
@@ -545,7 +544,7 @@ void OutsideEnergySourceSpecs::oneTimeInit_new(EnergyPlusData &state)
         meterTypeKey = Constant::eResource::DistrictHeatingSteam;
     }
     SetupOutputVariable(state,
-                        EnergyPlus::format("{}Energy", reportVarPrefix),
+                        std::format("{}Energy", reportVarPrefix),
                         Constant::Units::J,
                         this->EnergyTransfer,
                         OutputProcessor::TimeStepType::System,
@@ -555,28 +554,28 @@ void OutsideEnergySourceSpecs::oneTimeInit_new(EnergyPlusData &state)
                         OutputProcessor::Group::Plant,
                         heatingOrCooling);
     SetupOutputVariable(state,
-                        EnergyPlus::format("{}Rate", reportVarPrefix),
+                        std::format("{}Rate", reportVarPrefix),
                         Constant::Units::W,
                         this->EnergyRate,
                         OutputProcessor::TimeStepType::System,
                         OutputProcessor::StoreType::Average,
                         this->Name);
     SetupOutputVariable(state,
-                        EnergyPlus::format("{}Inlet Temperature", reportVarPrefix),
+                        std::format("{}Inlet Temperature", reportVarPrefix),
                         Constant::Units::C,
                         this->InletTemp,
                         OutputProcessor::TimeStepType::System,
                         OutputProcessor::StoreType::Average,
                         this->Name);
     SetupOutputVariable(state,
-                        EnergyPlus::format("{}Outlet Temperature", reportVarPrefix),
+                        std::format("{}Outlet Temperature", reportVarPrefix),
                         Constant::Units::C,
                         this->OutletTemp,
                         OutputProcessor::TimeStepType::System,
                         OutputProcessor::StoreType::Average,
                         this->Name);
     SetupOutputVariable(state,
-                        EnergyPlus::format("{}Mass Flow Rate", reportVarPrefix),
+                        std::format("{}Mass Flow Rate", reportVarPrefix),
                         Constant::Units::kg_s,
                         this->MassFlowRate,
                         OutputProcessor::TimeStepType::System,

@@ -105,7 +105,7 @@ GshpPeHeatingSpecs *GshpPeHeatingSpecs::factory(EnergyPlusData &state, const std
         return thisObj;
     }
     // If we didn't find it, fatal
-    ShowFatalError(state, EnergyPlus::format("WWHPHeatingFactory: Error getting inputs for heat pump named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, std::format("WWHPHeatingFactory: Error getting inputs for heat pump named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -132,8 +132,7 @@ void GshpPeHeatingSpecs::simulate(
                                                             this->SourceSideWaterMassFlowRate,
                                                             FirstHVACIteration);
     } else {
-        ShowFatalError(state,
-                       EnergyPlus::format("SimHPWatertoWaterHEATING:: Invalid loop connection {}, Requested Unit={}", ModuleCompName, this->Name));
+        ShowFatalError(state, std::format("SimHPWatertoWaterHEATING:: Invalid loop connection {}, Requested Unit={}", ModuleCompName, this->Name));
     }
 }
 
@@ -202,7 +201,7 @@ void GetGshpInput(EnergyPlusData &state)
     state.dataHPWaterToWaterHtg->NumGSHPs = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, ModuleCompName);
 
     if (state.dataHPWaterToWaterHtg->NumGSHPs <= 0) {
-        ShowSevereError(state, EnergyPlus::format("{}: No Equipment found", ModuleCompName));
+        ShowSevereError(state, std::format("{}: No Equipment found", ModuleCompName));
         ErrorsFound = true;
     }
 
@@ -221,7 +220,7 @@ void GetGshpInput(EnergyPlusData &state)
 
         thisGSHP.COP = NumArray(1);
         if (NumArray(1) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:COP = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:COP = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
@@ -236,60 +235,60 @@ void GetGshpInput(EnergyPlusData &state)
 
         thisGSHP.LoadSideVolFlowRate = NumArray(6);
         if (NumArray(6) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Load Side Flow Rate = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Load Side Flow Rate = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.SourceSideVolFlowRate = NumArray(7);
         if (NumArray(7) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Source Side Flow Rate = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Source Side Flow Rate = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.LoadSideUACoeff = NumArray(8);
         if (NumArray(8) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Load Side Heat Transfer Coefficient = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Load Side Heat Transfer Coefficient = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.SourceSideUACoeff = NumArray(9);
         if (NumArray(9) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Source Side Heat Transfer Coefficient = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Source Side Heat Transfer Coefficient = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.CompPistonDisp = NumArray(10);
         if (NumArray(10) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Compressor Piston displacement/Storke = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Compressor Piston displacement/Storke = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.CompClearanceFactor = NumArray(11);
         if (NumArray(11) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Compressor Clearance Factor = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Compressor Clearance Factor = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.CompSucPressDrop = NumArray(12);
         if (NumArray(12) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}: Pressure Drop = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}: Pressure Drop = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.SuperheatTemp = NumArray(13);
         if (NumArray(13) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Source Side SuperHeat = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Source Side SuperHeat = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
         thisGSHP.PowerLosses = NumArray(14);
         if (NumArray(14) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Compressor Power Loss = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Compressor Power Loss = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
         thisGSHP.LossFactor = NumArray(15);
         if (NumArray(15) == 0.0) {
-            ShowSevereError(state, EnergyPlus::format("{}:Efficiency = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
+            ShowSevereError(state, std::format("{}:Efficiency = 0.0, Heatpump={}", ModuleCompName, thisGSHP.Name));
             ErrorsFound = true;
         }
 
@@ -357,7 +356,7 @@ void GetGshpInput(EnergyPlusData &state)
     }
 
     if (ErrorsFound) {
-        ShowFatalError(state, EnergyPlus::format("Errors Found in getting {} Input", ModuleCompNameUC));
+        ShowFatalError(state, std::format("Errors Found in getting {} Input", ModuleCompNameUC));
     }
 
     // CurrentModuleObject='HeatPump:WaterToWater:ParameterEstimation:Heating'
@@ -637,8 +636,7 @@ void GshpPeHeatingSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad)
 
         // check cutoff pressures
         if (SourceSidePressure < this->LowPressCutoff) {
-            ShowSevereError(state,
-                            EnergyPlus::format("{}=\"{}\" Heating Source Side Pressure Less than the Design Minimum", ModuleCompName, this->Name));
+            ShowSevereError(state, std::format("{}=\"{}\" Heating Source Side Pressure Less than the Design Minimum", ModuleCompName, this->Name));
             ShowContinueError(state,
                               EnergyPlus::format("Source Side Pressure={:.2T} and user specified Design Minimum Pressure={:.2T}",
                                                  SourceSidePressure,
@@ -646,8 +644,7 @@ void GshpPeHeatingSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad)
             ShowFatalError(state, "Preceding Conditions cause termination.");
         }
         if (LoadSidePressure > this->HighPressCutoff) {
-            ShowSevereError(state,
-                            EnergyPlus::format("{}=\"{}\" Heating Load Side Pressure greater than the Design Maximum", ModuleCompName, this->Name));
+            ShowSevereError(state, std::format("{}=\"{}\" Heating Load Side Pressure greater than the Design Maximum", ModuleCompName, this->Name));
             ShowContinueError(state,
                               EnergyPlus::format("Load Side Pressure={:.2T} and user specified Design Maximum Pressure={:.2T}",
                                                  LoadSidePressure,
@@ -661,7 +658,7 @@ void GshpPeHeatingSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad)
         Real64 DischargePr = LoadSidePressure + this->CompSucPressDrop;
         // check cutoff pressures
         if (SuctionPr < this->LowPressCutoff) {
-            ShowSevereError(state, EnergyPlus::format("{}=\"{}\" Heating Suction Pressure Less than the Design Minimum", ModuleCompName, this->Name));
+            ShowSevereError(state, std::format("{}=\"{}\" Heating Suction Pressure Less than the Design Minimum", ModuleCompName, this->Name));
             ShowContinueError(state,
                               EnergyPlus::format("Heating Suction Pressure={:.2T} and user specified Design Minimum Pressure={:.2T}",
                                                  SuctionPr,
@@ -669,8 +666,7 @@ void GshpPeHeatingSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad)
             ShowFatalError(state, "Preceding Conditions cause termination.");
         }
         if (DischargePr > this->HighPressCutoff) {
-            ShowSevereError(state,
-                            EnergyPlus::format("{}=\"{}\" Heating Discharge Pressure greater than the Design Maximum", ModuleCompName, this->Name));
+            ShowSevereError(state, std::format("{}=\"{}\" Heating Discharge Pressure greater than the Design Maximum", ModuleCompName, this->Name));
             ShowContinueError(state,
                               EnergyPlus::format("Heating Discharge Pressure={:.2T} and user specified Design Maximum Pressure={:.2T}",
                                                  DischargePr,
@@ -736,18 +732,18 @@ void GshpPeHeatingSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad)
         // convergence and iteration limit check
         if (std::abs((this->QLoad - initialQLoad) / (initialQLoad + SmallNum)) < HeatBalTol || IterationCount > IterationLimit) {
             if (IterationCount > IterationLimit) {
-                ShowWarningError(state, EnergyPlus::format("{} did not converge", ModuleCompName));
+                ShowWarningError(state, std::format("{} did not converge", ModuleCompName));
                 ShowContinueErrorTimeStamp(state, "");
-                ShowContinueError(state, EnergyPlus::format("Heatpump Name = {}", this->Name));
-                ShowContinueError(state,
-                                  EnergyPlus::format("Heat Imbalance (%)             = {:G}",
-                                                     std::abs(100.0 * (this->QLoad - initialQLoad) / (initialQLoad + SmallNum))));
-                ShowContinueError(state, EnergyPlus::format("Load-side heat transfer rate   = {:G}", this->QLoad));
-                ShowContinueError(state, EnergyPlus::format("Source-side heat transfer rate = {:G}", this->QSource));
-                ShowContinueError(state, EnergyPlus::format("Source-side mass flow rate     = {:G}", this->SourceSideWaterMassFlowRate));
-                ShowContinueError(state, EnergyPlus::format("Load-side mass flow rate       = {:G}", this->LoadSideWaterMassFlowRate));
-                ShowContinueError(state, EnergyPlus::format("Source-side inlet temperature  = {:G}", this->SourceSideWaterInletTemp));
-                ShowContinueError(state, EnergyPlus::format("Load-side inlet temperature    = {:G}", this->LoadSideWaterInletTemp));
+                ShowContinueError(state, std::format("Heatpump Name = {}", this->Name));
+                ShowContinueError(
+                    state,
+                    std::format("Heat Imbalance (%)             = {:G}", std::abs(100.0 * (this->QLoad - initialQLoad) / (initialQLoad + SmallNum))));
+                ShowContinueError(state, std::format("Load-side heat transfer rate   = {:G}", this->QLoad));
+                ShowContinueError(state, std::format("Source-side heat transfer rate = {:G}", this->QSource));
+                ShowContinueError(state, std::format("Source-side mass flow rate     = {:G}", this->SourceSideWaterMassFlowRate));
+                ShowContinueError(state, std::format("Load-side mass flow rate       = {:G}", this->LoadSideWaterMassFlowRate));
+                ShowContinueError(state, std::format("Source-side inlet temperature  = {:G}", this->SourceSideWaterInletTemp));
+                ShowContinueError(state, std::format("Load-side inlet temperature    = {:G}", this->LoadSideWaterInletTemp));
             }
             goto LOOPLoadEnth_exit;
 

@@ -49,6 +49,7 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <sys/stat.h>
@@ -348,7 +349,7 @@ namespace FileSystem {
     {
         // Shenanigans would not be needed with fmt 10+ (maybe earlier), because fmt has native fs::path support
         if (!fileExists(filePath)) {
-            throw FatalError(fmt::format("File does not exists: {}", filePath));
+            throw FatalError(std::format("File does not exists: {}", filePath.string()));
         }
 
         // Can only be 'r', 'b' or 'rb'
@@ -359,7 +360,7 @@ namespace FileSystem {
         const std::uintmax_t file_size = fs::file_size(filePath);
         std::ifstream file(filePath, mode);
         if (!file.is_open()) {
-            throw FatalError(fmt::format("Could not open file: {}", filePath));
+            throw FatalError(std::format("Could not open file: {}", filePath.string()));
         }
         std::string result(file_size, '\0');
         file.read(result.data(), file_size);
@@ -371,7 +372,7 @@ namespace FileSystem {
 
         // Shenanigans would not be needed with fmt 10+ (maybe earlier), because fmt has native fs::path support
         if (!fileExists(filePath)) {
-            throw FatalError(fmt::format("File does not exists: {}", filePath));
+            throw FatalError(std::format("File does not exists: {}", filePath.string()));
         }
 
         // Can only be 'r', 'b' or 'rb'
@@ -381,7 +382,7 @@ namespace FileSystem {
 
         std::ifstream file(filePath, mode);
         if (!file.is_open()) {
-            throw FatalError(fmt::format("Could not open file: {}", filePath));
+            throw FatalError(std::format("Could not open file: {}", filePath.string()));
         }
 
         FileTypes const ext = getFileType(filePath);

@@ -200,11 +200,11 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
             for (int otherParams = 1; otherParams < Loop; ++otherParams) {
                 if (Util::SameString(thisEarthTubePars.nameParameters, state.dataEarthTube->EarthTubePars(otherParams).nameParameters)) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{}: {} = {} is not a unique name.",
-                                                       earthTubeParametersModuleObject,
-                                                       earthTubeModelParametersNameFieldName,
-                                                       thisEarthTubePars.nameParameters));
-                    ShowContinueError(state, EnergyPlus::format("Check the other {} names for a duplicate.", earthTubeParametersModuleObject));
+                                    std::format("{}: {} = {} is not a unique name.",
+                                                earthTubeParametersModuleObject,
+                                                earthTubeModelParametersNameFieldName,
+                                                thisEarthTubePars.nameParameters));
+                    ShowContinueError(state, std::format("Check the other {} names for a duplicate.", earthTubeParametersModuleObject));
                     ErrorsFound = true;
                 }
             }
@@ -251,7 +251,7 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
             // First Alpha is Zone Name
             thisEarthTube.ZonePtr = Util::FindItemInList(zoneName, state.dataHeatBal->Zone);
             if (thisEarthTube.ZonePtr == 0) {
-                ShowSevereError(state, EnergyPlus::format("{}: {} not found={}", earthTubeModuleObject, zoneNameFieldName, zoneName));
+                ShowSevereError(state, std::format("{}: {} not found={}", earthTubeModuleObject, zoneNameFieldName, zoneName));
                 ErrorsFound = true;
             }
 
@@ -606,7 +606,7 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
     CheckEarthTubesInZones(state, lastZoneName, earthTubeModuleObject, ErrorsFound);
 
     if (ErrorsFound) {
-        ShowFatalError(state, EnergyPlus::format("{}: Errors getting input.  Program terminates.", earthTubeModuleObject));
+        ShowFatalError(state, std::format("{}: Errors getting input.  Program terminates.", earthTubeModuleObject));
     }
 }
 
@@ -621,8 +621,8 @@ void CheckEarthTubesInZones(EnergyPlusData &state,
     for (int Loop = 1; Loop <= numEarthTubes - 1; ++Loop) {
         for (int Loop1 = Loop + 1; Loop1 <= numEarthTubes; ++Loop1) {
             if (state.dataEarthTube->EarthTubeSys(Loop).ZonePtr == state.dataEarthTube->EarthTubeSys(Loop1).ZonePtr) {
-                ShowSevereError(state, EnergyPlus::format("{} has more than one {} associated with it.", ZoneName, FieldName));
-                ShowContinueError(state, EnergyPlus::format("Only one {} is allowed per zone.  Check the definitions of {}", FieldName, FieldName));
+                ShowSevereError(state, std::format("{} has more than one {} associated with it.", ZoneName, FieldName));
+                ShowContinueError(state, std::format("Only one {} is allowed per zone.  Check the definitions of {}", FieldName, FieldName));
                 ShowContinueError(state, "in your input file and make sure that there is only one defined for each zone.");
                 ErrorsFound = true;
             }
@@ -739,14 +739,14 @@ void initEarthTubeVertical(EnergyPlusData &state)
             auto &zone = state.dataHeatBal->Zone(thisEarthTube.ZonePtr);
             for (int nodeNum = 1; nodeNum <= thisEarthTube.totNodes; ++nodeNum) {
                 SetupOutputVariable(state,
-                                    EnergyPlus::format("Earth Tube Node Temperature {}", nodeNum),
+                                    std::format("Earth Tube Node Temperature {}", nodeNum),
                                     Constant::Units::C,
                                     thisEarthTube.tCurrent[nodeNum - 1],
                                     OutputProcessor::TimeStepType::Zone,
                                     OutputProcessor::StoreType::Average,
                                     zone.Name);
                 SetupOutputVariable(state,
-                                    EnergyPlus::format("Earth Tube Undisturbed Ground Temperature {}", nodeNum),
+                                    std::format("Earth Tube Undisturbed Ground Temperature {}", nodeNum),
                                     Constant::Units::C,
                                     thisEarthTube.tUndist[nodeNum - 1],
                                     OutputProcessor::TimeStepType::Zone,

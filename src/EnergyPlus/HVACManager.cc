@@ -992,11 +992,11 @@ void SimHVAC(EnergyPlusData &state)
         if (state.dataHVACMgr->ErrCount < 15) {
             state.dataHVACMgr->ErrEnvironmentName = state.dataEnvrn->EnvironmentName;
             ShowWarningError(state,
-                             EnergyPlus::format("SimHVAC: Maximum iterations ({}) exceeded for all HVAC loops, at {}, {} {}",
-                                                state.dataConvergeParams->MaxIter,
-                                                state.dataEnvrn->EnvironmentName,
-                                                state.dataEnvrn->CurMnDy,
-                                                General::CreateSysTimeIntervalString(state)));
+                             std::format("SimHVAC: Maximum iterations ({}) exceeded for all HVAC loops, at {}, {} {}",
+                                         state.dataConvergeParams->MaxIter,
+                                         state.dataEnvrn->EnvironmentName,
+                                         state.dataEnvrn->CurMnDy,
+                                         General::CreateSysTimeIntervalString(state)));
             if (state.dataHVACGlobal->SimAirLoopsFlag) {
                 ShowContinueError(state, "The solution for one or more of the Air Loop HVAC systems did not appear to converge");
             }
@@ -1161,7 +1161,7 @@ void SimHVAC(EnergyPlusData &state)
                             }
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     "Node named {} humidity ratio [kg-water/kg-dryair] iteration history trace (most recent first): {}",
                                     state.dataLoopNodes->NodeID(state.dataConvergeParams->ZoneInletConvergence(ZoneNum).InletNode(NodeIndex).NodeNum),
                                     HistoryTrace));
@@ -1248,12 +1248,11 @@ void SimHVAC(EnergyPlusData &state)
                             for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                                 HistoryTrace += EnergyPlus::format("{:.6R},", mdotInletNode[StackDepth]);
                             }
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format(
-                                    "Node named {} mass flow rate [kg/s] iteration history trace (most recent first): {}",
-                                    state.dataLoopNodes->NodeID(state.dataConvergeParams->ZoneInletConvergence(ZoneNum).InletNode(NodeIndex).NodeNum),
-                                    HistoryTrace));
+                            ShowContinueError(state,
+                                              std::format("Node named {} mass flow rate [kg/s] iteration history trace (most recent first): {}",
+                                                          state.dataLoopNodes->NodeID(
+                                                              state.dataConvergeParams->ZoneInletConvergence(ZoneNum).InletNode(NodeIndex).NodeNum),
+                                                          HistoryTrace));
                         } // need to report trace
                         // end mass flow rate
 
@@ -1338,12 +1337,11 @@ void SimHVAC(EnergyPlusData &state)
                             for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                                 HistoryTrace += EnergyPlus::format("{:.6R},", inletTemp[StackDepth]);
                             }
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format(
-                                    "Node named {} temperature [C] iteration history trace (most recent first): {}",
-                                    state.dataLoopNodes->NodeID(state.dataConvergeParams->ZoneInletConvergence(ZoneNum).InletNode(NodeIndex).NodeNum),
-                                    HistoryTrace));
+                            ShowContinueError(state,
+                                              std::format("Node named {} temperature [C] iteration history trace (most recent first): {}",
+                                                          state.dataLoopNodes->NodeID(
+                                                              state.dataConvergeParams->ZoneInletConvergence(ZoneNum).InletNode(NodeIndex).NodeNum),
+                                                          HistoryTrace));
                         } // need to report trace
                           // end Temperature checks
 
@@ -1356,9 +1354,9 @@ void SimHVAC(EnergyPlusData &state)
                     bool MonotonicDecreaseFound;
 
                     if (state.dataConvergeParams->PlantConvergence(LoopNum).PlantMassFlowNotConverged) {
-                        ShowContinueError(state,
-                                          EnergyPlus::format("Plant System Named = {} did not converge for mass flow rate",
-                                                             state.dataPlnt->PlantLoop(LoopNum).Name));
+                        ShowContinueError(
+                            state,
+                            std::format("Plant System Named = {} did not converge for mass flow rate", state.dataPlnt->PlantLoop(LoopNum).Name));
                         ShowContinueError(state, "Check values should be zero. Most Recent values listed first.");
                         std::string HistoryTrace;
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
@@ -1366,16 +1364,14 @@ void SimHVAC(EnergyPlusData &state)
                                 "{:.6R},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantFlowDemandToSupplyTolValue[StackDepth]);
                         }
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("Demand-to-Supply interface mass flow rate check value iteration history trace: {}", HistoryTrace));
+                            state, std::format("Demand-to-Supply interface mass flow rate check value iteration history trace: {}", HistoryTrace));
                         HistoryTrace = "";
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                             HistoryTrace += EnergyPlus::format(
                                 "{:.6R},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantFlowSupplyToDemandTolValue[StackDepth]);
                         }
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("Supply-to-Demand interface mass flow rate check value iteration history trace: {}", HistoryTrace));
+                            state, std::format("Supply-to-Demand interface mass flow rate check value iteration history trace: {}", HistoryTrace));
 
                         // now work with history logs for mass flow to detect issues
                         for (DataPlant::LoopSideLocation ThisLoopSide : DataPlant::LoopSideKeys) {
@@ -1455,11 +1451,10 @@ void SimHVAC(EnergyPlusData &state)
                                 for (int StackDepth = 1; StackDepth <= DataPlant::NumConvergenceHistoryTerms; ++StackDepth) {
                                     HistoryTrace += EnergyPlus::format("{:.7R},", mdotHistInletNode(StackDepth));
                                 }
-                                ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("Node named {} mass flow rate [kg/s] iteration history trace (most recent first): {}",
-                                                       state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameIn,
-                                                       HistoryTrace));
+                                ShowContinueError(state,
+                                                  std::format("Node named {} mass flow rate [kg/s] iteration history trace (most recent first): {}",
+                                                              state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameIn,
+                                                              HistoryTrace));
                             } // need to report trace
                             // end of inlet node
 
@@ -1535,11 +1530,10 @@ void SimHVAC(EnergyPlusData &state)
                                 for (int StackDepth = 1; StackDepth <= DataPlant::NumConvergenceHistoryTerms; ++StackDepth) {
                                     HistoryTrace += EnergyPlus::format("{:.7R},", mdotHistOutletNode(StackDepth));
                                 }
-                                ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("Node named {} mass flow rate [kg/s] iteration history trace (most recent first): {}",
-                                                       state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameOut,
-                                                       HistoryTrace));
+                                ShowContinueError(state,
+                                                  std::format("Node named {} mass flow rate [kg/s] iteration history trace (most recent first): {}",
+                                                              state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameOut,
+                                                              HistoryTrace));
                             } // need to report trace
                               // end of Outlet node
 
@@ -1549,8 +1543,7 @@ void SimHVAC(EnergyPlusData &state)
 
                     if (state.dataConvergeParams->PlantConvergence(LoopNum).PlantTempNotConverged) {
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("Plant System Named = {} did not converge for temperature", state.dataPlnt->PlantLoop(LoopNum).Name));
+                            state, std::format("Plant System Named = {} did not converge for temperature", state.dataPlnt->PlantLoop(LoopNum).Name));
                         ShowContinueError(state, "Check values should be zero. Most Recent values listed first.");
                         std::string HistoryTrace;
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
@@ -1558,16 +1551,14 @@ void SimHVAC(EnergyPlusData &state)
                                 "{:.6R},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantTempDemandToSupplyTolValue[StackDepth]);
                         }
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("Demand-to-Supply interface temperature check value iteration history trace: {}", HistoryTrace));
+                            state, std::format("Demand-to-Supply interface temperature check value iteration history trace: {}", HistoryTrace));
                         HistoryTrace = "";
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                             HistoryTrace += EnergyPlus::format(
                                 "{:.6R},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantTempSupplyToDemandTolValue[StackDepth]);
                         }
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("Supply-to-Demand interface temperature check value iteration history trace: {}", HistoryTrace));
+                            state, std::format("Supply-to-Demand interface temperature check value iteration history trace: {}", HistoryTrace));
 
                         // now work with history logs for mass flow to detect issues
                         for (DataPlant::LoopSideLocation ThisLoopSide : DataPlant::LoopSideKeys) {
@@ -1648,9 +1639,9 @@ void SimHVAC(EnergyPlusData &state)
                                     HistoryTrace += EnergyPlus::format("{:.5R},", tempHistInletNode(StackDepth));
                                 }
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("Node named {} temperature [C] iteration history trace (most recent first): {}",
-                                                                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameIn,
-                                                                     HistoryTrace));
+                                                  std::format("Node named {} temperature [C] iteration history trace (most recent first): {}",
+                                                              state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameIn,
+                                                              HistoryTrace));
                             } // need to report trace
                             // end of inlet node
 
@@ -1731,9 +1722,9 @@ void SimHVAC(EnergyPlusData &state)
                                     HistoryTrace += EnergyPlus::format("{:.5R},", tempHistOutletNode(StackDepth));
                                 }
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("Node named {} temperature [C] iteration history trace (most recent first): {}",
-                                                                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameOut,
-                                                                     HistoryTrace));
+                                                  std::format("Node named {} temperature [C] iteration history trace (most recent first): {}",
+                                                              state.dataPlnt->PlantLoop(LoopNum).LoopSide(ThisLoopSide).NodeNameOut,
+                                                              HistoryTrace));
                             } // need to report trace
                               // end of Outlet node
 
@@ -1744,17 +1735,17 @@ void SimHVAC(EnergyPlusData &state)
             }
         } else {
             if (state.dataEnvrn->EnvironmentName == state.dataHVACMgr->ErrEnvironmentName) {
-                ShowRecurringWarningErrorAtEnd(state,
-                                               EnergyPlus::format("SimHVAC: Exceeding Maximum iterations for all HVAC loops, during {} continues",
-                                                                  state.dataEnvrn->EnvironmentName),
-                                               state.dataHVACMgr->MaxErrCount);
+                ShowRecurringWarningErrorAtEnd(
+                    state,
+                    std::format("SimHVAC: Exceeding Maximum iterations for all HVAC loops, during {} continues", state.dataEnvrn->EnvironmentName),
+                    state.dataHVACMgr->MaxErrCount);
             } else {
                 state.dataHVACMgr->MaxErrCount = 0;
                 state.dataHVACMgr->ErrEnvironmentName = state.dataEnvrn->EnvironmentName;
-                ShowRecurringWarningErrorAtEnd(state,
-                                               EnergyPlus::format("SimHVAC: Exceeding Maximum iterations for all HVAC loops, during {} continues",
-                                                                  state.dataEnvrn->EnvironmentName),
-                                               state.dataHVACMgr->MaxErrCount);
+                ShowRecurringWarningErrorAtEnd(
+                    state,
+                    std::format("SimHVAC: Exceeding Maximum iterations for all HVAC loops, during {} continues", state.dataEnvrn->EnvironmentName),
+                    state.dataHVACMgr->MaxErrCount);
             }
         }
     }
@@ -2951,8 +2942,7 @@ void SetHeatToReturnAirFlag(EnergyPlusData &state)
                 auto const &thisZone = state.dataHeatBal->Zone(ControlledZoneNum);
                 if (thisZone.RefrigCaseRA) {
                     ShowWarningError(
-                        state,
-                        EnergyPlus::format("For zone={} return air cooling by refrigerated cases will be applied to the zone air.", thisZone.Name));
+                        state, std::format("For zone={} return air cooling by refrigerated cases will be applied to the zone air.", thisZone.Name));
                     ShowContinueError(state, "  This zone has no return air or is served by an on/off HVAC system.");
                 }
                 for (int LightNum = 1; LightNum <= state.dataHeatBal->TotLights; ++LightNum) {
@@ -2960,9 +2950,8 @@ void SetHeatToReturnAirFlag(EnergyPlusData &state)
                         continue;
                     }
                     if (state.dataHeatBal->Lights(LightNum).FractionReturnAir > 0.0) {
-                        ShowWarningError(
-                            state,
-                            EnergyPlus::format("For zone={} return air heat gain from lights will be applied to the zone air.", thisZone.Name));
+                        ShowWarningError(state,
+                                         std::format("For zone={} return air heat gain from lights will be applied to the zone air.", thisZone.Name));
                         ShowContinueError(state, "  This zone has no return air or is served by an on/off HVAC system.");
                         break;
                     }
@@ -2971,10 +2960,9 @@ void SetHeatToReturnAirFlag(EnergyPlusData &state)
                     auto const &thisSpace = state.dataHeatBal->space(spaceNum);
                     for (int SurfNum = thisSpace.HTSurfaceFirst; SurfNum <= thisSpace.HTSurfaceLast; ++SurfNum) {
                         if (state.dataSurface->SurfWinAirflowDestination(SurfNum) == DataSurfaces::WindowAirFlowDestination::Return) {
-                            ShowWarningError(
-                                state,
-                                EnergyPlus::format("For zone={} return air heat gain from air flow windows will be applied to the zone air.",
-                                                   thisZone.Name));
+                            ShowWarningError(state,
+                                             std::format("For zone={} return air heat gain from air flow windows will be applied to the zone air.",
+                                                         thisZone.Name));
                             ShowContinueError(state, "  This zone has no return air or is served by an on/off HVAC system.");
                         }
                     }
@@ -3056,8 +3044,8 @@ void CheckAirLoopFlowBalance(EnergyPlusData &state)
                 Real64 unbalancedExhaustDelta = thisAirLoopFlow.SupFlow - thisAirLoopFlow.OAFlow - thisAirLoopFlow.SysRetFlow;
                 if (unbalancedExhaustDelta > HVAC::SmallMassFlow) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("CheckAirLoopFlowBalance: AirLoopHVAC {} is unbalanced. Supply is > return plus outdoor air.",
-                                                       state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).Name));
+                                    std::format("CheckAirLoopFlowBalance: AirLoopHVAC {} is unbalanced. Supply is > return plus outdoor air.",
+                                                state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).Name));
                     ShowContinueErrorTimeStamp(state, "");
                     ShowContinueError(state,
                                       EnergyPlus::format("  Flows [m3/s at standard density]: Supply={:.6R}  Return={:.6R}  Outdoor Air={:.6R}",
@@ -3087,30 +3075,28 @@ void ConvergenceErrors(EnergyPlusData &state,
     const auto &arrayRef = HVACNotConverged;
     if (std::any_of(std::begin(arrayRef), std::end(arrayRef), [](bool i) { return i; })) {
 
-        ShowContinueError(state,
-                          EnergyPlus::format("Air System Named = {} did not converge for {}",
-                                             state.dataAirLoop->AirToZoneNodeInfo(AirSysNum).AirLoopName,
-                                             CaseName));
+        ShowContinueError(
+            state,
+            std::format("Air System Named = {} did not converge for {}", state.dataAirLoop->AirToZoneNodeInfo(AirSysNum).AirLoopName, CaseName));
         ShowContinueError(state, "Check values should be zero. Most Recent values listed first.");
         std::string HistoryTrace;
         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
             HistoryTrace += EnergyPlus::format("{:.6R},", DemandToSupply[StackDepth]);
         }
-        ShowContinueError(state, EnergyPlus::format("Demand-to-Supply interface {} check value iteration history trace: {}", CaseName, HistoryTrace));
+        ShowContinueError(state, std::format("Demand-to-Supply interface {} check value iteration history trace: {}", CaseName, HistoryTrace));
         HistoryTrace = "";
         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
             HistoryTrace += EnergyPlus::format("{:.6R},", SupplyDeck1ToDemand[StackDepth]);
         }
-        ShowContinueError(state,
-                          EnergyPlus::format("Supply-to-demand interface deck 1 {} check value iteration history trace: {}", CaseName, HistoryTrace));
+        ShowContinueError(state, std::format("Supply-to-demand interface deck 1 {} check value iteration history trace: {}", CaseName, HistoryTrace));
 
         if (state.dataAirLoop->AirToZoneNodeInfo(AirSysNum).NumSupplyNodes >= 2) {
             HistoryTrace = "";
             for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                 HistoryTrace += EnergyPlus::format("{:.6R},", SupplyDeck2ToDemand[StackDepth]);
             }
-            ShowContinueError(
-                state, EnergyPlus::format("Supply-to-demand interface deck 2 {} check value iteration history trace: {}", CaseName, HistoryTrace));
+            ShowContinueError(state,
+                              std::format("Supply-to-demand interface deck 2 {} check value iteration history trace: {}", CaseName, HistoryTrace));
         }
     } // energy not converged
 }

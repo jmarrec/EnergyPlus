@@ -45,6 +45,7 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include <format>
 #include <utility>
 
 #include <EnergyPlus/Autosizing/CoolingAirFlowSizing.hh>
@@ -180,9 +181,9 @@ void CoilCoolingDXCurveFitSpeed::instantiateFromInputSpec(EnergyPlus::EnergyPlus
             CurveInput += 0.01;
         }
         if (MinCurveVal < 0.7) {
-            ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
-            ShowContinueError(
-                state, EnergyPlus::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
+            ShowWarningError(state, std::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
+            ShowContinueError(state,
+                              std::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
             ShowContinueError(state,
                               EnergyPlus::format("...Curve minimum must be >= 0.7, curve min at PLR = {:.2T} is {:.3T}", MinCurvePLR, MinCurveVal));
             ShowContinueError(state, "...Setting curve minimum to 0.7 and simulation continues.");
@@ -190,9 +191,9 @@ void CoilCoolingDXCurveFitSpeed::instantiateFromInputSpec(EnergyPlus::EnergyPlus
         }
 
         if (MaxCurveVal > 1.0) {
-            ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
-            ShowContinueError(
-                state, EnergyPlus::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
+            ShowWarningError(state, std::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
+            ShowContinueError(state,
+                              std::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
             ShowContinueError(state,
                               EnergyPlus::format("...Curve maximum must be <= 1.0, curve max at PLR = {:.2T} is {:.3T}", MaxCurvePLR, MaxCurveVal));
             ShowContinueError(state, "...Setting curve maximum to 1.0 and simulation continues.");

@@ -422,7 +422,7 @@ void ProcessDateString(EnergyPlusData &state,
             PDay = 0;
             DateType = Weather::DateType::MonthDay;
         } else if (FstNum < 0 || FstNum > 366) {
-            ShowSevereError(state, EnergyPlus::format("Invalid Julian date Entered={}", String));
+            ShowSevereError(state, std::format("Invalid Julian date Entered={}", String));
             ErrorsFound = true;
         } else {
             InvOrdinalDay(FstNum, PMonth, PDay, 0);
@@ -521,7 +521,7 @@ void DetermineDateTokens(EnergyPlusData &state,
 
     strip(CurrentString);
     if (CurrentString == BlankString) {
-        ShowSevereError(state, EnergyPlus::format("Invalid date field={}", String));
+        ShowSevereError(state, std::format("Invalid date field={}", String));
         ErrorsFound = true;
     } else {
         int Loop = 0;
@@ -543,7 +543,7 @@ void DetermineDateTokens(EnergyPlusData &state,
             strip(CurrentString);
         }
         if (not_blank(CurrentString)) {
-            ShowSevereError(state, EnergyPlus::format("Invalid date field={}", String));
+            ShowSevereError(state, std::format("Invalid date field={}", String));
             ErrorsFound = true;
         } else if (Loop == 2) {
             // Field must be Day Month or Month Day (if both numeric, mon / day)
@@ -553,7 +553,7 @@ void DetermineDateTokens(EnergyPlusData &state,
                 // Month day, but first field is not numeric, 2nd must be
                 NumField2 = int(Util::ProcessNumber(Fields(2), errFlag));
                 if (errFlag) {
-                    ShowSevereError(state, EnergyPlus::format("Invalid date field={}", String));
+                    ShowSevereError(state, std::format("Invalid date field={}", String));
                     InternalError = true;
                 } else {
                     TokenDay = NumField2;
@@ -631,7 +631,7 @@ void DetermineDateTokens(EnergyPlusData &state,
                             }
                         }
                     } else { // error....
-                        ShowSevereError(state, EnergyPlus::format("First date field not numeric, field={}", String));
+                        ShowSevereError(state, std::format("First date field not numeric, field={}", String));
                     }
                 }
             } else { // mm/dd/yyyy or yyyy/mm/dd
@@ -656,7 +656,7 @@ void DetermineDateTokens(EnergyPlusData &state,
             }
         } else {
             // Not enough or too many fields
-            ShowSevereError(state, EnergyPlus::format("Invalid date field={}", String));
+            ShowSevereError(state, std::format("Invalid date field={}", String));
             ErrorsFound = true;
         }
     }
@@ -695,7 +695,7 @@ void ValidateMonthDay(EnergyPlusData &state,
         }
     }
     if (InternalError) {
-        ShowSevereError(state, EnergyPlus::format("Invalid Month Day date format={}", String));
+        ShowSevereError(state, std::format("Invalid Month Day date format={}", String));
         ErrorsFound = true;
     } else {
         ErrorsFound = false;
@@ -874,10 +874,10 @@ std::string CreateSysTimeIntervalString(EnergyPlusData const &state)
         ++ActualTimeHrS;
         ActualTimeMinS = 0;
     }
-    const std::string TimeStmpS = EnergyPlus::format("{:02}:{:02}", ActualTimeHrS, ActualTimeMinS);
+    const std::string TimeStmpS = std::format("{:02}:{:02}", ActualTimeHrS, ActualTimeMinS);
     Real64 minutes = ((ActualTimeE - static_cast<int>(ActualTimeE)) * FracToMin);
 
-    std::string TimeStmpE = EnergyPlus::format("{:02}:{:2.0F}", static_cast<int>(ActualTimeE), minutes);
+    std::string TimeStmpE = std::format("{:02}:{:2.0F}", static_cast<int>(ActualTimeE), minutes);
 
     if (TimeStmpE[3] == ' ') {
         TimeStmpE[3] = '0';
@@ -1087,7 +1087,7 @@ std::string CreateTimeString(Real64 const Time) // Time in seconds
 
     // TimeStamp written with formatting
     // "hh:mm:ss.s"
-    return fmt::format("{:02d}:{:02d}:{:04.1f}", Hours, Minutes, Seconds);
+    return std::format("{:02d}:{:02d}:{:04.1f}", Hours, Minutes, Seconds);
 }
 
 void ParseTime(Real64 const Time, // Time value in seconds
@@ -1225,17 +1225,16 @@ void ScanForReports(EnergyPlusData &state,
                     state.dataGlobal->ShowDecayCurvesInEIO = true;
                     break;
                 default: // including empty
-                    ShowWarningError(state,
-                                     EnergyPlus::format("{}: No {} supplied.", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(1)));
+                    ShowWarningError(state, std::format("{}: No {} supplied.", cCurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(1)));
                     ShowContinueError(state,
                                       R"( Legal values are: "Lines", "Vertices", "Details", "DetailsWithVertices", "CostInfo", "ViewFactorIinfo".)");
                 }
             } catch (int e) {
                 ShowWarningError(state,
-                                 EnergyPlus::format("{}: Invalid {}=\"{}\" supplied.",
-                                                    cCurrentModuleObject,
-                                                    state.dataIPShortCut->cAlphaFieldNames(1),
-                                                    state.dataIPShortCut->cAlphaArgs(1)));
+                                 std::format("{}: Invalid {}=\"{}\" supplied.",
+                                             cCurrentModuleObject,
+                                             state.dataIPShortCut->cAlphaFieldNames(1),
+                                             state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state,
                                   R"( Legal values are: "Lines", "Vertices", "Details", "DetailsWithVertices", "CostInfo", "ViewFactorIinfo".)");
             }
@@ -1496,25 +1495,24 @@ void CheckCreatedZoneItemName(EnergyPlusData &state,
     ResultName = ZoneName + ' ' + ItemName;
     bool TooLong = false;
     if (ItemLength > Constant::MaxNameLength) {
-        ShowWarningError(state, fmt::format("{}{} Combination of ZoneList and Object Name generate a name too long.", calledFrom, CurrentObject));
-        ShowContinueError(state, EnergyPlus::format("Object Name=\"{}\".", ItemName));
-        ShowContinueError(state, EnergyPlus::format("ZoneList/Zone Name=\"{}\".", ZoneName));
+        ShowWarningError(state, std::format("{}{} Combination of ZoneList and Object Name generate a name too long.", calledFrom, CurrentObject));
+        ShowContinueError(state, std::format("Object Name=\"{}\".", ItemName));
+        ShowContinueError(state, std::format("ZoneList/Zone Name=\"{}\".", ZoneName));
         ShowContinueError(
-            state,
-            EnergyPlus::format("Item length=[{}] > Maximum Length=[{}]. You may need to shorten the names.", ItemLength, Constant::MaxNameLength));
+            state, std::format("Item length=[{}] > Maximum Length=[{}]. You may need to shorten the names.", ItemLength, Constant::MaxNameLength));
         ShowContinueError(state,
-                          EnergyPlus::format("Shortening the Object Name by [{}] characters will assure uniqueness for this ZoneList.",
-                                             MaxZoneNameLength + 1 + ItemNameLength - Constant::MaxNameLength));
-        ShowContinueError(state, EnergyPlus::format("name that will be used (may be needed in reporting)=\"{}\".", ResultName));
+                          std::format("Shortening the Object Name by [{}] characters will assure uniqueness for this ZoneList.",
+                                      MaxZoneNameLength + 1 + ItemNameLength - Constant::MaxNameLength));
+        ShowContinueError(state, std::format("name that will be used (may be needed in reporting)=\"{}\".", ResultName));
         TooLong = true;
     }
 
     int FoundItem = Util::FindItemInList(ResultName, ItemNames, NumItems);
 
     if (FoundItem != 0) {
-        ShowSevereError(state, fmt::format("{}{}=\"{}\", Duplicate Generated name encountered.", calledFrom, CurrentObject, ItemName));
-        ShowContinueError(
-            state, EnergyPlus::format("name=\"{}\" has already been generated or entered as {} item=[{}].", ResultName, CurrentObject, FoundItem));
+        ShowSevereError(state, std::format("{}{}=\"{}\", Duplicate Generated name encountered.", calledFrom, CurrentObject, ItemName));
+        ShowContinueError(state,
+                          std::format("name=\"{}\" has already been generated or entered as {} item=[{}].", ResultName, CurrentObject, FoundItem));
         if (TooLong) {
             ShowContinueError(state, "Duplicate name likely caused by the previous \"too long\" warning.");
         }

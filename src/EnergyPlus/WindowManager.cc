@@ -564,12 +564,12 @@ namespace Window {
                         // Add warning message for the glazing defined with full spectral data.
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
+                            std::format(
                                 "Window glazing material \"{}\" was defined with full spectral data and has been converted to average spectral data",
                                 matGlass->Name));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("due to its use with between-glass shades or blinds of the window construction \"{}\".",
-                                                             thisConstruct.Name));
+                        ShowContinueError(
+                            state,
+                            std::format("due to its use with between-glass shades or blinds of the window construction \"{}\".", thisConstruct.Name));
                         ShowContinueError(state, "All occurrences of this glazing material will be modeled as SpectralAverage.");
                         ShowContinueError(state,
                                           "If this material is also used in other window constructions  without between-glass shades or blinds,");
@@ -615,14 +615,13 @@ namespace Window {
                     numpt[iGlass] = numptDAT;
                     if (wm->BGFlag) {
                         // 5/16/2012 CR 8793. Add warning message for the glazing defined with full spectral data.
-                        ShowWarningError(
+                        ShowWarningError(state,
+                                         std::format("Window glazing material \"{}\" was defined with full spectral and angular data and has been "
+                                                     "converted to average spectral data",
+                                                     matGlass->Name));
+                        ShowContinueError(
                             state,
-                            EnergyPlus::format("Window glazing material \"{}\" was defined with full spectral and angular data and has been "
-                                               "converted to average spectral data",
-                                               matGlass->Name));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("due to its use with between-glass shades or blinds of the window construction \"{}\".",
-                                                             thisConstruct.Name));
+                            std::format("due to its use with between-glass shades or blinds of the window construction \"{}\".", thisConstruct.Name));
                         ShowContinueError(state, "All occurrences of this glazing material will be modeled as SpectralAverage.");
                         ShowContinueError(state,
                                           "If this material is also used in other window constructions  without between-glass shades or blinds,");
@@ -1767,9 +1766,9 @@ namespace Window {
                 ++DifOverrideCount;
                 if (state.dataGlobal->DisplayExtraWarnings) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("W5InitGlassParameters: Window=\"{}\" has interior material with Solar Diffusing=Yes, but "
-                                                        "existing Window Shading Device sets Diffusing=No.",
-                                                        surf.Name));
+                                     std::format("W5InitGlassParameters: Window=\"{}\" has interior material with Solar Diffusing=Yes, but "
+                                                 "existing Window Shading Device sets Diffusing=No.",
+                                                 surf.Name));
                 }
             }
         } // for (SurfNum)
@@ -1778,13 +1777,12 @@ namespace Window {
             if (!state.dataGlobal->DisplayExtraWarnings) {
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
-                                       DifOverrideCount));
+                    std::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
+                                DifOverrideCount));
             } else {
-                ShowMessage(
-                    state,
-                    EnergyPlus::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
-                                       DifOverrideCount));
+                ShowMessage(state,
+                            std::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
+                                        DifOverrideCount));
             }
         }
     } // W5InitGlassParameters()
@@ -2370,9 +2368,9 @@ namespace Window {
                         if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                             // check to make sure the user hasn't messed up the shade control values
                             if (matShade->group == Material::Group::Blind) {
-                                ShowSevereError(state,
-                                                EnergyPlus::format("CalcWindowHeatBalance: ShadeFlag indicates Shade but Blind=\"{}\" is being used.",
-                                                                   matShade->Name));
+                                ShowSevereError(
+                                    state,
+                                    std::format("CalcWindowHeatBalance: ShadeFlag indicates Shade but Blind=\"{}\" is being used.", matShade->Name));
                                 ShowContinueError(state, "This is most likely a fault of the EMS values for shading control.");
                                 ShowFatalError(state, "Preceding condition terminates program.");
                             }
@@ -2397,10 +2395,9 @@ namespace Window {
                         if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                             // check to make sure the user hasn't messed up the shade control values
                             if (matShade->group == Material::Group::Shade || matShade->group == Material::Group::Screen) {
-                                ShowSevereError(
-                                    state,
-                                    EnergyPlus::format("CalcWindowHeatBalance: ShadeFlag indicates Blind but Shade/Screen=\"{}\" is being used.",
-                                                       matShade->Name));
+                                ShowSevereError(state,
+                                                std::format("CalcWindowHeatBalance: ShadeFlag indicates Blind but Shade/Screen=\"{}\" is being used.",
+                                                            matShade->Name));
                                 ShowContinueError(state, "This is most likely a fault of the EMS values for shading control.");
                                 ShowFatalError(state, "Preceding condition terminates program.");
                             }
@@ -3188,8 +3185,7 @@ namespace Window {
             }
 
         } else {
-            ShowFatalError(state,
-                           EnergyPlus::format("SolveForWindowTemperatures: Invalid number of Glass Layers={}, up to 4 allowed.", wm->ngllayer));
+            ShowFatalError(state, std::format("SolveForWindowTemperatures: Invalid number of Glass Layers={}, up to 4 allowed.", wm->ngllayer));
         }
     } // GetHeatBalanceEqCoefMatrix()
 
@@ -3605,8 +3601,7 @@ namespace Window {
             }
         } else {
             // No convergence after MaxIterations even with relaxed error tolerance
-            ShowSevereError(state,
-                            EnergyPlus::format("Convergence error in SolveForWindowTemperatures for window {}", s_surf->Surface(SurfNum).Name));
+            ShowSevereError(state, std::format("Convergence error in SolveForWindowTemperatures for window {}", s_surf->Surface(SurfNum).Name));
             ShowContinueErrorTimeStamp(state, "");
 
             if (state.dataGlobal->DisplayExtraWarnings) {
@@ -3621,8 +3616,8 @@ namespace Window {
             }
 
             ShowFatalError(state,
-                           EnergyPlus::format("Program halted because of convergence error in SolveForWindowTemperatures for window {}",
-                                              s_surf->Surface(SurfNum).Name));
+                           std::format("Program halted because of convergence error in SolveForWindowTemperatures for window {}",
+                                       s_surf->Surface(SurfNum).Name));
         }
     } // SolveForWindowTemperatures()
 
@@ -6527,9 +6522,9 @@ namespace Window {
         // No convergence after MaxIterations; and/or error tolerance
         if (errtemp >= 10 * errtemptol) {
             // Fatal error: didn't converge
-            ShowFatalError(state,
-                           EnergyPlus::format("Convergence error in WindowTempsForNominalCond for construction {}",
-                                              state.dataConstruction->Construct(ConstrNum).Name));
+            ShowFatalError(
+                state,
+                std::format("Convergence error in WindowTempsForNominalCond for construction {}", state.dataConstruction->Construct(ConstrNum).Name));
         }
     } // WindowTempsForNominalCond()
 
@@ -6801,7 +6796,7 @@ namespace Window {
                         CalcNominalWindowCond(state, ThisNum, 1, NominalConductanceWinter, SHGCWinter, TransSolNorm, TransVisNorm, errFlag);
 
                         if (errFlag == 1) {
-                            ShowWarningError(state, EnergyPlus::format("Window construction {} has an interior or exterior blind", construct.Name));
+                            ShowWarningError(state, std::format("Window construction {} has an interior or exterior blind", construct.Name));
                             ShowContinueError(state, "but the corresponding construction without the blind cannot be found.");
                             ShowContinueError(state, "The ReportGlass entry for this construction will not be printed in eplusout.eio.");
                             continue;
@@ -6811,7 +6806,7 @@ namespace Window {
                         // nominal conductance and SHGC.
 
                         if (errFlag == 2) {
-                            ShowWarningError(state, EnergyPlus::format("Window construction {} has a between-glass shade or blind", construct.Name));
+                            ShowWarningError(state, std::format("Window construction {} has a between-glass shade or blind", construct.Name));
                             ShowContinueError(state, "The ReportGlass entry for this construction will not be printed in eplusout.eio.");
                             continue;
                         }
@@ -6925,10 +6920,10 @@ namespace Window {
                             if (matGlass->windowOpticalData == Window::OpticalDataModel::Spectral) {
                                 SpectralDataName = s_mat->SpectralData(matGlass->GlassSpectralDataPtr).Name;
                             } else if (matGlass->windowOpticalData == Window::OpticalDataModel::SpectralAndAngle) {
-                                SpectralDataName = EnergyPlus::format("{}, {}, {}",
-                                                                      matGlass->GlassSpecAngTransCurve->Name,
-                                                                      matGlass->GlassSpecAngFReflCurve->Name,
-                                                                      matGlass->GlassSpecAngBReflCurve->Name);
+                                SpectralDataName = std::format("{}, {}, {}",
+                                                               matGlass->GlassSpecAngTransCurve->Name,
+                                                               matGlass->GlassSpecAngFReflCurve->Name,
+                                                               matGlass->GlassSpecAngBReflCurve->Name);
                             } else {
                                 SpectralDataName = "";
                             }
@@ -8298,7 +8293,7 @@ namespace Window {
 
         // read custom spectrum data from Site:SolarAndVisibleSpectrum
         if (NumSiteSpectrum > 1) { // throw error
-            ShowSevereError(state, EnergyPlus::format("Only one {} object is allowed", cCurrentModuleObject));
+            ShowSevereError(state, std::format("Only one {} object is allowed", cCurrentModuleObject));
             ErrorsFound = true;
         }
 
@@ -8330,7 +8325,7 @@ namespace Window {
             cCurrentModuleObject = "Site:SpectrumData";
             NumSiteSpectrum = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
             if (NumSiteSpectrum == 0) { // throw error
-                ShowSevereError(state, EnergyPlus::format("No {} object is found", cCurrentModuleObject));
+                ShowSevereError(state, std::format("No {} object is found", cCurrentModuleObject));
                 ErrorsFound = true;
             }
 
@@ -8358,9 +8353,9 @@ namespace Window {
                     // overwrite the default solar spectrum
                     if (NumNumbers > 2 * nume) {
                         ShowSevereError(state,
-                                        EnergyPlus::format("Solar spectrum data pair is more than 107 - {} - {}",
-                                                           cCurrentModuleObject,
-                                                           state.dataIPShortCut->cAlphaArgs(1)));
+                                        std::format("Solar spectrum data pair is more than 107 - {} - {}",
+                                                    cCurrentModuleObject,
+                                                    state.dataIPShortCut->cAlphaArgs(1)));
                         ErrorsFound = true;
                     } else {
                         // Step 3 - overwrite default solar spectrum data
@@ -8380,9 +8375,9 @@ namespace Window {
                     // overwrite the default solar spectrum
                     if (NumNumbers > 2 * numt3) {
                         ShowSevereError(state,
-                                        EnergyPlus::format("Visible spectrum data pair is more than 81 - {} - {}",
-                                                           cCurrentModuleObject,
-                                                           state.dataIPShortCut->cAlphaArgs(1)));
+                                        std::format("Visible spectrum data pair is more than 81 - {} - {}",
+                                                    cCurrentModuleObject,
+                                                    state.dataIPShortCut->cAlphaArgs(1)));
                         ErrorsFound = true;
                     } else {
                         // Step 3 - overwrite default visible spectrum data
