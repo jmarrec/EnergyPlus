@@ -553,6 +553,136 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 
               ! If your original object starts with I, insert the rules here
 
+              CASE('ELECTRICEQUIPMENT:ITE:AIRCOOLED')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+
+                ! Old ElectricEquipment:ITE:AirCooled combined field order (A and N interleaved by IDD position):
+                !  1  A1  Name
+                !  2  A2  Zone or Space Name
+                !  3  A3  Air Flow Calculation Method
+                !  4  A4  Design Power Input Calculation Method
+                !  5  N1  Watts per Unit
+                !  6  N2  Number of Units
+                !  7  N3  Watts per Floor Area
+                !  8  A5  Design Power Input Schedule Name
+                !  9  A6  CPU Loading Schedule Name
+                ! 10  A7  CPU Power Input Function of Loading and Air Temperature Curve Name
+                ! 11  N4  Design Fan Power Input Fraction
+                ! 12  N5  Design Fan Air Flow Rate per Power Input
+                ! 13  A8  Air Flow Function of Loading and Air Temperature Curve Name
+                ! 14  A9  Fan Power Input Function of Flow Curve Name
+                ! 15  N6  Design Entering Air Temperature
+                ! 16  A10 Environmental Class
+                ! 17  A11 Air Inlet Connection Type
+                ! 18  A12 Air Inlet Room Air Model Node Name
+                ! 19  A13 Air Outlet Room Air Model Node Name
+                ! 20  A14 Supply Air Node Name
+                ! 21  N7  Design Recirculation Fraction
+                ! 22  A15 Recirculation Function of Loading and Supply Temperature Curve Name
+                ! 23  N8  Design Electric Power Supply Efficiency
+                ! 24  A16 Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
+                ! 25  N9  Fraction of Electric Power Supply Losses to Zone
+                ! 26  A17 CPU End-Use Subcategory
+                ! 27  A18 Fan End-Use Subcategory
+                ! 28  A19 Electric Power Supply End-Use Subcategory   <-- old \min-fields 28
+                ! 29  N10 Supply Temperature Difference               (optional)
+                ! 30  A20 Supply Temperature Difference Schedule      (optional)
+                ! 31  N11 Return Temperature Difference               (optional)
+                ! 32  A21 Return Temperature Difference Schedule      (optional)
+
+                ! Write the updated ElectricEquipment:ITE:AirCooled instance:
+                ! A1  Name (unchanged)
+                ! A2  ElectricEquipment ITE AirCooled Definition Name (new) = Name + ' Definition'
+                ! A3  Zone or Space Name (was A2/field 2)
+                ! N1  Number of Units (was N2/field 6)
+                ! A4  Design Power Input Schedule Name (was A5/field 8)
+                ! A5  CPU Loading Schedule Name (was A6/field 9)
+                ! A6  Air Inlet Room Air Model Node Name (was A12/field 18)
+                ! A7  Air Outlet Room Air Model Node Name (was A13/field 19)
+                ! A8  Supply Air Node Name (was A14/field 20)
+                ! A9  CPU End-Use Subcategory (was A17/field 26)
+                ! A10 Fan End-Use Subcategory (was A18/field 27)
+                ! A11 Electric Power Supply End-Use Subcategory (was A19/field 28)
+                OutArgs(1)  = InArgs(1)
+                OutArgs(2)  = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(3)  = InArgs(2)
+                OutArgs(4)  = InArgs(6)
+                OutArgs(5)  = InArgs(8)
+                OutArgs(6)  = InArgs(9)
+                OutArgs(7)  = InArgs(18)
+                OutArgs(8)  = InArgs(19)
+                OutArgs(9)  = InArgs(20)
+                OutArgs(10) = InArgs(26)
+                OutArgs(11) = InArgs(27)
+                OutArgs(12) = InArgs(28)
+                COutArgs = 12
+                CALL WriteOutIDFLines(DifLfn,'ElectricEquipment:ITE:AirCooled',COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                ! Create the new ElectricEquipment:ITE:AirCooled:Definition object:
+                ! A1  Name = Name + ' Definition'
+                ! A2  Air Flow Calculation Method (was A3/field 3)
+                ! A3  Design Power Input Calculation Method (was A4/field 4)
+                ! N1  Watts per Unit (was N1/field 5)
+                ! N2  Watts per Floor Area (was N3/field 7)
+                ! A4  CPU Power Input Function of Loading and Air Temperature Curve Name (was A7/field 10)
+                ! N3  Design Fan Power Input Fraction (was N4/field 11)
+                ! N4  Design Fan Air Flow Rate per Power Input (was N5/field 12)
+                ! A5  Air Flow Function of Loading and Air Temperature Curve Name (was A8/field 13)
+                ! A6  Fan Power Input Function of Flow Curve Name (was A9/field 14)
+                ! N5  Design Entering Air Temperature (was N6/field 15)
+                ! A7  Environmental Class (was A10/field 16)
+                ! A8  Air Inlet Connection Type (was A11/field 17)
+                ! N6  Design Recirculation Fraction (was N7/field 21)
+                ! A9  Recirculation Function of Loading and Supply Temperature Curve Name (was A15/field 22)
+                ! N7  Design Electric Power Supply Efficiency (was N8/field 23)
+                ! A10 Electric Power Supply Efficiency Function of Part Load Ratio Curve Name (was A16/field 24)
+                ! N8  Fraction of Electric Power Supply Losses to Zone (was N9/field 25)
+                ! N9  Supply Temperature Difference (was N10/field 29) -- optional
+                ! A11 Supply Temperature Difference Schedule (was A20/field 30) -- optional
+                ! N10 Return Temperature Difference (was N11/field 31) -- optional
+                ! A12 Return Temperature Difference Schedule (was A21/field 32) -- optional
+                ObjectName = 'ElectricEquipment:ITE:AirCooled:Definition'
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                OutArgs(1)  = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(2)  = InArgs(3)
+                OutArgs(3)  = InArgs(4)
+                OutArgs(4)  = InArgs(5)
+                OutArgs(5)  = InArgs(7)
+                OutArgs(6)  = InArgs(10)
+                OutArgs(7)  = InArgs(11)
+                OutArgs(8)  = InArgs(12)
+                OutArgs(9)  = InArgs(13)
+                OutArgs(10) = InArgs(14)
+                OutArgs(11) = InArgs(15)
+                OutArgs(12) = InArgs(16)
+                OutArgs(13) = InArgs(17)
+                OutArgs(14) = InArgs(21)
+                OutArgs(15) = InArgs(22)
+                OutArgs(16) = InArgs(23)
+                OutArgs(17) = InArgs(24)
+                OutArgs(18) = InArgs(25)
+                COutArgs = 18
+                IF (CurArgs >= 29) THEN
+                  OutArgs(19) = InArgs(29)
+                  COutArgs = 19
+                END IF
+                IF (CurArgs >= 30) THEN
+                  OutArgs(20) = InArgs(30)
+                  COutArgs = 20
+                END IF
+                IF (CurArgs >= 31) THEN
+                  OutArgs(21) = InArgs(31)
+                  COutArgs = 21
+                END IF
+                IF (CurArgs >= 32) THEN
+                  OutArgs(22) = InArgs(32)
+                  COutArgs = 22
+                END IF
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                Written = .true.
+
               ! If your original object starts with L, insert the rules here
 
               CASE('LIGHTS')

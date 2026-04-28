@@ -134,6 +134,37 @@ namespace InternalHeatGains {
         Real64 FractionReturnAirPlenTempCoeff2 = 0.0;
     };
 
+    struct ITEquipDefinitionData // ElectricEquipment:ITE:AirCooled:Definition
+    {
+        // Field names mirror ITEquipData members in DataHeatBalance.hh where they correspond.
+        std::string Name;
+        bool FlowControlWithApproachTemps = false;                         // matches ITEquipData::FlowControlWithApproachTemps
+        DesignLevelMethod designLevelMethod = DesignLevelMethod::Invalid;  // EquipmentLevel (Watts/Unit) or WattsPerArea
+        Real64 levelValue = 0.0;                                           // watts/unit or watts/m2 depending on designLevelMethod
+        bool levelIsBlank = false;                                         // True if the design level field was blank
+        std::string levelField;                                            // Schema field name used (for error messages)
+        int CPUPowerFLTCurve = 0;                                          // matches ITEquipData::CPUPowerFLTCurve
+        Real64 DesignFanPowerFrac = 0.0;                                   // matches ITEquipData::DesignFanPowerFrac
+        Real64 DesignFanAirFlowPerPower = 0.0;                             // [m3/s-W]; DesignAirVolFlowRate = this * DesignTotalPower
+        int AirFlowFLTCurve = 0;                                           // matches ITEquipData::AirFlowFLTCurve
+        int FanPowerFFCurve = 0;                                           // matches ITEquipData::FanPowerFFCurve
+        Real64 DesignTAirIn = 15.0;                                        // matches ITEquipData::DesignTAirIn
+        DataHeatBalance::ITEClass Class = DataHeatBalance::ITEClass::None; // matches ITEquipData::Class
+        DataHeatBalance::ITEInletConnection AirConnectionType =
+            DataHeatBalance::ITEInletConnection::AdjustedSupply; // matches ITEquipData::AirConnectionType
+        Real64 DesignRecircFrac = 0.0;                           // matches ITEquipData::DesignRecircFrac
+        int RecircFLTCurve = 0;                                  // matches ITEquipData::RecircFLTCurve
+        Real64 DesignUPSEfficiency = 1.0;                        // matches ITEquipData::DesignUPSEfficiency
+        int UPSEfficFPLRCurve = 0;                               // matches ITEquipData::UPSEfficFPLRCurve
+        Real64 UPSLossToZoneFrac = 1.0;                          // matches ITEquipData::UPSLossToZoneFrac
+        Real64 SupplyApproachTemp = 0.0;                         // matches ITEquipData::SupplyApproachTemp
+        bool supplyApproachTempProvided = false;                 // True if Supply Temperature Difference was explicitly given
+        Sched::Schedule *supplyApproachTempSched = nullptr;      // matches ITEquipData::supplyApproachTempSched
+        Real64 ReturnApproachTemp = 0.0;                         // matches ITEquipData::ReturnApproachTemp
+        bool returnApproachTempProvided = false;                 // True if Return Temperature Difference was explicitly given
+        Sched::Schedule *returnApproachTempSched = nullptr;      // matches ITEquipData::returnApproachTempSched
+    };
+
     struct GlobalInternalGainMiscObject
     {
         // Members
@@ -155,6 +186,8 @@ namespace InternalHeatGains {
     std::vector<PeopleDefinitionData> GetPeopleDefinition(EnergyPlusData &state);
 
     std::vector<LightsDefinitionData> GetLightsDefinition(EnergyPlusData &state);
+
+    std::vector<ITEquipDefinitionData> GetITEAirCooledDefinition(EnergyPlusData &state);
 
     void GetInternalHeatGainsInput(EnergyPlusData &state);
 
