@@ -5990,7 +5990,7 @@ void WaterThermalTankData::setupWaterHeaterOutputVars(EnergyPlusData &state)
     if (this->WaterThermalTankType == DataPlant::PlantEquipmentType::WtrHeaterStratified) {
 
         for (int NodeNum = 1; NodeNum <= this->Nodes; ++NodeNum) {
-            static constexpr std::string_view Format_723("Water Heater Stratified Node Information,{},{:.4f},{:.4f},{:.3f},{:.4f},{:.4f},{},{}\n");
+            static constexpr std::string_view Format_723("Water Heater Stratified Node Information,{},{:.4f},{:.4e},{:.3f},{:.4f},{:.4f},{},{}\n");
             print(state.files.eio,
                   Format_723,
                   NodeNum,
@@ -13083,7 +13083,7 @@ void WaterThermalTankData::ReportCWTankInits(EnergyPlusData &state)
         return;
     }
 
-    static constexpr std::string_view Format_728("Chilled Water Tank Information,{},{},{:.4f},{:.4f},{:.4f}\n");
+    static constexpr std::string_view Format_728("Chilled Water Tank Information,{},{},{:.4f},{:.4e},{:.4e}\n");
     print(state.files.eio, Format_728, this->Type, this->Name, this->Volume, this->UseDesignVolFlowRate, this->SourceDesignVolFlowRate);
 
     this->AlreadyReported = true;
