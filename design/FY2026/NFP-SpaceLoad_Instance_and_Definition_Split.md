@@ -1,8 +1,7 @@
 SpaceLoad Instance and Definition Objects
 ================
 
-**Kyle Benne, NLR**
-**Julien Marrec, EffiBEM**
+**Kyle Benne, National Laboratory of the Rockies**
 
  - Original Date: 04/29/2026
  - Revision Date: 04/29/2026
