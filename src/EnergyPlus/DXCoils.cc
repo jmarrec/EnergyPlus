@@ -6852,8 +6852,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                                          HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                          thisDXCoil.Name));
             ShowContinueError(state,
-                              std::format("Min Rated Vol Flow Per Watt=[{:.3f}], Rated Vol Flow Per Watt=[{:.3f}], Max Rated Vol Flow Per "
-                                          "Watt=[{:.3f}]. See Input-Output Reference Manual for valid range.",
+                              std::format("Min Rated Vol Flow Per Watt=[{:.3e}], Rated Vol Flow Per Watt=[{:.3e}], Max Rated Vol Flow Per "
+                                          "Watt=[{:.3e}]. See Input-Output Reference Manual for valid range.",
                                           HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                           RatedVolFlowPerRatedTotCap,
                                           HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
@@ -7001,8 +7001,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                                     HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                     thisDXCoil.Name));
                     ShowContinueError(state,
-                                      std::format("Min Rated Vol Flow Per Watt=[{:.3f}], Rated Vol Flow Per Watt=[{:.3f}], Max Rated Vol Flow Per "
-                                                  "Watt=[{:.3f}]. See Input Output Reference Manual for valid range.",
+                                      std::format("Min Rated Vol Flow Per Watt=[{:.3e}], Rated Vol Flow Per Watt=[{:.3e}], Max Rated Vol Flow Per "
+                                                  "Watt=[{:.3e}]. See Input-Output Reference Manual for valid range.",
                                                   HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                                   RatedVolFlowPerRatedTotCap,
                                                   HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
@@ -7126,8 +7126,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                                         thisDXCoil.Name));
                         ShowContinueError(
                             state,
-                            std::format("Min Rated Vol Flow Per Watt=[{:.3f}], Rated Vol Flow Per Watt=[{:.3f}], Max Rated Vol Flow Per "
-                                        "Watt=[{:.3f}]. See Input Output Reference Manual for valid range.",
+                            std::format("Min Rated Vol Flow Per Watt=[{:.3e}], Rated Vol Flow Per Watt=[{:.3e}], Max Rated Vol Flow Per "
+                                        "Watt=[{:.3e}]. See Input-Output Reference Manual for valid range.",
                                         HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                         RatedVolFlowPerRatedTotCap,
                                         HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
@@ -7185,8 +7185,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                                     HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                     thisDXCoil.Name));
                     ShowContinueError(state,
-                                      std::format("Min Rated Vol Flow Per Watt=[{:.3f}], Rated Vol Flow Per Watt=[{:.3f}], Max Rated Vol Flow Per "
-                                                  "Watt=[{:.3f}]. See Input-Output Reference Manual for valid range.",
+                                      std::format("Min Rated Vol Flow Per Watt=[{:.3e}], Rated Vol Flow Per Watt=[{:.3e}], Max Rated Vol Flow Per "
+                                                  "Watt=[{:.3e}]. See Input-Output Reference Manual for valid range.",
                                                   HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                                   RatedVolFlowPerRatedTotCap,
                                                   HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
@@ -7270,8 +7270,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                                 "capacity is out of range.",
                                 thisDXCoil.Name));
                 ShowContinueError(state,
-                                  std::format("Min Rated Vol Flow Per Watt=[{:.3f}], Rated Vol Flow Per Watt=[{:.3f}], Max Rated Vol Flow Per "
-                                              "Watt=[{:.3f}]. See Input-Output Reference Manual for valid range.",
+                                  std::format("Min Rated Vol Flow Per Watt=[{:.3e}], Rated Vol Flow Per Watt=[{:.3e}], Max Rated Vol Flow Per "
+                                              "Watt=[{:.3e}]. See Input-Output Reference Manual for valid range.",
                                               HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                               RatedVolFlowPerRatedTotCap,
                                               HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
@@ -7331,8 +7331,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                             thisDXCoil.Name,
                             Mode));
                     ShowContinueError(state,
-                                      std::format("Min Rated Vol Flow Per Watt=[{:.3f}], Rated Vol Flow Per Watt=[{:.3f}], Max Rated Vol Flow Per "
-                                                  "Watt=[{:.3f}]. See Input Output Reference Manual for valid range.",
+                                      std::format("Min Rated Vol Flow Per Watt=[{:.3e}], Rated Vol Flow Per Watt=[{:.3e}], Max Rated Vol Flow Per "
+                                                  "Watt=[{:.3e}]. See Input-Output Reference Manual for valid range.",
                                                   HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                                   RatedVolFlowPerRatedTotCap,
                                                   HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
@@ -7371,8 +7371,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                                                  thisDXCoil.Name,
                                                  Mode));
                     ShowContinueError(state,
-                                      std::format("Min Rated Vol Flow Per Watt=[{:.3f}], Rated Vol Flow Per Watt=[{:.3f}], Max Rated Vol Flow Per "
-                                                  "Watt=[{:.3f}]. See Input Output Reference Manual for valid range.",
+                                      std::format("Min Rated Vol Flow Per Watt=[{:.3e}], Rated Vol Flow Per Watt=[{:.3e}], Max Rated Vol Flow Per "
+                                                  "Watt=[{:.3e}]. See Input-Output Reference Manual for valid range.",
                                                   HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                                   RatedVolFlowPerRatedTotCap,
                                                   HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
