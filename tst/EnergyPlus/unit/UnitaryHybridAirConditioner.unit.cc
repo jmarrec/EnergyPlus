@@ -568,8 +568,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
         ",                        !- Mode1 System Second Fuel Consumption Lookup Table Name",
         ",                        !- Mode1 System Third Fuel Consumption Lookup Table Name",
         ",                        !- Mode1 System Water Use Lookup Table Name",
-        "-20,                     !- Mode1 Minimum Outside Air Temperature {C}",
-        "100,                     !- Mode1 Maximum Outside Air Temperature {C}",
+        ",                        !- Mode1 Minimum Outside Air Temperature {C}",
+        ",                        !- Mode1 Maximum Outside Air Temperature {C}",
         "0,                       !- Mode1 Minimum Outside Air Humidity Ratio {kgWater/kgDryAir}",
         "0.03,                    !- Mode1 Maximum Outside Air Humidity Ratio {kgWater/kgDryAir}",
         "0,                       !- Mode1 Minimum Outside Air Relative Humidity {percent}",
@@ -597,6 +597,17 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
     // check if names for HybridUnitaryAC are converted to upper case
     EXPECT_EQ("HYBRID UNIT 1", state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1).Name);
     EXPECT_EQ("HYBRID UNIT 2", state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2).Name);
+    // check outdoor air temperature constraints
+    auto &operatingMode = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1).OperatingModes[1];
+    EXPECT_EQ(operatingMode.Minimum_Outdoor_Air_Temperature_Blank, false);
+    EXPECT_EQ(operatingMode.Minimum_Outdoor_Air_Temperature, -20);
+    EXPECT_EQ(operatingMode.Maximum_Outdoor_Air_Temperature_Blank, false);
+    EXPECT_EQ(operatingMode.Maximum_Outdoor_Air_Temperature, 100);
+    operatingMode = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2).OperatingModes[1];
+    EXPECT_EQ(operatingMode.Minimum_Outdoor_Air_Temperature_Blank, true);
+    EXPECT_EQ(operatingMode.Minimum_Outdoor_Air_Temperature, 0);
+    EXPECT_EQ(operatingMode.Maximum_Outdoor_Air_Temperature_Blank, true);
+    EXPECT_EQ(operatingMode.Maximum_Outdoor_Air_Temperature, 0);
 }
 
 TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateMinimumIdfInput)
