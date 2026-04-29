@@ -725,10 +725,10 @@ namespace InternalHeatGains {
                                                                 RoutineName,
                                                                 peopleModuleObject,
                                                                 IHGAlphas(1)));
-                            ShowContinueError(
-                                state,
-                                "If schedules are specified for air velocity, clothing insulation, and/or work efficiency but no "
-                                "thermal comfort model is selected, the schedules will be listed as unused schedules in the .err file.");
+                            ShowContinueError(state,
+                                              "If schedules are specified for air velocity, clothing insulation, and/or work efficiency but no "
+                                              "thermal comfort");
+                            ShowContinueError(state, "model is selected, the schedules will be listed as unused schedules in the .err file.");
                             ShowContinueError(
                                 state,
                                 "To avoid these errors, select a valid thermal comfort model or eliminate these schedules in the PEOPLE input.");
