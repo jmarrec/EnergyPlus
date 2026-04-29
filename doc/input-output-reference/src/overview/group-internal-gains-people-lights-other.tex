@@ -92,13 +92,17 @@ This separation makes it straightforward to apply the same load characteristics 
 
 \subsection{People}\label{people}
 
-The people statement is used to model the occupant's effect on the space conditions. The following definition addresses the basic affects as well as providing information that can be used to report the thermal comfort of a group of occupants. The Fanger, Pierce Two-Node, Kansas State University Two-Node, ASHRAE Standard 55 Elevated Air Cooling Effect model, and ASHRAE Standard 55 Ankle Draft Risk thermal comfort models are available in EnergyPlus. A user may select any of these models for each People statement by simply adding the appropriate choice keyword after the air velocity schedule name. Thermal comfort calculations will only be made for people statements that include specific requests for these thermal comfort models. This object also requires input of carbon dioxide generation rate based on people activity level for zone carbon dioxide simulations.
+The people statement is used to model the occupant's effect on the space conditions. The following definition addresses the basic affects as well as providing information that can be used to report the thermal comfort of a group of occupants. The Fanger, Pierce Two-Node, Kansas State University Two-Node, ASHRAE Standard 55 Elevated Air Cooling Effect model, and ASHRAE Standard 55 Ankle Draft Risk thermal comfort models are available in EnergyPlus. A user may select any of these models for each People statement by simply adding the appropriate choice keyword in the associated \hyperref[peopledefinition]{People:Definition} object. Thermal comfort calculations will only be made for people statements that include specific requests for these thermal comfort models. This object also requires input of carbon dioxide generation rate based on people activity level for zone carbon dioxide simulations.
 
 \subsubsection{Inputs}\label{inputs-025}
 
 \paragraph{Field: Name}\label{field-name-024}
 
 The name of the People object. Must be unique across all People objects.
+
+\paragraph{Field: People Definition Name}\label{field-people-definition-name}
+
+The name of the \hyperref[peopledefinition]{People:Definition} object that specifies the occupancy calculation method, heat gain fractions, CO\(_{2}\) generation rate, and thermal comfort model types for this instance.
 
 \paragraph{Field: Zone or ZoneList or Space or SpaceList Name}\label{field-zone-or-zonelist-name-000}
 
@@ -108,57 +112,13 @@ When multiple people objects are defined for the same zone, and they have differ
 
 \paragraph{Field: Number of People Schedule Name}\label{field-number-of-people-schedule-name}
 
-This field is the name of the schedule (ref: Schedules) that modifies the number of people parameter (see Number of People Calculation Method and related fields). The schedule values can be any positive number. The actual number of people in a zone as defined by this statement is the product of the number of people field and the value of the schedule specified by name in this field.
-
-\paragraph{Field: Number of People Calculation Method}\label{field-number-of-people-calculation-method}
-
-This field is a key/choice field that tells which of the next three fields are filled and is descriptive of the method for calculating the nominal number of occupants (people) in the Zone. The key/choices are:
-
-\begin{description}
-
-\item[People] With this choice, the method used will be a straight insertion of the number of occupants (people).~ (The Number of People field should be filled.)
-
-\item[People/Area] With this choice, the method used will be a factor per floor area of the zone or space. (The People per Zone Floor Area field should be filled).
-
-\item[Area/Person] With this choice, the method used will be a factor of floor area per person. (The Zone Floor Area per Person field should be filled).
-
-\end{description}
-
-\paragraph{Field: Number of People}\label{field-number-of-people}
-
-This field is used to represent the maximum number of people in a zone that is then multiplied by a schedule fraction (see schedule field). In EnergyPlus, this is slightly more flexible in that the number of people could be a ``diversity factor'' applied to a schedule of real numbers. Note that while the schedule value can vary from hour to hour, the number of people field is constant for all simulation environments.
-
-\paragraph{Field: People per Floor Area}\label{field-people-per-zone-floor-area}
-
-This factor (person/m\(^{2}\)) is used, along with the Zone or Space Floor Area to determine the maximum number of people as described in the Number of People field. The choice from the method field should be ``people/area''.
-
-\paragraph{Field: Floor Area per Person}\label{field-zone-floor-area-per-person}
-
-This factor (m\(^{2}\)/person) is used, along with the Zone or Space Floor Area to determine the maximum number of people as described in the Number of People field. The choice from the method field should be ``area/person''.
-
-\paragraph{Field: Fraction Radiant}\label{field-fraction-radiant}
-
-This field is a decimal number between 0.0 and 1.0 and is used to characterize the type of heat being given off by people in a zone. The number specified in this field will be multiplied by the total sensible energy emitted by people to give the amount of long wavelength radiation gain from human beings in a zone. The remainder of the sensible load is assumed to be convective heat gain. Note that latent gains from people are not included in either the radiant or convective heat gains. See the Engineering Reference document for more details. Default value is 0.30.
-
-\paragraph{Field: Sensible Heat Fraction}\label{field-sensible-heat-fraction}
-
-The user can use this field to specify a fixed sensible fraction for the heat gain due to this PEOPLE object. Normally the program calculates the sensible/latent split; this field gives the user control over this split. This field is autocalculated: if the field is blank or \textbf{autocalculate}, the program will calculate the sensible/latent split; if a value is entered, it will be used as the sensible fraction of the current total heat gain.
+This field is the name of the schedule (ref: Schedules) that modifies the number of people parameter (see Number of People Calculation Method in the associated People:Definition object). The schedule values can be any positive number. The actual number of people in a zone as defined by this statement is the product of the number of people and the value of this schedule.
 
 \paragraph{Field: Activity Level Schedule Name}\label{field-activity-level-schedule-name}
 
-This field is the name of the schedule that determines the amount of heat gain per person in the zone under design conditions. This heat gain impacts the basic zone heat balance as well as the modeling of thermal comfort. This value is modified somewhat based on a correlation to account for variations in space temperature. The schedule values may be any positive number and the units for this parameter is Watts per person. This schedule represents the total heat gain per person including convective, radiant, and latent. An internal algorithm is used to determine what fraction of the total is sensible and what fraction is latent. Then, the sensible portion is divided into radiant and convective portions using the value specified for Fraction Radiant (above). See the Engineering Reference document for more details.
+This field is the name of the schedule that determines the amount of heat gain per person in the zone under design conditions. This heat gain impacts the basic zone heat balance as well as the modeling of thermal comfort. This value is modified somewhat based on a correlation to account for variations in space temperature. The schedule values may be any positive number and the units for this parameter is Watts per person. This schedule represents the total heat gain per person including convective, radiant, and latent. An internal algorithm is used to determine what fraction of the total is sensible and what fraction is latent. Then, the sensible portion is divided into radiant and convective portions using the value specified for Fraction Radiant in the associated People:Definition. See the Engineering Reference document for more details.
 
 Values for activity level can range anywhere from approximately 100-150 Watts per person for most office activities up to over 900 Watts per person for strenuous physical activities such as competitive wrestling. The following table (Table~\ref{table:metabolic-rates-for-various-activities}) is based on Table~\ref{table:wind-speed-profile-coefficients-ashrae} from the 2005 ASHRAE Handbook of Fundamentals, page 8.6. In addition to the information from the ASHRAE HOF, there is an added column of values in W/Person such as necessary for the activity level schedule values. This column uses the standard adult body surface area of 1.8 m\(^{2}\) to multiply the activity levels in W/m\(^{2}\) that are used in the table. Warnings are produced when the activity level schedule values fall outside normal ranges. Having too low or too high values can also skew thermal comfort reporting values.
-
-\paragraph{Field: Carbon Dioxide Generation Rate}\label{field-carbon-dioxide-generation-rate}
-
-This numeric input field specifies carbon dioxide generation rate per person with units of m3/s-W. The total carbon dioxide generation rate from this object is:
-
-Number of People * People Schedule * People Activity * Carbon Dioxide Generation Rate. The default value is 3.82E-8 m3/s-W (obtained from ASHRAE Standard 62.1-2007 value at 0.0084 cfm/met/person over the general adult population). The maximum value can be 10 times the default value.
-
-\paragraph{Field: Enable ASHRAE 55 comfort warnings}\label{field-enable-ashrae-55-comfort-warnings}
-
-This field accepts either ``Yes'' or ``No'' as values. When ``Yes'' is specified, warnings are generated when the space conditions are outside of the ASHRAE 55 comfort range as discussed in the sections that follow titled ``Simplified ASHRAE 55-2004 Graph Related Outputs'' and ``Simplified ASHRAE 55 Warnings.'' The default is not to provide these warnings so if you want to know if your space is outside this comfort range you must set this field to Yes.
 
 \begin{longtable}[c]{p{2.0in}p{2.0in}p{1.2in}p{0.8in}}
 \caption{Metabolic Rates for Various Activities \label{table:metabolic-rates-for-various-activities}} \tabularnewline
@@ -210,15 +170,9 @@ Wrestling, competitive & 738 to 909 & 410 to 505 & 7.0 to 8.7 \tabularnewline
 \textbf{*Note that one met = 58.1 W/m\(^{2}\)}
 \end{longtable}
 
-\paragraph{Field: Mean Radiant Temperature Calculation Type}\label{field-mean-radiant-temperature-calculation-type}
-
-This field specifies the type of Mean Radiant Temperature (MRT) calculation the user wishes to use for the thermal comfort model. At the present time, there are three options for MRT calculation type: enclosure averaged, surface weighted, and a list of angle factors. The default calculation is ``EnclosureAveraged'' and is used if field is left blank. In the enclosure averaged MRT calculation, the MRT used for the thermal comfort calculations is for an ``average'' point in the zone. MRT is calculated based on an area-emissivity weighted average of all of the surfaces in the same radiant enclosure (one or more \hyperref[space]{Spaces}). In cases where the emissivity of all of the surfaces are sufficiently small (near zero), the mean radiant temperature will be set to the mean air temperature of the space to avoid divide by zero errors. The other MRT calculation type is ``SurfaceWeighted''. The goal of this calculation type is to estimate a person in the space close to a particular surface without having to define exact view factors for all of the surfaces and the location of the person in the space. The MRT used in the thermal comfort calculations when the ``surface weighted'' calculation type is selected is actually the average of the temperature of the surface to which the person is closest (defined by the next field ``Surface Name'') and the enclosure averaged MRT (defined above). The surface temperature alone is not used because in theory the maximum view factor from a person to any flat surface is roughly 0.5. In the ``surfaceweighted'' calculation, the surface in question actually gets slightly more weighting than 50\% since the surface selected is still a part of the zone average MRT calculation. Again, this simplification was made to avoid the specification of view factors and the exact location of the person.
-
-A third option is to use ``AngleFactor''. This option allows for more explicit positioning of the person within the space by defining the angle factors from the person to the various surfaces in the enclosure. This option requires the user to list the surfaces that the person can see from a radiation standpoint and also define the angle (or view) factor for each surface. The \hyperref[comfortviewfactorangles]{ComfortViewFactorAngles} object (see next object description) is intended to give the user this opportunity.
-
 \paragraph{Field: Surface Name/Angle Factor List Name}\label{field-surface-nameangle-factor-list-name}
 
-This field is only valid when the user selects ``SurfaceWeighted'' or ``AngleFactor'' for the MRT calculation type (see the previous input field description). In the case of ``SurfaceWeighted'', the field is the name of a surface within the enclosure the people are residing. This surface will be used in the MRT calculation as defined above to come up with a more representative MRT for a person near a particular surface. The MRT used for thermal comfort calculations using the ``SurfaceWeighted'' MRT calculation method is the average of the temperature of the surface specified in this field and the ``zone averaged'' MRT (see the Mean Radiant Temperature calculation type field above). In the case of ``AngleFactor'', the field is the name of a \hyperref[comfortviewfactorangles]{ComfortViewFactorAngles} input object defined elsewhere. This field is required when the previous field is set to ``SurfaceWeighted'' or ``AngleFactor'' and is set to run one of the following thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 or AnkleDraftASH55.
+This field is only valid when the associated \hyperref[peopledefinition]{People:Definition} has Mean Radiant Temperature Calculation Type set to ``SurfaceWeighted'' or ``AngleFactor''. In the case of ``SurfaceWeighted'', the field is the name of a surface within the enclosure the people are residing. This surface will be used in the MRT calculation to come up with a more representative MRT for a person near a particular surface. The MRT used for thermal comfort calculations using the ``SurfaceWeighted'' MRT calculation method is the average of the temperature of the surface specified in this field and the enclosure-averaged MRT. In the case of ``AngleFactor'', the field is the name of a \hyperref[comfortviewfactorangles]{ComfortViewFactorAngles} input object defined elsewhere. This field is required when the definition's Mean Radiant Temperature Calculation Type is set to ``SurfaceWeighted'' or ``AngleFactor'' and one of the following thermal comfort models is active: Fanger, Pierce, KSU, CoolingEffectASH55 or AnkleDraftASH55.
 
 \paragraph{Field: Work Efficiency Schedule Name}\label{field-work-efficiency-schedule-name}
 
@@ -270,42 +224,9 @@ This field is the name of the schedule that defines the amount of clothing being
 
 This field is the name of the schedule that approximates the amount of air movement in the space as a function of time throughout the simulation period. The user has control over this parameter through the schedule that requires the individual numbers in the schedule to be positive real numbers having units of meters per second. This field is required to run one of the following thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 or AnkleDraftASH55. If a schedule is listed here but no thermal comfort model is selected, then a warning message will be produced and this schedule will be listed as unused in the error file.
 
-\paragraph{Field: Thermal Comfort Model Type (up to 7 allowed)}\label{field-thermal-comfort-model-type-up-to-7-allowed}
-
-The final one to five fields are optional and are intended to trigger various thermal comfort models within EnergyPlus. By entering the keywords Fanger, Pierce, KSU, AdaptiveASH55, AdaptiveCEN15251, CoolingEffectASH55, and AnkleDraftASH55, the user can request the Fanger, Pierce Two-Node, Kansas State UniversityTwo-Node, the adaptive comfort models of the ASHRAE Standard 55 and CEN Standard 15251, ASHRAE Standard 55 Elevated Air Cooling Effect model, and ASHRAE Standard 55 Ankle Draft Risk model results for this particular people statement. Detailed descriptions and requirements of the seven models as listed below.
-
-\begin{description}
-  \item[Fanger]
-  Fanger’s Comfort model is applied to calculate related thermal comfort metrics. Fanger Model PMV, PPD, and Clothing Surface Temperature are calculated and reported as each time step. Apart from existing required fields in People object, extra fields required for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
-
-  \item[Pierce]
-  The Pierce Two-Node model is applied to calculate related thermal comfort metrics. Pierce Model Effective Temperature PMV, Standard Effective Temperature PMV, Discomfort Index, Thermal Sensation Index, and Standard Effective Temperature are calculated and reported as each time step.Apart from existing required fields in People object, extra fields required for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
-
-  \item[KSU]
-  The KSU Two-Node Model is applied to calculate related thermal comfort metrics. KSU Model Thermal Sensation Vote is calculated and reported as each time step. Note that the KSU model is computationally intensive and may noticeably increase the execution time of the simulation. Apart from existing required fields in People object, extra fields required for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
-
-  \item[AdaptiveASH55]
-  Adaptive Comfort Model Based on ASHRAE Standard 55-2010 is applied to calculate related thermal comfort metrics. ASHRAE 55 Adaptive Model 90\% Acceptability Status, 80\% Acceptability Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported as each time step. AdaptiveASH55 is only applicable when the running average outdoor air temperature for the past 7 days is between 10.0 and 33.5$^\circ$C.
-
-  \item[AdaptiveCEN15251]
-  Adaptive Comfort Model Based on European Standard EN15251-2007 is applied to calculate related thermal comfort metrics. CEN 15251 Adaptive Model Category I/II/II Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported as each time step. AdaptiveCEN15251 is only applicable when the running average outdoor air temperature for the past 30 days is between 10.0 and 30.0$^\circ$C.
-
-  \item[CoolingEffectASH55]
-  ASHRAE 55-2017 Elevated Air Speed Cooling Effect Model is applied to calculate related thermal comfort metrics. Elevated Air Speed Cooling Effect, Cooling Effect Adjusted PMV, and Cooling Effect Adjusted PPD are calculated and reported as each time step. Apart from existing required fields in People object, extra fields required for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
-
-  \item[AnkleDraftASH55]
-  ASHRAE 55-2017 Ankle Draft Risk Model is applied to calculate related thermal comfort metrics. Zone Thermal Comfort ASHRAE 55 Ankle Draft PPD is calculated and reported as each time step. Apart from existing required fields in People object, extra fields required for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, Air Velocity Schedule Name, and Ankle Level Air Velocity Schedule Name. Ankle draft PPD calculations are only applicable for relative air velocity is below 0.2 m/s, and the subject’s metabolic rate and clothing level should be kept below 1.3 met and 0.7 clo. PPD at ankle draft will be set to -1.0 if if these conditions are not met.
-
-\end{description}
-
- For descriptions of the thermal comfort calculations, see the Engineering Reference document.
-
- Note that since up to seven models may be specified, the user may opt to have EnergyPlus calculate the thermal comfort for people identified with this people statement using all seven models if desired.
-
-
 \paragraph{Field: Ankle Level Air Velocity Schedule Name}\label{field-ankle-level-air-velocity-schedule-name}
 
-This field is the name of the schedule that approximates the amount of air movement at the occupants' ankle level (0.1 m above floor level) as a function of time throughout the simulation period. The user has control over this parameter through the schedule that requires the individual numbers in the schedule to be positive real numbers having units of meters per second. This field is required to run the AnkleDraftASH55 thermal comfort model. If a schedule is listed here but no thermal comfort model is selected, then a warning message will be produced and this schedule will be listed as unused in the error file.
+This field is the name of the schedule that approximates the amount of air movement at the occupants’ ankle level (0.1 m above floor level) as a function of time throughout the simulation period. The user has control over this parameter through the schedule that requires the individual numbers in the schedule to be positive real numbers having units of meters per second. This field is required to run the AnkleDraftASH55 thermal comfort model. If a schedule is listed here but no thermal comfort model is selected, then a warning message will be produced and this schedule will be listed as unused in the error file.
 
 \paragraph{Field: Cold Stress Temperature Threshold}\label{cold-stress-temperature-threshold}
 
@@ -323,89 +244,175 @@ beginning time of the risk period (e.g., the start time of a power outage) to
 not above a certain temperature threshold (specified in this field). If not
 specified, 86$^\circ$F (or 30$^\circ$C) will be used as the default temperature threshold.
 
-The following IDF example allows for a maximum of 31 people with scheduled occupancy of ``Office Occupancy'', 60\% radiant using an Activity Schedule of ``Activity Sch''. The example allows for thermal comfort reporting.
+An IDF example (simple, no thermal comfort):
 
 \begin{lstlisting}
+People:Definition,
+  Office People Def,          !- Name
+  People/Area,                !- Number of People Calculation Method
+  ,                           !- Number of People
+  0.11,                       !- People per Floor Area {person/m2}
+  ,                           !- Floor Area per Person {m2/person}
+  0.3,                        !- Fraction Radiant
+  Autocalculate,              !- Sensible Heat Fraction
+  3.82E-8;                    !- Carbon Dioxide Generation Rate {m3/s-W}
+
 People,
-  Kitchen_ZN_1_FLR_1,         !- Name
-  Kitchen_ZN_1_FLR_1,         !- Zone or ZoneList or Space or SpaceList Name
-  BLDG_OCC_SCH,               !- Number of People Schedule Name
+  SPACE1-1 People,            !- Name
+  Office People Def,          !- People Definition Name
+  SPACE1-1,                   !- Zone or ZoneList or Space or SpaceList Name
+  SPACE1-1 Occupancy Sch,     !- Number of People Schedule Name
+  ActSchd;                    !- Activity Level Schedule Name
+
+People,
+  SPACE2-1 People,            !- Name
+  Office People Def,          !- People Definition Name
+  SPACE2-1,                   !- Zone or ZoneList or Space or SpaceList Name
+  SPACE2-1 Occupancy Sch,     !- Number of People Schedule Name
+  ActSchd;                    !- Activity Level Schedule Name
+\end{lstlisting}
+
+Global People example:
+
+\begin{lstlisting}
+ZoneList,AllOccupiedZones,SPACE1-1,SPACE2-1,SPACE3-1,SPACE4-1,SPACE5-1;
+
+People:Definition,
+  AllZones People Def,        !- Name
+  People/Area,                !- Number of People Calculation Method
+  ,                           !- Number of People
+  0.11,                       !- People per Floor Area {person/m2}
+  ,                           !- Floor Area per Person {m2/person}
+  0.3,                        !- Fraction Radiant
+  ,                           !- Sensible Heat Fraction
+  3.82E-8;                    !- Carbon Dioxide Generation Rate {m3/s-W}
+
+People,
+  AllZones with People,       !- Name
+  AllZones People Def,        !- People Definition Name
+  AllOccupiedZones,           !- Zone or ZoneList or Space or SpaceList Name
+  Occupancy Sch,              !- Number of People Schedule Name
+  ActSchd;                    !- Activity Level Schedule Name
+\end{lstlisting}
+
+\subsection{People:Definition}\label{peopledefinition}
+
+This object defines the occupancy calculation method, heat gain fractions, CO\(_{2}\) generation rate, and thermal comfort model types shared by one or more \hyperref[people]{People} instances.
+
+\subsubsection{Inputs}\label{inputs-peopledefinition}
+
+\paragraph{Field: Name}\label{field-name-peopledefinition}
+
+The name of the People:Definition object. This name is referenced by the \textit{People Definition Name} field of \hyperref[people]{People} instances.
+
+\paragraph{Field: Number of People Calculation Method}\label{field-number-of-people-calculation-method}
+
+This field is a key/choice field that tells which of the next three fields are filled and is descriptive of the method for calculating the nominal number of occupants (people) in the Zone. The key/choices are:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{People} -- With this choice, the method used will be a straight insertion of the number of occupants (people). (The Number of People field should be filled.)
+\item
+  \textbf{People/Area} -- With this choice, the method used will be a factor per floor area of the zone or space. (The People per Floor Area field should be filled.)
+\item
+  \textbf{Area/Person} -- With this choice, the method used will be a factor of floor area per person. (The Floor Area per Person field should be filled.)
+\end{itemize}
+
+\paragraph{Field: Number of People}\label{field-number-of-people}
+
+This field is used to represent the maximum number of people in a zone that is then multiplied by a schedule fraction (see Number of People Schedule Name in the People instance). In EnergyPlus, this is slightly more flexible in that the number of people could be a ``diversity factor’’ applied to a schedule of real numbers. Note that while the schedule value can vary from hour to hour, the number of people field is constant for all simulation environments.
+
+\paragraph{Field: People per Floor Area}\label{field-people-per-zone-floor-area}
+
+This factor (person/m\(^{2}\)) is used, along with the Zone or Space Floor Area to determine the maximum number of people as described in the Number of People field. The choice from the method field should be ``People/Area’’.
+
+\paragraph{Field: Floor Area per Person}\label{field-zone-floor-area-per-person}
+
+This factor (m\(^{2}\)/person) is used, along with the Zone or Space Floor Area to determine the maximum number of people as described in the Number of People field. The choice from the method field should be ``Area/Person’’.
+
+\paragraph{Field: Fraction Radiant}\label{field-fraction-radiant}
+
+This field is a decimal number between 0.0 and 1.0 and is used to characterize the type of heat being given off by people in a zone. The number specified in this field will be multiplied by the total sensible energy emitted by people to give the amount of long wavelength radiation gain from human beings in a zone. The remainder of the sensible load is assumed to be convective heat gain. Note that latent gains from people are not included in either the radiant or convective heat gains. See the Engineering Reference document for more details. Default value is 0.30.
+
+\paragraph{Field: Sensible Heat Fraction}\label{field-sensible-heat-fraction}
+
+The user can use this field to specify a fixed sensible fraction for the heat gain due to this People:Definition object. Normally the program calculates the sensible/latent split; this field gives the user control over this split. This field is autocalculated: if the field is blank or \textbf{autocalculate}, the program will calculate the sensible/latent split; if a value is entered, it will be used as the sensible fraction of the current total heat gain.
+
+\paragraph{Field: Carbon Dioxide Generation Rate}\label{field-carbon-dioxide-generation-rate}
+
+This numeric input field specifies carbon dioxide generation rate per person with units of m3/s-W. The total carbon dioxide generation rate from this object is:
+
+Number of People * People Schedule * People Activity * Carbon Dioxide Generation Rate. The default value is 3.82E-8 m3/s-W (obtained from ASHRAE Standard 62.1-2007 value at 0.0084 cfm/met/person over the general adult population). The maximum value can be 10 times the default value.
+
+\paragraph{Field: Enable ASHRAE 55 comfort warnings}\label{field-enable-ashrae-55-comfort-warnings}
+
+This field accepts either ``Yes’’ or ``No’’ as values. When ``Yes’’ is specified, warnings are generated when the space conditions are outside of the ASHRAE 55 comfort range as discussed in the sections that follow titled ``Simplified ASHRAE 55-2004 Graph Related Outputs’’ and ``Simplified ASHRAE 55 Warnings.’’ The default is not to provide these warnings so if you want to know if your space is outside this comfort range you must set this field to Yes.
+
+\paragraph{Field: Mean Radiant Temperature Calculation Type}\label{field-mean-radiant-temperature-calculation-type}
+
+This field specifies the type of Mean Radiant Temperature (MRT) calculation the user wishes to use for the thermal comfort model. At the present time, there are three options for MRT calculation type: enclosure averaged, surface weighted, and a list of angle factors. The default calculation is ``EnclosureAveraged’’ and is used if field is left blank. In the enclosure averaged MRT calculation, the MRT used for the thermal comfort calculations is for an ``average’’ point in the zone. MRT is calculated based on an area-emissivity weighted average of all of the surfaces in the same radiant enclosure (one or more \hyperref[space]{Spaces}). In cases where the emissivity of all of the surfaces are sufficiently small (near zero), the mean radiant temperature will be set to the mean air temperature of the space to avoid divide by zero errors. The other MRT calculation type is ``SurfaceWeighted’’. The goal of this calculation type is to estimate a person in the space close to a particular surface without having to define exact view factors for all of the surfaces and the location of the person in the space. The MRT used in the thermal comfort calculations when the ``surface weighted’’ calculation type is selected is actually the average of the temperature of the surface to which the person is closest (defined by the Surface Name/Angle Factor List Name field in the People instance) and the enclosure averaged MRT. The surface temperature alone is not used because in theory the maximum view factor from a person to any flat surface is roughly 0.5. In the ``surfaceweighted’’ calculation, the surface in question actually gets slightly more weighting than 50\% since the surface selected is still a part of the zone average MRT calculation.
+
+A third option is to use ``AngleFactor’’. This option allows for more explicit positioning of the person within the space by defining the angle factors from the person to the various surfaces in the enclosure. This option requires the user to list the surfaces that the person can see from a radiation standpoint and also define the angle (or view) factor for each surface. The \hyperref[comfortviewfactorangles]{ComfortViewFactorAngles} object (see next object description) is intended to give the user this opportunity.
+
+\paragraph{Field: Thermal Comfort Model Type (up to 7 allowed)}\label{field-thermal-comfort-model-type-up-to-7-allowed}
+
+Up to seven optional fields trigger thermal comfort models within EnergyPlus. By entering the keywords Fanger, Pierce, KSU, AdaptiveASH55, AdaptiveCEN15251, CoolingEffectASH55, and AnkleDraftASH55, the user can request the Fanger, Pierce Two-Node, Kansas State University Two-Node, the adaptive comfort models of ASHRAE Standard 55 and CEN Standard 15251, ASHRAE Standard 55 Elevated Air Cooling Effect model, and ASHRAE Standard 55 Ankle Draft Risk model results. Detailed descriptions and requirements of the seven models are listed below.
+
+\begin{description}
+  \item[Fanger]
+  Fanger’s Comfort model is applied to calculate related thermal comfort metrics. Fanger Model PMV, PPD, and Clothing Surface Temperature are calculated and reported each time step. Extra fields required in the People instance for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
+
+  \item[Pierce]
+  The Pierce Two-Node model is applied to calculate related thermal comfort metrics. Pierce Model Effective Temperature PMV, Standard Effective Temperature PMV, Discomfort Index, Thermal Sensation Index, and Standard Effective Temperature are calculated and reported each time step. Extra fields required in the People instance for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
+
+  \item[KSU]
+  The KSU Two-Node Model is applied to calculate related thermal comfort metrics. KSU Model Thermal Sensation Vote is calculated and reported each time step. Note that the KSU model is computationally intensive and may noticeably increase the execution time of the simulation. Extra fields required in the People instance for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
+
+  \item[AdaptiveASH55]
+  Adaptive Comfort Model Based on ASHRAE Standard 55-2010 is applied to calculate related thermal comfort metrics. ASHRAE 55 Adaptive Model 90\% Acceptability Status, 80\% Acceptability Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported each time step. AdaptiveASH55 is only applicable when the running average outdoor air temperature for the past 7 days is between 10.0 and 33.5$^\circ$C.
+
+  \item[AdaptiveCEN15251]
+  Adaptive Comfort Model Based on European Standard EN15251-2007 is applied to calculate related thermal comfort metrics. CEN 15251 Adaptive Model Category I/II/II Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported each time step. AdaptiveCEN15251 is only applicable when the running average outdoor air temperature for the past 30 days is between 10.0 and 30.0$^\circ$C.
+
+  \item[CoolingEffectASH55]
+  ASHRAE 55-2017 Elevated Air Speed Cooling Effect Model is applied to calculate related thermal comfort metrics. Elevated Air Speed Cooling Effect, Cooling Effect Adjusted PMV, and Cooling Effect Adjusted PPD are calculated and reported each time step. Extra fields required in the People instance for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
+
+  \item[AnkleDraftASH55]
+  ASHRAE 55-2017 Ankle Draft Risk Model is applied to calculate related thermal comfort metrics. Zone Thermal Comfort ASHRAE 55 Ankle Draft PPD is calculated and reported each time step. Extra fields required in the People instance for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, Air Velocity Schedule Name, and Ankle Level Air Velocity Schedule Name. Ankle draft PPD calculations are only applicable when relative air velocity is below 0.2 m/s, and the subject’s metabolic rate and clothing level should be kept below 1.3 met and 0.7 clo. PPD at ankle draft will be set to -1.0 if these conditions are not met.
+
+\end{description}
+
+For descriptions of the thermal comfort calculations, see the Engineering Reference document. Up to seven models may be specified simultaneously.
+
+An IDF example with thermal comfort:
+
+\begin{lstlisting}
+People:Definition,
+  Kitchen People Def,         !- Name
   People,                     !- Number of People Calculation Method
-  25.2000,,,                  !- Number of People, People per Zone Floor Area, Zone Floor Area per Person
-  0.3000,                     !- Fraction Radiant
+  25.2,                       !- Number of People
+  ,                           !- People per Floor Area {person/m2}
+  ,                           !- Floor Area per Person {m2/person}
+  0.3,                        !- Fraction Radiant
   AUTOCALCULATE,              !- Sensible Heat Fraction
-  ACTIVITY_SCH,               !- Activity Level Schedule Name
   3.82E-8,                    !- Carbon Dioxide Generation Rate {m3/s-W}
   No,                         !- Enable ASHRAE 55 Comfort Warnings
   EnclosureAveraged,          !- Mean Radiant Temperature Calculation Type
+  Fanger;                     !- Thermal Comfort Model 1 Type
+
+People,
+  Kitchen_ZN_1_FLR_1,         !- Name
+  Kitchen People Def,         !- People Definition Name
+  Kitchen_ZN_1_FLR_1,         !- Zone or ZoneList or Space or SpaceList Name
+  BLDG_OCC_SCH,               !- Number of People Schedule Name
+  ACTIVITY_SCH,               !- Activity Level Schedule Name
   ,                           !- Surface Name/Angle Factor List Name
   WORK_EFF_SCH,               !- Work Efficiency Schedule Name
   ClothingInsulationSchedule, !- Clothing Insulation Calculation Method
   ,                           !- Clothing Insulation Calculation Method Schedule Name
   CLOTHING_SCH,               !- Clothing Insulation Schedule Name
-  AIR_VELO_SCH,               !- Air Velocity Schedule Name
-  Fanger;                     !- Thermal Comfort Model 1 Type
-\end{lstlisting}
-
-A simpler example, without using the thermal comfort reporting option:
-
-\begin{lstlisting}
-People,
-  RIGHT FORK,                 !- Name
-  RIGHT FORK,                 !- Zone or ZoneListName
-  Dorm Occupancy,             !- Number of People Schedule Name
-  people,                     !- Number of People Calculation Method
-  8.00000,                    !- Number of People,
-  ,                           !- People per Zone Floor Area
-  ,                           !- Zone Floor Area per Person
-  0.6000000,                  !- Fraction Radiant
-  Autocalculate,              !- Sensible Heat Fraction
-  Activity Sch,               !- Activity level Schedule Name
-\end{lstlisting}
-
-And with the sensible fraction specified:
-
-\begin{lstlisting}
-People,
-  SPACE1-1 People 1,          !- Name
-  SPACE1-1,                   !- Zone or ZoneListName
-  OCCUPY-1,                   !- Number of People Schedule Name
-  people,                     !- Number of People Calculation Method
-  11,                         !- Number of People
-  ,                           !- People per Zone Floor Area
-  ,                           !- Zone Floor Area per Person
-  0.3,                        !- Fraction Radiant
-  0.55,                       !- Sensible Heat Fraction
-  ActSchd;                    !- Activity level Schedule Name
-\end{lstlisting}
-
-Global People Object:
-
-\begin{lstlisting}
-ZoneList,AllOccupiedZones,SPACE1-1,SPACE2-1,SPACE3-1,SPACE4-1,SPACE5-1;
-People,
-  AllZones with People,       !- Name
-  AllOccupiedZones,           !- Zone or ZoneList or Space or SpaceList Name
-  OCCUPY-1,                   !- Number of People Schedule Name
-  People/Area,                !- Number of People Calculation Method
-  ,                           !- Number of People
-  .11,                        !- People per Floor Area {person/m2}
-  ,                           !- Floor Area per Person {m2/person}
-  0.3,                        !- Fraction Radiant
-  ,                           !- Sensible Heat Fraction
-  ActSchd,                    !- Activity Level Schedule Name
-  3.82E-8,                    !- Carbon Dioxide Generation Rate {m3/s-W}
-  No,                         !- Enable ASHRAE 55 Comfort Warnings
-  surfaceweighted,            !- Mean Radiant Temperature Calculation Type
-  Zn001:Wall001,              !- Surface Name/Angle Factor List Name
-  Work Eff Sch,               !- Work Efficiency Schedule Name
-  ClothingInsulationSchedule, !- Clothing Insulation Calculation Method
-  ,                           !- Clothing Insulation Calculation Method Schedule Name
-  Clothing Sch,               !- Clothing Insulation Schedule Name
-  Air Velo Sch,               !- Air Velocity Schedule Name
-  FANGER,                     !- Thermal Comfort Model 1 Type
-  PIERCE,                     !- Thermal Comfort Model 2 Type
-  KSU;                        !- Thermal Comfort Model 3 Type
+  AIR_VELO_SCH;               !- Air Velocity Schedule Name
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-017}
