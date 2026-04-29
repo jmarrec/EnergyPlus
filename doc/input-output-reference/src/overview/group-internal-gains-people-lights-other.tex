@@ -2617,7 +2617,7 @@ This output is LED electricity energy for indoor living walls in J. The LED elec
 
 \subsection{ElectricEquipment:ITE:AirCooled}\label{electricequipmentiteaircooled}
 
-This object describes air-cooled electric information technology equipment (ITE) which has variable power consumption as a function of loading and temperature.
+This object describes air-cooled electric information technology equipment (ITE) which has variable power consumption as a function of loading and temperature. Performance characteristics are specified in the associated \hyperref[electricequipmentiteaircooleddefinition]{ElectricEquipment:ITE:AirCooled:Definition} object.
 
 \subsubsection{Inputs}\label{inputs-9-009}
 
@@ -2625,9 +2625,105 @@ This object describes air-cooled electric information technology equipment (ITE)
 
 The name of this object.
 
+\paragraph{Field: ElectricEquipment ITE AirCooled Definition Name}\label{field-electricequipment-ite-aircooled-definition-name}
+
+The name of the \hyperref[electricequipmentiteaircooleddefinition]{ElectricEquipment:ITE:AirCooled:Definition} object that specifies the performance characteristics for this instance.
+
 \paragraph{Field: Zone or Space Name}\label{iteq-field-zone-or-space-name-000}
 
 This field applies this ElectricEquipment:ITE:AirCooled object to a thermal zone or space in the building. If a Zone Name is specified and the zone contains more than one Space, the names of the actual IT equipment objects will be concatenated as \textless{}Space Name\textgreater{} \textless{}ITEquipment Object Name\textgreater{}. See \hyperref[specifying-applicable-zones-or-spaces]{Specifying Applicable Zone(s) or Space(s)} for more details.
+
+\paragraph{Field: Number of Units}\label{field-number-of-units}
+
+This field is multiplied by the Watts per Unit (from the definition) to determine the design electrical power input to this ITE object. This field is used when the Design Power Input Calculation Method is ``Watts/Unit''. The default is 1.
+
+\paragraph{Field: Design Power Input Schedule Name}\label{field-design-power-input-schedule-name}
+
+This field is the name of the operating schedule that modifies the design level power input for this equipment. This schedule specifies the fraction (typically 0.0 to 1.0) of this equipment which is available (powered up), regardless of CPU utilization. If this field is blank, the schedule is assumed to always be 1.0.
+
+\paragraph{Field: CPU Loading Schedule Name}\label{field-cpu-loading-schedule-name}
+
+This field is the name of the schedule that specifies the CPU loading for this equipment as a fraction from 0.0 (idle) to 1.0 (full load). If this field is blank, the schedule is assumed to always be 1.0.
+
+\paragraph{Field: Air Inlet Room Air Model Node Name}\label{field-air-inlet-room-air-model-node-name}
+
+Specifies the name of a room air model node (ref. \hyperref[roomairnode]{RoomAir:Node}) which is the air inlet to this equipment. This field is required if the Air Inlet Connection Type in the associated definition = RoomAirModel.
+
+\paragraph{Field: Air Outlet Room Air Model Node Name}\label{field-air-outlet-room-air-model-node-name}
+
+Specifies the node name of a room air model node (ref. \hyperref[roomairnode]{RoomAir:Node}) which is the air outlet from this equipment. This field is required if the Air Inlet Connection Type in the associated definition = RoomAirModel.
+
+\paragraph{Field: Supply Air Node Name}\label{field-supply-air-node-name}
+
+Specifies the node name of the supply air inlet node serving this ITE. Required if the Air Inlet Connection Type in the associated definition = AdjustedSupply. Also required if Air Flow Calculation Method = \textbf{FlowControlWithApproachTemperatures} or if reporting of the Supply Heat Index is desired.
+
+\paragraph{Field: CPU End-Use Subcategory}\label{field-cpu-end-use-subcategory}
+
+This equipment is metered on the Interior Equipment end-use category for Electricity. This field allows you to specify a user-defined end-use subcategory for the CPU power consumption. A new meter for reporting is created for each unique subcategory (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} object). Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and in the LEED Summary table EAp2-4/5 Performance Rating Method Compliance. The default is ITE-CPU.
+
+\paragraph{Field: Fan End-Use Subcategory}\label{field-fan-end-use-subcategory}
+
+This equipment is metered on the Interior Equipment end-use category for Electricity. This field allows you to specify a user-defined end-use subcategory for the fan power consumption. A new meter for reporting is created for each unique subcategory (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} object). Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and in the LEED Summary table EAp2-4/5 Performance Rating Method Compliance. The default is ITE-Fans.
+
+\paragraph{Field: Electric Power Supply End-Use Subcategory}\label{field-electric-power-supply-end-use-subcategory}
+
+This equipment is metered on the Interior Equipment end-use category for Electricity. This field allows you to specify a user-defined end-use subcategory for the electric power supply power consumption. A new meter for reporting is created for each unique subcategory (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} object). Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and in the LEED Summary table EAp2-4/5 Performance Rating Method Compliance. The default is ITE-UPS.
+
+An IDF example:
+
+\begin{lstlisting}
+ElectricEquipment:ITE:AirCooled:Definition,
+  Model5250 ITE Def,          !- Name
+  FlowFromSystem,             !- Air Flow Calculation Method
+  Watts/Unit,                 !- Design Power Input Calculation Method
+  500,                        !- Watts per Unit {W}
+  ,                           !- Watts per Floor Area {W/m2}
+  Model 5250 Power fLoadTemp, !- CPU Power Input Function of Loading and Air Temperature Curve Name
+  0.4,                        !- Design Fan Power Input Fraction
+  0.0001,                     !- Design Fan Air Flow Rate per Power Input {m3/s-W}
+  Model 5250 AirFlow fLoadTemp,  !- Air Flow Function of Loading and Air Temperature Curve Name
+  ECM FanPower fFlow,         !- Fan Power Input Function of Flow Curve Name
+  15,                         !- Design Entering Air Temperature {C}
+  A3,                         !- Environmental Class
+  AdjustedSupply,             !- Air Inlet Connection Type
+  0.1,                        !- Design Recirculation Fraction
+  Data Center Recirculation fLoadTemp,  !- Recirculation Function of Loading and Supply Temperature Curve Name
+  0.9,                        !- Design Electric Power Supply Efficiency
+  UPS Efficiency fPLR,        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
+  1;                          !- Fraction of Electric Power Supply Losses to Zone
+
+ElectricEquipment:ITE:AirCooled,
+  Data Center Servers Row A,  !- Name
+  Model5250 ITE Def,          !- ElectricEquipment ITE AirCooled Definition Name
+  Main Zone,                  !- Zone or Space Name
+  200,                        !- Number of Units
+  Data Center Operation Schedule,  !- Design Power Input Schedule Name
+  Data Center CPU Loading Schedule,  !- CPU Loading Schedule Name
+  ,                           !- Air Inlet Room Air Model Node Name
+  ,                           !- Air Outlet Room Air Model Node Name
+  Main Zone Inlet Node;       !- Supply Air Node Name
+
+ElectricEquipment:ITE:AirCooled,
+  Data Center Servers Row B,  !- Name
+  Model5250 ITE Def,          !- ElectricEquipment ITE AirCooled Definition Name
+  Main Zone,                  !- Zone or Space Name
+  150,                        !- Number of Units
+  Data Center Operation Schedule,  !- Design Power Input Schedule Name
+  Data Center CPU Loading Schedule,  !- CPU Loading Schedule Name
+  ,                           !- Air Inlet Room Air Model Node Name
+  ,                           !- Air Outlet Room Air Model Node Name
+  Main Zone Inlet Node;       !- Supply Air Node Name
+\end{lstlisting}
+
+\subsection{ElectricEquipment:ITE:AirCooled:Definition}\label{electricequipmentiteaircooleddefinition}
+
+This object defines the performance characteristics shared by one or more \hyperref[electricequipmentiteaircooled]{ElectricEquipment:ITE:AirCooled} instances.
+
+\subsubsection{Inputs}\label{inputs-9-electricequipmentiteaircooleddefinition}
+
+\paragraph{Field: Name}\label{field-name-electricequipmentiteaircooleddefinition}
+
+The name of the ElectricEquipment:ITE:AirCooled:Definition object. This name is referenced by the \textit{ElectricEquipment ITE AirCooled Definition Name} field of \hyperref[electricequipmentiteaircooled]{ElectricEquipment:ITE:AirCooled} instances.
 
 \paragraph{Field: Air Flow Calculation Method}\label{field-air-flow-calculation-method}
 
@@ -2643,31 +2739,21 @@ The default method is FlowFromSystem.
 
 This field is a key/choice field that tells which of the next two fields are filled and is descriptive of the method for calculating the nominal electric power input to the ITE. The key/choices are:
 
-\begin{description}
-	\item[Watts/Unit:] With this choice, the design power input will be the product of Design Level per Unit and Number of Units. (Both of these fields should be filled.) This is the default.
-
-	\item[Watts/Area:] With this choice, the design power input will be a factor per floor area of the zone. (The Watts per Floor Area field should be filled).
-\end{description}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Watts/Unit} -- With this choice, the design power input will be the product of Watts per Unit and Number of Units (from the instance). This is the default.
+\item
+  \textbf{Watts/Area} -- With this choice, the design power input will be a factor per floor area of the zone. (The Watts per Floor Area field should be filled.)
+\end{itemize}
 
 \paragraph{Field: Watts per Unit}\label{field-watts-per-unit}
 
-This field (in Watts) is typically used to represent the design electrical power input to the ITE when fully loaded and the entering air temperatures is at the specified design value. This field is used if the choice from the method field is ``EquipmentLevel''.
-
-\paragraph{Field: Number of Units}\label{field-number-of-units}
-
-This field is multiplied times the Design Level per Unit to determine the design electrical power input to this ITE object when fully loaded and the entering air temperature is at the specified design value. This field is used if the choice from the method field is ``EquipmentLevel''. The default is 1.
+This field (in Watts) is the design electrical power input to the ITE per unit when fully loaded and the entering air temperature is at the specified design value. Used when the Design Power Input Calculation Method is ``Watts/Unit''.
 
 \paragraph{Field: Watts per Floor Area}\label{field-watts-per-zone-floor-area-2}
 
-This factor (Watts/m2) is used, along with the Zone Area to determine the design electrical power input as described in the Design Level field above. This field is used if the choice from the method field is ``Watts/Area''.
-
-\paragraph{Field: Design Power Input Schedule Name}\label{field-design-power-input-schedule-name}
-
-This field is the name of the operating schedule that modifies the design level power input for this equipment This schedule specifies the fraction (typically 0.0 to 1.0) of this equipment which is available (powered up), regardless of CPU utilization. If this field is blank, the schedule is assumed to always be 1.0.
-
-\paragraph{Field: CPU Loading Schedule Name}\label{field-cpu-loading-schedule-name}
-
-This field is the name of the schedule that specifies the CPU loading for this equipment as a fraction from 0.0 (idle) to 1.0 (full load). If this field is blank, the schedule is assumed to always be 1.0.
+This factor (Watts/m\(^{2}\)) is used, along with the Zone or Space floor area to determine the design electrical power input. Used when the Design Power Input Calculation Method is ``Watts/Area''.
 
 \paragraph{Field: CPU Power Input Function of Loading and Air Temperature Curve Name}\label{field-cpu-power-input-function-of-loading-and-air-temperature-curve-name}
 
@@ -2679,9 +2765,7 @@ This field is a decimal number between 0.0 and 1.0 and is used to specify the fr
 
 \paragraph{Field: Design Fan Air Flow Rate per Power Input}\label{field-design-fan-air-flow-rate-per-power-input}
 
-Specifies the cooling fan air flow rate in m$^3$/s per Watt of total electric power input at design conditions (CPU loading = 1.0 and Design Entering Air Temperature).
-
-This is normalized by power input to allow the design power input to be changed without needing to change this value.
+Specifies the cooling fan air flow rate in m$^3$/s per Watt of total electric power input at design conditions (CPU loading = 1.0 and Design Entering Air Temperature). This is normalized by power input to allow the design power input to be changed without needing to change this value.
 
 \paragraph{Field: Air Flow Function of Loading and Air Temperature Curve Name}\label{field-air-flow-function-of-loading-and-air-temperature-curve-name}
 
@@ -2729,7 +2813,7 @@ The related reporting variables (such as ``ITE Air Inlet Operating Range Exceede
 Specifies the type of connection between the zone and the ITE air inlet node. The choices are:
 
 \begin{description}
-	\item[AdjustedSupply:] This option is used to apply a recirculation adjustment to the ITE inlet conditions. If this option is specified, then the Supply Air Node Name is required and the air inlet temperature to the ITE will be the current supply air node temperature adjusted by the current recirculation fraction. All heat output is added to the zone air heat balance as a convective gain. AdjustedSupply is the default.
+	\item[AdjustedSupply:] This option is used to apply a recirculation adjustment to the ITE inlet conditions. If this option is specified, then the Supply Air Node Name in the instance is required and the air inlet temperature to the ITE will be the current supply air node temperature adjusted by the current recirculation fraction. All heat output is added to the zone air heat balance as a convective gain. AdjustedSupply is the default.
 
 	\item[ZoneAirNode:] This option is used if there is no containment and the ITE air inlet node is at the average zone condition. All heat output is added to the zone air heat balance as a convective gain.
 
@@ -2738,25 +2822,13 @@ Specifies the type of connection between the zone and the ITE air inlet node. Th
 
 This field is only used when Air Flow Calculation Method is \textbf{FlowFromSystem}.
 
-\paragraph{Field: Air Inlet Room Air Model Node Name}\label{field-air-inlet-room-air-model-node-name}
-
-Specifies the name of a room air model node (ref. \hyperref[roomairnode]{RoomAir:Node}) which is the air inlet to this equipment. This field is required if the Air Node Connection Type = RoomAirModel.
-
-\paragraph{Field: Air Outlet Room Air Model Node Name}\label{field-air-outlet-room-air-model-node-name}
-
-Specifies the node name of a room air model node (ref. \hyperref[roomairnode]{RoomAir:Node}) which is the air outlet from this equipment. This field is required if the Air Node Connection Type = RoomAirModel.
-
-\paragraph{Field: Supply Air Node Name}\label{field-supply-air-node-name}
-
-Specifies the node name of the supply air inlet node service this ITE. If the Air Node Connection Type = AdjustedSupply ,then this field is required, and the conditions at this node will be used to determine the ITE air inlet conditions. This field is also required if reporting of the Supply Heat Index is desired. Also required if Calculation Method = \textbf{FlowControlWithApproachTemperatures}.
-
 \paragraph{Field: Design Recirculation Fraction}\label{field-design-recirculation-fraction}
 
-Specifies the recirculation fraction for this equipment at design conditions. This field is used only if the Air Node Connection Type = AdjustedSupply. The recirculation fraction is defined as the ratio of recirculated air flow to total air flow entering the ITE. Recirculation is dependent upon many factors including rack and containment configuration. The default is 0.0 (no recirculation). This field is only used when Air Flow Calculation Method = \textbf{FlowFromSystem}.
+Specifies the recirculation fraction for this equipment at design conditions. This field is used only if the Air Inlet Connection Type = AdjustedSupply. The recirculation fraction is defined as the ratio of recirculated air flow to total air flow entering the ITE. Recirculation is dependent upon many factors including rack and containment configuration. The default is 0.0 (no recirculation). This field is only used when Air Flow Calculation Method = \textbf{FlowFromSystem}.
 
 \paragraph{Field: Recirculation Function of Loading and Supply Temperature Curve Name}\label{field-recirculation-function-of-loading-and-supply-temperature-curve-name}
 
-The name of a two-variable curve or table lookup object which modifies the Design Recirculation Fraction as a function of CPU loading ($x$) and supply air node temperature ($y$). This curve (table) should equal 1.0 at design conditions (CPU loading = 1.0 and Design Entering Air Temperature). This field is used only if the Air Node Connection Type = AdjustedSupply. If this curve is left blank, then the curve is assumed to always equal 1.0. This field is only used when Air Flow Calculation Method = \textbf{FlowFromSystem}.
+The name of a two-variable curve or table lookup object which modifies the Design Recirculation Fraction as a function of CPU loading ($x$) and supply air node temperature ($y$). This curve (table) should equal 1.0 at design conditions (CPU loading = 1.0 and Design Entering Air Temperature). This field is used only if the Air Inlet Connection Type = AdjustedSupply. If this curve is left blank, then the curve is assumed to always equal 1.0. This field is only used when Air Flow Calculation Method = \textbf{FlowFromSystem}.
 
 \paragraph{Field: Design Electric Power Supply Efficiency}\label{field-design-electric-power-supply-efficiency}
 
@@ -2769,18 +2841,6 @@ The name of a single-variable curve or table lookup object which modifies the el
 \paragraph{Field: Fraction of Electric Power Supply Losses to Zone}\label{field-fraction-of-electric-power-supply-losses-to-zone}
 
 This field is a decimal number between 0.0 and 1.0 and is used to specify the fraction of the electric power supply losses which are a heat gain to the zone containing the ITE. If this value is less than 1.0, the remainder of the losses are assumed to be lost to the outdoors. The default is 1.0.
-
-\paragraph{Field: CPU End-Use Subcategory}\label{field-cpu-end-use-subcategory}
-
-This equipment is metered on the Interior Equipment end-use category for Electricity. This field allows you to specify a user-defined end-use subcategory for the CPU power consumption. A new meter for reporting is created for each unique subcategory (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} object). Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and in the LEED Summary table EAp2-4/5 Performance Rating Method Compliance. The default is ITE-CPU.
-
-\paragraph{Field: Fan End-Use Subcategory}\label{field-fan-end-use-subcategory}
-
-This equipment is metered on the Interior Equipment end-use category for Electricity. This field allows you to specify a user-defined end-use subcategory for the fan power consumption. A new meter for reporting is created for each unique subcategory (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} object). Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and in the LEED Summary table EAp2-4/5 Performance Rating Method Compliance. The default is ITE-Fans.
-
-\paragraph{Field: Electric Power Supply End-Use Subcategory}\label{field-electric-power-supply-end-use-subcategory}
-
-This equipment is metered on the Interior Equipment end-use category for Electricity. This field allows you to specify a user-defined end-use subcategory for the electric power supply power consumption. A new meter for reporting is created for each unique subcategory (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} object). Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and in the LEED Summary table EAp2-4/5 Performance Rating Method Compliance. The default is ITE-UPS
 
 \paragraph{Field: Supply Temperature Difference}\label{field-supply-temperature-difference}
 
@@ -2798,53 +2858,15 @@ The difference of the actual AHU return air temperature to the IT equipment outl
 
 The difference schedule of the actual AHU return air temperature to the IT equipment outlet temperature (${\Delta}T_{\textrm{return}} = T_{\textrm{return}}-T_{\textrm{out}}$). Either Return Temperature Difference or Return Temperature Difference Schedule is required if Air Flow Calculation Method is set to \textbf{FlowControlWithApproachTemperatures}. This field is ignored when Air Flow Calculation Method is \textbf{FlowFromSystem}.
 
-An IDF example:
+An IDF example with Air Flow Calculation Method = FlowControlWithApproachTemperatures:
 
 \begin{lstlisting}
-ElectricEquipment:ITE:AirCooled,
-  Data Center Servers,        !- Name
-  Main Zone,                  !- Zone or Space Name
-  FlowFromSystem,             !- Air Flow Calculation Method
-  Watts/Unit,                 !- Design Power Input Calculation Method
-  500,                        !- Watts per Unit {W}
-  200,                        !- Number of Units
-  ,                           !- Watts per Floor Area {W/m2}
-  Data Center Operation Schedule,  !- Design Power Input Schedule Name
-  Data Center CPU Loading Schedule,  !- CPU Loading  Schedule Name
-  Model 5250 Power fLoadTemp, !- CPU Power Input Function of Loading and Air Temperature Curve Name
-  0.4,                        !- Design Fan Power Input Fraction
-  0.0001,                     !- Design Fan Air Flow Rate per Power Input {m3/s-W}
-  Model 5250 AifFlow fLoadTemp,  !- Air Flow Function of Loading and Air Temperature Curve Name
-  ECM FanPower fFlow,         !- Fan Power Input Function of Flow Curve Name
-  15,                         !- Design Entering Air Temperature {C}
-  A3,                         !- Environmental Class
-  AdjustedSupply,             !- Air Inlet Connection Type
-  ,                           !- Air Inlet Room Air Model Node Name
-  ,                           !- Air Outlet Room Air Model Node Name
-  Main Zone Inlet Node,       !- Supply Air Node Name
-  0.1,                        !- Design Recirculation Fraction
-  Data Center Recirculation fLoadTemp,  !- Recirculation Function of Loading and Supply Temperature Curve Name
-  0.9,                        !- Design Electric Power Supply Efficiency
-  UPS Efficiency fPLR,        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
-  1,                          !- Fraction of Electric Power Supply Losses to Zone
-  ITE-CPU,                    !- CPU End-Use Subcategory
-  ITE-Fans,                   !- Fan End-Use Subcategory
-  ITE-UPS;                    !- Electric Power Supply End-Use Subcategory
-\end{lstlisting}
-
-Another IDF example when Air Flow Calculation Method = FlowControlWithApproachTemperatures:
-
-\begin{lstlisting}
-ElectricEquipment:ITE:AirCooled,
-  SmallDataCenter ComputerRoom Elec Equip,  !- Name
-  ComputerRoom ZN,            !- Zone or Space Name
+ElectricEquipment:ITE:AirCooled:Definition,
+  SmallDataCenter ITE Def,    !- Name
   FlowControlWithApproachTemperatures,  !- Air Flow Calculation Method
   Watts/Area,                 !- Design Power Input Calculation Method
   ,                           !- Watts per Unit {W}
-  ,                           !- Number of Units
   430.556416668389,           !- Watts per Floor Area {W/m2}
-  Data Center Operation Schedule,  !- Design Power Input Schedule Name
-  DataCenter Equipment_SCH,   !- CPU Loading  Schedule Name
   Data Center Servers Power fLoadTemp,  !- CPU Power Input Function of Loading and Air Temperature Curve Name
   0.4,                        !- Design Fan Power Input Fraction
   0.0001,                     !- Design Fan Air Flow Rate per Power Input {m3/s-W}
@@ -2853,21 +2875,26 @@ ElectricEquipment:ITE:AirCooled,
   15,                         !- Design Entering Air Temperature {C}
   A3,                         !- Environmental Class
   AdjustedSupply,             !- Air Inlet Connection Type
-  ,                           !- Air Inlet Room Air Model Node Name
-  ,                           !- Air Outlet Room Air Model Node Name
-  Node 6,                     !- Supply Air Node Name
   0,                          !- Design Recirculation Fraction
   Data Center Recirculation fLoadTemp,  !- Recirculation Function of Loading and Supply Temperature Curve Name
   0.9,                        !- Design Electric Power Supply Efficiency
   UPS Efficiency fPLR,        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name
   1,                          !- Fraction of Electric Power Supply Losses to Zone
-  ITE-CPU,                    !- CPU End-Use Subcategory
-  ITE-Fans,                   !- Fan End-Use Subcategory
-  ITE-UPS,                    !- Electric Power Supply End-Use Subcategory
-  3,                          !- field Supply Approach Temperature
-  ,                           !- field Supply Approach Temperature Schedule
-  -3,                         !- field Return Approach Temperature
-  ;                           !- field Return Approach Temperature Schedule
+  3,                          !- Supply Temperature Difference {deltaC}
+  ,                           !- Supply Temperature Difference Schedule
+  -3,                         !- Return Temperature Difference {deltaC}
+  ;                           !- Return Temperature Difference Schedule
+
+ElectricEquipment:ITE:AirCooled,
+  SmallDataCenter ComputerRoom Elec Equip,  !- Name
+  SmallDataCenter ITE Def,    !- ElectricEquipment ITE AirCooled Definition Name
+  ComputerRoom ZN,            !- Zone or Space Name
+  ,                           !- Number of Units
+  Data Center Operation Schedule,  !- Design Power Input Schedule Name
+  DataCenter Equipment_SCH,   !- CPU Loading Schedule Name
+  ,                           !- Air Inlet Room Air Model Node Name
+  ,                           !- Air Outlet Room Air Model Node Name
+  Node 6;                     !- Supply Air Node Name
 \end{lstlisting}
 
 \subsubsection{Outputs}
