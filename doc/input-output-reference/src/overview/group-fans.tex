@@ -235,8 +235,18 @@ Fan:SystemModel,
   HVAC,Average,Fan Air Mass Flow Rate {[}kg/s{]}
 \item
   HVAC,Average,Fan Heat Gain to Air {[}W{]}
+\end{itemize}
+
+Additional variable for single-speed fans:
+
+\begin{itemize}
 \item
   HVAC,Average,Fan Runtime Fraction {[]}
+\end{itemize}
+
+Additional variable for two-speed and multi-speed fans:
+
+\begin{itemize}
 \item
   HVAC,Average,Fan Runtime Fraction Speed <\#> {[]}
 \end{itemize}
@@ -263,11 +273,11 @@ This output contains the average power in Watts lost to the process air stream f
 
 \paragraph{Fan Runtime Fraction {[]}}\label{fan-runtime-fraction-fansysmodel}
 
-This output contains the fraction of time that this fan operated for the timestep being reported. Applies only for single-speed fans.
+This output contains the fraction of time that this fan operated for the timestep being reported. Applicable only for single-speed fans.
 
 \paragraph{Fan Runtime Fraction Speed <\#> {[]}}\label{fan-runtime-fraction-speed-fansysmodel}
 
-This output contains the fraction of time that this fan operated at each speed for the timestep being reported. The overall runtime fraction is the sum of the runtime fractions for each speed. Applies only for two-speed and multi-speed fans.
+This output contains the fraction of time that this fan operated at each speed for the timestep being reported. The overall runtime fraction is the sum of the runtime fractions for each speed. Applicable only for two-speed and multi-speed fans.
 
 \subsection{Fan:ConstantVolume}\label{fanconstantvolume}
 
