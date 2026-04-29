@@ -49,7 +49,6 @@
 #define IOFiles_hh_INCLUDED
 
 // C++ Headers
-#include <array>
 #include <cassert>
 #include <fstream>
 #include <iostream>

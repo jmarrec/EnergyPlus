@@ -61,7 +61,6 @@
 #include <EnergyPlus/DataAirSystems.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
-#include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataRuntimeLanguage.hh>
 #include <EnergyPlus/DataSurfaces.hh>
@@ -230,7 +229,7 @@ namespace EMSManager {
 
             General::ScanForReports(state, "EnergyManagementSystem", state.dataRuntimeLang->OutputEDDFile);
             if (state.dataRuntimeLang->OutputEDDFile) {
-                // open up output file for EMS EDD file  EMS Data and Debug
+                // open up output file for EMS EDD file EMS Data and Debug
                 state.files.edd.ensure_open(state, "CheckIFAnyEMS", state.files.outputControl.edd);
             }
         } else {

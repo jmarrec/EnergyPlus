@@ -3849,14 +3849,18 @@ std::string ValueToString(ErlValueType const &Value)
     // Locals
     // FUNCTION ARGUMENT DEFINITIONS:
 
+    Real64 constexpr floatToSciCutoff = 0.01;
+
     String = "";
 
     switch (Value.Type) {
     case Value::Number:
         if (Value.Number == 0.0) {
             String = "0.0";
+        } else if (std::abs(Value.Number) > floatToSciCutoff) {
+            String = std::format("{:.6f}", Value.Number); // floating point representation
         } else {
-            String = std::format("{:.6f}", Value.Number); //(String)
+            String = std::format("{:.6e}", Value.Number); // scientific notation representation for small numbers
         }
         break;
 
