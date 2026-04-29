@@ -68,6 +68,28 @@ Resulting instances of People:
 \end{itemize}
 
 
+\subsection{SpaceLoad Instance and Definition Objects}\label{internal-gains-instance-and-definition-objects}
+
+Internal gains (Space Loads) object types are split into a paired \textbf{Instance} object and a \textbf{Definition} object.
+
+\begin{itemize}
+\tightlist
+\item \hyperref[people]{People} / \hyperref[peopledefinition]{People:Definition}
+\item \hyperref[lights-000]{Lights} / \hyperref[lightsdefinition]{Lights:Definition}
+\item \hyperref[electricequipment]{ElectricEquipment} / \hyperref[electricequipmentdefinition]{ElectricEquipment:Definition}
+\item \hyperref[gasequipment]{GasEquipment} / \hyperref[gasequipmentdefinition]{GasEquipment:Definition}
+\item \hyperref[hotwaterequipment]{HotWaterEquipment} / \hyperref[hotwaterequipmentdefinition]{HotWaterEquipment:Definition}
+\item \hyperref[steamequipment]{SteamEquipment} / \hyperref[steamequipmentdefinition]{SteamEquipment:Definition}
+\item \hyperref[otherequipment]{OtherEquipment} / \hyperref[otherequipmentdefinition]{OtherEquipment:Definition}
+\item \hyperref[electricequipmentiteaircooled]{ElectricEquipment:ITE:AirCooled} / \hyperref[electricequipmentiteaircooleddefinition]{ElectricEquipment:ITE:AirCooled:Definition}
+\end{itemize}
+
+The \textbf{Definition} object holds the physical characteristics of the load: the design level calculation method, the level values (per floor area, per person, or absolute), and the heat gain fractions, and any other similar applicable characteristics (CO2 Generation Rate, Return Air Fraction, etc). Because a definition does not reference any zone or space, it can be shared by any number of instance objects.
+
+The \textbf{Instance} object holds at least the zone/space assignment, the operating schedule, and the end-use subcategory, and any other attributes that are specific to a particular installation. It references its definition by name.
+
+This separation makes it straightforward to apply the same load characteristics to many zones or spaces without duplicating the physical data. For example, a single \texttt{ElectricEquipment:Definition} describing a standard workstation can be shared by dozens of \texttt{ElectricEquipment} instances, each with its own zone and schedule and end-use subcategory.
+
 \subsection{People}\label{people}
 
 The people statement is used to model the occupant's effect on the space conditions. The following definition addresses the basic affects as well as providing information that can be used to report the thermal comfort of a group of occupants. The Fanger, Pierce Two-Node, Kansas State University Two-Node, ASHRAE Standard 55 Elevated Air Cooling Effect model, and ASHRAE Standard 55 Ankle Draft Risk thermal comfort models are available in EnergyPlus. A user may select any of these models for each People statement by simply adding the appropriate choice keyword after the air velocity schedule name. Thermal comfort calculations will only be made for people statements that include specific requests for these thermal comfort models. This object also requires input of carbon dioxide generation rate based on people activity level for zone carbon dioxide simulations.
@@ -1229,7 +1251,7 @@ The electric power input for all lights in the space or zone. This will have the
 
 \subsection{ElectricEquipment}\label{electricequipment}
 
-The object models equipment in the zone which consumes electricity, such as computers, televisions, and cooking equipment, also known as ``plug loads.'' All of the energy consumed by the equipment becomes a heat gain in the zone or is lost (exhausted) as specified below.
+The object models equipment in the zone which consumes electricity, such as computers, televisions, and cooking equipment, also known as ``plug loads.'' All of the energy consumed by the equipment becomes a heat gain in the zone or is lost (exhausted) as specified in the associated \hyperref[electricequipmentdefinition]{ElectricEquipment:Definition} object.
 
 \subsubsection{Inputs}\label{inputs-3-019}
 
@@ -1237,13 +1259,81 @@ The object models equipment in the zone which consumes electricity, such as comp
 
 The name of the ElectricEquipment object.
 
+\paragraph{Field: Electric Equipment Definition Name}\label{field-electric-equipment-definition-name}
+
+The name of the \hyperref[electricequipmentdefinition]{ElectricEquipment:Definition} object that specifies the design level calculation method and heat gain fractions for this instance.
+
 \paragraph{Field: Zone or ZoneList or Space or SpaceList Name}\label{eleceq-field-zone-or-zonelist-name-000}
 
 This field applies this ElectricEquipment object to one or more thermal zones or spaces in the building. The Zone, Zonelist or SpaceList options can be used effectively with the watts/area and watts/person options of the Design Level Calculation Method to place a varying equipment load at the same density in each zone or space. The names of the actual electric equipment objects may be concatenated as \textless{}Space Name\textgreater{} \textless{}ElectricEquipment Object Name\textgreater{}. See \hyperref[specifying-applicable-zones-or-spaces]{Specifying Applicable Zone(s) or Space(s)} for more details.
 
 \paragraph{Field: Schedule Name}\label{field-schedule-name-1-001}
 
-This field is the name of the schedule that modifies the design level parameter for electric equipment (see Design Level Calculation Method field and related subsequent fields). The schedule values can be any positive number. The actual electrical input for equipment in a zone as defined by this statement is the product of the design level field and the value of the schedule specified by name in this field.
+This field is the name of the schedule that modifies the design level parameter for electric equipment (see Design Level Calculation Method field in the associated ElectricEquipment:Definition object). The schedule values can be any positive number. The actual electrical input for equipment in a zone as defined by this statement is the product of the design level and the value of this schedule.
+
+\paragraph{Field: End-Use Subcategory}\label{field-end-use-subcategory-1-001}
+
+Allows you to specify a user-defined end-use subcategory, e.g., ``Computers'', ``Copy Machines'', etc. A new meter for reporting is created for each unique subcategory~ (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} objects). Subcategories are also reported in the ABUPS table. If this field is omitted or blank, the equipment will be assigned to the ``General'' end-use subcategory. Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and the LEED Summary table EAp2-4/5. Performance Rating Method Compliance.
+
+An IDF example:
+
+\begin{lstlisting}
+ElectricEquipment:Definition,
+  Residential ElecEq Def,     !- Name
+  Watts/Area,                 !- Design Level Calculation Method
+  ,                           !- Design Level {W}
+  10.0,                       !- Watts per Floor Area {W/m2}
+  ,                           !- Watts per Person {W/person}
+  0.0,                        !- Fraction Latent
+  0.3,                        !- Fraction Radiant
+  0.0;                        !- Fraction Lost
+
+ElectricEquipment,
+  DORM ROOMS ElecEq ,         !- Name
+  Residential ElecEq Def,     !- Electric Equipment Definition Name
+  DORM ROOMS,                 !- Zone or ZoneList or Space or SpaceList Name
+  Residential Equipment Sch,  !- Schedule Name
+  Dorms;                      !- End-Use Subcategory
+
+ElectricEquipment,
+  COMMON AREAS ElecEq ,       !- Name
+  Residential ElecEq Def,     !- Electric Equipment Definition Name
+  COMMON AREAS,               !- Zone or ZoneList or Space or SpaceList Name
+  Residential Equipment Sch,  !- Schedule Name
+  Common;                     !- End-Use Subcategory
+\end{lstlisting}
+
+Global ElectricEquipment example:
+
+\begin{lstlisting}
+ZoneList,AllOccupiedZones,SPACE1-1,SPACE2-1,SPACE3-1,SPACE4-1,SPACE5-1;
+
+ElectricEquipment:Definition,
+  AllZones ElecEq Def,        !- Name
+  Watts/Person,               !- Design Level Calculation Method
+  ,                           !- Design Level {W}
+  ,                           !- Watts per Floor Area {W/m2}
+  96,                         !- Watts per Person {W/person}
+  0,                          !- Fraction Latent
+  0.3,                        !- Fraction Radiant
+  0;                          !- Fraction Lost
+
+ElectricEquipment,
+  AllZones with Electric Equipment,  !- Name
+  AllZones ElecEq Def,        !- Electric Equipment Definition Name
+  AllOccupiedZones,           !- Zone or ZoneList or Space or SpaceList Name
+  EQUIP-1;                    !- Schedule Name
+\end{lstlisting}
+
+\subsection{ElectricEquipment:Definition}\label{electricequipmentdefinition}
+
+This object defines the design-level calculation method and heat gain fractions shared by one or more \hyperref[electricequipment]{ElectricEquipment} instances.
+
+\subsubsection{Inputs}\label{inputs-3-electricequipmentdefinition}
+
+\paragraph{Field: Name}\label{field-name-electricequipmentdefinition}
+
+The name of the ElectricEquipment:Definition object. This name is referenced by the \textit{Electric Equipment Definition Name} field of \hyperref[electricequipment]{ElectricEquipment} instances.
 
 \paragraph{Field: Design Level Calculation Method}\label{field-design-level-calculation-method-1}
 
@@ -1252,30 +1342,16 @@ This field is a key/choice field that tells which of the next three fields are f
 \begin{itemize}
 \tightlist
 \item
-  EquipmentLevel
-\end{itemize}
-
-With this choice, the method used will be a straight insertion of the electric equipment level (Watts) for the Zone.~ (The Design Level field should be filled.)
-
-\begin{itemize}
-\tightlist
+  \textbf{EquipmentLevel} -- With this choice, the method used will be a straight insertion of the electric equipment level (Watts) for the Zone. (The Design Level field should be filled.)
 \item
-  Watts/Area
-\end{itemize}
-
-With this choice, the method used will be a factor per floor area of the zone or space. (The Watts per Floor Area field should be filled).
-
-\begin{itemize}
-\tightlist
+  \textbf{Watts/Area} -- With this choice, the method used will be a factor per floor area of the zone or space. (The Watts per Floor Area field should be filled.)
 \item
-  Watts/Person
+  \textbf{Watts/Person} -- With this choice, the method used will be a factor of equipment level (watts) per person. (The Watts per Person field should be filled.)
 \end{itemize}
-
-With this choice, the method used will be a factor of equipment level (watts) per person. (The Watts per Person field should be filled).
 
 \paragraph{Field: Design Level}\label{field-design-level-000}
 
-This field (in Watts) is typically used to represent the maximum electrical input to equipment in a zone that is then multiplied by a schedule fraction (see previous field). In EnergyPlus, this is slightly more flexible in that the electric equipment design level could be a ``diversity factor'' applied to a schedule of real numbers. Note that while the schedule value can vary from hour to hour, the design level field is constant for all simulation environments.
+This field (in Watts) is typically used to represent the maximum electrical input to equipment in a zone that is then multiplied by a schedule fraction (see Schedule Name in the ElectricEquipment instance). In EnergyPlus, this is slightly more flexible in that the electric equipment design level could be a ``diversity factor'' applied to a schedule of real numbers. Note that while the schedule value can vary from hour to hour, the design level field is constant for all simulation environments.
 
 \paragraph{Field: Watts per Floor Area}\label{field-watts-per-zone-floor-area-1}
 
@@ -1306,45 +1382,6 @@ This field is a decimal number between 0.0 and 1.0 and is used to characterize t
 \paragraph{Field: Fraction Lost}\label{field-fraction-lost}
 
 This field is a decimal number between 0.0 and 1.0 and is used to characterize the amount of ``lost'' heat being given off by electric equipment in a zone. The number specified in this field will be multiplied by the total energy consumed by electric equipment to give the amount of heat which is ``lost'' and does not impact the zone energy balances. This might correspond to electrical energy converted to mechanical work or heat that is vented to the atmosphere.
-
-\paragraph{Field: End-Use Subcategory}\label{field-end-use-subcategory-1-001}
-
-Allows you to specify a user-defined end-use subcategory, e.g., ``Computers'', ``Copy Machines'', etc. A new meter for reporting is created for each unique subcategory~ (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} objects). Subcategories are also reported in the ABUPS table. If this field is omitted or blank, the equipment will be assigned to the ``General'' end-use subcategory. Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and the LEED Summary table EAp2-4/5. Performance Rating Method Compliance.
-
-
-An IDF example:
-
-\begin{lstlisting}
-ElectricEquipment,
-  DORM ROOMS AND COMMON AREAS ElecEq 1,  !- Name
-  DORM ROOMS AND COMMON AREAS,!- Zone Name
-  Residence Equipment,        !- SCHEDULE Name
-  EquipmentLevel,             !- Design Level calculation method
-  9210.921,                   !- Design Level {W}
-  ,                           !- Watts per Zone Floor Area {watts/m2}
-  ,                           !- Watts per Person {watts/person}
-  0.0000000E+00,              !- Fraction Latent
-  0.3000000,                  !- Fraction Radiant
-  0.0000000E+00,              !- Fraction Lost
-  Computers;                  !- End-use Subcategory
-\end{lstlisting}
-
-Global ElectricEquipment example:
-
-\begin{lstlisting}
-ZoneList,AllOccupiedZones,SPACE1-1,SPACE2-1,SPACE3-1,SPACE4-1,SPACE5-1;
-ElectricEquipment,
-  AllZones with Electric Equipment,  !- Name
-  AllOccupiedZones,           !- Zone or ZoneList or Space or SpaceList Name
-  EQUIP-1,                    !- Schedule Name
-  Watts/Person,               !- Design Level Calculation Method
-  ,                           !- Design Level {W}
-  ,                           !- Watts per Zone Floor Area {W/m2}
-  96,                         !- Watts per Person {W/person}
-  0,                          !- Fraction Latent
-  0.3,                        !- Fraction Radiant
-  0;                          !- Fraction Lost
-\end{lstlisting}
 
 \subsection{GasEquipment}\label{gasequipment}
 
