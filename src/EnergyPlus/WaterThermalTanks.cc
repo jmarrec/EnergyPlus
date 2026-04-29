@@ -13044,10 +13044,10 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
             MaxCapacity_loc = this->MaxCapacity;
         }
 
-        static constexpr std::string_view Format_720("Water Heater Information,{},{},{:.4f},{:.1f},{:.3f},{:.4f}\n");
+        static constexpr std::string_view Format_720("Water Heater Information,{},{},{:.4e},{:.1f},{:.3f},{:.4f}\n");
         print(state.files.eio, Format_720, this->Type, this->Name, this->Volume, MaxCapacity_loc, RecoveryEfficiency, EnergyFactor);
     } else {
-        static constexpr std::string_view Format_721("Heat Pump Water Heater Information,{},{},{:.4f},{:.1f},{:.3f},{:.4f},{:.0f}\n");
+        static constexpr std::string_view Format_721("Heat Pump Water Heater Information,{},{},{:.4e},{:.1f},{:.3f},{:.4f},{:.0f}\n");
         print(state.files.eio,
               Format_721,
               state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).Type,
