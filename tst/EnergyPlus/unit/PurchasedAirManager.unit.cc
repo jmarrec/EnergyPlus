@@ -77,7 +77,6 @@
 using namespace EnergyPlus;
 using namespace EnergyPlus::DataHeatBalance;
 using namespace EnergyPlus::DataHeatBalFanSys;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataSizing;
 using namespace EnergyPlus::DataSurfaces;
 using namespace EnergyPlus::DataZoneEnergyDemands;

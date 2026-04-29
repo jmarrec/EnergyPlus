@@ -2636,7 +2636,7 @@ namespace WindowComplexManager {
 
         // Deflection
         // Tarcog requires deflection as input parameters.  Deflection is NOT used in EnergyPlus simulations
-        TARCOGParams::DeflectionCalculation CalcDeflection; // Deflection calculation flag:
+        TARCOGParams::DeflectionCalculation CalcDeflection = TARCOGParams::DeflectionCalculation::NONE; // Deflection calculation flag:
         //    0 - no deflection calculations
         //    1 - perform deflection calculation (input is Pressure/Temp)
         //    2 - perform deflection calculation (input is measured deflection)
@@ -2755,7 +2755,6 @@ namespace WindowComplexManager {
         auto &s_mat = state.dataMaterial;
         // fill local vars
 
-        CalcDeflection = TARCOGParams::DeflectionCalculation::NONE;
         CalcSHGC = 0;
 
         if (CalcCondition == DataBSDFWindow::Condition::Invalid) {
@@ -2985,7 +2984,7 @@ namespace WindowComplexManager {
                 }
             } else {
                 ShowContinueError(state, "Illegal layer type in Construction:ComplexFenestrationState.");
-                ShowContinueError(state, "Allowed object are:");
+                ShowContinueError(state, "Allowed objects are:");
                 ShowContinueError(state, "   - WindowMaterial:Glazing");
                 ShowContinueError(state, "   - WindowMaterial:ComplexShade");
                 ShowContinueError(state, "   - WindowMaterial:Gap");
@@ -3212,9 +3211,9 @@ namespace WindowComplexManager {
             tarcogErrorMessage = "message = \"" + tarcogErrorMessage + "\"";
             ShowContinueErrorTimeStamp(state, tarcogErrorMessage);
             if (CalcCondition == DataBSDFWindow::Condition::Invalid) {
-                ShowContinueError(state, format("surface name = {}", state.dataSurface->Surface(SurfNum).Name));
+                ShowContinueError(state, EnergyPlus::format("surface name = {}", state.dataSurface->Surface(SurfNum).Name));
             }
-            ShowContinueError(state, format("construction name = {}", state.dataConstruction->Construct(ConstrNum).Name));
+            ShowContinueError(state, EnergyPlus::format("construction name = {}", state.dataConstruction->Construct(ConstrNum).Name));
             ShowFatalError(state, "halting because of error in tarcog");
         }
 

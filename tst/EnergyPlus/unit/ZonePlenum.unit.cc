@@ -60,7 +60,6 @@
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::ZonePlenum;
-using namespace EnergyPlus::DataLoopNode;
 
 TEST_F(EnergyPlusFixture, ZonePlenum_InitAirZoneReturnPlenumTest)
 {
