@@ -1597,7 +1597,7 @@ namespace HybridEvapCoolingModel {
             CurrentOperatingSettings[1] = oStandBy;
         } else {
             // if we partly met the load then do the best we can and run full out in that optimal setting.
-            if (!DidWeMeetLoad && DidWePartlyMeetLoad) {
+            if (DidWePartlyMeetLoad) {
                 ErrorCode = 0;
                 count_DidWeNotMeetLoad++;
                 if (OptimalSetting.ElectricalPower == IMPLAUSIBLE_POWER) {
