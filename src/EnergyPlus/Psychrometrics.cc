@@ -547,7 +547,7 @@ namespace Psychrometrics {
 
 #ifdef EP_psych_errors
         if (FlagError) {
-            ShowContinueError(state, EnergyPlus::format(" Resultant Temperature= {:.2f}", WBT));
+            ShowContinueError(state, EnergyPlus::format(" Resultant Temperature= {:.4f}", WBT));
         }
 #endif
 
@@ -1023,7 +1023,7 @@ namespace Psychrometrics {
 
 #ifdef EP_psych_errors
         if (FlagError) {
-            ShowContinueError(state, std::format(" Initial Resultant Temperature= {:.2f}", T));
+            ShowContinueError(state, std::format(" Initial Resultant Temperature= {:.4f}", T));
         }
 #endif
         if (std::abs(PB - 1.0133e5) / 1.0133e5 > 0.01) {
@@ -1437,7 +1437,7 @@ namespace Psychrometrics {
 
 #ifdef EP_psych_errors
         if (FlagError) {
-            ShowContinueError(state, std::format(" Resultant Temperature= {:.2f}", Temp));
+            ShowContinueError(state, std::format(" Resultant Temperature= {:.4f}", Temp));
         }
 #endif
 
