@@ -879,7 +879,7 @@ ComfortViewFactorAngles,
 
 \subsection{Lights}\label{lights-000}
 
-The Lights statement allows you to specify information about a zone's electric lighting system, including design power level and operation schedule, and how the heat from lights is distributed thermally.
+The Lights statement allows you to specify information about a zone's electric lighting system, including design power level and operation schedule, and how the heat from lights is distributed thermally. Physical characteristics are specified in the associated \hyperref[lightsdefinition]{Lights:Definition} object.
 
 A zone may have multiple Lights statements. For example, one statement may describe the general lighting in the zone and another the task lighting. Or you can use multiple Lights statements for a zone that has two or more general lighting systems that differ in design level, schedule, etc.
 
@@ -889,39 +889,124 @@ A zone may have multiple Lights statements. For example, one statement may descr
 
 The name of the Lights object.
 
+\paragraph{Field: Lights Definition Name}\label{field-lights-definition-name}
+
+The name of the \hyperref[lightsdefinition]{Lights:Definition} object that specifies the design level calculation method and heat gain fractions for this instance.
+
 \paragraph{Field: Zone or ZoneList or Space or SpaceList Name}\label{lights-field-zone-or-zonelist-name-000}
 
 This field applies this Lights object to one or more thermal zones or spaces in the building. The Zone, Zonelist or SpaceList options can be used effectively with the watts/area and watts/person options of the Design Level Calculation Method to place a varying lighting load at the same density in each zone or space. The names of the actual lights objects may be concatenated as \textless{}Space Name\textgreater{} \textless{}Lights Object Name\textgreater{}. See \hyperref[specifying-applicable-zones-or-spaces]{Specifying Applicable Zone(s) or Space(s)} for more details.
 
 \paragraph{Field: Schedule Name}\label{field-schedule-name-002}
 
-The name of the schedule that modifies the lighting power design level (see Design Level Calculation Method field and related subsequent fields). The schedule values can be any positive number. The electrical input for lighting in a particular timestep is the product of the design level and the value of this schedule in that timestep. If the design level is the maximum lighting power input the schedule should contain values between 0.0 and 1.0.
+The name of the schedule that modifies the lighting power design level (see Design Level Calculation Method field in the associated Lights:Definition object). The schedule values can be any positive number. The electrical input for lighting in a particular timestep is the product of the design level and the value of this schedule in that timestep. If the design level is the maximum lighting power input the schedule should contain values between 0.0 and 1.0.
+
+\paragraph{Field: Fraction Replaceable}\label{field-fraction-replaceable}
+
+This field defines the daylighting control for the Lights object.
+
+If \textbf{\hyperref[daylightingcontrols-000]{Daylighting:Controls}} is specified for the space or zone, this field is used as an on/off flag for dimming controls. If set to 0.0, the lights are not dimmed by the daylighting controls. If set to 1.0, the lights are allowed to be dimmed by the applicable daylighting control. If daylighting controls are operating in the space or zone, all of the applicable Lights objects with a Fraction Replaceable greater than zero will be reduced by a multiplicative factor that accounts for how much the electric lighting is lowered due to daylighting (ref. \hyperref[daylighting-lighting-power-multiplier-1]{Daylighting Lighting Power Multiplier}).
+
+\paragraph{Field: End-Use Subcategory}\label{field-end-use-subcategory-002}
+
+Allows you to specify a user-defined end-use subcategory, e.g., ``Task Lights'', ``Hall Lights'', etc. A new meter for reporting is created for each unique subcategory~ (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} objects). Subcategories are also reported in the ABUPS table. If this field is omitted or blank, the lights will be assigned to the ``General'' end-use subcategory. Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and the LEED EAp2-4/5. Performance Rating Method Compliance table.
+
+\paragraph{Field: Return Air Heat Gain Node Name}\label{field-return-air-heat-gain-node-name}
+
+Name of the return air node for this heat gain. If left blank, it defaults to the first return air node for the zone containing this Lights object. Leave blank when using a \hyperref[zonelist]{ZoneList} name. See Figure~\ref{fig:vertical-section-through-a-zone-and-its}.
+
+\paragraph{Field: Exhaust Air Heat Gain Node Name}\label{field-exhaust-air-heat-gain-node-name}
+
+Name of the exhaust air node for this heat gain. If left blank, no heat gain from return air fraction will be added to the zone exhaust node. When the exhaust node name is entered, the return air heat gain will be shared by both return and exhaust nodes. The equipment can draw air from the exhaust node, but the inlet air properties is combined properties with mixing mass flow rates of both nodes and added lights heat gain.
+
+An IDF example:
+
+\begin{lstlisting}
+Lights:Definition,
+  Office Lights Def,          !- Name
+  LightingLevel,              !- Design Level Calculation Method
+  1039.706,                   !- Lighting Level {W}
+  ,                           !- Watts per Floor Area {W/m2}
+  ,                           !- Watts per Person {W/person}
+  0.0,                        !- Return Air Fraction
+  0.4,                        !- Fraction Radiant
+  0.2;                        !- Fraction Visible
+
+Lights,
+  RIGHT FORK Lights,          !- Name
+  Office Lights Def,          !- Lights Definition Name
+  RIGHT FORK,                 !- Zone or ZoneList or Space or SpaceList Name
+  Office Lighting,            !- Schedule Name
+  1.0,                        !- Fraction Replaceable
+  GeneralLights;              !- End-Use Subcategory
+
+Lights,
+  LEFT FORK Non Replaceable Lights,  !- Name
+  Office Lights Def,          !- Lights Definition Name
+  LEFT FORK,                  !- Zone or ZoneList or Space or SpaceList Name
+  Office Lighting,            !- Schedule Name
+  0.0,                        !- Fraction Replaceable
+  GeneralLights;              !- End-Use Subcategory
+\end{lstlisting}
+
+Global Lights example:
+
+\begin{lstlisting}
+ZoneList,AllOccupiedZones,SPACE1-1,SPACE2-1,SPACE3-1,SPACE4-1,SPACE5-1;
+
+Lights:Definition,
+  AllZones Lights Def,        !- Name
+  Watts/Area,                 !- Design Level Calculation Method
+  ,                           !- Lighting Level {W}
+  16,                         !- Watts per Floor Area {W/m2}
+  ,                           !- Watts per Person {W/person}
+  0.2,                        !- Return Air Fraction
+  0.59,                       !- Fraction Radiant
+  0.2;                        !- Fraction Visible
+
+Lights,
+  AllZones with Lights,       !- Name
+  AllZones Lights Def,        !- Lights Definition Name
+  AllOccupiedZones,           !- Zone or ZoneList or Space or SpaceList Name
+  LIGHTS-1,                   !- Schedule Name
+  0;                          !- Fraction Replaceable
+\end{lstlisting}
+
+\subsection{Lights:Definition}\label{lightsdefinition}
+
+This object defines the design-level calculation method and heat gain fractions shared by one or more \hyperref[lights-000]{Lights} instances.
+
+\subsubsection{Inputs}\label{inputs-2-lightsdefinition}
+
+\paragraph{Field: Name}\label{field-name-lightsdefinition}
+
+The name of the Lights:Definition object. This name is referenced by the \textit{Lights Definition Name} field of \hyperref[lights-000]{Lights} instances.
 
 \paragraph{Field: Design Level Calculation Method}\label{field-design-level-calculation-method}
 
 This field is a key/choice field that tells which of the next three fields are filled and is descriptive of the method for calculating the nominal lighting level in the Zone. The key/choice options are:
 
-\begin{description}
-
-\item[LightingLevel] With this choice, the method used will be a straight insertion of the lighting level (Watts) for the Zone.~ (The Lighting Level field should be filled.)
-
-\item[Watts/Area] With this choice, the method used will be a factor per floor area of the zone or space. (The Watts per Floor Area field should be filled).
-
-\item[Watts/Person] With this choice, the method used will be a factor of lighting level (watts) per person. (The Watts per person field should be filled).
-
-\end{description}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{LightingLevel} -- With this choice, the method used will be a straight insertion of the lighting level (Watts) for the Zone. (The Lighting Level field should be filled.)
+\item
+  \textbf{Watts/Area} -- With this choice, the method used will be a factor per floor area of the zone or space. (The Watts per Floor Area field should be filled.)
+\item
+  \textbf{Watts/Person} -- With this choice, the method used will be a factor of lighting level (watts) per person. (The Watts per Person field should be filled.)
+\end{itemize}
 
 \paragraph{Field: Lighting Level}\label{field-lighting-level}
 
-This is typically the maximum electrical power input (in Watts) to lighting in a zone, including ballasts, if present. This value is multiplied by a schedule fraction (see previous field) to get the lighting power in a particular timestep. In EnergyPlus, this is slightly more flexible in that the lighting design level could be a ``diversity factor'' applied to a schedule of real numbers.
+This is typically the maximum electrical power input (in Watts) to lighting in a zone, including ballasts, if present. This value is multiplied by a schedule fraction (see Schedule Name in the Lights instance) to get the lighting power in a particular timestep. In EnergyPlus, this is slightly more flexible in that the lighting design level could be a ``diversity factor'' applied to a schedule of real numbers.
 
 \paragraph{Field: Watts per Floor Area}\label{field-watts-per-zone-floor-area}
 
-This factor (watts/m\(^{2}\)) is used, along with the Zone or Space Floor Area to determine the maximum lighting level as described in the Lighting Level field. The choice from the method field should be ``watts/area''.
+This factor (watts/m\(^{2}\)) is used, along with the Zone or Space Floor Area to determine the maximum lighting level as described in the Lighting Level field. The choice from the method field should be ``Watts/Area''.
 
 \paragraph{Field: Watts per Person}\label{field-watts-per-person}
 
-This factor (watts/person) is used, along with the number of occupants (people) to determine the maximum lighting level as described in the Lighting Level field. The choice from the method field should be ``watts/person''.
+This factor (watts/person) is used, along with the number of occupants (people) to determine the maximum lighting level as described in the Lighting Level field. The choice from the method field should be ``Watts/Person''.
 
 \paragraph{Heat Gains from Lights:}\label{heat-gains-from-lights}
 
@@ -988,16 +1073,6 @@ Fixture No. & Luminaire Feature & Return Air Fraction & Fraction Radiant & Fract
 \bottomrule
 \end{longtable}
 
-\paragraph{Field: Fraction Replaceable}\label{field-fraction-replaceable}
-
-This field defines the daylighting control for the LIGHTS object.
-
-If \textbf{\hyperref[daylightingcontrols-000]{Daylighting:Controls}} is specified for the space or zone, this field is used as an on/off flag for dimming controls. If set to 0.0, the lights are not dimmed by the daylighting controls. If set to 1.0, the lights are allowed to be dimmed by the applicable daylighting control. If daylighting controls are operating in the space or zone, all of the applicable Lights objects with a Fraction Replaceable greater than zero will be reduced by a multiplicative factor that accounts for how much the electric lighting is lowered due to daylighting (ref. \hyperref[daylighting-lighting-power-multiplier-1]{Daylighting Lighting Power Multiplier}).
-
-\paragraph{Field: End-Use Subcategory}\label{field-end-use-subcategory-002}
-
-Allows you to specify a user-defined end-use subcategory, e.g., ``Task Lights'', ``Hall Lights'', etc. A new meter for reporting is created for each unique subcategory~ (ref: \hyperref[outputmeter-and-outputmetermeterfileonly]{Output:Meter} objects). Subcategories are also reported in the ABUPS table. If this field is omitted or blank, the lights will be assigned to the ``General'' end-use subcategory. Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table and the LEED EAp2-4/5. Performance Rating Method Compliance table.
-
 \paragraph{Field: Return Air Fraction Calculated from Plenum Temperature}\label{field-return-air-fraction-calculated-from-plenum-temperature}
 
 Accepts values Yes or No (the default). Yes is for advanced used only. In this case the program will calculate the return air fraction by assuming that it is due to conduction of some of the light heat into the zone's return air plenum and that the amount of the conduction depends on the plenum air temperature. A Yes value should only be used for luminaires that are recessed and non-vented, as shown in Figure~\ref{fig:vertical-section-through-a-zone-and-its}.
@@ -1032,56 +1107,11 @@ The coefficient C\(_{1}\) in the equation for (Return Air Fraction)\(_{calculate
 
 The coefficient C\(_{2}\) in the equation for (Return Air Fraction)\(_{calculated}\). Its units are 1/$^\circ$C.
 
-\paragraph{Field: Return Air Heat Gain Node Name}\label{field-return-air-heat-gain-node-name}
-
-Name of the return air node for this heat gain. If left blank, it defaults to the first return air node for the zone containing this Lights object. Leave blank when using a \hyperref[zonelist]{ZoneList} name.
-
-\paragraph{Field:Exhaust Air Heat Gain Node Name}\label{field-exhaust-air-heat-gain-node-name}
-
-Name of the exhaust air node for this heat gain. If left blank, no heat gain from return air fraction will be added to the zone exhaust node. When the exhaust node name is entered, the return air heat gain will be shared by both return and exhaust nodes. The equipment can draw air from the exhaust node, but the inlet air properties is combined properties with mixing mass flow rates of both nodes and added lights heat gain.
-
 \begin{figure}[hbtp] % fig 52
 \centering
 \includegraphics[width=0.9\textwidth, height=0.9\textheight, keepaspectratio=true]{media/image087.png}
 \caption{Vertical section through a zone and its return air plenum showing recessed lighting (not to scale). The heat from lights is divided into four fractions, three of which---ReturnAirFraction, FractionRadiant and FractionConvected---depend on plenum air temperature. \protect \label{fig:vertical-section-through-a-zone-and-its}}
 \end{figure}
-
-An IDF example:
-
-\begin{lstlisting}
-Lights,
-  RIGHT FORK Lights 1,        !- Name
-  RIGHT FORK,                 !- Zone Name
-  Office Lighting,            !- SCHEDULE Name
-  LightingLevel,              !- Design Level calculation method
-  1039.706,                   !- Lighting Level {W}
-  ,                           !- Watts per Floor Area {W/m2}
-  ,                           !- Watts per Person {W/person}
-  0.0000000E+00,              !- Return Air Fraction
-  0.4000000,                  !- Fraction Radiant
-  0.2000000,                  !- Fraction Visible
-  1.0,                        !- Fraction Replaceable
-  GeneralLights;              !- End-Use Subcategory
-\end{lstlisting}
-
-Global Lights Object:
-
-\begin{lstlisting}
-ZoneList,AllOccupiedZones,SPACE1-1,SPACE2-1,SPACE3-1,SPACE4-1,SPACE5-1;
-Lights,
-  AllZones with Lights,       !- Name
-  AllOccupiedZones,           !- Zone or ZoneList or Space or SpaceList Name
-  LIGHTS-1,                   !- Schedule Name
-  Watts/Area,                 !- Design Level Calculation Method
-  ,                           !- Lighting Level {W}
-  16,                         !- Watts per Zone Floor Area {W/m2}
-  ,                           !- Watts per Person {W/person}
-  0.2,                        !- Return Air Fraction
-  0.59,                       !- Fraction Radiant
-  0.2,                        !- Fraction Visible
-  0,                          !- Fraction Replaceable
-  GeneralLights;              !- End-Use Subcategory
-\end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-2-012}
 
