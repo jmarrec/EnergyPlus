@@ -316,12 +316,12 @@ namespace Psychrometrics {
 
         std::uint64_t hash = (Tdb_tag ^ (W_tag ^ Pb_tag)) & std::uint64_t(twbcache_size - 1);
 
-        auto &cached_Twb = state.dataPsychCache->cached_Twb;
+        auto &twb_Cache = state.dataPsychCache->cached_Twb;
 
-        if (cached_Twb[hash].iTdb != Tdb_tag || cached_Twb[hash].iW != W_tag || cached_Twb[hash].iPb != Pb_tag) {
-            cached_Twb[hash].iTdb = Tdb_tag;
-            cached_Twb[hash].iW = W_tag;
-            cached_Twb[hash].iPb = Pb_tag;
+        if (twb_Cache[hash].iTdb != Tdb_tag || twb_Cache[hash].iW != W_tag || twb_Cache[hash].iPb != Pb_tag) {
+            twb_Cache[hash].iTdb = Tdb_tag;
+            twb_Cache[hash].iW = W_tag;
+            twb_Cache[hash].iPb = Pb_tag;
 
             DISABLE_WARNING_PUSH
             DISABLE_WARNING_STRICT_ALIASING
@@ -338,10 +338,10 @@ namespace Psychrometrics {
             Real64 Pb_tag_r = *reinterpret_cast<Real64 const *>(&Pb_tag);
             DISABLE_WARNING_POP
 
-            cached_Twb[hash].Twb = PsyTwbFnTdbWPb_raw(state, Tdb_tag_r, W_tag_r, Pb_tag_r, CalledFrom);
+            twb_Cache[hash].Twb = PsyTwbFnTdbWPb_raw(state, Tdb_tag_r, W_tag_r, Pb_tag_r, CalledFrom);
         }
 
-        return cached_Twb[hash].Twb;
+        return twb_Cache[hash].Twb;
     }
 
     Real64 PsyTwbFnTdbWPb_raw(EnergyPlusData &state,
