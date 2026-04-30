@@ -799,8 +799,13 @@ void InstantiateInitializeFMUImport(EnergyPlusData &state)
         for (int j = 1; j <= fmu.NumInstances; ++j) {
             auto &fmuInst = fmu.Instance(j);
             std::string const folderStr = FileSystem::toString(fmuInst.WorkingFolder);
-            fmuInst.fmicomponent = fmiEPlusInstantiateSlave(
-                (char *)folderStr.c_str(), &fmuInst.LenWorkingFolder, &fmu.TimeOut, &fmu.Visible, &fmu.Interactive, &fmu.LoggingOn, &fmuInst.Index);
+            fmuInst.fmicomponent = fmiEPlusInstantiateSlave(const_cast<char *>(folderStr.c_str()),
+                                                            &fmuInst.LenWorkingFolder,
+                                                            &fmu.TimeOut,
+                                                            &fmu.Visible,
+                                                            &fmu.Interactive,
+                                                            &fmu.LoggingOn,
+                                                            &fmuInst.Index);
             // TODO: This is doing a null pointer check; OK?
             if (fmuInst.fmicomponent == nullptr) {
                 ShowSevereError(state, "ExternalInterface/CalcExternalInterfaceFMUImport: Error when trying to instantiate");
@@ -1109,7 +1114,7 @@ void InitExternalInterfaceFMUImport(EnergyPlusData &state)
                     std::vector<char> workingFolderArr(getCharArrayFromString(workingFolderStr));
 
                     // make the library call
-                    fmuInst.Index = model_ID_GUID((char *)fmuInst.Name.c_str(),
+                    fmuInst.Index = model_ID_GUID(const_cast<char *>(fmuInst.Name.c_str()),
                                                   &workingFolderArr[0],
                                                   &fmuInst.LenWorkingFolder,
                                                   &fmuInst.NumInputVariablesInFMU,
