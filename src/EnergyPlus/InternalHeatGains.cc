@@ -2213,15 +2213,22 @@ namespace InternalHeatGains {
                     }
                 } // for Item1.numOfSpaces
             } // for itEqInputNum
+
+            // Check for incompatible flow control methods within the same zone after we've processed all of them
             for (int Loop = 1; Loop <= state.dataHeatBal->TotITEquip; ++Loop) {
-                if (state.dataHeatBal->Zone(state.dataHeatBal->ZoneITEq(Loop).ZonePtr).HasAdjustedReturnTempByITE &&
-                    (!state.dataHeatBal->ZoneITEq(Loop).FlowControlWithApproachTemps)) {
+
+                auto &thisZoneITEq = state.dataHeatBal->ZoneITEq(Loop);
+                if (thisZoneITEq.ZonePtr <= 0) {
+                    continue; // Error, will be caught and terminated later
+                }
+
+                if (state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).HasAdjustedReturnTempByITE && (!thisZoneITEq.FlowControlWithApproachTemps)) {
                     ShowSevereError(state,
                                     EnergyPlus::format("{}{}=\"{}\": invalid calculation method for Zone: {}",
                                                        RoutineName,
                                                        itEqModuleObject,
-                                                       state.dataHeatBal->ZoneITEq(Loop).Name,
-                                                       state.dataHeatBal->Zone(state.dataHeatBal->ZoneITEq(Loop).ZonePtr).Name));
+                                                       thisZoneITEq.Name,
+                                                       state.dataHeatBal->Zone(thisZoneITEq.ZonePtr).Name));
                     ShowContinueError(state, "...Multiple flow control methods apply to one zone. ");
                     ErrorsFound = true;
                 }
