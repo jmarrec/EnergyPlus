@@ -681,7 +681,6 @@ bool getDesuperHtrInput(EnergyPlusData &state)
     bool ErrorsFound = false;
     static constexpr std::string_view routineName = "getDesuperHtrInput";
     // Make local copies of IPShortCut because other getinputs might overwrite the ones in state <-- need to fix this idiom
-    std::string cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     Array1D<std::string> cAlphaArgs = state.dataIPShortCut->cAlphaArgs;
     Array1D<Real64> rNumericArgs = state.dataIPShortCut->rNumericArgs;
     Array1D<bool> lNumericFieldBlanks = state.dataIPShortCut->lNumericFieldBlanks;
@@ -689,7 +688,7 @@ bool getDesuperHtrInput(EnergyPlusData &state)
     Array1D<std::string> cAlphaFieldNames = state.dataIPShortCut->cAlphaFieldNames;
     Array1D<std::string> cNumericFieldNames = state.dataIPShortCut->cNumericFieldNames;
 
-    cCurrentModuleObject = cCoilDesuperheater;
+    std::string cCurrentModuleObject = cCoilDesuperheater;
     for (int DesuperheaterNum = 1; DesuperheaterNum <= state.dataWaterThermalTanks->numWaterHeaterDesuperheater; ++DesuperheaterNum) {
         int NumAlphas;
         int NumNums;
