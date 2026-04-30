@@ -1,0 +1,74 @@
+People,Lights,ElectricEquipment,GasEquipment,HotWaterEquipment,SteamEquipment,OtherEquipment
+Name,Name,Name,Name,Name,Name,Name
+Zone or ZoneList or Space or SpaceList Name,Zone or ZoneList or Space or SpaceList Name,Zone or ZoneList or Space or SpaceList Name,Zone or ZoneList or Space or SpaceList Name,Zone or ZoneList or Space or SpaceList Name,Zone or ZoneList or Space or SpaceList Name,Fuel Type
+Number of People Schedule Name,Schedule Name,Schedule Name,Schedule Name,Schedule Name,Schedule Name,Zone or ZoneList or Space or SpaceList Name
+Number of People Calculation Method,Design Level Calculation Method,Design Level Calculation Method,Design Level Calculation Method,Design Level Calculation Method,Design Level Calculation Method,Schedule Name
+Number of People,Lighting Level,Design Level,Design Level,Design Level,Design Level,Design Level Calculation Method
+People per Floor Area,Watts per Floor Area,Watts per Floor Area,Power per Floor Area,Power per Floor Area,Power per Floor Area,Design Level
+Floor Area per Person,Watts per Person,Watts per Person,Power per Person,Power per Person,Power per Person,Power per Floor Area
+Fraction Radiant,Return Air Fraction,Fraction Latent,Fraction Latent,Fraction Latent,Fraction Latent,Power per Person
+Sensible Heat Fraction,Fraction Radiant,Fraction Radiant,Fraction Radiant,Fraction Radiant,Fraction Radiant,Fraction Latent
+Activity Level Schedule Name,Fraction Visible,Fraction Lost,Fraction Lost,Fraction Lost,Fraction Lost,Fraction Radiant
+Carbon Dioxide Generation Rate,Fraction Replaceable,End-Use Subcategory,Carbon Dioxide Generation Rate,End-Use Subcategory,End-Use Subcategory,Fraction Lost
+Enable ASHRAE 55 Comfort Warnings,End-Use Subcategory,,End-Use Subcategory,,,Carbon Dioxide Generation Rate
+Mean Radiant Temperature Calculation Type,Return Air Fraction Calculated from Plenum Temperature,,,,,End-Use Subcategory
+Surface Name/Angle Factor List Name,Return Air Fraction Function of Plenum Temperature Coefficient 1,,,,,
+Work Efficiency Schedule Name,Return Air Fraction Function of Plenum Temperature Coefficient 2,,,,,
+Clothing Insulation Calculation Method,Return Air Heat Gain Node Name,,,,,
+Clothing Insulation Calculation Method Schedule Name,Exhaust Air Heat Gain Node Name,,,,,
+Clothing Insulation Schedule Name,,,,,,
+Air Velocity Schedule Name,,,,,,
+Thermal Comfort Model 1 Type,,,,,,
+Thermal Comfort Model 2 Type,,,,,,
+Thermal Comfort Model 3 Type,,,,,,
+Thermal Comfort Model 4 Type,,,,,,
+Thermal Comfort Model 5 Type,,,,,,
+Thermal Comfort Model 6 Type,,,,,,
+Thermal Comfort Model 7 Type,,,,,,
+Ankle Level Air Velocity Schedule Name,,,,,,
+Cold Stress Temperature Threshold,,,,,,
+Heat Stress Temperature Threshold,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+People,Lights,,,,,
+Name,Name,,,,,
+People Definition Name,Lights Definition Name,,,,,
+Zone or ZoneList or Space or SpaceList Name,Zone or ZoneList or Space or SpaceList Name,,,,,
+Number of People Schedule Name,Schedule Name,,,,,
+Activity Level Schedule Name,Fraction Replaceable,,,,,
+Surface Name/Angle Factor List Name,End-Use Subcategory,,,,,
+Work Efficiency Schedule Name,,,,,,
+Clothing Insulation Calculation Method,,,,,,
+Clothing Insulation Calculation Method Schedule Name,,,,,,
+Clothing Insulation Schedule Name,,,,,,
+Air Velocity Schedule Name,,,,,,
+Ankle Level Air Velocity Schedule Name,,,,,,
+Cold Stress Temperature Threshold,,,,,,
+Heat Stress Temperature Threshold,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+People:Definition,Lights:Definition,,,,,
+Name,Name,,,,,
+Number of People Calculation Method,Design Level Calculation Method,,,,,
+Number of People,Lighting Level,,,,,
+People per Floor Area,Watts per Floor Area,,,,,
+Floor Area per Person,Watts per Person,,,,,
+Fraction Radiant,Return Air Fraction,,,,,
+Sensible Heat Fraction,Fraction Radiant,,,,,
+Carbon Dioxide Generation Rate,Fraction Visible,,,,,
+Enable ASHRAE 55 Comfort Warnings,Return Air Fraction Calculated from Plenum Temperature,,,,,
+Mean Radiant Temperature Calculation Type,Return Air Fraction Function of Plenum Temperature Coefficient 1,,,,,
+Thermal Comfort Model 1 Type,Return Air Fraction Function of Plenum Temperature Coefficient 2,,,,,
+Thermal Comfort Model 2 Type,Return Air Heat Gain Node Name,,,,,
+Thermal Comfort Model 3 Type,Exhaust Air Heat Gain Node Name,,,,,
+Thermal Comfort Model 4 Type,,,,,,
+Thermal Comfort Model 5 Type,,,,,,
+Thermal Comfort Model 6 Type,,,,,,
+Thermal Comfort Model 7 Type,,,,,,
