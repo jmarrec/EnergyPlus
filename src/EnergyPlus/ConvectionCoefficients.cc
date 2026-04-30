@@ -105,7 +105,6 @@ namespace EnergyPlus::Convect {
 // Subroutines are called to fill the variable HConvIn with the convection coefficient at
 // the inside face.  or outside face for the current surface.
 
-using namespace DataLoopNode;
 using namespace DataHeatBalance;
 using namespace DataSurfaces;
 using namespace DataVectorTypes;

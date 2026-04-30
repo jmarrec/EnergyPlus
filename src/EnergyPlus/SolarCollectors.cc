@@ -382,25 +382,25 @@ namespace SolarCollectors {
                 }
 
                 state.dataSolarCollectors->Collector(CollectorNum).InletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(4),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::SolarCollectorFlatPlateWater,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            state.dataIPShortCut->cAlphaArgs(4),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::SolarCollectorFlatPlateWater,
+                                            state.dataIPShortCut->cAlphaArgs(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Inlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 state.dataSolarCollectors->Collector(CollectorNum).OutletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(5),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::SolarCollectorFlatPlateWater,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            state.dataIPShortCut->cAlphaArgs(5),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::SolarCollectorFlatPlateWater,
+                                            state.dataIPShortCut->cAlphaArgs(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Outlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
 
                 if (NumNumbers > 0) {
                     state.dataSolarCollectors->Collector(CollectorNum).VolFlowRateMax =
@@ -412,12 +412,12 @@ namespace SolarCollectors {
                         999999.9; // But...set a very high value so that it demands as much as possible
                 }
 
-                BranchNodeConnections::TestCompSet(state,
-                                                   CurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(4),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   "Water Nodes");
+                Node::TestCompSet(state,
+                                  CurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(4),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  "Water Nodes");
 
             } // FlatPlateUnitsNum
 
@@ -691,25 +691,25 @@ namespace SolarCollectors {
                 }
 
                 state.dataSolarCollectors->Collector(CollectorNum).InletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(6),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::SolarCollectorIntegralCollectorStorage,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            state.dataIPShortCut->cAlphaArgs(6),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::SolarCollectorIntegralCollectorStorage,
+                                            state.dataIPShortCut->cAlphaArgs(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Inlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 state.dataSolarCollectors->Collector(CollectorNum).OutletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(7),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::SolarCollectorIntegralCollectorStorage,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            state.dataIPShortCut->cAlphaArgs(7),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::SolarCollectorIntegralCollectorStorage,
+                                            state.dataIPShortCut->cAlphaArgs(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Outlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
 
                 if (NumNumbers > 0) {
                     state.dataSolarCollectors->Collector(CollectorNum).VolFlowRateMax =
@@ -721,12 +721,12 @@ namespace SolarCollectors {
                         999999.9; // But...set a very high value so that it demands as much as possible
                 }
 
-                BranchNodeConnections::TestCompSet(state,
-                                                   CurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(6),
-                                                   state.dataIPShortCut->cAlphaArgs(7),
-                                                   "Water Nodes");
+                Node::TestCompSet(state,
+                                  CurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(6),
+                                  state.dataIPShortCut->cAlphaArgs(7),
+                                  "Water Nodes");
 
             } // ICSNum
 
@@ -1905,7 +1905,7 @@ namespace SolarCollectors {
                               TempOutdoorAir * (hConvCoefC2O + hRadCoefC2O) + TempInnerCover * (hConvCoefC2C + hRadCoefC2C);
                     tempdenom = (hConvCoefC2O + hRadCoefC2O) + (hConvCoefC2C + hRadCoefC2C);
                     TempOuterCover = tempnom / tempdenom;
-                } else if (Num == 1) {
+                } else {
                     tempnom = this->CoverAbs[Num] * state.dataHeatBal->SurfQRadSWOutIncident(SurfNum) + TempAbsPlate * (hConvCoefA2C + hRadCoefA2C) +
                               TempOuterCover * (hConvCoefC2C + hRadCoefC2C);
                     tempdenom = (hConvCoefC2C + hRadCoefC2C + hConvCoefA2C + hRadCoefA2C);

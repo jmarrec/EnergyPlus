@@ -132,7 +132,6 @@ namespace EnergyPlus::SetPointManager {
 // Previous time step node data will be used, in a set of fixed, precoded algorithms,
 // to determine the current time step's controller setpoints.
 
-using namespace DataLoopNode;
 using namespace DataAirLoop;
 using namespace Curve;
 using Psychrometrics::PsyCpAirFnW;
@@ -196,39 +195,39 @@ constexpr std::array<std::string_view, (int)SPMType::Num> spmTypeNames = {"Setpo
                                                                           "SetpointManager:SystemNodeReset:Temperature",
                                                                           "SetpointManager:SystemNodeReset:Humidity"};
 
-constexpr std::array<DataLoopNode::ConnectionObjectType, (int)SPMType::Num> spmNodeObjectTypes = {
-    DataLoopNode::ConnectionObjectType::SetpointManagerScheduled,
-    DataLoopNode::ConnectionObjectType::SetpointManagerScheduledDualSetpoint,
-    DataLoopNode::ConnectionObjectType::SetpointManagerOutdoorAirReset,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSingleZoneReheat,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSingleZoneHeating,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSingleZoneCooling,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSingleZoneHumidityMinimum,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSingleZoneHumidityMaximum,
-    DataLoopNode::ConnectionObjectType::SetpointManagerMixedAir,
-    DataLoopNode::ConnectionObjectType::SetpointManagerOutdoorAirPretreat,
-    DataLoopNode::ConnectionObjectType::SetpointManagerWarmest,
-    DataLoopNode::ConnectionObjectType::SetpointManagerColdest,
-    DataLoopNode::ConnectionObjectType::SetpointManagerWarmestTemperatureFlow,
-    DataLoopNode::ConnectionObjectType::Invalid, // SPMType::ReturnAirBypass
-    DataLoopNode::ConnectionObjectType::SetpointManagerMultiZoneCoolingAverage,
-    DataLoopNode::ConnectionObjectType::SetpointManagerMultiZoneHeatingAverage,
-    DataLoopNode::ConnectionObjectType::SetpointManagerMultiZoneMinimumHumidityAverage,
-    DataLoopNode::ConnectionObjectType::SetpointManagerMultiZoneMaximumHumidityAverage,
-    DataLoopNode::ConnectionObjectType::SetpointManagerMultiZoneHumidityMinimum,
-    DataLoopNode::ConnectionObjectType::SetpointManagerMultiZoneHumidityMaximum,
-    DataLoopNode::ConnectionObjectType::SetpointManagerFollowOutdoorAirTemperature,
-    DataLoopNode::ConnectionObjectType::SetpointManagerFollowSystemNodeTemperature,
-    DataLoopNode::ConnectionObjectType::SetpointManagerFollowGroundTemperature,
-    DataLoopNode::ConnectionObjectType::SetpointManagerCondenserEnteringReset,
-    DataLoopNode::ConnectionObjectType::SetpointManagerCondenserEnteringResetIdeal,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSingleZoneOneStageCooling,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSingleZoneOneStageHeating,
-    DataLoopNode::ConnectionObjectType::SetpointManagerReturnTemperatureChilledWater,
-    DataLoopNode::ConnectionObjectType::SetpointManagerReturnTemperatureHotWater,
-    DataLoopNode::ConnectionObjectType::Invalid, // SPMType::TESScheduled
-    DataLoopNode::ConnectionObjectType::SetpointManagerSystemNodeResetTemperature,
-    DataLoopNode::ConnectionObjectType::SetpointManagerSystemNodeResetHumidity};
+constexpr std::array<Node::ConnectionObjectType, (int)SPMType::Num> spmNodeObjectTypes = {
+    Node::ConnectionObjectType::SetpointManagerScheduled,
+    Node::ConnectionObjectType::SetpointManagerScheduledDualSetpoint,
+    Node::ConnectionObjectType::SetpointManagerOutdoorAirReset,
+    Node::ConnectionObjectType::SetpointManagerSingleZoneReheat,
+    Node::ConnectionObjectType::SetpointManagerSingleZoneHeating,
+    Node::ConnectionObjectType::SetpointManagerSingleZoneCooling,
+    Node::ConnectionObjectType::SetpointManagerSingleZoneHumidityMinimum,
+    Node::ConnectionObjectType::SetpointManagerSingleZoneHumidityMaximum,
+    Node::ConnectionObjectType::SetpointManagerMixedAir,
+    Node::ConnectionObjectType::SetpointManagerOutdoorAirPretreat,
+    Node::ConnectionObjectType::SetpointManagerWarmest,
+    Node::ConnectionObjectType::SetpointManagerColdest,
+    Node::ConnectionObjectType::SetpointManagerWarmestTemperatureFlow,
+    Node::ConnectionObjectType::Invalid, // SPMType::ReturnAirBypass
+    Node::ConnectionObjectType::SetpointManagerMultiZoneCoolingAverage,
+    Node::ConnectionObjectType::SetpointManagerMultiZoneHeatingAverage,
+    Node::ConnectionObjectType::SetpointManagerMultiZoneMinimumHumidityAverage,
+    Node::ConnectionObjectType::SetpointManagerMultiZoneMaximumHumidityAverage,
+    Node::ConnectionObjectType::SetpointManagerMultiZoneHumidityMinimum,
+    Node::ConnectionObjectType::SetpointManagerMultiZoneHumidityMaximum,
+    Node::ConnectionObjectType::SetpointManagerFollowOutdoorAirTemperature,
+    Node::ConnectionObjectType::SetpointManagerFollowSystemNodeTemperature,
+    Node::ConnectionObjectType::SetpointManagerFollowGroundTemperature,
+    Node::ConnectionObjectType::SetpointManagerCondenserEnteringReset,
+    Node::ConnectionObjectType::SetpointManagerCondenserEnteringResetIdeal,
+    Node::ConnectionObjectType::SetpointManagerSingleZoneOneStageCooling,
+    Node::ConnectionObjectType::SetpointManagerSingleZoneOneStageHeating,
+    Node::ConnectionObjectType::SetpointManagerReturnTemperatureChilledWater,
+    Node::ConnectionObjectType::SetpointManagerReturnTemperatureHotWater,
+    Node::ConnectionObjectType::Invalid, // SPMType::TESScheduled
+    Node::ConnectionObjectType::SetpointManagerSystemNodeResetTemperature,
+    Node::ConnectionObjectType::SetpointManagerSystemNodeResetHumidity};
 
 constexpr std::array<std::string_view, (int)SupplyFlowTempStrategy::Num> supplyFlowTempStrategyNamesUC = {"MAXIMUMTEMPERATURE", "MINIMUMTEMPERATURE"};
 
@@ -354,8 +353,8 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
     using DataZoneEquipment::GetSystemNodeNumberForZone;
     using General::FindNumberInList;
 
-    using NodeInputManager::GetNodeNums;
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetNodeNums;
+    using Node::GetOnlySingleNode;
 
     // Locals
     // SUBROUTINE PARAMETER DEFINITIONS:
@@ -809,19 +808,19 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                         ErrorsFound,
                                                         spmNodeObjectTypes[(int)spm->type],
                                                         spmSZR->Name,
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Sensor,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Sensor,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsNotParent);
                 spmSZR->zoneInletNodeNum = GetOnlySingleNode(state,
                                                              ip->getAlphaFieldValue(fields, props, "zone_inlet_node_name"),
                                                              ErrorsFound,
                                                              spmNodeObjectTypes[(int)spm->type],
                                                              spmSZR->Name,
-                                                             DataLoopNode::NodeFluidType::Air,
-                                                             DataLoopNode::ConnectionType::Sensor,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             ObjectIsNotParent);
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Sensor,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
             } break;
 
             // SetpointManager:SingleZone:Heating
@@ -849,19 +848,19 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                            ErrorsFound,
                                                            spmNodeObjectTypes[(int)spm->type],
                                                            spmSZTemp->Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Sensor,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           ObjectIsNotParent);
+                                                           Node::FluidType::Air,
+                                                           Node::ConnectionType::Sensor,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
                 spmSZTemp->zoneInletNodeNum = GetOnlySingleNode(state,
                                                                 ip->getAlphaFieldValue(fields, props, "zone_inlet_node_name"),
                                                                 ErrorsFound,
                                                                 spmNodeObjectTypes[(int)spm->type],
                                                                 spmSZTemp->Name,
-                                                                DataLoopNode::NodeFluidType::Air,
-                                                                DataLoopNode::ConnectionType::Sensor,
-                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                ObjectIsNotParent);
+                                                                Node::FluidType::Air,
+                                                                Node::ConnectionType::Sensor,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
 
             } break;
 
@@ -879,12 +878,12 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                             NumNodes,
                             NodeNums,
                             ErrInList,
-                            DataLoopNode::NodeFluidType::Air,
+                            Node::FluidType::Air,
                             spmNodeObjectTypes[(int)spm->type],
                             spmSZHum->Name,
-                            DataLoopNode::ConnectionType::Sensor,
-                            NodeInputManager::CompFluidStream::Primary,
-                            ObjectIsNotParent,
+                            Node::ConnectionType::Sensor,
+                            Node::CompFluidStream::Primary,
+                            Node::ObjectIsNotParent,
                             false,
                             "control_zone_air_node_name"); // nodes of zones whose humidity is being controlled
 
@@ -919,28 +918,28 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                       ErrorsFound,
                                                       spmNodeObjectTypes[(int)spm->type],
                                                       spmMA->Name,
-                                                      DataLoopNode::NodeFluidType::Air,
-                                                      DataLoopNode::ConnectionType::Sensor,
-                                                      NodeInputManager::CompFluidStream::Primary,
-                                                      ObjectIsNotParent);
+                                                      Node::FluidType::Air,
+                                                      Node::ConnectionType::Sensor,
+                                                      Node::CompFluidStream::Primary,
+                                                      Node::ObjectIsNotParent);
                 spmMA->fanInNodeNum = GetOnlySingleNode(state,
                                                         ip->getAlphaFieldValue(fields, props, "fan_inlet_node_name"),
                                                         ErrorsFound,
                                                         spmNodeObjectTypes[(int)spm->type],
                                                         spmMA->Name,
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Sensor,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Sensor,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsNotParent);
                 spmMA->fanOutNodeNum = GetOnlySingleNode(state,
                                                          ip->getAlphaFieldValue(fields, props, "fan_outlet_node_name"),
                                                          ErrorsFound,
                                                          spmNodeObjectTypes[(int)spm->type],
                                                          spmMA->Name,
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::Sensor,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         ObjectIsNotParent);
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::Sensor,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsNotParent);
             } break;
 
             // SetpointManager:OutdoorAirPretreat
@@ -953,37 +952,37 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                        ErrorsFound,
                                                        spmNodeObjectTypes[(int)spm->type],
                                                        spmOAP->Name,
-                                                       DataLoopNode::NodeFluidType::Air,
-                                                       DataLoopNode::ConnectionType::Sensor,
-                                                       NodeInputManager::CompFluidStream::Primary,
-                                                       ObjectIsNotParent);
+                                                       Node::FluidType::Air,
+                                                       Node::ConnectionType::Sensor,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsNotParent);
                 spmOAP->mixedOutNodeNum = GetOnlySingleNode(state,
                                                             ip->getAlphaFieldValue(fields, props, "mixed_air_stream_node_name"),
                                                             ErrorsFound,
                                                             spmNodeObjectTypes[(int)spm->type],
                                                             spmOAP->Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Sensor,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Sensor,
+                                                            Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
                 spmOAP->oaInNodeNum = GetOnlySingleNode(state,
                                                         ip->getAlphaFieldValue(fields, props, "outdoor_air_stream_node_name"),
                                                         ErrorsFound,
                                                         spmNodeObjectTypes[(int)spm->type],
                                                         spmOAP->Name,
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Sensor,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Sensor,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsNotParent);
                 spmOAP->returnInNodeNum = GetOnlySingleNode(state,
                                                             ip->getAlphaFieldValue(fields, props, "return_air_stream_node_name"),
                                                             ErrorsFound,
                                                             spmNodeObjectTypes[(int)spm->type],
                                                             spmOAP->Name,
-                                                            DataLoopNode::NodeFluidType::Air,
-                                                            DataLoopNode::ConnectionType::Sensor,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            ObjectIsNotParent);
+                                                            Node::FluidType::Air,
+                                                            Node::ConnectionType::Sensor,
+                                                            Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
 
                 if (std::find(spmOAP->ctrlNodeNums.begin(), spmOAP->ctrlNodeNums.end(), spmOAP->refNodeNum) != spmOAP->ctrlNodeNums.end()) {
                     ShowSevereError(state, EnergyPlus::format("{}: {}=\"{}\", reference node.", routineName, cCurrentModuleObject, spmOAP->Name));
@@ -1099,10 +1098,10 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                        ErrorsFound,
                                                        spmNodeObjectTypes[(int)spm->type],
                                                        spmFNT->Name,
-                                                       DataLoopNode::NodeFluidType::Blank,
-                                                       DataLoopNode::ConnectionType::Sensor,
-                                                       NodeInputManager::CompFluidStream::Primary,
-                                                       ObjectIsNotParent);
+                                                       Node::FluidType::Blank,
+                                                       Node::ConnectionType::Sensor,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsNotParent);
 
                 spmFNT->refTempType =
                     static_cast<AirTempType>(getEnumValue(nodeTempTypeNamesUC, ip->getAlphaFieldValue(fields, props, "reference_temperature_type")));
@@ -1289,20 +1288,20 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                           errFlag,
                                                           spmNodeObjectTypes[(int)spm->type],
                                                           spmRWT->Name,
-                                                          DataLoopNode::NodeFluidType::Blank,
-                                                          DataLoopNode::ConnectionType::SetPoint,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          ObjectIsNotParent,
+                                                          Node::FluidType::Blank,
+                                                          Node::ConnectionType::SetPoint,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent,
                                                           "plant_loop_supply_outlet_node"); // setpoint nodes
                 spmRWT->returnNodeNum = GetOnlySingleNode(state,
                                                           ip->getAlphaFieldValue(fields, props, "plant_loop_supply_inlet_node"),
                                                           errFlag,
                                                           spmNodeObjectTypes[(int)spm->type],
                                                           spmRWT->Name,
-                                                          DataLoopNode::NodeFluidType::Blank,
-                                                          DataLoopNode::ConnectionType::Sensor,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          ObjectIsNotParent,
+                                                          Node::FluidType::Blank,
+                                                          Node::ConnectionType::Sensor,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent,
                                                           "plant_loop_supply_inlet_node"); // setpoint nodes
 
                 // process the setpoint inputs
@@ -1344,10 +1343,10 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                            ErrorsFound,
                                                            spmNodeObjectTypes[(int)spm->type],
                                                            spmSNRTemp->Name,
-                                                           DataLoopNode::NodeFluidType::Blank,
-                                                           DataLoopNode::ConnectionType::Sensor,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           ObjectIsNotParent);
+                                                           Node::FluidType::Blank,
+                                                           Node::ConnectionType::Sensor,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
             } break;
 
             // SetpointManager:SystemNodeReset:Humidity
@@ -1371,10 +1370,10 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                           ErrorsFound,
                                                           spmNodeObjectTypes[(int)spm->type],
                                                           spmSNRHum->Name,
-                                                          DataLoopNode::NodeFluidType::Blank,
-                                                          DataLoopNode::ConnectionType::Sensor,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          ObjectIsNotParent);
+                                                          Node::FluidType::Blank,
+                                                          Node::ConnectionType::Sensor,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent);
             } break;
 
                 // SetpointManager:MultiZone:Cooling:Average
@@ -1398,12 +1397,12 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                             NumNodes,
                             NodeNums,
                             NodeListError,
-                            DataLoopNode::NodeFluidType::Blank,
+                            Node::FluidType::Blank,
                             spmNodeObjectTypes[iSPM],
                             name,
-                            DataLoopNode::ConnectionType::SetPoint,
-                            NodeInputManager::CompFluidStream::Primary,
-                            ObjectIsNotParent,
+                            Node::ConnectionType::SetPoint,
+                            Node::CompFluidStream::Primary,
+                            Node::ObjectIsNotParent,
                             false,
                             "setpoint_node_or_nodelist_name");
 
@@ -1427,10 +1426,10 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                  ErrorsFound,
                                                                  spmNodeObjectTypes[(int)spm->type],
                                                                  spmMA->Name,
-                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                 DataLoopNode::ConnectionType::Sensor,
-                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                 ObjectIsNotParent);
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Sensor,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
                 }
 
                 if (auto found = fields.find("cooling_coil_outlet_node_name"); found != fields.end()) {
@@ -1439,10 +1438,10 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                   ErrorsFound,
                                                                   spmNodeObjectTypes[(int)spm->type],
                                                                   spmMA->Name,
-                                                                  DataLoopNode::NodeFluidType::Air,
-                                                                  DataLoopNode::ConnectionType::Sensor,
-                                                                  NodeInputManager::CompFluidStream::Primary,
-                                                                  ObjectIsNotParent);
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Sensor,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
                 }
 
                 if (auto found = fields.find("minimum_temperature_at_cooling_coil_outlet_node"); found != fields.end()) {
@@ -2536,9 +2535,9 @@ void InitSetPointManagers(EnergyPlusData &state)
                         }
                     } else { // If reference node is a water node, then set RefTypeMode to NodeDryBulb
 
-                        if (refNode.FluidType == DataLoopNode::NodeFluidType::Water) {
+                        if (refNode.fluidType == Node::FluidType::Water) {
                             spmFSNT->refTempType = AirTempType::DryBulb;
-                        } else if (refNode.FluidType == DataLoopNode::NodeFluidType::Air) {
+                        } else if (refNode.fluidType == Node::FluidType::Air) {
                             if (spmFSNT->refTempType == AirTempType::WetBulb) {
                                 refNode.SPMNodeWetBulbRepReq = true;
                             }
@@ -3018,7 +3017,7 @@ void SPMMixedAir::calculate(EnergyPlusData &state)
 
     if (!state.dataGlobal->SysSizingCalc && this->mySetPointCheckFlag) {
 
-        if (refNode.TempSetPoint == SensedNodeFlagValue) {
+        if (refNode.TempSetPoint == Node::SensedNodeFlagValue) {
             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 ShowSevereError(
                     state,
@@ -3130,7 +3129,7 @@ void SPMOutsideAirPretreat::calculate(EnergyPlusData &state)
 
     if (!state.dataGlobal->SysSizingCalc && this->mySetPointCheckFlag) {
         this->mySetPointCheckFlag = false;
-        if (RefNodeSetPoint == SensedNodeFlagValue) {
+        if (RefNodeSetPoint == Node::SensedNodeFlagValue) {
             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 ShowSevereError(state,
                                 EnergyPlus::format("CalcOAPretreatSetPoint: Missing reference setpoint for Outdoor Air Pretreat Setpoint Manager {}",

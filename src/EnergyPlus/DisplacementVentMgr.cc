@@ -87,7 +87,6 @@ namespace RoomAir {
     // Routines that implement the UCSD Displacement Ventilation
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using namespace DataEnvironment;
     using namespace DataHeatBalance;
     using namespace DataHeatBalSurface;

@@ -1812,10 +1812,15 @@ namespace HeatBalanceManager {
         // METHODOLOGY EMPLOYED:
         // The GetObjectItem routines are employed to retrieve the data.
 
-        SolarShading::GetShadowingInput(state);
-
         GetZoneData(state, ErrorsFound); // Read Zone data from input file
 
+        // ShadowCalculation settings affect geometry-time validation, such as the
+        // convexity warning path for PolygonClipping + ConvexWeilerAtherton, so
+        // this happens before SetupZoneGeometry.
+        SolarShading::GetShadowingInput(state);
+
+        // SetupZoneGeometry includes the call to GetSurfaceData for
+        // populating surfData = state.dataSurface.
         SurfaceGeometry::SetupZoneGeometry(state, ErrorsFound);
     }
 
@@ -2186,8 +2191,8 @@ namespace HeatBalanceManager {
         // load input data for Outdoor Air Node for zones
 
         // Using/Aliasing
-        using DataLoopNode::ObjectIsParent;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
+        using Node::ObjectIsParent;
         using OutAirNodeManager::CheckOutAirNodeNumber;
 
         //-----------------------------------------------------------------------
@@ -2247,11 +2252,11 @@ namespace HeatBalanceManager {
                 int NodeNum = GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(3),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::ZonePropertyLocalEnvironment,
+                                                Node::ConnectionObjectType::ZonePropertyLocalEnvironment,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Air,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
+                                                Node::FluidType::Air,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Primary,
                                                 ObjectIsParent);
                 if (NodeNum == 0 && CheckOutAirNodeNumber(state, NodeNum)) {
                     ShowSevereError(state,
@@ -3334,7 +3339,7 @@ namespace HeatBalanceManager {
 
         // Using/Aliasing
         using EconomicTariff::UpdateUtilityBills; // added for computing annual utility costs
-        using NodeInputManager::CalcMoreNodeInfo;
+        using Node::CalcMoreNodeInfo;
         using OutputReportTabular::UpdateTabularReports;
 
         Sched::ReportScheduleVals(state);
@@ -3362,33 +3367,31 @@ namespace HeatBalanceManager {
                 state.dataEnvrn->PrintEnvrnStampWarmupPrinted = false;
             }
             if (state.dataEnvrn->PrintEnvrnStampWarmup) {
-                if (state.dataReportFlag->PrintEndDataDictionary && state.dataGlobal->DoOutputReporting) {
+                if (state.dataReportFlag->PrintEndDataDictionary) {
                     constexpr const char *EndOfHeaderString("End of Data Dictionary"); // End of data dictionary marker
                     print(state.files.eso, "{}\n", EndOfHeaderString);
                     print(state.files.mtr, "{}\n", EndOfHeaderString);
                     state.dataReportFlag->PrintEndDataDictionary = false;
                 }
-                if (state.dataGlobal->DoOutputReporting) {
-                    constexpr const char *EnvironmentStampFormatStr("{},{},{:7.2F},{:7.2F},{:7.2F},{:7.2F}\n"); // Format descriptor for environ stamp
-                    print(state.files.eso,
-                          EnvironmentStampFormatStr,
-                          "1",
-                          "Warmup {" + state.dataReportFlag->cWarmupDay + "} " + state.dataEnvrn->EnvironmentName,
-                          state.dataEnvrn->Latitude,
-                          state.dataEnvrn->Longitude,
-                          state.dataEnvrn->TimeZoneNumber,
-                          state.dataEnvrn->Elevation);
+                constexpr const char *EnvironmentStampFormatStr("{},{},{:7.2F},{:7.2F},{:7.2F},{:7.2F}\n"); // Format descriptor for environ stamp
+                print(state.files.eso,
+                      EnvironmentStampFormatStr,
+                      "1",
+                      "Warmup {" + state.dataReportFlag->cWarmupDay + "} " + state.dataEnvrn->EnvironmentName,
+                      state.dataEnvrn->Latitude,
+                      state.dataEnvrn->Longitude,
+                      state.dataEnvrn->TimeZoneNumber,
+                      state.dataEnvrn->Elevation);
 
-                    print(state.files.mtr,
-                          EnvironmentStampFormatStr,
-                          "1",
-                          "Warmup {" + state.dataReportFlag->cWarmupDay + "} " + state.dataEnvrn->EnvironmentName,
-                          state.dataEnvrn->Latitude,
-                          state.dataEnvrn->Longitude,
-                          state.dataEnvrn->TimeZoneNumber,
-                          state.dataEnvrn->Elevation);
-                    state.dataEnvrn->PrintEnvrnStampWarmup = false;
-                }
+                print(state.files.mtr,
+                      EnvironmentStampFormatStr,
+                      "1",
+                      "Warmup {" + state.dataReportFlag->cWarmupDay + "} " + state.dataEnvrn->EnvironmentName,
+                      state.dataEnvrn->Latitude,
+                      state.dataEnvrn->Longitude,
+                      state.dataEnvrn->TimeZoneNumber,
+                      state.dataEnvrn->Elevation);
+                state.dataEnvrn->PrintEnvrnStampWarmup = false;
             }
             if (!state.dataGlobal->DoingSizing) {
                 CalcMoreNodeInfo(state);

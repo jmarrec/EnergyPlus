@@ -244,7 +244,7 @@ TEST(FileSystem, make_and_remove_Directory)
     EXPECT_TRUE(EnergyPlus::FileSystem::fileExists(filePath));
     EXPECT_FALSE(EnergyPlus::FileSystem::directoryExists((filePath)));
 
-    fs::remove_all("sandbox");
+    fs::remove_all("sandboxA");
 }
 
 TEST(FileSystem, Elaborate)

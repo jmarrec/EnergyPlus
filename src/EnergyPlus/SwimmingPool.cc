@@ -342,28 +342,26 @@ void GetSwimmingPool(EnergyPlusData &state)
 
         state.dataSwimmingPools->Pool(Item).WaterInletNodeName = Alphas(6);
         state.dataSwimmingPools->Pool(Item).WaterOutletNodeName = Alphas(7);
-        state.dataSwimmingPools->Pool(Item).WaterInletNode =
-            NodeInputManager::GetOnlySingleNode(state,
-                                                Alphas(6),
-                                                ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::SwimmingPoolIndoor,
-                                                Alphas(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
-        state.dataSwimmingPools->Pool(Item).WaterOutletNode =
-            NodeInputManager::GetOnlySingleNode(state,
-                                                Alphas(7),
-                                                ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::SwimmingPoolIndoor,
-                                                Alphas(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Outlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
+        state.dataSwimmingPools->Pool(Item).WaterInletNode = Node::GetOnlySingleNode(state,
+                                                                                     Alphas(6),
+                                                                                     ErrorsFound,
+                                                                                     Node::ConnectionObjectType::SwimmingPoolIndoor,
+                                                                                     Alphas(1),
+                                                                                     Node::FluidType::Water,
+                                                                                     Node::ConnectionType::Inlet,
+                                                                                     Node::CompFluidStream::Primary,
+                                                                                     Node::ObjectIsNotParent);
+        state.dataSwimmingPools->Pool(Item).WaterOutletNode = Node::GetOnlySingleNode(state,
+                                                                                      Alphas(7),
+                                                                                      ErrorsFound,
+                                                                                      Node::ConnectionObjectType::SwimmingPoolIndoor,
+                                                                                      Alphas(1),
+                                                                                      Node::FluidType::Water,
+                                                                                      Node::ConnectionType::Outlet,
+                                                                                      Node::CompFluidStream::Primary,
+                                                                                      Node::ObjectIsNotParent);
         if ((!lAlphaBlanks(6)) || (!lAlphaBlanks(7))) {
-            BranchNodeConnections::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(6), Alphas(7), "Hot Water Nodes");
+            Node::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(6), Alphas(7), "Hot Water Nodes");
         }
         state.dataSwimmingPools->Pool(Item).WaterVolFlowMax = Numbers(6);
         state.dataSwimmingPools->Pool(Item).MiscPowerFactor = Numbers(7);

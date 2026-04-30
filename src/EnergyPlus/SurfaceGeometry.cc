@@ -1450,7 +1450,7 @@ namespace SurfaceGeometry {
 
         // Move all shading Surfaces to Front
         for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
-            auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
+            const auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
             if (surfTemp.Class != SurfaceClass::Detached_F && surfTemp.Class != SurfaceClass::Detached_B && surfTemp.Class != SurfaceClass::Shading) {
                 continue;
             }
@@ -1506,7 +1506,7 @@ namespace SurfaceGeometry {
                 for (const DataSurfaces::SurfaceClass Loop : state.dataSurfaceGeometry->BaseSurfIDs) {
 
                     for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
-                        auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
+                        const auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
 
                         if (SurfaceTmpClassMoved(SurfNum)) {
                             continue;
@@ -1554,7 +1554,7 @@ namespace SurfaceGeometry {
                         continue;
                     }
 
-                    auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
+                    const auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
                     if (surfTemp.spaceNum != spaceNum) {
                         continue;
                     }
@@ -8057,12 +8057,12 @@ namespace SurfaceGeometry {
                     int NodeNum = GetOnlySingleNode(state,
                                                     s_ipsc->cAlphaArgs(5),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::SurfacePropertyLocalEnvironment,
+                                                    Node::ConnectionObjectType::SurfacePropertyLocalEnvironment,
                                                     SurfLocalEnv.Name,
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsParent);
                     if (NodeNum == 0 && OutAirNodeManager::CheckOutAirNodeNumber(state, NodeNum)) {
                         ShowSevereError(state,
                                         EnergyPlus::format("{} {} = \"{}\", object. Illegal value for \"{}\" has been found.",
@@ -8183,8 +8183,8 @@ namespace SurfaceGeometry {
                 SrdSurfsProp.Name = s_ipsc->cAlphaArgs(1);
 
                 // N1: sky view factor
-                if (!s_ipsc->lNumericFieldBlanks(1)) {
-                    SrdSurfsProp.SkyViewFactor = s_ipsc->rNumericArgs(1);
+                SrdSurfsProp.SkyViewFactor = s_ipsc->rNumericArgs(1);
+                if (SrdSurfsProp.SkyViewFactor != DataSizing::AutoSize) {
                     SrdSurfsProp.IsSkyViewFactorSet = true;
                 }
 
@@ -8195,8 +8195,8 @@ namespace SurfaceGeometry {
                 }
 
                 // N2: ground view factor
-                if (!s_ipsc->lNumericFieldBlanks(2)) {
-                    SrdSurfsProp.GroundViewFactor = s_ipsc->rNumericArgs(2);
+                SrdSurfsProp.GroundViewFactor = s_ipsc->rNumericArgs(2);
+                if (SrdSurfsProp.GroundViewFactor != DataSizing::AutoSize) {
                     SrdSurfsProp.IsGroundViewFactorSet = true;
                 }
 
@@ -10994,17 +10994,10 @@ namespace SurfaceGeometry {
                 int numF = 1;
                 int alpF = 1;
 
-                bool ErrorInName = false;
-
                 HeatBalanceKivaManager::FoundationKiva fndInput;
 
                 fndInput.name = s_ipsc->cAlphaArgs(alpF);
                 alpF++;
-
-                if (ErrorInName) {
-                    ErrorsFound = true;
-                    continue;
-                }
 
                 // Start with copy of default
                 auto &fnd = fndInput.foundation;
@@ -12068,6 +12061,20 @@ namespace SurfaceGeometry {
                     ++notused;
                     surfacenotused(notused) = SurfNum;
                     continue;
+                }
+
+                // Same-zone paired surfaces that separate different spaces are interior partitions within a
+                // multi-space zone. Including both sides here would count partition edges four times in the
+                // enclosure check, which can falsely report that the zone is not fully enclosed even though
+                // the outer shell is valid. Exclude only these cross-space same-zone pairs from the volume shell.
+                if (thisZone.numSpaces > 1 && thisSurface.ExtBoundCond > 0 && thisSurface.ExtBoundCond != SurfNum) {
+                    auto const &adjacentSurface = state.dataSurface->Surface(thisSurface.ExtBoundCond);
+                    if ((adjacentSurface.Zone == thisSurface.Zone) && (adjacentSurface.spaceNum > 0) &&
+                        (adjacentSurface.spaceNum != thisSurface.spaceNum)) {
+                        ++notused;
+                        surfacenotused(notused) = SurfNum;
+                        continue;
+                    }
                 }
 
                 ++NActFaces;

@@ -364,27 +364,25 @@ namespace FuelCellElectricGenerator {
                 fuelCell.FCPM.NdotDilutionAir = NumArray(22);
                 fuelCell.FCPM.StackHeatLossToDilution = NumArray(23);
                 fuelCell.FCPM.DilutionInletNodeName = AlphArray(7);
-                fuelCell.FCPM.DilutionInletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(7),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorFuelCellPowerModule,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                fuelCell.FCPM.DilutionInletNode = Node::GetOnlySingleNode(state,
+                                                                          AlphArray(7),
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::GeneratorFuelCellPowerModule,
+                                                                          AlphArray(1),
+                                                                          Node::FluidType::Air,
+                                                                          Node::ConnectionType::Inlet,
+                                                                          Node::CompFluidStream::Primary,
+                                                                          Node::ObjectIsNotParent);
                 fuelCell.FCPM.DilutionExhaustNodeName = AlphArray(8);
-                fuelCell.FCPM.DilutionExhaustNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(8),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorFuelCellPowerModule,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                fuelCell.FCPM.DilutionExhaustNode = Node::GetOnlySingleNode(state,
+                                                                            AlphArray(8),
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::GeneratorFuelCellPowerModule,
+                                                                            AlphArray(1),
+                                                                            Node::FluidType::Air,
+                                                                            Node::ConnectionType::Outlet,
+                                                                            Node::CompFluidStream::Primary,
+                                                                            Node::ObjectIsNotParent);
 
                 fuelCell.FCPM.PelMin = NumArray(24);
                 fuelCell.FCPM.PelMax = NumArray(25);
@@ -454,15 +452,15 @@ namespace FuelCellElectricGenerator {
                 fuelCell.AirSup.NodeName = AlphArray(2);
 
                 // check the node connections
-                fuelCell.AirSup.SupNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                                 AlphArray(2),
-                                                                                 ErrorsFound,
-                                                                                 DataLoopNode::ConnectionObjectType::GeneratorFuelCellAirSupply,
-                                                                                 AlphArray(1),
-                                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                                 DataLoopNode::ConnectionType::Inlet,
-                                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                                 DataLoopNode::ObjectIsNotParent);
+                fuelCell.AirSup.SupNodeNum = Node::GetOnlySingleNode(state,
+                                                                     AlphArray(2),
+                                                                     ErrorsFound,
+                                                                     Node::ConnectionObjectType::GeneratorFuelCellAirSupply,
+                                                                     AlphArray(1),
+                                                                     Node::FluidType::Air,
+                                                                     Node::ConnectionType::Inlet,
+                                                                     Node::CompFluidStream::Primary,
+                                                                     Node::ObjectIsNotParent);
 
                 if (s_ipsc->lAlphaFieldBlanks(3)) {
                     ShowSevereEmptyField(state, eoh, s_ipsc->cAlphaFieldNames(3));
@@ -667,27 +665,27 @@ namespace FuelCellElectricGenerator {
 
                 } else if (fuelCell.WaterSup.waterTempMode == DataGenerators::WaterTempMode::AirNode) {
                     fuelCell.WaterSup.NodeName = AlphArray(5);
-                    fuelCell.WaterSup.NodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                                    AlphArray(5),
-                                                                                    ErrorsFound,
-                                                                                    DataLoopNode::ConnectionObjectType::GeneratorFuelCellWaterSupply,
-                                                                                    AlphArray(1),
-                                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                                    DataLoopNode::ConnectionType::Sensor,
-                                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                                    DataLoopNode::ObjectIsNotParent);
+                    fuelCell.WaterSup.NodeNum = Node::GetOnlySingleNode(state,
+                                                                        AlphArray(5),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::GeneratorFuelCellWaterSupply,
+                                                                        AlphArray(1),
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Sensor,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
 
                 } else if (fuelCell.WaterSup.waterTempMode == DataGenerators::WaterTempMode::WaterNode) {
                     fuelCell.WaterSup.NodeName = AlphArray(5);
-                    fuelCell.WaterSup.NodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                                    AlphArray(5),
-                                                                                    ErrorsFound,
-                                                                                    DataLoopNode::ConnectionObjectType::GeneratorFuelCellWaterSupply,
-                                                                                    AlphArray(1),
-                                                                                    DataLoopNode::NodeFluidType::Water,
-                                                                                    DataLoopNode::ConnectionType::Sensor,
-                                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                                    DataLoopNode::ObjectIsNotParent);
+                    fuelCell.WaterSup.NodeNum = Node::GetOnlySingleNode(state,
+                                                                        AlphArray(5),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::GeneratorFuelCellWaterSupply,
+                                                                        AlphArray(1),
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Sensor,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
                 }
 
                 fuelCell.WaterSup.sched = Sched::GetSchedule(state, AlphArray(6));
@@ -813,40 +811,37 @@ namespace FuelCellElectricGenerator {
                 fuelCell.ExhaustHX.WaterInNodeName = AlphArray(2);
                 fuelCell.ExhaustHX.WaterOutNodeName = AlphArray(3);
                 // find node ids for water path
-                fuelCell.ExhaustHX.WaterInNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(2),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
-                fuelCell.ExhaustHX.WaterOutNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(3),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
-                BranchNodeConnections::TestCompSet(
-                    state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Heat Recovery Nodes");
+                fuelCell.ExhaustHX.WaterInNode = Node::GetOnlySingleNode(state,
+                                                                         AlphArray(2),
+                                                                         ErrorsFound,
+                                                                         Node::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
+                                                                         AlphArray(1),
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Inlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
+                fuelCell.ExhaustHX.WaterOutNode = Node::GetOnlySingleNode(state,
+                                                                          AlphArray(3),
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
+                                                                          AlphArray(1),
+                                                                          Node::FluidType::Water,
+                                                                          Node::ConnectionType::Outlet,
+                                                                          Node::CompFluidStream::Primary,
+                                                                          Node::ObjectIsNotParent);
+                Node::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Heat Recovery Nodes");
 
                 fuelCell.ExhaustHX.ExhaustOutNodeName = AlphArray(4);
                 fuelCell.ExhaustHX.ExhaustOutNode =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        AlphArray(4),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
-                                                        AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Secondary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                    Node::GetOnlySingleNode(state,
+                                            AlphArray(4),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
+                                            AlphArray(1),
+                                            Node::FluidType::Air,
+                                            Node::ConnectionType::Outlet,
+                                            Node::CompFluidStream::Secondary,
+                                            Node::ObjectIsNotParent);
 
                 fuelCell.ExhaustHX.HXmodelMode = static_cast<DataGenerators::ExhaustGasHX>(getEnumValue(exhaustGasHXNamesUC, AlphArray(5)));
                 if (fuelCell.ExhaustHX.HXmodelMode == DataGenerators::ExhaustGasHX::Invalid) {
@@ -1033,28 +1028,25 @@ namespace FuelCellElectricGenerator {
 
                     fuelCell.StackCooler.WaterOutNodeName = AlphArray(3);
 
-                    fuelCell.StackCooler.WaterInNode =
-                        NodeInputManager::GetOnlySingleNode(state,
-                                                            AlphArray(2),
-                                                            ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::GeneratorFuelCellStackCooler,
-                                                            AlphArray(1),
-                                                            DataLoopNode::NodeFluidType::Water,
-                                                            DataLoopNode::ConnectionType::Inlet,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            DataLoopNode::ObjectIsNotParent);
-                    fuelCell.StackCooler.WaterOutNode =
-                        NodeInputManager::GetOnlySingleNode(state,
-                                                            AlphArray(3),
-                                                            ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::GeneratorFuelCellStackCooler,
-                                                            AlphArray(1),
-                                                            DataLoopNode::NodeFluidType::Water,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            DataLoopNode::ObjectIsNotParent);
-                    BranchNodeConnections::TestCompSet(
-                        state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Heat Recovery Nodes");
+                    fuelCell.StackCooler.WaterInNode = Node::GetOnlySingleNode(state,
+                                                                               AlphArray(2),
+                                                                               ErrorsFound,
+                                                                               Node::ConnectionObjectType::GeneratorFuelCellStackCooler,
+                                                                               AlphArray(1),
+                                                                               Node::FluidType::Water,
+                                                                               Node::ConnectionType::Inlet,
+                                                                               Node::CompFluidStream::Primary,
+                                                                               Node::ObjectIsNotParent);
+                    fuelCell.StackCooler.WaterOutNode = Node::GetOnlySingleNode(state,
+                                                                                AlphArray(3),
+                                                                                ErrorsFound,
+                                                                                Node::ConnectionObjectType::GeneratorFuelCellStackCooler,
+                                                                                AlphArray(1),
+                                                                                Node::FluidType::Water,
+                                                                                Node::ConnectionType::Outlet,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsNotParent);
+                    Node::TestCompSet(state, s_ipsc->cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Heat Recovery Nodes");
 
                     fuelCell.StackCooler.TstackNom = NumArray(1);
                     fuelCell.StackCooler.TstackActual = NumArray(2);
@@ -1638,11 +1630,6 @@ namespace FuelCellElectricGenerator {
             if (this->FCPM.StartUpTime > 0.0) {
                 this->FCPM.DuringStartUp = true;
             }
-        }
-
-        // TODO deal with things when jump out if not running?
-        if (!RunFlag) {
-            return;
         }
 
         // Note: MyLoad (input) is Pdemand (electrical Power requested)

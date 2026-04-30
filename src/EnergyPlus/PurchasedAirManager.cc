@@ -222,12 +222,11 @@ void GetPurchasedAir(EnergyPlusData &state)
     // Set up output variables.
 
     // Using/Aliasing
-    using NodeInputManager::CheckUniqueNodeNames;
-    using NodeInputManager::EndUniqueNodeCheck;
-    using NodeInputManager::GetOnlySingleNode;
-    using NodeInputManager::InitUniqueNodeCheck;
+    using Node::CheckUniqueNodeNames;
+    using Node::EndUniqueNodeCheck;
+    using Node::GetOnlySingleNode;
+    using Node::InitUniqueNodeCheck;
     using OutAirNodeManager::CheckAndAddAirNodeNumber;
-    using namespace DataLoopNode;
     using ZonePlenum::GetReturnPlenumIndex;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -298,12 +297,12 @@ void GetPurchasedAir(EnergyPlusData &state)
             PurchAir.ZoneSupplyAirNodeNum = GetOnlySingleNode(state,
                                                               zoneSupplyAirNodeName,
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
+                                                              Node::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
                                                               PurchAir.Name,
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              ObjectIsNotParent);
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Outlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
             bool UniqueNodeError = false;
             CheckUniqueNodeNames(state, cAlphaFieldName, UniqueNodeError, zoneSupplyAirNodeName, PurchAir.Name);
             if (UniqueNodeError) {
@@ -319,22 +318,22 @@ void GetPurchasedAir(EnergyPlusData &state)
                     PurchAir.ZoneExhaustAirNodeNum = GetOnlySingleNode(state,
                                                                        zoneExhaustAirNodeName,
                                                                        ErrorsFound,
-                                                                       DataLoopNode::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
+                                                                       Node::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
                                                                        PurchAir.Name,
-                                                                       DataLoopNode::NodeFluidType::Air,
-                                                                       DataLoopNode::ConnectionType::Inlet,
-                                                                       NodeInputManager::CompFluidStream::Primary,
-                                                                       ObjectIsNotParent);
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsNotParent);
                 } else {
                     PurchAir.ZoneExhaustAirNodeNum = GetOnlySingleNode(state,
                                                                        zoneExhaustAirNodeName,
                                                                        ErrorsFound,
-                                                                       DataLoopNode::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
+                                                                       Node::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
                                                                        PurchAir.Name,
-                                                                       DataLoopNode::NodeFluidType::Air,
-                                                                       DataLoopNode::ConnectionType::Outlet,
-                                                                       NodeInputManager::CompFluidStream::Primary,
-                                                                       ObjectIsNotParent);
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::Outlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsNotParent);
                 }
                 UniqueNodeError = false;
                 CheckUniqueNodeNames(state, cAlphaFieldName, UniqueNodeError, zoneExhaustAirNodeName, PurchAir.Name);
@@ -347,12 +346,12 @@ void GetPurchasedAir(EnergyPlusData &state)
                 PurchAir.PlenumExhaustAirNodeNum = GetOnlySingleNode(state,
                                                                      systemInletAirNodeName,
                                                                      ErrorsFound,
-                                                                     DataLoopNode::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
+                                                                     Node::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
                                                                      PurchAir.Name,
-                                                                     DataLoopNode::NodeFluidType::Air,
-                                                                     DataLoopNode::ConnectionType::Inlet,
-                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                     ObjectIsNotParent);
+                                                                     Node::FluidType::Air,
+                                                                     Node::ConnectionType::Inlet,
+                                                                     Node::CompFluidStream::Primary,
+                                                                     Node::ObjectIsNotParent);
             }
             PurchAir.MaxHeatSuppAirTemp = s_ip->getRealFieldValue(fields, schemaProps, "maximum_heating_supply_air_temperature");
             PurchAir.MinCoolSuppAirTemp = s_ip->getRealFieldValue(fields, schemaProps, "minimum_cooling_supply_air_temperature");
@@ -425,12 +424,12 @@ void GetPurchasedAir(EnergyPlusData &state)
                 PurchAir.OutdoorAirNodeNum = GetOnlySingleNode(state,
                                                                oaInletNodeName,
                                                                ErrorsFound,
-                                                               DataLoopNode::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
+                                                               Node::ConnectionObjectType::ZoneHVACIdealLoadsAirSystem,
                                                                PurchAir.Name,
-                                                               DataLoopNode::NodeFluidType::Air,
-                                                               DataLoopNode::ConnectionType::Outlet,
-                                                               NodeInputManager::CompFluidStream::Primary,
-                                                               ObjectIsNotParent);
+                                                               Node::FluidType::Air,
+                                                               Node::ConnectionType::Outlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
                 // Check if OA node is initialized in OutdoorAir:Node or OutdoorAir:Nodelist
                 bool IsOANodeListed; // Flag for OA node name listed in OutdoorAir:Node or Nodelist
                 CheckAndAddAirNodeNumber(state, PurchAir.OutdoorAirNodeNum, IsOANodeListed);
@@ -1575,9 +1574,6 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                         state.dataSize->DataScalableSizingON = true;
                         CoolingAirFlowSizer sizingCoolingAirFlow;
                         std::string stringOverride = "Maximum Cooling Air Flow Rate [m3/s]";
-                        if (state.dataGlobal->isEpJSON) {
-                            stringOverride = "maximum_cooling_air_flow_rate [m3/s]";
-                        }
                         sizingCoolingAirFlow.overrideSizingString(stringOverride);
                         // sizingCoolingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                         sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
@@ -1591,9 +1587,6 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                             state.dataSize->DataScalableSizingON = true;
                             CoolingAirFlowSizer sizingCoolingAirFlow;
                             std::string stringOverride = "Maximum Cooling Air Flow Rate [m3/s]";
-                            if (state.dataGlobal->isEpJSON) {
-                                stringOverride = "maximum_cooling_air_flow_rate [m3/s]";
-                            }
                             sizingCoolingAirFlow.overrideSizingString(stringOverride);
                             // sizingCoolingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                             sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
@@ -1615,13 +1608,9 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                         state.dataSize->DataAutosizedCoolingCapacity = sizerCoolingCapacity.size(state, TempSize, ErrorsFound);
                         state.dataSize->DataFlowPerCoolingCapacity = state.dataSize->ZoneHVACSizing(zoneHVACIndex).MaxCoolAirVolFlow;
                         PrintFlag = true;
-                        TempSize = AutoSize;
                         state.dataSize->DataScalableSizingON = true;
                         CoolingAirFlowSizer sizingCoolingAirFlow;
                         std::string stringOverride = "Maximum Cooling Air Flow Rate [m3/s]";
-                        if (state.dataGlobal->isEpJSON) {
-                            stringOverride = "maximum_cooling_air_flow_rate [m3/s]";
-                        }
                         sizingCoolingAirFlow.overrideSizingString(stringOverride);
                         // sizingCoolingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                         sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
@@ -1808,9 +1797,6 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                 if (PurchAir.MaxCoolVolFlowRate > 0.0) {
                     CoolingAirFlowSizer sizingCoolingAirFlow;
                     std::string stringOverride = "Maximum Cooling Air Flow Rate [m3/s]";
-                    if (state.dataGlobal->isEpJSON) {
-                        stringOverride = "maximum_cooling_air_flow_rate [m3/s]";
-                    }
                     sizingCoolingAirFlow.overrideSizingString(stringOverride);
                     // sizingCoolingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                     sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
@@ -1821,9 +1807,6 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                 TempSize = PurchAir.MaxCoolVolFlowRate;
                 CoolingAirFlowSizer sizingCoolingAirFlow;
                 std::string stringOverride = "Maximum Cooling Air Flow Rate [m3/s]";
-                if (state.dataGlobal->isEpJSON) {
-                    stringOverride = "maximum_cooling_air_flow_rate [m3/s]";
-                }
                 sizingCoolingAirFlow.overrideSizingString(stringOverride);
                 // sizingCoolingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                 sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);

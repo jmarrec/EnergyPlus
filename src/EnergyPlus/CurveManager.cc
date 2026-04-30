@@ -136,9 +136,9 @@ namespace Curve {
         // This allows the report variable for curve/table objects to show an inactive state.
 
         for (auto *c : state.dataCurveManager->curves) {
-            c->output = DataLoopNode::SensedNodeFlagValue;
+            c->output = Node::SensedNodeFlagValue;
             for (auto &i : c->inputs) { // Not a good pattern
-                i = DataLoopNode::SensedNodeFlagValue;
+                i = Node::SensedNodeFlagValue;
             }
         }
     }
@@ -3137,7 +3137,7 @@ namespace Curve {
         return "";
     }
 
-    int GetCurveIndex(EnergyPlusData &state, std::string const &CurveName) // name of the curve
+    int GetCurveIndex(EnergyPlusData const &state, std::string const &CurveName) // name of the curve
     {
 
         // FUNCTION INFORMATION:

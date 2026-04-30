@@ -3763,7 +3763,7 @@ void GenOutputVariablesAuditReport(EnergyPlusData &state)
     using namespace OutputProcessor;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    auto &op = state.dataOutputProcessor;
+    const auto &op = state.dataOutputProcessor;
 
     static constexpr std::array<std::string_view, (int)ReportFreq::Num> localReportFreqNames = {
         "Detailed",  // EachCall  // For some reason, this is "Detailed" here and "Each Call" in other places
@@ -4102,8 +4102,8 @@ int GetMeterIndex(EnergyPlusData const &state, std::string const &name)
     //       DATE WRITTEN   August 2002
 
     // PURPOSE OF THIS FUNCTION:
-    // This function returns a index to the meter "number" (aka assigned report number)
-    // for the meter name.  If none active for this run, a zero is returned.  This is used later to
+    // This function returns an index to the meter "number" (aka assigned report number)
+    // for the meter name. If none is active for this run, -1 is returned. This is used later to
     // obtain a meter "value".
 
     auto const &op = state.dataOutputProcessor;
@@ -4138,7 +4138,7 @@ Real64 GetCurrentMeterValue(EnergyPlusData const &state, int const MeterNumber) 
     return (MeterNumber != -1) ? state.dataOutputProcessor->meters[MeterNumber]->CurTSValue : 0.0;
 } // GetCurrentMeterValue()
 
-Real64 GetInstantMeterValue(EnergyPlusData &state,
+Real64 GetInstantMeterValue(EnergyPlusData const &state,
                             int const meterNum,                              // Which Meter Number (from GetMeterIndex)
                             OutputProcessor::TimeStepType const timeStepType // Whether this is zone of HVAC
 )
@@ -4568,7 +4568,7 @@ void GetVariableKeys(EnergyPlusData &state,
     }
 } // GetVariableKeys()
 
-bool ReportingThisVariable(EnergyPlusData &state, std::string const &RepVarName)
+bool ReportingThisVariable(EnergyPlusData const &state, std::string const &RepVarName)
 {
 
     // FUNCTION INFORMATION:
@@ -4584,7 +4584,7 @@ bool ReportingThisVariable(EnergyPlusData &state, std::string const &RepVarName)
 
     std::string name = Util::makeUPPER(RepVarName);
 
-    for (auto &reqVar : op->reqVars) {
+    for (const auto &reqVar : op->reqVars) {
         if (reqVar->name == name) {
             return true;
         }

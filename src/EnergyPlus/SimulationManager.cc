@@ -220,7 +220,6 @@ namespace SimulationManager {
         OutputProcessor::SetupTimePointers(state, OutputProcessor::TimeStepType::System, state.dataHVACGlobal->TimeStepSys);
 
         createFacilityElectricPowerServiceObject(state);
-        createCoilSelectionReportObj(state);
         // read object information early in simulation
         isInputObjectUsed(state);
 
@@ -288,7 +287,7 @@ namespace SimulationManager {
 
             ReportSurfaces(state);
 
-            NodeInputManager::SetupNodeVarsForReporting(state);
+            Node::SetupNodeVarsForReporting(state);
             state.dataGlobal->MetersHaveBeenInitialized = true;
             Pollution::SetupPollutionMeterReporting(state);
             SystemReports::AllocateAndSetUpVentReports(state);
@@ -308,15 +307,15 @@ namespace SimulationManager {
             if (ErrFound) {
                 TerminalError = true;
             }
-            NodeInputManager::CheckMarkedNodes(state, ErrFound);
+            Node::CheckMarkedNodes(state, ErrFound);
             if (ErrFound) {
                 TerminalError = true;
             }
-            BranchNodeConnections::CheckNodeConnections(state, ErrFound);
+            Node::CheckNodeConnections(state, ErrFound);
             if (ErrFound) {
                 TerminalError = true;
             }
-            BranchNodeConnections::TestCompSetInletOutletNodes(state, ErrFound);
+            Node::TestCompSetInletOutletNodes(state, ErrFound);
             if (ErrFound) {
                 TerminalError = true;
             }
@@ -2076,9 +2075,6 @@ namespace SimulationManager {
         // This subroutine 'reports' the NodeConnection data structure.  It groups the
         // report/dump by parent, non-parent objects.
 
-        // Using/Aliasing
-        using namespace DataBranchNodeConnections;
-
         // Formats
         static constexpr std::string_view Format_702("! <#{0} Node Connections>,<Number of {0} Node Connections>\n");
         static constexpr std::string_view Format_703(
@@ -2110,14 +2106,13 @@ namespace SimulationManager {
             print(state.files.bnd,
                   " Parent Node Connection,{},{},{},{},{}\n",
                   state.dataBranchNodeConnections->NodeConnections(Loop).NodeName,
-                  BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                      state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
+                  Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).ObjectName,
-                  DataLoopNode::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
+                  Node::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream);
             // Build ParentNodeLists
-            if ((state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == DataLoopNode::ConnectionType::Inlet) ||
-                (state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == DataLoopNode::ConnectionType::Outlet)) {
+            if ((state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == Node::ConnectionType::Inlet) ||
+                (state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == Node::ConnectionType::Outlet)) {
                 bool ParentComponentFound = false;
                 for (int Loop1 = 1; Loop1 <= state.dataBranchNodeConnections->NumOfActualParents; ++Loop1) {
                     if (state.dataBranchNodeConnections->ParentNodeList(Loop1).ComponentType !=
@@ -2129,11 +2124,11 @@ namespace SimulationManager {
                     ParentComponentFound = true;
 
                     switch (state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType) {
-                    case DataLoopNode::ConnectionType::Inlet:
+                    case Node::ConnectionType::Inlet:
                         state.dataBranchNodeConnections->ParentNodeList(Loop1).InletNodeName =
                             state.dataBranchNodeConnections->NodeConnections(Loop).NodeName;
                         break;
-                    case DataLoopNode::ConnectionType::Outlet:
+                    case Node::ConnectionType::Outlet:
                         state.dataBranchNodeConnections->ParentNodeList(Loop1).OutletNodeName =
                             state.dataBranchNodeConnections->NodeConnections(Loop).NodeName;
                     default:
@@ -2148,11 +2143,11 @@ namespace SimulationManager {
                         state.dataBranchNodeConnections->NodeConnections(Loop).ObjectName;
 
                     switch (state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType) {
-                    case DataLoopNode::ConnectionType::Inlet:
+                    case Node::ConnectionType::Inlet:
                         state.dataBranchNodeConnections->ParentNodeList(state.dataBranchNodeConnections->NumOfActualParents).InletNodeName =
                             state.dataBranchNodeConnections->NodeConnections(Loop).NodeName;
                         break;
-                    case DataLoopNode::ConnectionType::Outlet:
+                    case Node::ConnectionType::Outlet:
                         state.dataBranchNodeConnections->ParentNodeList(state.dataBranchNodeConnections->NumOfActualParents).OutletNodeName =
                             state.dataBranchNodeConnections->NodeConnections(Loop).NodeName;
                         break;
@@ -2177,10 +2172,9 @@ namespace SimulationManager {
             print(state.files.bnd,
                   " Non-Parent Node Connection,{},{},{},{},{}\n",
                   state.dataBranchNodeConnections->NodeConnections(Loop).NodeName,
-                  BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                      state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
+                  Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).ObjectName,
-                  DataLoopNode::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
+                  Node::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream);
         }
 
@@ -2259,19 +2253,17 @@ namespace SimulationManager {
             print(state.files.bnd,
                   " Component Set,{},{},{},{},{},{},{},{}\n",
                   Count,
-                  BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                      state.dataBranchNodeConnections->CompSets(Count).ParentObjectType)],
+                  Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->CompSets(Count).ParentObjectType)],
                   state.dataBranchNodeConnections->CompSets(Count).ParentCName,
-                  BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                      state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType)],
+                  Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType)],
                   state.dataBranchNodeConnections->CompSets(Count).CName,
                   state.dataBranchNodeConnections->CompSets(Count).InletNodeName,
                   state.dataBranchNodeConnections->CompSets(Count).OutletNodeName,
                   state.dataBranchNodeConnections->CompSets(Count).Description);
 
-            std::string_view const CType = BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType)];
-            if (state.dataBranchNodeConnections->CompSets(Count).ParentObjectType == DataLoopNode::ConnectionObjectType::Undefined ||
+            std::string_view const CType =
+                Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType)];
+            if (state.dataBranchNodeConnections->CompSets(Count).ParentObjectType == Node::ConnectionObjectType::Undefined ||
                 state.dataBranchNodeConnections->CompSets(Count).InletNodeName == "UNDEFINED" ||
                 state.dataBranchNodeConnections->CompSets(Count).OutletNodeName == "UNDEFINED") {
                 if (state.dataErrTracking->AbortProcessing && state.dataSimulationManager->WarningOut) {
@@ -2290,7 +2282,7 @@ namespace SimulationManager {
                 ShowContinueError(state, EnergyPlus::format("  Outlet Node: {}", state.dataBranchNodeConnections->CompSets(Count).OutletNodeName));
                 ++state.dataBranchNodeConnections->NumNodeConnectionErrors;
                 if (state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType ==
-                    DataLoopNode::ConnectionObjectType::SolarCollectorUnglazedTranspired) {
+                    Node::ConnectionObjectType::SolarCollectorUnglazedTranspired) {
                     ShowContinueError(state, "This report does not necessarily indicate a problem for a MultiSystem Transpired Collector");
                 }
             }
@@ -2336,12 +2328,12 @@ namespace SimulationManager {
                                      "been retrieved.");
                     state.dataSimulationManager->WarningOut = false;
                 }
-                std::string_view const CType = BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                    state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType)];
-                std::string_view const ParentCType = BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                    state.dataBranchNodeConnections->CompSets(Count1).ParentObjectType)];
-                std::string_view const ParentCType1 = BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(
-                    state.dataBranchNodeConnections->CompSets(Count).ParentObjectType)];
+                std::string_view const CType =
+                    Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType)];
+                std::string_view const ParentCType =
+                    Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->CompSets(Count1).ParentObjectType)];
+                std::string_view const ParentCType1 =
+                    Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->CompSets(Count).ParentObjectType)];
                 ShowWarningError(state, "Component plus inlet/outlet node pair used more than once:");
                 ShowContinueError(state, EnergyPlus::format("  Component  : {}={}", CType, state.dataBranchNodeConnections->CompSets(Count).CName));
                 ShowContinueError(state, EnergyPlus::format("  Inlet Node : {}", state.dataBranchNodeConnections->CompSets(Count).InletNodeName));

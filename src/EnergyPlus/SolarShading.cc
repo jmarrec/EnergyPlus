@@ -197,6 +197,7 @@ void InitSolarCalculations(EnergyPlusData &state)
         if (state.dataSolarShading->GetInputFlag) {
             checkShadingSurfaceSchedules(state);
             processShadowingInput(state);
+            checkSurfaceExternalShadingSchedules(state);
             state.dataSolarShading->GetInputFlag = false;
             state.dataSolarShading->MaxHCV =
                 (((max(15, s_surf->MaxVerticesPerSurface) + 16) / 16) * 16) - 1; // Assure MaxHCV+1 is multiple of 16 for 128 B alignment
@@ -482,7 +483,6 @@ void GetShadowingInput(EnergyPlusData &state)
         if (Util::SameString(state.dataIPShortCut->cAlphaArgs(aNum), "Scheduled")) {
             state.dataSysVars->shadingMethod = ShadingMethod::Scheduled;
             state.dataIPShortCut->cAlphaArgs(aNum) = "Scheduled";
-            checkScheduledSurfacePresent(state);
         } else if (Util::SameString(state.dataIPShortCut->cAlphaArgs(aNum), "Imported")) {
             if (state.dataSched->ScheduleFileShadingProcessed) {
                 state.dataSysVars->shadingMethod = ShadingMethod::Imported;
@@ -761,13 +761,8 @@ void processShadowingInput(EnergyPlusData &state)
 
     if (state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Imported) {
         for (auto &surf : state.dataSurface->Surface) {
-            if ((surf.surfExternalShadingSched = Sched::GetSchedule(state, surf.Name + "_shading")) != nullptr) {
+            if ((surf.surfExternalShadingSched = Sched::GetSchedule(state, Util::makeUPPER(surf.Name + "_shading"))) != nullptr) {
                 surf.SurfSchedExternalShadingFrac = true;
-            } else {
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format("processShadowingInput: sunlit fraction schedule not found for {} when using ImportedShading.", surf.Name));
-                ShowContinueError(state, "These values are set to 1.0.");
             }
         }
     }
@@ -829,9 +824,11 @@ void processShadowingInput(EnergyPlusData &state)
     }
 }
 
-void checkScheduledSurfacePresent(EnergyPlusData &state)
+void checkSurfaceExternalShadingSchedules(EnergyPlusData &state)
 {
-    // User has chosen "Scheduled" for sunlit fraction so check to see which surfaces don't have a schedule
+    // #9275: refactor warnings around Shadow Calculation Method and sunlit fraction schedules.
+    // - User has chosen "Scheduled" or "Imported" for shading calculation method so check to see which surfaces don't have a schedule.
+    // - User has *not* chosen "Scheduled" or "Imported" for shading calculation method so check to see which surfaces *have* a schedule.
     int numNotDef = 0;
     int constexpr maxErrMessages = 50;
     auto &surfData = state.dataSurface;
@@ -841,21 +838,55 @@ void checkScheduledSurfacePresent(EnergyPlusData &state)
              thisSurf.Class == SurfaceClass::Overhang || thisSurf.Class == SurfaceClass::Fin)) {
             continue; // skip shading surfaces
         }
-        if (!thisSurf.SurfSchedExternalShadingFrac) {
-            numNotDef += 1;
-            if (numNotDef == 1) {
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format("ShadowCalculation specified Schedule for the Shading Calculation Method but no schedule provided for {}",
-                                       thisSurf.Name));
-                ShowContinueError(
-                    state, "When Schedule is selected for the Shading Calculation Method and no schedule is provided for a particular surface,");
-                ShowContinueError(
-                    state, "EnergyPlus will assume that the surface is not shaded.  Use SurfaceProperty:LocalEnvironment to specify a schedule");
-                ShowContinueError(state, "for sunlit fraction if this was not desired.  Otherwise, this surface will not be shaded at all.");
-            } else if (numNotDef <= maxErrMessages) {
-                ShowWarningError(
-                    state, EnergyPlus::format("No schedule was provided for {} either.  See above error message for more details", thisSurf.Name));
+        if ((state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Scheduled) ||
+            (state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Imported)) {
+            if (!thisSurf.SurfSchedExternalShadingFrac) {
+                numNotDef += 1;
+                if (numNotDef == 1) {
+                    if (state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Scheduled) {
+                        ShowWarningError(
+                            state,
+                            EnergyPlus::format(
+                                "ShadowCalculation specified \"Scheduled\" for the Shading Calculation Method but no schedule provided for {}.",
+                                thisSurf.Name));
+                        ShowContinueError(state,
+                                          "When \"Scheduled\" is selected for the Shading Calculation Method and no schedule is provided for a "
+                                          "particular surface,");
+                        ShowContinueError(state,
+                                          "EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use "
+                                          "SurfaceProperty:LocalEnvironment to specify a schedule");
+                    } else if (state.dataSysVars->shadingMethod == DataSystemVariables::ShadingMethod::Imported) {
+                        ShowWarningError(
+                            state,
+                            EnergyPlus::format(
+                                "ShadowCalculation specified \"Imported\" for the Shading Calculation Method but no schedule provided for {}.",
+                                thisSurf.Name));
+                        ShowContinueError(
+                            state,
+                            "When \"Imported\" is selected for the Shading Calculation Method and no schedule is provided for a particular surface,");
+                        ShowContinueError(state,
+                                          "EnergyPlus will assume that the surface is not shaded (i.e., values are set to 1.0). Use "
+                                          "Schedule:File:Shading to specify a schedule");
+                    }
+                    ShowContinueError(state, "for sunlit fraction if this was not desired. Otherwise, this surface will not be shaded at all.");
+                } else if (numNotDef <= maxErrMessages) {
+                    ShowWarningError(
+                        state,
+                        EnergyPlus::format("No schedule was provided for {} either. See above error message for more details.", thisSurf.Name));
+                }
+            }
+        } else {
+            if (thisSurf.SurfSchedExternalShadingFrac) {
+                numNotDef += 1;
+                if (numNotDef == 1) {
+                    ShowWarningError(state,
+                                     EnergyPlus::format("ShadowCalculation did not specify \"Scheduled\" or \"Imported\" for the Shading Calculation "
+                                                        "Method but schedule provided for {}.",
+                                                        thisSurf.Name));
+                } else if (numNotDef <= maxErrMessages) {
+                    ShowWarningError(
+                        state, EnergyPlus::format("Schedule was also provided for {}. See above error message for more details.", thisSurf.Name));
+                }
             }
         }
     }
@@ -4343,7 +4374,7 @@ void CLIPPOLY(EnergyPlusData &state,
     Real64 W; // Normalization factor
     Real64 HFunct;
 
-    auto &s_surf = state.dataSurface;
+    const auto &s_surf = state.dataSurface;
 
 #ifdef EP_Count_Calls
     ++state.dataTimingsData->NumClipPoly_Calls;
@@ -4642,7 +4673,7 @@ void ORDER(EnergyPlusData &state,
     int P; // Location of first slope to be sorted
 
     if (state.dataSolarShading->ORDERFirstTimeFlag) {
-        auto &s_surf = state.dataSurface;
+        const auto &s_surf = state.dataSurface;
         state.dataSolarShading->SLOPE.allocate(max(10, s_surf->MaxVerticesPerSurface + 1));
         state.dataSolarShading->ORDERFirstTimeFlag = false;
     }
@@ -5962,7 +5993,7 @@ void SHDBKS(EnergyPlusData &state,
     assert(equal_dimensions(state.dataSolarShading->HCX, state.dataSolarShading->HCA));
 
     if (state.dataSolarShading->SHDBKSOneTimeFlag) {
-        auto &s_surf = state.dataSurface;
+        const auto &s_surf = state.dataSurface;
         state.dataSolarShading->XVrtx.allocate(s_surf->MaxVerticesPerSurface + 1);
         state.dataSolarShading->YVrtx.allocate(s_surf->MaxVerticesPerSurface + 1);
         state.dataSolarShading->ZVrtx.allocate(s_surf->MaxVerticesPerSurface + 1);
@@ -8995,7 +9026,7 @@ void PerformSolarCalculations(EnergyPlusData &state)
     Real64 EqTime;
     // not used INTEGER SurfNum
 
-    auto &s_surf = state.dataSurface;
+    const auto &s_surf = state.dataSurface;
     // Calculate sky diffuse shading
 
     if (state.dataGlobal->BeginSimFlag) {
@@ -10596,7 +10627,7 @@ void SkyDifSolarShading(EnergyPlusData &state)
             state.dataSolarShading->SUNCOS(2) = state.dataSolarShading->cos_Phi[IPhi] * state.dataSolarShading->sin_Theta[ITheta];
 
             for (int SurfNum : s_surf->AllExtSolAndShadingSurfaceList) {
-                auto &surf = s_surf->Surface(SurfNum);
+                const auto &surf = s_surf->Surface(SurfNum);
 
                 // Cosine of angle of incidence on surface of solar radiation from patch
                 state.dataSolarShading->SurfSunCosTheta(SurfNum) = state.dataSolarShading->SUNCOS.x * surf.OutNormVec.x +
@@ -10607,7 +10638,7 @@ void SkyDifSolarShading(EnergyPlusData &state)
             SHADOW(state, 24, 0);
 
             for (int SurfNum : s_surf->AllExtSolAndShadingSurfaceList) {
-                auto &surf = s_surf->Surface(SurfNum);
+                const auto &surf = s_surf->Surface(SurfNum);
 
                 if (state.dataSolarShading->SurfSunCosTheta(SurfNum) < 0.0) {
                     continue;

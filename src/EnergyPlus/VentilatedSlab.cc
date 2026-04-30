@@ -254,12 +254,7 @@ namespace VentilatedSlab {
 
         constexpr std::array<std::string_view, static_cast<int>(OutsideAirControlType::Num)> OutsideAirControlTypeNamesUC{
             "VARIABLEPERCENT", "FIXEDTEMPERATURE", "FIXEDAMOUNT"};
-        constexpr std::array<std::string_view, static_cast<int>(CoilType::Num)> CoilTypeNamesUC{"NONE", "HEATING", "COOLING", "HEATINGANDCOOLING"};
-
-        constexpr std::array<std::string_view, static_cast<int>(HeatingCoilType::Num)> HeatingCoilTypeNamesUC{
-            "COIL:HEATING:ELECTRIC", "COIL:HEATING:FUEL", "COIL:HEATING:WATER", "COIL:HEATING:STEAM"};
-        constexpr std::array<std::string_view, static_cast<int>(CoolingCoilType::Num)> CoolingCoilTypeNamesUC{
-            "COIL:COOLING:WATER", "COIL:COOLING:WATER:DETAILEDGEOMETRY", "COILSYSTEM:COOLING:WATER:HEATEXCHANGERASSISTED"};
+        constexpr std::array<std::string_view, static_cast<int>(CoilsUsed::Num)> coilsUsedNamesUC{"NONE", "HEATING", "COOLING", "HEATINGANDCOOLING"};
 
         // Figure out how many Ventilated Slab Systems there are in the input file
 
@@ -653,178 +648,178 @@ namespace VentilatedSlab {
             //         are registered with "-OA MIXER" appended to the object type and object name
             //      %ReturnAirNode is one inlet to the implicit oa mixer
             //         For SlabOnly and SeriesSlab this node does nothing,
-            //             so DataLoopNode::NodeConnectionType::Internal,ObjectIsNotParent, -OA MIXER
+            //             so Node::NodeConnectionType::Internal,ObjectIsNotParent, -OA MIXER
             //         For SlabandZone, this node extracts air from the zone,
-            //             so DataLoopNode::NodeConnectionType::Inlet,ObjectIsNotParent, -OA MIXER
+            //             so Node::NodeConnectionType::Inlet,ObjectIsNotParent, -OA MIXER
             //         For SlabandZone, this node is also used to associate the whole system with a pair of zone inlet/exhaust nodes,
-            //             so it is registered again as DataLoopNode::NodeConnectionType::Inlet,1,ObjectIsParent, -SYSTEM
+            //             so it is registered again as Node::NodeConnectionType::Inlet,1,ObjectIsParent, -SYSTEM
             //      %RadInNode is the ultimate air inlet to the slab or series of slabs
-            //         For all types of ventilated slab, this is DataLoopNode::NodeConnectionType::Inlet,ObjectIsNotParent
+            //         For all types of ventilated slab, this is Node::NodeConnectionType::Inlet,ObjectIsNotParent
             //      %OAMixerOutNode is the outlet from the implicit OA mixer
-            //         For all types of ventilated slab, this is DataLoopNode::NodeConnectionType::Outlet,ObjectIsNotParent
+            //         For all types of ventilated slab, this is Node::NodeConnectionType::Outlet,ObjectIsNotParent
             //      %FanOutletNode is the outlet from the explicit fan child object (redundant input, should mine from child)
-            //         For all types of ventilated slab, this is DataLoopNode::NodeConnectionType::Internal,ObjectIsParent
+            //         For all types of ventilated slab, this is Node::NodeConnectionType::Internal,ObjectIsParent
             //      %ZoneAirInNode is applicable only to SlabandZone configuration. It is the node that flows into the zone,
             //         and it is also the outlet from the ventilated slab section, so it must be registered twice
-            //         First for the overall system, DataLoopNode::NodeConnectionType::Outlet,ObjectIsParent, -SYSTEM
-            //         Second as the slab outlet, DataLoopNode::NodeConnectionType::Outlet,ObjectIsNotParent
+            //         First for the overall system, Node::NodeConnectionType::Outlet,ObjectIsParent, -SYSTEM
+            //         Second as the slab outlet, Node::NodeConnectionType::Outlet,ObjectIsNotParent
             //      %OutsideAirNode is the outdoor air inlet to the OA mixer
-            //         For all types of ventilated slab, this is DataLoopNode::NodeConnectionType::Inlet,ObjectIsNotParent, -OA MIXER
+            //         For all types of ventilated slab, this is Node::NodeConnectionType::Inlet,ObjectIsNotParent, -OA MIXER
 
             if (ventSlab.SysConfg == VentilatedSlabConfig::SlabOnly) {
 
-                ventSlab.ReturnAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(18),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name + "-OA MIXER",
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Outlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
-                ventSlab.ReturnAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(18),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name,
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Inlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
-                ventSlab.RadInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                         state.dataIPShortCut->cAlphaArgs(19),
-                                                                         ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                         ventSlab.Name,
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::Inlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         DataLoopNode::ObjectIsNotParent);
+                ventSlab.ReturnAirNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(18),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name + "-OA MIXER",
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
+                ventSlab.ReturnAirNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(18),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
+                ventSlab.RadInNode = Node::GetOnlySingleNode(state,
+                                                             state.dataIPShortCut->cAlphaArgs(19),
+                                                             ErrorsFound,
+                                                             Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                             ventSlab.Name,
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
-                ventSlab.OAMixerOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                              state.dataIPShortCut->cAlphaArgs(23),
-                                                                              ErrorsFound,
-                                                                              DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                              ventSlab.Name + "-OA MIXER",
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::Outlet,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              DataLoopNode::ObjectIsNotParent);
-                ventSlab.FanOutletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(24),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name,
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Internal,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
+                ventSlab.OAMixerOutNode = Node::GetOnlySingleNode(state,
+                                                                  state.dataIPShortCut->cAlphaArgs(23),
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                  ventSlab.Name + "-OA MIXER",
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
+                ventSlab.FanOutletNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(24),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Internal,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
 
             } else if (ventSlab.SysConfg == VentilatedSlabConfig::SeriesSlabs) {
 
-                ventSlab.ReturnAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(18),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name + "-OA MIXER",
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Outlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
-                ventSlab.ReturnAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(18),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name,
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Inlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
-                ventSlab.RadInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                         state.dataIPShortCut->cAlphaArgs(19),
-                                                                         ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                         ventSlab.Name,
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::Inlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         DataLoopNode::ObjectIsNotParent);
+                ventSlab.ReturnAirNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(18),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name + "-OA MIXER",
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
+                ventSlab.ReturnAirNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(18),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
+                ventSlab.RadInNode = Node::GetOnlySingleNode(state,
+                                                             state.dataIPShortCut->cAlphaArgs(19),
+                                                             ErrorsFound,
+                                                             Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                             ventSlab.Name,
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
-                ventSlab.OAMixerOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                              state.dataIPShortCut->cAlphaArgs(23),
-                                                                              ErrorsFound,
-                                                                              DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                              ventSlab.Name + "-OA MIXER",
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::Outlet,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              DataLoopNode::ObjectIsNotParent);
-                ventSlab.FanOutletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(24),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name,
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Internal,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
+                ventSlab.OAMixerOutNode = Node::GetOnlySingleNode(state,
+                                                                  state.dataIPShortCut->cAlphaArgs(23),
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                  ventSlab.Name + "-OA MIXER",
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
+                ventSlab.FanOutletNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(24),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Internal,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
 
             } else if (ventSlab.SysConfg == VentilatedSlabConfig::SlabAndZone) {
 
-                ventSlab.ReturnAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(18),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name + "-SYSTEM",
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Inlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
-                ventSlab.ReturnAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(18),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name,
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Inlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
-                ventSlab.ReturnAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(18),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name + "-OA MIXER",
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Inlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
-                ventSlab.RadInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                         state.dataIPShortCut->cAlphaArgs(19),
-                                                                         ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                         ventSlab.Name,
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::Inlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         DataLoopNode::ObjectIsNotParent);
-                ventSlab.OAMixerOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                              state.dataIPShortCut->cAlphaArgs(23),
-                                                                              ErrorsFound,
-                                                                              DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                              ventSlab.Name + "-OA MIXER",
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::Outlet,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              DataLoopNode::ObjectIsNotParent);
-                ventSlab.FanOutletNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(24),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name,
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Internal,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
+                ventSlab.ReturnAirNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(18),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name + "-SYSTEM",
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
+                ventSlab.ReturnAirNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(18),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
+                ventSlab.ReturnAirNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(18),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name + "-OA MIXER",
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
+                ventSlab.RadInNode = Node::GetOnlySingleNode(state,
+                                                             state.dataIPShortCut->cAlphaArgs(19),
+                                                             ErrorsFound,
+                                                             Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                             ventSlab.Name,
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
+                ventSlab.OAMixerOutNode = Node::GetOnlySingleNode(state,
+                                                                  state.dataIPShortCut->cAlphaArgs(23),
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                  ventSlab.Name + "-OA MIXER",
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
+                ventSlab.FanOutletNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(24),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Internal,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
             }
 
             if (ventSlab.SysConfg == VentilatedSlabConfig::SlabOnly) {
@@ -846,37 +841,37 @@ namespace VentilatedSlab {
                     ErrorsFound = true;
                 }
 
-                ventSlab.ZoneAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(20),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name + "-SYSTEM",
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Outlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsParent);
+                ventSlab.ZoneAirInNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(20),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name + "-SYSTEM",
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsParent);
 
-                ventSlab.ZoneAirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             state.dataIPShortCut->cAlphaArgs(20),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                             ventSlab.Name,
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::Outlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
+                ventSlab.ZoneAirInNode = Node::GetOnlySingleNode(state,
+                                                                 state.dataIPShortCut->cAlphaArgs(20),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                 ventSlab.Name,
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
             }
 
             //  Set connection type to 'Inlet', because it now uses an OA node
-            ventSlab.OutsideAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                          state.dataIPShortCut->cAlphaArgs(21),
-                                                                          ErrorsFound,
-                                                                          DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                          ventSlab.Name + "-OA MIXER",
-                                                                          DataLoopNode::NodeFluidType::Air,
-                                                                          DataLoopNode::ConnectionType::Inlet,
-                                                                          NodeInputManager::CompFluidStream::Primary,
-                                                                          DataLoopNode::ObjectIsNotParent);
+            ventSlab.OutsideAirNode = Node::GetOnlySingleNode(state,
+                                                              state.dataIPShortCut->cAlphaArgs(21),
+                                                              ErrorsFound,
+                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                              ventSlab.Name + "-OA MIXER",
+                                                              Node::FluidType::Air,
+                                                              Node::ConnectionType::Inlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
 
             if (!lAlphaBlanks(21)) {
                 OutAirNodeManager::CheckAndAddAirNodeNumber(state, ventSlab.OutsideAirNode, IsValid);
@@ -888,15 +883,15 @@ namespace VentilatedSlab {
                 }
             }
 
-            ventSlab.AirReliefNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                         state.dataIPShortCut->cAlphaArgs(22),
-                                                                         ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                         ventSlab.Name + "-OA MIXER",
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::ReliefAir,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         DataLoopNode::ObjectIsNotParent);
+            ventSlab.AirReliefNode = Node::GetOnlySingleNode(state,
+                                                             state.dataIPShortCut->cAlphaArgs(22),
+                                                             ErrorsFound,
+                                                             Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                             ventSlab.Name + "-OA MIXER",
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::ReliefAir,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
             // Fan information:
             ventSlab.FanName = state.dataIPShortCut->cAlphaArgs(25);
@@ -921,27 +916,24 @@ namespace VentilatedSlab {
             }
 
             // Add fan to component sets array
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 CurrentModuleObject,
-                                                 ventSlab.Name,
-                                                 "UNDEFINED",
-                                                 state.dataIPShortCut->cAlphaArgs(25),
-                                                 state.dataIPShortCut->cAlphaArgs(23),
-                                                 state.dataIPShortCut->cAlphaArgs(24));
+            Node::SetUpCompSets(state,
+                                CurrentModuleObject,
+                                ventSlab.Name,
+                                "UNDEFINED",
+                                state.dataIPShortCut->cAlphaArgs(25),
+                                state.dataIPShortCut->cAlphaArgs(23),
+                                state.dataIPShortCut->cAlphaArgs(24));
 
             // Coil options assign
 
-            ventSlab.coilOption = static_cast<CoilType>(getEnumValue(CoilTypeNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(26))));
+            ventSlab.coilsUsed = static_cast<CoilsUsed>(getEnumValue(coilsUsedNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(26))));
 
-            if (ventSlab.coilOption == CoilType::Invalid) {
-                ShowSevereError(
-                    state,
-                    EnergyPlus::format(
-                        R"({}="{}" invalid {}="{}".)", CurrentModuleObject, ventSlab.Name, cAlphaFields(26), state.dataIPShortCut->cAlphaArgs(26)));
+            if (ventSlab.coilsUsed == CoilsUsed::Invalid) {
+                ShowSevereInvalidKey(state, eoh, cAlphaFields(26), state.dataIPShortCut->cAlphaArgs(26));
                 ErrorsFound = true;
             }
 
-            if (ventSlab.coilOption == CoilType::Both || ventSlab.coilOption == CoilType::Heating) {
+            if (ventSlab.coilsUsed == CoilsUsed::Both || ventSlab.coilsUsed == CoilsUsed::Heating) {
                 // Heating coil information:
                 //        A27, \field Heating Coil Object Type
                 //             \type choice
@@ -959,16 +951,15 @@ namespace VentilatedSlab {
                     ventSlab.heatingCoilTypeCh = state.dataIPShortCut->cAlphaArgs(27);
                     errFlag = false;
 
-                    ventSlab.hCoilType =
-                        static_cast<HeatingCoilType>(getEnumValue(HeatingCoilTypeNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(27))));
+                    ventSlab.heatCoilType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, state.dataIPShortCut->cAlphaArgs(27)));
 
-                    switch (ventSlab.hCoilType) {
+                    switch (ventSlab.heatCoilType) {
 
-                    case HeatingCoilType::Water: {
+                    case HVAC::CoilType::HeatingWater: {
                         ventSlab.heatingCoilType = DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
                         break;
                     }
-                    case HeatingCoilType::Steam: {
+                    case HVAC::CoilType::HeatingSteam: {
                         ventSlab.heatingCoilType = DataPlant::PlantEquipmentType::CoilSteamAirHeating;
                         ventSlab.heatingCoil_fluid = Fluid::GetSteam(state);
                         if (ventSlab.heatingCoil_fluid == nullptr) {
@@ -981,16 +972,11 @@ namespace VentilatedSlab {
                         }
                         break;
                     }
-                    case HeatingCoilType::Electric:
-                    case HeatingCoilType::Gas:
+                    case HVAC::CoilType::HeatingElectric:
+                    case HVAC::CoilType::HeatingGasOrOtherFuel:
                         break;
                     default: {
-                        ShowSevereError(state,
-                                        EnergyPlus::format(R"({}="{}" invalid {}="{}".)",
-                                                           CurrentModuleObject,
-                                                           ventSlab.Name,
-                                                           cAlphaFields(27),
-                                                           state.dataIPShortCut->cAlphaArgs(27)));
+                        ShowSevereInvalidKey(state, eoh, cAlphaFields(27), state.dataIPShortCut->cAlphaArgs(27));
                         ErrorsFound = true;
                         errFlag = true;
                         break;
@@ -1017,7 +1003,7 @@ namespace VentilatedSlab {
 
                     // The heating coil control node is necessary for a hot water coil, but not necessary for an
                     // electric or gas coil.
-                    if (ventSlab.hCoilType == HeatingCoilType::Gas || ventSlab.hCoilType == HeatingCoilType::Electric) {
+                    if (ventSlab.heatCoilType == HVAC::CoilType::HeatingGasOrOtherFuel || ventSlab.heatCoilType == HVAC::CoilType::HeatingElectric) {
                         if (!lAlphaBlanks(29)) {
                             ShowWarningError(state,
                                              EnergyPlus::format("{}=\"{}\" {}=\"{}\" not needed - ignored.",
@@ -1035,22 +1021,22 @@ namespace VentilatedSlab {
                                     "{}=\"{}\" invalid {} is blank and must be entered.", CurrentModuleObject, ventSlab.Name, cAlphaFields(29)));
                             ErrorsFound = true;
                         }
-                        ventSlab.HotControlNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                      state.dataIPShortCut->cAlphaArgs(29),
-                                                                                      ErrorsFound,
-                                                                                      DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                                      ventSlab.Name,
-                                                                                      DataLoopNode::NodeFluidType::Water,
-                                                                                      DataLoopNode::ConnectionType::Actuator,
-                                                                                      NodeInputManager::CompFluidStream::Primary,
-                                                                                      DataLoopNode::ObjectIsParent);
+                        ventSlab.HotControlNode = Node::GetOnlySingleNode(state,
+                                                                          state.dataIPShortCut->cAlphaArgs(29),
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                          ventSlab.Name,
+                                                                          Node::FluidType::Water,
+                                                                          Node::ConnectionType::Actuator,
+                                                                          Node::CompFluidStream::Primary,
+                                                                          Node::ObjectIsParent);
                     }
                     ventSlab.HotControlOffset = 0.001;
 
-                    if (ventSlab.hCoilType == HeatingCoilType::Water) {
+                    if (ventSlab.heatCoilType == HVAC::CoilType::HeatingWater) {
                         ventSlab.MaxVolHotWaterFlow = GetWaterCoilMaxFlowRate(state, "Coil:Heating:Water", ventSlab.heatingCoilName, ErrorsFound);
                         ventSlab.MaxVolHotSteamFlow = GetWaterCoilMaxFlowRate(state, "Coil:Heating:Water", ventSlab.heatingCoilName, ErrorsFound);
-                    } else if (ventSlab.hCoilType == HeatingCoilType::Steam) {
+                    } else if (ventSlab.heatCoilType == HVAC::CoilType::HeatingSteam) {
                         ventSlab.MaxVolHotWaterFlow = GetSteamCoilMaxFlowRate(state, "Coil:Heating:Steam", ventSlab.heatingCoilName, ErrorsFound);
                         ventSlab.MaxVolHotSteamFlow = GetSteamCoilMaxFlowRate(state, "Coil:Heating:Steam", ventSlab.heatingCoilName, ErrorsFound);
                     }
@@ -1064,7 +1050,7 @@ namespace VentilatedSlab {
                 }
             }
 
-            if (ventSlab.coilOption == CoilType::Both || ventSlab.coilOption == CoilType::Cooling) {
+            if (ventSlab.coilsUsed == CoilsUsed::Both || ventSlab.coilsUsed == CoilsUsed::Cooling) {
                 // Cooling coil information (if one is present):
                 //        A30, \field Cooling Coil Object Type
                 //             \type choice
@@ -1080,20 +1066,19 @@ namespace VentilatedSlab {
                     ventSlab.coolingCoilTypeCh = state.dataIPShortCut->cAlphaArgs(30);
                     errFlag = false;
 
-                    ventSlab.cCoilType =
-                        static_cast<CoolingCoilType>(getEnumValue(CoolingCoilTypeNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(30))));
-                    switch (ventSlab.cCoilType) {
-                    case CoolingCoilType::WaterCooling: {
+                    ventSlab.coolCoilType = static_cast<HVAC::CoilType>(getEnumValue(HVAC::coilTypeNamesUC, state.dataIPShortCut->cAlphaArgs(30)));
+                    switch (ventSlab.coolCoilType) {
+                    case HVAC::CoilType::CoolingWater: {
                         ventSlab.coolingCoilType = DataPlant::PlantEquipmentType::CoilWaterCooling;
                         ventSlab.coolingCoilPlantName = state.dataIPShortCut->cAlphaArgs(31);
                         break;
                     }
-                    case CoolingCoilType::DetailedCooling: {
+                    case HVAC::CoilType::CoolingWaterDetailed: {
                         ventSlab.coolingCoilType = DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling;
                         ventSlab.coolingCoilPlantName = state.dataIPShortCut->cAlphaArgs(31);
                         break;
                     }
-                    case CoolingCoilType::HXAssisted: {
+                    case HVAC::CoilType::CoolingWaterHXAssisted: {
                         HVACHXAssistedCoolingCoil::GetHXCoilTypeAndName(state,
                                                                         state.dataIPShortCut->cAlphaArgs(30),
                                                                         state.dataIPShortCut->cAlphaArgs(31),
@@ -1147,15 +1132,15 @@ namespace VentilatedSlab {
 
                     ventSlab.MinVolColdWaterFlow = 0.0;
 
-                    ventSlab.ColdControlNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(32),
-                                                                                   ErrorsFound,
-                                                                                   DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                                   ventSlab.Name,
-                                                                                   DataLoopNode::NodeFluidType::Water,
-                                                                                   DataLoopNode::ConnectionType::Actuator,
-                                                                                   NodeInputManager::CompFluidStream::Primary,
-                                                                                   DataLoopNode::ObjectIsParent);
+                    ventSlab.ColdControlNode = Node::GetOnlySingleNode(state,
+                                                                       state.dataIPShortCut->cAlphaArgs(32),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                       ventSlab.Name,
+                                                                       Node::FluidType::Water,
+                                                                       Node::ConnectionType::Actuator,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsParent);
 
                     if (lAlphaBlanks(32)) {
                         ShowSevereError(
@@ -1167,12 +1152,12 @@ namespace VentilatedSlab {
 
                     ventSlab.ColdControlOffset = 0.001;
 
-                    if (ventSlab.cCoilType == CoolingCoilType::WaterCooling) {
+                    if (ventSlab.coolCoilType == HVAC::CoilType::CoolingWater) {
                         ventSlab.MaxVolColdWaterFlow = GetWaterCoilMaxFlowRate(state, "Coil:Cooling:Water", ventSlab.coolingCoilName, ErrorsFound);
-                    } else if (ventSlab.cCoilType == CoolingCoilType::DetailedCooling) {
+                    } else if (ventSlab.coolCoilType == HVAC::CoilType::CoolingWaterDetailed) {
                         ventSlab.MaxVolColdWaterFlow =
                             GetWaterCoilMaxFlowRate(state, "Coil:Cooling:Water:DetailedGeometry", ventSlab.coolingCoilName, ErrorsFound);
-                    } else if (ventSlab.cCoilType == CoolingCoilType::HXAssisted) {
+                    } else if (ventSlab.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
                         ventSlab.MaxVolColdWaterFlow =
                             GetHXAssistedCoilFlowRate(state, "CoilSystem:Cooling:Water:HeatExchangerAssisted", ventSlab.coolingCoilName, ErrorsFound);
                     }
@@ -1196,50 +1181,50 @@ namespace VentilatedSlab {
                 }
             }
 
-            switch (ventSlab.coilOption) {
-            case CoilType::Both: { // 'HeatingAndCooling'
+            switch (ventSlab.coilsUsed) {
+            case CoilsUsed::Both: { // 'HeatingAndCooling'
                 // Add cooling coil to component sets array when present
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     ventSlab.Name,
-                                                     state.dataIPShortCut->cAlphaArgs(30),
-                                                     state.dataIPShortCut->cAlphaArgs(31),
-                                                     state.dataIPShortCut->cAlphaArgs(24),
-                                                     "UNDEFINED");
+                Node::SetUpCompSets(state,
+                                    CurrentModuleObject,
+                                    ventSlab.Name,
+                                    state.dataIPShortCut->cAlphaArgs(30),
+                                    state.dataIPShortCut->cAlphaArgs(31),
+                                    state.dataIPShortCut->cAlphaArgs(24),
+                                    "UNDEFINED");
 
                 // Add heating coil to component sets array when cooling coil present
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     ventSlab.Name,
-                                                     state.dataIPShortCut->cAlphaArgs(27),
-                                                     state.dataIPShortCut->cAlphaArgs(28),
-                                                     "UNDEFINED",
-                                                     state.dataIPShortCut->cAlphaArgs(19));
+                Node::SetUpCompSets(state,
+                                    CurrentModuleObject,
+                                    ventSlab.Name,
+                                    state.dataIPShortCut->cAlphaArgs(27),
+                                    state.dataIPShortCut->cAlphaArgs(28),
+                                    "UNDEFINED",
+                                    state.dataIPShortCut->cAlphaArgs(19));
                 break;
             }
-            case CoilType::Heating: { // 'Heating'
+            case CoilsUsed::Heating: { // 'Heating'
                 // Add heating coil to component sets array when no cooling coil present
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     ventSlab.Name,
-                                                     state.dataIPShortCut->cAlphaArgs(27),
-                                                     state.dataIPShortCut->cAlphaArgs(28),
-                                                     state.dataIPShortCut->cAlphaArgs(24),
-                                                     state.dataIPShortCut->cAlphaArgs(19));
+                Node::SetUpCompSets(state,
+                                    CurrentModuleObject,
+                                    ventSlab.Name,
+                                    state.dataIPShortCut->cAlphaArgs(27),
+                                    state.dataIPShortCut->cAlphaArgs(28),
+                                    state.dataIPShortCut->cAlphaArgs(24),
+                                    state.dataIPShortCut->cAlphaArgs(19));
                 break;
             }
-            case CoilType::Cooling: { // 'Cooling'
+            case CoilsUsed::Cooling: { // 'Cooling'
                 // Add cooling coil to component sets array when no heating coil present
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     ventSlab.Name,
-                                                     state.dataIPShortCut->cAlphaArgs(30),
-                                                     state.dataIPShortCut->cAlphaArgs(31),
-                                                     state.dataIPShortCut->cAlphaArgs(24),
-                                                     state.dataIPShortCut->cAlphaArgs(19));
+                Node::SetUpCompSets(state,
+                                    CurrentModuleObject,
+                                    ventSlab.Name,
+                                    state.dataIPShortCut->cAlphaArgs(30),
+                                    state.dataIPShortCut->cAlphaArgs(31),
+                                    state.dataIPShortCut->cAlphaArgs(24),
+                                    state.dataIPShortCut->cAlphaArgs(19));
                 break;
             }
-            case CoilType::None:
+            case CoilsUsed::None:
             default:
                 break;
             }
@@ -1799,9 +1784,6 @@ namespace VentilatedSlab {
                     }
                     CoolingAirFlowSizer sizingCoolingAirFlow;
                     std::string stringOverride = "Maximum Air Flow Rate [m3/s]";
-                    if (state.dataGlobal->isEpJSON) {
-                        stringOverride = "maximum_air_flow_rate [m3/s]";
-                    }
                     sizingCoolingAirFlow.overrideSizingString(stringOverride);
                     // sizingCoolingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                     sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
@@ -1821,9 +1803,6 @@ namespace VentilatedSlab {
                     TempSize = DataSizing::AutoSize;
                     CoolingAirFlowSizer sizingCoolingAirFlow;
                     std::string stringOverride = "Maximum Air Flow Rate [m3/s]";
-                    if (state.dataGlobal->isEpJSON) {
-                        stringOverride = "maximum_air_flow_rate [m3/s]";
-                    }
                     sizingCoolingAirFlow.overrideSizingString(stringOverride);
                     // sizingCoolingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                     sizingCoolingAirFlow.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
@@ -1998,7 +1977,7 @@ namespace VentilatedSlab {
         if (ventSlab.MaxVolHotWaterFlow == DataSizing::AutoSize) {
             IsAutoSize = true;
         }
-        if (ventSlab.hCoilType == HeatingCoilType::Water) {
+        if (ventSlab.heatCoilType == HVAC::CoilType::HeatingWater) {
 
             if (CurZoneEqNum > 0) {
                 if (!IsAutoSize && !state.dataSize->ZoneSizingRunDone) {
@@ -2125,7 +2104,7 @@ namespace VentilatedSlab {
         if (ventSlab.MaxVolHotSteamFlow == DataSizing::AutoSize) {
             IsAutoSize = true;
         }
-        if (ventSlab.hCoilType == HeatingCoilType::Steam) {
+        if (ventSlab.heatCoilType == HVAC::CoilType::HeatingSteam) {
 
             if (CurZoneEqNum > 0) {
                 if (!IsAutoSize && !state.dataSize->ZoneSizingRunDone) {
@@ -2257,7 +2236,7 @@ namespace VentilatedSlab {
                 }
             } else {
                 CheckZoneSizing(state, cMO_VentilatedSlab, ventSlab.Name);
-                if (ventSlab.cCoilType == CoolingCoilType::HXAssisted) {
+                if (ventSlab.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
                     CoolingCoilName =
                         HVACHXAssistedCoolingCoil::GetHXDXCoilName(state, ventSlab.coolingCoilTypeCh, ventSlab.coolingCoilName, ErrorsFound);
                     CoolingCoilType =
@@ -2376,7 +2355,7 @@ namespace VentilatedSlab {
             }
         }
 
-        if (ventSlab.cCoilType == CoolingCoilType::HXAssisted) {
+        if (ventSlab.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
             CoolingCoilName = HVACHXAssistedCoolingCoil::GetHXDXCoilName(state, ventSlab.coolingCoilTypeCh, ventSlab.coolingCoilName, ErrorsFound);
             CoolingCoilType = HVACHXAssistedCoolingCoil::GetHXCoilType(state, ventSlab.coolingCoilTypeCh, ventSlab.coolingCoilName, ErrorsFound);
         } else {
@@ -2493,25 +2472,25 @@ namespace VentilatedSlab {
         int RadSurfNum;        // DO loop counter for the surfaces that comprise a particular radiant system
         static std::string const CurrentModuleObject("ZoneHVAC:VentilatedSlab");
 
-        switch (ventSlab.coilOption) {
-        case CoilType::Both: {
+        switch (ventSlab.coilsUsed) {
+        case CoilsUsed::Both: {
 
-            switch (ventSlab.hCoilType) {
-            case HeatingCoilType::Water: {
+            switch (ventSlab.heatCoilType) {
+            case HVAC::CoilType::HeatingWater: {
                 WaterCoils::CheckWaterCoilSchedule(state, ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
             }
-            case HeatingCoilType::Steam: {
+            case HVAC::CoilType::HeatingSteam: {
                 SteamCoils::CheckSteamCoilSchedule(
                     state, "Coil:Heating:Steam", ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
             }
-            case HeatingCoilType::Electric: {
+            case HVAC::CoilType::HeatingElectric: {
                 HeatingCoils::CheckHeatingCoilSchedule(
                     state, "Coil:Heating:Electric", ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
             }
-            case HeatingCoilType::Gas: {
+            case HVAC::CoilType::HeatingGasOrOtherFuel: {
                 HeatingCoils::CheckHeatingCoilSchedule(
                     state, "Coil:Heating:Fuel", ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
@@ -2520,13 +2499,13 @@ namespace VentilatedSlab {
                 break;
             }
 
-            switch (ventSlab.cCoilType) {
-            case CoolingCoilType::WaterCooling:
-            case CoolingCoilType::DetailedCooling: {
+            switch (ventSlab.coolCoilType) {
+            case HVAC::CoilType::CoolingWater:
+            case HVAC::CoilType::CoolingWaterDetailed: {
                 WaterCoils::CheckWaterCoilSchedule(state, ventSlab.coolingCoilName, ventSlab.coolingCoilSchedValue, ventSlab.coolingCoil_Index);
                 break;
             }
-            case CoolingCoilType::HXAssisted: {
+            case HVAC::CoilType::CoolingWaterHXAssisted: {
                 HVACHXAssistedCoolingCoil::CheckHXAssistedCoolingCoilSchedule(state,
                                                                               "CoilSystem:Cooling:Water:HeatExchangerAssisted",
                                                                               ventSlab.coolingCoilName,
@@ -2539,24 +2518,25 @@ namespace VentilatedSlab {
             }
             break;
         }
-        case CoilType::Heating: {
 
-            switch (ventSlab.hCoilType) {
-            case HeatingCoilType::Water: {
+        case CoilsUsed::Heating: {
+
+            switch (ventSlab.heatCoilType) {
+            case HVAC::CoilType::HeatingWater: {
                 WaterCoils::CheckWaterCoilSchedule(state, ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
             }
-            case HeatingCoilType::Steam: {
+            case HVAC::CoilType::HeatingSteam: {
                 SteamCoils::CheckSteamCoilSchedule(
                     state, "Coil:Heating:Steam", ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
             }
-            case HeatingCoilType::Electric: {
+            case HVAC::CoilType::HeatingElectric: {
                 HeatingCoils::CheckHeatingCoilSchedule(
                     state, "Coil:Heating:Electric", ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
             }
-            case HeatingCoilType::Gas: {
+            case HVAC::CoilType::HeatingGasOrOtherFuel: {
                 HeatingCoils::CheckHeatingCoilSchedule(
                     state, "Coil:Heating:Fuel", ventSlab.heatingCoilName, ventSlab.heatingCoilSchedValue, ventSlab.heatingCoil_Index);
                 break;
@@ -2566,15 +2546,16 @@ namespace VentilatedSlab {
             }
             break;
         }
-        case CoilType::Cooling: {
 
-            switch (ventSlab.cCoilType) {
-            case CoolingCoilType::WaterCooling:
-            case CoolingCoilType::DetailedCooling: {
+        case CoilsUsed::Cooling: {
+
+            switch (ventSlab.coolCoilType) {
+            case HVAC::CoilType::CoolingWater:
+            case HVAC::CoilType::CoolingWaterDetailed: {
                 WaterCoils::CheckWaterCoilSchedule(state, ventSlab.coolingCoilName, ventSlab.coolingCoilSchedValue, ventSlab.coolingCoil_Index);
                 break;
             }
-            case CoolingCoilType::HXAssisted: {
+            case HVAC::CoilType::CoolingWaterHXAssisted: {
                 HVACHXAssistedCoolingCoil::CheckHXAssistedCoolingCoilSchedule(state,
                                                                               "CoilSystem:Cooling:Water:HeatExchangerAssisted",
                                                                               ventSlab.coolingCoilName,
@@ -2586,7 +2567,7 @@ namespace VentilatedSlab {
                 break;
             }
         }
-        case CoilType::None:
+        case CoilsUsed::None:
         default:
             break;
         }
@@ -2695,24 +2676,24 @@ namespace VentilatedSlab {
                     std::string SlabName = ventSlab.SurfaceName(RadSurfNum);
                     std::string MSlabIn = ventSlab.SlabIn(RadSurfNum);
                     std::string MSlabOut = ventSlab.SlabOut(RadSurfNum);
-                    ventSlab.MSlabInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                               MSlabIn,
-                                                                               ErrorsFound,
-                                                                               DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                               SlabName,
-                                                                               DataLoopNode::NodeFluidType::Air,
-                                                                               DataLoopNode::ConnectionType::Internal,
-                                                                               NodeInputManager::CompFluidStream::Primary,
-                                                                               DataLoopNode::ObjectIsNotParent);
-                    ventSlab.MSlabOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                MSlabOut,
-                                                                                ErrorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                                SlabName,
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Internal,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                DataLoopNode::ObjectIsNotParent);
+                    ventSlab.MSlabInNode = Node::GetOnlySingleNode(state,
+                                                                   MSlabIn,
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                   SlabName,
+                                                                   Node::FluidType::Air,
+                                                                   Node::ConnectionType::Internal,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
+                    ventSlab.MSlabOutNode = Node::GetOnlySingleNode(state,
+                                                                    MSlabOut,
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                    SlabName,
+                                                                    Node::FluidType::Air,
+                                                                    Node::ConnectionType::Internal,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
                     int MSlabInletNode = ventSlab.MSlabInNode;
                     int MSlabOutletNode = ventSlab.MSlabOutNode;
 
@@ -2769,12 +2750,12 @@ namespace VentilatedSlab {
                 // On the first HVAC iteration the system values are given to the controller, but after that
                 // the demand limits are in place and there needs to be feedback to the Zone Equipment
 
-                if (!FirstHVACIteration && ventSlab.hCoilType == HeatingCoilType::Water) {
+                if (!FirstHVACIteration && ventSlab.heatCoilType == HVAC::CoilType::HeatingWater) {
                     MaxWaterFlow = state.dataLoopNodes->Node(ControlNode).MassFlowRateMaxAvail;
                     MinWaterFlow = state.dataLoopNodes->Node(ControlNode).MassFlowRateMinAvail;
                 }
 
-                if (!FirstHVACIteration && ventSlab.hCoilType == HeatingCoilType::Steam) {
+                if (!FirstHVACIteration && ventSlab.heatCoilType == HVAC::CoilType::HeatingSteam) {
                     MaxSteamFlow = state.dataLoopNodes->Node(ControlNode).MassFlowRateMaxAvail;
                     MinSteamFlow = state.dataLoopNodes->Node(ControlNode).MassFlowRateMinAvail;
                 }
@@ -2954,9 +2935,9 @@ namespace VentilatedSlab {
                         (state.dataLoopNodes->Node(OutletNode).MassFlowRate) * CpFan * (RadInTemp - state.dataLoopNodes->Node(FanOutletNode).Temp);
 
                     // Setup the coil configuration
-                    switch (ventSlab.hCoilType) {
+                    switch (ventSlab.heatCoilType) {
 
-                    case HeatingCoilType::Water: {
+                    case HVAC::CoilType::HeatingWater: {
                         // control water flow to obtain output matching QZnReq
 
                         ControlCompOutput(state,
@@ -2979,9 +2960,9 @@ namespace VentilatedSlab {
                                           ventSlab.HWPlantLoc);
                         break;
                     }
-                    case HeatingCoilType::Gas:
-                    case HeatingCoilType::Electric:
-                    case HeatingCoilType::Steam: {
+                    case HVAC::CoilType::HeatingGasOrOtherFuel:
+                    case HVAC::CoilType::HeatingElectric:
+                    case HVAC::CoilType::HeatingSteam: {
 
                         CalcVentilatedSlabComps(state, Item, FirstHVACIteration, QUnitOut);
                         break;
@@ -3303,7 +3284,7 @@ namespace VentilatedSlab {
         state.dataFans->fans(ventSlab.Fan_Index)->simulate(state, FirstHVACIteration, _, _);
 
         if ((ventSlab.coolingCoilPresent) && (ventSlab.coolingCoilSchedValue >= 0.0)) {
-            if (ventSlab.cCoilType == CoolingCoilType::HXAssisted) {
+            if (ventSlab.coolCoilType == HVAC::CoilType::CoolingWaterHXAssisted) {
                 HVACHXAssistedCoolingCoil::SimHXAssistedCoolingCoil(state,
                                                                     ventSlab.coolingCoilName,
                                                                     FirstHVACIteration,
@@ -3318,14 +3299,14 @@ namespace VentilatedSlab {
 
         if ((ventSlab.heatingCoilPresent) && (ventSlab.heatingCoilSchedValue >= 0.0)) {
 
-            switch (ventSlab.hCoilType) {
+            switch (ventSlab.heatCoilType) {
 
-            case HeatingCoilType::Water: {
+            case HVAC::CoilType::HeatingWater: {
 
                 WaterCoils::SimulateWaterCoilComponents(state, ventSlab.heatingCoilName, FirstHVACIteration, ventSlab.heatingCoil_Index);
                 break;
             }
-            case HeatingCoilType::Steam: {
+            case HVAC::CoilType::HeatingSteam: {
 
                 if (!state.dataVentilatedSlab->HCoilOn) {
                     QCoilReq = 0.0;
@@ -3344,8 +3325,8 @@ namespace VentilatedSlab {
                 SteamCoils::SimulateSteamCoilComponents(state, ventSlab.heatingCoilName, FirstHVACIteration, ventSlab.heatingCoil_Index, QCoilReq);
                 break;
             }
-            case HeatingCoilType::Electric:
-            case HeatingCoilType::Gas: {
+            case HVAC::CoilType::HeatingElectric:
+            case HVAC::CoilType::HeatingGasOrOtherFuel: {
 
                 if (!state.dataVentilatedSlab->HCoilOn) {
                     QCoilReq = 0.0;
@@ -4025,24 +4006,24 @@ namespace VentilatedSlab {
                     std::string SlabName = ventSlab.SurfaceName(RadSurfNum);
                     std::string MSlabIn = ventSlab.SlabIn(RadSurfNum);
                     std::string MSlabOut = ventSlab.SlabOut(RadSurfNum);
-                    ventSlab.MSlabInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                               MSlabIn,
-                                                                               ErrorsFound,
-                                                                               DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                               SlabName,
-                                                                               DataLoopNode::NodeFluidType::Air,
-                                                                               DataLoopNode::ConnectionType::Internal,
-                                                                               NodeInputManager::CompFluidStream::Primary,
-                                                                               DataLoopNode::ObjectIsNotParent);
-                    ventSlab.MSlabOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                                MSlabOut,
-                                                                                ErrorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::ZoneHVACVentilatedSlab,
-                                                                                SlabName,
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Internal,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                DataLoopNode::ObjectIsNotParent);
+                    ventSlab.MSlabInNode = Node::GetOnlySingleNode(state,
+                                                                   MSlabIn,
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                   SlabName,
+                                                                   Node::FluidType::Air,
+                                                                   Node::ConnectionType::Internal,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
+                    ventSlab.MSlabOutNode = Node::GetOnlySingleNode(state,
+                                                                    MSlabOut,
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
+                                                                    SlabName,
+                                                                    Node::FluidType::Air,
+                                                                    Node::ConnectionType::Internal,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
                     int MSlabInletNode = ventSlab.MSlabInNode;
                     int MSlabOutletNode = ventSlab.MSlabOutNode;
                     SurfNum = ventSlab.SurfacePtr(RadSurfNum);
