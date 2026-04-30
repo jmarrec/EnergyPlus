@@ -1129,6 +1129,7 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     Real64 const QRad_baseline = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
     Real64 const CondFlux_baseline = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
 
+    EXPECT_EQ(surfFD.enetActuatorReport, 0.0);
     // With sky at -20C and surface at 20C, baseline has large net outgoing radiation → QRad negative
     EXPECT_LT(QRad_baseline, 0.0);
 
@@ -1158,6 +1159,7 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     Real64 const QRad_enet0 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
     Real64 const CondFlux_enet0 = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
 
+    EXPECT_EQ(surfFD.enetActuatorReport, 0.0);
     // With Enet=0, no sky cooling, so surface should be warmer than baseline (where sky cools it)
     EXPECT_GT(TDT_enet0, TDT_baseline);
     // Sky at -20C vs surface at 20C → baseline has large outgoing radiation; Enet=0 removes that sky term
@@ -1191,6 +1193,7 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     Real64 const QRad_enetNeg200 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
     Real64 const CondFlux_enetNeg200 = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
 
+    EXPECT_EQ(surfFD.enetActuatorReport, -200.0);
     // Enet=-200 is much stronger cooling than the default sky term, so surface should be colder
     EXPECT_LT(TDT_enetNeg200, TDT_baseline);
 
@@ -1220,6 +1223,7 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     Real64 const QRad_enetPos200 = state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1);
     Real64 const CondFlux_enetPos200 = state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1);
 
+    EXPECT_EQ(surfFD.enetActuatorReport, 200.0);
     // Enet=+200 W/m² net incoming → QRad sign flips positive (surface gains radiation)
     EXPECT_GT(QRad_enetPos200, 0.0);
 
@@ -1238,7 +1242,8 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
 
     // --- Sub-case 5: Actuator toggled back OFF → recovers baseline ---
     surfFD.enetActuator.isActuated = false;
-    surfFD.enetActuator.actuatedValue = 0.0;
+    // EMS Null clears the actuation flag but leaves the last numeric value in place.
+    surfFD.enetActuator.actuatedValue = 200.0;
     TDT_arr = 20.0; // reset
 
     ExteriorBCEqns(*state,
@@ -1261,6 +1266,7 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride)
     EXPECT_NEAR(TDT_arr(nodeIdx), TDT_baseline, 1e-10);
     EXPECT_NEAR(state->dataHeatBalSurf->SurfQdotRadOutRepPerArea(1), QRad_baseline, 1e-10);
     EXPECT_NEAR(state->dataHeatBalSurf->SurfOpaqOutFaceCondFlux(1), CondFlux_baseline, 1e-10);
+    EXPECT_EQ(surfFD.enetActuatorReport, 0.0);
 }
 
 TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_EnetActuatorOverride_CrankNicolson)

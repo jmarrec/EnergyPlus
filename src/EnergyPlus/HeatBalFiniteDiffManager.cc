@@ -1051,7 +1051,7 @@ namespace HeatBalFiniteDiffManager {
                     SetupOutputVariable(state,
                                         "CondFD EMS Sky Longwave Radiation Override Heat Flux",
                                         Constant::Units::W_m2,
-                                        SurfaceFD(SurfNum).enetActuator.actuatedValue,
+                                        SurfaceFD(SurfNum).enetActuatorReport,
                                         OutputProcessor::TimeStepType::Zone,
                                         OutputProcessor::StoreType::Average,
                                         state.dataSurface->Surface(SurfNum).Name);
@@ -1612,6 +1612,8 @@ namespace HeatBalFiniteDiffManager {
 
         auto &s_hbfd = state.dataHeatBalFiniteDiffMgr;
         auto const &surface(state.dataSurface->Surface(Surf));
+        auto &surfaceFD = s_hbfd->SurfaceFD(Surf);
+        surfaceFD.enetActuatorReport = surfaceFD.enetActuator.isActuated ? surfaceFD.enetActuator.actuatedValue : 0.0;
         int const surface_ExtBoundCond(surface.ExtBoundCond);
 
         Real64 Tsky;
@@ -1643,7 +1645,6 @@ namespace HeatBalFiniteDiffManager {
             if (surface_ExtBoundCond == Surf) { // adiabatic surface, PT added since it is not the same as interzone wall
                 // as Outside Boundary Condition Object can be left blank.
 
-                auto &surfaceFD = s_hbfd->SurfaceFD(Surf);
                 InteriorBCEqns(state,
                                Delt,
                                NodeIn,
