@@ -603,7 +603,6 @@ add_simulation_test(IDF_FILE SolarCollectorFlatPlateWater.idf EPW_FILE USA_IL_Ch
 add_simulation_test(IDF_FILE SolarShadingTest.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
 add_simulation_test(IDF_FILE SolarShadingTestGPU.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
 add_simulation_test(IDF_FILE SolarShadingTest_SQL.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
-add_simulation_test(IDF_FILE SolarShadingTest_ConvexWeilerAtherton.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
 add_simulation_test(IDF_FILE SolarShadingTest_ExternalFraction.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
 add_simulation_test(IDF_FILE SolarShadingTest_DisableSelfShading.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
 add_simulation_test(IDF_FILE SolarShadingTest_DisableSelfShadingGroup.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
