@@ -213,12 +213,6 @@ namespace Furnaces {
             state.dataFurnaces->GetFurnaceInputFlag = false;
         }
 
-        // Save the current AFNLoopHeatingCoilMaxRTF for comparison with the one calculated below
-        Real64 refAFNLoopHeatingCoilMaxRTF(0.0);
-        if (state.afn->distribution_simulated) {
-            refAFNLoopHeatingCoilMaxRTF = state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF;
-        }
-
         // Find the correct Furnace
         if (CompIndex == 0) {
             FurnaceNum = Util::FindItemInList(FurnaceName, state.dataFurnaces->Furnace);
@@ -705,8 +699,6 @@ namespace Furnaces {
                 ShowContinueError(state, EnergyPlus::format("...occurs for {}", thisFurnace.Name));
                 errorFound = false;
             }
-            state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF =
-                max(refAFNLoopHeatingCoilMaxRTF, heatingCoilRTF, suppHeatingCoilRTF);
         }
 
         // Reset OnOffFanPartLoadFraction to 1 in case another on/off fan is called without a part-load curve
@@ -5855,11 +5847,6 @@ namespace Furnaces {
                 // either way, it seems these two should be using the same parameters.
                 SetOnOffMassFlowRate(state, FurnaceNum, AirLoopNum, OnOffAirFlowRatio, fanOp, ZoneLoad, MoistureLoad, PartLoadRatio);
             }
-        }
-
-        // AirflowNetwork global variable
-        if (state.afn->distribution_simulated) {
-            state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF = 0.0;
         }
     }
 
