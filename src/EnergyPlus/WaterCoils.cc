@@ -4629,9 +4629,7 @@ void ReportWaterCoil(EnergyPlusData &state, int const CoilNum)
     auto &waterCoil = state.dataWaterCoils->WaterCoil(CoilNum);
     if (waterCoil.reportCoilFinalSizes) {
         if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingHVACSizingSimulations && !state.dataGlobal->DoingSizing) {
-            std::string coilObjClassName;
             if (waterCoil.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterSimpleHeating) {
-                coilObjClassName = "Coil:Heating:Water";
                 ReportCoilSelection::setCoilFinalSizes(state,
                                                        waterCoil.coilReportNum,
                                                        waterCoil.DesWaterHeatingCoilRate,
@@ -4640,7 +4638,6 @@ void ReportWaterCoil(EnergyPlusData &state, int const CoilNum)
                                                        waterCoil.MaxWaterVolFlowRate);
                 waterCoil.reportCoilFinalSizes = false;
             } else if (waterCoil.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling) {
-                coilObjClassName = "Coil:Cooling:Water:DetailedGeometry";
                 ReportCoilSelection::setCoilFinalSizes(state,
                                                        waterCoil.coilReportNum,
                                                        waterCoil.DesWaterCoolingCoilRate,
@@ -4649,7 +4646,6 @@ void ReportWaterCoil(EnergyPlusData &state, int const CoilNum)
                                                        waterCoil.MaxWaterVolFlowRate);
                 waterCoil.reportCoilFinalSizes = false;
             } else if (waterCoil.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterCooling) {
-                coilObjClassName = "Coil:Cooling:Water";
                 ReportCoilSelection::setCoilFinalSizes(state,
                                                        waterCoil.coilReportNum,
                                                        waterCoil.DesWaterCoolingCoilRate,

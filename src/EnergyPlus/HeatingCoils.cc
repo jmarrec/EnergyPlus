@@ -2830,8 +2830,6 @@ namespace HeatingCoils {
 
         heatingCoil.ParasiticFuelConsumption = heatingCoil.ParasiticFuelRate * TimeStepSysSec;
 
-        std::string coilObjClassName = std::string{HVAC::coilTypeNames[(int)heatingCoil.coilType]};
-
         if (heatingCoil.reportCoilFinalSizes) {
             if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingHVACSizingSimulations && !state.dataGlobal->DoingSizing) {
                 ReportCoilSelection::setCoilFinalSizes(

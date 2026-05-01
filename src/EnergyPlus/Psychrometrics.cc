@@ -1311,8 +1311,8 @@ namespace Psychrometrics {
         // na
 
         // FUNCTION LOCAL VARIABLE DECLARATIONS:
-        Real64 tSat; // Water temperature guess
-        int iter(0); // Iteration counter
+        Real64 tSat;                  // Water temperature guess
+        [[maybe_unused]] int iter(0); // Iteration counter
 
 #ifdef EP_psych_stats
         ++state.dataPsychCache->NumTimesCalled[static_cast<int>(PsychrometricFunction::TsatFnPb)];
