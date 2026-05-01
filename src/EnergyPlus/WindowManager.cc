@@ -4609,7 +4609,6 @@ namespace Window {
             for (int i = 1; i < NMix; ++i) {
                 auto const &wmgas = wm->gaps[iGap].gases[i];
                 fvis[i] = wmgas.vis.c0 + wmgas.vis.c1 * tmean + wmgas.vis.c2 * tmean_2;
-                fdens[i] = pres * wmgas.wght / (gaslaw * tmean);
                 molmix += frct[i] * wmgas.wght; // eq. 56
                 mukpdwn[i] = 1.0;               // initialize denominator of eq. 60
             }
