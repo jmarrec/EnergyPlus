@@ -143,12 +143,14 @@ namespace HybridEvapCoolingModel {
         Maximum_Outdoor_Air_Relative_Humidity = max;
         return true;
     }
-    bool CMode::InitializeReturnAirTemperatureConstraints(Real64 min, Real64 max)
+    bool CMode::InitializeReturnAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank)
     {
         // will not be considered when the return air temperature is below the value in this field.
         // If this field is blank, there will be no lower constraint on return air temperature
         Minimum_Return_Air_Temperature = min;
         Maximum_Return_Air_Temperature = max;
+        Minimum_Return_Air_Temperature_Blank = minBlank;
+        Maximum_Return_Air_Temperature_Blank = maxBlank;
         return true;
     }
     bool CMode::InitializeReturnAirHumidityRatioConstraints(Real64 min, Real64 max)
@@ -398,11 +400,21 @@ namespace HybridEvapCoolingModel {
                           Array1D<Real64> Numbers,
                           Array1D_string cNumericFields,
                           Array1D<bool> lAlphaBlanks,
+                          Array1D<bool> lNumericBlanks,
                           std::string cCurrentModuleObject)
     {
         CMode newMode;
-        bool error = newMode.ParseMode(
-            state, ModeCounter, &OperatingModes, ScalingFactor, Alphas, cAlphaFields, Numbers, cNumericFields, lAlphaBlanks, cCurrentModuleObject);
+        bool error = newMode.ParseMode(state,
+                                       ModeCounter,
+                                       &OperatingModes,
+                                       ScalingFactor,
+                                       Alphas,
+                                       cAlphaFields,
+                                       Numbers,
+                                       cNumericFields,
+                                       lAlphaBlanks,
+                                       lNumericBlanks,
+                                       cCurrentModuleObject);
         ModeCounter++;
         return error;
     }
@@ -416,6 +428,7 @@ namespace HybridEvapCoolingModel {
                           Array1D<Real64> Numbers,
                           Array1D_string cNumericFields,
                           Array1D<bool> lAlphaBlanks,
+                          Array1D<bool> lNumericBlanks,
                           std::string cCurrentModuleObject)
     {
         // SUBROUTINE INFORMATION:
@@ -620,7 +633,8 @@ namespace HybridEvapCoolingModel {
         inter_Number = inter_Number + 2;
         // N14, \field Mode1 Minimum Return Air Temperature
         // N15, \field Mode1 Maximum Return Air Temperature
-        ok = InitializeReturnAirTemperatureConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
+        ok = InitializeReturnAirTemperatureConstraints(
+            Numbers(inter_Number), Numbers(inter_Number + 1), lNumericBlanks(inter_Number), lNumericBlanks(inter_Number + 1));
         if (!ok) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
@@ -674,7 +688,7 @@ namespace HybridEvapCoolingModel {
         return ErrorsFound;
     }
 
-    bool CMode::MeetsOAEnvConstraints(Real64 Tosa, Real64 Wosa, Real64 RHosa)
+    bool CMode::MeetsConstraints(Real64 Tosa, Real64 Wosa, Real64 RHosa, Real64 Tra, Real64 Wra, Real64 RHra)
     {
         // SUBROUTINE INFORMATION:
         //       AUTHOR         Spencer Maxwell Dutton
@@ -683,7 +697,7 @@ namespace HybridEvapCoolingModel {
         //       RE-ENGINEERED  na
 
         // PURPOSE OF THIS SUBROUTINE:
-        // To check to see if this mode of operation is able to operate given the specified outdoor environmental conditions.
+        // To check to see if this mode of operation is able to operate given the specified environmental conditions.
 
         // METHODOLOGY EMPLOYED:
         // Constraining certain modes to only operate over certain environmental conditions gives the user greater control in which
@@ -692,26 +706,16 @@ namespace HybridEvapCoolingModel {
         // REFERENCES:
         // na
 
-        // Using/Aliasing
-        bool OATempConstraintmet = false;
-        bool OAHRConstraintmet = false;
-        bool OARHConstraintmet = false;
+        bool OATempConstraintMet = (Tosa >= Minimum_Outdoor_Air_Temperature && Tosa <= Maximum_Outdoor_Air_Temperature);
+        bool OAHRConstraintMet = (Wosa >= Minimum_Outdoor_Air_Humidity_Ratio && Wosa <= Maximum_Outdoor_Air_Humidity_Ratio);
+        bool OARHConstraintMet = (RHosa >= Minimum_Outdoor_Air_Relative_Humidity && RHosa <= Maximum_Outdoor_Air_Relative_Humidity);
 
-        if (Tosa >= Minimum_Outdoor_Air_Temperature && Tosa <= Maximum_Outdoor_Air_Temperature) {
-            OATempConstraintmet = true;
-        }
+        bool RATempConstraintMet = (Minimum_Return_Air_Temperature_Blank || Tra >= Minimum_Return_Air_Temperature) &&
+                                   (Minimum_Return_Air_Temperature_Blank || Tra <= Maximum_Return_Air_Temperature);
+        bool RAHRConstraintMet = (Wra >= Minimum_Return_Air_Humidity_Ratio && Wra <= Maximum_Return_Air_Humidity_Ratio);
+        bool RARHConstraintMet = (RHra >= Minimum_Return_Air_Relative_Humidity && RHra <= Maximum_Return_Air_Relative_Humidity);
 
-        if (Wosa >= Minimum_Outdoor_Air_Humidity_Ratio && Wosa <= Maximum_Outdoor_Air_Humidity_Ratio) {
-            OAHRConstraintmet = true;
-        }
-
-        if (RHosa >= Minimum_Outdoor_Air_Relative_Humidity && RHosa <= Maximum_Outdoor_Air_Relative_Humidity) {
-            OARHConstraintmet = true;
-        }
-        if (OATempConstraintmet && OAHRConstraintmet && OARHConstraintmet) {
-            return true;
-        }
-        return false;
+        return OATempConstraintMet && OAHRConstraintMet && OARHConstraintMet && RATempConstraintMet && RAHRConstraintMet && RARHConstraintMet;
     }
 
     bool Model::MeetsSupplyAirTOC([[maybe_unused]] EnergyPlusData &state, Real64 Tsupplyair)
@@ -1294,7 +1298,7 @@ namespace HybridEvapCoolingModel {
 
             // Check that in this mode the //Outdoor Air Relative Humidity(0 - 100 % )    //Outdoor Air Humidity Ratio(g / g)//Outdoor Air
             // Temperature(degC)
-            if (Mode.MeetsOAEnvConstraints(StepIns.Tosa, Wosa, 100 * StepIns.RHosa)) {
+            if (Mode.MeetsConstraints(StepIns.Tosa, Wosa, 100 * StepIns.RHosa, StepIns.Tra, Wra, 100 * StepIns.RHra)) {
                 EnvironmentConditionsMet = EnvironmentConditionsMetOnce = true;
             } else {
                 EnvironmentConditionsMet = false;

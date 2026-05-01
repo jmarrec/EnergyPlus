@@ -574,8 +574,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
         "0.03,                    !- Mode1 Maximum Outside Air Humidity Ratio {kgWater/kgDryAir}",
         "0,                       !- Mode1 Minimum Outside Air Relative Humidity {percent}",
         "100,                     !- Mode1 Maximum Outside Air Relative Humidity {percent}",
-        "-20,                     !- Mode1 Minimum Return Air Temperature {C}",
-        "100,                     !- Mode1 Maximum Return Air Temperature {C}",
+        ",                        !- Mode1 Minimum Return Air Temperature {C}",
+        ",                        !- Mode1 Maximum Return Air Temperature {C}",
         "0,                       !- Mode1 Minimum Return Air Humidity Ratio {kgWater/kgDryAir}",
         "0.03,                    !- Mode1 Maximum Return Air Humidity Ratio {kgWater/kgDryAir}",
         "0,                       !- Mode1 Minimum Return Air Relative Humidity {percent}",
@@ -597,6 +597,23 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
     // check if names for HybridUnitaryAC are converted to upper case
     EXPECT_EQ("HYBRID UNIT 1", state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1).Name);
     EXPECT_EQ("HYBRID UNIT 2", state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2).Name);
+    // check return air temperature constraints
+    auto &operatingMode1 = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1).OperatingModes[1];
+    EXPECT_EQ(operatingMode1.Minimum_Return_Air_Temperature_Blank, false);
+    EXPECT_EQ(operatingMode1.Minimum_Return_Air_Temperature, -20);
+    EXPECT_EQ(operatingMode1.Maximum_Return_Air_Temperature_Blank, false);
+    EXPECT_EQ(operatingMode1.Maximum_Return_Air_Temperature, 100);
+    auto &operatingMode2 = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2).OperatingModes[1];
+    EXPECT_EQ(operatingMode2.Minimum_Return_Air_Temperature_Blank, true);
+    EXPECT_EQ(operatingMode2.Minimum_Return_Air_Temperature, 0);
+    EXPECT_EQ(operatingMode2.Maximum_Return_Air_Temperature_Blank, true);
+    EXPECT_EQ(operatingMode2.Maximum_Return_Air_Temperature, 0);
+
+    EXPECT_EQ(operatingMode1.MeetsConstraints(120, 0.05, 101, 120, 0.05, 101), false);
+    EXPECT_EQ(operatingMode1.MeetsConstraints(20, 0.01, 30, 20, 0.01, 30), true);
+
+    EXPECT_EQ(operatingMode2.MeetsConstraints(120, 0.05, 101, 120, 0.05, 101), false);
+    EXPECT_EQ(operatingMode2.MeetsConstraints(20, 0.01, 30, 120, 0.01, 30), true);
 }
 
 TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateMinimumIdfInput)
