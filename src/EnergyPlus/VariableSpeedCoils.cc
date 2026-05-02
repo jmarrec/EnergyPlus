@@ -199,7 +199,6 @@ namespace VariableSpeedCoils {
         // two additional output variables
         varSpeedCoil.SpeedNumReport = SpeedCal;
         varSpeedCoil.SpeedRatioReport = SpeedRatio;
-
     }
 
     void GetVarSpeedCoilInput(EnergyPlusData &state)
