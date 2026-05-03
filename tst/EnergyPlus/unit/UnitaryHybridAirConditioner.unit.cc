@@ -484,8 +484,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
         "Electricity,             !- First fuel type",
         "NaturalGas,              !- Second fuel type",
         "DistrictCooling,         !- Third fuel type",
-        ",                        !- Objective Function Minimizes",
-        "SZ DSOA SPACE 1,        !- Design Specification Outdoor Air Object Name",
+        "Electricity Use,         !- Objective Function Minimizes",
+        "SZ DSOA SPACE 1,         !- Design Specification Outdoor Air Object Name",
         "Mode0 Standby,           !- Mode0 Name",
         ",                        !- Mode0 Supply Air Temperature Lookup Table Name",
         ",                        !- Mode0 Supply Air Humidity Ratio Lookup Table Name",
@@ -546,8 +546,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
         "Electricity,             !- First fuel type",
         "NaturalGas,              !- Second fuel type",
         "DistrictCooling,         !- Third fuel type",
-        "Electricity Use,         !- Objective Function Minimizes",
-        "SZ DSOA SPACE 2,        !- Design Specification Outdoor Air Object Name",
+        "Water Use,               !- Objective Function Minimizes",
+        "SZ DSOA SPACE 2,         !- Design Specification Outdoor Air Object Name",
         "Mode0 Standby,           !- Mode0 Name",
         ",                        !- Mode0 Supply Air Temperature Lookup Table Name",
         ",                        !- Mode0 Supply Air Humidity Ratio Lookup Table Name",
@@ -602,7 +602,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
     EXPECT_EQ(hybridUnit2.Name, "HYBRID UNIT 2");
     // check that objective function was set or defaulted correctly
     EXPECT_EQ(hybridUnit1.ObjectiveFunction, HybridEvapCoolingModel::ObjectiveFunctionType::ElectricityUse);
-    EXPECT_EQ(hybridUnit2.ObjectiveFunction, HybridEvapCoolingModel::ObjectiveFunctionType::ElectricityUse);
+    EXPECT_EQ(hybridUnit2.ObjectiveFunction, HybridEvapCoolingModel::ObjectiveFunctionType::WaterUse);
 }
 
 TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateMinimumIdfInput)
