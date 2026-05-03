@@ -1567,8 +1567,7 @@ namespace HybridEvapCoolingModel {
                         }
                     }
                     if (store_best_attempt) {
-                        if (ObjectiveFunction == ObjectiveFunctionType::ElectricityUse &&
-                            RunFractionTotalFuel < OptimalSetting_RunFractionTotalFuel) {
+                        if (ObjectiveFunction == ObjectiveFunctionType::ElectricityUse) {
                             OptimalSetting_RunFractionTotalFuel = RunFractionTotalFuel;
                             OptimalSetting = thisSetting;
                             DidWePartlyMeetLoad = true;
