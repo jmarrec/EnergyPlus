@@ -146,10 +146,10 @@ class DataExchangeAPIUnitTestFixture : public EnergyPlusFixture
     {
         EnergyPlusFixture::SetUp();
         Real64 timeStep = 1.0;
-        OutputProcessor::SetupTimePointers(*state, OutputProcessor::SOVTimeStepType::Zone, timeStep);
-        OutputProcessor::SetupTimePointers(*state, OutputProcessor::SOVTimeStepType::HVAC, timeStep);
-        *state->dataOutputProcessor->TimeValue.at(OutputProcessor::TimeStepType::Zone).TimeStep = 60;
-        *state->dataOutputProcessor->TimeValue.at(OutputProcessor::TimeStepType::System).TimeStep = 60;
+        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, timeStep);
+        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::System, timeStep);
+        *state->dataOutputProcessor->TimeValue.at(static_cast<int>(OutputProcessor::TimeStepType::Zone)).TimeStep = 60;
+        *state->dataOutputProcessor->TimeValue.at(static_cast<int>(OutputProcessor::TimeStepType::System)).TimeStep = 60;
         state->dataPluginManager->pluginManager = std::make_unique<EnergyPlus::PluginManagement::PluginManager>(*state);
     }
 
@@ -180,33 +180,31 @@ public:
             if (val.meterType) {
                 SetupOutputVariable(*state,
                                     val.varName,
-                                    OutputProcessor::Unit::kg_s,
+                                    Constant::Units::J,
                                     val.value,
-                                    OutputProcessor::SOVTimeStepType::Zone,
-                                    OutputProcessor::SOVStoreType::Summed,
+                                    OutputProcessor::TimeStepType::Zone,
+                                    OutputProcessor::StoreType::Sum,
                                     val.varKey,
-                                    _,
-                                    "ELECTRICITY",
-                                    "HEATING",
-                                    _,
-                                    "System");
+                                    Constant::eResource::Electricity,
+                                    OutputProcessor::Group::HVAC,
+                                    OutputProcessor::EndUseCat::Heating);
             } else {
                 SetupOutputVariable(*state,
                                     val.varName,
-                                    OutputProcessor::Unit::kg_s,
+                                    Constant::Units::kg_s,
                                     val.value,
-                                    OutputProcessor::SOVTimeStepType::Zone,
-                                    OutputProcessor::SOVStoreType::Average,
+                                    OutputProcessor::TimeStepType::Zone,
+                                    OutputProcessor::StoreType::Average,
                                     val.varKey);
             }
         }
         for (auto &val : this->intVariablePlaceholders) {
             SetupOutputVariable(*state,
                                 val.varName,
-                                OutputProcessor::Unit::kg_s,
+                                Constant::Units::kg_s,
                                 val.value,
-                                OutputProcessor::SOVTimeStepType::Zone,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Average,
                                 val.varKey);
         }
     }
