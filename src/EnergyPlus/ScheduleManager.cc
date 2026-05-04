@@ -1173,10 +1173,41 @@ namespace Sched {
             if ((Alphas(10)) == "YES") {
                 ruleSched->applySaturday = true;
             }
-            ruleSched->startMonth = Numbers(2);
-            ruleSched->startDay = Numbers(3);
-            ruleSched->endMonth = Numbers(4);
-            ruleSched->endDay = Numbers(5);
+
+            ruleSched->dateSpecificationType = "DATERANGE";
+            if (!lAlphaBlanks(11)) {
+                ruleSched->dateSpecificationType = Alphas(11);
+            }
+            if (ruleSched->dateSpecificationType == "DATERANGE") {
+                ruleSched->startMonth = 1;
+                if (!lNumericBlanks(2)) {
+                    ruleSched->startMonth = Numbers(2);
+                }
+                ruleSched->startDay = 1;
+                if (!lNumericBlanks(3)) {
+                    ruleSched->startDay = Numbers(3);
+                }
+                ruleSched->endMonth = 12;
+                if (!lNumericBlanks(4)) {
+                    ruleSched->endMonth = Numbers(4);
+                }
+                ruleSched->endDay = 31;
+                if (!lNumericBlanks(5)) {
+                    ruleSched->endDay = Numbers(5);
+                }
+            } else if (ruleSched->dateSpecificationType == "SPECIFICDATES") {
+                if (NumNumbers < 7) { // needs to be at least 7 for a single required specific month/day
+                    ShowSevereCustomAudit(state, eoh, "has no specific dates specified");
+                    ErrorsFound = true;
+                    break;
+                }
+                for (int idx = 6; idx <= NumNumbers; idx += 2) {
+                    int specMonth = int(Numbers(idx));
+                    int specDay = int(Numbers(idx + 1));
+                    int specDate = General::OrdinalDay(specMonth, specDay, 1);
+                    ruleSched->specificDates.push_back(specDate);
+                }
+            }
         }
 
         //!! Get Week Schedules - compact
@@ -2916,12 +2947,22 @@ namespace Sched {
         std::vector<Sched::RuleSchedule *> ruleSchedules;
         for (Sched::RuleSchedule * ruleSchedule : s_sched->ruleSchedules) {
             if (ruleSchedule->scheduleRulesetName == scheduleRulesetName) {
-                int startPointer = General::OrdinalDay(ruleSchedule->startMonth, ruleSchedule->startDay, 1);
-                int endPointer = General::OrdinalDay(ruleSchedule->endMonth, ruleSchedule->endDay, 1);
-                if ((startPointer <= day) && (day <= endPointer)) {
-                    if (ruleSchedule->ruleOrder < ruleOrder) {
-                        ruleSchedules.push_back(ruleSchedule);
-                        ruleOrder = ruleSchedule->ruleOrder;
+                if (ruleSchedule->dateSpecificationType == "DATERANGE") {
+                    int startPointer = General::OrdinalDay(ruleSchedule->startMonth, ruleSchedule->startDay, 1);
+                    int endPointer = General::OrdinalDay(ruleSchedule->endMonth, ruleSchedule->endDay, 1);
+                    if ((startPointer <= day) && (day <= endPointer)) {
+                        if (ruleSchedule->ruleOrder < ruleOrder) {
+                            ruleSchedules.push_back(ruleSchedule);
+                            ruleOrder = ruleSchedule->ruleOrder;
+                        }
+                    }
+                } else if (ruleSchedule->dateSpecificationType == "SPECIFICDATES") {
+                    std::vector<int> specificDates = ruleSchedule->specificDates;
+                    if (std::find(std::begin(specificDates), std::end(specificDates), day) != std::end(specificDates)) {
+                        if (ruleSchedule->ruleOrder < ruleOrder) {
+                            ruleSchedules.push_back(ruleSchedule);
+                            ruleOrder = ruleSchedule->ruleOrder;
+                        }
                     }
                 }
             }

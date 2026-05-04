@@ -260,13 +260,12 @@ namespace Sched {
         bool applyThursday;
         bool applyFriday;
         bool applySaturday;
-        //std::string dateSpecificationType;
+        std::string dateSpecificationType;
         int startMonth;
         int startDay;
         int endMonth;
         int endDay;
-        //int specificMonth;
-        //int specificDay;
+        std::vector<int> specificDates;
 
         RuleSchedule() = default;
         virtual ~RuleSchedule() = default;

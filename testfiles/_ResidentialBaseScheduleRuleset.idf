@@ -2233,81 +2233,6 @@
     clothes dryer exhaust 0 schedule default day;  !- CustomDay2 Schedule:Day Name
 
   Schedule:Week:Daily,
-    cooling season schedule Week Rule - Jan1-Apr28,  !- Name
-    cooling season schedule allday1,  !- Sunday Schedule:Day Name
-    cooling season schedule allday1,  !- Monday Schedule:Day Name
-    cooling season schedule allday1,  !- Tuesday Schedule:Day Name
-    cooling season schedule allday1,  !- Wednesday Schedule:Day Name
-    cooling season schedule allday1,  !- Thursday Schedule:Day Name
-    cooling season schedule allday1,  !- Friday Schedule:Day Name
-    cooling season schedule allday1,  !- Saturday Schedule:Day Name
-    cooling season schedule default day,  !- Holiday Schedule:Day Name
-    cooling season schedule default day,  !- SummerDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- WinterDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- CustomDay1 Schedule:Day Name
-    cooling season schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    cooling season schedule Week Rule - Apr29-May5,  !- Name
-    cooling season schedule allday1,  !- Sunday Schedule:Day Name
-    cooling season schedule allday1,  !- Monday Schedule:Day Name
-    cooling season schedule allday5,  !- Tuesday Schedule:Day Name
-    cooling season schedule allday5,  !- Wednesday Schedule:Day Name
-    cooling season schedule allday5,  !- Thursday Schedule:Day Name
-    cooling season schedule allday5,  !- Friday Schedule:Day Name
-    cooling season schedule allday5,  !- Saturday Schedule:Day Name
-    cooling season schedule default day,  !- Holiday Schedule:Day Name
-    cooling season schedule default day,  !- SummerDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- WinterDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- CustomDay1 Schedule:Day Name
-    cooling season schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    cooling season schedule Week Rule - May6-Oct27,  !- Name
-    cooling season schedule allday5,  !- Sunday Schedule:Day Name
-    cooling season schedule allday5,  !- Monday Schedule:Day Name
-    cooling season schedule allday5,  !- Tuesday Schedule:Day Name
-    cooling season schedule allday5,  !- Wednesday Schedule:Day Name
-    cooling season schedule allday5,  !- Thursday Schedule:Day Name
-    cooling season schedule allday5,  !- Friday Schedule:Day Name
-    cooling season schedule allday5,  !- Saturday Schedule:Day Name
-    cooling season schedule default day,  !- Holiday Schedule:Day Name
-    cooling season schedule default day,  !- SummerDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- WinterDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- CustomDay1 Schedule:Day Name
-    cooling season schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    cooling season schedule Week Rule - Oct28-Nov3,  !- Name
-    cooling season schedule allday5,  !- Sunday Schedule:Day Name
-    cooling season schedule allday5,  !- Monday Schedule:Day Name
-    cooling season schedule allday5,  !- Tuesday Schedule:Day Name
-    cooling season schedule allday5,  !- Wednesday Schedule:Day Name
-    cooling season schedule allday11,  !- Thursday Schedule:Day Name
-    cooling season schedule allday11,  !- Friday Schedule:Day Name
-    cooling season schedule allday11,  !- Saturday Schedule:Day Name
-    cooling season schedule default day,  !- Holiday Schedule:Day Name
-    cooling season schedule default day,  !- SummerDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- WinterDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- CustomDay1 Schedule:Day Name
-    cooling season schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    cooling season schedule Week Rule - Nov4-Dec31,  !- Name
-    cooling season schedule allday11,  !- Sunday Schedule:Day Name
-    cooling season schedule allday11,  !- Monday Schedule:Day Name
-    cooling season schedule allday11,  !- Tuesday Schedule:Day Name
-    cooling season schedule allday11,  !- Wednesday Schedule:Day Name
-    cooling season schedule allday11,  !- Thursday Schedule:Day Name
-    cooling season schedule allday11,  !- Friday Schedule:Day Name
-    cooling season schedule allday11,  !- Saturday Schedule:Day Name
-    cooling season schedule default day,  !- Holiday Schedule:Day Name
-    cooling season schedule default day,  !- SummerDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- WinterDesignDay Schedule:Day Name
-    cooling season schedule default day,  !- CustomDay1 Schedule:Day Name
-    cooling season schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
     dhw fixtures schedule Week Rule - Jan1-Dec31,  !- Name
     dhw fixtures schedule allday1,  !- Sunday Schedule:Day Name
     dhw fixtures schedule allday1,  !- Monday Schedule:Day Name
@@ -2757,35 +2682,6 @@
     1,                       !- Start Day 1
     12,                      !- End Month 1
     31;                      !- End Day 1
-
-  Schedule:Year,
-    cooling season schedule, !- Name
-    Fractional,              !- Schedule Type Limits Name
-    cooling season schedule Week Rule - Jan1-Apr28,  !- Schedule:Week Name 1
-    1,                       !- Start Month 1
-    1,                       !- Start Day 1
-    4,                       !- End Month 1
-    28,                      !- End Day 1
-    cooling season schedule Week Rule - Apr29-May5,  !- Schedule:Week Name 2
-    4,                       !- Start Month 2
-    29,                      !- Start Day 2
-    5,                       !- End Month 2
-    5,                       !- End Day 2
-    cooling season schedule Week Rule - May6-Oct27,  !- Schedule:Week Name 3
-    5,                       !- Start Month 3
-    6,                       !- Start Day 3
-    10,                      !- End Month 3
-    27,                      !- End Day 3
-    cooling season schedule Week Rule - Oct28-Nov3,  !- Schedule:Week Name 4
-    10,                      !- Start Month 4
-    28,                      !- Start Day 4
-    11,                      !- End Month 4
-    3,                       !- End Day 4
-    cooling season schedule Week Rule - Nov4-Dec31,  !- Schedule:Week Name 5
-    11,                      !- Start Month 5
-    4,                       !- Start Day 5
-    12,                      !- End Month 5
-    31;                      !- End Day 5
 
   Schedule:Year,
     dhw fixtures schedule,   !- Name
@@ -4014,6 +3910,103 @@
     Until: 24:00,10.1122222222222; !- <none>
 
 !-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:RULESET ===========
+
+  Schedule:Ruleset,
+    cooling season schedule,                    !- Name
+    Fractional,                                 !- Schedule Type Limits Name
+    cooling season schedule default day;        !- Default Day Schedule Name
+
+  Schedule:Rule,
+    cooling season schedule allday rule,        !- Name
+    cooling season schedule,                    !- Schedule Ruleset Name
+    3,                                          !- Rule Order
+    cooling season schedule allday1,            !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    1,                                          !- Start Month
+    1,                                          !- Start Day
+    4,                                          !- End Month
+    30;                                         !- End Day
+
+  Schedule:Rule,
+    cooling season schedule allday rule 1,      !- Name
+    cooling season schedule,                    !- Schedule Ruleset Name
+    2,                                          !- Rule Order
+    cooling season schedule allday5,            !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    SpecificDates,                              !- Date Specification Type
+    ,                                           !- Start Month
+    ,                                           !- Start Day
+    ,                                           !- End Month
+    ,                                           !- End Day
+    5,                                          !- Specific Month 1
+    1,                                          !- Specific Day 1
+    5,                                          !- Specific Month 2
+    2,                                          !- Specific Day 2
+    5,                                          !- Specific Month 3
+    3,                                          !- Specific Day 3
+    5,                                          !- Specific Month 4
+    4,                                          !- Specific Day 4
+    5,                                          !- Specific Month 5
+    5,                                          !- Specific Day 5
+    5,                                          !- Specific Month 6
+    6,                                          !- Specific Day 6
+    5,                                          !- Specific Month 7
+    7,                                          !- Specific Day 7
+    5,                                          !- Specific Month 8
+    8,                                          !- Specific Day 8
+    5,                                          !- Specific Month 9
+    9,                                          !- Specific Day 9
+    5,                                          !- Specific Month 10
+    10;                                         !- Specific Day 10
+
+  Schedule:Rule,
+    cooling season schedule allday rule 2,      !- Name
+    cooling season schedule,                    !- Schedule Ruleset Name
+    1,                                          !- Rule Order
+    cooling season schedule allday5,            !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    5,                                          !- Start Month
+    11,                                         !- Start Day
+    10,                                         !- End Month
+    31;                                         !- End Day
+
+  Schedule:Rule,
+    cooling season schedule allday rule 3,      !- Name
+    cooling season schedule,                    !- Schedule Ruleset Name
+    0,                                          !- Rule Order
+    cooling season schedule allday11,           !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    11,                                         !- Start Month
+    1,                                          !- Start Day
+    12,                                         !- End Month
+    31;                                         !- End Day
 
   Schedule:Ruleset,
     natural vent schedule,                      !- Name
