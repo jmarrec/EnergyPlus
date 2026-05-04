@@ -591,29 +591,30 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
     bool ErrorsFound = false;
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     unsigned long expectedOperatingModesSize = 2;
+    auto &hybridUnit1 = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1);
+    auto &hybridUnit2 = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2);
     // check the number of operating modes
-    EXPECT_EQ(state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1).OperatingModes.size(), expectedOperatingModesSize);
-    EXPECT_EQ(state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2).OperatingModes.size(), expectedOperatingModesSize);
+    EXPECT_EQ(hybridUnit1.OperatingModes.size(), expectedOperatingModesSize);
+    EXPECT_EQ(hybridUnit2.OperatingModes.size(), expectedOperatingModesSize);
     // check if names for HybridUnitaryAC are converted to upper case
-    EXPECT_EQ("HYBRID UNIT 1", state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1).Name);
-    EXPECT_EQ("HYBRID UNIT 2", state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2).Name);
-    // check return air temperature constraints
-    auto &operatingMode1 = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(1).OperatingModes[1];
-    EXPECT_EQ(operatingMode1.Minimum_Return_Air_Temperature_Blank, false);
-    EXPECT_EQ(operatingMode1.Minimum_Return_Air_Temperature, -20);
-    EXPECT_EQ(operatingMode1.Maximum_Return_Air_Temperature_Blank, false);
-    EXPECT_EQ(operatingMode1.Maximum_Return_Air_Temperature, 100);
-    auto &operatingMode2 = state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(2).OperatingModes[1];
-    EXPECT_EQ(operatingMode2.Minimum_Return_Air_Temperature_Blank, true);
-    EXPECT_EQ(operatingMode2.Minimum_Return_Air_Temperature, 0);
-    EXPECT_EQ(operatingMode2.Maximum_Return_Air_Temperature_Blank, true);
-    EXPECT_EQ(operatingMode2.Maximum_Return_Air_Temperature, 0);
-
-    EXPECT_EQ(operatingMode1.MeetsConstraints(120, 0.05, 101, 120, 0.05, 101), false);
-    EXPECT_EQ(operatingMode1.MeetsConstraints(20, 0.01, 30, 20, 0.01, 30), true);
-
-    EXPECT_EQ(operatingMode2.MeetsConstraints(120, 0.05, 101, 120, 0.05, 101), false);
-    EXPECT_EQ(operatingMode2.MeetsConstraints(20, 0.01, 30, 120, 0.01, 30), true);
+    EXPECT_EQ(hybridUnit1.Name, "HYBRID UNIT 1");
+    EXPECT_EQ(hybridUnit2.Name, "HYBRID UNIT 2");
+    // check return air temperature constraints for hybrid unit 1, mode 1
+    auto &mode1 = hybridUnit1.OperatingModes[1];
+    EXPECT_EQ(mode1.Minimum_Return_Air_Temperature_Blank, false);
+    EXPECT_EQ(mode1.Minimum_Return_Air_Temperature, -20);
+    EXPECT_EQ(mode1.Maximum_Return_Air_Temperature_Blank, false);
+    EXPECT_EQ(mode1.Maximum_Return_Air_Temperature, 100);
+    EXPECT_EQ(mode1.MeetsConstraints(120, 0.01, 30, 120, 0.01, 30), false);
+    EXPECT_EQ(mode1.MeetsConstraints(20, 0.01, 30, 20, 0.01, 30), true);
+    // check return air temperature constraints for hybrid unit 2, mode 1
+    mode1 = hybridUnit2.OperatingModes[1];
+    EXPECT_EQ(mode1.Minimum_Return_Air_Temperature_Blank, true);
+    EXPECT_EQ(mode1.Minimum_Return_Air_Temperature, 0);
+    EXPECT_EQ(mode1.Maximum_Return_Air_Temperature_Blank, true);
+    EXPECT_EQ(mode1.Maximum_Return_Air_Temperature, 0);
+    EXPECT_EQ(mode1.MeetsConstraints(120, 0.01, 30, 120, 0.01, 30), false);
+    EXPECT_EQ(mode1.MeetsConstraints(20, 0.01, 30, 120, 0.01, 30), true);
 }
 
 TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateMinimumIdfInput)
