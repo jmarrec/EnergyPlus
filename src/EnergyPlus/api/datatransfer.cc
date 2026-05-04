@@ -457,16 +457,6 @@ int getActuatorHandle(EnergyPlusState state, const char *componentType, const ch
             }
             ++availActuator.handleCount;
 
-            // Mirror EMSManager::SetupNodeSetPointsAsActuators for Python plugin path (issue #8904)
-            if (typeUC == "OUTDOOR AIR SYSTEM NODE") {
-                for (int NodeNum = 1; NodeNum <= thisState->dataLoopNodes->NumOfNodes; ++NodeNum) {
-                    if (EnergyPlus::Util::makeUPPER(thisState->dataLoopNodes->NodeID(NodeNum)) == keyUC) {
-                        thisState->dataLoopNodes->Node(NodeNum).IsLocalNode = true;
-                        break;
-                    }
-                }
-            }
-
             return handle;
         }
     }
