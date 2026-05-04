@@ -74,27 +74,32 @@ Update doc/input-output-reference/src/overview/group-schedules.tex with a new `S
 
 ```
   Schedule:Ruleset,
-    occupants schedule,                         !- Name
-    Fractional,                                 !- Schedule Type Limits Name
-    occupants schedule default day;             !- Default Day Schedule Name
+    occupants schedule ruleset              !- Name
+    Fractional,                             !- Schedule Type Limits Name
+    occupants schedule default day;         !- Default Day Schedule Name
+    occupants schedule default day,         !- Summer Design Day Schedule Name
+    occupants schedule default day,         !- Winter Design Day Schedule Name
+    occupants schedule default day,         !- Holiday Schedule Name
+    occupants schedule default day,         !- Custom Day 1 Schedule Name
+    occupants schedule default day;         !- Custom Day 2 Schedule Name
 
   Schedule:Rule,
-    occupants schedule allday ruleset1,         !- Name
-    occupants schedule,                         !- Schedule Ruleset Name
-    0,                                          !- Rule Order
-    occupants schedule allday1,                 !- Day Schedule Name
-    Yes,                                        !- Apply Sunday
-    Yes,                                        !- Apply Monday
-    Yes,                                        !- Apply Tuesday
-    Yes,                                        !- Apply Wednesday
-    Yes,                                        !- Apply Thursday
-    Yes,                                        !- Apply Friday
-    Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
-    1,                                          !- Start Month
-    1,                                          !- Start Day
-    12,                                         !- End Month
-    31;                                         !- End Day
+    occupants schedule rule,                !- Name
+    occupants schedule,                     !- Schedule Ruleset Name
+    0,                                      !- Rule Order
+    occupants schedule day,                 !- Day Schedule Name
+    No,                                     !- Apply Sunday
+    Yes,                                    !- Apply Monday
+    No,                                     !- Apply Tuesday
+    Yes,                                    !- Apply Wednesday
+    No,                                     !- Apply Thursday
+    Yes,                                    !- Apply Friday
+    No,                                     !- Apply Saturday
+    DateRange,                              !- Date Specification Type
+    1,                                      !- Start Month
+    1,                                      !- Start Day
+    12,                                     !- End Month
+    31;                                     !- End Day
 ```
 
 ## Outputs Description ##

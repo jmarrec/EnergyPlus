@@ -2076,321 +2076,6 @@
     trans schedule winter=0.85 summer=0.7 default day;  !- CustomDay2 Schedule:Day Name
 
   Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Jan1-Jan27,  !- Name
-    interior lighting schedule allday1,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday1,  !- Monday Schedule:Day Name
-    interior lighting schedule allday1,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday1,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday1,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday1,  !- Friday Schedule:Day Name
-    interior lighting schedule allday1,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Jan28-Feb3,  !- Name
-    interior lighting schedule allday1,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday1,  !- Monday Schedule:Day Name
-    interior lighting schedule allday1,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday1,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday2,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday2,  !- Friday Schedule:Day Name
-    interior lighting schedule allday2,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Feb4-Feb24,  !- Name
-    interior lighting schedule allday2,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday2,  !- Monday Schedule:Day Name
-    interior lighting schedule allday2,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday2,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday2,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday2,  !- Friday Schedule:Day Name
-    interior lighting schedule allday2,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Feb25-Mar3,  !- Name
-    interior lighting schedule allday2,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday2,  !- Monday Schedule:Day Name
-    interior lighting schedule allday2,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday2,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday3,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday3,  !- Friday Schedule:Day Name
-    interior lighting schedule allday3,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Mar4-Mar31,  !- Name
-    interior lighting schedule allday3,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday3,  !- Monday Schedule:Day Name
-    interior lighting schedule allday3,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday3,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday3,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday3,  !- Friday Schedule:Day Name
-    interior lighting schedule allday3,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Apr1-Apr28,  !- Name
-    interior lighting schedule allday4,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday4,  !- Monday Schedule:Day Name
-    interior lighting schedule allday4,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday4,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday4,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday4,  !- Friday Schedule:Day Name
-    interior lighting schedule allday4,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Apr29-May5,  !- Name
-    interior lighting schedule allday4,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday4,  !- Monday Schedule:Day Name
-    interior lighting schedule allday5,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday5,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday5,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday5,  !- Friday Schedule:Day Name
-    interior lighting schedule allday5,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - May6-May26,  !- Name
-    interior lighting schedule allday5,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday5,  !- Monday Schedule:Day Name
-    interior lighting schedule allday5,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday5,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday5,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday5,  !- Friday Schedule:Day Name
-    interior lighting schedule allday5,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - May27-Jun2,  !- Name
-    interior lighting schedule allday5,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday5,  !- Monday Schedule:Day Name
-    interior lighting schedule allday5,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday5,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday5,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday6,  !- Friday Schedule:Day Name
-    interior lighting schedule allday6,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Jun3-Jun30,  !- Name
-    interior lighting schedule allday6,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday6,  !- Monday Schedule:Day Name
-    interior lighting schedule allday6,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday6,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday6,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday6,  !- Friday Schedule:Day Name
-    interior lighting schedule allday6,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Jul1-Jul28,  !- Name
-    interior lighting schedule allday7,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday7,  !- Monday Schedule:Day Name
-    interior lighting schedule allday7,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday7,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday7,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday7,  !- Friday Schedule:Day Name
-    interior lighting schedule allday7,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Jul29-Aug4,  !- Name
-    interior lighting schedule allday7,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday7,  !- Monday Schedule:Day Name
-    interior lighting schedule allday7,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday8,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday8,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday8,  !- Friday Schedule:Day Name
-    interior lighting schedule allday8,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Aug5-Aug25,  !- Name
-    interior lighting schedule allday8,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday8,  !- Monday Schedule:Day Name
-    interior lighting schedule allday8,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday8,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday8,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday8,  !- Friday Schedule:Day Name
-    interior lighting schedule allday8,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Aug26-Sep1,  !- Name
-    interior lighting schedule allday8,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday8,  !- Monday Schedule:Day Name
-    interior lighting schedule allday8,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday8,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday8,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday8,  !- Friday Schedule:Day Name
-    interior lighting schedule allday9,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Sep2-Sep29,  !- Name
-    interior lighting schedule allday9,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday9,  !- Monday Schedule:Day Name
-    interior lighting schedule allday9,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday9,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday9,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday9,  !- Friday Schedule:Day Name
-    interior lighting schedule allday9,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Sep30-Oct6,  !- Name
-    interior lighting schedule allday9,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday10,  !- Monday Schedule:Day Name
-    interior lighting schedule allday10,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday10,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday10,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday10,  !- Friday Schedule:Day Name
-    interior lighting schedule allday10,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Oct7-Oct27,  !- Name
-    interior lighting schedule allday10,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday10,  !- Monday Schedule:Day Name
-    interior lighting schedule allday10,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday10,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday10,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday10,  !- Friday Schedule:Day Name
-    interior lighting schedule allday10,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Oct28-Nov3,  !- Name
-    interior lighting schedule allday10,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday10,  !- Monday Schedule:Day Name
-    interior lighting schedule allday10,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday10,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday11,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday11,  !- Friday Schedule:Day Name
-    interior lighting schedule allday11,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Nov4-Nov24,  !- Name
-    interior lighting schedule allday11,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday11,  !- Monday Schedule:Day Name
-    interior lighting schedule allday11,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday11,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday11,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday11,  !- Friday Schedule:Day Name
-    interior lighting schedule allday11,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Nov25-Dec1,  !- Name
-    interior lighting schedule allday11,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday11,  !- Monday Schedule:Day Name
-    interior lighting schedule allday11,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday11,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday11,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday11,  !- Friday Schedule:Day Name
-    interior lighting schedule allday12,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
-    interior lighting schedule Week Rule - Dec2-Dec31,  !- Name
-    interior lighting schedule allday12,  !- Sunday Schedule:Day Name
-    interior lighting schedule allday12,  !- Monday Schedule:Day Name
-    interior lighting schedule allday12,  !- Tuesday Schedule:Day Name
-    interior lighting schedule allday12,  !- Wednesday Schedule:Day Name
-    interior lighting schedule allday12,  !- Thursday Schedule:Day Name
-    interior lighting schedule allday12,  !- Friday Schedule:Day Name
-    interior lighting schedule allday12,  !- Saturday Schedule:Day Name
-    interior lighting schedule default day,  !- Holiday Schedule:Day Name
-    interior lighting schedule default day,  !- SummerDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- WinterDesignDay Schedule:Day Name
-    interior lighting schedule default day,  !- CustomDay1 Schedule:Day Name
-    interior lighting schedule default day;  !- CustomDay2 Schedule:Day Name
-
-  Schedule:Week:Daily,
     clothes dryer schedule Week Rule - Jan1-Dec31,  !- Name
     clothes dryer schedule allday1,  !- Sunday Schedule:Day Name
     clothes dryer schedule allday1,  !- Monday Schedule:Day Name
@@ -3006,138 +2691,226 @@
     12,                      !- End Month 5
     31;                      !- End Day 5
 
-  Schedule:Year,
-    interior lighting schedule,  !- Name
-    Fractional,              !- Schedule Type Limits Name
-    interior lighting schedule Week Rule - Jan1-Jan27,  !- Schedule:Week Name 1
-    1,                       !- Start Month 1
-    1,                       !- Start Day 1
-    1,                       !- End Month 1
-    27,                      !- End Day 1
-    interior lighting schedule Week Rule - Jan28-Feb3,  !- Schedule:Week Name 2
-    1,                       !- Start Month 2
-    28,                      !- Start Day 2
-    2,                       !- End Month 2
-    3,                       !- End Day 2
-    interior lighting schedule Week Rule - Feb4-Feb24,  !- Schedule:Week Name 3
-    2,                       !- Start Month 3
-    4,                       !- Start Day 3
-    2,                       !- End Month 3
-    24,                      !- End Day 3
-    interior lighting schedule Week Rule - Feb25-Mar3,  !- Schedule:Week Name 4
-    2,                       !- Start Month 4
-    25,                      !- Start Day 4
-    3,                       !- End Month 4
-    3,                       !- End Day 4
-    interior lighting schedule Week Rule - Mar4-Mar31,  !- Schedule:Week Name 5
-    3,                       !- Start Month 5
-    4,                       !- Start Day 5
-    3,                       !- End Month 5
-    31,                      !- End Day 5
-    interior lighting schedule Week Rule - Apr1-Apr28,  !- Schedule:Week Name 6
-    4,                       !- Start Month 6
-    1,                       !- Start Day 6
-    4,                       !- End Month 6
-    28,                      !- End Day 6
-    interior lighting schedule Week Rule - Apr29-May5,  !- Schedule:Week Name 7
-    4,                       !- Start Month 7
-    29,                      !- Start Day 7
-    5,                       !- End Month 7
-    5,                       !- End Day 7
-    interior lighting schedule Week Rule - May6-May26,  !- Schedule:Week Name 8
-    5,                       !- Start Month 8
-    6,                       !- Start Day 8
-    5,                       !- End Month 8
-    26,                      !- End Day 8
-    interior lighting schedule Week Rule - May27-Jun2,  !- Schedule:Week Name 9
-    5,                       !- Start Month 9
-    27,                      !- Start Day 9
-    6,                       !- End Month 9
-    2,                       !- End Day 9
-    interior lighting schedule Week Rule - Jun3-Jun30,  !- Schedule:Week Name 10
-    6,                       !- Start Month 10
-    3,                       !- Start Day 10
-    6,                       !- End Month 10
-    30,                      !- End Day 10
-    interior lighting schedule Week Rule - Jul1-Jul28,  !- Schedule:Week Name 11
-    7,                       !- Start Month 11
-    1,                       !- Start Day 11
-    7,                       !- End Month 11
-    28,                      !- End Day 11
-    interior lighting schedule Week Rule - Jul29-Aug4,  !- Schedule:Week Name 12
-    7,                       !- Start Month 12
-    29,                      !- Start Day 12
-    8,                       !- End Month 12
-    4,                       !- End Day 12
-    interior lighting schedule Week Rule - Aug5-Aug25,  !- Schedule:Week Name 13
-    8,                       !- Start Month 13
-    5,                       !- Start Day 13
-    8,                       !- End Month 13
-    25,                      !- End Day 13
-    interior lighting schedule Week Rule - Aug26-Sep1,  !- Schedule:Week Name 14
-    8,                       !- Start Month 14
-    26,                      !- Start Day 14
-    9,                       !- End Month 14
-    1,                       !- End Day 14
-    interior lighting schedule Week Rule - Sep2-Sep29,  !- Schedule:Week Name 15
-    9,                       !- Start Month 15
-    2,                       !- Start Day 15
-    9,                       !- End Month 15
-    29,                      !- End Day 15
-    interior lighting schedule Week Rule - Sep30-Oct6,  !- Schedule:Week Name 16
-    9,                       !- Start Month 16
-    30,                      !- Start Day 16
-    10,                      !- End Month 16
-    6,                       !- End Day 16
-    interior lighting schedule Week Rule - Oct7-Oct27,  !- Schedule:Week Name 17
-    10,                      !- Start Month 17
-    7,                       !- Start Day 17
-    10,                      !- End Month 17
-    27,                      !- End Day 17
-    interior lighting schedule Week Rule - Oct28-Nov3,  !- Schedule:Week Name 18
-    10,                      !- Start Month 18
-    28,                      !- Start Day 18
-    11,                      !- End Month 18
-    3,                       !- End Day 18
-    interior lighting schedule Week Rule - Nov4-Nov24,  !- Schedule:Week Name 19
-    11,                      !- Start Month 19
-    4,                       !- Start Day 19
-    11,                      !- End Month 19
-    24,                      !- End Day 19
-    interior lighting schedule Week Rule - Nov25-Dec1,  !- Schedule:Week Name 20
-    11,                      !- Start Month 20
-    25,                      !- Start Day 20
-    12,                      !- End Month 20
-    1,                       !- End Day 20
-    interior lighting schedule Week Rule - Dec2-Dec31,  !- Schedule:Week Name 21
-    12,                      !- Start Month 21
-    2,                       !- Start Day 21
-    12,                      !- End Month 21
-    31;                      !- End Day 21
+  Schedule:Ruleset,
+    interior lighting schedule,                 !- Name
+    Fractional,                                 !- Schedule Type Limits Name
+    interior lighting schedule default day;     !- Default Day Schedule Name
 
-!- Schedule:Week:Daily,
-!-   occupants schedule Week Rule - Jan1-Dec31, !- Name
-!-   occupants schedule allday1,             !- Sunday Schedule:Day Name
-!-   occupants schedule allday1,             !- Monday Schedule:Day Name
-!-   occupants schedule allday1,             !- Tuesday Schedule:Day Name
-!-   occupants schedule allday1,             !- Wednesday Schedule:Day Name
-!-   occupants schedule allday1,             !- Thursday Schedule:Day Name
-!-   occupants schedule allday1,             !- Friday Schedule:Day Name
-!-   occupants schedule allday1,             !- Saturday Schedule:Day Name
-!-   occupants schedule default day,         !- Holiday Schedule:Day Name
-!-   occupants schedule default day,         !- SummerDesignDay Schedule:Day Name
-!-   occupants schedule default day,         !- WinterDesignDay Schedule:Day Name
-!-   occupants schedule default day,         !- CustomDay1 Schedule:Day Name
-!-   occupants schedule default day;         !- CustomDay2 Schedule:Day Name
+  Schedule:Rule,
+    interior lighting schedule allday rule,     !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    11,                                         !- Rule Order
+    interior lighting schedule allday1,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    1,                                          !- Start Month
+    1,                                          !- Start Day
+    1,                                          !- End Month
+    31;                                         !- End Day
 
-!- Schedule:Year,
-!-   occupants schedule,                     !- Name
-!-   Fractional,                             !- Schedule Type Limits Name
-!-   occupants schedule Week Rule - Jan1-Dec31, !- Schedule:Week Name 1
-!-   1,                                      !- Start Month 1
-!-   1,                                      !- Start Day 1
-!-   12,                                     !- End Month 1
-!-   31;                                     !- End Day 1
+  Schedule:Rule,
+    interior lighting schedule allday rule 1,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    10,                                         !- Rule Order
+    interior lighting schedule allday3,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    2,                                          !- Start Month
+    1,                                          !- Start Day
+    2,                                          !- End Month
+    28;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 2,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    9,                                          !- Rule Order
+    interior lighting schedule allday3,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    3,                                          !- Start Month
+    1,                                          !- Start Day
+    3,                                          !- End Month
+    31;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 3,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    8,                                          !- Rule Order
+    interior lighting schedule allday4,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    4,                                          !- Start Month
+    1,                                          !- Start Day
+    4,                                          !- End Month
+    30;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 4,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    7,                                          !- Rule Order
+    interior lighting schedule allday5,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    5,                                          !- Start Month
+    1,                                          !- Start Day
+    5,                                          !- End Month
+    31;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 5,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    6,                                          !- Rule Order
+    interior lighting schedule allday6,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    6,                                          !- Start Month
+    1,                                          !- Start Day
+    6,                                          !- End Month
+    30;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 6,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    5,                                          !- Rule Order
+    interior lighting schedule allday7,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    7,                                          !- Start Month
+    1,                                          !- Start Day
+    7,                                          !- End Month
+    31;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 7,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    4,                                          !- Rule Order
+    interior lighting schedule allday8,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    8,                                          !- Start Month
+    1,                                          !- Start Day
+    8,                                          !- End Month
+    31;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 8,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    3,                                          !- Rule Order
+    interior lighting schedule allday9,         !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    9,                                          !- Start Month
+    1,                                          !- Start Day
+    9,                                          !- End Month
+    30;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 9,   !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    2,                                          !- Rule Order
+    interior lighting schedule allday10,        !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    10,                                         !- Start Month
+    1,                                          !- Start Day
+    10,                                         !- End Month
+    31;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 10,  !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    1,                                          !- Rule Order
+    interior lighting schedule allday11,        !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    11,                                         !- Start Month
+    1,                                          !- Start Day
+    11,                                         !- End Month
+    30;                                         !- End Day
+
+  Schedule:Rule,
+    interior lighting schedule allday rule 11,  !- Name
+    interior lighting schedule,                 !- Schedule Ruleset Name
+    0,                                          !- Rule Order
+    interior lighting schedule allday12,        !- Day Schedule Name
+    Yes,                                        !- Apply Sunday
+    Yes,                                        !- Apply Monday
+    Yes,                                        !- Apply Tuesday
+    Yes,                                        !- Apply Wednesday
+    Yes,                                        !- Apply Thursday
+    Yes,                                        !- Apply Friday
+    Yes,                                        !- Apply Saturday
+    DateRange,                                  !- Date Specification Type
+    12,                                         !- Start Month
+    1,                                          !- Start Day
+    12,                                         !- End Month
+    31;                                         !- End Day
 
   Schedule:Ruleset,
     occupants schedule,                         !- Name
@@ -3145,7 +2918,7 @@
     occupants schedule default day;             !- Default Day Schedule Name
 
   Schedule:Rule,
-    occupants schedule allday ruleset1,         !- Name
+    occupants schedule Week Rule - Jan1-Dec31,  !- Name
     occupants schedule,                         !- Schedule Ruleset Name
     0,                                          !- Rule Order
     occupants schedule allday1,                 !- Day Schedule Name
