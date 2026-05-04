@@ -53,12 +53,24 @@ Make updates and additions to ScheduleManager.hh and ScheduleManager.cc:
 - Loop through each `Schedule:Ruleset` object
   - Call `AddScheduleDetailed` for creating a new detailed schedule
   - For every day of the year:
-    - Get the "priority" schedule rule (i.e., the one that applies and has the least rule order value)
+    - Get the "priority" schedule rule (i.e., the one whose (A) applicable dates contain the day and (B) has the least rule order value)
     - Either get an existing, or add a new, week schedule
     - Update the (12) day schedules according to the ruleset's special day schedules and rule's properties
     - Assign the week schedule to the week schedule's array for the year
 
-That's it. Downstream `GetSchedule` will find the detailed schedules created from `Schedule:Ruleset` and `Schedule:Rule`.
+It is not required that a day has a rule defined for it (i.e., a `Schedule:Ruleset` may have no attached `Schedule:Rule` objects).
+In this case, either:
+- The day is Feb 29 and is just made equal to Feb 28, or
+- The day falls back to the default day schedule as defined by the ruleset.
+
+Allow `Schedule:Ruleset` objects to be actuated by adding the following at the end of the `CurrentModuleObject = "Schedule:Ruleset";` block:
+```
+  if (s_glob->AnyEnergyManagementSystemInModel) { // setup constant schedules as actuators
+      SetupEMSActuator(state, "Schedule:Ruleset", sched->Name, "Schedule Value", "[ ]", sched->EMSActuatedOn, sched->EMSVal);
+  }
+```
+
+Downstream `GetSchedule` will find the detailed schedules created from `Schedule:Ruleset` and `Schedule:Rule`.
 
 ## Testing/Validation/Data Sources ##
 

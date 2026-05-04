@@ -237,6 +237,13 @@
 !-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:DAY:INTERVAL ===========
 
   Schedule:Day:Interval,
+    fridge schedule default day,  !- Name
+    Fractional,                   !- Schedule Type Limits Name
+    No,                           !- Interpolate to Timestep
+    24:00,                        !- Time 1
+    0;                            !- Value Until Time 1
+
+  Schedule:Day:Interval,
     trans schedule winter=0.85 summer=0.7 allday1,  !- Name
     Fractional,              !- Schedule Type Limits Name
     No,                      !- Interpolate to Timestep
@@ -875,7 +882,7 @@
     Fractional,              !- Schedule Type Limits Name
     No,                      !- Interpolate to Timestep
     24:00,                   !- Time 1
-    0.1;                       !- Value Until Time 1
+    0;                       !- Value Until Time 1
 
   Schedule:Day:Interval,
     clothes dryer schedule allday1,  !- Name
@@ -2691,6 +2698,13 @@
     12,                      !- End Month 5
     31;                      !- End Day 5
 
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:RULESET ===========
+
+  Schedule:Ruleset,
+    fridge schedule,                            !- Name
+    Fractional,                                 !- Schedule Type Limits Name
+    fridge schedule default day;                !- Default Day Schedule Name
+
   Schedule:Ruleset,
     interior lighting schedule,                 !- Name
     Fractional,                                 !- Schedule Type Limits Name
@@ -4306,8 +4320,6 @@
   Schedule:Constant,Always On Continuous,Fractional 1,1;
 
   Schedule:Constant,occupants activity schedule,ActivityLevel,117.228428068889;
-
-  Schedule:Constant,fridge schedule,Fractional,0;
 
   Schedule:Constant,mech vent house fan schedule,Fractional,1;
 
@@ -7021,7 +7033,7 @@
   EnergyManagementSystem:Actuator,
     fridge_schedule_act,     !- Name
     fridge schedule,         !- Actuated Component Unique Name
-    Schedule:Constant,       !- Actuated Component Type
+    Schedule:Ruleset,        !- Actuated Component Type
     Schedule Value;          !- Actuated Component Control Type
 
   EnergyManagementSystem:Actuator,

@@ -1464,12 +1464,30 @@ namespace Sched {
                 sched->weekScheds[60] = sched->weekScheds[59];
             }
 
+            // Anything remaining (e.g., when no rules specified) gets default day schedule + any special days
             for (int iDay = 1; iDay <= 366; ++iDay) {
                 if (daysInYear[iDay] == 0) {
-                    ShowSevereCustomAudit(state, eoh, "has missing days in its schedule pointers");
-                    ErrorsFound = true;
-                    break;
+                    Sched::WeekSchedule *weekSched;
+                    weekSched = GetWeekSchedule(state, EnergyPlus::format("{}_{}", Alphas(1), Alphas(3)));
+                    if (weekSched == nullptr) {
+                        weekSched = AddWeekSchedule(state, EnergyPlus::format("{}_{}", Alphas(1), Alphas(3)));
+                        weekSched->isUsed = true;
+
+                        for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
+                            weekSched->dayScheds[iDayType] = defaultDaySched;
+                        }
+                        weekSched->dayScheds[8] = summerDesignDaySchedule;
+                        weekSched->dayScheds[9] = winterDesignDaySchedule;
+                        weekSched->dayScheds[10] = holidaySchedule;
+                        weekSched->dayScheds[11] = customDay1Schedule;
+                        weekSched->dayScheds[12] = customDay2Schedule;
+                    }
+                    sched->weekScheds[iDay] = weekSched;
                 }
+            }
+
+            if (s_glob->AnyEnergyManagementSystemInModel) { // setup constant schedules as actuators
+                SetupEMSActuator(state, "Schedule:Ruleset", sched->Name, "Schedule Value", "[ ]", sched->EMSActuatedOn, sched->EMSVal);
             }
         }
 
