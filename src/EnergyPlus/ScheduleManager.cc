@@ -1385,25 +1385,50 @@ namespace Sched {
             }
 
             auto *defaultDaySched = GetDaySchedule(state, Alphas(3));
+            if (defaultDaySched == nullptr) {
+                ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(3), Alphas(3));
+                ErrorsFound = true;
+            }
+
             auto *summerDesignDaySchedule = defaultDaySched;
             if (!lAlphaBlanks(4)) {
               summerDesignDaySchedule = GetDaySchedule(state, Alphas(4));
+              if (summerDesignDaySchedule == nullptr) {
+                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(4), Alphas(4));
+                  ErrorsFound = true;
+              }
             }
             auto *winterDesignDaySchedule = defaultDaySched;
             if (!lAlphaBlanks(5)) {
               winterDesignDaySchedule = GetDaySchedule(state, Alphas(5));
+              if (winterDesignDaySchedule == nullptr) {
+                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(5), Alphas(5));
+                  ErrorsFound = true;
+              }
             }
             auto *holidaySchedule = defaultDaySched;
             if (!lAlphaBlanks(6)) {
               holidaySchedule = GetDaySchedule(state, Alphas(6));
+              if (holidaySchedule == nullptr) {
+                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(6), Alphas(6));
+                  ErrorsFound = true;
+              }
             }
             auto *customDay1Schedule = defaultDaySched;
             if (!lAlphaBlanks(7)) {
               customDay1Schedule = GetDaySchedule(state, Alphas(7));
+              if (customDay1Schedule == nullptr) {
+                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(7), Alphas(7));
+                  ErrorsFound = true;
+              }
             }
             auto *customDay2Schedule = defaultDaySched;
             if (!lAlphaBlanks(8)) {
               customDay2Schedule = GetDaySchedule(state, Alphas(8));
+              if (customDay2Schedule == nullptr) {
+                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(8), Alphas(8));
+                  ErrorsFound = true;
+              }
             }
 
             std::array<int, 367> daysInYear;
