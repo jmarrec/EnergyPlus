@@ -4841,6 +4841,125 @@ Schedule:Constant,
        \type real
        \default 0
 
+Schedule:Ruleset,
+       \min-fields 3
+  A1,  \field Name
+       \type alpha
+       \required-field
+       \reference ScheduleNames
+       \reference ScheduleRulesetNames
+  A2,  \field Schedule Type Limits Name
+       \type object-list
+       \object-list ScheduleTypeLimitsNames
+  A3,  \field Default Day Schedule Name
+       \type object-list
+       \required-field
+       \object-list DayScheduleNames
+  A4,  \field Summer Design Day Schedule Name
+       \type object-list
+       \object-list DayScheduleNames
+  A5,  \field Winter Design Day Schedule Name
+       \type object-list
+       \object-list DayScheduleNames
+  A6,  \field Holiday Schedule Name
+       \type object-list
+       \object-list DayScheduleNames
+  A7,  \field Custom Day 1 Schedule Name
+       \type object-list
+       \object-list DayScheduleNames
+  A8;  \field Custom Day 2 Schedule Name
+       \type object-list
+       \object-list DayScheduleNames
+
+Schedule:Rule,
+       \extensible:2
+       \min-fields 4
+  A1,  \field Name
+       \type alpha
+       \required-field
+       \reference ScheduleRuleNames
+  A2,  \field Schedule Ruleset Name
+       \type object-list
+       \required-field
+       \object-list ScheduleRulesetNames
+  N1,  \field Rule Order
+       \type integer
+       \required-field
+       \minimum 0
+  A3,  \field Day Schedule Name
+       \type object-list
+       \required-field
+       \object-list DayScheduleNames
+  A4,  \field Apply Sunday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A5,  \field Apply Monday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A6,  \field Apply Tuesday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A7,  \field Apply Wednesday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A8,  \field Apply Thursday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A9,  \field Apply Friday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A10, \field Apply Saturday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A11, \field Date Specification Type
+       \type choice
+       \default DateRange
+       \key DateRange
+       \key SpecificDates
+  N2,  \field Start Month
+       \type integer
+       \minimum 1
+       \maximum 12
+       \default 1
+  N3,  \field Start Day
+       \type integer
+       \minimum 1
+       \maximum 31
+       \default 1
+  N4,  \field End Month
+       \type integer
+       \minimum 1
+       \maximum 12
+       \default 12
+  N5,  \field End Day
+       \type integer
+       \minimum 1
+       \maximum 31
+       \default 31
+  N6,  \field Specific Month 1
+       \type integer
+       \begin-extensible
+       \minimum 1
+       \maximum 12
+  N7;  \field Specific Day 1
+       \type integer
+       \minimum 1
+       \maximum 31
+
 Schedule:File:Shading,
        \min-fields 1
        \memo A Schedule:File:Shading points to a CSV file that has 8760-8784
