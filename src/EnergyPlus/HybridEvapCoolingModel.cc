@@ -711,7 +711,7 @@ namespace HybridEvapCoolingModel {
         bool OARHConstraintMet = (RHosa >= Minimum_Outdoor_Air_Relative_Humidity && RHosa <= Maximum_Outdoor_Air_Relative_Humidity);
 
         bool RATempConstraintMet = (Minimum_Return_Air_Temperature_Blank || Tra >= Minimum_Return_Air_Temperature) &&
-                                   (Minimum_Return_Air_Temperature_Blank || Tra <= Maximum_Return_Air_Temperature);
+                                   (Maximum_Return_Air_Temperature_Blank || Tra <= Maximum_Return_Air_Temperature);
         bool RAHRConstraintMet = (Wra >= Minimum_Return_Air_Humidity_Ratio && Wra <= Maximum_Return_Air_Humidity_Ratio);
         bool RARHConstraintMet = (RHra >= Minimum_Return_Air_Relative_Humidity && RHra <= Maximum_Return_Air_Relative_Humidity);
 
