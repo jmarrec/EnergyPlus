@@ -4155,6 +4155,7 @@ void SetupZoneSizing(EnergyPlusData &state, bool &ErrorsFound)
         state.dataGlobal->BeginEnvrnFlag = true;
         state.dataGlobal->EndEnvrnFlag = false;
         state.dataEnvrn->EndMonthFlag = false;
+        state.dataGlobal->SetupFlag = true;
         state.dataGlobal->WarmupFlag = true;
         state.dataGlobal->DayOfSim = 0;
 
