@@ -970,8 +970,6 @@ TEST_F(EnergyPlusFixture, TestEMSVariableInitAfterRef1)
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
-    state->dataGlobal->WarmupFlag = true;
-    state->dataGlobal->SetupFlag = true;
 
     int internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
     EXPECT_EQ(internalVarNum, 0);
@@ -1014,7 +1012,7 @@ TEST_F(EnergyPlusFixture, TestEMSVariableInitAfterRef1)
         "   **   ~~~   ** Erl program line text: SET POWER_MULT = SITE_TEMP_ADJ",
         "   **   ~~~   ** Error message:  *** Error: EvaluateExpression: Variable = 'SITE_TEMP_ADJ' used in expression has not been initialized! "
         "*** ",
-        "   **   ~~~   **  During Setup, Environment=, at Simulation time= 00:-15 - 00:00",
+        "   **   ~~~   **  Environment=, at Simulation time= 00:-15 - 00:00",
         "   **  Fatal  ** Previous EMS error caused program termination.",
         "   ...Summary of Errors that led to program termination:",
         "   ..... Reference severe error count=1",

@@ -905,18 +905,10 @@ void ShowContinueErrorTimeStamp(EnergyPlusData &state, std::string const &Messag
     std::string cEnvHeader;
 
     if (state.dataGlobal->WarmupFlag) {
-        if (!state.dataGlobal->SetupFlag) {
-            if (!state.dataGlobal->DoingSizing) {
-                cEnvHeader = " During Warmup, Environment=";
-            } else {
-                cEnvHeader = " During Warmup & Sizing, Environment=";
-            }
+        if (!state.dataGlobal->DoingSizing) {
+            cEnvHeader = " During Warmup, Environment=";
         } else {
-            if (!state.dataGlobal->DoingSizing) {
-                cEnvHeader = " During Setup, Environment=";
-            } else {
-                cEnvHeader = " During Setup & Sizing, Environment=";
-            }
+            cEnvHeader = " During Warmup & Sizing, Environment=";
         }
     } else {
         if (!state.dataGlobal->DoingSizing) {
