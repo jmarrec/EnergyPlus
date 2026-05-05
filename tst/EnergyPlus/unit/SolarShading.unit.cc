@@ -2790,6 +2790,8 @@ WindowMaterial:SimpleGlazingSystem,
     state->dataGlobal->BeginSimFlag = true;
     EXPECT_TRUE(state->dataSolarShading->GetInputFlag);
     SolarShading::InitSolarCalculations(*state);
+    EXPECT_FALSE(state->dataSysVars->SutherlandHodgman);
+    EXPECT_FALSE(state->dataSysVars->SlaterBarsky);
 
     std::string const error_string =
         delimited_string({"   ** Warning ** CheckConvexity: Zone=\"ZONE A\", Surface=\"69C03D\" is non-convex.",
