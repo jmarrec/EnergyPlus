@@ -15674,7 +15674,7 @@ namespace UnitarySystems {
         std::string CompName; // Name of Unitary System object
         Real64 SensLoad = 0.0;
         Real64 LatLoad = 0.0;
-        HVAC::CoilType coilType = HVAC::CoilType::Invalid;
+        HVAC::CoilType coilType;
         int CompIndex = 0;
         Real64 dummy = 0.0;
 

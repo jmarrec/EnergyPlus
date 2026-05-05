@@ -10019,7 +10019,6 @@ namespace SurfaceGeometry {
                     ErrorsFound = true;
                 }
             } else if (IShadedConst > 0 && IShadingDevice > 0) {
-                IShadingDevice = 0;
                 ShowWarningError(state,
                                  EnergyPlus::format("{}=\"{}\" Both {} and {} are specified.",
                                                     s_ipsc->cCurrentModuleObject,
