@@ -917,6 +917,7 @@ void ShowContinueErrorTimeStamp(EnergyPlusData &state, std::string const &Messag
             } else {
                 cEnvHeader = " During Setup & Sizing, Environment=";
             }
+        }
     } else {
         if (!state.dataGlobal->DoingSizing) {
             cEnvHeader = " Environment=";

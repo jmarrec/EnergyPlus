@@ -1016,6 +1016,7 @@ void WriteTrace(EnergyPlusData &state, int const StackNum, int const Instruction
             } else {
                 OccurrenceTimingInfo = " During Setup & Sizing, Occurrence info=";
             }
+        }
     } else {
         if (!state.dataGlobal->DoingSizing) {
             OccurrenceTimingInfo = " Occurrence info=";
