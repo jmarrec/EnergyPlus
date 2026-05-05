@@ -3329,7 +3329,6 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
 
                 lbracket = index(cAlphaArgs(1), '[');
                 if (lbracket == std::string::npos) {
-                    UnitsA = "";
                     //          if (lAlphaFieldBlanks(6)) then
                     //            CALL ShowWarningError(state, RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//' no units
                     //            indicated.') CALL ShowContinueError(state, '...no units indicated for this variable. [] is assumed.')
@@ -3505,7 +3504,6 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
 
                 lbracket = index(cAlphaArgs(1), '[');
                 if (lbracket == std::string::npos) {
-                    UnitsA = "";
                     //          if (lAlphaFieldBlanks(9)) then
                     //            CALL ShowWarningError(state, RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//' no units
                     //            indicated.') CALL ShowContinueError(state, '...no units indicated for this variable. [] is assumed.')
