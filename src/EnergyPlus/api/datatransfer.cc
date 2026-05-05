@@ -55,6 +55,7 @@
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataGlobalConstants.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
+#include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataRuntimeLanguage.hh>
 #include <EnergyPlus/DataStringGlobals.hh>
 #include <EnergyPlus/HeatBalFiniteDiffManager.hh>
