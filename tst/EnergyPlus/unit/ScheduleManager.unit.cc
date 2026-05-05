@@ -2176,3 +2176,127 @@ TEST_F(EnergyPlusFixture, ScheduleCompact_MissingValues)
 
     compare_err_stream(expected_error);
 }
+
+TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
+{
+    // Test that rule priority is arranged greater rule order means less priority
+    std::string const idf_objects = delimited_string({
+        "ScheduleTypeLimits,",
+        "  Fractional,              !- Name",
+        "  0,                       !- Lower Limit Value",
+        "  1,                       !- Upper Limit Value",
+        "  Continuous;              !- Numeric Type",
+        " ",
+        "Schedule:Day:Interval,",
+        "  always off,              !- Name",
+        "  Fractional,              !- Schedule Type Limits Name",
+        "  No,                      !- Interpolate to Timestep",
+        "  24:00,                   !- Time 1",
+        "  0.0;                     !- Value Until Time 1",
+        " ",
+        "Schedule:Day:Interval,",
+        "  always on,               !- Name",
+        "  Fractional,              !- Schedule Type Limits Name",
+        "  No,                      !- Interpolate to Timestep",
+        "  24:00,                   !- Time 1",
+        "  1.0;                     !- Value Until Time 1",
+        " ", 
+        "Schedule:Ruleset,",
+        "  always on ruleset,                          !- Name",
+        "  Fractional,                                 !- Schedule Type Limits Name",
+        "  always off;                                 !- Default Day Schedule Name",
+        " ",
+        "Schedule:Rule,",
+        "  schedule rule Jan1-Dec31 1,                 !- Name",
+        "  always on ruleset,                          !- Schedule Ruleset Name",
+        "  0,                                          !- Rule Order",
+        "  always on,                                  !- Day Schedule Name",
+        "  Yes,                                        !- Apply Sunday",
+        "  Yes,                                        !- Apply Monday",
+        "  Yes,                                        !- Apply Tuesday",
+        "  Yes,                                        !- Apply Wednesday",
+        "  Yes,                                        !- Apply Thursday",
+        "  Yes,                                        !- Apply Friday",
+        "  Yes,                                        !- Apply Saturday",
+        "  DateRange,                                  !- Date Specification Type",
+        "  1,                                          !- Start Month",
+        "  1,                                          !- Start Day",
+        "  12,                                         !- End Month",
+        "  31;                                         !- End Day",
+        " ",
+        "Schedule:Rule,",
+        "  schedule rule Jan1-Jan31 1,                 !- Name",
+        "  always on ruleset,                          !- Schedule Ruleset Name",
+        "  1,                                          !- Rule Order",
+        "  always off,                                 !- Day Schedule Name",
+        "  Yes,                                        !- Apply Sunday",
+        "  Yes,                                        !- Apply Monday",
+        "  Yes,                                        !- Apply Tuesday",
+        "  Yes,                                        !- Apply Wednesday",
+        "  Yes,                                        !- Apply Thursday",
+        "  Yes,                                        !- Apply Friday",
+        "  Yes,                                        !- Apply Saturday",
+        "  DateRange,                                  !- Date Specification Type",
+        "  1,                                          !- Start Month",
+        "  1,                                          !- Start Day",
+        "  1,                                          !- End Month",
+        "  31;                                         !- End Day",
+        " ",
+        "Schedule:Ruleset,",
+        "  mostly on ruleset,                          !- Name",
+        "  Fractional,                                 !- Schedule Type Limits Name",
+        "  always off;                                 !- Default Day Schedule Name",
+        " ",
+        "Schedule:Rule,",
+        "  schedule rule Jan1-Dec31 2,                 !- Name",
+        "  mostly on ruleset,                          !- Schedule Ruleset Name",
+        "  1,                                          !- Rule Order",
+        "  always on,                                  !- Day Schedule Name",
+        "  Yes,                                        !- Apply Sunday",
+        "  Yes,                                        !- Apply Monday",
+        "  Yes,                                        !- Apply Tuesday",
+        "  Yes,                                        !- Apply Wednesday",
+        "  Yes,                                        !- Apply Thursday",
+        "  Yes,                                        !- Apply Friday",
+        "  Yes,                                        !- Apply Saturday",
+        "  DateRange,                                  !- Date Specification Type",
+        "  1,                                          !- Start Month",
+        "  1,                                          !- Start Day",
+        "  12,                                         !- End Month",
+        "  31;                                         !- End Day",
+        " ",
+        "Schedule:Rule,",
+        "  schedule rule Jan1-Jan31 2,                 !- Name",
+        "  mostly on ruleset,                          !- Schedule Ruleset Name",
+        "  0,                                          !- Rule Order",
+        "  always off,                                 !- Day Schedule Name",
+        "  Yes,                                        !- Apply Sunday",
+        "  Yes,                                        !- Apply Monday",
+        "  Yes,                                        !- Apply Tuesday",
+        "  Yes,                                        !- Apply Wednesday",
+        "  Yes,                                        !- Apply Thursday",
+        "  Yes,                                        !- Apply Friday",
+        "  Yes,                                        !- Apply Saturday",
+        "  DateRange,                                  !- Date Specification Type",
+        "  1,                                          !- Start Month",
+        "  1,                                          !- Start Day",
+        "  1,                                          !- End Month",
+        "  31;                                         !- End Day",
+        " ",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    auto &s_glob = state->dataGlobal;
+
+    s_glob->TimeStepsInHour = 4;
+    s_glob->MinutesInTimeStep = 15;
+
+    state->init_state(*state);
+
+    auto *alwaysOnRuleset = Sched::GetSchedule(*state, "ALWAYS ON RULESET");
+    EXPECT_EQ(8760., alwaysOnRuleset->getAnnualHoursFullLoad(*state, 1, false));
+
+    auto *mostlyOnRuleset = Sched::GetSchedule(*state, "MOSTLY ON RULESET");
+    EXPECT_EQ(8760. - 31.0 * 24.0, mostlyOnRuleset->getAnnualHoursFullLoad(*state, 1, false));
+}
