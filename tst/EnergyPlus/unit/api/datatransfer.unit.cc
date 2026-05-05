@@ -64,6 +64,8 @@
 #include <EnergyPlus/PluginManager.hh>
 #include <EnergyPlus/api/datatransfer.h>
 
+#include "EnergyPlus/DataEnvironment.hh"
+
 using namespace EnergyPlus;
 
 class DataExchangeAPIUnitTestFixture : public EnergyPlusFixture
@@ -255,19 +257,19 @@ public:
         }
     }
 
-    void addPluginGlobal(EnergyPlus::EnergyPlusData &state, std::string const &varName)
+    static void addPluginGlobal(EnergyPlus::EnergyPlusData &state, std::string const &varName)
     {
         state.dataPluginManager->pluginManager->addGlobalVariable(state, varName);
     }
 
-    void addTrendWithNewGlobal(std::string const &newGlobalVarName, std::string const &trendName, int numTrendValues)
+    void addTrendWithNewGlobal(std::string const &newGlobalVarName, std::string const &trendName, int numTrendValues) const
     {
         state->dataPluginManager->pluginManager->addGlobalVariable(*state, newGlobalVarName);
         int i = EnergyPlus::PluginManagement::PluginManager::getGlobalVariableHandle(*state, newGlobalVarName, true);
         state->dataPluginManager->trends.emplace_back(*state, trendName, numTrendValues, i);
     }
 
-    void simulateTimeStepAndReport()
+    void simulateTimeStepAndReport() const
     {
         UpdateMeterReporting(*state);
         UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
@@ -371,6 +373,11 @@ TEST_F(DataExchangeAPIUnitTestFixture, DataTransfer_TestGetVariableValuesRealTyp
     int hChillerHT = getVariableHandle((void *)this->state, "Chiller Heat Transfer", "Chiller 1");
     int hZoneTemp = getVariableHandle((void *)this->state, "Zone Mean Temperature", "Zone 1");
 
+    this->state->dataGlobal->HourOfDay = 1;
+    this->state->dataGlobal->MinutesInTimeStep = 1;
+    this->state->dataEnvrn->Month = 1;
+    this->state->dataEnvrn->DayOfMonth = 1;
+
     // pretend like E+ ran a time step
     this->simulateTimeStepAndReport();
 
@@ -406,6 +413,12 @@ TEST_F(DataExchangeAPIUnitTestFixture, DataTransfer_TestGetMeterValues)
     this->setupVariablesOnceAllAreRequested();
     int hFacilityElectricity = getMeterHandle((void *)this->state, "Electricity:Facility");
     EXPECT_GT(hFacilityElectricity, -1);
+
+    this->state->dataGlobal->HourOfDay = 1;
+    this->state->dataGlobal->MinutesInTimeStep = 1;
+    this->state->dataEnvrn->Month = 1;
+    this->state->dataEnvrn->DayOfMonth = 1;
+
     // pretend like E+ ran a time step
     this->simulateTimeStepAndReport();
     // get the value for a valid meter
