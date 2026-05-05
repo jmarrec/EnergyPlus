@@ -173,12 +173,13 @@ void SetupPollutionCalculations(EnergyPlusData &state)
         //  and the like are happening as expected.
         OutputProcessor::ReportFreq freq = OutputProcessor::ReportFreq::Simulation;
 
-        if (!state.dataIPShortCut->lAlphaFieldBlanks(1) &&
-            (freq = static_cast<OutputProcessor::ReportFreq>(
-                 getEnumValue(OutputProcessor::reportFreqNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(1))))) ==
-                OutputProcessor::ReportFreq::Invalid) {
-            ShowSevereError(state, EnergyPlus::format("Invalid reporting frequency {}", state.dataIPShortCut->cAlphaArgs(1)));
-            continue;
+        if (!state.dataIPShortCut->lAlphaFieldBlanks(1)) {
+            freq = static_cast<OutputProcessor::ReportFreq>(
+                getEnumValue(OutputProcessor::reportFreqNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(1))));
+            if (freq == OutputProcessor::ReportFreq::Invalid) {
+                ShowSevereError(state, EnergyPlus::format("Invalid reporting frequency {}", state.dataIPShortCut->cAlphaArgs(1)));
+                continue;
+            }
         }
 
         InitPollutionMeterReporting(state, freq);

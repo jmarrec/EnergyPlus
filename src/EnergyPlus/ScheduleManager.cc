@@ -2436,7 +2436,7 @@ namespace Sched {
             int DayNum = 1;
             while (DayNum <= 366) {
                 auto *weekSched = schedDetailed->weekScheds[DayNum];
-                while (schedDetailed->weekScheds[DayNum] == weekSched && DayNum <= 366) {
+                while (DayNum <= 366 && schedDetailed->weekScheds[DayNum] == weekSched) {
                     if (DayNum == 366) {
                         General::InvOrdinalDay(DayNum, PMon, PDay, 1);
                         print(state.files.eio, ThruFmt, Months[PMon - 1], PDay, weekSched->Name);
