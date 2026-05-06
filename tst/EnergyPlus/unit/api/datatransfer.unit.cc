@@ -147,11 +147,10 @@ class DataExchangeAPIUnitTestFixture : public EnergyPlusFixture
     void SetUp() override
     {
         EnergyPlusFixture::SetUp();
-        Real64 timeStep = 1.0;
-        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, timeStep);
-        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::System, timeStep);
-        *state->dataOutputProcessor->TimeValue.at(static_cast<int>(OutputProcessor::TimeStepType::Zone)).TimeStep = 60;
-        *state->dataOutputProcessor->TimeValue.at(static_cast<int>(OutputProcessor::TimeStepType::System)).TimeStep = 60;
+        state->dataGlobal->TimeStepZone = 1.0 / 60.0;
+        state->dataHVACGlobal->TimeStepSys = state->dataGlobal->TimeStepZone;
+        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, state->dataGlobal->TimeStepZone);
+        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::System, state->dataHVACGlobal->TimeStepSys);
         state->dataPluginManager->pluginManager = std::make_unique<EnergyPlus::PluginManagement::PluginManager>(*state);
     }
 
