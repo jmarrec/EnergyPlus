@@ -121,6 +121,8 @@ namespace InternalHeatGains {
 
     void InitInternalHeatGains(EnergyPlusData &state);
 
+    void SizeOaControlledBaseboard(EnergyPlusData &state);
+
     void CheckReturnAirHeatGain(EnergyPlusData &state);
 
     void CalcZoneITEq(EnergyPlusData &state);
