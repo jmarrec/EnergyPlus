@@ -7118,7 +7118,7 @@ namespace InternalHeatGains {
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         // int Loop;						 // DO loop counter for OA controlled baseboard heater
-        //int SurfNum; // DO loop counter for surfaces
+        // int SurfNum; // DO loop counter for surfaces
         // int NZ;							 // Zone number counter
         bool IsAutosize;                 // True if autosize
         Real64 LowTemperatureDes;        // Autosize low temperature for reporting
@@ -7143,7 +7143,7 @@ namespace InternalHeatGains {
             if (thisBBHeat.IsThisSized == false) {
                 // Initialize local variables
                 IsAutosize = false;
-                //SurfNum = 0;
+                // SurfNum = 0;
                 LowTemperatureDes = 0.0;
                 LowTemperatureUser = 0.0;
                 HighTemperatureDes = 0.0;
@@ -7163,7 +7163,8 @@ namespace InternalHeatGains {
                 LowTemperatureDes = thisBBHeat.ZnMinOutTemp;
                 if (IsAutosize) {
                     thisBBHeat.LowTemperature = LowTemperatureDes;
-                    BaseSizer::reportSizerOutput(state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size Low Temperature [C]", LowTemperatureDes);
+                    BaseSizer::reportSizerOutput(
+                        state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size Low Temperature [C]", LowTemperatureDes);
                 } else {
                     LowTemperatureUser = thisBBHeat.LowTemperature;
                     BaseSizer::reportSizerOutput(state,
@@ -7195,7 +7196,8 @@ namespace InternalHeatGains {
                 HighTemperatureDes = thisBBHeat.ZnHtgSetTemp;
                 if (IsAutosize) {
                     thisBBHeat.HighTemperature = HighTemperatureDes;
-                    BaseSizer::reportSizerOutput(state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size High Temperature [C]", HighTemperatureDes);
+                    BaseSizer::reportSizerOutput(
+                        state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size High Temperature [C]", HighTemperatureDes);
                 } else {
                     HighTemperatureUser = thisBBHeat.HighTemperature;
                     BaseSizer::reportSizerOutput(state,
@@ -7270,7 +7272,11 @@ namespace InternalHeatGains {
 
                 if (IsAutosize) {
                     thisBBHeat.CapatLowTemperature = CapatLowTemperatureDes;
-                    BaseSizer::reportSizerOutput(state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size Capacity at Low Temperature [W]", CapatLowTemperatureDes);
+                    BaseSizer::reportSizerOutput(state,
+                                                 "ZoneBaseboard:OutdoorTemperatureControlled",
+                                                 thisBBHeat.Name,
+                                                 "Design Size Capacity at Low Temperature [W]",
+                                                 CapatLowTemperatureDes);
                 } else {
                     CapatLowTemperatureUser = thisBBHeat.CapatLowTemperature;
                     BaseSizer::reportSizerOutput(state,
@@ -7310,7 +7316,11 @@ namespace InternalHeatGains {
                 }
                 if (IsAutosize) {
                     thisBBHeat.CapatHighTemperature = CapatHighTemperatureDes;
-                    BaseSizer::reportSizerOutput(state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size Capacity at High Temperature [W]", CapatHighTemperatureDes);
+                    BaseSizer::reportSizerOutput(state,
+                                                 "ZoneBaseboard:OutdoorTemperatureControlled",
+                                                 thisBBHeat.Name,
+                                                 "Design Size Capacity at High Temperature [W]",
+                                                 CapatHighTemperatureDes);
                 } else {
                     CapatHighTemperatureUser = thisBBHeat.CapatHighTemperature;
                     BaseSizer::reportSizerOutput(state,
@@ -7361,7 +7371,11 @@ namespace InternalHeatGains {
                 CapatLowTemperatureDes = thisBBHeat.ExtSurfCondLoad + ZnInfilSensLoad + ZnVentSensLoad;
                 if (IsAutosize) {
                     thisBBHeat.CapatLowTemperature = CapatLowTemperatureDes;
-                    BaseSizer::reportSizerOutput(state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size Capacity at Low Temperature [W]", CapatLowTemperatureDes);
+                    BaseSizer::reportSizerOutput(state,
+                                                 "ZoneBaseboard:OutdoorTemperatureControlled",
+                                                 thisBBHeat.Name,
+                                                 "Design Size Capacity at Low Temperature [W]",
+                                                 CapatLowTemperatureDes);
                 } else {
                     CapatLowTemperatureUser = thisBBHeat.CapatLowTemperature;
                     BaseSizer::reportSizerOutput(state,
@@ -7380,7 +7394,9 @@ namespace InternalHeatGains {
                                                    thisBBHeat.Name));
                             ShowContinueError(state,
                                               EnergyPlus::format("User-Specified Capacity at Low Temperature of {:.R} [W]", CapatLowTemperatureUser));
-                            ShowContinueError(state, EnergyPlus::format("differs from Design Size Capacity at Low Temperature of {:.R} [W]"));
+                            ShowContinueError(
+                                state,
+                                EnergyPlus::format("differs from Design Size Capacity at Low Temperature of {:.R} [W]", CapatLowTemperatureDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -7395,7 +7411,11 @@ namespace InternalHeatGains {
                 CapatHighTemperatureDes = thisBBHeat.CapatLowTemperature * DeltaTMin / DeltaTMax;
                 if (IsAutosize) {
                     thisBBHeat.CapatHighTemperature = CapatHighTemperatureDes;
-                    BaseSizer::reportSizerOutput(state, "ZoneBaseboard:OutdoorTemperatureControlled", thisBBHeat.Name, "Design Size Capacity at High Temperature [W]", CapatHighTemperatureDes);
+                    BaseSizer::reportSizerOutput(state,
+                                                 "ZoneBaseboard:OutdoorTemperatureControlled",
+                                                 thisBBHeat.Name,
+                                                 "Design Size Capacity at High Temperature [W]",
+                                                 CapatHighTemperatureDes);
                 } else {
                     CapatHighTemperatureUser = thisBBHeat.CapatHighTemperature;
                     BaseSizer::reportSizerOutput(state,
@@ -7416,7 +7436,7 @@ namespace InternalHeatGains {
                                 state, EnergyPlus::format("User-Specified Capacity at High Temperature of {:.R} [W]", CapatHighTemperatureUser));
                             ShowContinueError(
                                 state,
-                                EnergyPlus::format("differs from Design Size Capacity at High Temperature of :.R} [W]", CapatHighTemperatureDes));
+                                EnergyPlus::format("differs from Design Size Capacity at High Temperature of {:.R} [W]", CapatHighTemperatureDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
