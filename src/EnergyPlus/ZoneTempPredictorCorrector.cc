@@ -6978,8 +6978,6 @@ void ZoneSpaceHeatBalanceData::calcPredictedSystemLoad(EnergyPlusData &state, Re
         ZoneSetPoint = zoneTstatSetpt.setpt;
         if (RAFNFrac > 0.0) {
             LoadToHeatingSetPoint = LoadToHeatingSetPoint / RAFNFrac;
-        }
-        if (RAFNFrac > 0.0) {
             LoadToCoolingSetPoint = LoadToCoolingSetPoint / RAFNFrac;
         }
 
@@ -7070,8 +7068,6 @@ void ZoneSpaceHeatBalanceData::calcPredictedSystemLoad(EnergyPlusData &state, Re
 
         if (RAFNFrac > 0.0) {
             LoadToHeatingSetPoint = LoadToHeatingSetPoint / RAFNFrac;
-        }
-        if (RAFNFrac > 0.0) {
             LoadToCoolingSetPoint = LoadToCoolingSetPoint / RAFNFrac;
         }
 

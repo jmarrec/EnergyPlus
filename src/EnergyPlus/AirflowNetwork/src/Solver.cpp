@@ -5041,12 +5041,12 @@ namespace AirflowNetwork {
         if (simulation_control.DuctLoss) {
             // Assign node num based on Distribution node
             for (int i = 1; i <= AirflowNetworkNumOfLinks; ++i) {
-                for (int j = 1; j <= DisSysNumOfNodes; ++j) {
-                    if (Util::SameString(AirflowNetworkLinkageData(i).NodeNames[0], DisSysNodeData(j).Name)) {
-                        AirflowNetworkLinkageData(i).NodeNums[0] = j;
+                for (int k = 1; k <= DisSysNumOfNodes; ++k) {
+                    if (Util::SameString(AirflowNetworkLinkageData(i).NodeNames[0], DisSysNodeData(k).Name)) {
+                        AirflowNetworkLinkageData(i).NodeNums[0] = k;
                     }
-                    if (Util::SameString(AirflowNetworkLinkageData(i).NodeNames[1], DisSysNodeData(j).Name)) {
-                        AirflowNetworkLinkageData(i).NodeNums[1] = j;
+                    if (Util::SameString(AirflowNetworkLinkageData(i).NodeNames[1], DisSysNodeData(k).Name)) {
+                        AirflowNetworkLinkageData(i).NodeNums[1] = k;
                     }
                 }
                 if (AirflowNetworkLinkageData(i).NodeNums[0] == 0) {
@@ -11419,7 +11419,7 @@ namespace AirflowNetwork {
 
         // Check number of fans specified in an AirLoop #6748
         int BranchNum;
-        int NumOfFans;
+        int NumOfFans = 0;
         std::string FanNames;
         for (BranchNum = 1; BranchNum <= m_state.dataAirSystemsData->PrimaryAirSystems(1).NumBranches; ++BranchNum) {
             NumOfFans = 0;

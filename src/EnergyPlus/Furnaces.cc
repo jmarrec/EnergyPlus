@@ -9463,15 +9463,15 @@ namespace Furnaces {
         int constexpr SolveMaxIter(50);
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        Real64 mdot;                                       // heating coil steam or hot water mass flow rate
-        Real64 MinWaterFlow;                               // coil minimum hot water mass flow rate, kg/s
-        Real64 MaxHotWaterFlow;                            // coil maximum hot water mass flow rate, kg/s
-        Real64 HotWaterMdot;                               // actual hot water mass flow rate
-        HVAC::CoilType CoilType = HVAC::CoilType::Invalid; // heating coil type number
-        int HeatingCoilIndex(0);                           // heating coil index
-        int CoilControlNode(0);                            // control node for hot water and steam heating coils
-        int CoilOutletNode(0);                             // air outlet node of the heating coils
-        PlantLocation plantLoc{};                          // plant loop location
+        Real64 mdot;              // heating coil steam or hot water mass flow rate
+        Real64 MinWaterFlow;      // coil minimum hot water mass flow rate, kg/s
+        Real64 MaxHotWaterFlow;   // coil maximum hot water mass flow rate, kg/s
+        Real64 HotWaterMdot;      // actual hot water mass flow rate
+        HVAC::CoilType CoilType;  // heating coil type number
+        int HeatingCoilIndex(0);  // heating coil index
+        int CoilControlNode(0);   // control node for hot water and steam heating coils
+        int CoilOutletNode(0);    // air outlet node of the heating coils
+        PlantLocation plantLoc{}; // plant loop location
 
         Real64 QActual = 0.0;                                               // actual heating load
         std::string &HeatingCoilName = state.dataFurnaces->HeatingCoilName; // name of heating coil

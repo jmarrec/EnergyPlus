@@ -135,9 +135,11 @@ namespace DuctLoss {
                         state.dataDuctLoss->ductloss(DuctLossNum).CalcDuctLoss(state, DuctLossNum);
                     }
                 }
-            }
-            // Return branch leak
-            if (AirPathWay == AirPath::Return) {
+
+                SupplyPathUpdate(state, PathNum);
+                ReportDuctLoss(state);
+
+            } else if (AirPathWay == AirPath::Return) { // Return branch leak
                 for (int DuctLossNum = 1; DuctLossNum <= state.dataDuctLoss->NumOfDuctLosses; DuctLossNum++) {
                     if (state.dataDuctLoss->ductloss(DuctLossNum).LossSubType == DuctLossSubType::RetLeakBranch) {
                         state.dataDuctLoss->ductloss(DuctLossNum).CalcDuctLoss(state, DuctLossNum);
@@ -167,13 +169,8 @@ namespace DuctLoss {
                         state.dataDuctLoss->ductloss(DuctLossNum).CalcDuctLoss(state, DuctLossNum);
                     }
                 }
-            }
-            if (AirPathWay == AirPath::Return) {
+
                 ReturnPathUpdate(state, PathNum);
-            }
-            if (AirPathWay == AirPath::Supply) {
-                SupplyPathUpdate(state, PathNum);
-                ReportDuctLoss(state);
             }
         }
     }

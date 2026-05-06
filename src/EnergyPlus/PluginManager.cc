@@ -477,9 +477,8 @@ void initPython(EnergyPlusData &state, fs::path const &pathToPythonPackages)
 // GilGrabber is an RAII helper that will ensure we release the GIL (including if we end up throwing)
 struct GilGrabber
 {
-    GilGrabber()
+    GilGrabber() : gil(PyGILState_Ensure())
     {
-        gil = PyGILState_Ensure();
     }
     ~GilGrabber()
     {
