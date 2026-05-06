@@ -1075,14 +1075,14 @@ namespace DataHeatBalance {
         bool EMSZoneBaseboardOverrideOn = false; // EMS actuating equipment power if .TRUE.
         Real64 EMSZoneBaseboardPower = 0.0;      // Value EMS is directing to use for override
         Real64 FractionRadiant = 0.0;
-        Real64 ZnHtgSetTemp = 0.0;		// Design zone heating setpoint temperature
-        Real64 ZnMinOutTemp = 0.0;		// Minimum outdoor temperature over design days
-        Real64 ExtSurfCondLoad = 0.0;		// Conductional load through exterior surfaces by max temp diff
-        bool IsThisSized = false;			// True if called once
-        bool InfilVentDone = false;			// True if infiltration / ventilation loads were determined
-                      // It is also used to skip second sizing call if necessary
-        bool CapatLowTempAutosize = false;	// Flag to indicate autosize of the field in second sizing call
-        bool CapatHighTempAutosize = false;	// Flag to indicate autosize of the field in second sizing call
+        Real64 ZnHtgSetTemp = 0.0;          // Design zone heating setpoint temperature
+        Real64 ZnMinOutTemp = 0.0;          // Minimum outdoor temperature over design days
+        Real64 ExtSurfCondLoad = 0.0;       // Conductional load through exterior surfaces by max temp diff
+        bool IsThisSized = false;           // True if called once
+        bool InfilVentDone = false;         // True if infiltration / ventilation loads were determined
+                                            // It is also used to skip second sizing call if necessary
+        bool CapatLowTempAutosize = false;  // Flag to indicate autosize of the field in second sizing call
+        bool CapatHighTempAutosize = false; // Flag to indicate autosize of the field in second sizing call
         Real64 FractionConvected = 0.0;
         bool ManageDemand = false; // Flag to indicate whether to use demand limiting
         Real64 DemandLimit = 0.0;  // Demand limit set by demand manager [W]
