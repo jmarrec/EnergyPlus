@@ -435,9 +435,13 @@
 
   OtherEquipment,
     Test 352a,               !- Name
+    Test 352a Definition,    !- Other Equipment Definition Name
     FuelOilNo2,              !- Fuel Type
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    OthEqSch,                !- Schedule Name
+    OthEqSch;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    Test 352a Definition,    !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     352,                     !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -448,9 +452,13 @@
 
   OtherEquipment,
     Test 352 minus,          !- Name
+    Test 352 minus Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    OthEqSch,                !- Schedule Name
+    OthEqSch;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    Test 352 minus Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     -352,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}

@@ -1208,9 +1208,13 @@
 
   OtherEquipment,
     OthEquSen_ZoneOne,       !- Name
+    OthEquSen_ZoneOne Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    FMU_OthEquSen_ZoneOne,   !- Schedule Name
+    FMU_OthEquSen_ZoneOne;   !- Schedule Name
+
+  OtherEquipment:Definition,
+    OthEquSen_ZoneOne Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -1223,9 +1227,13 @@
 
   OtherEquipment,
     OthEquLat_ZoneOne,       !- Name
+    OthEquLat_ZoneOne Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    FMU_OthEquLat_ZoneOne,   !- Schedule Name
+    FMU_OthEquLat_ZoneOne;   !- Schedule Name
+
+  OtherEquipment:Definition,
+    OthEquLat_ZoneOne Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1,                       !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
