@@ -118,6 +118,24 @@ namespace InternalHeatGains {
         bool usingThermalComfort = false; // True if any TC model is enabled
     };
 
+    struct LightsDefinitionData // Lights:Definition
+    {
+        // Members
+        std::string Name;                                                 // Definition object name
+        DesignLevelMethod designLevelMethod = DesignLevelMethod::Invalid; // LightingLevel, WattsPerArea, or WattsPerPerson
+        Real64 levelValue = 0.0;                                          // design level read from the matched field
+        bool levelIsBlank = false;                                        // True if design level field is blank in input
+        std::string levelField;                                           // Schema field name used for the level (for error messages)
+        Real64 FractionReturnAir = 0.0;                                   // Fraction of sensible heat that goes to return air
+        Real64 FractionRadiant = 0.0;                                     // Fraction of sensible heat that is radiant
+        Real64 FractionShortWave = 0.0;                                   // Fraction of sensible heat that is short-wave (visible)
+        bool FractionReturnAirIsCalculated = false;                       // True if return-air fraction is calculated from plenum temperature
+        Real64 FractionReturnAirPlenTempCoeff1 = 0.0;
+        Real64 FractionReturnAirPlenTempCoeff2 = 0.0;
+        std::string RetNodeName;     // Return Air Heat Gain Node Name
+        std::string ExhaustNodeName; // Exhaust Air Heat Gain Node Name
+    };
+
     struct GlobalInternalGainMiscObject
     {
         // Members
@@ -137,6 +155,8 @@ namespace InternalHeatGains {
     std::vector<ZoneEquipDefinitionData> GetSpaceLoadDefinition(EnergyPlusData &state, const std::string &objectType);
 
     std::vector<PeopleDefinitionData> GetPeopleDefinition(EnergyPlusData &state);
+
+    std::vector<LightsDefinitionData> GetLightsDefinition(EnergyPlusData &state);
 
     void GetInternalHeatGainsInput(EnergyPlusData &state);
 
