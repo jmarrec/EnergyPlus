@@ -21449,22 +21449,88 @@ People,
    \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
    \memo then this definition applies to all applicable spaces, and each instance will
    \memo be named with the Space Name plus this Object Name.
-   \min-fields 10
+   \min-fields 5
   A1 , \field Name
        \required-field
        \type alpha
        \reference PeopleNames
-  A2 , \field Zone or ZoneList or Space or SpaceList Name
+       \reference SpaceItemNames
+       \reference SpaceLoadNames
+       \reference SpaceComponentInstanceNames
+  A2 , \field People Definition Name
+       \type object-list
+       \required-field
+       \object-list PeopleDefinitionNames
+  A3 , \field Zone or ZoneList or Space or SpaceList Name
        \required-field
        \type object-list
        \object-list ZoneAndZoneListNames
        \object-list SpaceAndSpaceListNames
-  A3 , \field Number of People Schedule Name
+  A4 , \field Number of People Schedule Name
        \required-field
        \type object-list
        \note units in schedule should be fraction applied to number of people (0.0 - 1.0)
        \object-list ScheduleNames
-  A4 , \field Number of People Calculation Method
+  A5 , \field Activity Level Schedule Name
+       \required-field
+       \note Note that W has to be converted to mets in TC routine
+       \type object-list
+       \note units in schedule are W/person
+       \object-list ScheduleNames
+  A6 , \field Surface Name/Angle Factor List Name
+       \type object-list
+       \object-list AllHeatTranAngFacNames
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  A7 , \field Work Efficiency Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note units in schedule are 0.0 to 1.0
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  A8 , \field Clothing Insulation Calculation Method
+       \type choice
+       \key ClothingInsulationSchedule
+       \key DynamicClothingModelASHRAE55
+       \key CalculationMethodSchedule
+       \default ClothingInsulationSchedule
+  A9 , \field Clothing Insulation Calculation Method Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note a schedule value of 1 for the Scheduled method, and 2 for the DynamicClothingModelASHRAE55 method
+  A10, \field Clothing Insulation Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note use "Clo" from ASHRAE or Thermal Comfort guides
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  A11, \field Air Velocity Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note units in the schedule are m/s
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  A12, \field Ankle Level Air Velocity Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note units in the schedule are m/s
+       \note this is the schedule of the air speed at the 0.1 m above the floor
+       \note optional (only required for runs of thermal comfort models AnkleDraftASH55)
+  N1,  \field Cold Stress Temperature Threshold
+       \type real
+       \units C
+       \note this is the indoor safe temperature threshold for cold stress
+       \default 15.56
+  N2;  \field Heat Stress Temperature Threshold
+       \type real
+       \units C
+       \note this is the indoor safe temperature threshold for heat stress
+       \default 30
+
+People:Definition,
+   \min-fields 5
+  A1 , \field Name
+       \type alpha
+       \required-field
+       \reference PeopleDefinitionNames
+       \reference SpaceComponentDefinitionNames
+  A2 , \field Number of People Calculation Method
        \note The entered calculation method is used to create the maximum number of people
        \note for this set of attributes (i.e. sensible fraction, schedule, etc)
        \note Choices: People -- simply enter number of occupants.
@@ -21500,12 +21566,6 @@ People,
        \default autocalculate
        \minimum 0.0
        \maximum 1.0
-  A5 , \field Activity Level Schedule Name
-       \required-field
-       \note Note that W has to be converted to mets in TC routine
-       \type object-list
-       \note units in schedule are W/person
-       \object-list ScheduleNames
   N6 , \field Carbon Dioxide Generation Rate
        \note CO2 generation rate per unit of activity level.
        \type real
@@ -21515,48 +21575,19 @@ People,
        \maximum 3.82E-7
        \note The default value is obtained from ASHRAE Std 62.1 at 0.0084 cfm/met/person over
        \note the general adult population.
-  A6 , \field Enable ASHRAE 55 Comfort Warnings
+  A3 , \field Enable ASHRAE 55 Comfort Warnings
        \type choice
        \key Yes
        \key No
        \default No
-  A7 , \field Mean Radiant Temperature Calculation Type
+  A4 , \field Mean Radiant Temperature Calculation Type
        \note optional (only required for thermal comfort runs)
        \type choice
        \key EnclosureAveraged
        \key SurfaceWeighted
        \key AngleFactor
        \default EnclosureAveraged
-  A8 , \field Surface Name/Angle Factor List Name
-       \type object-list
-       \object-list AllHeatTranAngFacNames
-       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
-  A9 , \field Work Efficiency Schedule Name
-       \type object-list
-       \object-list ScheduleNames
-       \note units in schedule are 0.0 to 1.0
-       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
-  A10, \field Clothing Insulation Calculation Method
-       \type choice
-       \key ClothingInsulationSchedule
-       \key DynamicClothingModelASHRAE55
-       \key CalculationMethodSchedule
-       \default ClothingInsulationSchedule
-  A11, \field Clothing Insulation Calculation Method Schedule Name
-       \type object-list
-       \object-list ScheduleNames
-       \note a schedule value of 1 for the Scheduled method, and 2 for the DynamicClothingModelASHRAE55 method
-  A12, \field Clothing Insulation Schedule Name
-       \type object-list
-       \object-list ScheduleNames
-       \note use "Clo" from ASHRAE or Thermal Comfort guides
-       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
-  A13, \field Air Velocity Schedule Name
-       \type object-list
-       \object-list ScheduleNames
-       \note units in the schedule are m/s
-       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
-  A14, \field Thermal Comfort Model 1 Type
+  A5 , \field Thermal Comfort Model 1 Type
        \type choice
        \key Fanger
        \key Pierce
@@ -21566,7 +21597,7 @@ People,
        \key CoolingEffectASH55
        \key AnkleDraftASH55
        \note optional (only needed for people thermal comfort results reporting)
-  A15, \field Thermal Comfort Model 2 Type
+  A6 , \field Thermal Comfort Model 2 Type
        \type choice
        \key Fanger
        \key Pierce
@@ -21576,7 +21607,7 @@ People,
        \key CoolingEffectASH55
        \key AnkleDraftASH55
        \note optional (second type of thermal comfort model and results reporting)
-  A16, \field Thermal Comfort Model 3 Type
+  A7 , \field Thermal Comfort Model 3 Type
        \type choice
        \key Fanger
        \key Pierce
@@ -21586,7 +21617,7 @@ People,
        \key CoolingEffectASH55
        \key AnkleDraftASH55
        \note optional (third thermal comfort model and report type)
-  A17, \field Thermal Comfort Model 4 Type
+  A8 , \field Thermal Comfort Model 4 Type
        \type choice
        \key Fanger
        \key Pierce
@@ -21596,7 +21627,7 @@ People,
        \key CoolingEffectASH55
        \key AnkleDraftASH55
        \note optional (fourth thermal comfort model and report type)
-  A18, \field Thermal Comfort Model 5 Type
+  A9 , \field Thermal Comfort Model 5 Type
        \type choice
        \key Fanger
        \key Pierce
@@ -21606,7 +21637,7 @@ People,
        \key CoolingEffectASH55
        \key AnkleDraftASH55
        \note optional (fifth thermal comfort model and report type)
-  A19, \field Thermal Comfort Model 6 Type
+  A10, \field Thermal Comfort Model 6 Type
        \type choice
        \key Fanger
        \key Pierce
@@ -21616,7 +21647,7 @@ People,
        \key CoolingEffectASH55
        \key AnkleDraftASH55
        \note optional (sixth thermal comfort model and report type)
-  A20, \field Thermal Comfort Model 7 Type
+  A11; \field Thermal Comfort Model 7 Type
        \type choice
        \key Fanger
        \key Pierce
@@ -21626,22 +21657,6 @@ People,
        \key CoolingEffectASH55
        \key AnkleDraftASH55
        \note optional (seventh thermal comfort model and report type)
-  A21, \field Ankle Level Air Velocity Schedule Name
-       \type object-list
-       \object-list ScheduleNames
-       \note units in the schedule are m/s
-       \note this is the schedule of the air speed at the 0.1 m above the floor
-       \note optional (only required for runs of thermal comfort models AnkleDraftASH55)
-  N7,  \field Cold Stress Temperature Threshold
-       \type real
-       \units C
-       \note this is the indoor safe temperature threshold for cold stress
-       \default 15.56
-  N8;  \field Heat Stress Temperature Threshold
-       \type real
-       \units C
-       \note this is the indoor safe temperature threshold for heat stress
-       \default 30
 
 ComfortViewFactorAngles,
        \memo Used to specify radiant view factors for thermal comfort calculations.
