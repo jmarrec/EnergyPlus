@@ -100,6 +100,7 @@ Usage:
     # With no args, processes all *.unit.cc under tst/EnergyPlus/unit/
 """
 
+import argparse
 import importlib.util
 import re
 import sys
@@ -107,8 +108,8 @@ from pathlib import Path
 
 # Load the IDF script for its parsing helpers (used inside raw string literals)
 _spec = importlib.util.spec_from_file_location(
-    "split_electric_equipment_idf",
-    Path(__file__).parent / "split_electric_equipment_idf.py",
+    "split_space_load_idf",
+    Path(__file__).parent / "split_space_load_idf.py",
 )
 _idf = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_idf)
@@ -170,9 +171,10 @@ def set_terminator(idf_content, new_term):
     return new_value_str
 
 
-def is_ee_class(idf_content):
+def is_ee_class(idf_content, only_class: str | None = None):
     """True iff idf_content is a splittable equipment class name (not a Definition)."""
-    return bool(re.match(r"^\s*(" + "|".join(re.escape(k) for k in _idf.OBJECTS_TO_SPLIT) + r")\s*,\s*$", idf_content))
+    classes = [only_class] if only_class is not None else list(_idf.OBJECTS_TO_SPLIT)
+    return bool(re.match(r"^\s*(" + "|".join(re.escape(k) for k in classes) + r")\s*,\s*$", idf_content))
 
 
 def terminates_object(idf_content):
@@ -579,7 +581,7 @@ def transform_block(block, filepath_for_warning=""):
 # ---------------------------------------------------------------------------
 
 
-def process_file(filepath):
+def process_file(filepath, only_class: str | None = None):
     """Process a single file in place. Returns number of blocks converted."""
     filepath = Path(filepath)
     lines = filepath.read_text(encoding="utf-8", errors="replace").splitlines(keepends=True)
@@ -608,7 +610,7 @@ def process_file(filepath):
         if in_raw_string:
             # Plain IDF content — delegate to the IDF script's parser
             parsed = _idf.parse_idf_line(line)
-            if parsed and _idf.is_ee_class(parsed):
+            if parsed and _idf.is_ee_class(parsed=parsed, only_class=only_class):
                 block = [line]
                 j = i + 1
                 while j < len(lines):
@@ -644,7 +646,7 @@ def process_file(filepath):
         else:
             # C++ per-line quoted string mode
             parsed = parse_cpp_line(line)
-            if parsed and is_ee_class(parsed[1]):
+            if parsed and is_ee_class(idf_content=parsed[1], only_class=only_class):
                 block = [line]
                 j = i + 1
                 while j < len(lines):
@@ -689,8 +691,18 @@ def process_file(filepath):
 
 
 def main():
-    if len(sys.argv) > 1:
-        files = [Path(f) for f in sys.argv[1:]]
+    parser = argparse.ArgumentParser(description="Split old-style equipment objects in C++ unit test files.")
+    parser.add_argument("files", nargs="*", help="Files to process (default: all *.unit.cc under tst/EnergyPlus/unit/)")
+    parser.add_argument(
+        "--only-class",
+        choices=list(_idf.OBJECTS_TO_SPLIT),
+        metavar="CLASS",
+        help=f"Limit split to this class only. Choices: {', '.join(_idf.OBJECTS_TO_SPLIT)}",
+    )
+    args = parser.parse_args()
+
+    if args.files:
+        files = [Path(f) for f in args.files]
     else:
         repo_root = Path(__file__).resolve().parents[2]
         unit_dir = repo_root / "tst" / "EnergyPlus" / "unit"
@@ -698,7 +710,7 @@ def main():
 
     total = 0
     for filepath in files:
-        count = process_file(filepath)
+        count = process_file(filepath=filepath, only_class=args.only_class)
         if count:
             print(f"  {filepath.name}: {count} block(s) converted")
             total += count

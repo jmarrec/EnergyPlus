@@ -98,6 +98,7 @@ Usage:
     # With no args, processes all *.epJSON under testfiles/
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -327,7 +328,7 @@ def process_object_type(data, obj_type, cfg):
     return len(old_objs)
 
 
-def process_file(filepath):
+def process_file(filepath, only_class: str | None = None):
     """Process a single epJSON file in place. Returns number of objects converted."""
     filepath = Path(filepath)
     text = filepath.read_text(encoding="utf-8")
@@ -335,7 +336,9 @@ def process_file(filepath):
 
     total = 0
     for obj_type, cfg in OBJECT_CONFIGS.items():
-        total += process_object_type(data, obj_type, cfg)
+        if only_class is not None and obj_type != only_class:
+            continue
+        total += process_object_type(data=data, obj_type=obj_type, cfg=cfg)
 
     if total:
         filepath.write_text(json.dumps(data, indent=4) + "\n", encoding="utf-8")
@@ -343,9 +346,19 @@ def process_file(filepath):
 
 
 def main():
-    if len(sys.argv) > 1:
+    parser = argparse.ArgumentParser(description="Split old-style equipment epJSON objects into instance + definition.")
+    parser.add_argument("files", nargs="*", help="Files or directories to process (default: all epJSON under repo)")
+    parser.add_argument(
+        "--only-class",
+        choices=list(OBJECT_CONFIGS),
+        metavar="CLASS",
+        help=f"Limit split to this class only. Choices: {', '.join(OBJECT_CONFIGS)}",
+    )
+    args = parser.parse_args()
+
+    if args.files:
         files = []
-        for arg in sys.argv[1:]:
+        for arg in args.files:
             p = Path(arg)
             if p.is_dir():
                 files.extend(sorted(p.rglob("*.epJSON")))
@@ -359,7 +372,7 @@ def main():
 
     total = 0
     for filepath in files:
-        count = process_file(filepath)
+        count = process_file(filepath=filepath, only_class=args.only_class)
         if count:
             print(f"  {filepath.name}: {count} object(s) converted")
             total += count

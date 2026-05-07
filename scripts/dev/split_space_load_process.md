@@ -39,9 +39,9 @@ Completed so far: `ElectricEquipment`, `HotWaterEquipment`, `SteamEquipment`, `G
 
 ### Script support
 
-`split_electric_equipment_idf.py` and `split_electric_equipment_unit_tests.py` have dedicated `transform_lights_block` / `transform_lights_block_cpp` functions dispatched when `transform_block` encounters a `Lights` class line.
+`split_space_load_idf.py` and `split_space_load_unit_tests.py` have dedicated `transform_lights_block` / `transform_lights_block_cpp` functions dispatched when `transform_block` encounters a `Lights` class line.
 
-`split_electric_equipment_epjson.py` uses per-object `instance_fields` in `OBJECT_CONFIGS["Lights"]` (including `fraction_replaceable`) and lists all 12 definition fields explicitly.
+`split_space_load_epjson.py` uses per-object `instance_fields` in `OBJECT_CONFIGS["Lights"]` (including `fraction_replaceable`) and lists all 12 definition fields explicitly.
 
 ### Production code fix
 
@@ -80,9 +80,9 @@ When a `Lights` definition name doesn't match any `Lights:Definition`, the proce
 
 ### Script support
 
-Because of the interleaved layout, `split_electric_equipment_idf.py` and `split_electric_equipment_unit_tests.py` have a dedicated `transform_people_block` / `transform_people_block_cpp` function that is dispatched automatically when `transform_block` encounters a `People` class line.
+Because of the interleaved layout, `split_space_load_idf.py` and `split_space_load_unit_tests.py` have a dedicated `transform_people_block` / `transform_people_block_cpp` function that is dispatched automatically when `transform_block` encounters a `People` class line.
 
-`split_electric_equipment_epjson.py` uses per-object `instance_fields` in `OBJECT_CONFIGS["People"]` (instead of the shared `_INSTANCE_FIELDS`) and lists all 16 definition fields explicitly.
+`split_space_load_epjson.py` uses per-object `instance_fields` in `OBJECT_CONFIGS["People"]` (instead of the shared `_INSTANCE_FIELDS`) and lists all 16 definition fields explicitly.
 
 ---
 
@@ -244,9 +244,9 @@ Where `<resolved_field>` is `watts_per_floor_area` for ElectricEquipment and `po
 
 ## 7. Update split scripts
 
-### `split_electric_equipment_idf.py` and `split_electric_equipment_unit_tests.py`
+### `split_space_load_idf.py` and `split_space_load_unit_tests.py`
 
-Add the new type to `OBJECTS_TO_SPLIT` in `split_electric_equipment_idf.py`:
+Add the new type to `OBJECTS_TO_SPLIT` in `split_space_load_idf.py`:
 ```python
 OBJECTS_TO_SPLIT = {
     "ElectricEquipment": "Electric Equipment Definition Name",
@@ -258,7 +258,7 @@ The IDF and unit-test scripts read this dict from the imported `_idf` module —
 
 For objects that include a CO2 generation rate field in the definition (currently `GasEquipment` and `OtherEquipment`), also add an entry to `OBJECT_MAX_DEF_FIELDS` (set to `8`) and `OBJECT_MIN_DEF_FIELDS` (set to `7`, because the CO2 field has a default and may be absent in old files).
 
-### `split_electric_equipment_epjson.py`
+### `split_space_load_epjson.py`
 
 Add an entry to `OBJECT_CONFIGS`:
 ```python
@@ -284,9 +284,17 @@ Add an entry to `OBJECT_CONFIGS`:
 
 ```bash
 # From repo root:
-python scripts/dev/split_electric_equipment_idf.py
-python scripts/dev/split_electric_equipment_unit_tests.py
-python scripts/dev/split_electric_equipment_epjson.py
+python scripts/dev/split_space_load_idf.py
+python scripts/dev/split_space_load_unit_tests.py
+python scripts/dev/split_space_load_epjson.py
 ```
 
 Default (no args) covers `testfiles/`, `performance_tests/`, `datasets/` for IDF/IMF/epJSON, and `tst/EnergyPlus/unit/` for unit tests.
+
+To limit the split to a single class (useful when adding one new type at a time):
+
+```bash
+python scripts/dev/split_space_load_idf.py          --only-class ElectricEquipment
+python scripts/dev/split_space_load_unit_tests.py   --only-class ElectricEquipment
+python scripts/dev/split_space_load_epjson.py       --only-class ElectricEquipment
+```
