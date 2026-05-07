@@ -620,6 +620,178 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 
               ! If your original object starts with P, insert the rules here
 
+              CASE('PEOPLE')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+
+                ! Old People combined field order (A and N interleaved by IDD position):
+                !  1  A1  Name
+                !  2  A2  Zone or ZoneList or Space or SpaceList Name
+                !  3  A3  Number of People Schedule Name
+                !  4  A4  Number of People Calculation Method
+                !  5  N1  Number of People
+                !  6  N2  People per Zone Floor Area
+                !  7  N3  Zone Floor Area per Person
+                !  8  N4  Fraction Radiant
+                !  9  N5  Sensible Heat Fraction
+                ! 10  A5  Activity Level Schedule Name           <-- old \min-fields 10
+                ! 11  N6  Carbon Dioxide Generation Rate         (optional)
+                ! 12  A6  Enable ASHRAE 55 Comfort Warnings      (optional)
+                ! 13  A7  Mean Radiant Temperature Calculation Type (optional)
+                ! 14  A8  Surface Name/Angle Factor List Name    (optional)
+                ! 15  A9  Work Efficiency Schedule Name          (optional)
+                ! 16  A10 Clothing Insulation Calculation Method (optional)
+                ! 17  A11 Clothing Insulation Calculation Method Schedule Name (optional)
+                ! 18  A12 Clothing Insulation Schedule Name      (optional)
+                ! 19  A13 Air Velocity Schedule Name             (optional)
+                ! 20  A14 Thermal Comfort Model 1 Type           (optional)
+                ! 21  A15 Thermal Comfort Model 2 Type           (optional)
+                ! 22  A16 Thermal Comfort Model 3 Type           (optional)
+                ! 23  A17 Thermal Comfort Model 4 Type           (optional)
+                ! 24  A18 Thermal Comfort Model 5 Type           (optional)
+                ! 25  A19 Thermal Comfort Model 6 Type           (optional)
+                ! 26  A20 Thermal Comfort Model 7 Type           (optional)
+                ! 27  A21 Ankle Level Air Velocity Schedule Name (optional)
+                ! 28  N7  Cold Stress Temperature Threshold      (optional)
+                ! 29  N8  Heat Stress Temperature Threshold      (optional)
+
+                ! Write the updated People instance:
+                ! A1 Name (unchanged)
+                ! A2 People Definition Name (new) = Name + ' Definition'
+                ! A3 Zone or ZoneList or Space or SpaceList Name (was A2/field 2)
+                ! A4 Number of People Schedule Name (was A3/field 3)
+                ! A5 Activity Level Schedule Name (was A5/field 10)
+                !    --- all guaranteed by old \min-fields 10 ---
+                ! A6  Surface Name/Angle Factor List Name (was A8/field 14) -- optional
+                ! A7  Work Efficiency Schedule Name (was A9/field 15)       -- optional
+                ! A8  Clothing Insulation Calculation Method (was A10/field 16) -- optional
+                ! A9  Clothing Insulation Calculation Method Schedule Name (was A11/field 17) -- optional
+                ! A10 Clothing Insulation Schedule Name (was A12/field 18)  -- optional
+                ! A11 Air Velocity Schedule Name (was A13/field 19)         -- optional
+                ! A12 Ankle Level Air Velocity Schedule Name (was A21/field 27) -- optional
+                ! N1  Cold Stress Temperature Threshold (was N7/field 28)   -- optional
+                ! N2  Heat Stress Temperature Threshold (was N8/field 29)   -- optional
+                OutArgs(1) = InArgs(1)
+                OutArgs(2) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(3) = InArgs(2)
+                OutArgs(4) = InArgs(3)
+                OutArgs(5) = InArgs(10)
+                COutArgs = 5
+                IF (CurArgs >= 14) THEN
+                  OutArgs(6) = InArgs(14)
+                  COutArgs = 6
+                END IF
+                IF (CurArgs >= 15) THEN
+                  OutArgs(7) = InArgs(15)
+                  COutArgs = 7
+                END IF
+                IF (CurArgs >= 16) THEN
+                  OutArgs(8) = InArgs(16)
+                  COutArgs = 8
+                END IF
+                IF (CurArgs >= 17) THEN
+                  OutArgs(9) = InArgs(17)
+                  COutArgs = 9
+                END IF
+                IF (CurArgs >= 18) THEN
+                  OutArgs(10) = InArgs(18)
+                  COutArgs = 10
+                END IF
+                IF (CurArgs >= 19) THEN
+                  OutArgs(11) = InArgs(19)
+                  COutArgs = 11
+                END IF
+                IF (CurArgs >= 27) THEN
+                  OutArgs(12) = InArgs(27)
+                  COutArgs = 12
+                END IF
+                IF (CurArgs >= 28) THEN
+                  OutArgs(13) = InArgs(28)
+                  COutArgs = 13
+                END IF
+                IF (CurArgs >= 29) THEN
+                  OutArgs(14) = InArgs(29)
+                  COutArgs = 14
+                END IF
+                CALL WriteOutIDFLines(DifLfn,'People',COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                ! Create the new People:Definition object:
+                ! A1 Name = Name + ' Definition'
+                ! A2 Number of People Calculation Method (was A4/field 4)
+                ! N1 Number of People (was N1/field 5)
+                ! N2 People per Zone Floor Area (was N2/field 6)
+                ! N3 Zone Floor Area per Person (was N3/field 7)
+                ! N4 Fraction Radiant (was N4/field 8)
+                ! N5 Sensible Heat Fraction (was N5/field 9)
+                !    --- fields 4-9 guaranteed by old \min-fields 10 ---
+                ! N6 Carbon Dioxide Generation Rate (was N6/field 11)    -- optional
+                ! A3 Enable ASHRAE 55 Comfort Warnings (was A6/field 12) -- optional
+                ! A4 Mean Radiant Temperature Calculation Type (was A7/field 13) -- optional
+                ! A5 Thermal Comfort Model 1 Type (was A14/field 20)     -- optional
+                ! A6 Thermal Comfort Model 2 Type (was A15/field 21)     -- optional
+                ! A7 Thermal Comfort Model 3 Type (was A16/field 22)     -- optional
+                ! A8 Thermal Comfort Model 4 Type (was A17/field 23)     -- optional
+                ! A9 Thermal Comfort Model 5 Type (was A18/field 24)     -- optional
+                ! A10 Thermal Comfort Model 6 Type (was A19/field 25)    -- optional
+                ! A11 Thermal Comfort Model 7 Type (was A20/field 26)    -- optional
+                ObjectName = 'People:Definition'
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                OutArgs(1) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(2) = InArgs(4)
+                OutArgs(3) = InArgs(5)
+                OutArgs(4) = InArgs(6)
+                OutArgs(5) = InArgs(7)
+                OutArgs(6) = InArgs(8)
+                OutArgs(7) = InArgs(9)
+                COutArgs = 7
+                ! Optional CO2 Rate (field 11)
+                IF (CurArgs >= 11) THEN
+                  OutArgs(8) = InArgs(11)
+                  COutArgs = 8
+                END IF
+                ! Optional ASHRAE 55 Warnings (field 12)
+                IF (CurArgs >= 12) THEN
+                  OutArgs(9) = InArgs(12)
+                  COutArgs = 9
+                END IF
+                ! Optional MRT Calculation Type (field 13)
+                IF (CurArgs >= 13) THEN
+                  OutArgs(10) = InArgs(13)
+                  COutArgs = 10
+                END IF
+                ! Optional TC Model types (fields 20-26; fields 14-19 go to the instance)
+                IF (CurArgs >= 20) THEN
+                  OutArgs(11) = InArgs(20)
+                  COutArgs = 11
+                END IF
+                IF (CurArgs >= 21) THEN
+                  OutArgs(12) = InArgs(21)
+                  COutArgs = 12
+                END IF
+                IF (CurArgs >= 22) THEN
+                  OutArgs(13) = InArgs(22)
+                  COutArgs = 13
+                END IF
+                IF (CurArgs >= 23) THEN
+                  OutArgs(14) = InArgs(23)
+                  COutArgs = 14
+                END IF
+                IF (CurArgs >= 24) THEN
+                  OutArgs(15) = InArgs(24)
+                  COutArgs = 15
+                END IF
+                IF (CurArgs >= 25) THEN
+                  OutArgs(16) = InArgs(25)
+                  COutArgs = 16
+                END IF
+                IF (CurArgs >= 26) THEN
+                  OutArgs(17) = InArgs(26)
+                  COutArgs = 17
+                END IF
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                Written = .true.
+
               ! If your original object starts with R, insert the rules here
 
               ! If your original object starts with S, insert the rules here
