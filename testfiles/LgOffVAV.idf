@@ -3032,213 +3032,273 @@
 
   Lights,
     PER-1T Lights 1,         !- Name
+    PER-1T Lights 1 Definition,  !- Lights Definition Name
     PER-1T,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-1T Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2632.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     COR-T Lights 1,          !- Name
+    COR-T Lights 1 Definition,  !- Lights Definition Name
     COR-T,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    COR-T Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     10920.,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-2T Lights 1,         !- Name
+    PER-2T Lights 1 Definition,  !- Lights Definition Name
     PER-2T,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-2T Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-3T Lights 1,         !- Name
+    PER-3T Lights 1 Definition,  !- Lights Definition Name
     PER-3T,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-3T Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2632.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-4T Lights 1,         !- Name
+    PER-4T Lights 1 Definition,  !- Lights Definition Name
     PER-4T,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-4T Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-1F Lights 1,         !- Name
+    PER-1F Lights 1 Definition,  !- Lights Definition Name
     PER-1F,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-1F Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2632.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-2F Lights 1,         !- Name
+    PER-2F Lights 1 Definition,  !- Lights Definition Name
     PER-2F,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-2F Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-3F Lights 1,         !- Name
+    PER-3F Lights 1 Definition,  !- Lights Definition Name
     PER-3F,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-3F Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2632.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-4F Lights 1,         !- Name
+    PER-4F Lights 1 Definition,  !- Lights Definition Name
     PER-4F,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-4F Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     COR-F Lights 1,          !- Name
+    COR-F Lights 1 Definition,  !- Lights Definition Name
     COR-F,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    COR-F Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     10920.,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-1I Lights 1,         !- Name
+    PER-1I Lights 1 Definition,  !- Lights Definition Name
     PER-1I,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-1I Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2632.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-2I Lights 1,         !- Name
+    PER-2I Lights 1 Definition,  !- Lights Definition Name
     PER-2I,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-2I Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-3I Lights 1,         !- Name
+    PER-3I Lights 1 Definition,  !- Lights Definition Name
     PER-3I,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-3I Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2632.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     PER-4I Lights 1,         !- Name
+    PER-4I Lights 1 Definition,  !- Lights Definition Name
     PER-4I,                  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PER-4I Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657.5,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     COR-I Lights 1,          !- Name
+    COR-I Lights 1 Definition,  !- Lights Definition Name
     COR-I,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    COR-I Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     10920.,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.3,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     PER-1T ElecEq 1,         !- Name

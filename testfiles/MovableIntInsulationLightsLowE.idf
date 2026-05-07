@@ -313,16 +313,20 @@
 
   Lights,
     Lights 1,                !- Name
+    Lights 1 Definition,     !- Lights Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     ON,                      !- Schedule Name
+    0.0000000E+00;           !- Fraction Replaceable
+
+  Lights:Definition,
+    Lights 1 Definition,     !- Name
     LightingLevel,           !- Design Level Calculation Method
     960.0,                   !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0.0000000E+00;           !- Fraction Replaceable
+    0.2000000;               !- Fraction Visible
 
   BuildingSurface:Detailed,
     Zn001:Wall001,           !- Name

@@ -977,31 +977,39 @@ TEST_F(EnergyPlusFixture, OutputReportTabular_ZoneMultiplierTest)
         " ",
         "Lights,",
         " Space Lights,             !- Name",
+        " Space Lights Definition,  !- Lights Definition Name",
         " Space,                    !- Zone or ZoneList Name",
         " OnSched,                  !- Schedule Name",
+        " 0,                        !- Fraction Replaceable",
+        " GeneralLights;            !- End - Use Subcategory",
+
+        "Lights:Definition,",
+        " Space Lights Definition,  !- Name",
         " Watts/Area,               !- Design Level Calculation Method",
         " ,                         !- Lighting Level{ W }",
         " 10.0,                     !- Watts per Zone Floor Area{ W / m2 }",
         " ,                         !- Watts per Person{ W / person }",
         " 0.1,                      !- Return Air Fraction",
         " 0.59,                     !- Fraction Radiant",
-        " 0.2,                      !- Fraction Visible",
-        " 0,                        !- Fraction Replaceable",
-        " GeneralLights;            !- End - Use Subcategory",
+        " 0.2;                      !- Fraction Visible",
         " ",
         "Lights,",
         " Space Lights x10,         !- Name",
+        " Space Lights x10 Definition, !- Lights Definition Name",
         " Spacex10,                 !- Zone or ZoneList Name",
         " OnSched,                  !- Schedule Name",
+        " 0,                        !- Fraction Replaceable",
+        " GeneralLights;            !- End - Use Subcategory",
+
+        "Lights:Definition,",
+        " Space Lights x10 Definition, !- Name",
         " Watts/Area,               !- Design Level Calculation Method",
         " ,                         !- Lighting Level{ W }",
         " 10.0,                     !- Watts per Zone Floor Area{ W / m2 }",
         " ,                         !- Watts per Person{ W / person }",
         " 0.1,                      !- Return Air Fraction",
         " 0.59,                     !- Fraction Radiant",
-        " 0.2,                      !- Fraction Visible",
-        " 0,                        !- Fraction Replaceable",
-        " GeneralLights;            !- End - Use Subcategory",
+        " 0.2;                      !- Fraction Visible",
         " ",
         "ElectricEquipment,",
         " Space ElecEq,             !- Name",
@@ -1685,31 +1693,39 @@ TEST_F(EnergyPlusFixture, AirloopHVAC_ZoneSumTest)
 
         "Lights,",
         " Space Lights,             !- Name",
+        " Space Lights Definition,  !- Lights Definition Name",
         " Space,                    !- Zone or ZoneList Name",
         " OnSched,                  !- Schedule Name",
-        " Watts/Area,               !- Design Level Calculation Method",
-        " ,                         !- Lighting Level{ W }",
-        " 10.0,                     !- Watts per Zone Floor Area{ W / m2 }",
-        " ,                         !- Watts per Person{ W / person }",
-        " 0.1,                      !- Return Air Fraction",
-        " 0.59,                     !- Fraction Radiant",
-        " 0.2,                      !- Fraction Visible",
         " 0,                        !- Fraction Replaceable",
         " GeneralLights;            !- End - Use Subcategory",
 
-        "Lights,",
-        " Space Lights x10,         !- Name",
-        " Spacex10,                 !- Zone or ZoneList Name",
-        " OnSched,                  !- Schedule Name",
+        "Lights:Definition,",
+        " Space Lights Definition,  !- Name",
         " Watts/Area,               !- Design Level Calculation Method",
         " ,                         !- Lighting Level{ W }",
         " 10.0,                     !- Watts per Zone Floor Area{ W / m2 }",
         " ,                         !- Watts per Person{ W / person }",
         " 0.1,                      !- Return Air Fraction",
         " 0.59,                     !- Fraction Radiant",
-        " 0.2,                      !- Fraction Visible",
+        " 0.2;                      !- Fraction Visible",
+
+        "Lights,",
+        " Space Lights x10,         !- Name",
+        " Space Lights x10 Definition, !- Lights Definition Name",
+        " Spacex10,                 !- Zone or ZoneList Name",
+        " OnSched,                  !- Schedule Name",
         " 0,                        !- Fraction Replaceable",
         " GeneralLights;            !- End - Use Subcategory",
+
+        "Lights:Definition,",
+        " Space Lights x10 Definition, !- Name",
+        " Watts/Area,               !- Design Level Calculation Method",
+        " ,                         !- Lighting Level{ W }",
+        " 10.0,                     !- Watts per Zone Floor Area{ W / m2 }",
+        " ,                         !- Watts per Person{ W / person }",
+        " 0.1,                      !- Return Air Fraction",
+        " 0.59,                     !- Fraction Radiant",
+        " 0.2;                      !- Fraction Visible",
 
         "ElectricEquipment,",
         " Space ElecEq,             !- Name",
@@ -11444,17 +11460,21 @@ TEST_F(SQLiteFixture, DOASDirectToZone_ZoneMultiplierRemoved)
 
   Lights,
     TestZone Lights,       !- Name
+    TestZone Lights Definition,  !- Lights Definition Name
     Test Zone,               !- Zone or ZoneList or Space or SpaceList Name
     Always On,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    TestZone Lights Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1878.6252,               !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.2,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     TestZone ElecEq,         !- Name
@@ -12290,17 +12310,21 @@ TEST_F(SQLiteFixture, UpdateSizing_EndSysSizingCalc)
 
   Lights,
     West Zone Lights,        !- Name
+    West Zone Lights Definition,  !- Lights Definition Name
     Thermal Zone one,        !- Zone or ZoneList or Space or SpaceList Name
     Always On,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    West Zone Lights Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1878.6252,               !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.2,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     West Zone ElecEq,        !- Name

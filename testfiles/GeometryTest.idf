@@ -601,17 +601,21 @@
 
   Lights,
     PSI FOYER Lights 1,      !- Name
+    PSI FOYER Lights 1 Definition,  !- Lights Definition Name
     PSI FOYER,               !- Zone or ZoneList or Space or SpaceList Name
     Residence Lighting,      !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    PSI FOYER Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     518.3889,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   GasEquipment,
     PSI FOYER GasEq 1,       !- Name
@@ -696,17 +700,21 @@
 
   Lights,
     DORM ROOMS AND COMMON AREAS Lights 1,  !- Name
+    DORM ROOMS AND COMMON AREAS Lights 1 Definition,  !- Lights Definition Name
     DORM ROOMS AND COMMON AREAS,  !- Zone or ZoneList or Space or SpaceList Name
     Residence Lighting,      !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    DORM ROOMS AND COMMON AREAS Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1247.648,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     DORM ROOMS AND COMMON AREAS ElecEq 1,  !- Name
@@ -807,17 +815,21 @@
 
   Lights,
     Office Zones with Lights,!- Name
+    Office Zones with Lights Definition,  !- Lights Definition Name
     OfficeZones,             !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting,         !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    Office Zones with Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     14,                      !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     Office Zones with Electric Equipment,  !- Name

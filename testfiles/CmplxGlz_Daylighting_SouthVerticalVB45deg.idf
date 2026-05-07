@@ -85469,17 +85469,21 @@
 
   Lights,
     COMFENZone Lights,       !- Name
+    COMFENZone Lights Definition,  !- Lights Definition Name
     COMFENZone,              !- Zone or ZoneList or Space or SpaceList Name
     LIGHT-SCHED,             !- Schedule Name
+    1.,                      !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    COMFENZone Lights Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     83.630989075,            !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Return Air Fraction
     0.7,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.,                      !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     COMFENZone ElecEq,       !- Name

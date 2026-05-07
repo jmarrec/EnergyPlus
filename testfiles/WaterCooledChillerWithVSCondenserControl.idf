@@ -13600,787 +13600,1011 @@
 
   Lights,
     Office_Lights 5,         !- Name
+    Office_Lights 5 Definition,  !- Lights Definition Name
     blocks-3644_office_1_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 5 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 3,         !- Name
+    Office_Lights 3 Definition,  !- Lights Definition Name
     blocks-3644_office_1_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 3 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 2,         !- Name
+    Office_Lights 2 Definition,  !- Lights Definition Name
     blocks-3644_office_1_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 4,         !- Name
+    Office_Lights 4 Definition,  !- Lights Definition Name
     blocks-3644_office_1_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 4 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 1,         !- Name
+    Office_Lights 1 Definition,  !- Lights Definition Name
     blocks-3644_office_1_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 10,        !- Name
+    Office_Lights 10 Definition,  !- Lights Definition Name
     blocks-3644_office_2_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 10 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 8,         !- Name
+    Office_Lights 8 Definition,  !- Lights Definition Name
     blocks-3644_office_2_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 8 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 7,         !- Name
+    Office_Lights 7 Definition,  !- Lights Definition Name
     blocks-3644_office_2_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 7 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 9,         !- Name
+    Office_Lights 9 Definition,  !- Lights Definition Name
     blocks-3644_office_2_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 9 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 6,         !- Name
+    Office_Lights 6 Definition,  !- Lights Definition Name
     blocks-3644_office_2_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 6 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10343277347541,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 15,        !- Name
+    Office_Lights 15 Definition,  !- Lights Definition Name
     blocks-3645_office_1_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 15 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 13,        !- Name
+    Office_Lights 13 Definition,  !- Lights Definition Name
     blocks-3645_office_1_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 13 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 12,        !- Name
+    Office_Lights 12 Definition,  !- Lights Definition Name
     blocks-3645_office_1_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 12 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 14,        !- Name
+    Office_Lights 14 Definition,  !- Lights Definition Name
     blocks-3645_office_1_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 14 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 11,        !- Name
+    Office_Lights 11 Definition,  !- Lights Definition Name
     blocks-3645_office_1_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 11 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 20,        !- Name
+    Office_Lights 20 Definition,  !- Lights Definition Name
     blocks-3645_office_2_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 20 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 18,        !- Name
+    Office_Lights 18 Definition,  !- Lights Definition Name
     blocks-3645_office_2_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 18 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 17,        !- Name
+    Office_Lights 17 Definition,  !- Lights Definition Name
     blocks-3645_office_2_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 17 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 19,        !- Name
+    Office_Lights 19 Definition,  !- Lights Definition Name
     blocks-3645_office_2_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 19 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 16,        !- Name
+    Office_Lights 16 Definition,  !- Lights Definition Name
     blocks-3645_office_2_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 16 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 25,        !- Name
+    Office_Lights 25 Definition,  !- Lights Definition Name
     blocks-3645_office_3_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 25 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 23,        !- Name
+    Office_Lights 23 Definition,  !- Lights Definition Name
     blocks-3645_office_3_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 23 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 22,        !- Name
+    Office_Lights 22 Definition,  !- Lights Definition Name
     blocks-3645_office_3_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 22 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 24,        !- Name
+    Office_Lights 24 Definition,  !- Lights Definition Name
     blocks-3645_office_3_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 24 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 21,        !- Name
+    Office_Lights 21 Definition,  !- Lights Definition Name
     blocks-3645_office_3_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 21 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 30,        !- Name
+    Office_Lights 30 Definition,  !- Lights Definition Name
     blocks-3645_office_4_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 30 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 28,        !- Name
+    Office_Lights 28 Definition,  !- Lights Definition Name
     blocks-3645_office_4_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 28 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 27,        !- Name
+    Office_Lights 27 Definition,  !- Lights Definition Name
     blocks-3645_office_4_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 27 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 29,        !- Name
+    Office_Lights 29 Definition,  !- Lights Definition Name
     blocks-3645_office_4_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 29 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 26,        !- Name
+    Office_Lights 26 Definition,  !- Lights Definition Name
     blocks-3645_office_4_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 26 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 35,        !- Name
+    Office_Lights 35 Definition,  !- Lights Definition Name
     blocks-3645_office_5_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 35 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 33,        !- Name
+    Office_Lights 33 Definition,  !- Lights Definition Name
     blocks-3645_office_5_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 33 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 32,        !- Name
+    Office_Lights 32 Definition,  !- Lights Definition Name
     blocks-3645_office_5_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 32 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 34,        !- Name
+    Office_Lights 34 Definition,  !- Lights Definition Name
     blocks-3645_office_5_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 34 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 31,        !- Name
+    Office_Lights 31 Definition,  !- Lights Definition Name
     blocks-3645_office_5_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 31 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 40,        !- Name
+    Office_Lights 40 Definition,  !- Lights Definition Name
     blocks-3645_office_6_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 40 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 38,        !- Name
+    Office_Lights 38 Definition,  !- Lights Definition Name
     blocks-3645_office_6_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 38 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 37,        !- Name
+    Office_Lights 37 Definition,  !- Lights Definition Name
     blocks-3645_office_6_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 37 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 39,        !- Name
+    Office_Lights 39 Definition,  !- Lights Definition Name
     blocks-3645_office_6_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 39 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 36,        !- Name
+    Office_Lights 36 Definition,  !- Lights Definition Name
     blocks-3645_office_6_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 36 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 45,        !- Name
+    Office_Lights 45 Definition,  !- Lights Definition Name
     blocks-3645_office_7_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 45 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 43,        !- Name
+    Office_Lights 43 Definition,  !- Lights Definition Name
     blocks-3645_office_7_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 43 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 42,        !- Name
+    Office_Lights 42 Definition,  !- Lights Definition Name
     blocks-3645_office_7_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 42 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 44,        !- Name
+    Office_Lights 44 Definition,  !- Lights Definition Name
     blocks-3645_office_7_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 44 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 41,        !- Name
+    Office_Lights 41 Definition,  !- Lights Definition Name
     blocks-3645_office_7_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 41 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 50,        !- Name
+    Office_Lights 50 Definition,  !- Lights Definition Name
     blocks-3645_office_8_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 50 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 48,        !- Name
+    Office_Lights 48 Definition,  !- Lights Definition Name
     blocks-3645_office_8_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 48 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 47,        !- Name
+    Office_Lights 47 Definition,  !- Lights Definition Name
     blocks-3645_office_8_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 47 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 49,        !- Name
+    Office_Lights 49 Definition,  !- Lights Definition Name
     blocks-3645_office_8_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 49 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 46,        !- Name
+    Office_Lights 46 Definition,  !- Lights Definition Name
     blocks-3645_office_8_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 46 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 55,        !- Name
+    Office_Lights 55 Definition,  !- Lights Definition Name
     blocks-3645_office_9_Core,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 55 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 53,        !- Name
+    Office_Lights 53 Definition,  !- Lights Definition Name
     blocks-3645_office_9_East Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 53 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 52,        !- Name
+    Office_Lights 52 Definition,  !- Lights Definition Name
     blocks-3645_office_9_North Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 52 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 54,        !- Name
+    Office_Lights 54 Definition,  !- Lights Definition Name
     blocks-3645_office_9_South Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 54 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 51,        !- Name
+    Office_Lights 51 Definition,  !- Lights Definition Name
     blocks-3645_office_9_West Perimeter,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 51 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.10412702976931,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   Lights,
     Office_Lights 56,        !- Name
+    Office_Lights 56 Definition,  !- Lights Definition Name
     Office_Space_Type_62.2_Multizone_Adjusted,  !- Zone or ZoneList or Space or SpaceList Name
-    Office_Lighting_Schedule,!- Schedule Name
+    Office_Lighting_Schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office_Lights 56 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     0,                       !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.37,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
 !-   ===========  ALL OBJECTS IN CLASS: ELECTRICEQUIPMENT ===========
 

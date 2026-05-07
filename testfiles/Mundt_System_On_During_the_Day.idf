@@ -1735,31 +1735,39 @@
 
   Lights,
     MID-UPP ZONE Lights 1,   !- Name
+    MID-UPP ZONE Lights 1 Definition,  !- Lights Definition Name
     MID-UPP ZONE,            !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
-    LightingLevel,           !- Design Level Calculation Method
-    878.6252,                !- Lighting Level {W}
-    ,                        !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
     0,                       !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
-  Lights,
-    MID-LOW ZONE Lights 1,   !- Name
-    MID-LOW ZONE,            !- Zone or ZoneList or Space or SpaceList Name
-    LIGHTS-1,                !- Schedule Name
+  Lights:Definition,
+    MID-UPP ZONE Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     878.6252,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
+    0.2000000;               !- Fraction Visible
+
+  Lights,
+    MID-LOW ZONE Lights 1,   !- Name
+    MID-LOW ZONE Lights 1 Definition,  !- Lights Definition Name
+    MID-LOW ZONE,            !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
     0,                       !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    MID-LOW ZONE Lights 1 Definition,  !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    878.6252,                !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0,                       !- Return Air Fraction
+    0.2000000,               !- Fraction Radiant
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     WEST ZONE ElecEq 1,      !- Name

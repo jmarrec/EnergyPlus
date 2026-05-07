@@ -5167,8 +5167,14 @@
 
   Lights,
     Lighting_hardwired_GSW,  !- Name
+    Lighting_hardwired_GSW Definition,  !- Lights Definition Name
     G SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GSW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5176,14 +5182,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_GNW,  !- Name
+    Lighting_hardwired_GNW Definition,  !- Lights Definition Name
     G NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GNW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5191,14 +5201,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_Office,  !- Name
+    Lighting_hardwired_Office Definition,  !- Lights Definition Name
     Office,                  !- Zone or ZoneList or Space or SpaceList Name
     LTG_OFF_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_Office Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     7.965293709,             !- Watts per Floor Area {W/m2}
@@ -5206,14 +5220,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_GNE,  !- Name
+    Lighting_hardwired_GNE Definition,  !- Lights Definition Name
     G NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GNE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5221,14 +5239,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_GN1,  !- Name
+    Lighting_hardwired_GN1 Definition,  !- Lights Definition Name
     G N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GN1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5236,14 +5258,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_GN2,  !- Name
+    Lighting_hardwired_GN2 Definition,  !- Lights Definition Name
     G N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GN2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5251,14 +5277,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_GS1,  !- Name
+    Lighting_hardwired_GS1 Definition,  !- Lights Definition Name
     G S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GS1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5266,14 +5296,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_GS2,  !- Name
+    Lighting_hardwired_GS2 Definition,  !- Lights Definition Name
     G S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GS2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5281,14 +5315,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MSW,  !- Name
+    Lighting_hardwired_MSW Definition,  !- Lights Definition Name
     M SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MSW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5296,14 +5334,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MNW,  !- Name
+    Lighting_hardwired_MNW Definition,  !- Lights Definition Name
     M NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MNW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5311,14 +5353,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MSE,  !- Name
+    Lighting_hardwired_MSE Definition,  !- Lights Definition Name
     M SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MSE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5326,14 +5372,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MNE,  !- Name
+    Lighting_hardwired_MNE Definition,  !- Lights Definition Name
     M NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MNE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5341,14 +5391,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MN1,  !- Name
+    Lighting_hardwired_MN1 Definition,  !- Lights Definition Name
     M N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MN1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5356,14 +5410,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MN2,  !- Name
+    Lighting_hardwired_MN2 Definition,  !- Lights Definition Name
     M N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MN2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5371,14 +5429,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MS1,  !- Name
+    Lighting_hardwired_MS1 Definition,  !- Lights Definition Name
     M S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MS1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5386,14 +5448,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MS2,  !- Name
+    Lighting_hardwired_MS2 Definition,  !- Lights Definition Name
     M S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MS2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5401,14 +5467,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TSW,  !- Name
+    Lighting_hardwired_TSW Definition,  !- Lights Definition Name
     T SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TSW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5416,14 +5486,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TNW,  !- Name
+    Lighting_hardwired_TNW Definition,  !- Lights Definition Name
     T NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TNW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5431,14 +5505,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TSE,  !- Name
+    Lighting_hardwired_TSE Definition,  !- Lights Definition Name
     T SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TSE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5446,14 +5524,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TNE,  !- Name
+    Lighting_hardwired_TNE Definition,  !- Lights Definition Name
     T NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TNE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5461,14 +5543,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TN1,  !- Name
+    Lighting_hardwired_TN1 Definition,  !- Lights Definition Name
     T N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TN1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5476,14 +5562,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TN2,  !- Name
+    Lighting_hardwired_TN2 Definition,  !- Lights Definition Name
     T N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TN2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5491,14 +5581,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TS1,  !- Name
+    Lighting_hardwired_TS1 Definition,  !- Lights Definition Name
     T S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TS1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5506,14 +5600,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TS2,  !- Name
+    Lighting_hardwired_TS2 Definition,  !- Lights Definition Name
     T S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TS2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.45834625,              !- Watts per Floor Area {W/m2}
@@ -5521,14 +5619,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_GC,   !- Name
+    Lighting_hardwired_GC Definition,  !- Lights Definition Name
     G Corridor,              !- Zone or ZoneList or Space or SpaceList Name
     LTG_COR_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_GC Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.295843925,             !- Watts per Floor Area {W/m2}
@@ -5536,14 +5638,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_MC,   !- Name
+    Lighting_hardwired_MC Definition,  !- Lights Definition Name
     M Corridor,              !- Zone or ZoneList or Space or SpaceList Name
     LTG_COR_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_MC Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.295843925,             !- Watts per Floor Area {W/m2}
@@ -5551,14 +5657,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_hardwired_TC,   !- Name
+    Lighting_hardwired_TC Definition,  !- Lights Definition Name
     T Corridor,              !- Zone or ZoneList or Space or SpaceList Name
     LTG_COR_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsWired;             !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_hardwired_TC Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     5.295843925,             !- Watts per Floor Area {W/m2}
@@ -5566,14 +5676,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsWired,             !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_GSW,     !- Name
+    Lighting_plugin_GSW Definition,  !- Lights Definition Name
     G SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_GSW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5581,14 +5695,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_GNW,     !- Name
+    Lighting_plugin_GNW Definition,  !- Lights Definition Name
     G NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_GNW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5596,14 +5714,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_GNE,     !- Name
+    Lighting_plugin_GNE Definition,  !- Lights Definition Name
     G NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_GNE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5611,14 +5733,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_GN1,     !- Name
+    Lighting_plugin_GN1 Definition,  !- Lights Definition Name
     G N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_GN1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5626,14 +5752,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_GN2,     !- Name
+    Lighting_plugin_GN2 Definition,  !- Lights Definition Name
     G N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_GN2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5641,14 +5771,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_GS1,     !- Name
+    Lighting_plugin_GS1 Definition,  !- Lights Definition Name
     G S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_GS1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5656,14 +5790,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_GS2,     !- Name
+    Lighting_plugin_GS2 Definition,  !- Lights Definition Name
     G S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_GS2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5671,14 +5809,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MSW,     !- Name
+    Lighting_plugin_MSW Definition,  !- Lights Definition Name
     M SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MSW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5686,14 +5828,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MNW,     !- Name
+    Lighting_plugin_MNW Definition,  !- Lights Definition Name
     M NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MNW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5701,14 +5847,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MSE,     !- Name
+    Lighting_plugin_MSE Definition,  !- Lights Definition Name
     M SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MSE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5716,14 +5866,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MNE,     !- Name
+    Lighting_plugin_MNE Definition,  !- Lights Definition Name
     M NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MNE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5731,14 +5885,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MN1,     !- Name
+    Lighting_plugin_MN1 Definition,  !- Lights Definition Name
     M N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MN1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5746,14 +5904,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MN2,     !- Name
+    Lighting_plugin_MN2 Definition,  !- Lights Definition Name
     M N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MN2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5761,14 +5923,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MS1,     !- Name
+    Lighting_plugin_MS1 Definition,  !- Lights Definition Name
     M S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MS1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5776,14 +5942,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_MS2,     !- Name
+    Lighting_plugin_MS2 Definition,  !- Lights Definition Name
     M S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_MS2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5791,14 +5961,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TSW,     !- Name
+    Lighting_plugin_TSW Definition,  !- Lights Definition Name
     T SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TSW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5806,14 +5980,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TNW,     !- Name
+    Lighting_plugin_TNW Definition,  !- Lights Definition Name
     T NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TNW Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5821,14 +5999,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TSE,     !- Name
+    Lighting_plugin_TSE Definition,  !- Lights Definition Name
     T SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TSE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5836,14 +6018,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TNE,     !- Name
+    Lighting_plugin_TNE Definition,  !- Lights Definition Name
     T NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TNE Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5851,14 +6037,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TN1,     !- Name
+    Lighting_plugin_TN1 Definition,  !- Lights Definition Name
     T N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TN1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5866,14 +6056,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TN2,     !- Name
+    Lighting_plugin_TN2 Definition,  !- Lights Definition Name
     T N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TN2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5881,14 +6075,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TS1,     !- Name
+    Lighting_plugin_TS1 Definition,  !- Lights Definition Name
     T S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TS1 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5896,14 +6094,18 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Lighting_plugin_TS2,     !- Name
+    Lighting_plugin_TS2 Definition,  !- Lights Definition Name
     T S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     LTG_APT_SCH,             !- Schedule Name
+    1,                       !- Fraction Replaceable
+    LightsPlugIn;            !- End-Use Subcategory
+
+  Lights:Definition,
+    Lighting_plugin_TS2 Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     2.906255813,             !- Watts per Floor Area {W/m2}
@@ -5911,8 +6113,6 @@
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    LightsPlugIn,            !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   ElectricEquipment,

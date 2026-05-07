@@ -563,17 +563,21 @@
 
   Lights,
     OSCTest Lights 1,        !- Name
+    OSCTest Lights 1 Definition,  !- Lights Definition Name
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
     OSCTest-LightsSchedule,  !- Schedule Name
+    0.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    OSCTest Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     400,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.4,                     !- Fraction Radiant
-    0.0,                     !- Fraction Visible
-    0.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.0;                     !- Fraction Visible
 
   ElectricEquipment,
     OSCTest ElecEq 1,        !- Name

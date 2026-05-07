@@ -1412,16 +1412,20 @@ TEST_F(EnergyPlusFixture, BaseSizer_SupplyAirTempLessThanZoneTStatTest)
 
         "  Lights,",
         "      OfficeLights,            !- Name",
+        "      OfficeLights Definition, !- Lights Definition Name",
         "      ZONE ONE,                !- Zone or ZoneList Name",
         "      BLDG_LIGHT_SCH,          !- Schedule Name",
+        "      ;                        !- Fraction Replaceable",
+
+        "  Lights:Definition,",
+        "      OfficeLights Definition, !- Name",
         "      Watts/Area,              !- Design Level Calculation Method",
         "      ,                        !- Lighting Level {W}",
         "      8.0,                    !- Watts per Zone Floor Area {W/m2}",
         "      ,                        !- Watts per Person {W/person}",
         "      ,                        !- Return Air Fraction",
         "      ,                        !- Fraction Radiant",
-        "      ,                        !- Fraction Visible",
-        "      ;                        !- Fraction Replaceable",
+        "      ;                        !- Fraction Visible",
 
         "  ElectricEquipment,",
         "      ElectricEquipment,       !- Name",

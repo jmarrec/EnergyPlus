@@ -568,17 +568,21 @@
 
   Lights,
     HEARTLAND AREA Lights 1, !- Name
+    HEARTLAND AREA Lights 1 Definition,  !- Lights Definition Name
     HEARTLAND AREA,          !- Zone or ZoneList or Space or SpaceList Name
     OFFICE LIGHTING,         !- Schedule Name
+    0.0000000E+00,           !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    HEARTLAND AREA Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     23190.00,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0.0000000E+00,           !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     HEARTLAND AREA ElecEq 1, !- Name
@@ -624,17 +628,21 @@
 
   Lights,
     OREGON WING Lights 1,    !- Name
+    OREGON WING Lights 1 Definition,  !- Lights Definition Name
     OREGON WING,             !- Zone or ZoneList or Space or SpaceList Name
     OFFICE LIGHTING,         !- Schedule Name
+    0.0000000E+00,           !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    OREGON WING Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     7750.000,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0.0000000E+00,           !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     OREGON WING ElecEq 1,    !- Name
@@ -680,17 +688,21 @@
 
   Lights,
     GEORGIA WING Lights 1,   !- Name
+    GEORGIA WING Lights 1 Definition,  !- Lights Definition Name
     GEORGIA WING,            !- Zone or ZoneList or Space or SpaceList Name
     OFFICE LIGHTING,         !- Schedule Name
+    0.0000000E+00,           !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    GEORGIA WING Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     7750.000,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0.0000000E+00,           !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     GEORGIA WING ElecEq 1,   !- Name
@@ -736,17 +748,21 @@
 
   Lights,
     ARIZONA WING Lights 1,   !- Name
+    ARIZONA WING Lights 1 Definition,  !- Lights Definition Name
     ARIZONA WING,            !- Zone or ZoneList or Space or SpaceList Name
     OFFICE LIGHTING,         !- Schedule Name
+    0.0000000E+00,           !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ARIZONA WING Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     7750.000,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0.0000000E+00,           !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     ARIZONA WING ElecEq 1,   !- Name
@@ -792,17 +808,21 @@
 
   Lights,
     MAINE WING Lights 1,     !- Name
+    MAINE WING Lights 1 Definition,  !- Lights Definition Name
     MAINE WING,              !- Zone or ZoneList or Space or SpaceList Name
     OFFICE LIGHTING,         !- Schedule Name
+    0.0000000E+00,           !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    MAINE WING Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     7750.000,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.4000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0.0000000E+00,           !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   ElectricEquipment,
     MAINE WING ElecEq 1,     !- Name

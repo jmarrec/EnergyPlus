@@ -596,17 +596,21 @@
 
   Lights,
     ROOM LIGHTS,             !- Name
+    ROOM LIGHTS Definition,  !- Lights Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     Sch Lig,                 !- Schedule Name
+    1,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ROOM LIGHTS Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1632.0,                  !- Lighting Level {W}
     0,                       !- Watts per Floor Area {W/m2}
     0,                       !- Watts per Person {W/person}
     0.000,                   !- Return Air Fraction
     0.400,                   !- Fraction Radiant
-    0.200,                   !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.200;                   !- Fraction Visible
 
   People,
     ROOM PEOPLE,             !- Name

@@ -919,16 +919,20 @@
 
   Lights,
     ZONA Lights 1,           !- Name
+    ZONA Lights 1 Definition,  !- Lights Definition Name
     ZONA,                    !- Zone or ZoneList or Space or SpaceList Name
     ON,                      !- Schedule Name
+    ;                        !- Fraction Replaceable
+
+  Lights:Definition,
+    ZONA Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     5000,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     0.5,                     !- Fraction Radiant
-    ,                        !- Fraction Visible
-    ;                        !- Fraction Replaceable
+    ;                        !- Fraction Visible
 
   ElectricEquipment,
     ZONA ElecEq 1,           !- Name

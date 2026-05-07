@@ -6272,184 +6272,231 @@
     },
     "Lights": {
         "Core_bottom_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Core_bottom_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Core_bottom"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Core_bottom",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Core_mid_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Core_mid_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Core_mid"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Core_mid",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Core_top_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Core_top_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Core_top"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Core_top",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_bot_ZN_1_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_bot_ZN_1_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_1"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_1",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_bot_ZN_2_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_bot_ZN_2_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_2"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_2",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_bot_ZN_3_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_bot_ZN_3_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_3"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_3",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_bot_ZN_4_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_bot_ZN_4_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_4"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_4",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_mid_ZN_1_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_mid_ZN_1_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_1"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_1",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_mid_ZN_2_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_mid_ZN_2_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_2"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_2",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_mid_ZN_3_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_mid_ZN_3_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_3"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_3",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_mid_ZN_4_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_mid_ZN_4_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_4"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_4",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_top_ZN_1_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_top_ZN_1_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_1"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_1",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_top_ZN_2_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_top_ZN_2_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_2"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_2",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_top_ZN_3_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_top_ZN_3_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
-            "return_air_fraction": 0.4,
-            "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_3"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_3",
+            "schedule_name": "BLDG_LIGHT_SCH"
         },
         "Perimeter_top_ZN_4_Lights": {
-            "design_level_calculation_method": "Watts/Area",
+            "lights_definition_name": "Perimeter_top_ZN_4_Lights Definition",
             "end_use_subcategory": "General",
-            "fraction_radiant": 0.4,
             "fraction_replaceable": 1.0,
-            "fraction_visible": 0.2,
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_4",
+            "schedule_name": "BLDG_LIGHT_SCH"
+        }
+    },
+    "Lights:Definition": {
+        "Core_bottom_Lights Definition": {
             "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
             "return_air_fraction_calculated_from_plenum_temperature": "No",
-            "schedule_name": "BLDG_LIGHT_SCH",
             "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_4"
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Core_mid_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Core_top_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_bot_ZN_1_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_bot_ZN_2_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_bot_ZN_3_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_bot_ZN_4_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_mid_ZN_1_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_mid_ZN_2_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_mid_ZN_3_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_mid_ZN_4_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_top_ZN_1_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_top_ZN_2_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_top_ZN_3_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
+        },
+        "Perimeter_top_ZN_4_Lights Definition": {
+            "return_air_fraction": 0.4,
+            "design_level_calculation_method": "Watts/Area",
+            "return_air_fraction_calculated_from_plenum_temperature": "No",
+            "watts_per_floor_area": 10.76,
+            "fraction_visible": 0.2,
+            "fraction_radiant": 0.4
         }
     },
     "Material": {
