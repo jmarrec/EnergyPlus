@@ -13582,15 +13582,19 @@
 
   People,
     Office_Occupants 1,      !- Name
+    Office_Occupants 1 Definition,  !- People Definition Name
     Office_Space_Type_62.2_Multizone_Adjusted,  !- Zone or ZoneList or Space or SpaceList Name
     Office_Occupancy_Schedule,  !- Number of People Schedule Name
+    Office_Activity_Schedule;  !- Activity Level Schedule Name
+
+  People:Definition,
+    Office_Occupants 1 Definition,  !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     18.580608,               !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.5,                     !- Sensible Heat Fraction
-    Office_Activity_Schedule;!- Activity Level Schedule Name
+    0.5;                     !- Sensible Heat Fraction
 
 !-   ===========  ALL OBJECTS IN CLASS: LIGHTS ===========
 

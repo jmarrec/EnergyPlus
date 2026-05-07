@@ -6224,15 +6224,19 @@
 
   People,
     people_unit1,            !- Name
+    people_unit1 Definition,  !- People Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     Occupancy,               !- Number of People Schedule Name
+    activity_sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    people_unit1 Definition,  !- Name
     People,                  !- Number of People Calculation Method
     3,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0,                       !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    activity_sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type

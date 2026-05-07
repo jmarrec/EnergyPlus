@@ -1648,15 +1648,19 @@
 
   People,
     Main_Zone_a_b_g_l_Peop,  !- Name
+    Main_Zone_a_b_g_l_Peop Definition,  !- People Definition Name
     Main_Zone_a_b_g_l,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_a_b_g_l_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_a_b_g_l_Lite,  !- Name
@@ -1718,15 +1722,19 @@
 
   People,
     Main_Zone_b_c_h_g_Peop,  !- Name
+    Main_Zone_b_c_h_g_Peop Definition,  !- People Definition Name
     Main_Zone_b_c_h_g,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_b_c_h_g_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_b_c_h_g_Lite,  !- Name
@@ -1788,15 +1796,19 @@
 
   People,
     Main_Zone_c_d_i_h_Peop,  !- Name
+    Main_Zone_c_d_i_h_Peop Definition,  !- People Definition Name
     Main_Zone_c_d_i_h,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_c_d_i_h_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_c_d_i_h_Lite,  !- Name
@@ -1858,15 +1870,19 @@
 
   People,
     Main_Zone_d_e_j_i_Peop,  !- Name
+    Main_Zone_d_e_j_i_Peop Definition,  !- People Definition Name
     Main_Zone_d_e_j_i,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_d_e_j_i_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_d_e_j_i_Lite,  !- Name
@@ -1928,15 +1944,19 @@
 
   People,
     Main_Zone_e_f_k_j_Peop,  !- Name
+    Main_Zone_e_f_k_j_Peop Definition,  !- People Definition Name
     Main_Zone_e_f_k_j,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_e_f_k_j_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_e_f_k_j_Lite,  !- Name
@@ -1998,15 +2018,19 @@
 
   People,
     Main_Zone_l_k_f_a_Peop,  !- Name
+    Main_Zone_l_k_f_a_Peop Definition,  !- People Definition Name
     Main_Zone_l_k_f_a,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_l_k_f_a_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_l_k_f_a_Lite,  !- Name
@@ -2068,15 +2092,19 @@
 
   People,
     Main_Zone_g_h_i_l_Peop,  !- Name
+    Main_Zone_g_h_i_l_Peop Definition,  !- People Definition Name
     Main_Zone_g_h_i_l,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_g_h_i_l_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_g_h_i_l_Lite,  !- Name
@@ -2138,15 +2166,19 @@
 
   People,
     Main_Zone_i_j_k_l_Peop,  !- Name
+    Main_Zone_i_j_k_l_Peop Definition,  !- People Definition Name
     Main_Zone_i_j_k_l,       !- Zone or ZoneList or Space or SpaceList Name
     People_office_Sch,       !- Number of People Schedule Name
+    Activity_office_Sch;     !- Activity Level Schedule Name
+
+  People:Definition,
+    Main_Zone_i_j_k_l_Peop Definition,  !- Name
     area/person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     23.22349,                !- Floor Area per Person {m2/person}
     0.2,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity_office_Sch;     !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   Lights,
     Main_Zone_i_j_k_l_Lite,  !- Name

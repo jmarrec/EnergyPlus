@@ -547,15 +547,19 @@
 
   People,
     OSCTest People 1,        !- Name
+    OSCTest People 1 Definition,  !- People Definition Name
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
     OSCTest-PeopleSchedule,  !- Number of People Schedule Name
+    OSCTest-PeopleActivity;  !- Activity Level Schedule Name
+
+  People:Definition,
+    OSCTest People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    OSCTest-PeopleActivity;  !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     OSCTest Lights 1,        !- Name

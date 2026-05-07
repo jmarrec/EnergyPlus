@@ -23562,15 +23562,19 @@
 
   People,
     90.1-2010 - Office - OpenOffice People,  !- Name
+    90.1-2010 - Office - OpenOffice People Definition,  !- People Definition Name
     90.1-2010 - Office - OpenOffice,  !- Zone or ZoneList or Space or SpaceList Name
     Medium Office Bldg Occ,  !- Number of People Schedule Name
+    Medium Office Activity;  !- Activity Level Schedule Name
+
+  People:Definition,
+    90.1-2010 - Office - OpenOffice People Definition,  !- Name
     People/Area,             !- Number of People Calculation Method
     ,                        !- Number of People
     0.056510529687726,       !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Medium Office Activity;  !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   ElectricEquipment,
     90.1-2010 - Office - OpenOffice Electric Equipment,  !- Name

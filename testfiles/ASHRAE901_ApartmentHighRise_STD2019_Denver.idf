@@ -13422,963 +13422,1283 @@
 
   People,
     G SW Apartment People,   !- Name
+    G SW Apartment People Definition,  !- People Definition Name
     G SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    G SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.5,                     !- Fraction Radiant
-    autocalculate,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    autocalculate;           !- Sensible Heat Fraction
 
   People,
     G NW Apartment People,   !- Name
+    G NW Apartment People Definition,  !- People Definition Name
     G NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    G NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     Office People,           !- Name
+    Office People Definition,  !- People Definition Name
     Office,                  !- Zone or ZoneList or Space or SpaceList Name
     OCC_OFF_w_SB_SCH,        !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    Office People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.0000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     G NE Apartment People,   !- Name
+    G NE Apartment People Definition,  !- People Definition Name
     G NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    G NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     G N1 Apartment People,   !- Name
+    G N1 Apartment People Definition,  !- People Definition Name
     G N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    G N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     G N2 Apartment People,   !- Name
+    G N2 Apartment People Definition,  !- People Definition Name
     G N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    G N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     G S1 Apartment People,   !- Name
+    G S1 Apartment People Definition,  !- People Definition Name
     G S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    G S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     G S2 Apartment People,   !- Name
+    G S2 Apartment People Definition,  !- People Definition Name
     G S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    G S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 SW Apartment People,  !- Name
+    F2 SW Apartment People Definition,  !- People Definition Name
     F2 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 NW Apartment People,  !- Name
+    F2 NW Apartment People Definition,  !- People Definition Name
     F2 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 SE Apartment People,  !- Name
+    F2 SE Apartment People Definition,  !- People Definition Name
     F2 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 NE Apartment People,  !- Name
+    F2 NE Apartment People Definition,  !- People Definition Name
     F2 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 N1 Apartment People,  !- Name
+    F2 N1 Apartment People Definition,  !- People Definition Name
     F2 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 N2 Apartment People,  !- Name
+    F2 N2 Apartment People Definition,  !- People Definition Name
     F2 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 S1 Apartment People,  !- Name
+    F2 S1 Apartment People Definition,  !- People Definition Name
     F2 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F2 S2 Apartment People,  !- Name
+    F2 S2 Apartment People Definition,  !- People Definition Name
     F2 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F2 S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 SW Apartment People,  !- Name
+    F3 SW Apartment People Definition,  !- People Definition Name
     F3 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 NW Apartment People,  !- Name
+    F3 NW Apartment People Definition,  !- People Definition Name
     F3 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 SE Apartment People,  !- Name
+    F3 SE Apartment People Definition,  !- People Definition Name
     F3 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 NE Apartment People,  !- Name
+    F3 NE Apartment People Definition,  !- People Definition Name
     F3 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 N1 Apartment People,  !- Name
+    F3 N1 Apartment People Definition,  !- People Definition Name
     F3 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 N2 Apartment People,  !- Name
+    F3 N2 Apartment People Definition,  !- People Definition Name
     F3 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 S1 Apartment People,  !- Name
+    F3 S1 Apartment People Definition,  !- People Definition Name
     F3 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F3 S2 Apartment People,  !- Name
+    F3 S2 Apartment People Definition,  !- People Definition Name
     F3 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F3 S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 SW Apartment People,  !- Name
+    F4 SW Apartment People Definition,  !- People Definition Name
     F4 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 NW Apartment People,  !- Name
+    F4 NW Apartment People Definition,  !- People Definition Name
     F4 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 SE Apartment People,  !- Name
+    F4 SE Apartment People Definition,  !- People Definition Name
     F4 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 NE Apartment People,  !- Name
+    F4 NE Apartment People Definition,  !- People Definition Name
     F4 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 N1 Apartment People,  !- Name
+    F4 N1 Apartment People Definition,  !- People Definition Name
     F4 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 N2 Apartment People,  !- Name
+    F4 N2 Apartment People Definition,  !- People Definition Name
     F4 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 S1 Apartment People,  !- Name
+    F4 S1 Apartment People Definition,  !- People Definition Name
     F4 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F4 S2 Apartment People,  !- Name
+    F4 S2 Apartment People Definition,  !- People Definition Name
     F4 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F4 S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M SW Apartment People,   !- Name
+    M SW Apartment People Definition,  !- People Definition Name
     M SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M NW Apartment People,   !- Name
+    M NW Apartment People Definition,  !- People Definition Name
     M NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M SE Apartment People,   !- Name
+    M SE Apartment People Definition,  !- People Definition Name
     M SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M NE Apartment People,   !- Name
+    M NE Apartment People Definition,  !- People Definition Name
     M NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M N1 Apartment People,   !- Name
+    M N1 Apartment People Definition,  !- People Definition Name
     M N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M N2 Apartment People,   !- Name
+    M N2 Apartment People Definition,  !- People Definition Name
     M N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M S1 Apartment People,   !- Name
+    M S1 Apartment People Definition,  !- People Definition Name
     M S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     M S2 Apartment People,   !- Name
+    M S2 Apartment People Definition,  !- People Definition Name
     M S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    M S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 SW Apartment People,  !- Name
+    F6 SW Apartment People Definition,  !- People Definition Name
     F6 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 NW Apartment People,  !- Name
+    F6 NW Apartment People Definition,  !- People Definition Name
     F6 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 SE Apartment People,  !- Name
+    F6 SE Apartment People Definition,  !- People Definition Name
     F6 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 NE Apartment People,  !- Name
+    F6 NE Apartment People Definition,  !- People Definition Name
     F6 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 N1 Apartment People,  !- Name
+    F6 N1 Apartment People Definition,  !- People Definition Name
     F6 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 N2 Apartment People,  !- Name
+    F6 N2 Apartment People Definition,  !- People Definition Name
     F6 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 S1 Apartment People,  !- Name
+    F6 S1 Apartment People Definition,  !- People Definition Name
     F6 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F6 S2 Apartment People,  !- Name
+    F6 S2 Apartment People Definition,  !- People Definition Name
     F6 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F6 S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 SW Apartment People,  !- Name
+    F7 SW Apartment People Definition,  !- People Definition Name
     F7 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 NW Apartment People,  !- Name
+    F7 NW Apartment People Definition,  !- People Definition Name
     F7 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 SE Apartment People,  !- Name
+    F7 SE Apartment People Definition,  !- People Definition Name
     F7 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 NE Apartment People,  !- Name
+    F7 NE Apartment People Definition,  !- People Definition Name
     F7 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 N1 Apartment People,  !- Name
+    F7 N1 Apartment People Definition,  !- People Definition Name
     F7 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 N2 Apartment People,  !- Name
+    F7 N2 Apartment People Definition,  !- People Definition Name
     F7 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 S1 Apartment People,  !- Name
+    F7 S1 Apartment People Definition,  !- People Definition Name
     F7 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F7 S2 Apartment People,  !- Name
+    F7 S2 Apartment People Definition,  !- People Definition Name
     F7 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F7 S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 SW Apartment People,  !- Name
+    F8 SW Apartment People Definition,  !- People Definition Name
     F8 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 NW Apartment People,  !- Name
+    F8 NW Apartment People Definition,  !- People Definition Name
     F8 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 SE Apartment People,  !- Name
+    F8 SE Apartment People Definition,  !- People Definition Name
     F8 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 NE Apartment People,  !- Name
+    F8 NE Apartment People Definition,  !- People Definition Name
     F8 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 N1 Apartment People,  !- Name
+    F8 N1 Apartment People Definition,  !- People Definition Name
     F8 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 N2 Apartment People,  !- Name
+    F8 N2 Apartment People Definition,  !- People Definition Name
     F8 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 S1 Apartment People,  !- Name
+    F8 S1 Apartment People Definition,  !- People Definition Name
     F8 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F8 S2 Apartment People,  !- Name
+    F8 S2 Apartment People Definition,  !- People Definition Name
     F8 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F8 S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 SW Apartment People,  !- Name
+    F9 SW Apartment People Definition,  !- People Definition Name
     F9 SW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 NW Apartment People,  !- Name
+    F9 NW Apartment People Definition,  !- People Definition Name
     F9 NW Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 SE Apartment People,  !- Name
+    F9 SE Apartment People Definition,  !- People Definition Name
     F9 SE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 NE Apartment People,  !- Name
+    F9 NE Apartment People Definition,  !- People Definition Name
     F9 NE Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 N1 Apartment People,  !- Name
+    F9 N1 Apartment People Definition,  !- People Definition Name
     F9 N1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 N2 Apartment People,  !- Name
+    F9 N2 Apartment People Definition,  !- People Definition Name
     F9 N2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 S1 Apartment People,  !- Name
+    F9 S1 Apartment People Definition,  !- People Definition Name
     F9 S1 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     F9 S2 Apartment People,  !- Name
+    F9 S2 Apartment People Definition,  !- People Definition Name
     F9 S2 Apartment,         !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    F9 S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T SW Apartment People,   !- Name
+    T SW Apartment People Definition,  !- People Definition Name
     T SW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T SW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T NW Apartment People,   !- Name
+    T NW Apartment People Definition,  !- People Definition Name
     T NW Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T NW Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T SE Apartment People,   !- Name
+    T SE Apartment People Definition,  !- People Definition Name
     T SE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T SE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T NE Apartment People,   !- Name
+    T NE Apartment People Definition,  !- People Definition Name
     T NE Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T NE Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T N1 Apartment People,   !- Name
+    T N1 Apartment People Definition,  !- People Definition Name
     T N1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T N1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T N2 Apartment People,   !- Name
+    T N2 Apartment People Definition,  !- People Definition Name
     T N2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T N2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T S1 Apartment People,   !- Name
+    T S1 Apartment People Definition,  !- People Definition Name
     T S1 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T S1 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
   People,
     T S2 Apartment People,   !- Name
+    T S2 Apartment People Definition,  !- People Definition Name
     T S2 Apartment,          !- Zone or ZoneList or Space or SpaceList Name
     OCC_APT_SCH,             !- Number of People Schedule Name
+    Activity Schedule;       !- Activity Level Schedule Name
+
+  People:Definition,
+    T S2 Apartment People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     2.5000,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000,                  !- Fraction Radiant
-    AUTOCALCULATE,           !- Sensible Heat Fraction
-    Activity Schedule;       !- Activity Level Schedule Name
+    AUTOCALCULATE;           !- Sensible Heat Fraction
 
 !-   ===========  ALL OBJECTS IN CLASS: LIGHTS ===========
 

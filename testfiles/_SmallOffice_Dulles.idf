@@ -1911,51 +1911,67 @@
 
   People,
     SouthZone_1stFloor People,  !- Name
+    SouthZone_1stFloor People Definition,  !- People Definition Name
     SouthZone_1stFloor,      !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
+    Office Activity Level;   !- Activity Level Schedule Name
+
+  People:Definition,
+    SouthZone_1stFloor People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Office Activity Level;   !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     NorthZone_1stFloor People,  !- Name
+    NorthZone_1stFloor People Definition,  !- People Definition Name
     NorthZone_1stFloor,      !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
+    Office Activity Level;   !- Activity Level Schedule Name
+
+  People:Definition,
+    NorthZone_1stFloor People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Office Activity Level;   !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     SouthZone_2ndFloor People,  !- Name
+    SouthZone_2ndFloor People Definition,  !- People Definition Name
     SouthZone_2ndFloor,      !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
+    Office Activity Level;   !- Activity Level Schedule Name
+
+  People:Definition,
+    SouthZone_2ndFloor People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Office Activity Level;   !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     NorthZone_2ndFloor People,  !- Name
+    NorthZone_2ndFloor People Definition,  !- People Definition Name
     NorthZone_2ndFloor,      !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
+    Office Activity Level;   !- Activity Level Schedule Name
+
+  People:Definition,
+    NorthZone_2ndFloor People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Office Activity Level;   !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     SouthZone_1stFloor Lights,  !- Name
