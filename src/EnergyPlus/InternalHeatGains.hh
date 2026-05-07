@@ -134,8 +134,6 @@ namespace InternalHeatGains {
         bool FractionReturnAirIsCalculated = false;                       // True if return-air fraction is calculated from plenum temperature
         Real64 FractionReturnAirPlenTempCoeff1 = 0.0;
         Real64 FractionReturnAirPlenTempCoeff2 = 0.0;
-        std::string RetNodeName;     // Return Air Heat Gain Node Name
-        std::string ExhaustNodeName; // Exhaust Air Heat Gain Node Name
     };
 
     struct GlobalInternalGainMiscObject

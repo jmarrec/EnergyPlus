@@ -595,6 +595,16 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                   OutArgs(6) = InArgs(12)
                   COutArgs = 6
                 END IF
+                ! Optional Return Air Heat Gain Node Name (was A7/field 16)
+                IF (CurArgs >= 16) THEN
+                  OutArgs(7) = InArgs(16)
+                  COutArgs = 7
+                END IF
+                ! Optional Exhaust Air Heat Gain Node Name (was A8/field 17)
+                IF (CurArgs >= 17) THEN
+                  OutArgs(8) = InArgs(17)
+                  COutArgs = 8
+                END IF
                 CALL WriteOutIDFLines(DifLfn,'Lights',COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
                 ! Create the new Lights:Definition object:
@@ -610,8 +620,6 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 ! A3 Return Air Fraction Calculated from Plenum Temperature (was A6/field 13) -- optional
                 ! N7 Coeff 1 (was N8/field 14) -- optional
                 ! N8 Coeff 2 (was N9/field 15) -- optional
-                ! A4 Return Air Heat Gain Node Name (was A7/field 16) -- optional
-                ! A5 Exhaust Air Heat Gain Node Name (was A8/field 17) -- optional
                 ObjectName = 'Lights:Definition'
                 CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
                 OutArgs(1) = TRIM(InArgs(1)) // ' Definition'
@@ -634,14 +642,6 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                 IF (CurArgs >= 15) THEN
                   OutArgs(11) = InArgs(15)
                   COutArgs = 11
-                END IF
-                IF (CurArgs >= 16) THEN
-                  OutArgs(12) = InArgs(16)
-                  COutArgs = 12
-                END IF
-                IF (CurArgs >= 17) THEN
-                  OutArgs(13) = InArgs(17)
-                  COutArgs = 13
                 END IF
                 CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
 
