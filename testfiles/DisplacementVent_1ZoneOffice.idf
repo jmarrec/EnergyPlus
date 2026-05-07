@@ -1074,8 +1074,12 @@
 
   ElectricEquipment,
     ZONE1 ElecEq 1,          !- Name
+    ZONE1 ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE1 ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3038,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1086,8 +1090,12 @@
 
   ElectricEquipment,
     ZONE1 ElecEq 2,          !- Name
+    ZONE1 ElecEq 2 Definition,  !- Electric Equipment Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE1 ElecEq 2 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1912,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1098,8 +1106,12 @@
 
   ElectricEquipment,
     ZONE1 ElecEq 3,          !- Name
+    ZONE1 ElecEq 3 Definition,  !- Electric Equipment Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE1 ElecEq 3 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3038,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1110,8 +1122,12 @@
 
   ElectricEquipment,
     ZONE1 ElecEq 4,          !- Name
+    ZONE1 ElecEq 4 Definition,  !- Electric Equipment Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE1 ElecEq 4 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1912,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1122,8 +1138,12 @@
 
   ElectricEquipment,
     ZONE1 ElecEq 5,          !- Name
+    ZONE1 ElecEq 5 Definition,  !- Electric Equipment Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED,               !- Schedule Name
+    EQP-SCHED;               !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE1 ElecEq 5 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     12600,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

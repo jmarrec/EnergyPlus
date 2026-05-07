@@ -462,8 +462,12 @@
 
   ElectricEquipment,
     Office Buildings,        !- Name
+    Office Buildings Definition,  !- Electric Equipment Definition Name
     AllZones,                !- Zone or ZoneList or Space or SpaceList Name
-    EQP-SCHED-BldgAvg,       !- Schedule Name
+    EQP-SCHED-BldgAvg;       !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Office Buildings Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.43,                   !- Watts per Floor Area {W/m2}

@@ -420,8 +420,12 @@ TEST_F(EnergyPlusFixture, ChillerAbsorption_Calc)
 
         "  ElectricEquipment,",
         "    West Zone ElecEq 1,      !- Name",
+        "    West Zone ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    West Zone,               !- Zone or ZoneList Name",
-        "    INTERMITTENT,            !- Schedule Name",
+        "    INTERMITTENT;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    West Zone ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    2500.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",

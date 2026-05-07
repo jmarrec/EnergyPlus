@@ -1165,8 +1165,12 @@ TEST_F(EnergyPlusFixture, DuctLoss_test)
 
         "ElectricEquipment,",
         "  LIVING ZONE ElecEq,      !- Name",
+        "  LIVING ZONE ElecEq Definition, !- Electric Equipment Definition Name",
         "  LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name",
-        "  INTERMITTENT,            !- Schedule Name",
+        "  INTERMITTENT;            !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "  LIVING ZONE ElecEq Definition, !- Name",
         "  EquipmentLevel,          !- Design Level Calculation Method",
         "  500,                     !- Design Level {W}",
         "  ,                        !- Watts per Zone Floor Area {W/m2}",

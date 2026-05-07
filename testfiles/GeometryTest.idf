@@ -702,8 +702,12 @@
 
   ElectricEquipment,
     DORM ROOMS AND COMMON AREAS ElecEq 1,  !- Name
+    DORM ROOMS AND COMMON AREAS ElecEq 1 Definition,  !- Electric Equipment Definition Name
     DORM ROOMS AND COMMON AREAS,  !- Zone or ZoneList or Space or SpaceList Name
-    Residence Equipment,     !- Schedule Name
+    Residence Equipment;     !- Schedule Name
+
+  ElectricEquipment:Definition,
+    DORM ROOMS AND COMMON AREAS ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     9210.921,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -801,8 +805,12 @@
 
   ElectricEquipment,
     Office Zones with Electric Equipment,  !- Name
+    Office Zones with Electric Equipment Definition,  !- Electric Equipment Definition Name
     OfficeZones,             !- Zone or ZoneList or Space or SpaceList Name
-    Office Lighting,         !- Schedule Name
+    Office Lighting;         !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Office Zones with Electric Equipment Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     5.4,                     !- Watts per Floor Area {W/m2}

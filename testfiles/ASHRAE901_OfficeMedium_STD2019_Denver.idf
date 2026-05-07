@@ -4989,224 +4989,292 @@
 
   ElectricEquipment,
     Core_bottom_MiscPlug_Equip,  !- Name
+    Core_bottom_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Core_bottom,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Core_bottom_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     7937.1558,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Core_mid_MiscPlug_Equip, !- Name
+    Core_mid_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Core_mid,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Core_mid_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     7937.1558,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Core_top_MiscPlug_Equip, !- Name
+    Core_top_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Core_top,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Core_top_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     7937.1558,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_top_ZN_3_MiscPlug_Equip,  !- Name
+    Perimeter_top_ZN_3_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_top_ZN_3,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_top_ZN_3_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1673.2138,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_top_ZN_2_MiscPlug_Equip,  !- Name
+    Perimeter_top_ZN_2_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_top_ZN_2,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_top_ZN_2_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1059.2170,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_top_ZN_1_MiscPlug_Equip,  !- Name
+    Perimeter_top_ZN_1_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_top_ZN_1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_top_ZN_1_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1673.2028,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_top_ZN_4_MiscPlug_Equip,  !- Name
+    Perimeter_top_ZN_4_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_top_ZN_4,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_top_ZN_4_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1059.2100,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_bot_ZN_3_MiscPlug_Equip,  !- Name
+    Perimeter_bot_ZN_3_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_bot_ZN_3,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_bot_ZN_3_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1673.2138,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_bot_ZN_2_MiscPlug_Equip,  !- Name
+    Perimeter_bot_ZN_2_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_bot_ZN_2,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_bot_ZN_2_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1059.2170,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_bot_ZN_1_MiscPlug_Equip,  !- Name
+    Perimeter_bot_ZN_1_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_bot_ZN_1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_bot_ZN_1_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1673.2028,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_bot_ZN_4_MiscPlug_Equip,  !- Name
+    Perimeter_bot_ZN_4_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_bot_ZN_4,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_bot_ZN_4_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1059.2100,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_mid_ZN_3_MiscPlug_Equip,  !- Name
+    Perimeter_mid_ZN_3_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_mid_ZN_3,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_mid_ZN_3_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1673.2138,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_mid_ZN_2_MiscPlug_Equip,  !- Name
+    Perimeter_mid_ZN_2_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_mid_ZN_2,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_mid_ZN_2_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1059.2170,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_mid_ZN_1_MiscPlug_Equip,  !- Name
+    Perimeter_mid_ZN_1_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_mid_ZN_1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_mid_ZN_1_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1673.2028,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Perimeter_mid_ZN_4_MiscPlug_Equip,  !- Name
+    Perimeter_mid_ZN_4_MiscPlug_Equip Definition,  !- Electric Equipment Definition Name
     Perimeter_mid_ZN_4,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscPlug;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Perimeter_mid_ZN_4_MiscPlug_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1059.2100,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    MiscPlug;                !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Core_bottom_Elevators_Equip,  !- Name
+    Core_bottom_Elevators_Equip Definition,  !- Electric Equipment Definition Name
     Core_bottom,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_ELEVATORS,          !- Schedule Name
+    ElevatorLift;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Core_bottom_Elevators_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     32109.8901098901,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ElevatorLift;            !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Elevators_Lights_Fan,    !- Name
+    Elevators_Lights_Fan Definition,  !- Electric Equipment Definition Name
     Core_bottom,             !- Zone or ZoneList or Space or SpaceList Name
     ELEV_LIGHT_FAN_SCH_ADD_DF,  !- Schedule Name
+    ElevatorLightsFan;       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Elevators_Lights_Fan Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     125,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ElevatorLightsFan;       !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: DAYLIGHTING:CONTROLS ===========
 

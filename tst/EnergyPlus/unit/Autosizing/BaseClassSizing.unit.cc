@@ -1421,8 +1421,12 @@ TEST_F(EnergyPlusFixture, BaseSizer_SupplyAirTempLessThanZoneTStatTest)
 
         "  ElectricEquipment,",
         "      ElectricEquipment,       !- Name",
+        "      ElectricEquipment Definition, !- Electric Equipment Definition Name",
         "      ZONE ONE,                !- Zone or ZoneList Name",
-        "      BLDG_EQUIP_SCH,          !- Schedule Name",
+        "      BLDG_EQUIP_SCH;          !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "      ElectricEquipment Definition, !- Name",
         "      Watts/Area,              !- Design Level Calculation Method",
         "      ,                        !- Design Level {W}",
         "      8.0,                    !- Watts per Zone Floor Area {W/m2}",

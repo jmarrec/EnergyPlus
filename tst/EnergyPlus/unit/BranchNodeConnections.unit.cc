@@ -391,8 +391,12 @@ TEST_F(EnergyPlusFixture, BranchNodeConnections_ReturnPlenumNodeCheckFailure)
 
         "ElectricEquipment,",
         " Space ElecEq,             !- Name",
+        " Space ElecEq Definition,  !- Electric Equipment Definition Name",
         " Space,                    !- Zone or ZoneList Name",
-        " OnSched,                  !- Schedule Name",
+        " OnSched;                  !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        " Space ElecEq Definition,  !- Name",
         " Watts/Area,               !- Design Level Calculation Method",
         " ,                         !- Design Level{ W }",
         " 20.0,                     !- Watts per Zone Floor Area{ W / m2 }",
@@ -403,8 +407,12 @@ TEST_F(EnergyPlusFixture, BranchNodeConnections_ReturnPlenumNodeCheckFailure)
 
         "ElectricEquipment,",
         " Space ElecEq x10,         !- Name",
+        " Space ElecEq x10 Definition, !- Electric Equipment Definition Name",
         " Spacex10,                 !- Zone or ZoneList Name",
-        " OnSched,                  !- Schedule Name",
+        " OnSched;                  !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        " Space ElecEq x10 Definition, !- Name",
         " Watts/Area,               !- Design Level Calculation Method",
         " ,                         !- Design Level{ W }",
         " 20.0,                     !- Watts per Zone Floor Area{ W / m2 }",
@@ -1413,8 +1421,12 @@ TEST_F(EnergyPlusFixture, BranchNodeConnections_ReturnPlenumNodeCheck)
 
         "ElectricEquipment,",
         " Space ElecEq,             !- Name",
+        " Space ElecEq Definition,  !- Electric Equipment Definition Name",
         " Space,                    !- Zone or ZoneList Name",
-        " OnSched,                  !- Schedule Name",
+        " OnSched;                  !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        " Space ElecEq Definition,  !- Name",
         " Watts/Area,               !- Design Level Calculation Method",
         " ,                         !- Design Level{ W }",
         " 20.0,                     !- Watts per Zone Floor Area{ W / m2 }",
@@ -1425,8 +1437,12 @@ TEST_F(EnergyPlusFixture, BranchNodeConnections_ReturnPlenumNodeCheck)
 
         "ElectricEquipment,",
         " Space ElecEq x10,         !- Name",
+        " Space ElecEq x10 Definition, !- Electric Equipment Definition Name",
         " Spacex10,                 !- Zone or ZoneList Name",
-        " OnSched,                  !- Schedule Name",
+        " OnSched;                  !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        " Space ElecEq x10 Definition, !- Name",
         " Watts/Area,               !- Design Level Calculation Method",
         " ,                         !- Design Level{ W }",
         " 20.0,                     !- Watts per Zone Floor Area{ W / m2 }",

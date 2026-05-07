@@ -5608,164 +5608,214 @@
     },
     "ElectricEquipment": {
         "Core_bottom_Elevators_Equip": {
-            "design_level": 32109.8901098901,
-            "design_level_calculation_method": "EquipmentLevel",
+            "electric_equipment_definition_name": "Core_bottom_Elevators_Equip Definition",
             "end_use_subcategory": "Elevators",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_ELEVATORS",
-            "zone_or_zonelist_or_space_or_spacelist_name": "Core_bottom"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Core_bottom",
+            "schedule_name": "BLDG_ELEVATORS"
         },
         "Core_bottom_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Core_bottom_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Core_bottom"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Core_bottom",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Core_mid_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Core_mid_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Core_mid"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Core_mid",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Core_top_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Core_top_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Core_top"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Core_top",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_bot_ZN_1_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_bot_ZN_1_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_1"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_1",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_bot_ZN_2_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_bot_ZN_2_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_2"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_2",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_bot_ZN_3_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_bot_ZN_3_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_3"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_3",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_bot_ZN_4_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_bot_ZN_4_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_4"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_bot_ZN_4",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_mid_ZN_1_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_mid_ZN_1_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_1"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_1",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_mid_ZN_2_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_mid_ZN_2_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_2"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_2",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_mid_ZN_3_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_mid_ZN_3_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_3"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_3",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_mid_ZN_4_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_mid_ZN_4_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_4"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_mid_ZN_4",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_top_ZN_1_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_top_ZN_1_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_1"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_1",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_top_ZN_2_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_top_ZN_2_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_2"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_2",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_top_ZN_3_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_top_ZN_3_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
-            "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_3"
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_3",
+            "schedule_name": "BLDG_EQUIP_SCH"
         },
         "Perimeter_top_ZN_4_PlugMisc_Equip": {
-            "design_level_calculation_method": "Watts/Area",
+            "electric_equipment_definition_name": "Perimeter_top_ZN_4_PlugMisc_Equip Definition",
             "end_use_subcategory": "General",
-            "fraction_latent": 0.0,
-            "fraction_lost": 0.0,
+            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_4",
+            "schedule_name": "BLDG_EQUIP_SCH"
+        }
+    },
+    "ElectricEquipment:Definition": {
+        "Core_bottom_Elevators_Equip Definition": {
             "fraction_radiant": 0.5,
-            "schedule_name": "BLDG_EQUIP_SCH",
-            "watts_per_floor_area": 10.76,
-            "zone_or_zonelist_or_space_or_spacelist_name": "Perimeter_top_ZN_4"
+            "design_level": 32109.8901098901,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "EquipmentLevel",
+            "fraction_latent": 0.0
+        },
+        "Core_bottom_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Core_mid_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Core_top_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_bot_ZN_1_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_bot_ZN_2_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_bot_ZN_3_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_bot_ZN_4_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_mid_ZN_1_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_mid_ZN_2_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_mid_ZN_3_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_mid_ZN_4_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_top_ZN_1_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_top_ZN_2_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_top_ZN_3_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
+        },
+        "Perimeter_top_ZN_4_PlugMisc_Equip Definition": {
+            "fraction_radiant": 0.5,
+            "fraction_lost": 0.0,
+            "design_level_calculation_method": "Watts/Area",
+            "fraction_latent": 0.0,
+            "watts_per_floor_area": 10.76
         }
     },
     "EnvironmentalImpactFactors": {

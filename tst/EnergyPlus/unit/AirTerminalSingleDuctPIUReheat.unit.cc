@@ -960,8 +960,12 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIU_SimTest)
 
         "ElectricEquipment,",
         "    OpenOffice Electric Equipment,  !- Name",
+        "    OpenOffice Electric Equipment Definition, !- Electric Equipment Definition Name",
         "    OpenOffice - ZoneList,   !- Zone or ZoneList Name",
-        "    Office Bldg Equip,       !- Schedule Name",
+        "    Office Bldg Equip;       !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    OpenOffice Electric Equipment Definition, !- Name",
         "    Watts/Area,              !- Design Level Calculation Method",
         "    ,                        !- Design Level {W}",
         "    8.02,                    !- Watts per Zone Floor Area {W/m2}",

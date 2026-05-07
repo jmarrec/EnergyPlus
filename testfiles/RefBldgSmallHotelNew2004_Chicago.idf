@@ -13345,562 +13345,734 @@
 
   ElectricEquipment,
     ElevatorCoreFlr1_Elevators_Equip,  !- Name
+    ElevatorCoreFlr1_Elevators_Equip Definition,  !- Electric Equipment Definition Name
     ElevatorCoreFlr1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_ELEVATORS,          !- Schedule Name
+    Elevators;               !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ElevatorCoreFlr1_Elevators_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     32109.8901098901,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    Elevators;               !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     EmployeeLoungeFlr1_PlugMisc_Equip,  !- Name
+    EmployeeLoungeFlr1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     EmployeeLoungeFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     EmployeeLounge_Eqp_Sch,  !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    EmployeeLoungeFlr1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     77.16,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     ExerciseCenterFlr1_PlugMisc_Equip,  !- Name
+    ExerciseCenterFlr1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     ExerciseCenterFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     ExerciseRoom_Eqp_Sch,    !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    ExerciseCenterFlr1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     11.5,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     FrontLoungeFlr1_PlugMisc_Equip,  !- Name
+    FrontLoungeFlr1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     FrontLoungeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     EmployeeLounge_Eqp_Sch,  !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontLoungeFlr1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.4,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     FrontOfficeFlr1_PlugMisc_Equip,  !- Name
+    FrontOfficeFlr1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     FrontOfficeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     Office_Eqp_Sch,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    FrontOfficeFlr1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     12.9,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom101_PlugMisc_Equip,  !- Name
+    GuestRoom101_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom101,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom101_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom102_PlugMisc_Equip,  !- Name
+    GuestRoom102_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom102,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom102_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom103_PlugMisc_Equip,  !- Name
+    GuestRoom103_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom103,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom103_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom104_PlugMisc_Equip,  !- Name
+    GuestRoom104_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom104,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom104_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom105_PlugMisc_Equip,  !- Name
+    GuestRoom105_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom105,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom105_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom201_PlugMisc_Equip,  !- Name
+    GuestRoom201_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom201,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom201_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom202_205_PlugMisc_Equip,  !- Name
+    GuestRoom202_205_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom202_205,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom202_205_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom206_208_PlugMisc_Equip,  !- Name
+    GuestRoom206_208_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom206_208,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom206_208_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom209_212_PlugMisc_Equip,  !- Name
+    GuestRoom209_212_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom209_212,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom209_212_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom213_PlugMisc_Equip,  !- Name
+    GuestRoom213_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom213,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom213_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom214_PlugMisc_Equip,  !- Name
+    GuestRoom214_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom214,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom214_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom215_218_PlugMisc_Equip,  !- Name
+    GuestRoom215_218_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom215_218,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom215_218_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom219_PlugMisc_Equip,  !- Name
+    GuestRoom219_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom219,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom219_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom220_223_PlugMisc_Equip,  !- Name
+    GuestRoom220_223_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom220_223,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom220_223_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom224_PlugMisc_Equip,  !- Name
+    GuestRoom224_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom224,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom224_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom301_PlugMisc_Equip,  !- Name
+    GuestRoom301_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom301,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom301_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom302_305_PlugMisc_Equip,  !- Name
+    GuestRoom302_305_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom302_305,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom302_305_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom306_308_PlugMisc_Equip,  !- Name
+    GuestRoom306_308_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom306_308,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom306_308_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom309_312_PlugMisc_Equip,  !- Name
+    GuestRoom309_312_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom309_312,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom309_312_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom313_PlugMisc_Equip,  !- Name
+    GuestRoom313_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom313,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom313_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom314_PlugMisc_Equip,  !- Name
+    GuestRoom314_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom314,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom314_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom315_318_PlugMisc_Equip,  !- Name
+    GuestRoom315_318_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom315_318,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom315_318_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom319_PlugMisc_Equip,  !- Name
+    GuestRoom319_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom319,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom319_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom320_323_PlugMisc_Equip,  !- Name
+    GuestRoom320_323_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom320_323,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom320_323_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom324_PlugMisc_Equip,  !- Name
+    GuestRoom324_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom324,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom324_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom401_PlugMisc_Equip,  !- Name
+    GuestRoom401_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom401,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom401_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom402_405_PlugMisc_Equip,  !- Name
+    GuestRoom402_405_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom402_405,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom402_405_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom406_408_PlugMisc_Equip,  !- Name
+    GuestRoom406_408_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom406_408,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom406_408_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom409_412_PlugMisc_Equip,  !- Name
+    GuestRoom409_412_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom409_412,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom409_412_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom413_PlugMisc_Equip,  !- Name
+    GuestRoom413_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom413,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom413_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom414_PlugMisc_Equip,  !- Name
+    GuestRoom414_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom414,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom414_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom415_418_PlugMisc_Equip,  !- Name
+    GuestRoom415_418_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom415_418,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom415_418_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom419_PlugMisc_Equip,  !- Name
+    GuestRoom419_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom419,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom419_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom420_423_PlugMisc_Equip,  !- Name
+    GuestRoom420_423_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom420_423,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom420_423_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     GuestRoom424_PlugMisc_Equip,  !- Name
+    GuestRoom424_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     GuestRoom424,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Eqp_Sch,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    GuestRoom424_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.3,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     LaundryRoomFlr1_LaundryWashers_Equip,  !- Name
+    LaundryRoomFlr1_LaundryWashers_Equip Definition,  !- Electric Equipment Definition Name
     LaundryRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
-    LaundryRoom_Eqp_Elec_Sch,!- Schedule Name
+    LaundryRoom_Eqp_Elec_Sch,  !- Schedule Name
+    LaundryWashers;          !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    LaundryRoomFlr1_LaundryWashers_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2140,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    LaundryWashers;          !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     MeetingRoomFlr1_PlugMisc_Equip,  !- Name
+    MeetingRoomFlr1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     MeetingRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     MeetingRoom_Eqp_Sch,     !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    MeetingRoomFlr1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     12.9,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     RestroomFlr1_PlugMisc_Equip,  !- Name
+    RestroomFlr1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     RestroomFlr1,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    RestroomFlr1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   GasEquipment,
     LaundryRoomFlr1_LaundryDryers_Equip,  !- Name

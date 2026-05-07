@@ -573,8 +573,12 @@
 
   ElectricEquipment,
     OSCTest ElecEq 1,        !- Name
+    OSCTest ElecEq 1 Definition,  !- Electric Equipment Definition Name
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
-    OSCTest-EquipSchedule,   !- Schedule Name
+    OSCTest-EquipSchedule;   !- Schedule Name
+
+  ElectricEquipment:Definition,
+    OSCTest ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     800,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

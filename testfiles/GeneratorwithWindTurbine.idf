@@ -443,16 +443,20 @@
 
   ElectricEquipment,
     Equipment,               !- Name
+    Equipment Definition,    !- Electric Equipment Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     Always On,               !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Equipment Definition,    !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    ,                        !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    ;                        !- Fraction Lost
 
   NodeList,
     Zone1Inlets,             !- Name
