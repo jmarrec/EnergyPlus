@@ -2919,16 +2919,20 @@
 
   HotWaterEquipment,
     SPACE2-1 HWEq 1,         !- Name
+    SPACE2-1 HWEq 1 Definition,  !- Hot Water Equipment Definition Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
+    Dishwashing;             !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    SPACE2-1 HWEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     300,                     !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    Dishwashing;             !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
   WaterUse:Equipment,
     SPACE2-1 DHW 1,          !- Name

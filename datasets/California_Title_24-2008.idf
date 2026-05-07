@@ -65,16 +65,20 @@
 
   HotWaterEquipment,
     Auditoriums,             !- Name
+    Auditoriums Definition,  !- Hot Water Equipment Definition Name
     Auditoriums,             !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Auditoriums Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     17.6,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Classroom Building,       !Occupancy type
@@ -133,16 +137,20 @@
 
   HotWaterEquipment,
     Classroom Building,      !- Name
+    Classroom Building Definition,  !- Hot Water Equipment Definition Name
     Classroom Building,      !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Classroom Building Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     31.6,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Commercial and Industrial Building,       !Occupancy type
@@ -201,16 +209,20 @@
 
   HotWaterEquipment,
     Commercial and Industrial Building,  !- Name
+    Commercial and Industrial Building Definition,  !- Hot Water Equipment Definition Name
     Commercial and Industrial Building,  !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Commercial and Industrial Building Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     31.6,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Convention Centers,       !Occupancy type
@@ -269,16 +281,20 @@
 
   HotWaterEquipment,
     Convention Centers,      !- Name
+    Convention Centers Definition,  !- Hot Water Equipment Definition Name
     Convention Centers,      !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Convention Centers Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     16.7,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Financial Institutions,   !Occupancy type
@@ -337,16 +353,20 @@
 
   HotWaterEquipment,
     Financial Institutions,  !- Name
+    Financial Institutions Definition,  !- Hot Water Equipment Definition Name
     Financial Institutions,  !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Financial Institutions Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     35.2,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! General Commercial and Industrial Work Buildings,   !Occupancy type
@@ -405,16 +425,20 @@
 
   HotWaterEquipment,
     General Commercial and Industrial Work Buildings,  !- Name
+    General Commercial and Industrial Work Buildings Definition,  !- Hot Water Equipment Definition Name
     General Commercial and Industrial Work Buildings,  !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    General Commercial and Industrial Work Buildings Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     35.2,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Grocery Stores,           !Occupancy type
@@ -473,16 +497,20 @@
 
   HotWaterEquipment,
     Grocery Stores,          !- Name
+    Grocery Stores Definition,  !- Hot Water Equipment Definition Name
     Grocery Stores,          !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Grocery Stores Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     33.1,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Library,                  !Occupancy type
@@ -541,16 +569,20 @@
 
   HotWaterEquipment,
     Library,                 !- Name
+    Library Definition,      !- Hot Water Equipment Definition Name
     Library,                 !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Library Definition,      !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     35.2,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Medical Buildings and Clinics,  !Occupancy type
@@ -609,16 +641,20 @@
 
   HotWaterEquipment,
     Medical Buildings and Clinics,  !- Name
+    Medical Buildings and Clinics Definition,  !- Hot Water Equipment Definition Name
     Medical Buildings and Clinics,  !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Medical Buildings and Clinics Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     32.2,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Office Buildings,         !Occupancy type
@@ -677,16 +713,20 @@
 
   HotWaterEquipment,
     Office Buildings,        !- Name
+    Office Buildings Definition,  !- Hot Water Equipment Definition Name
     Office Buildings,        !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Office Buildings Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     31.1,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Religious Facilities,     !Occupancy type
@@ -745,16 +785,20 @@
 
   HotWaterEquipment,
     Religious Facilities,    !- Name
+    Religious Facilities Definition,  !- Hot Water Equipment Definition Name
     Religious Facilities,    !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Religious Facilities Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     16.7,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Restaurants,              !Occupancy type
@@ -813,16 +857,20 @@
 
   HotWaterEquipment,
     Restaurants,             !- Name
+    Restaurants Definition,  !- Hot Water Equipment Definition Name
     Restaurants,             !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Restaurants Definition,  !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     107.2,                   !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Schools,                  !Occupancy type
@@ -881,16 +929,20 @@
 
   HotWaterEquipment,
     Schools,                 !- Name
+    Schools Definition,      !- Hot Water Equipment Definition Name
     Schools,                 !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Schools Definition,      !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     31.6,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! Theaters,                 !Occupancy type
@@ -949,16 +1001,20 @@
 
   HotWaterEquipment,
     Theaters,                !- Name
+    Theaters Definition,     !- Hot Water Equipment Definition Name
     Theaters,                !- Zone or ZoneList or Space or SpaceList Name
     DHW-SCHED-BldgAvg,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  HotWaterEquipment:Definition,
+    Theaters Definition,     !- Name
     Watts/Person,            !- Design Level Calculation Method
     ,                        !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     17.6,                    !- Power per Person {W/person}
     0.2,                     !- Fraction Latent
     0.1,                     !- Fraction Radiant
-    0.5,                     !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.5;                     !- Fraction Lost
 
 !OccupancyData,
 ! All Others,               !Occupancy type
