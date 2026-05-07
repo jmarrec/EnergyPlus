@@ -79,7 +79,6 @@ New format:
     Name Definition,         !- Electric Equipment Definition Name
     Zone,                    !- Zone or ZoneList or Space or SpaceList Name
     Schedule[,               !- Schedule Name
-    ,]                       !- Multiplier
     [EndUse];                !- End-Use Subcategory
 
   ElectricEquipment:Definition,
@@ -298,11 +297,10 @@ def transform_people_block(block, filepath_for_warning=""):
         result.append(fl(act_v, ",", act_c))
         for i, fn in enumerate(inst_opt):
             v, c = get(fn)
-            result.append(fl(v, ",", c))
-        result.append(fl("", ";", "Multiplier"))
+            term = ";" if i == len(inst_opt) - 1 else ","
+            result.append(fl(v, term, c))
     else:
-        result.append(fl(act_v, ",", act_c))
-        result.append(fl("", ";", "Multiplier"))
+        result.append(fl(act_v, ";", act_c))
 
     result.append(eol)
 
@@ -402,7 +400,7 @@ def transform_lights_block(block, filepath_for_warning=""):
 
     if inst_opt:
         result.append(fl(repl_v, ",", repl_c))
-        result.append(fl("", ",", "Multiplier"))
+        # result.append(fl("", ",", "Multiplier"))
         for i, ((v, c), label) in enumerate(inst_opt):
             term = ";" if i == len(inst_opt) - 1 else ","
             result.append(fl(v, term, c or label))
@@ -667,7 +665,7 @@ def transform_block(block, filepath_for_warning=""):
     sched_indent, sched_val, _, sched_comment = sched_parsed
     if end_use_value:
         result.append(idf_line(sched_indent, sched_val, ",", sched_comment))
-        result.append(field_line("", ",", "Multiplier"))
+        # result.append(field_line("", ",", "Multiplier"))
         result.append(field_line(end_use_value, ";", "End-Use Subcategory"))
     else:
         result.append(idf_line(sched_indent, sched_val, ";", sched_comment))

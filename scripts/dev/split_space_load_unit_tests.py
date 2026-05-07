@@ -79,7 +79,6 @@ New format:
     Name Definition,         !- Electric Equipment Definition Name
     Zone,                    !- Zone or ZoneList or Space or SpaceList Name
     Schedule[,               !- Schedule Name
-    ,]                       !- Multiplier
     [EndUse];                !- End-Use Subcategory
 
   ElectricEquipment:Definition,
@@ -262,13 +261,12 @@ def transform_people_block_cpp(block, filepath_for_warning=""):
     result.append(cpp_line(set_terminator(parsed[2][1], ",")))  # Zone
     result.append(cpp_line(set_terminator(parsed[3][1], ",")))  # Schedule
     if inst_opt:
-        result.append(cpp_line(set_terminator(parsed[10][1], ",")))  # Activity
+        result.append(cpp_line(set_terminator(idf_content=parsed[10][1], new_term=",")))  # Activity
         for i, fn in enumerate(inst_opt):
-            result.append(cpp_line(set_terminator(parsed[fn][1], ",")))
-        result.append(nfl("", ";", "Multiplier"))
+            term = ";" if i == len(inst_opt) - 1 else ","
+            result.append(cpp_line(set_terminator(idf_content=parsed[fn][1], new_term=term)))
     else:
-        result.append(cpp_line(set_terminator(parsed[10][1], ",")))  # Activity
-        result.append(nfl("", ";", "Multiplier"))
+        result.append(cpp_line(set_terminator(idf_content=parsed[10][1], new_term=";")))
 
     result.append(eol)
 
@@ -341,7 +339,7 @@ def transform_lights_block_cpp(block, filepath_for_warning=""):
         inst_opt_fns.append(17)  # Exhaust Air Heat Gain Node Name
     if inst_opt_fns:
         result.append(cpp_line(set_terminator(parsed[11][1], ",")))
-        result.append(nfl("", ",", "Multiplier"))
+        # result.append(nfl("", ",", "Multiplier"))
         for i, fn in enumerate(inst_opt_fns):
             result.append(cpp_line(set_terminator(parsed[fn][1], ";" if i == len(inst_opt_fns) - 1 else ",")))
     else:
@@ -558,7 +556,7 @@ def transform_block(block, filepath_for_warning=""):
 
     if end_use_value:
         result.append(cpp_line(set_terminator(schedule_idf, ",")))  # Schedule → comma
-        result.append(new_field_line("", ",", "Multiplier"))
+        # result.append(new_field_line("", ",", "Multiplier"))
         result.append(new_field_line(end_use_value, ";", "End-Use Subcategory"))
     else:
         result.append(cpp_line(set_terminator(schedule_idf, ";")))  # Schedule → semicolon
