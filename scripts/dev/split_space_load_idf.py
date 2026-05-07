@@ -101,6 +101,7 @@ Usage:
     # performance_tests/, and datasets/
 """
 
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -165,7 +166,7 @@ def parse_idf_line(line):
     return None
 
 
-def is_ee_class(parsed):
+def is_ee_class(parsed, only_class: str | None = None):
     """True iff parsed line is a splittable equipment class-name line (not a Definition).
 
     Field-value lines that happen to contain an equipment name as a value always
@@ -173,7 +174,11 @@ def is_ee_class(parsed):
     lines with a comment reliably avoids false positives.
     """
     indent, value, term, comment = parsed
-    return value in OBJECTS_TO_SPLIT and term == "," and comment is None
+    if term != "," or comment is not None:
+        return False
+    if only_class is not None:
+        return value == only_class
+    return value in OBJECTS_TO_SPLIT
 
 
 def terminates_object(parsed):
@@ -685,7 +690,7 @@ def transform_block(block, filepath_for_warning=""):
 # ---------------------------------------------------------------------------
 
 
-def process_file(filepath):
+def process_file(filepath, only_class: str | None = None):
     """Process a single .idf file in place. Returns number of blocks converted."""
     filepath = Path(filepath)
     lines = filepath.read_text(encoding="utf-8", errors="replace").splitlines(keepends=True)
@@ -698,7 +703,7 @@ def process_file(filepath):
         line = lines[i]
         parsed = parse_idf_line(line)
 
-        if parsed and is_ee_class(parsed):
+        if parsed and is_ee_class(parsed=parsed, only_class=only_class):
             # Collect the complete IDF object (until the terminating ';' field)
             block = [line]
             j = i + 1
@@ -748,9 +753,21 @@ def process_file(filepath):
 
 
 def main():
-    if len(sys.argv) > 1:
+    parser = argparse.ArgumentParser(description="Split old-style equipment IDF objects into instance + definition.")
+    parser.add_argument("files", nargs="*", help="Files or directories to process (default: all IDF/IMF under repo)")
+    parser.add_argument(
+        "--only-class",
+        choices=list(OBJECTS_TO_SPLIT),
+        metavar="CLASS",
+        help=f"Limit split to this class only. Choices: {', '.join(OBJECTS_TO_SPLIT)}",
+    )
+    args = parser.parse_args()
+
+    only_class = args.only_class
+
+    if args.files:
         files = []
-        for arg in sys.argv[1:]:
+        for arg in args.files:
             p = Path(arg)
             if p.is_dir():
                 files.extend(sorted(p.rglob("*.idf")))
@@ -767,7 +784,7 @@ def main():
 
     total = 0
     for filepath in files:
-        count = process_file(filepath)
+        count = process_file(filepath, only_class=only_class)
         if count:
             print(f"  {filepath.name}: {count} block(s) converted")
             total += count
