@@ -964,51 +964,49 @@ namespace InternalHeatGains {
 
                     thisLights.FractionReturnAirIsCalculated = itLightsDef->FractionReturnAirIsCalculated;
 
-                    // Set return air node number
+                    // Set return air node number (A6 on instance)
                     thisLights.ZoneReturnNum = 0;
                     thisLights.RetNodeName = "";
-                    if (!itLightsDef->RetNodeName.empty()) {
+                    if (IHGNumAlphas > 5 && !IHGAlphaFieldBlanks(6)) {
                         if (thisLightsInput.ZoneListActive) {
                             ShowSevereError(state,
                                             EnergyPlus::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
                                                                RoutineName,
                                                                lightsModuleObject,
                                                                thisLightsInput.Name,
-                                                               "Return Air Heat Gain Node Name"));
+                                                               IHGAlphaFieldNames(6)));
                             ErrorsFound = true;
                         } else {
-                            thisLights.RetNodeName = itLightsDef->RetNodeName;
+                            thisLights.RetNodeName = IHGAlphas(6);
                         }
                     }
                     if ((thisLights.FractionReturnAir > 0.0) && (thisLights.ZonePtr > 0)) {
                         thisLights.ZoneReturnNum = DataZoneEquipment::GetReturnNumForZone(state, thisLights.ZonePtr, thisLights.RetNodeName);
                     }
 
-                    if ((thisLights.ZoneReturnNum == 0) && (thisLights.FractionReturnAir > 0.0) && (!itLightsDef->RetNodeName.empty())) {
-                        ShowSevereError(state,
-                                        EnergyPlus::format("{}{}=\"{}\", invalid Return Air Heat Gain Node Name ={}",
-                                                           RoutineName,
-                                                           lightsModuleObject,
-                                                           IHGAlphas(1),
-                                                           itLightsDef->RetNodeName));
+                    if ((thisLights.ZoneReturnNum == 0) && (thisLights.FractionReturnAir > 0.0) && (IHGNumAlphas > 5 && !IHGAlphaFieldBlanks(6))) {
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format(
+                                "{}{}=\"{}\", invalid {} ={}", RoutineName, lightsModuleObject, IHGAlphas(1), IHGAlphaFieldNames(6), IHGAlphas(6)));
                         ShowContinueError(state, "No matching Zone Return Air Node found.");
                         ErrorsFound = true;
                     }
-                    // Set exhaust air node number
+                    // Set exhaust air node number (A7 on instance)
                     thisLights.ZoneExhaustNodeNum = 0;
-                    if (!itLightsDef->ExhaustNodeName.empty()) {
+                    if (IHGNumAlphas > 6 && !IHGAlphaFieldBlanks(7)) {
                         if (thisLightsInput.ZoneListActive) {
                             ShowSevereError(state,
                                             EnergyPlus::format("{}{}=\"{}\": {} must be blank when using a ZoneList.",
                                                                RoutineName,
                                                                lightsModuleObject,
                                                                thisLightsInput.Name,
-                                                               "Exhaust Air Heat Gain Node Name"));
+                                                               IHGAlphaFieldNames(7)));
                             ErrorsFound = true;
                         } else {
                             bool exhaustNodeError = false;
                             thisLights.ZoneExhaustNodeNum = GetOnlySingleNode(state,
-                                                                              itLightsDef->ExhaustNodeName,
+                                                                              IHGAlphas(7),
                                                                               exhaustNodeError,
                                                                               Node::ConnectionObjectType::Lights,
                                                                               thisLights.Name,
@@ -1022,11 +1020,12 @@ namespace InternalHeatGains {
                             }
                             if (exhaustNodeError) {
                                 ShowSevereError(state,
-                                                EnergyPlus::format("{}{}=\"{}\", invalid Exhaust Air Heat Gain Node Name = {}",
+                                                EnergyPlus::format("{}{}=\"{}\", invalid {} = {}",
                                                                    RoutineName,
                                                                    lightsModuleObject,
                                                                    IHGAlphas(1),
-                                                                   itLightsDef->ExhaustNodeName));
+                                                                   IHGAlphaFieldNames(7),
+                                                                   IHGAlphas(7)));
                                 ShowContinueError(state, "No matching Zone Exhaust Air Node found.");
                                 ErrorsFound = true;
                             } else {
@@ -1036,11 +1035,12 @@ namespace InternalHeatGains {
                                     CheckSharedExhaustFlag = true;
                                 } else {
                                     ShowSevereError(state,
-                                                    EnergyPlus::format("{}{}=\"{}\", Exhaust Air Heat Gain Node Name ={} is not used",
+                                                    EnergyPlus::format("{}{}=\"{}\", {} ={} is not used",
                                                                        RoutineName,
                                                                        lightsModuleObject,
                                                                        IHGAlphas(1),
-                                                                       itLightsDef->ExhaustNodeName));
+                                                                       IHGAlphaFieldNames(7),
+                                                                       IHGAlphas(7)));
                                     ShowContinueError(
                                         state, "No matching Zone Return Air Node found. The Exhaust Node requires Return Node to work together");
                                     ErrorsFound = true;
@@ -3502,9 +3502,6 @@ namespace InternalHeatGains {
                     ip->getRealFieldValue(objectFields, objectSchemaProps, "return_air_fraction_function_of_plenum_temperature_coefficient_1");
                 lightsDef.FractionReturnAirPlenTempCoeff2 =
                     ip->getRealFieldValue(objectFields, objectSchemaProps, "return_air_fraction_function_of_plenum_temperature_coefficient_2");
-
-                lightsDef.RetNodeName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "return_air_heat_gain_node_name", true);
-                lightsDef.ExhaustNodeName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "exhaust_air_heat_gain_node_name", true);
             }
         }
 
