@@ -310,6 +310,10 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
         if (state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.initialized) {
             state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value =
                 SetErlValueNumber(0.0, state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
+
+            if (!state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.SetupInit) {
+                state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.initialized = false;
+            }
         }
     }
     // reinitialize state of actuators
@@ -1806,19 +1810,18 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 }
 
             } else if (thisOperand.Type == Value::Variable) {
-                auto const &thisErlVar = state.dataRuntimeLang->ErlVariable(thisOperand.Variable);
+                auto &thisErlVar = state.dataRuntimeLang->ErlVariable(thisOperand.Variable);
                 if (thisErlVar.Value.initialized) { // check that value has been initialized
                     thisOperand = thisErlVar.Value;
                 } else { // value has never been set
-                    // During setup (before simulation), we want to avoid initializing variables to zero without throwing an error.
-                    // Throw the error, and write it to edd file, if variable is uninitialized and is *not* a global or internal variable.
-                    // The assumption is that if we made it here for a global variable, it is initialized in another program.
-                    // E.g., if it's initialized in a program with BeginNewEnvironment calling point, setup won't set it but simulation will.
-                    if ((!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) ||
-                        (!(thisErlVar.SetByGlobalVariable || thisErlVar.SetByInternalVariable))) {
 
-                        ReturnValue.Type = Value::Error;
-                        ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
+                    ReturnValue.Type = Value::Error;
+                    ReturnValue.Error =
+                        EnergyPlus::format("EvaluateExpression: Variable = '{}' used in expression has not been initialized!", thisErlVar.Name);
+                    // Use SetupInit in BeginEnvrnInitializeRuntimeLanguage for "un-initializing" Erl variables that may have been
+                    // initialized to zero during setup. This can happen since SetupSimulation does not call BeginNewEnvironment.
+                    thisErlVar.Value.SetupInit = false;
+                    if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
 
                         // check if this is an arg in CurveValue,
                         if (thisErlExpression.Operator !=
