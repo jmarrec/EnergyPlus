@@ -555,6 +555,98 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 
               ! If your original object starts with L, insert the rules here
 
+              CASE('LIGHTS')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+
+                ! Old Lights combined field order (A and N interleaved by IDD position):
+                !  1  A1  Name
+                !  2  A2  Zone or ZoneList or Space or SpaceList Name
+                !  3  A3  Schedule Name
+                !  4  A4  Design Level Calculation Method
+                !  5  N1  Lighting Level
+                !  6  N2  Watts per Floor Area
+                !  7  N3  Watts per Person
+                !  8  N4  Return Air Fraction
+                !  9  N5  Fraction Radiant
+                ! 10  N6  Fraction Visible
+                ! 11  N7  Fraction Replaceable        <-- old \min-fields 11
+                ! 12  A5  End-Use Subcategory         (optional)
+                ! 13  A6  Return Air Fraction Calculated from Plenum Temperature (optional)
+                ! 14  N8  Return Air Fraction Function of Plenum Temperature Coefficient 1 (optional)
+                ! 15  N9  Return Air Fraction Function of Plenum Temperature Coefficient 2 (optional)
+                ! 16  A7  Return Air Heat Gain Node Name (optional)
+                ! 17  A8  Exhaust Air Heat Gain Node Name (optional)
+
+                ! Write the updated Lights instance:
+                ! A1 Name (unchanged)
+                ! A2 Lights Definition Name (new) = Name + ' Definition'
+                ! A3 Zone or ZoneList or Space or SpaceList Name (was A2/field 2)
+                ! A4 Schedule Name (was A3/field 3)
+                ! N1 Fraction Replaceable (was N7/field 11, guaranteed by old \min-fields 11)
+                OutArgs(1) = InArgs(1)
+                OutArgs(2) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(3) = InArgs(2)
+                OutArgs(4) = InArgs(3)
+                OutArgs(5) = InArgs(11)
+                COutArgs = 5
+                ! Optional End-Use Subcategory
+                IF (CurArgs >= 12) THEN
+                  OutArgs(6) = InArgs(12)
+                  COutArgs = 6
+                END IF
+                CALL WriteOutIDFLines(DifLfn,'Lights',COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                ! Create the new Lights:Definition object:
+                ! A1 Name = Name + ' Definition'
+                ! A2 Design Level Calculation Method (was A4/field 4)
+                ! N1 Lighting Level (was N1/field 5)
+                ! N2 Watts per Floor Area (was N2/field 6)
+                ! N3 Watts per Person (was N3/field 7)
+                ! N4 Return Air Fraction (was N4/field 8)
+                ! N5 Fraction Radiant (was N5/field 9)
+                ! N6 Fraction Visible (was N6/field 10)
+                !    --- fields 4-10 guaranteed by old \min-fields 11 ---
+                ! A3 Return Air Fraction Calculated from Plenum Temperature (was A6/field 13) -- optional
+                ! N7 Coeff 1 (was N8/field 14) -- optional
+                ! N8 Coeff 2 (was N9/field 15) -- optional
+                ! A4 Return Air Heat Gain Node Name (was A7/field 16) -- optional
+                ! A5 Exhaust Air Heat Gain Node Name (was A8/field 17) -- optional
+                ObjectName = 'Lights:Definition'
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                OutArgs(1) = TRIM(InArgs(1)) // ' Definition'
+                OutArgs(2) = InArgs(4)
+                OutArgs(3) = InArgs(5)
+                OutArgs(4) = InArgs(6)
+                OutArgs(5) = InArgs(7)
+                OutArgs(6) = InArgs(8)
+                OutArgs(7) = InArgs(9)
+                OutArgs(8) = InArgs(10)
+                COutArgs = 8
+                IF (CurArgs >= 13) THEN
+                  OutArgs(9) = InArgs(13)
+                  COutArgs = 9
+                END IF
+                IF (CurArgs >= 14) THEN
+                  OutArgs(10) = InArgs(14)
+                  COutArgs = 10
+                END IF
+                IF (CurArgs >= 15) THEN
+                  OutArgs(11) = InArgs(15)
+                  COutArgs = 11
+                END IF
+                IF (CurArgs >= 16) THEN
+                  OutArgs(12) = InArgs(16)
+                  COutArgs = 12
+                END IF
+                IF (CurArgs >= 17) THEN
+                  OutArgs(13) = InArgs(17)
+                  COutArgs = 13
+                END IF
+                CALL WriteOutIDFLines(DifLfn,ObjectName,COutArgs,OutArgs,NwFldNames,NwFldUnits)
+
+                Written = .true.
+
               ! If your original object starts with M, insert the rules here
 
               ! If your original object starts with N, insert the rules here

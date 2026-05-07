@@ -5504,3 +5504,302 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_People_MissingLevelField)
     const auto &people = state->dataHeatBal->People(1);
     EXPECT_NEAR(people.NumberOfPeople, 0.0, 1e-6);
 }
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_Lights)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+        "Zone,Zone2;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,LightsSchedule1,SchType1,1.0;",
+        "Schedule:Constant,LightsSchedule2,SchType1,0.5;",
+
+        "Lights,",
+        "  Zone1 Lights,            !- Name",
+        "  LightsDef,               !- Lights Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  LightsSchedule1,         !- Schedule Name",
+        "  1.0,                     !- Fraction Replaceable",
+        "  General;                 !- End-Use Subcategory",
+
+        "Lights,",
+        "  Zone2 Lights,            !- Name",
+        "  LIGHTSDEF,               !- Lights Definition Name",
+        "  Zone2,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  LightsSchedule2,         !- Schedule Name",
+        "  0.5;                     !- Fraction Replaceable",
+
+        "Lights:Definition,",
+        "  LightsDef,               !- Name",
+        "  LightingLevel,           !- Design Level Calculation Method",
+        "  500.0,                   !- Lighting Level {W}",
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  ,                        !- Watts per Person {W/person}",
+        "  0.0,                     !- Return Air Fraction",
+        "  0.32,                    !- Fraction Radiant",
+        "  0.25;                    !- Fraction Visible",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    ASSERT_EQ(state->dataHeatBal->TotLights, 2);
+
+    for (int i = 1; i <= state->dataHeatBal->TotLights; ++i) {
+        const auto &lights = state->dataHeatBal->Lights(i);
+        if (lights.Name == "ZONE1 LIGHTS") {
+            EXPECT_EQ(state->dataHeatBal->Zone(lights.ZonePtr).Name, "ZONE1");
+            EXPECT_EQ(lights.sched->Name, "LIGHTSSCHEDULE1");
+            EXPECT_EQ(lights.EndUseSubcategory, "General");
+            EXPECT_NEAR(lights.FractionReplaceable, 1.0, 1e-6);
+        } else if (lights.Name == "ZONE2 LIGHTS") {
+            EXPECT_EQ(state->dataHeatBal->Zone(lights.ZonePtr).Name, "ZONE2");
+            EXPECT_EQ(lights.sched->Name, "LIGHTSSCHEDULE2");
+            EXPECT_EQ(lights.EndUseSubcategory, "General");
+            EXPECT_NEAR(lights.FractionReplaceable, 0.5, 1e-6);
+        } else {
+            FAIL() << "Unexpected lights name: " << lights.Name;
+        }
+        EXPECT_NEAR(lights.DesignLevel, 500.0, 1e-6);
+        EXPECT_NEAR(lights.FractionReturnAir, 0.0, 1e-6);
+        EXPECT_NEAR(lights.FractionRadiant, 0.32, 1e-6);
+        EXPECT_NEAR(lights.FractionShortWave, 0.25, 1e-6);
+    }
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_Lights_InvalidDefinition)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,LightsSchedule1,SchType1,1.0;",
+
+        "Lights,",
+        "  Zone1 Lights,            !- Name",
+        "  LightsDef WITH A TYPO,   !- Lights Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  LightsSchedule1,         !- Schedule Name",
+        "  1.0;                     !- Fraction Replaceable",
+
+        "Lights:Definition,",
+        "  LightsDef,               !- Name",
+        "  LightingLevel,           !- Design Level Calculation Method",
+        "  500.0,                   !- Lighting Level {W}",
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  ,                        !- Watts per Person {W/person}",
+        "  0.0,                     !- Return Air Fraction",
+        "  0.32,                    !- Fraction Radiant",
+        "  0.25;                    !- Fraction Visible",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: Lights = ZONE1 LIGHTS",
+        "   **   ~~~   ** Lights Definition Name = LIGHTSDEF WITH A TYPO, item not found.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_Lights_PerArea)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  3.0,                     !- Ceiling Height {m}",
+        "  300.0,                   !- Volume {m3}",
+        "  100.0;                   !- Floor Area {m2}",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,LightsSchedule1,SchType1,1.0;",
+
+        "Lights,",
+        "  Zone1 Lights,            !- Name",
+        "  LightsDef,               !- Lights Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  LightsSchedule1,         !- Schedule Name",
+        "  1.0;                     !- Fraction Replaceable",
+
+        "Lights:Definition,",
+        "  LightsDef,               !- Name",
+        "  Watts/Area,              !- Design Level Calculation Method",
+        "  ,                        !- Lighting Level {W}",
+        "  10.0,                    !- Watts per Floor Area {W/m2}",
+        "  ,                        !- Watts per Person {W/person}",
+        "  0.0,                     !- Return Air Fraction",
+        "  0.32,                    !- Fraction Radiant",
+        "  0.25;                    !- Fraction Visible",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataHeatBal->Zone(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+    state->dataHeatBal->space(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    ASSERT_EQ(state->dataHeatBal->TotLights, 1);
+    const auto &lights = state->dataHeatBal->Lights(1);
+    EXPECT_EQ("ZONE1 LIGHTS", lights.Name);
+    // 100 m2 * 10.0 W/m2 = 1000 W
+    EXPECT_NEAR(lights.DesignLevel, 100.0 * 10.0, 1e-6);
+    EXPECT_NEAR(lights.FractionRadiant, 0.32, 1e-6);
+    EXPECT_NEAR(lights.FractionShortWave, 0.25, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_Lights_PerPerson)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  3.0,                     !- Ceiling Height {m}",
+        "  300.0,                   !- Volume {m3}",
+        "  100.0;                   !- Floor Area {m2}",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,LightsSchedule1,SchType1,1.0;",
+
+        "Lights,",
+        "  Zone1 Lights,            !- Name",
+        "  LightsDef,               !- Lights Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  LightsSchedule1,         !- Schedule Name",
+        "  1.0;                     !- Fraction Replaceable",
+
+        "Lights:Definition,",
+        "  LightsDef,               !- Name",
+        "  Watts/Person,            !- Design Level Calculation Method",
+        "  ,                        !- Lighting Level {W}",
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  50.0,                    !- Watts per Person {W/person}",
+        "  0.0,                     !- Return Air Fraction",
+        "  0.32,                    !- Fraction Radiant",
+        "  0.25;                    !- Fraction Visible",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataHeatBal->space(1).TotOccupants = 5.0;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    ASSERT_EQ(state->dataHeatBal->TotLights, 1);
+    const auto &lights = state->dataHeatBal->Lights(1);
+    EXPECT_EQ("ZONE1 LIGHTS", lights.Name);
+    // 5 people * 50 W/person = 250 W
+    EXPECT_NEAR(lights.DesignLevel, 5.0 * 50.0, 1e-6);
+    EXPECT_NEAR(lights.FractionRadiant, 0.32, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_Lights_MissingLevelField)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,LightsSchedule1,SchType1,1.0;",
+
+        "Lights,",
+        "  Zone1 Lights,            !- Name",
+        "  LightsDef,               !- Lights Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  LightsSchedule1,         !- Schedule Name",
+        "  1.0;                     !- Fraction Replaceable",
+
+        "Lights:Definition,",
+        "  LightsDef,               !- Name",
+        "  Watts/Area,              !- Design Level Calculation Method",
+        "  500.0,                   !- Lighting Level {W}",
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  ,                        !- Watts per Person {W/person}",
+        "  0.0,                     !- Return Air Fraction",
+        "  0.32,                    !- Fraction Radiant",
+        "  0.25;                    !- Fraction Visible",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        R"(   ** Warning ** getLightsDefinition: Lights:Definition="LIGHTSDEF", specifies Method=WATTS/AREA, but the corresponding field "watts_per_floor_area"is blank. 0 will result.)",
+        R"(   ** Warning ** GetInternalHeatGains: Lights="ZONE1 LIGHTS", specifies watts_per_floor_area, but that field is blank.  0 Lights will result.)",
+    })));
+
+    ASSERT_EQ(state->dataHeatBal->TotLights, 1);
+    const auto &lights = state->dataHeatBal->Lights(1);
+    EXPECT_NEAR(lights.DesignLevel, 0.0, 1e-6);
+}
