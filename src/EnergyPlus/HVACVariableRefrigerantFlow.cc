@@ -8272,9 +8272,9 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
         auto &vrfTUList = state.dataHVACVarRefFlow->TerminalUnitList(TUListNum);
         for (int NumTU = 1; NumTU <= vrfTUList.NumTUInList; ++NumTU) {
             int TUIndex = vrfTUList.ZoneTUPtr(NumTU);
-            auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(TUIndex);
-            if (vrfTU.CoolCoilIndex > 0) {
-                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.CoolCoilIndex, vrfTU.coolCoilType, errFlag);
+            auto &vrfTUobj = state.dataHVACVarRefFlow->VRFTU(TUIndex);
+            if (vrfTUobj.CoolCoilIndex > 0) {
+                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTUobj.CoolCoilIndex, vrfTUobj.coolCoilType, errFlag);
                 TUCoolingCapacity += DXCoilCap;
                 if (DXCoilCap == AutoSize) {
                     FoundAll = false;
@@ -8282,8 +8282,8 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                 }
             }
 
-            if (vrfTU.HeatCoilIndex > 0) {
-                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTU.HeatCoilIndex, vrfTU.heatCoilType, errFlag);
+            if (vrfTUobj.HeatCoilIndex > 0) {
+                DXCoilCap = DXCoils::GetCoilCapacityByIndexType(state, vrfTUobj.HeatCoilIndex, vrfTUobj.heatCoilType, errFlag);
                 TUHeatingCapacity += DXCoilCap;
                 if (DXCoilCap == AutoSize) {
                     FoundAll = false;
