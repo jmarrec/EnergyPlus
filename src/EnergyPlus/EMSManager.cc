@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <format>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -60,7 +61,6 @@
 #include <EnergyPlus/DataAirSystems.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
-#include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataRuntimeLanguage.hh>
 #include <EnergyPlus/DataSurfaces.hh>
@@ -229,7 +229,7 @@ namespace EMSManager {
 
             General::ScanForReports(state, "EnergyManagementSystem", state.dataRuntimeLang->OutputEDDFile);
             if (state.dataRuntimeLang->OutputEDDFile) {
-                // open up output file for EMS EDD file  EMS Data and Debug
+                // open up output file for EMS EDD file EMS Data and Debug
                 state.files.edd.ensure_open(state, "CheckIFAnyEMS", state.files.outputControl.edd);
             }
         } else {
@@ -451,10 +451,19 @@ namespace EMSManager {
             if ((ErlVariableNum > 0) && (state.dataRuntimeLang->Sensor(SensorNum).Index > -1)) {
                 if (state.dataRuntimeLang->Sensor(SensorNum).sched == nullptr) { // not a schedule so get from output processor
 
-                    state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value = RuntimeLanguageProcessor::SetErlValueNumber(
-                        GetInternalVariableValue(
-                            state, state.dataRuntimeLang->Sensor(SensorNum).VariableType, state.dataRuntimeLang->Sensor(SensorNum).Index),
-                        state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
+                    Real64 sensorValue;
+                    if (state.dataRuntimeLang->Sensor(SensorNum).VariableType == OutputProcessor::VariableType::Meter) {
+                        // Issue #7563: for meter sensors, sum live source-var contributions instead of reading
+                        // meter->CurTSValue (refreshed inside UpdateDataandReport, i.e. AFTER most EMS calling points).
+                        sensorValue =
+                            GetInstantMeterValue(state, state.dataRuntimeLang->Sensor(SensorNum).Index, OutputProcessor::TimeStepType::Zone) +
+                            GetInstantMeterValue(state, state.dataRuntimeLang->Sensor(SensorNum).Index, OutputProcessor::TimeStepType::System);
+                    } else {
+                        sensorValue = GetInternalVariableValue(
+                            state, state.dataRuntimeLang->Sensor(SensorNum).VariableType, state.dataRuntimeLang->Sensor(SensorNum).Index);
+                    }
+                    state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value =
+                        RuntimeLanguageProcessor::SetErlValueNumber(sensorValue, state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
                 } else { // schedule so use schedule service
 
                     state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value = RuntimeLanguageProcessor::SetErlValueNumber(
@@ -971,21 +980,20 @@ namespace EMSManager {
                         ShowSevereError(state,
                                         EnergyPlus::format("Invalid Output:Variable or Output:Meter Name ={}",
                                                            state.dataRuntimeLang->Sensor(SensorNum).OutputVarName));
-                        ShowContinueError(
-                            state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->Sensor(SensorNum).Name));
+                        ShowContinueError(state,
+                                          std::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->Sensor(SensorNum).Name));
                         ShowContinueError(state, "Output:Variable Name not found");
                         ErrorsFound = true;
                     }
                 } else if (VarIndex == -1) {
                     if (reportErrors) {
                         ShowSevereError(state,
-                                        EnergyPlus::format("Invalid Output:Variable or Output:Meter Index Key Name ={}",
-                                                           state.dataRuntimeLang->Sensor(SensorNum).UniqueKeyName));
+                                        std::format("Invalid Output:Variable or Output:Meter Index Key Name ={}",
+                                                    state.dataRuntimeLang->Sensor(SensorNum).UniqueKeyName));
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("For Output:Variable or Output:Meter = {}", state.dataRuntimeLang->Sensor(SensorNum).OutputVarName));
-                        ShowContinueError(
-                            state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->Sensor(SensorNum).Name));
+                            state, std::format("For Output:Variable or Output:Meter = {}", state.dataRuntimeLang->Sensor(SensorNum).OutputVarName));
+                        ShowContinueError(state,
+                                          std::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->Sensor(SensorNum).Name));
                         ShowContinueError(state, "Unique Key Name not found.");
                         ErrorsFound = true;
                     }
@@ -1001,14 +1009,13 @@ namespace EMSManager {
                             state.dataRuntimeLang->Sensor(SensorNum).CheckedOkay = false;
                             if (reportErrors) {
                                 ShowSevereError(state,
-                                                EnergyPlus::format("Invalid Output:Variable or Output:Meter Index Key Name ={}",
-                                                                   state.dataRuntimeLang->Sensor(SensorNum).UniqueKeyName));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("For Output:Variable or Output:Meter = {}",
-                                                                     state.dataRuntimeLang->Sensor(SensorNum).OutputVarName));
+                                                std::format("Invalid Output:Variable or Output:Meter Index Key Name ={}",
+                                                            state.dataRuntimeLang->Sensor(SensorNum).UniqueKeyName));
                                 ShowContinueError(
                                     state,
-                                    EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->Sensor(SensorNum).Name));
+                                    std::format("For Output:Variable or Output:Meter = {}", state.dataRuntimeLang->Sensor(SensorNum).OutputVarName));
+                                ShowContinueError(
+                                    state, std::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->Sensor(SensorNum).Name));
                                 ShowContinueError(state, "Schedule Name not found.");
                                 ErrorsFound = true;
                             }
@@ -1050,12 +1057,12 @@ namespace EMSManager {
                 std::make_tuple(actuatorUsed.ComponentTypeName, actuatorUsed.UniqueIDName, actuatorUsed.ControlTypeName));
             if (found == s_lang->EMSActuatorAvailableMap.end()) {
                 if (reportErrors) {
-                    ShowSevereError(state, EnergyPlus::format("Actuator {} = {} not found.", cCurrentModuleObject, actuatorUsed.Name));
+                    ShowSevereError(state, std::format("Actuator {} = {} not found.", cCurrentModuleObject, actuatorUsed.Name));
                     ShowContinueError(state,
-                                      EnergyPlus::format("Combination of ObjectType = {}, ObjectName = {}, and ControlType = {} not available.",
-                                                         actuatorUsed.ComponentTypeName,
-                                                         actuatorUsed.UniqueIDName,
-                                                         actuatorUsed.ControlTypeName));
+                                      std::format("Combination of ObjectType = {}, ObjectName = {}, and ControlType = {} not available.",
+                                                  actuatorUsed.ComponentTypeName,
+                                                  actuatorUsed.UniqueIDName,
+                                                  actuatorUsed.ControlTypeName));
                     if (state.dataRuntimeLang->OutputEDDFile) {
                         ShowContinueError(state, "Review .edd file for valid component types.");
                     } else {
@@ -1069,13 +1076,13 @@ namespace EMSManager {
                 actuatorUsed.CheckedOkay = true;
                 int nHandle = s_lang->EMSActuatorAvailable(found->second).handleCount;
                 if (nHandle > 0) {
-                    EnergyPlus::ShowWarningError(
-                        state, EnergyPlus::format("Seems like you already tried to get a Handle on this Actuator {}times.", nHandle));
+                    EnergyPlus::ShowWarningError(state,
+                                                 std::format("Seems like you already tried to get a Handle on this Actuator {}times.", nHandle));
                     EnergyPlus::ShowContinueError(state,
-                                                  EnergyPlus::format("Occurred for componentType='{}', controlType='{}', uniqueKey='{}'.",
-                                                                     actuatorUsed.ComponentTypeName,
-                                                                     actuatorUsed.ControlTypeName,
-                                                                     actuatorUsed.UniqueIDName));
+                                                  std::format("Occurred for componentType='{}', controlType='{}', uniqueKey='{}'.",
+                                                              actuatorUsed.ComponentTypeName,
+                                                              actuatorUsed.ControlTypeName,
+                                                              actuatorUsed.UniqueIDName));
                     EnergyPlus::ShowContinueError(state, "You should take note that there is a risk of overwriting.");
                 }
                 ++s_lang->EMSActuatorAvailable(found->second).handleCount;
@@ -1087,7 +1094,7 @@ namespace EMSManager {
                         if (state.dataSurface->Surface(actuatedSurfNum).IsAirBoundarySurf) {
                             ShowWarningError(
                                 state,
-                                EnergyPlus::format(
+                                std::format(
                                     "GetEMSInput: EnergyManagementSystem:Actuator={} actuates an opening attached to an air boundary surface.",
                                     actuatorUsed.Name));
                         }
@@ -1117,12 +1124,11 @@ namespace EMSManager {
 
             if (!FoundObjectType) {
                 if (reportErrors) {
-                    ShowSevereError(state,
-                                    EnergyPlus::format("Invalid Internal Data Type ={}",
-                                                       state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).InternalDataTypeName));
-                    ShowContinueError(
+                    ShowSevereError(
                         state,
-                        EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).Name));
+                        std::format("Invalid Internal Data Type ={}", state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).InternalDataTypeName));
+                    ShowContinueError(
+                        state, std::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).Name));
                     ShowContinueError(state, "Internal data type name not found");
                     ErrorsFound = true;
                 }
@@ -1131,11 +1137,10 @@ namespace EMSManager {
             if (!FoundObjectName) {
                 if (reportErrors) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("Invalid Internal Data Index Key Name ={}",
-                                                       state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).UniqueIDName));
+                                    std::format("Invalid Internal Data Index Key Name ={}",
+                                                state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).UniqueIDName));
                     ShowContinueError(
-                        state,
-                        EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).Name));
+                        state, std::format("Entered in {}={}", cCurrentModuleObject, state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).Name));
                     ShowContinueError(state, "Internal data unique identifier not found");
                     ErrorsFound = true;
                 }
@@ -1507,10 +1512,9 @@ namespace EMSManager {
                 }
             }
             if (!FoundControl) {
-                ShowWarningError(state,
-                                 EnergyPlus::format("Missing '{}' for node named named '{}'.",
-                                                    controlTypeNames[(int)ctrlVar],
-                                                    state.dataLoopNodes->NodeID(NodeNum)));
+                ShowWarningError(
+                    state,
+                    std::format("Missing '{}' for node named named '{}'.", controlTypeNames[(int)ctrlVar], state.dataLoopNodes->NodeID(NodeNum)));
             }
         } else {
             for (int Loop = 1; Loop <= state.dataRuntimeLang->numActuatorsUsed + state.dataRuntimeLang->NumExternalInterfaceActuatorsUsed; ++Loop) {
@@ -1714,9 +1718,9 @@ namespace EMSManager {
                     DataSurfaces::WinShadingType::SwitchableGlazing) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format("Missing shade or blind layer in window construction name = '{}', surface name = '{}'.",
-                                           state.dataConstruction->Construct(state.dataSurface->Surface(loopSurfNum).activeShadedConstruction).Name,
-                                           state.dataSurface->Surface(loopSurfNum).Name));
+                        std::format("Missing shade or blind layer in window construction name = '{}', surface name = '{}'.",
+                                    state.dataConstruction->Construct(state.dataSurface->Surface(loopSurfNum).activeShadedConstruction).Name,
+                                    state.dataSurface->Surface(loopSurfNum).Name));
                     ShowContinueError(state,
                                       "...'Control Status' or 'Slat Angle' EMS Actuator cannot be set for a construction that does not have a shade "
                                       "or a blind layer.");
@@ -1990,17 +1994,15 @@ namespace EMSManager {
                                  "checkForUnusedActuatorsAtEnd: Unused EMS Actuator detected, suggesting possible unintended programming error or "
                                  "spelling mistake.");
                 ShowContinueError(state,
-                                  EnergyPlus::format("Check Erl programs related to EMS actuator variable name = {}",
-                                                     state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).Name));
+                                  std::format("Check Erl programs related to EMS actuator variable name = {}",
+                                              state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).Name));
+                ShowContinueError(
+                    state, std::format("EMS Actuator type name = {}", state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).ComponentTypeName));
                 ShowContinueError(
                     state,
-                    EnergyPlus::format("EMS Actuator type name = {}", state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).ComponentTypeName));
-                ShowContinueError(state,
-                                  EnergyPlus::format("EMS Actuator unique component name = {}",
-                                                     state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).UniqueIDName));
+                    std::format("EMS Actuator unique component name = {}", state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).UniqueIDName));
                 ShowContinueError(
-                    state,
-                    EnergyPlus::format("EMS Actuator control type = {}", state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).ControlTypeName));
+                    state, std::format("EMS Actuator control type = {}", state.dataRuntimeLang->EMSActuatorUsed(actuatorUsedLoop).ControlTypeName));
             }
         }
     }
@@ -2193,7 +2195,7 @@ void SetupEMSInternalVariable(
 
     if (FoundDuplicate) {
         ShowSevereError(state, "Duplicate internal variable was sent to SetupEMSInternalVariable.");
-        ShowContinueError(state, EnergyPlus::format("Internal variable type = {} ; name = {}", cDataTypeName, cUniqueIDName));
+        ShowContinueError(state, std::format("Internal variable type = {} ; name = {}", cDataTypeName, cUniqueIDName));
         ShowContinueError(state, "Called from SetupEMSInternalVariable.");
     } else {
         // add new internal data variable
@@ -2242,7 +2244,7 @@ void SetupEMSInternalVariable(
 
     if (FoundDuplicate) {
         ShowSevereError(state, "Duplicate internal variable was sent to SetupEMSInternalVariable.");
-        ShowContinueError(state, EnergyPlus::format("Internal variable type = {} ; name = {}", cDataTypeName, cUniqueIDName));
+        ShowContinueError(state, std::format("Internal variable type = {} ; name = {}", cDataTypeName, cUniqueIDName));
         ShowContinueError(state, "called from SetupEMSInternalVariable");
     } else {
         // add new internal data variable
