@@ -117,11 +117,13 @@ namespace HybridEvapCoolingModel {
         BLOCK_HEADER_OFFSET_Number = 6;
     }
 
-    bool CMode::InitializeOutdoorAirTemperatureConstraints(Real64 min, Real64 max)
+    bool CMode::InitializeOutdoorAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank)
     {
         // note If this field is blank, there should be no lower constraint on outside air temperature
         Minimum_Outdoor_Air_Temperature = min;
         Maximum_Outdoor_Air_Temperature = max;
+        Minimum_Outdoor_Air_Temperature_Blank = minBlank;
+        Maximum_Outdoor_Air_Temperature_Blank = maxBlank;
         return true;
     }
     bool CMode::InitializeOutdoorAirHumidityRatioConstraints(Real64 min, Real64 max)
@@ -607,7 +609,8 @@ namespace HybridEvapCoolingModel {
         }
         // N8, \field Mode1  Minimum Outdoor Air Temperature
         // N9, \field Mode1  Maximum Outdoor Air Temperature
-        bool ok = InitializeOutdoorAirTemperatureConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
+        bool ok = InitializeOutdoorAirTemperatureConstraints(
+            Numbers(inter_Number), Numbers(inter_Number + 1), lNumericBlanks(inter_Number), lNumericBlanks(inter_Number + 1));
         if (!ok) {
             ShowSevereError(state, EnergyPlus::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
             ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
@@ -705,7 +708,8 @@ namespace HybridEvapCoolingModel {
         // REFERENCES:
         // na
 
-        bool OATempConstraintMet = (Tosa >= Minimum_Outdoor_Air_Temperature && Tosa <= Maximum_Outdoor_Air_Temperature);
+        bool OATempConstraintMet = (Minimum_Outdoor_Air_Temperature_Blank || Tosa >= Minimum_Outdoor_Air_Temperature) &&
+                                   (Maximum_Outdoor_Air_Temperature_Blank || Tosa <= Maximum_Outdoor_Air_Temperature);
         bool OAHRConstraintMet = (Wosa >= Minimum_Outdoor_Air_Humidity_Ratio && Wosa <= Maximum_Outdoor_Air_Humidity_Ratio);
         bool OARHConstraintMet = (RHosa >= Minimum_Outdoor_Air_Relative_Humidity && RHosa <= Maximum_Outdoor_Air_Relative_Humidity);
 

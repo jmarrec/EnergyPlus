@@ -135,6 +135,8 @@ namespace HybridEvapCoolingModel {
         Real64 Max_OAF;
         Real64 Minimum_Outdoor_Air_Temperature;
         Real64 Maximum_Outdoor_Air_Temperature;
+        bool Minimum_Outdoor_Air_Temperature_Blank;
+        bool Maximum_Outdoor_Air_Temperature_Blank;
         Real64 Minimum_Outdoor_Air_Humidity_Ratio;
         Real64 Maximum_Outdoor_Air_Humidity_Ratio;
         Real64 Minimum_Outdoor_Air_Relative_Humidity;
@@ -169,7 +171,7 @@ namespace HybridEvapCoolingModel {
         Real64 CalculateCurveVal(EnergyPlusData &state, Real64 Tosa, Real64 Wosa, Real64 Tra, Real64 Wra, Real64 Msa, Real64 OSAF, int curveType);
         bool InitializeOSAFConstraints(Real64 minOSAF, Real64 maxOSAF);
         bool InitializeMsaRatioConstraints(Real64 minMsa, Real64 maxMsa);
-        bool InitializeOutdoorAirTemperatureConstraints(Real64 min, Real64 max);
+        bool InitializeOutdoorAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank);
         bool InitializeOutdoorAirHumidityRatioConstraints(Real64 min, Real64 max);
         bool InitializeOutdoorAirRelativeHumidityConstraints(Real64 min, Real64 max);
         bool InitializeReturnAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank);
