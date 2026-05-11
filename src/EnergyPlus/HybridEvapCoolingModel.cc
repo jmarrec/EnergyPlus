@@ -117,16 +117,15 @@ namespace HybridEvapCoolingModel {
         BLOCK_HEADER_OFFSET_Number = 6;
     }
 
-    bool CMode::InitializeOutdoorAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank)
+    void CMode::InitializeOutdoorAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank)
     {
         // note If this field is blank, there should be no lower constraint on outside air temperature
         Minimum_Outdoor_Air_Temperature = min;
         Maximum_Outdoor_Air_Temperature = max;
         Minimum_Outdoor_Air_Temperature_Blank = minBlank;
         Maximum_Outdoor_Air_Temperature_Blank = maxBlank;
-        return true;
     }
-    bool CMode::InitializeOutdoorAirHumidityRatioConstraints(Real64 min, Real64 max)
+    void CMode::InitializeOutdoorAirHumidityRatioConstraints(Real64 min, Real64 max)
     {
         // minimum 0.00 maximum 0.10, units kgWater / kgDryAir
         // note Mode0 will not be considered when outside air absolute humidity is below the value in this field.
@@ -134,9 +133,8 @@ namespace HybridEvapCoolingModel {
         // the upper constraint on outside air humidity ratio will be 0.10 kgWater / kgDryAir, default 0.10
         Minimum_Outdoor_Air_Humidity_Ratio = min;
         Maximum_Outdoor_Air_Humidity_Ratio = max;
-        return true;
     }
-    bool CMode::InitializeOutdoorAirRelativeHumidityConstraints(Real64 min, Real64 max)
+    void CMode::InitializeOutdoorAirRelativeHumidityConstraints(Real64 min, Real64 max)
     {
         // minimum 0.00,maximum 100.00, units percent, Mode0 will not be considered when the outside air relative humidity is below the value in this
         // field.
@@ -144,9 +142,8 @@ namespace HybridEvapCoolingModel {
         // outside air relative humidity will be 100.00%, (default 100.00)
         Minimum_Outdoor_Air_Relative_Humidity = min;
         Maximum_Outdoor_Air_Relative_Humidity = max;
-        return true;
     }
-    bool CMode::InitializeReturnAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank)
+    void CMode::InitializeReturnAirTemperatureConstraints(Real64 min, Real64 max, bool minBlank, bool maxBlank)
     {
         // will not be considered when the return air temperature is below the value in this field.
         // If this field is blank, there will be no lower constraint on return air temperature
@@ -154,9 +151,8 @@ namespace HybridEvapCoolingModel {
         Maximum_Return_Air_Temperature = max;
         Minimum_Return_Air_Temperature_Blank = minBlank;
         Maximum_Return_Air_Temperature_Blank = maxBlank;
-        return true;
     }
-    bool CMode::InitializeReturnAirHumidityRatioConstraints(Real64 min, Real64 max)
+    void CMode::InitializeReturnAirHumidityRatioConstraints(Real64 min, Real64 max)
     {
         // minimum 0.00 maximum 0.10, units kgWater / kgDryAir
         // note Mode0 will not be considered when outside air absolute humidity is below the value in this field.
@@ -164,9 +160,8 @@ namespace HybridEvapCoolingModel {
         // the upper constraint on outside air humidity ratio will be 0.10 kgWater / kgDryAir, default 0.10
         Minimum_Return_Air_Humidity_Ratio = min;
         Maximum_Return_Air_Humidity_Ratio = max;
-        return true;
     }
-    bool CMode::InitializeReturnAirRelativeHumidityConstraints(Real64 min, Real64 max)
+    void CMode::InitializeReturnAirRelativeHumidityConstraints(Real64 min, Real64 max)
     {
         // minimum 0.00,maximum 100.00, units percent, Mode0 will not be considered when the outside air relative humidity is below the value in this
         // field.
@@ -174,24 +169,21 @@ namespace HybridEvapCoolingModel {
         // outside air relative humidity will be 100.00%, (default 100.00)
         Minimum_Return_Air_Relative_Humidity = min;
         Maximum_Return_Air_Relative_Humidity = max;
-        return true;
     }
-    bool CMode::InitializeOSAFConstraints(Real64 minOSAF, Real64 maxOSAF)
+    void CMode::InitializeOSAFConstraints(Real64 minOSAF, Real64 maxOSAF)
     {
         // minimum 0.00, maximum 1.00, Outdoor air fractions below this value will not be considered.
         // If this field is blank, the lower constraint on outside air fraction will be 0.00,default 0.10
         Min_OAF = minOSAF;
         Max_OAF = maxOSAF;
-        return true;
     }
-    bool CMode::InitializeMsaRatioConstraints(Real64 minMsa, Real64 maxMsa)
+    void CMode::InitializeMsaRatioConstraints(Real64 minMsa, Real64 maxMsa)
     {
         // minimum 0.00, maximum 1.00, Supply air mass flow rate ratios below this value will not be considered.
         // Supply air mass flow rate ratio describes supply air mass flow rate as a fraction of mass flow rate associated with the value in field :
         // "System Maximum Supply Air Flow Rate".  If this field is blank, the lower constraint on outside air fraction will be 0.00,default 0.10
         Min_Msa = minMsa;
         Max_Msa = maxMsa;
-        return true;
     }
     bool CMode::ValidPointer(int curve_pointer)
     {
@@ -609,83 +601,37 @@ namespace HybridEvapCoolingModel {
         }
         // N8, \field Mode1  Minimum Outdoor Air Temperature
         // N9, \field Mode1  Maximum Outdoor Air Temperature
-        bool ok = InitializeOutdoorAirTemperatureConstraints(
+        InitializeOutdoorAirTemperatureConstraints(
             Numbers(inter_Number), Numbers(inter_Number + 1), lNumericBlanks(inter_Number), lNumericBlanks(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state, EnergyPlus::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
-            ShowContinueError(state, EnergyPlus::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
         inter_Number = inter_Number + 2;
         // N10, \field Mode1  Minimum Outdoor Air Humidity Ratio
         // N11, \field Mode1  Maximum Outdoor Air Humidity Ratio
-        ok = InitializeOutdoorAirHumidityRatioConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state, std::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
+        InitializeOutdoorAirHumidityRatioConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
         inter_Number = inter_Number + 2;
         // N12, \field Mode1 Minimum Outdoor Air Relative Humidity
         // N13, \field Mode1 Maximum Outdoor Air Relative Humidity
-        ok = InitializeOutdoorAirRelativeHumidityConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state, std::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
+        InitializeOutdoorAirRelativeHumidityConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
         inter_Number = inter_Number + 2;
         // N14, \field Mode1 Minimum Return Air Temperature
         // N15, \field Mode1 Maximum Return Air Temperature
-        ok = InitializeReturnAirTemperatureConstraints(
+        InitializeReturnAirTemperatureConstraints(
             Numbers(inter_Number), Numbers(inter_Number + 1), lNumericBlanks(inter_Number), lNumericBlanks(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state, std::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
         inter_Number = inter_Number + 2;
         // N16, \field Mode1 Minimum Return Air Humidity Ratio
         // N17, \field Mode1 Maximum Return Air Humidity Ratio
-        ok = InitializeReturnAirHumidityRatioConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state, std::format("Invalid {}Or Invalid{}", cNumericFields(inter_Number), cNumericFields(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
+        InitializeReturnAirHumidityRatioConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
         inter_Number = inter_Number + 2;
         // N18, \field Mode1 Minimum Return Air Relative HumidityInitialize
         // N19, \field Mode1 Maximum Return Air Relative Humidity
-        ok = InitializeReturnAirRelativeHumidityConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state,
-                            std::format("Invalid {}={}Or Invalid{}={}",
-                                        cAlphaFields(inter_Number),
-                                        Alphas(inter_Number),
-                                        cAlphaFields(inter_Number + 1),
-                                        Alphas(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
+        InitializeReturnAirRelativeHumidityConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
         inter_Number = inter_Number + 2;
         // N20, \field Mode1 Minimum Outdoor Air Fraction
         // N21, \field Mode1 Maximum Outdoor Air Fraction
-
-        ok = InitializeOSAFConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state, std::format("Error in OSAFConstraints{}through{}", cAlphaFields(inter_Number), cAlphaFields(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
+        InitializeOSAFConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
         // N22, \field Mode1 Minimum Supply Air Mass Flow Rate Ratio
         // N23, \field Mode1 Maximum Supply Air Mass Flow Rate Ratio
         inter_Number = inter_Number + 2;
-        ok = InitializeMsaRatioConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
-        if (!ok) {
-            ShowSevereError(state, std::format("Error in OSAFConstraints{}through{}", cAlphaFields(inter_Number), cAlphaFields(inter_Number + 1)));
-            ShowContinueError(state, std::format("Entered in {}", cCurrentModuleObject));
-            ErrorsFound = true;
-        }
+        InitializeMsaRatioConstraints(Numbers(inter_Number), Numbers(inter_Number + 1));
         (*OperatingModes).push_back(*this);
         return ErrorsFound;
     }

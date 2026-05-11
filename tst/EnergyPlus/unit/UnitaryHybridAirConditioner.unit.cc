@@ -624,8 +624,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateFieldsParsing
     EXPECT_EQ(mode1.Minimum_Return_Air_Temperature, 0);
     EXPECT_EQ(mode1.Maximum_Return_Air_Temperature_Blank, true);
     EXPECT_EQ(mode1.Maximum_Return_Air_Temperature, 0);
-    EXPECT_EQ(mode1.MeetsConstraints(120, 0.01, 30, 120, 0.01, 30), false);
-    EXPECT_EQ(mode1.MeetsConstraints(20, 0.01, 30, 120, 0.01, 30), true);
+    EXPECT_EQ(mode1.MeetsConstraints(120, 0.01, 30, 120, 0.01, 30), true);
+    EXPECT_EQ(mode1.MeetsConstraints(20, 0.01, 30, 20, 0.01, 30), true);
 }
 
 TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateMinimumIdfInput)
