@@ -188,9 +188,9 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                                                            SurfList(Item).SurfName(SurfNum),
                                                            SurfList(Item).Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Flow fraction of {:.6R} is less than minimum criteria = {:.6R}",
-                                                             SurfList(Item).SurfFlowFrac(SurfNum),
-                                                             SurfListMinFlowFrac));
+                                          std::format("Flow fraction of {:.6f} is less than minimum criteria = {:.6f}",
+                                                      SurfList(Item).SurfFlowFrac(SurfNum),
+                                                      SurfListMinFlowFrac));
                         ShowContinueError(state,
                                           "Zero or extremely low flow fractions are not allowed. Remove this surface from the surface group or "
                                           "combine small surfaces together.");

@@ -1120,8 +1120,8 @@ void GasAbsorberSpecs::size(EnergyPlusData &state)
                                 ShowMessage(
                                     state,
                                     std::format("SizeChillerHeaterAbsorptionDirectFired: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
-                                ShowContinueError(state, EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
+                                ShowContinueError(state, std::format("User-Specified Nominal Capacity of {:.2f} [W]", NomCapUser));
+                                ShowContinueError(state, std::format("differs from Design Size Nominal Capacity of {:.2f} [W]", tmpNomCap));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1193,11 +1193,11 @@ void GasAbsorberSpecs::size(EnergyPlusData &state)
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(
                                     state, std::format("SizeChillerAbsorptionDirectFired: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(
-                                    state, EnergyPlus::format("User-Specified Design Chilled Water Flow Rate of {:.5R} [m3/s]", EvapVolFlowRateUser));
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Size Design Chilled Water Flow Rate of {:.5R} [m3/s]",
-                                                                     tmpEvapVolFlowRate));
+                                                  std::format("User-Specified Design Chilled Water Flow Rate of {:.5f} [m3/s]", EvapVolFlowRateUser));
+                                ShowContinueError(
+                                    state,
+                                    std::format("differs from Design Size Design Chilled Water Flow Rate of {:.5f} [m3/s]", tmpEvapVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1276,11 +1276,11 @@ void GasAbsorberSpecs::size(EnergyPlusData &state)
                                 ShowMessage(
                                     state,
                                     std::format("SizeChillerHeaterAbsorptionDirectFired: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(
-                                    state, EnergyPlus::format("User-Specified Design Hot Water Flow Rate of {:.5R} [m3/s]", HeatRecVolFlowRateUser));
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Size Design Hot Water Flow Rate of {:.5R} [m3/s]",
-                                                                     tmpHeatRecVolFlowRate));
+                                                  std::format("User-Specified Design Hot Water Flow Rate of {:.5f} [m3/s]", HeatRecVolFlowRateUser));
+                                ShowContinueError(
+                                    state,
+                                    std::format("differs from Design Size Design Hot Water Flow Rate of {:.5f} [m3/s]", tmpHeatRecVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1363,11 +1363,10 @@ void GasAbsorberSpecs::size(EnergyPlusData &state)
                                 ShowMessage(
                                     state, std::format("SizeChillerAbsorptionDirectFired: Potential issue with equipment sizing for {}", this->Name));
                                 ShowContinueError(
+                                    state, std::format("User-Specified Design Condenser Water Flow Rate of {:.5f} [m3/s]", CondVolFlowRateUser));
+                                ShowContinueError(
                                     state,
-                                    EnergyPlus::format("User-Specified Design Condenser Water Flow Rate of {:.5R} [m3/s]", CondVolFlowRateUser));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Size Design Condenser Water Flow Rate of {:.5R} [m3/s]",
-                                                                     tmpCondVolFlowRate));
+                                    std::format("differs from Design Size Design Condenser Water Flow Rate of {:.5f} [m3/s]", tmpCondVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }

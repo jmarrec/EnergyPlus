@@ -250,11 +250,11 @@ namespace DXFEarClipping {
                     ShowMessage(state, EnergyPlus::format(" surface={} class={}", surfname, DataSurfaces::cSurfaceClass(surfclass)));
 
                     for (int j = 1; j <= nsides; ++j) {
-                        ShowMessage(state, EnergyPlus::format(" side={} ({:.1R},{:.1R},{:.1R})", j, polygon(j).x, polygon(j).y, polygon(j).z));
+                        ShowMessage(state, std::format(" side={} ({:.1f},{:.1f},{:.1f})", j, polygon(j).x, polygon(j).y, polygon(j).z));
                     }
                     ShowMessage(state, EnergyPlus::format(" number of triangles found={:12}", ncount));
                     for (int j = 1; j <= nrangles; ++j) {
-                        ShowMessage(state, EnergyPlus::format(" r angle={} vert={} deg={:.1R}", j, r_angles(j), rangles(j) * Constant::RadToDeg));
+                        ShowMessage(state, std::format(" r angle={} vert={} deg={:.1f}", j, r_angles(j), rangles(j) * Constant::RadToDeg));
                     }
                 }
                 break; // while loop

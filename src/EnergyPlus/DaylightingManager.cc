@@ -545,7 +545,7 @@ void CalcDayltgCoefficients(EnergyPlusData &state)
                     for (int refPtNum = 1; refPtNum <= thisDayltgCtrl.TotalDaylRefPoints; ++refPtNum) {
                         Real64 DaylFac = thisDayltgCtrl.daylFac[12](windowCounter, refPtNum)[iWinCover_Bare][iLum_Illum].sky[iSky];
                         print(state.files.eio,
-                              " Sky Daylight Factors,{},{},{},{},{},{},{:.4R}\n",
+                              " Sky Daylight Factors,{},{},{},{},{},{},{:.4f}\n",
                               skyTypeStrings[iSky],
                               state.dataEnvrn->CurMnDy,
                               thisDayltgCtrl.Name,
@@ -653,7 +653,7 @@ void CalcDayltgCoefficients(EnergyPlusData &state)
 
                             // write daylight factors - 4 sky types for each daylight ref point
                             print(state.files.dfs,
-                                  "{},{},{:.5R},{:.5R},{:.5R},{:.5R}\n",
+                                  "{},{},{:.5f},{:.5f},{:.5f},{:.5f}\n",
                                   IHR,
                                   dl->DaylRefPt(thisDayltgCtrl.refPts(refPtNum).num).Name,
                                   illums.sky[(int)SkyType::Clear],
@@ -1640,7 +1640,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
                         dl->daylightControl(daylightCtrlNum).Name,
                         iRefPoint,
                         surf.Name));
-                ShowContinueError(state, EnergyPlus::format("Distance=[{:.5R}]. This is too close; check position of reference point.", ALF));
+                ShowContinueError(state, std::format("Distance=[{:.5f}]. This is too close; check position of reference point.", ALF));
                 ShowFatalError(state, "Program terminates due to preceding condition.");
             }
         } else if (ALF < 0.1524 && extWinType == ExtWinType::AdjZone) {
@@ -1652,13 +1652,12 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
                                        dl->daylightControl(daylightCtrlNum).Name,
                                        surf.Name,
                                        state.dataHeatBal->Zone(surf.Zone).Name));
-                ShowContinueError(
-                    state,
-                    EnergyPlus::format("Distance=[{:.1R} m] to ref point=[{:.1R},{:.1R},{:.1R}], Inaccuracy in Daylighting Calcs may result.",
-                                       ALF,
-                                       RREF.x,
-                                       RREF.y,
-                                       RREF.z));
+                ShowContinueError(state,
+                                  std::format("Distance=[{:.1f} m] to ref point=[{:.1f},{:.1f},{:.1f}], Inaccuracy in Daylighting Calcs may result.",
+                                              ALF,
+                                              RREF.x,
+                                              RREF.y,
+                                              RREF.z));
                 dl->RefErrIndex(iRefPoint, IWin) = 1;
             }
         }
@@ -1675,7 +1674,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
                 ShowContinueError(
                     state,
                     EnergyPlus::format(
-                        "Distance=[{:.1R} m] map point=[{:.1R},{:.1R},{:.1R}], Inaccuracy in Map Calcs may result.", ALF, RREF.x, RREF.y, RREF.z));
+                        "Distance=[{:.1f} m] map point=[{:.1f},{:.1f},{:.1f}], Inaccuracy in Map Calcs may result.", ALF, RREF.x, RREF.y, RREF.z));
                 dl->MapErrIndex(iRefPoint, IWin) = 1;
             }
         }
@@ -4206,11 +4205,11 @@ void GetInputIlluminanceMap(EnergyPlusData &state, bool &ErrorsFound)
             if (s_ipsc->rNumericArgs(2) > s_ipsc->rNumericArgs(3)) {
                 ShowSevereError(state, std::format("{}=\"{}\", invalid entry.", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("...{} {:.2R} must be <= {} {:.2R}.",
-                                                     s_ipsc->cNumericFieldNames(2),
-                                                     s_ipsc->rNumericArgs(2),
-                                                     s_ipsc->cNumericFieldNames(3),
-                                                     s_ipsc->rNumericArgs(3)));
+                                  std::format("...{} {:.2f} must be <= {} {:.2f}.",
+                                              s_ipsc->cNumericFieldNames(2),
+                                              s_ipsc->rNumericArgs(2),
+                                              s_ipsc->cNumericFieldNames(3),
+                                              s_ipsc->rNumericArgs(3)));
                 ErrorsFound = true;
             }
             illumMap.Xnum = s_ipsc->rNumericArgs(4);
@@ -4221,11 +4220,11 @@ void GetInputIlluminanceMap(EnergyPlusData &state, bool &ErrorsFound)
             if (s_ipsc->rNumericArgs(5) > s_ipsc->rNumericArgs(6)) {
                 ShowSevereError(state, std::format("{}=\"{}\", invalid entry.", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("...{} {:.2R} must be <= {} {:.2R}.",
-                                                     s_ipsc->cNumericFieldNames(5),
-                                                     s_ipsc->rNumericArgs(5),
-                                                     s_ipsc->cNumericFieldNames(6),
-                                                     s_ipsc->rNumericArgs(6)));
+                                  std::format("...{} {:.2f} must be <= {} {:.2f}.",
+                                              s_ipsc->cNumericFieldNames(5),
+                                              s_ipsc->rNumericArgs(5),
+                                              s_ipsc->cNumericFieldNames(6),
+                                              s_ipsc->rNumericArgs(6)));
                 ErrorsFound = true;
             }
             illumMap.Ynum = s_ipsc->rNumericArgs(7);
@@ -4400,42 +4399,42 @@ void GetInputIlluminanceMap(EnergyPlusData &state, bool &ErrorsFound)
                         state,
                         std::format("GetInputIlluminanceMap: Reference Map point #[{}], X Value outside Zone Min/Max X, Zone={}", iRefPt, zone.Name));
                     ShowContinueError(state,
-                                      EnergyPlus::format("...X Reference Point= {:.2R}, Zone Minimum X= {:.2R}, Zone Maximum X= {:.2R}",
-                                                         refPt.absCoords.x,
-                                                         zone.MinimumX,
-                                                         zone.MaximumX));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...X Reference Distance Outside MinimumX= {:.4R} m.",
-                                                         (refPt.absCoords.x < zone.MinimumX) ? (zone.MinimumX - refPt.absCoords.x)
-                                                                                             : (refPt.absCoords.x - zone.MaximumX)));
+                                      std::format("...X Reference Point= {:.2f}, Zone Minimum X= {:.2f}, Zone Maximum X= {:.2f}",
+                                                  refPt.absCoords.x,
+                                                  zone.MinimumX,
+                                                  zone.MaximumX));
+                    ShowContinueError(
+                        state,
+                        std::format("...X Reference Distance Outside MinimumX= {:.4f} m.",
+                                    (refPt.absCoords.x < zone.MinimumX) ? (zone.MinimumX - refPt.absCoords.x) : (refPt.absCoords.x - zone.MaximumX)));
                 }
                 if (refPt.absCoords.y < zone.MinimumY || refPt.absCoords.y > zone.MaximumY) {
                     ShowWarningError(
                         state,
                         std::format("GetInputIlluminanceMap: Reference Map point #[{}], Y Value outside Zone Min/Max Y, Zone={}", iRefPt, zone.Name));
                     ShowContinueError(state,
-                                      EnergyPlus::format("...Y Reference Point= {:.2R}, Zone Minimum Y= {:.2R}, Zone Maximum Y= {:.2R}",
-                                                         refPt.absCoords.y,
-                                                         zone.MinimumY,
-                                                         zone.MaximumY));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...Y Reference Distance Outside MinimumY= {:.4R} m.",
-                                                         (refPt.absCoords.y < zone.MinimumY) ? (zone.MinimumY - refPt.absCoords.y)
-                                                                                             : (refPt.absCoords.y - zone.MaximumY)));
+                                      std::format("...Y Reference Point= {:.2f}, Zone Minimum Y= {:.2f}, Zone Maximum Y= {:.2f}",
+                                                  refPt.absCoords.y,
+                                                  zone.MinimumY,
+                                                  zone.MaximumY));
+                    ShowContinueError(
+                        state,
+                        std::format("...Y Reference Distance Outside MinimumY= {:.4f} m.",
+                                    (refPt.absCoords.y < zone.MinimumY) ? (zone.MinimumY - refPt.absCoords.y) : (refPt.absCoords.y - zone.MaximumY)));
                 }
                 if (refPt.absCoords.z < zone.MinimumZ || refPt.absCoords.z > zone.MaximumZ) {
                     ShowWarningError(
                         state,
                         std::format("GetInputIlluminanceMap: Reference Map point #[{}], Z Value outside Zone Min/Max Z, Zone={}", iRefPt, zone.Name));
                     ShowContinueError(state,
-                                      EnergyPlus::format("...Z Reference Point= {:.2R}, Zone Minimum Z= {:.2R}, Zone Maximum Z= {:.2R}",
-                                                         refPt.absCoords.z,
-                                                         zone.MinimumZ,
-                                                         zone.MaximumZ));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("...Z Reference Distance Outside MinimumZ= {:.4R} m.",
-                                                         (refPt.absCoords.z < zone.MinimumZ) ? (zone.MinimumZ - refPt.absCoords.z)
-                                                                                             : (refPt.absCoords.z - zone.MaximumZ)));
+                                      std::format("...Z Reference Point= {:.2f}, Zone Minimum Z= {:.2f}, Zone Maximum Z= {:.2f}",
+                                                  refPt.absCoords.z,
+                                                  zone.MinimumZ,
+                                                  zone.MaximumZ));
+                    ShowContinueError(
+                        state,
+                        std::format("...Z Reference Distance Outside MinimumZ= {:.4f} m.",
+                                    (refPt.absCoords.z < zone.MinimumZ) ? (zone.MinimumZ - refPt.absCoords.z) : (refPt.absCoords.z - zone.MaximumZ)));
                 }
             } // for (X)
         } // for (Y)
@@ -4466,7 +4465,7 @@ void GetInputIlluminanceMap(EnergyPlusData &state, bool &ErrorsFound)
     }
     for (auto const &illumMap : dl->illumMaps) {
         print(state.files.eio,
-              "Daylighting:Illuminance Maps:Detail,{},{},{:.2R},{:.2R},{:.2R},{},{:.2R},{:.2R},{:.2R},{},{:.2R}\n",
+              "Daylighting:Illuminance Maps:Detail,{},{},{:.2f},{:.2f},{:.2f},{},{:.2f},{:.2f},{:.2f},{},{:.2f}\n",
               illumMap.Name,
               state.dataHeatBal->Zone(illumMap.zoneIndex).Name,
               illumMap.Xmin,
@@ -4753,17 +4752,17 @@ void GetDaylightingControls(EnergyPlusData &state, bool &ErrorsFound)
         if ((1.0 - sumFracs) > FractionTolerance) {
             ShowWarningError(state, "GetDaylightingControls: Fraction of zone or space controlled by the Daylighting reference points is < 1.0.");
             ShowContinueError(state,
-                              EnergyPlus::format("..discovered in {}=\"{}\", only {:.3R} of the zone or space is controlled.",
-                                                 s_ipsc->cCurrentModuleObject,
-                                                 daylightControl.Name,
-                                                 sumFracs));
+                              std::format("..discovered in {}=\"{}\", only {:.3f} of the zone or space is controlled.",
+                                          s_ipsc->cCurrentModuleObject,
+                                          daylightControl.Name,
+                                          sumFracs));
         } else if ((sumFracs - 1.0) > FractionTolerance) {
             ShowSevereError(state, "GetDaylightingControls: Fraction of zone or space controlled by the Daylighting reference points is > 1.0.");
             ShowContinueError(state,
-                              EnergyPlus::format("..discovered in {}=\"{}\", trying to control {:.3R} of the zone or space.",
-                                                 s_ipsc->cCurrentModuleObject,
-                                                 daylightControl.Name,
-                                                 sumFracs));
+                              std::format("..discovered in {}=\"{}\", trying to control {:.3f} of the zone or space.",
+                                          s_ipsc->cCurrentModuleObject,
+                                          daylightControl.Name,
+                                          sumFracs));
             ErrorsFound = true;
         }
 
@@ -4871,42 +4870,42 @@ void GeometryTransformForDaylighting(EnergyPlusData &state)
                 ShowWarningError(state,
                                  std::format("GeometryTransformForDaylighting: Reference point X Value outside Zone Min/Max X, Zone={}", zone.Name));
                 ShowContinueError(state,
-                                  EnergyPlus::format("...X Reference Point= {:.2R}, Zone Minimum X= {:.2R}, Zone Maximum X= {:.2R}",
-                                                     refPt.absCoords.x,
-                                                     zone.MinimumX,
-                                                     zone.MaximumX));
-                ShowContinueError(state,
-                                  EnergyPlus::format("...X Reference Distance Outside MinimumX= {:.4R} m.",
-                                                     (refPt.absCoords.x < zone.MinimumX) ? (zone.MinimumX - refPt.absCoords.x)
-                                                                                         : (refPt.absCoords.x - zone.MaximumX)));
+                                  std::format("...X Reference Point= {:.2f}, Zone Minimum X= {:.2f}, Zone Maximum X= {:.2f}",
+                                              refPt.absCoords.x,
+                                              zone.MinimumX,
+                                              zone.MaximumX));
+                ShowContinueError(
+                    state,
+                    std::format("...X Reference Distance Outside MinimumX= {:.4f} m.",
+                                (refPt.absCoords.x < zone.MinimumX) ? (zone.MinimumX - refPt.absCoords.x) : (refPt.absCoords.x - zone.MaximumX)));
             }
             if (refPt.absCoords.y < zone.MinimumY || refPt.absCoords.y > zone.MaximumY) {
                 refPt.inBounds = false;
                 ShowWarningError(state,
                                  std::format("GeometryTransformForDaylighting: Reference point Y Value outside Zone Min/Max Y, Zone={}", zone.Name));
                 ShowContinueError(state,
-                                  EnergyPlus::format("...Y Reference Point= {:.2R}, Zone Minimum Y= {:.2R}, Zone Maximum Y= {:.2R}",
-                                                     refPt.absCoords.x,
-                                                     zone.MinimumY,
-                                                     zone.MaximumY));
-                ShowContinueError(state,
-                                  EnergyPlus::format("...Y Reference Distance Outside MinimumY= {:.4R} m.",
-                                                     (refPt.absCoords.y < zone.MinimumY) ? (zone.MinimumY - refPt.absCoords.y)
-                                                                                         : (refPt.absCoords.y - zone.MaximumY)));
+                                  std::format("...Y Reference Point= {:.2f}, Zone Minimum Y= {:.2f}, Zone Maximum Y= {:.2f}",
+                                              refPt.absCoords.x,
+                                              zone.MinimumY,
+                                              zone.MaximumY));
+                ShowContinueError(
+                    state,
+                    std::format("...Y Reference Distance Outside MinimumY= {:.4f} m.",
+                                (refPt.absCoords.y < zone.MinimumY) ? (zone.MinimumY - refPt.absCoords.y) : (refPt.absCoords.y - zone.MaximumY)));
             }
             if (refPt.absCoords.z < zone.MinimumZ || refPt.absCoords.z > zone.MaximumZ) {
                 refPt.inBounds = false;
                 ShowWarningError(state,
                                  std::format("GeometryTransformForDaylighting: Reference point Z Value outside Zone Min/Max Z, Zone={}", zone.Name));
                 ShowContinueError(state,
-                                  EnergyPlus::format("...Z Reference Point= {:.2R}, Zone Minimum Z= {:.2R}, Zone Maximum Z= {:.2R}",
-                                                     refPt.absCoords.z,
-                                                     zone.MinimumZ,
-                                                     zone.MaximumZ));
-                ShowContinueError(state,
-                                  EnergyPlus::format("...Z Reference Distance Outside MinimumZ= {:.4R} m.",
-                                                     (refPt.absCoords.z < zone.MinimumZ) ? (zone.MinimumZ - refPt.absCoords.z)
-                                                                                         : (refPt.absCoords.z - zone.MaximumZ)));
+                                  std::format("...Z Reference Point= {:.2f}, Zone Minimum Z= {:.2f}, Zone Maximum Z= {:.2f}",
+                                              refPt.absCoords.z,
+                                              zone.MinimumZ,
+                                              zone.MaximumZ));
+                ShowContinueError(
+                    state,
+                    std::format("...Z Reference Distance Outside MinimumZ= {:.4f} m.",
+                                (refPt.absCoords.z < zone.MinimumZ) ? (zone.MinimumZ - refPt.absCoords.z) : (refPt.absCoords.z - zone.MaximumZ)));
             }
         } // for (refPt)
     } // for (daylightCtrl)
@@ -5138,8 +5137,7 @@ void GetLightWellData(EnergyPlusData &state, bool &ErrorsFound) // If errors fou
             ShowSevereError(
                 state,
                 std::format("{}: invalid {}=\"{}\" - Areas.", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaFieldNames(1), s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state,
-                              EnergyPlus::format("has Area of Bottom of Well={:.1R} that is less than window area={:.1R}", surf.Area, AreaWell));
+            ShowContinueError(state, std::format("has Area of Bottom of Well={:.1f} that is less than window area={:.1f}", surf.Area, AreaWell));
         }
 
         if (HeightWell >= 0.0 && PerimWell > 0.0 && AreaWell > 0.0) {
@@ -9176,7 +9174,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
 
         dl->SavedMnDy(MapNum) = state.dataEnvrn->CurMnDyHr.substr(0, 5);
 
-        illumMap.Name = EnergyPlus::format("{} at {:.2R}m", illumMap.Name, illumMap.Z);
+        illumMap.Name = std::format("{} at {:.2f}m", illumMap.Name, illumMap.Z);
     }
     if (dl->SavedMnDy(MapNum) != state.dataEnvrn->CurMnDyHr.substr(0, 5)) {
         dl->EnvrnPrint(MapNum) = true;
@@ -9193,8 +9191,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
         for (int R = 1; R <= thisDayltgCtrl.TotalDaylRefPoints; ++R) {
             ++rCount;
             auto const &refPt = thisDayltgCtrl.refPts(R);
-            illumMap.pointsHeader +=
-                EnergyPlus::format(" RefPt{}=({:.2R}:{:.2R}:{:.2R}),", rCount, refPt.absCoords.x, refPt.absCoords.y, refPt.absCoords.z);
+            illumMap.pointsHeader += std::format(" RefPt{}=({:.2f}:{:.2f}:{:.2f}),", rCount, refPt.absCoords.x, refPt.absCoords.y, refPt.absCoords.z);
         }
     }
 
@@ -9220,7 +9217,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
             int RefPt = 1;
             for (int X = 1; X <= illumMap.Xnum; ++X) {
                 const std::string AddXorYString =
-                    EnergyPlus::format("{}({:.2R};{:.2R})=", dl->MapColSep, illumMap.refPts(RefPt).absCoords.x, illumMap.refPts(RefPt).absCoords.y);
+                    std::format("{}({:.2f};{:.2f})=", dl->MapColSep, illumMap.refPts(RefPt).absCoords.x, illumMap.refPts(RefPt).absCoords.y);
                 if (illumMap.HeaderXLineLengthNeeded) {
                     linelen += int(len(AddXorYString));
                 }
@@ -9245,7 +9242,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
             // Write Y scale prefix and illuminance values
             RefPt = 1;
             for (int Y = 1; Y <= illumMap.Ynum; ++Y) {
-                mapLine = EnergyPlus::format("({:.2R};{:.2R})=", illumMap.refPts(RefPt).absCoords.x, illumMap.refPts(RefPt).absCoords.y);
+                mapLine = std::format("({:.2f};{:.2f})=", illumMap.refPts(RefPt).absCoords.x, illumMap.refPts(RefPt).absCoords.y);
                 for (int R = RefPt; R <= RefPt + illumMap.Xnum - 1; ++R) {
                     int IllumOut = nint(illumMap.refPts(R).lumsHr[iLum_Illum]);
                     std::string String = fmt::to_string(IllumOut);

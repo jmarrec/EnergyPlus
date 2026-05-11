@@ -284,8 +284,8 @@ void GetBLASTAbsorberInput(EnergyPlusData &state)
             thisChiller.NomPumpPowerWasAutoSized = true;
         }
         if (state.dataIPShortCut->rNumericArgs(1) == 0.0) {
-            ShowSevereError(
-                state, EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), state.dataIPShortCut->rNumericArgs(1)));
+            ShowSevereError(state,
+                            std::format("Invalid {}={:.2f}", state.dataIPShortCut->cNumericFieldNames(1), state.dataIPShortCut->rNumericArgs(1)));
             ShowContinueError(
                 state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ErrorsFound = true;
@@ -474,8 +474,8 @@ void GetBLASTAbsorberInput(EnergyPlusData &state)
         }
 
         if (thisChiller.GeneratorVolFlowRate == 0.0 && thisChiller.GenHeatSourceType == Node::FluidType::Water) {
-            ShowSevereError(
-                state, EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(16), state.dataIPShortCut->rNumericArgs(16)));
+            ShowSevereError(state,
+                            std::format("Invalid {}={:.2f}", state.dataIPShortCut->cNumericFieldNames(16), state.dataIPShortCut->rNumericArgs(16)));
             ShowContinueError(
                 state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(state, "...Generator water flow rate must be greater than 0 when absorber generator fluid type is hot water.");
@@ -977,8 +977,8 @@ void BLASTAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                             if ((std::abs(tmpNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state,
                                             EnergyPlus::format("SizeChillerAbsorption: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
-                                ShowContinueError(state, EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
+                                ShowContinueError(state, std::format("User-Specified Nominal Capacity of {:.2f} [W]", NomCapUser));
+                                ShowContinueError(state, std::format("differs from Design Size Nominal Capacity of {:.2f} [W]", tmpNomCap));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1028,9 +1028,8 @@ void BLASTAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(tmpNomPumpPower - NomPumpPowerUser) / NomPumpPowerUser) > state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(state, std::format("SizeChillerAbsorption: Potential issue with equipment sizing for {}", this->Name));
-                            ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Pumping Power of {:.2R} [W]", NomPumpPowerUser));
-                            ShowContinueError(state,
-                                              EnergyPlus::format("differs from Design Size Nominal Pumping Power of {:.2R} [W]", tmpNomPumpPower));
+                            ShowContinueError(state, std::format("User-Specified Nominal Pumping Power of {:.2f} [W]", NomPumpPowerUser));
+                            ShowContinueError(state, std::format("differs from Design Size Nominal Pumping Power of {:.2f} [W]", tmpNomPumpPower));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -1079,11 +1078,11 @@ void BLASTAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                             if ((std::abs(tmpEvapVolFlowRate - EvapVolFlowRateUser) / EvapVolFlowRateUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeChillerAbsorption: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(
-                                    state, EnergyPlus::format("User-Specified Design Chilled Water Flow Rate of {:.5R} [m3/s]", EvapVolFlowRateUser));
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Size Design Chilled Water Flow Rate of {:.5R} [m3/s]",
-                                                                     tmpEvapVolFlowRate));
+                                                  std::format("User-Specified Design Chilled Water Flow Rate of {:.5f} [m3/s]", EvapVolFlowRateUser));
+                                ShowContinueError(
+                                    state,
+                                    std::format("differs from Design Size Design Chilled Water Flow Rate of {:.5f} [m3/s]", tmpEvapVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1153,11 +1152,10 @@ void BLASTAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeChillerAbsorption: Potential issue with equipment sizing for {}", this->Name));
                                 ShowContinueError(
+                                    state, std::format("User-Specified Design Condenser Water Flow Rate of {:.5f} [m3/s]", CondVolFlowRateUser));
+                                ShowContinueError(
                                     state,
-                                    EnergyPlus::format("User-Specified Design Condenser Water Flow Rate of {:.5R} [m3/s]", CondVolFlowRateUser));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Size Design Condenser Water Flow Rate of {:.5R} [m3/s]",
-                                                                     tmpCondVolFlowRate));
+                                    std::format("differs from Design Size Design Condenser Water Flow Rate of {:.5f} [m3/s]", tmpCondVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1228,12 +1226,11 @@ void BLASTAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                         ShowMessage(state,
                                                     std::format("SizeChillerAbsorption: Potential issue with equipment sizing for {}", this->Name));
                                         ShowContinueError(state,
-                                                          EnergyPlus::format("User-Specified Design Generator Fluid Flow Rate of {:.5R} [m3/s]",
-                                                                             GeneratorVolFlowRateUser));
-                                        ShowContinueError(
-                                            state,
-                                            EnergyPlus::format("differs from Design Size Design Generator Fluid Flow Rate of {:.5R} [m3/s]",
-                                                               tmpGeneratorVolFlowRate));
+                                                          std::format("User-Specified Design Generator Fluid Flow Rate of {:.5f} [m3/s]",
+                                                                      GeneratorVolFlowRateUser));
+                                        ShowContinueError(state,
+                                                          std::format("differs from Design Size Design Generator Fluid Flow Rate of {:.5f} [m3/s]",
+                                                                      tmpGeneratorVolFlowRate));
                                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                         ShowContinueError(state,
                                                           "Verify that the value entered is intended and is consistent with other components.");
@@ -1295,12 +1292,11 @@ void BLASTAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                         ShowMessage(state,
                                                     std::format("SizeChillerAbsorption: Potential issue with equipment sizing for {}", this->Name));
                                         ShowContinueError(state,
-                                                          EnergyPlus::format("User-Specified Design Generator Fluid Flow Rate of {:.5R} [m3/s]",
-                                                                             GeneratorVolFlowRateUser));
-                                        ShowContinueError(
-                                            state,
-                                            EnergyPlus::format("differs from Design Size Design Generator Fluid Flow Rate of {:.5R} [m3/s]",
-                                                               tmpGeneratorVolFlowRate));
+                                                          std::format("User-Specified Design Generator Fluid Flow Rate of {:.5f} [m3/s]",
+                                                                      GeneratorVolFlowRateUser));
+                                        ShowContinueError(state,
+                                                          std::format("differs from Design Size Design Generator Fluid Flow Rate of {:.5f} [m3/s]",
+                                                                      tmpGeneratorVolFlowRate));
                                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                         ShowContinueError(state,
                                                           "Verify that the value entered is intended and is consistent with other components.");

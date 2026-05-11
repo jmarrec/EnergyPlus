@@ -3494,9 +3494,8 @@ namespace CondenserLoopTowers {
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(tmpNomTowerCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                     ShowMessage(state, std::format("SizeVSMerkelTower: Potential issue with equipment sizing for {}", this->Name));
-                                    ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
-                                    ShowContinueError(state,
-                                                      EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomTowerCap));
+                                    ShowContinueError(state, std::format("User-Specified Nominal Capacity of {:.2f} [W]", NomCapUser));
+                                    ShowContinueError(state, std::format("differs from Design Size Nominal Capacity of {:.2f} [W]", tmpNomTowerCap));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }
@@ -3540,11 +3539,11 @@ namespace CondenserLoopTowers {
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(tmpTowerFreeConvNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                     ShowMessage(state, std::format("SizeVSMerkelTower: Potential issue with equipment sizing for {}", this->Name));
-                                    ShowContinueError(
-                                        state, EnergyPlus::format("User-Specified Free Convection Nominal Capacity of {:.2R} [W]", NomCapUser));
                                     ShowContinueError(state,
-                                                      EnergyPlus::format("differs from Design Size Free Convection Nominal Capacity of {:.2R} [W]",
-                                                                         tmpTowerFreeConvNomCap));
+                                                      std::format("User-Specified Free Convection Nominal Capacity of {:.2f} [W]", NomCapUser));
+                                    ShowContinueError(state,
+                                                      std::format("differs from Design Size Free Convection Nominal Capacity of {:.2f} [W]",
+                                                                  tmpTowerFreeConvNomCap));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }
@@ -3592,10 +3591,10 @@ namespace CondenserLoopTowers {
                                 if ((std::abs(tmpDesignWaterFlowRate - NomDesWaterFlowUser) / NomDesWaterFlowUser) >
                                     state.dataSize->AutoVsHardSizingThreshold) {
                                     ShowMessage(state, std::format("SizeVSMerkelTower: Potential issue with equipment sizing for {}", this->Name));
-                                    ShowContinueError(
-                                        state, EnergyPlus::format("User-Specified Design Water Flow Rate of {:.2R} [m3/s]", NomDesWaterFlowUser));
-                                    ShowContinueError(
-                                        state, EnergyPlus::format("differs from Design Water Flow Rate of {:.2R} [m3/s]", tmpDesignWaterFlowRate));
+                                    ShowContinueError(state,
+                                                      std::format("User-Specified Design Water Flow Rate of {:.2f} [m3/s]", NomDesWaterFlowUser));
+                                    ShowContinueError(state,
+                                                      std::format("differs from Design Water Flow Rate of {:.2f} [m3/s]", tmpDesignWaterFlowRate));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }
@@ -3645,10 +3644,8 @@ namespace CondenserLoopTowers {
                             if ((std::abs(tmpDesignAirFlowRate - DesignAirFlowRateUser) / DesignAirFlowRateUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeVSMerkelTower: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("User-Specified Design Air Flow Rate of {:.2R} [m3/s]", DesignAirFlowRateUser));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Air Flow Rate of {:.2R} [m3/s]", tmpDesignAirFlowRate));
+                                ShowContinueError(state, std::format("User-Specified Design Air Flow Rate of {:.2f} [m3/s]", DesignAirFlowRateUser));
+                                ShowContinueError(state, std::format("differs from Design Air Flow Rate of {:.2f} [m3/s]", tmpDesignAirFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -3691,12 +3688,12 @@ namespace CondenserLoopTowers {
                             if ((std::abs(tmpFreeConvAirFlowRate - FreeConvAirFlowUser) / FreeConvAirFlowUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeVSMerkelTower: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("User-Specified Design Free Convection Regime Air Flow Rate of {:.2R} [m3/s]",
-                                                                     FreeConvAirFlowUser));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Free Convection Regime Air Flow Rate of {:.2R} [m3/s]",
-                                                                     tmpFreeConvAirFlowRate));
+                                ShowContinueError(
+                                    state,
+                                    std::format("User-Specified Design Free Convection Regime Air Flow Rate of {:.2f} [m3/s]", FreeConvAirFlowUser));
+                                ShowContinueError(
+                                    state,
+                                    std::format("differs from Design Free Convection Regime Air Flow Rate of {:.2f} [m3/s]", tmpFreeConvAirFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -4311,8 +4308,8 @@ namespace CondenserLoopTowers {
                         if ((std::abs(tmpHighSpeedFanPower - HighSpeedFanPowerUser) / HighSpeedFanPowerUser) >
                             state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(state, std::format("SizeVSMerkelTower: Potential issue with equipment sizing for {}", this->Name));
-                            ShowContinueError(state, EnergyPlus::format("User-Specified Design Fan Power of {:.2R} [W]", HighSpeedFanPowerUser));
-                            ShowContinueError(state, EnergyPlus::format("differs from Design Fan Power of {:.2R} [W]", tmpHighSpeedFanPower));
+                            ShowContinueError(state, std::format("User-Specified Design Fan Power of {:.2f} [W]", HighSpeedFanPowerUser));
+                            ShowContinueError(state, std::format("differs from Design Fan Power of {:.2f} [W]", tmpHighSpeedFanPower));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -5458,9 +5455,9 @@ namespace CondenserLoopTowers {
                                                      cCoolingTower_VariableSpeedMerkel,
                                                      this->Name));
                         ShowContinueError(state,
-                                          EnergyPlus::format("Estimated air flow ratio  = {:.4R}",
-                                                             (std::abs(MyLoad) - MinSpeedFanQdot) / (FullSpeedFanQdot - MinSpeedFanQdot)));
-                        ShowContinueError(state, EnergyPlus::format("Calculated air flow ratio = {:.4R}", this->airFlowRateRatio));
+                                          std::format("Estimated air flow ratio  = {:.4f}",
+                                                      (std::abs(MyLoad) - MinSpeedFanQdot) / (FullSpeedFanQdot - MinSpeedFanQdot)));
+                        ShowContinueError(state, std::format("Calculated air flow ratio = {:.4f}", this->airFlowRateRatio));
                         ShowContinueErrorTimeStamp(state,
                                                    "The calculated air flow ratio will be used and the simulation continues. Occurrence info:");
                     }
@@ -5481,7 +5478,7 @@ namespace CondenserLoopTowers {
                                          std::format("{} - solver failed calculating variable speed fan ratio for unit = {}",
                                                      cCoolingTower_VariableSpeedMerkel,
                                                      this->Name));
-                        ShowContinueError(state, EnergyPlus::format("Estimated air flow ratio  = {:.4R}", this->airFlowRateRatio));
+                        ShowContinueError(state, std::format("Estimated air flow ratio  = {:.4f}", this->airFlowRateRatio));
                         ShowContinueErrorTimeStamp(state, "The estimated air flow ratio will be used and the simulation continues. Occurrence info:");
                     }
                     ShowRecurringWarningErrorAtEnd(
@@ -5894,9 +5891,9 @@ namespace CondenserLoopTowers {
 
         //   check boundaries of independent variables and post warnings to individual buffers to print at end of time step
         if (Twb < this->MinInletAirWBTemp || Twb > this->MaxInletAirWBTemp) {
-            OutputChar = EnergyPlus::format("{:.2R}", Twb);
-            OutputCharLo = EnergyPlus::format("{:.2R}", this->MinInletAirWBTemp);
-            OutputCharHi = EnergyPlus::format("{:.2R}", this->MaxInletAirWBTemp);
+            OutputChar = std::format("{:.2f}", Twb);
+            OutputCharLo = std::format("{:.2f}", this->MinInletAirWBTemp);
+            OutputCharHi = std::format("{:.2f}", this->MaxInletAirWBTemp);
             if (Twb < this->MinInletAirWBTemp) {
                 TwbCapped = this->MinInletAirWBTemp;
             }
@@ -5912,7 +5909,7 @@ namespace CondenserLoopTowers {
                 this->TwbBuffer2 = " ...Valid range = " + OutputCharLo + " to " + OutputCharHi +
                                    ". Occurrence info = " + state.dataEnvrn->EnvironmentName + ", " + state.dataEnvrn->CurMnDy + ' ' +
                                    General::CreateSysTimeIntervalString(state);
-                TrimValue = EnergyPlus::format("{:.6R}", TwbCapped);
+                TrimValue = std::format("{:.6f}", TwbCapped);
                 this->TwbBuffer3 = " ...Inlet air wet-bulb temperature passed to the model = " + TrimValue;
                 this->TwbLast = Twb;
             } else {
@@ -5923,9 +5920,9 @@ namespace CondenserLoopTowers {
         }
 
         if (Tr < this->MinRangeTemp || Tr > this->MaxRangeTemp) {
-            OutputChar = EnergyPlus::format("{:.2R}", Tr);
-            OutputCharLo = EnergyPlus::format("{:.2R}", this->MinRangeTemp);
-            OutputCharHi = EnergyPlus::format("{:.2R}", this->MaxRangeTemp);
+            OutputChar = std::format("{:.2f}", Tr);
+            OutputCharLo = std::format("{:.2f}", this->MinRangeTemp);
+            OutputCharHi = std::format("{:.2f}", this->MaxRangeTemp);
             if (Tr < this->MinRangeTemp) {
                 TrCapped = this->MinRangeTemp;
             }
@@ -5941,7 +5938,7 @@ namespace CondenserLoopTowers {
                 this->TrBuffer2 = " ...Valid range = " + OutputCharLo + " to " + OutputCharHi +
                                   ". Occurrence info = " + state.dataEnvrn->EnvironmentName + ", " + state.dataEnvrn->CurMnDy + ' ' +
                                   General::CreateSysTimeIntervalString(state);
-                TrimValue = EnergyPlus::format("{:.5R}", Tr);
+                TrimValue = std::format("{:.5f}", Tr);
                 this->TrBuffer3 = " ...Tower range temperature passed to the model = " + TrimValue;
                 this->TrLast = Tr;
             } else {
@@ -5952,9 +5949,9 @@ namespace CondenserLoopTowers {
         }
 
         if (Ta < this->MinApproachTemp || Ta > this->MaxApproachTemp) {
-            OutputChar = EnergyPlus::format("{:.2R}", Ta);
-            OutputCharLo = EnergyPlus::format("{:.2R}", this->MinApproachTemp);
-            OutputCharHi = EnergyPlus::format("{:.2R}", this->MaxApproachTemp);
+            OutputChar = std::format("{:.2f}", Ta);
+            OutputCharLo = std::format("{:.2f}", this->MinApproachTemp);
+            OutputCharHi = std::format("{:.2f}", this->MaxApproachTemp);
             if (Ta < this->MinApproachTemp) {
                 TaCapped = this->MinApproachTemp;
             }
@@ -5970,7 +5967,7 @@ namespace CondenserLoopTowers {
                 this->TaBuffer2 = " ...Valid range = " + OutputCharLo + " to " + OutputCharHi +
                                   ". Occurrence info = " + state.dataEnvrn->EnvironmentName + ", " + state.dataEnvrn->CurMnDy + ' ' +
                                   General::CreateSysTimeIntervalString(state);
-                TrimValue = EnergyPlus::format("{:.5R}", Ta);
+                TrimValue = std::format("{:.5f}", Ta);
                 this->TaBuffer3 = " ...Tower approach temperature passed to the model = " + TrimValue;
                 this->TaLast = Ta;
             } else {
@@ -5986,9 +5983,9 @@ namespace CondenserLoopTowers {
             this->PrintWFRRMessage = false;
         } else {
             if (WaterFlowRateRatio < this->MinWaterFlowRatio || WaterFlowRateRatio > this->MaxWaterFlowRatio) {
-                OutputChar = EnergyPlus::format("{:.2R}", WaterFlowRateRatio);
-                OutputCharLo = EnergyPlus::format("{:.2R}", this->MinWaterFlowRatio);
-                OutputCharHi = EnergyPlus::format("{:.2R}", this->MaxWaterFlowRatio);
+                OutputChar = std::format("{:.2f}", WaterFlowRateRatio);
+                OutputCharLo = std::format("{:.2f}", this->MinWaterFlowRatio);
+                OutputCharHi = std::format("{:.2f}", this->MaxWaterFlowRatio);
                 if (WaterFlowRateRatio < this->MinWaterFlowRatio) {
                     WaterFlowRateRatioCapped = this->MinWaterFlowRatio;
                 }
@@ -6004,7 +6001,7 @@ namespace CondenserLoopTowers {
                     this->WFRRBuffer2 = " ...Valid range = " + OutputCharLo + " to " + OutputCharHi +
                                         ". Occurrence info = " + state.dataEnvrn->EnvironmentName + ", " + state.dataEnvrn->CurMnDy + ' ' +
                                         General::CreateSysTimeIntervalString(state);
-                    TrimValue = EnergyPlus::format("{:.5R}", WaterFlowRateRatioCapped);
+                    TrimValue = std::format("{:.5f}", WaterFlowRateRatioCapped);
                     this->WFRRBuffer3 = " ...Water flow rate ratio passed to the model = " + TrimValue;
                     this->WaterFlowRateRatioLast = WaterFlowRateRatio;
                 } else {

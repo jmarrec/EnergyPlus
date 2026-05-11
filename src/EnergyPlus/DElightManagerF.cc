@@ -616,24 +616,22 @@ namespace DElightManagerF {
                                     ShowSevereError(
                                         state,
                                         EnergyPlus::format("DElightInputGenerator:Reference point X Value outside Zone Min/Max X, Zone={}", zn.Name));
-                                    ShowContinueError(
-                                        state,
-                                        EnergyPlus::format("...X Reference Point= {:.2R}, Zone Minimum X= {:.2R}, Zone Maximum X= {:.2R}",
-                                                           thisZone.MinimumX,
-                                                           RefPt_WCS_Coord.x,
-                                                           thisZone.MaximumX));
+                                    ShowContinueError(state,
+                                                      std::format("...X Reference Point= {:.2f}, Zone Minimum X= {:.2f}, Zone Maximum X= {:.2f}",
+                                                                  thisZone.MinimumX,
+                                                                  RefPt_WCS_Coord.x,
+                                                                  thisZone.MaximumX));
                                     ErrorsFound = true;
                                 }
                                 if (RefPt_WCS_Coord.y < thisZone.MinimumY || RefPt_WCS_Coord.y > thisZone.MaximumY) {
                                     ShowSevereError(
                                         state,
                                         EnergyPlus::format("DElightInputGenerator:Reference point Y Value outside Zone Min/Max Y, Zone={}", zn.Name));
-                                    ShowContinueError(
-                                        state,
-                                        EnergyPlus::format("...Y Reference Point= {:.2R}, Zone Minimum Y= {:.2R}, Zone Maximum Y= {:.2R}",
-                                                           thisZone.MinimumY,
-                                                           RefPt_WCS_Coord.y,
-                                                           thisZone.MaximumY));
+                                    ShowContinueError(state,
+                                                      std::format("...Y Reference Point= {:.2f}, Zone Minimum Y= {:.2f}, Zone Maximum Y= {:.2f}",
+                                                                  thisZone.MinimumY,
+                                                                  RefPt_WCS_Coord.y,
+                                                                  thisZone.MaximumY));
                                     ErrorsFound = true;
                                 }
                                 if (RefPt_WCS_Coord.z < state.dataHeatBal->Zone(izone).MinimumZ || RefPt_WCS_Coord.z > thisZone.MaximumZ) {
@@ -641,12 +639,11 @@ namespace DElightManagerF {
                                         state,
                                         EnergyPlus::format("DElightInputGenerator:Reference point Z Value outside Zone Min/Max Z, Zone={}",
                                                            thisZone.Name));
-                                    ShowContinueError(
-                                        state,
-                                        EnergyPlus::format("...Z Reference Point= {:.2R}, Zone Minimum Z= {:.2R}, Zone Maximum Z= {:.2R}",
-                                                           thisZone.MinimumZ,
-                                                           RefPt_WCS_Coord.z,
-                                                           thisZone.MaximumZ));
+                                    ShowContinueError(state,
+                                                      std::format("...Z Reference Point= {:.2f}, Zone Minimum Z= {:.2f}, Zone Maximum Z= {:.2f}",
+                                                                  thisZone.MinimumZ,
+                                                                  RefPt_WCS_Coord.z,
+                                                                  thisZone.MaximumZ));
                                     ErrorsFound = true;
                                 }
 

@@ -773,21 +773,21 @@ namespace Curve {
             if (Numbers(7) > Numbers(8)) { // error
                 ShowSevereError(state, EnergyPlus::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(7),
-                                                     Numbers(7),
-                                                     state.dataIPShortCut->cNumericFieldNames(8),
-                                                     Numbers(8)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(7),
+                                              Numbers(7),
+                                              state.dataIPShortCut->cNumericFieldNames(8),
+                                              Numbers(8)));
                 ErrorsFound = true;
             }
             if (Numbers(9) > Numbers(10)) { // error
                 ShowSevereError(state, EnergyPlus::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(9),
-                                                     Numbers(9),
-                                                     state.dataIPShortCut->cNumericFieldNames(10),
-                                                     Numbers(10)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(9),
+                                              Numbers(9),
+                                              state.dataIPShortCut->cNumericFieldNames(10),
+                                              Numbers(10)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -846,11 +846,11 @@ namespace Curve {
             if (Numbers(13) > Numbers(14)) { // error
                 ShowSevereError(state, EnergyPlus::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(13),
-                                                     Numbers(13),
-                                                     state.dataIPShortCut->cNumericFieldNames(14),
-                                                     Numbers(14)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(13),
+                                              Numbers(13),
+                                              state.dataIPShortCut->cNumericFieldNames(14),
+                                              Numbers(14)));
                 ErrorsFound = true;
             }
 
@@ -859,11 +859,11 @@ namespace Curve {
             if (Numbers(15) > Numbers(16)) { // error
                 ShowSevereError(state, EnergyPlus::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(15),
-                                                     Numbers(15),
-                                                     state.dataIPShortCut->cNumericFieldNames(16),
-                                                     Numbers(16)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(15),
+                                              Numbers(15),
+                                              state.dataIPShortCut->cNumericFieldNames(16),
+                                              Numbers(16)));
                 ErrorsFound = true;
             }
 
@@ -872,11 +872,11 @@ namespace Curve {
             if (Numbers(17) > Numbers(18)) { // error
                 ShowSevereError(state, EnergyPlus::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(17),
-                                                     Numbers(17),
-                                                     state.dataIPShortCut->cNumericFieldNames(18),
-                                                     Numbers(18)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(17),
+                                              Numbers(17),
+                                              state.dataIPShortCut->cNumericFieldNames(18),
+                                              Numbers(18)));
                 ErrorsFound = true;
             }
 
@@ -958,11 +958,11 @@ namespace Curve {
             if (Numbers(5) > Numbers(6)) { // error
                 ShowSevereError(state, EnergyPlus::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5),
-                                                     state.dataIPShortCut->cNumericFieldNames(6),
-                                                     Numbers(6)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5),
+                                              state.dataIPShortCut->cNumericFieldNames(6),
+                                              Numbers(6)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1021,11 +1021,11 @@ namespace Curve {
             if (Numbers(6) > Numbers(7)) { // error
                 ShowSevereError(state, EnergyPlus::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(6),
-                                                     Numbers(6),
-                                                     state.dataIPShortCut->cNumericFieldNames(7),
-                                                     Numbers(7)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(6),
+                                              Numbers(6),
+                                              state.dataIPShortCut->cNumericFieldNames(7),
+                                              Numbers(7)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1084,11 +1084,11 @@ namespace Curve {
             if (Numbers(4) > Numbers(5)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(4),
-                                                     Numbers(4),
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(4),
+                                              Numbers(4),
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1148,21 +1148,21 @@ namespace Curve {
             if (Numbers(7) > Numbers(8)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(7),
-                                                     Numbers(7),
-                                                     state.dataIPShortCut->cNumericFieldNames(8),
-                                                     Numbers(8)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(7),
+                                              Numbers(7),
+                                              state.dataIPShortCut->cNumericFieldNames(8),
+                                              Numbers(8)));
                 ErrorsFound = true;
             }
             if (Numbers(9) > Numbers(10)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(9),
-                                                     Numbers(9),
-                                                     state.dataIPShortCut->cNumericFieldNames(10),
-                                                     Numbers(10)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(9),
+                                              Numbers(9),
+                                              state.dataIPShortCut->cNumericFieldNames(10),
+                                              Numbers(10)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1227,21 +1227,21 @@ namespace Curve {
             if (Numbers(7) > Numbers(8)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(7),
-                                                     Numbers(7),
-                                                     state.dataIPShortCut->cNumericFieldNames(8),
-                                                     Numbers(8)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(7),
+                                              Numbers(7),
+                                              state.dataIPShortCut->cNumericFieldNames(8),
+                                              Numbers(8)));
                 ErrorsFound = true;
             }
             if (Numbers(9) > Numbers(10)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(9),
-                                                     Numbers(9),
-                                                     state.dataIPShortCut->cNumericFieldNames(10),
-                                                     Numbers(10)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(9),
+                                              Numbers(9),
+                                              state.dataIPShortCut->cNumericFieldNames(10),
+                                              Numbers(10)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1304,11 +1304,11 @@ namespace Curve {
             if (Numbers(3) > Numbers(4)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(3),
-                                                     Numbers(3),
-                                                     state.dataIPShortCut->cNumericFieldNames(4),
-                                                     Numbers(4)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(3),
+                                              Numbers(3),
+                                              state.dataIPShortCut->cNumericFieldNames(4),
+                                              Numbers(4)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1368,21 +1368,21 @@ namespace Curve {
             if (Numbers(11) > Numbers(12)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(11),
-                                                     Numbers(11),
-                                                     state.dataIPShortCut->cNumericFieldNames(12),
-                                                     Numbers(12)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(11),
+                                              Numbers(11),
+                                              state.dataIPShortCut->cNumericFieldNames(12),
+                                              Numbers(12)));
                 ErrorsFound = true;
             }
             if (Numbers(13) > Numbers(14)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(13),
-                                                     Numbers(13),
-                                                     state.dataIPShortCut->cNumericFieldNames(14),
-                                                     Numbers(14)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(13),
+                                              Numbers(13),
+                                              state.dataIPShortCut->cNumericFieldNames(14),
+                                              Numbers(14)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1473,31 +1473,31 @@ namespace Curve {
             if (Numbers(28) > Numbers(29)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(28),
-                                                     Numbers(28),
-                                                     state.dataIPShortCut->cNumericFieldNames(29),
-                                                     Numbers(29)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(28),
+                                              Numbers(28),
+                                              state.dataIPShortCut->cNumericFieldNames(29),
+                                              Numbers(29)));
                 ErrorsFound = true;
             }
             if (Numbers(30) > Numbers(31)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(30),
-                                                     Numbers(30),
-                                                     state.dataIPShortCut->cNumericFieldNames(31),
-                                                     Numbers(31)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(30),
+                                              Numbers(30),
+                                              state.dataIPShortCut->cNumericFieldNames(31),
+                                              Numbers(31)));
                 ErrorsFound = true;
             }
             if (Numbers(32) > Numbers(33)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(32),
-                                                     Numbers(32),
-                                                     state.dataIPShortCut->cNumericFieldNames(33),
-                                                     Numbers(33)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(32),
+                                              Numbers(32),
+                                              state.dataIPShortCut->cNumericFieldNames(33),
+                                              Numbers(33)));
                 ErrorsFound = true;
             }
             if (NumAlphas >= 2) {
@@ -1577,11 +1577,11 @@ namespace Curve {
                 if (Numbers(MinIndex) > Numbers(MaxIndex)) { // error
                     ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                     ShowContinueError(state,
-                                      EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                         state.dataIPShortCut->cNumericFieldNames(MinIndex),
-                                                         Numbers(MinIndex),
-                                                         state.dataIPShortCut->cNumericFieldNames(MaxIndex),
-                                                         Numbers(MaxIndex)));
+                                      std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                                  state.dataIPShortCut->cNumericFieldNames(MinIndex),
+                                                  Numbers(MinIndex),
+                                                  state.dataIPShortCut->cNumericFieldNames(MaxIndex),
+                                                  Numbers(MaxIndex)));
                     ErrorsFound = true;
                 }
                 int InputTypeIndex = i + 1;
@@ -1655,11 +1655,11 @@ namespace Curve {
                 if (Numbers(MinIndex) > Numbers(MaxIndex)) { // error
                     ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                     ShowContinueError(state,
-                                      EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                         state.dataIPShortCut->cNumericFieldNames(MinIndex),
-                                                         Numbers(MinIndex),
-                                                         state.dataIPShortCut->cNumericFieldNames(MaxIndex),
-                                                         Numbers(MaxIndex)));
+                                      std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                                  state.dataIPShortCut->cNumericFieldNames(MinIndex),
+                                                  Numbers(MinIndex),
+                                                  state.dataIPShortCut->cNumericFieldNames(MaxIndex),
+                                                  Numbers(MaxIndex)));
                     ErrorsFound = true;
                 }
                 int InputTypeIndex = i + 1;
@@ -1712,11 +1712,11 @@ namespace Curve {
             if (Numbers(4) > Numbers(5)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(4),
-                                                     Numbers(4),
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(4),
+                                              Numbers(4),
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5)));
                 ErrorsFound = true;
             }
 
@@ -1786,21 +1786,21 @@ namespace Curve {
             if (Numbers(5) > Numbers(6)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5),
-                                                     state.dataIPShortCut->cNumericFieldNames(6),
-                                                     Numbers(6)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5),
+                                              state.dataIPShortCut->cNumericFieldNames(6),
+                                              Numbers(6)));
                 ErrorsFound = true;
             }
             if (Numbers(7) > Numbers(8)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(7),
-                                                     Numbers(7),
-                                                     state.dataIPShortCut->cNumericFieldNames(8),
-                                                     Numbers(8)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(7),
+                                              Numbers(7),
+                                              state.dataIPShortCut->cNumericFieldNames(8),
+                                              Numbers(8)));
                 ErrorsFound = true;
             }
 
@@ -1850,11 +1850,11 @@ namespace Curve {
             if (Numbers(5) > Numbers(6)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5),
-                                                     state.dataIPShortCut->cNumericFieldNames(6),
-                                                     Numbers(6)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5),
+                                              state.dataIPShortCut->cNumericFieldNames(6),
+                                              Numbers(6)));
                 ErrorsFound = true;
             }
 
@@ -1914,11 +1914,11 @@ namespace Curve {
             if (Numbers(6) > Numbers(7)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(6),
-                                                     Numbers(6),
-                                                     state.dataIPShortCut->cNumericFieldNames(7),
-                                                     Numbers(7)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(6),
+                                              Numbers(6),
+                                              state.dataIPShortCut->cNumericFieldNames(7),
+                                              Numbers(7)));
                 ErrorsFound = true;
             }
 
@@ -1978,11 +1978,11 @@ namespace Curve {
             if (Numbers(4) > Numbers(5)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(4),
-                                                     Numbers(4),
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(4),
+                                              Numbers(4),
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5)));
                 ErrorsFound = true;
             }
 
@@ -2042,11 +2042,11 @@ namespace Curve {
             if (Numbers(4) > Numbers(5)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(4),
-                                                     Numbers(4),
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(4),
+                                              Numbers(4),
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5)));
                 ErrorsFound = true;
             }
 
@@ -2106,11 +2106,11 @@ namespace Curve {
             if (Numbers(4) > Numbers(5)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(4),
-                                                     Numbers(4),
-                                                     state.dataIPShortCut->cNumericFieldNames(5),
-                                                     Numbers(5)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(4),
+                                              Numbers(4),
+                                              state.dataIPShortCut->cNumericFieldNames(5),
+                                              Numbers(5)));
                 ErrorsFound = true;
             }
 
@@ -2161,11 +2161,11 @@ namespace Curve {
             if (Numbers(6) > Numbers(7)) { // error
                 ShowSevereError(state, std::format("GetCurveInput: For {}: ", CurrentModuleObject));
                 ShowContinueError(state,
-                                  EnergyPlus::format("{} [{:.2R}] > {} [{:.2R}]",
-                                                     state.dataIPShortCut->cNumericFieldNames(6),
-                                                     Numbers(6),
-                                                     state.dataIPShortCut->cNumericFieldNames(7),
-                                                     Numbers(7)));
+                                  std::format("{} [{:.2f}] > {} [{:.2f}]",
+                                              state.dataIPShortCut->cNumericFieldNames(6),
+                                              Numbers(6),
+                                              state.dataIPShortCut->cNumericFieldNames(7),
+                                              Numbers(7)));
                 ErrorsFound = true;
             }
 
@@ -2235,11 +2235,11 @@ namespace Curve {
                                               "a higher wind direction value.");
                             ShowContinueError(state, "Wind direction values must be entered in ascending order.");
                             ShowContinueError(state,
-                                              EnergyPlus::format("{} = {:.2R} {} = {:.2R}",
-                                                                 state.dataIPShortCut->cNumericFieldNames(j),
-                                                                 windDirs[j - 2],
-                                                                 state.dataIPShortCut->cNumericFieldNames[j + 1],
-                                                                 windDirs[j - 1]));
+                                              std::format("{} = {:.2f} {} = {:.2f}",
+                                                          state.dataIPShortCut->cNumericFieldNames(j),
+                                                          windDirs[j - 2],
+                                                          state.dataIPShortCut->cNumericFieldNames[j + 1],
+                                                          windDirs[j - 1]));
                             ErrorsFound = true;
                         }
                     }
@@ -2247,7 +2247,7 @@ namespace Curve {
                 // Check that the first table value is zero
                 if (dirMin != 0.0) {
                     ShowSevereError(state, std::format("GetCurveInput: An {} object ", CurrentModuleObject));
-                    ShowContinueError(state, EnergyPlus::format("has a nonzero minimum value of {:.2R}", dirMin));
+                    ShowContinueError(state, std::format("has a nonzero minimum value of {:.2f}", dirMin));
                     ShowContinueError(state, "Wind direction values must begin at zero.");
                     ErrorsFound = true;
                 }
@@ -3607,8 +3607,8 @@ namespace Curve {
         }
         if (!state.dataCurveManager->FrictionFactorErrorHasOccurred) {
             ShowSevereError(state, "Plant Pressure System: Error in moody friction factor calculation");
-            ShowContinueError(
-                state, EnergyPlus::format("Current Conditions: Roughness Ratio={:.7R}; Reynolds Number={:.1R}", RoughnessRatio, ReynoldsNumber));
+            ShowContinueError(state,
+                              std::format("Current Conditions: Roughness Ratio={:.7f}; Reynolds Number={:.1f}", RoughnessRatio, ReynoldsNumber));
             ShowContinueError(state, "These conditions resulted in an unhandled numeric issue.");
             ShowContinueError(state, "Please contact EnergyPlus support/development team to raise an alert about this issue");
             ShowContinueError(state, "This issue will occur only one time.  The friction factor has been reset to 0.04 for calculations");

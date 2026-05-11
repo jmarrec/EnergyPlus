@@ -226,14 +226,13 @@ namespace BoilerSteam {
 
                 if (thisBoiler.MinPartLoadRat < 0.0) {
                     ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
-                    ShowContinueError(state, EnergyPlus::format("Invalid {}={:.3R}", "Minimum Part Load Ratio", thisBoiler.MinPartLoadRat));
+                    ShowContinueError(state, std::format("Invalid {}={:.3f}", "Minimum Part Load Ratio", thisBoiler.MinPartLoadRat));
                     ErrorsFound = true;
                 }
 
                 if (thisBoiler.TempUpLimitBoilerOut == 0.0) {
                     ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, state.dataIPShortCut->cCurrentModuleObject, boilerName));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("Invalid {}={:.3R}", "Design Outlet Steam Temperature", thisBoiler.TempUpLimitBoilerOut));
+                    ShowContinueError(state, std::format("Invalid {}={:.3f}", "Design Outlet Steam Temperature", thisBoiler.TempUpLimitBoilerOut));
                     ErrorsFound = true;
                 }
                 thisBoiler.BoilerInletNodeNum = Node::GetOnlySingleNode(state,
@@ -570,9 +569,8 @@ namespace BoilerSteam {
                             if (state.dataGlobal->DisplayExtraWarnings) {
                                 if ((std::abs(tmpNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                     ShowMessage(state, EnergyPlus::format("SizePump: Potential issue with equipment sizing for {}", this->Name));
-                                    ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
-                                    ShowContinueError(state,
-                                                      EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
+                                    ShowContinueError(state, std::format("User-Specified Nominal Capacity of {:.2f} [W]", NomCapUser));
+                                    ShowContinueError(state, std::format("differs from Design Size Nominal Capacity of {:.2f} [W]", tmpNomCap));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }
@@ -664,8 +662,8 @@ namespace BoilerSteam {
                 ShowSevereError(
                     state, EnergyPlus::format("Boiler:Steam=\"{}\", Saturation Pressure is greater than Maximum Operating Pressure,", this->Name));
                 ShowContinueError(state, "Lower Input Temperature");
-                ShowContinueError(state, EnergyPlus::format("Steam temperature=[{:.2R}] C", this->BoilerOutletTemp));
-                ShowContinueError(state, EnergyPlus::format("Refrigerant Saturation Pressure =[{:.0R}] Pa", this->BoilerPressCheck));
+                ShowContinueError(state, std::format("Steam temperature=[{:.2f}] C", this->BoilerOutletTemp));
+                ShowContinueError(state, std::format("Refrigerant Saturation Pressure =[{:.0f}] Pa", this->BoilerPressCheck));
             }
             ShowRecurringSevereErrorAtEnd(state,
                                           "Boiler:Steam=\"" + this->Name +

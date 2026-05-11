@@ -678,11 +678,11 @@ namespace DualDuct {
                         } else {
                             if (thisDD.MaxAirVolFlowRate < thisDD.DesignOAFlowRate) {
                                 ShowSevereError(state,
-                                                EnergyPlus::format("The value {:.5R} in {}is lower than the outdoor air requirement.",
-                                                                   thisDD.MaxAirVolFlowRate,
-                                                                   cNumericFields(1)));
+                                                std::format("The value {:.5f} in {}is lower than the outdoor air requirement.",
+                                                            thisDD.MaxAirVolFlowRate,
+                                                            cNumericFields(1)));
                                 ShowContinueError(state, EnergyPlus::format("Occurs in {} = {}", cCMO_DDVarVolOA, thisDD.Name));
-                                ShowContinueError(state, EnergyPlus::format("The design outdoor air requirement is {:.5R}", thisDD.DesignOAFlowRate));
+                                ShowContinueError(state, std::format("The design outdoor air requirement is {:.5f}", thisDD.DesignOAFlowRate));
                                 ErrorsFound = true;
                             }
                         }

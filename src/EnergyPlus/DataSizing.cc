@@ -1241,7 +1241,7 @@ OARequirementsData::calcOAFlowRate(EnergyPlusData &state,
                                         state,
                                         EnergyPlus::format(
                                             "For System Outdoor Air Method = ProportionalControlBasedOnOccupancySchedule, maximum target "
-                                            "CO2 concentration ({:.2R}), is not greater than minimum target CO2 concentration ({:.2R}).",
+                                            "CO2 concentration ({:.2f}), is not greater than minimum target CO2 concentration ({:.2f}).",
                                             ZoneMaxCO2,
                                             ZoneMinCO2));
                                     ShowContinueError(state,
@@ -1268,7 +1268,7 @@ OARequirementsData::calcOAFlowRate(EnergyPlusData &state,
                                         state,
                                         EnergyPlus::format(
                                             "For System Outdoor Air Method = ProportionalControlBasedOnDesignOccupancy, maximum target "
-                                            "CO2 concentration ({:.2R}), is not greater than minimum target CO2 concentration ({:.2R}).",
+                                            "CO2 concentration ({:.2f}), is not greater than minimum target CO2 concentration ({:.2f}).",
                                             ZoneMaxCO2,
                                             ZoneMinCO2));
                                     ShowContinueError(state,

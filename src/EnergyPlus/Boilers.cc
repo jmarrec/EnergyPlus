@@ -217,7 +217,7 @@ void GetBoilerInput(EnergyPlusData &state)
         thisBoiler.NomCap = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "nominal_capacity");
         if (thisBoiler.NomCap == 0.0) {
             ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
-            ShowContinueError(state, EnergyPlus::format("Invalid {}={:.2R}", "Nominal Capacity", thisBoiler.NomCap));
+            ShowContinueError(state, std::format("Invalid {}={:.2f}", "Nominal Capacity", thisBoiler.NomCap));
             ShowContinueError(state, "...Nominal Capacity must be greater than 0.0");
             ErrorsFound = true;
         }
@@ -228,7 +228,7 @@ void GetBoilerInput(EnergyPlusData &state)
         thisBoiler.NomEffic = inputProcessor->getRealFieldValue(boilerFields, boilerSchemaProps, "nominal_thermal_efficiency");
         if (thisBoiler.NomEffic == 0.0) {
             ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, boilerName));
-            ShowContinueError(state, EnergyPlus::format("Invalid {}={:.3R}", "Nominal Thermal Efficiency", thisBoiler.NomEffic));
+            ShowContinueError(state, std::format("Invalid {}={:.3f}", "Nominal Thermal Efficiency", thisBoiler.NomEffic));
             ShowContinueError(state, "...Nominal Thermal Efficiency must be greater than 0.0");
             ErrorsFound = true;
         } else if (thisBoiler.NomEffic > 1.0) {
@@ -661,8 +661,8 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeBoilerHotWater: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
-                                ShowContinueError(state, EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
+                                ShowContinueError(state, std::format("User-Specified Nominal Capacity of {:.2f} [W]", NomCapUser));
+                                ShowContinueError(state, std::format("differs from Design Size Nominal Capacity of {:.2f} [W]", tmpNomCap));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -715,11 +715,9 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpBoilerVolFlowRate - VolFlowRateUser) / VolFlowRateUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeBoilerHotWater: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("User-Specified Design Water Flow Rate of {:.2R} [m3/s]", VolFlowRateUser));
+                                ShowContinueError(state, std::format("User-Specified Design Water Flow Rate of {:.2f} [m3/s]", VolFlowRateUser));
                                 ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("differs from Design Size Design Water Flow Rate of {:.2R} [m3/s]", tmpBoilerVolFlowRate));
+                                    state, std::format("differs from Design Size Design Water Flow Rate of {:.2f} [m3/s]", tmpBoilerVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }

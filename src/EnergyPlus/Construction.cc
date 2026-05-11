@@ -235,19 +235,17 @@ void ConstructionProps::calculateTransferFunction(EnergyPlusData &state, bool &E
                         ShowContinueError(
                             state,
                             EnergyPlus::format("High conductivity Material layers are not well supported for internal source constructions, "
-                                               "material conductivity = {:.3R} [W/m-K]",
+                                               "material conductivity = {:.3f} [W/m-K]",
                                                thisMaterial->Conductivity));
-                        ShowContinueError(state, EnergyPlus::format("Material thermal diffusivity = {:.3R} [m2/s]", Alpha));
+                        ShowContinueError(state, std::format("Material thermal diffusivity = {:.3f} [m2/s]", Alpha));
                         ShowContinueError(
-                            state,
-                            EnergyPlus::format("Material with this thermal diffusivity should have thickness > {:.5R} [m]", ThicknessThreshold));
+                            state, std::format("Material with this thermal diffusivity should have thickness > {:.5f} [m]", ThicknessThreshold));
                         if (thisMaterial->Thickness < DataHeatBalance::ThinMaterialLayerThreshold) {
                             ShowContinueError(
-                                state,
-                                EnergyPlus::format("Material may be too thin to be modeled well, thickness = {:.5R} [m]", thisMaterial->Thickness));
+                                state, std::format("Material may be too thin to be modeled well, thickness = {:.5f} [m]", thisMaterial->Thickness));
                             ShowContinueError(state,
-                                              EnergyPlus::format("Material with this thermal diffusivity should have thickness > {:.5R} [m]",
-                                                                 DataHeatBalance::ThinMaterialLayerThreshold));
+                                              std::format("Material with this thermal diffusivity should have thickness > {:.5f} [m]",
+                                                          DataHeatBalance::ThinMaterialLayerThreshold));
                         }
                         thisMaterial->WarnedForHighDiffusivity = true;
                     }
@@ -280,7 +278,7 @@ void ConstructionProps::calculateTransferFunction(EnergyPlusData &state, bool &E
 
                 ShowSevereError(
                     state, EnergyPlus::format("InitConductionTransferFunctions: Material={}R Value below lowest allowed value", thisMaterial->Name));
-                ShowContinueError(state, EnergyPlus::format("Lowest allowed value=[{:.3R}], Material R Value=[{:.3R}].", RValueLowLimit, lr(Layer)));
+                ShowContinueError(state, std::format("Lowest allowed value=[{:.3f}], Material R Value=[{:.3f}].", RValueLowLimit, lr(Layer)));
                 ErrorsFound = true;
 
             } else { // A valid user defined R-value is available.

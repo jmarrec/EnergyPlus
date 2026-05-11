@@ -686,11 +686,10 @@ namespace BaseboardRadiator {
                                             "SizeBaseboard: Potential issue with equipment sizing for ZoneHVAC:Baseboard:Convective:Water=\"{}\".",
                                             this->EquipID));
                                     ShowContinueError(
+                                        state, std::format("User-Specified Maximum Water Flow Rate of {:.5f} [m3/s]", WaterVolFlowRateMaxUser));
+                                    ShowContinueError(
                                         state,
-                                        EnergyPlus::format("User-Specified Maximum Water Flow Rate of {:.5R} [m3/s]", WaterVolFlowRateMaxUser));
-                                    ShowContinueError(state,
-                                                      EnergyPlus::format("differs from Design Size Maximum Water Flow Rate of {:.5R} [m3/s]",
-                                                                         WaterVolFlowRateMaxDes));
+                                        std::format("differs from Design Size Maximum Water Flow Rate of {:.5f} [m3/s]", WaterVolFlowRateMaxDes));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }
@@ -831,9 +830,9 @@ namespace BaseboardRadiator {
                                     ShowContinueError(
                                         state,
                                         std::format("Design UA set equal to design coil load for {}=\"{}\"", cCMO_BBRadiator_Water, this->EquipID));
-                                    ShowContinueError(state, EnergyPlus::format("Design coil load used during sizing = {:.5R} W.", DesCoilLoad));
-                                    ShowContinueError(
-                                        state, EnergyPlus::format("Inlet water temperature used during sizing = {:.5R} C.", this->WaterInletTemp));
+                                    ShowContinueError(state, std::format("Design coil load used during sizing = {:.5f} W.", DesCoilLoad));
+                                    ShowContinueError(state,
+                                                      std::format("Inlet water temperature used during sizing = {:.5f} C.", this->WaterInletTemp));
                                 }
                             }
                         } else { // baseboard design load is less than output at UA = 0.001 * design load so set UA to minimum value
@@ -847,9 +846,8 @@ namespace BaseboardRadiator {
                                                   std::format("Design UA set equal to 0.001 * design coil load for {}=\"{}\"",
                                                               cCMO_BBRadiator_Water,
                                                               this->EquipID));
-                                ShowContinueError(state, EnergyPlus::format("Design coil load used during sizing = {:.5R} W.", DesCoilLoad));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("Inlet water temperature used during sizing = {:.5R} C.", this->WaterInletTemp));
+                                ShowContinueError(state, std::format("Design coil load used during sizing = {:.5f} W.", DesCoilLoad));
+                                ShowContinueError(state, std::format("Inlet water temperature used during sizing = {:.5f} C.", this->WaterInletTemp));
                             }
                         }
 
@@ -879,9 +877,9 @@ namespace BaseboardRadiator {
                                         std::format(
                                             "SizeBaseboard: Potential issue with equipment sizing for ZoneHVAC:Baseboard:Convective:Water=\"{}\".",
                                             this->EquipID));
-                                    ShowContinueError(state, EnergyPlus::format("User-Specified U-Factor Times Area Value of {:.2R} [W/K]", UAUser));
-                                    ShowContinueError(
-                                        state, EnergyPlus::format("differs from Design Size U-Factor Times Area Value of {:.2R} [W/K]", UADes));
+                                    ShowContinueError(state, std::format("User-Specified U-Factor Times Area Value of {:.2f} [W/K]", UAUser));
+                                    ShowContinueError(state,
+                                                      std::format("differs from Design Size U-Factor Times Area Value of {:.2f} [W/K]", UADes));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }

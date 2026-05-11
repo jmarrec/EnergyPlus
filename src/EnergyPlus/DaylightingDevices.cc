@@ -406,7 +406,7 @@ namespace Dayltg {
                     state.dataDaylightingDevices->ShelfReported = true;
                 }
                 print(state.files.eio,
-                      "Shelf Details,{},{:.2R},{},{:.2R},{:.2R}\n",
+                      "Shelf Details,{},{:.2f},{},{:.2f},{:.2f}\n",
                       state.dataDaylightingDevicesData->Shelf(ShelfNum).Name,
                       state.dataDaylightingDevicesData->Shelf(ShelfNum).ViewFactor,
                       state.dataSurface->Surface(WinSurf).Name,
@@ -589,10 +589,9 @@ namespace Dayltg {
                                                            ipsc->cAlphaArgs(1),
                                                            ipsc->cAlphaArgs(3),
                                                            state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).Name));
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("Diffuse solar transmittance of construction [{:.4R}] too small for calculations.",
-                                               state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).TransDiff));
+                        ShowContinueError(state,
+                                          std::format("Diffuse solar transmittance of construction [{:.4f}] too small for calculations.",
+                                                      state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).TransDiff));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     }
 
@@ -607,21 +606,19 @@ namespace Dayltg {
                                             EnergyPlus::format("{} = {}:  Dome and diffuser areas are significantly different (>10%).",
                                                                cCurrentModuleObject,
                                                                ipsc->cAlphaArgs(1)));
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format("...Diffuser Area=[{:.4R}]; Dome Area=[{:.4R}].",
-                                                   state.dataSurface->Surface(SurfNum).Area,
-                                                   state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
+                            ShowContinueError(state,
+                                              std::format("...Diffuser Area=[{:.4f}]; Dome Area=[{:.4f}].",
+                                                          state.dataSurface->Surface(SurfNum).Area,
+                                                          state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
                             state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                         } else {
                             ShowWarningError(state,
                                              EnergyPlus::format(
                                                  "{} = {}:  Dome and diffuser areas differ by > .1 m2.", cCurrentModuleObject, ipsc->cAlphaArgs(1)));
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format("...Diffuser Area=[{:.4R}]; Dome Area=[{:.4R}].",
-                                                   state.dataSurface->Surface(SurfNum).Area,
-                                                   state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
+                            ShowContinueError(state,
+                                              std::format("...Diffuser Area=[{:.4f}]; Dome Area=[{:.4f}].",
+                                                          state.dataSurface->Surface(SurfNum).Area,
+                                                          state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
                         }
                     }
 
@@ -689,21 +686,19 @@ namespace Dayltg {
                                         std::format("{} = {}:  Pipe and dome/diffuser areas are significantly different (>10%).",
                                                     cCurrentModuleObject,
                                                     ipsc->cAlphaArgs(1)));
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("...Pipe Area=[{:.4R}]; Dome/Diffuser Area=[{:.4R}].",
-                                               PipeArea,
-                                               state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
+                        ShowContinueError(state,
+                                          std::format("...Pipe Area=[{:.4f}]; Dome/Diffuser Area=[{:.4f}].",
+                                                      PipeArea,
+                                                      state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
                         state.dataDaylightingDevices->GetTDDInputErrorsFound = true;
                     } else {
                         ShowWarningError(
                             state,
                             std::format("{} = {}:  Pipe and dome/diffuser areas differ by > .1 m2.", cCurrentModuleObject, ipsc->cAlphaArgs(1)));
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("...Pipe Area=[{:.4R}]; Dome/Diffuser Area=[{:.4R}].",
-                                               PipeArea,
-                                               state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
+                        ShowContinueError(state,
+                                          std::format("...Pipe Area=[{:.4f}]; Dome/Diffuser Area=[{:.4f}].",
+                                                      PipeArea,
+                                                      state.dataSurface->Surface(state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome).Area));
                     }
                 }
 
@@ -1715,9 +1710,9 @@ namespace Dayltg {
         // Now correct the view factors based on the location of the shelf with respect to the window
         ShowWarningError(
             state,
-            EnergyPlus::format("DaylightingDevice:Shelf = {}:  Window view factor to shelf [{:.2R}] results in a sum of view factors greater than 1.",
-                               state.dataDaylightingDevicesData->Shelf(ShelfNum).Name,
-                               state.dataDaylightingDevicesData->Shelf(ShelfNum).ViewFactor));
+            std::format("DaylightingDevice:Shelf = {}:  Window view factor to shelf [{:.2f}] results in a sum of view factors greater than 1.",
+                        state.dataDaylightingDevicesData->Shelf(ShelfNum).Name,
+                        state.dataDaylightingDevicesData->Shelf(ShelfNum).ViewFactor));
         if (zWinMin >= zShelfMax) { // Shelf is fully below window, reduce view to ground first based on view to shelf
             ShowContinueError(
                 state,

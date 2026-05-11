@@ -968,7 +968,7 @@ void GetDemandManagerInput(EnergyPlusData &state)
                 ShowContinueError(
                     state,
                     EnergyPlus::format(
-                        "{} [{:.2R}] > {} [{:.2R}]", s_ipsc->cNumericFieldNames(2), NumArray(2), s_ipsc->cNumericFieldNames(3), NumArray(3)));
+                        "{} [{:.2f}] > {} [{:.2f}]", s_ipsc->cNumericFieldNames(2), NumArray(2), s_ipsc->cNumericFieldNames(3), NumArray(3)));
                 ShowContinueError(state,
                                   EnergyPlus::format("{} cannot be greater than {}", s_ipsc->cNumericFieldNames(2), s_ipsc->cNumericFieldNames(3)));
                 ErrorsFound = true;

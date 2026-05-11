@@ -209,7 +209,7 @@ namespace CTElectricGenerator {
                 state.dataCTElectricGenerator->CTGenerator(genNum).RatedPowerOutput =
                     inputProcessor->getRealFieldValue(generatorFields, objectSchemaProps, "rated_power_output");
                 if (state.dataCTElectricGenerator->CTGenerator(genNum).RatedPowerOutput == 0.0) {
-                    ShowSevereError(state, EnergyPlus::format("Invalid {}={:.2R}", "rated_power_output", 0.0));
+                    ShowSevereError(state, std::format("Invalid {}={:.2f}", "rated_power_output", 0.0));
                     ShowContinueError(state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, generatorName));
                     ErrorsFound = true;
                 }

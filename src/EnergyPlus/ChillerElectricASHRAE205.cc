@@ -188,7 +188,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         //        if (thisChiller.RefCap == 0.0) {
         //            ShowSevereError(
         //                state, format("{}{}=\"{}\"",std::string{RoutineName},state.dataIPShortCut->cCurrentModuleObject,thisChiller.Name);
-        //            ShowContinueError(state, format("Invalid {}={:.2R}", "Rated Capacity", thisChiller.RefCap));
+        //            ShowContinueError(state, format("Invalid {}={:.2f}", "Rated Capacity", thisChiller.RefCap));
         //            ErrorsFound = true;
         //        }
 
@@ -738,13 +738,12 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
                             if ((std::abs(tmpEvapVolFlowRate - EvapVolFlowRateUser) / EvapVolFlowRateUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, this->Name));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("User-Specified Chilled Water Maximum Requested Flow Rate of {:.5R} [m3/s]",
-                                                                     EvapVolFlowRateUser));
                                 ShowContinueError(
                                     state,
-                                    EnergyPlus::format("differs from Design Size Chilled Water Maximum Requested Flow Rate of {:.5R} [m3/s]",
-                                                       tmpEvapVolFlowRate));
+                                    std::format("User-Specified Chilled Water Maximum Requested Flow Rate of {:.5f} [m3/s]", EvapVolFlowRateUser));
+                                ShowContinueError(state,
+                                                  std::format("differs from Design Size Chilled Water Maximum Requested Flow Rate of {:.5f} [m3/s]",
+                                                              tmpEvapVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -810,12 +809,10 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("{}: Potential issue with equipment sizing for {}", RoutineName, this->Name));
                                 ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("User-Specified Condenser Maximum Requested Flow Rate of {:.5R} [m3/s]", CondVolFlowRateUser));
-                                ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("differs from Design Size Condenser Maximum Requested Flow Rate of {:.5R} [m3/s]",
-                                                       tmpCondVolFlowRate));
+                                    state, std::format("User-Specified Condenser Maximum Requested Flow Rate of {:.5f} [m3/s]", CondVolFlowRateUser));
+                                ShowContinueError(state,
+                                                  std::format("differs from Design Size Condenser Maximum Requested Flow Rate of {:.5f} [m3/s]",
+                                                              tmpCondVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -905,8 +902,8 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpNomCap - RefCapUser) / RefCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("{}: Potential issue with equipment sizing for {}", RoutineName, this->Name));
-                                ShowContinueError(state, EnergyPlus::format("User-Specified Rated Capacity of {:.2R} [W]", RefCapUser));
-                                ShowContinueError(state, EnergyPlus::format("differs from Design Size Rated Capacity of {:.2R} [W]", tmpNomCap));
+                                ShowContinueError(state, std::format("User-Specified Rated Capacity of {:.2f} [W]", RefCapUser));
+                                ShowContinueError(state, std::format("differs from Design Size Rated Capacity of {:.2f} [W]", tmpNomCap));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
