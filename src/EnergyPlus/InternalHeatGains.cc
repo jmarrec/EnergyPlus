@@ -6891,7 +6891,7 @@ namespace InternalHeatGains {
             thisSpaceRpt.SteamLostRate += thisSteamEq.LostRate;
         }
 
-        // Flow for outdoor temp controlled zone baseboard heater
+/*         // Flow for outdoor temp controlled zone baseboard heater
         if (state.dataHeatBal->TotBBHeat > 0) {
             if (MyOneTimeFlag) {
                 DesDayOutDryBulbTemp.allocate(state.dataEnvrn->TotDesDays);
@@ -6950,6 +6950,41 @@ namespace InternalHeatGains {
                         MySizeFlag = false;
                     }
                 }
+            }
+        } */
+
+        // Flow for outdoor temp controlled zone baseboard heater
+        if (state.dataHeatBal->TotBBHeat > 0) {
+
+            // Find the minimum outdoor dry bulb temperature through design days
+            if (!state.dataGlobal->ZoneSizingCalc && MySizeFirstFlag && MySizeFlag) {
+                DesDayOutDryBulbTemp.allocate(state.dataEnvrn->TotDesDays);
+                DesDayOutDryBulbTemp = 0.0;
+
+                for (int Loop = 1; Loop <= state.dataEnvrn->TotDesDays; ++Loop) {
+                    DesDayOutDryBulbTemp(Loop) = state.dataEnvrn->OutDryBulbTemp;
+                }
+
+                MinDesOutTemp = *std::min_element(DesDayOutDryBulbTemp.begin(), DesDayOutDryBulbTemp.end());
+                for (int Loop = 1; Loop <= state.dataHeatBal->TotBBHeat; ++Loop) {
+                    auto &thisBBHeat = state.dataHeatBal->ZoneBBHeat(Loop);
+                    thisBBHeat.ZnMinOutTemp = MinDesOutTemp;
+                }
+
+                SizeOaControlledBaseboard(state);
+                MySizeFirstFlag = false;
+
+            } else if (!state.dataGlobal->ZoneSizingCalc && MySizeFlag) {
+
+                // Add infiltration and ventilation sensible loads if necessary
+                auto &thisBBHeat = state.dataHeatBal->ZoneBBHeat(1);
+                if (thisBBHeat.InfilVentDone == false) {
+                    if (state.dataHeatBal->TotInfiltration > 0 || state.dataHeatBal->TotVentilation > 0) {
+                        SizeOaControlledBaseboard(state);
+                    }
+                }
+
+                MySizeFlag = false;
             }
         }
 
