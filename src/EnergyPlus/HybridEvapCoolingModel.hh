@@ -163,7 +163,6 @@ namespace HybridEvapCoolingModel {
                        Array1D_string Alphas,
                        Array1D_string cAlphaFields,
                        Array1D<Real64> Numbers,
-                       Array1D_string cNumericFields,
                        Array1D<bool> lAlphaBlanks,
                        Array1D<bool> lNumericBlanks,
                        std::string cCurrentModuleObject);
@@ -402,7 +401,6 @@ namespace HybridEvapCoolingModel {
                        Array1D_string Alphas,
                        Array1D_string cAlphaFields,
                        Array1D<Real64> Numbers,
-                       Array1D_string cNumericFields,
                        Array1D<bool> lAlphaBlanks,
                        Array1D<bool> lNumericBlanks,
                        std::string cCurrentModuleObject);

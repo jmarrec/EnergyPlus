@@ -393,23 +393,13 @@ namespace HybridEvapCoolingModel {
                           Array1D_string Alphas,
                           Array1D_string cAlphaFields,
                           Array1D<Real64> Numbers,
-                          Array1D_string cNumericFields,
                           Array1D<bool> lAlphaBlanks,
                           Array1D<bool> lNumericBlanks,
                           std::string cCurrentModuleObject)
     {
         CMode newMode;
-        bool error = newMode.ParseMode(state,
-                                       ModeCounter,
-                                       &OperatingModes,
-                                       ScalingFactor,
-                                       Alphas,
-                                       cAlphaFields,
-                                       Numbers,
-                                       cNumericFields,
-                                       lAlphaBlanks,
-                                       lNumericBlanks,
-                                       cCurrentModuleObject);
+        bool error = newMode.ParseMode(
+            state, ModeCounter, &OperatingModes, ScalingFactor, Alphas, cAlphaFields, Numbers, lAlphaBlanks, lNumericBlanks, cCurrentModuleObject);
         ModeCounter++;
         return error;
     }
@@ -421,7 +411,6 @@ namespace HybridEvapCoolingModel {
                           Array1D_string Alphas,
                           Array1D_string cAlphaFields,
                           Array1D<Real64> Numbers,
-                          Array1D_string cNumericFields,
                           Array1D<bool> lAlphaBlanks,
                           Array1D<bool> lNumericBlanks,
                           std::string cCurrentModuleObject)
