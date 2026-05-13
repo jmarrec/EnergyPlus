@@ -101,7 +101,7 @@ TEST_F(AutoSizingFixture, SystemAirFlowSizingGauntlet)
 
     std::string eiooutput =
         std::string("! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value\n"
-                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 5.00000\n");
+                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 5.000000\n");
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
@@ -145,7 +145,7 @@ TEST_F(AutoSizingFixture, SystemAirFlowSizingGauntlet)
     sizer.autoSizedValue = 0.0; // reset for next test
 
     eiooutput =
-        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size Supply Air Maximum Flow Rate [m3/s], 1.60000\n");
+        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size Supply Air Maximum Flow Rate [m3/s], 1.600000\n");
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
@@ -694,7 +694,7 @@ TEST_F(AutoSizingFixture, SystemAirFlowSizingGauntlet)
 
     // <Component Sizing Information> header already reported above (and flag set false). Only coil sizing information reported here.
     eiooutput =
-        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 1.33000\n");
+        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 1.330000\n");
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
@@ -935,8 +935,8 @@ TEST_F(AutoSizingFixture, SystemAirFlowSizingGauntlet)
 
     // <Component Sizing Information> header already reported above (and flag set false). Only coil sizing information reported here.
     eiooutput =
-        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size Supply Air Maximum Flow Rate [m3/s], 5.00000\n"
-                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 2.00000\n");
+        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size Supply Air Maximum Flow Rate [m3/s], 5.000000\n"
+                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 2.000000\n");
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
     // Test 57 - Air Loop HX Equipment, CurDuctType = RAB, hard-sized air flow rate
@@ -961,8 +961,8 @@ TEST_F(AutoSizingFixture, SystemAirFlowSizingGauntlet)
 
     // <Component Sizing Information> header already reported above (and flag set false). Only coil sizing information reported here.
     eiooutput =
-        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size Supply Air Maximum Flow Rate [m3/s], 3.50000\n"
-                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 2.20000\n");
+        std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size Supply Air Maximum Flow Rate [m3/s], 3.500000\n"
+                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified Supply Air Maximum Flow Rate [m3/s], 2.200000\n");
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
     // Test 58 - DOAS fan air flow rate autosizing

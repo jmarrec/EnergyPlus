@@ -94,8 +94,8 @@ TEST_F(EnergyPlusFixture, Fans_FanSizing)
     EXPECT_NEAR(1.0352, fan1->designPointFEI, 0.0001);
 
     std::string eiooutput = std::string("! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value\n"
-                                        " Component Sizing Information, Fan:OnOff, Test Fan, Design Size Maximum Flow Rate [m3/s], 1.00635\n"
-                                        " Component Sizing Information, Fan:OnOff, Test Fan, Design Electric Power Consumption [W], 1257.93750\n");
+                                        " Component Sizing Information, Fan:OnOff, Test Fan, Design Size Maximum Flow Rate [m3/s], 1.006350\n"
+                                        " Component Sizing Information, Fan:OnOff, Test Fan, Design Electric Power Consumption [W], 1257.938\n");
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 }
 

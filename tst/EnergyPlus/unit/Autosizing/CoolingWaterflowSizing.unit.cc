@@ -119,7 +119,7 @@ TEST_F(AutoSizingFixture, CoolingWaterflowSizingGauntlet)
 
     std::string eiooutput =
         std::string("! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value\n"
-                    " Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, User-Specified Design Water Flow Rate [m3/s], 5.00000\n");
+                    " Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, User-Specified Design Water Flow Rate [m3/s], 5.000000\n");
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
@@ -154,7 +154,8 @@ TEST_F(AutoSizingFixture, CoolingWaterflowSizingGauntlet)
     sizer.autoSizedValue = 0.0; // reset for next test
     sizedValue = 0.0;
 
-    eiooutput = std::string(" Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, Design Size Design Water Flow Rate [m3/s], 0.00015\n");
+    eiooutput =
+        std::string(" Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, Design Size Design Water Flow Rate [m3/s], 0.0001490183\n");
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
@@ -314,7 +315,8 @@ TEST_F(AutoSizingFixture, CoolingWaterflowSizingGauntlet)
     sizer.autoSizedValue = 0.0; // reset for next test
 
     // <Component Sizing Information> header already reported above (and flag set false). Only coil sizing information reported here.
-    eiooutput = std::string(" Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, Design Size Design Water Flow Rate [m3/s], 0.00024\n");
+    eiooutput =
+        std::string(" Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, Design Size Design Water Flow Rate [m3/s], 0.0002382369\n");
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
@@ -344,8 +346,8 @@ TEST_F(AutoSizingFixture, CoolingWaterflowSizingGauntlet)
 
     // <Component Sizing Information> header already reported above (and flag set false). Only coil sizing information reported here.
     eiooutput =
-        std::string(" Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, Design Size Design Water Flow Rate [m3/s], 0.00048\n"
-                    " Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, User-Specified Design Water Flow Rate [m3/s], 0.00020\n");
+        std::string(" Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, Design Size Design Water Flow Rate [m3/s], 0.0004764739\n"
+                    " Component Sizing Information, Coil:Cooling:Water, MyWaterCoil, User-Specified Design Water Flow Rate [m3/s], 0.0002000000\n");
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 
     // call the clearState

@@ -327,7 +327,7 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     // <Component Sizing Information> header already reported above (and flag set false). Only coil sizing information reported here.
     eiooutput =
         std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size U-Factor Times Area Value [W/K], 98.35096\n"
-                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified U-Factor Times Area Value [W/K], 5.00000\n");
+                    " Component Sizing Information, Coil:Heating:Water, MyWaterCoil, User-Specified U-Factor Times Area Value [W/K], 5.000000\n");
     EXPECT_TRUE(compare_eio_stream(eiooutput, true));
     // How to compare these sizing strings if they have some tolerance on them?
     // Maybe not use the optimizing SolveRoot on sizing routines?  Stick to RegulaFalsi?
