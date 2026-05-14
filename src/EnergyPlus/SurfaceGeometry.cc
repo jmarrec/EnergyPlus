@@ -13071,15 +13071,13 @@ namespace SurfaceGeometry {
                             state.dataSurface->SurfWinProjCorrFrOut(ThisSurf) =
                                 (state.dataSurface->FrameDivider(FrDivNum).FrameProjectionOut / FrWidth) *
                                 (ThisHeight + ThisWidth -
-                                 (state.dataSurface->FrameDivider(FrDivNum).HorDividers +
-                                  state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
+                                 (state.dataSurface->FrameDivider(FrDivNum).HorDividers + state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
                                      DivWidth) /
                                 (ThisHeight + ThisWidth + 2 * FrWidth);
                             state.dataSurface->SurfWinProjCorrFrIn(ThisSurf) =
                                 (state.dataSurface->FrameDivider(FrDivNum).FrameProjectionIn / FrWidth) *
                                 (ThisHeight + ThisWidth -
-                                 (state.dataSurface->FrameDivider(FrDivNum).HorDividers +
-                                  state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
+                                 (state.dataSurface->FrameDivider(FrDivNum).HorDividers + state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
                                      DivWidth) /
                                 (ThisHeight + ThisWidth + 2 * FrWidth);
                         }
@@ -13098,7 +13096,6 @@ namespace SurfaceGeometry {
                                 DivFrac * state.dataSurface->FrameDivider(FrDivNum).DividerProjectionIn / DivWidth;
                         }
                     }
-
                 }
             } break;
             case DataSurfaces::SurfaceShape::TriangularWindow:

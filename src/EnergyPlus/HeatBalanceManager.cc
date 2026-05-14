@@ -3577,7 +3577,10 @@ namespace HeatBalanceManager {
                                   std::format("...but {} > 0 or {} > 0.",
                                               state.dataIPShortCut->cNumericFieldNames(10),
                                               state.dataIPShortCut->cNumericFieldNames(11)));
-                ShowContinueError(state, std::format("...{} and {} set to 0.", state.dataIPShortCut->cNumericFieldNames(10), state.dataIPShortCut->cNumericFieldNames(11)));
+                ShowContinueError(state,
+                                  std::format("...{} and {} set to 0.",
+                                              state.dataIPShortCut->cNumericFieldNames(10),
+                                              state.dataIPShortCut->cNumericFieldNames(11)));
                 frameDivider.HorDividers = 0;
                 frameDivider.VertDividers = 0;
             }
