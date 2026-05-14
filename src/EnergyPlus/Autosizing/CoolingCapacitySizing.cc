@@ -510,9 +510,9 @@ Real64 CoolingCapacitySizer::size(EnergyPlusData &state, Real64 _originalValue, 
                             state, "..." + this->sizingString + " will be limited by the minimum rated volume flow per rated total capacity ratio.");
                         ShowContinueError(state, EnergyPlus::format("...DX coil volume flow rate [m3/s] = {:.6f}", DesVolFlow));
                         ShowContinueError(state, EnergyPlus::format("...Requested capacity [W] = {:.3f}", this->autoSizedValue));
-                        ShowContinueError(state, std::format("...Requested flow/capacity ratio [m3/s/W] = {:.3f}", RatedVolFlowPerRatedTotCap));
+                        ShowContinueError(state, std::format("...Requested flow/capacity ratio [m3/s/W] = {:#G}", RatedVolFlowPerRatedTotCap));
                         ShowContinueError(state,
-                                          std::format("...Minimum flow/capacity ratio [m3/s/W] = {:.3f}",
+                                          std::format("...Minimum flow/capacity ratio [m3/s/W] = {:#G}",
                                                       HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
                     }
 
@@ -530,9 +530,9 @@ Real64 CoolingCapacitySizer::size(EnergyPlusData &state, Real64 _originalValue, 
                             state, "..." + this->sizingString + " will be limited by the maximum rated volume flow per rated total capacity ratio.");
                         ShowContinueError(state, std::format("...DX coil volume flow rate [m3/s] = {:.6f}", DesVolFlow));
                         ShowContinueError(state, std::format("...Requested capacity [W] = {:.3f}", this->autoSizedValue));
-                        ShowContinueError(state, std::format("...Requested flow/capacity ratio [m3/s/W] = {:.3f}", RatedVolFlowPerRatedTotCap));
+                        ShowContinueError(state, std::format("...Requested flow/capacity ratio [m3/s/W] = {:#G}", RatedVolFlowPerRatedTotCap));
                         ShowContinueError(state,
-                                          std::format("...Maximum flow/capacity ratio [m3/s/W] = {:.3f}",
+                                          std::format("...Maximum flow/capacity ratio [m3/s/W] = {:#G}",
                                                       HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
                     }
 

@@ -2811,7 +2811,7 @@ namespace DesiccantDehumidifiers {
                 if (desicDehum.ErrCount < 2) {
                     ShowWarningError(state,
                                      std::format("{} \"{}\" - Air volume flow rate per watt of total condenser waste heat is below the minimum "
-                                                 "recommended at {:G} m3/s/W.",
+                                                 "recommended at {:#G} m3/s/W.",
                                                  desicDehum.DehumType,
                                                  desicDehum.Name,
                                                  VolFlowPerRatedTotQ));

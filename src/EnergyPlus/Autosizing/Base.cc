@@ -313,7 +313,7 @@ void BaseSizer::reportSizerOutput(EnergyPlusData &state,
 
     static constexpr std::string_view Format_990(
         "! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value\n");
-    static constexpr std::string_view Format_991(" Component Sizing Information, {}, {}, {}, {:#.7G}\n");
+    static constexpr std::string_view Format_991(" Component Sizing Information, {}, {}, {}, {:#G}\n");
     static constexpr std::string_view Format_991_HumRat(" Component Sizing Information, {}, {}, {}, {:.3E}\n");
     auto const sizingFormat = [](std::string_view description) {
         return description.find("Humidity Ratio") != std::string_view::npos ? Format_991_HumRat : Format_991;

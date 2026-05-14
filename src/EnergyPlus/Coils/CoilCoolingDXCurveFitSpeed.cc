@@ -650,7 +650,7 @@ Real64 CoilCoolingDXCurveFitSpeed::CalcBypassFactor(EnergyPlus::EnergyPlusData &
             if (((this->minRatedVolFlowPerRatedTotCap - this->evap_air_flow_rate / q) > SmallDifferenceTest) ||
                 ((this->evap_air_flow_rate / q - this->maxRatedVolFlowPerRatedTotCap) > SmallDifferenceTest)) {
                 ShowContinueError(state,
-                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:.7f} m3/s/W",
+                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:#G} m3/s/W",
                                               this->evap_air_flow_rate / q));
             }
         }
@@ -691,7 +691,7 @@ Real64 CoilCoolingDXCurveFitSpeed::CalcBypassFactor(EnergyPlus::EnergyPlusData &
             if (((this->minRatedVolFlowPerRatedTotCap - this->evap_air_flow_rate / q) > SmallDifferenceTest) ||
                 ((this->evap_air_flow_rate / q - this->maxRatedVolFlowPerRatedTotCap) > SmallDifferenceTest)) {
                 ShowContinueError(state,
-                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:.7f} m3/s/W",
+                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:#G} m3/s/W",
                                               this->evap_air_flow_rate / q));
             }
         }

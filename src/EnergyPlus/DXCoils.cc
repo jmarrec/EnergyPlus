@@ -9574,15 +9574,14 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
             if (thisDXCoil.ErrIndex1 == 0) {
                 ShowWarningMessage(
                     state,
-                    EnergyPlus::format(
-                        "{}{}=\"{}\" - Air volume flow rate per watt of rated total cooling capacity is out of range at {:.3f} m3/s/W.",
-                        RoutineName,
-                        HVAC::coilTypeNames[(int)thisDXCoil.coilType],
-                        thisDXCoil.Name,
-                        VolFlowperRatedTotCap));
+                    EnergyPlus::format("{}{}=\"{}\" - Air volume flow rate per watt of rated total cooling capacity is out of range at {:#G} m3/s/W.",
+                                       RoutineName,
+                                       HVAC::coilTypeNames[(int)thisDXCoil.coilType],
+                                       thisDXCoil.Name,
+                                       VolFlowperRatedTotCap));
                 ShowContinueErrorTimeStamp(state, "");
                 ShowContinueError(state,
-                                  std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}]",
+                                  std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}]",
                                               HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                               HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
                 ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components,");
@@ -9605,14 +9604,14 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
                 ShowWarningMessage(
                     state,
                     EnergyPlus::format(
-                        "{}{}=\"{}\" - Air volume flow rate per watt of rated total water heating capacity is out of range at {:.2f} m3/s/W.",
+                        "{}{}=\"{}\" - Air volume flow rate per watt of rated total water heating capacity is out of range at {:#G} m3/s/W.",
                         RoutineName,
                         HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                         thisDXCoil.Name,
                         VolFlowperRatedTotCap));
                 ShowContinueErrorTimeStamp(state, "");
                 ShowContinueError(state,
-                                  std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}]",
+                                  std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}]",
                                               HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                               HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
                 ShowContinueError(state,
@@ -10619,13 +10618,13 @@ void CalcVRFCoolingCoil(EnergyPlusData &state,
             if (thisDXCoil.ErrIndex1 == 0) {
                 ShowWarningMessage(
                     state,
-                    std::format("{} \"{}\" - Air volume flow rate per watt of rated total cooling capacity is out of range at {:.3f} m3/s/W.",
+                    std::format("{} \"{}\" - Air volume flow rate per watt of rated total cooling capacity is out of range at {:#G} m3/s/W.",
                                 HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                 thisDXCoil.Name,
                                 VolFlowperRatedTotCap));
                 ShowContinueErrorTimeStamp(state, "");
                 ShowContinueError(state,
-                                  std::format("...Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}]",
+                                  std::format("...Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}]",
                                               HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                               HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
                 ShowContinueError(state, "...Possible causes include inconsistent air flow rates in system components,");
@@ -11205,13 +11204,13 @@ void CalcDXHeatingCoil(EnergyPlusData &state,
             if (thisDXCoil.ErrIndex1 == 0) {
                 ShowWarningMessage(
                     state,
-                    std::format("{} \"{}\" - Air volume flow rate per watt of rated total heating capacity is out of range at {:.3f} m3/s/W.",
+                    std::format("{} \"{}\" - Air volume flow rate per watt of rated total heating capacity is out of range at {:#G} m3/s/W.",
                                 HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                 thisDXCoil.Name,
                                 VolFlowperRatedTotCap));
                 ShowContinueErrorTimeStamp(state, "");
                 ShowContinueError(state,
-                                  std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}]",
+                                  std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}]",
                                               HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
                                               HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
                 ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components or");
@@ -12256,7 +12255,7 @@ Real64 CalcCBF(EnergyPlusData &state,
             if (((HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT] - AirVolFlowRate / TotCap) > SmallDifferenceTest) ||
                 ((AirVolFlowRate / TotCap - HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]) > SmallDifferenceTest)) {
                 ShowContinueError(state,
-                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:.7f} m3/s/W",
+                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:#G} m3/s/W",
                                               AirVolFlowRate / TotCap));
             }
         }
@@ -12293,7 +12292,7 @@ Real64 CalcCBF(EnergyPlusData &state,
             if (((HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT] - AirVolFlowRate / TotCap) > SmallDifferenceTest) ||
                 ((AirVolFlowRate / TotCap - HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]) > SmallDifferenceTest)) {
                 ShowContinueError(state,
-                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:.7f} m3/s/W",
+                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:#G} m3/s/W",
                                               AirVolFlowRate / TotCap));
             }
         }
@@ -12323,7 +12322,7 @@ Real64 CalcCBF(EnergyPlusData &state,
             if (((HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT] - AirVolFlowRate / TotCap) > SmallDifferenceTest) ||
                 ((AirVolFlowRate / TotCap - HVAC::MaxRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]) > SmallDifferenceTest)) {
                 ShowContinueError(state,
-                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:.7f} m3/s/W",
+                                  std::format("...Air Volume Flow Rate per Watt of Rated Cooling Capacity is also out of bounds at = {:#G} m3/s/W",
                                               AirVolFlowRate / TotCap));
             }
         }
@@ -13074,12 +13073,11 @@ void CalcMultiSpeedDXCoilCooling(EnergyPlusData &state,
                                     thisDXCoil.Name,
                                     SpeedNumLS));
                     ShowContinueErrorTimeStamp(state, "");
-                    ShowContinueError(
-                        state,
-                        std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}] Current value is {:.3f} m3/s/W",
-                                    HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    VolFlowperRatedTotCap));
+                    ShowContinueError(state,
+                                      std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}] Current value is {:#G} m3/s/W",
+                                                  HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  VolFlowperRatedTotCap));
                     ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components or");
                     ShowContinueError(state, "inconsistent supply air fan operation modes in coil and unitary system objects.");
                 }
@@ -13111,12 +13109,11 @@ void CalcMultiSpeedDXCoilCooling(EnergyPlusData &state,
                                     thisDXCoil.Name,
                                     SpeedNumHS));
                     ShowContinueErrorTimeStamp(state, "");
-                    ShowContinueError(
-                        state,
-                        std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}] Current value is {:.3f} m3/s/W",
-                                    HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    VolFlowperRatedTotCap));
+                    ShowContinueError(state,
+                                      std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}] Current value is {:#G} m3/s/W",
+                                                  HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  VolFlowperRatedTotCap));
                     ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components or");
                     ShowContinueError(state, "inconsistent supply air fan operation modes in coil and unitary system objects.");
                 }
@@ -13424,12 +13421,11 @@ void CalcMultiSpeedDXCoilCooling(EnergyPlusData &state,
                                     thisDXCoil.Name,
                                     SpeedNum));
                     ShowContinueErrorTimeStamp(state, "");
-                    ShowContinueError(
-                        state,
-                        std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}] Current value is {:.3f} m3/s/W",
-                                    HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    VolFlowperRatedTotCap));
+                    ShowContinueError(state,
+                                      std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}] Current value is {:#G} m3/s/W",
+                                                  HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  HVAC::MaxCoolVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  VolFlowperRatedTotCap));
                     ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components or");
                     ShowContinueError(state, "inconsistent supply air fan operation modes in coil and unitary system objects.");
                 }
@@ -13934,12 +13930,11 @@ void CalcMultiSpeedDXCoilHeating(EnergyPlusData &state,
                                     thisDXCoil.Name,
                                     SpeedNumLS));
                     ShowContinueErrorTimeStamp(state, "");
-                    ShowContinueError(
-                        state,
-                        std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}] Current value is {:.3f} m3/s/W",
-                                    HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    VolFlowperRatedTotCap));
+                    ShowContinueError(state,
+                                      std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}] Current value is {:#G} m3/s/W",
+                                                  HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  VolFlowperRatedTotCap));
                     ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components or");
                     ShowContinueError(state, "inconsistent supply air fan operation modes in coil and unitary system objects.");
                 }
@@ -13970,12 +13965,11 @@ void CalcMultiSpeedDXCoilHeating(EnergyPlusData &state,
                                     thisDXCoil.Name,
                                     SpeedNumHS));
                     ShowContinueErrorTimeStamp(state, "");
-                    ShowContinueError(
-                        state,
-                        std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}] Current value is {:.3f} m3/s/W",
-                                    HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    VolFlowperRatedTotCap));
+                    ShowContinueError(state,
+                                      std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}] Current value is {:#G} m3/s/W",
+                                                  HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  VolFlowperRatedTotCap));
                     ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components or");
                     ShowContinueError(state, "inconsistent supply air fan operation modes in coil and unitary system objects.");
                 }
@@ -14252,12 +14246,11 @@ void CalcMultiSpeedDXCoilHeating(EnergyPlusData &state,
                                     HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                     thisDXCoil.Name));
                     ShowContinueErrorTimeStamp(state, "");
-                    ShowContinueError(
-                        state,
-                        std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:.3f}--{:.3f}] Current value is {:.3f} m3/s/W",
-                                    HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
-                                    VolFlowperRatedTotCap));
+                    ShowContinueError(state,
+                                      std::format("Expected range for VolumeFlowPerRatedTotalCapacity=[{:#G}--{:#G}] Current value is {:#G} m3/s/W",
+                                                  HVAC::MinOperVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  HVAC::MaxHeatVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT],
+                                                  VolFlowperRatedTotCap));
                     ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components or");
                     ShowContinueError(state, "inconsistent supply air fan operation modes in coil and unitary system objects.");
                 }
