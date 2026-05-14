@@ -9934,7 +9934,7 @@ void InitSurfacePropertyViewFactors(EnergyPlusData &state)
             }
             if (Surface.IsSurfPropertyGndSurfacesDefined) {
                 GndSurfsNum = Surface.SurfPropertyGndSurfIndex;
-                auto &GrndSurfsProperty = state.dataSurface->GroundSurfsProperty(GndSurfsNum);
+                auto const &GrndSurfsProperty = state.dataSurface->GroundSurfsProperty(GndSurfsNum);
                 GroundSurfsViewFactor = GrndSurfsProperty.SurfsViewFactorSum;
                 IsGroundViewFactorSet = GrndSurfsProperty.IsGroundViewFactorSet;
                 SrdSurfsViewFactor += GroundSurfsViewFactor;
