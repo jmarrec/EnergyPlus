@@ -6817,8 +6817,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_HorAndVertDividersAreAlwaysIntegers)
     auto &frameDivider2 = state->dataSurface->FrameDivider(2);
     frameDivider2.Name = "FrameDivider2";
     frameDivider2.DividerWidth = 0.2;
-    frameDivider2.HorDividers = 2.25;
-    frameDivider2.VertDividers = 2.99;
+    frameDivider2.HorDividers = static_cast<int>(2.25);
+    frameDivider2.VertDividers = static_cast<int>(2.99);
 
     auto &frameDivider3 = state->dataSurface->FrameDivider(3);
     frameDivider3.Name = "FrameDivider3";
