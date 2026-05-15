@@ -612,7 +612,7 @@ namespace Psychrometrics {
                         ShowContinueErrorTimeStamp(state, " Routine=Unknown,");
                     }
                     ShowContinueError(state, state.dataPsychrometrics->String);
-                    state.dataPsychrometrics->String = std::format("Calculated Humidity Ratio= {:.4e}", W);
+                    state.dataPsychrometrics->String = std::format("Calculated Humidity Ratio= {:.4E}", W);
                     ShowContinueError(state, std::format("{} ... Humidity Ratio set to .00001", state.dataPsychrometrics->String));
                 }
                 ShowRecurringWarningErrorAtEnd(state,
@@ -830,7 +830,7 @@ namespace Psychrometrics {
                         ShowContinueErrorTimeStamp(state, " Routine=Unknown,");
                     }
                     ShowContinueError(state, state.dataPsychrometrics->String);
-                    state.dataPsychrometrics->String = std::format("Calculated Humidity Ratio= {:.4e}, will recalculate Humidity Ratio", W);
+                    state.dataPsychrometrics->String = std::format("Calculated Humidity Ratio= {:.4E}, will recalculate Humidity Ratio", W);
                     ShowContinueError(
                         state, std::format("{} using Relative Humidity .01% (and Dry-Bulb and Pressure as shown)", state.dataPsychrometrics->String));
                 }
@@ -867,7 +867,7 @@ namespace Psychrometrics {
                         ShowContinueErrorTimeStamp(state, " Routine=Unknown,");
                     }
                     state.dataPsychrometrics->String =
-                        std::format(" Dry-bulb={:.2f} Wet-Bulb (WB)= {:.2f} Pressure= {:.2f} Humidity Ratio={:.3e}", TDB, TWB, PB, W);
+                        std::format(" Dry-bulb={:.2f} Wet-Bulb (WB)= {:.2f} Pressure= {:.2f} Humidity Ratio={:.3E}", TDB, TWB, PB, W);
                     ShowContinueError(state, state.dataPsychrometrics->String);
                     state.dataPsychrometrics->String =
                         std::format(" Calculated Dew Point Temperature (DPT)= {:.2f}; Since DPT > WB, DPT will be set to WB", TDP);
@@ -1131,7 +1131,7 @@ namespace Psychrometrics {
             if (!state.dataGlobal->WarmupFlag) {
                 if (state.dataPsychrometrics->iPsyErrIndex[static_cast<int>(PsychrometricFunction::RhFnTdbWPb)] == 0) {
                     state.dataPsychrometrics->String =
-                        std::format(" Dry-Bulb= {:.2f} Humidity Ratio= {:.3e} Calculated Relative Humidity [%]= {:.2f}", TDB, W, RHValue * 100.0);
+                        std::format(" Dry-Bulb= {:.2f} Humidity Ratio= {:.3E} Calculated Relative Humidity [%]= {:.2f}", TDB, W, RHValue * 100.0);
                     ShowWarningMessage(state, "Calculated Relative Humidity out of range (PsyRhFnTdbWPb) ");
                     if (!CalledFrom.empty()) {
                         ShowContinueErrorTimeStamp(state, std::format(" Routine={}", CalledFrom));
@@ -1154,7 +1154,7 @@ namespace Psychrometrics {
             if (!state.dataGlobal->WarmupFlag) {
                 if (state.dataPsychrometrics->iPsyErrIndex[static_cast<int>(PsychrometricFunction::RhFnTdbWPb)] == 0) {
                     state.dataPsychrometrics->String =
-                        std::format(" Dry-Bulb= {:.2f} Humidity Ratio= {:.3e} Calculated Relative Humidity [%]= {:.2f}", TDB, W, RHValue * 100.0);
+                        std::format(" Dry-Bulb= {:.2f} Humidity Ratio= {:.3E} Calculated Relative Humidity [%]= {:.2f}", TDB, W, RHValue * 100.0);
                     ShowWarningMessage(state, "Calculated Relative Humidity out of range (PsyRhFnTdbWPb) ");
                     if (!CalledFrom.empty()) {
                         ShowContinueErrorTimeStamp(state, std::format(" Routine={}", CalledFrom));
@@ -1235,7 +1235,7 @@ namespace Psychrometrics {
                         ShowContinueErrorTimeStamp(state, " Routine=Unknown,");
                     }
                     ShowContinueError(state, state.dataPsychrometrics->String);
-                    state.dataPsychrometrics->String = std::format("Calculated Humidity Ratio= {:.4e}", W);
+                    state.dataPsychrometrics->String = std::format("Calculated Humidity Ratio= {:.4E}", W);
                     ShowContinueError(state, std::format("{} ... Humidity Ratio set to .00001", state.dataPsychrometrics->String));
                 }
                 ShowRecurringWarningErrorAtEnd(state,
