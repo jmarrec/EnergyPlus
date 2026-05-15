@@ -6839,7 +6839,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_HorAndVertDividersAreAlwaysIntegers)
     auto &surf3 = state->dataSurface->Surface(3);
     surf1.Name = "Surface1";
     surf2.Name = "Surface2";
-    surf3.Name = "Surface2";
+    surf3.Name = "Surface3";
     surf1.Zone = 1;
     surf2.Zone = 1;
     surf3.Zone = 1;
@@ -6918,7 +6918,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_HorAndVertDividersAreAlwaysIntegers)
     state->dataHeatBal->Zone(1).spaceIndexes[0] = 1;
     state->dataHeatBal->space.allocate(1);
     state->dataHeatBal->space(1).WindowSurfaceFirst = 1;
-    state->dataHeatBal->space(1).WindowSurfaceLast = 2;
+    state->dataHeatBal->space(1).WindowSurfaceLast = 3;
 
     Window::W5InitGlassParameters(*state);
 
