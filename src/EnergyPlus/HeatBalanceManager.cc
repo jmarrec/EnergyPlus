@@ -3556,7 +3556,7 @@ namespace HeatBalanceManager {
 
             if (frameDivider.DividerWidth > 0.0 && (frameDivider.HorDividers == 0 && frameDivider.VertDividers == 0)) {
                 ShowWarningError(state,
-                                 std::format("{}: In FrameAndDivider {} {} > 0 ",
+                                 std::format("{}: In FrameAndDivider {} {} > 0",
                                              state.dataHeatBalMgr->CurrentModuleObject,
                                              frameDivider.Name,
                                              state.dataIPShortCut->cNumericFieldNames(9)));
@@ -3569,7 +3569,7 @@ namespace HeatBalanceManager {
             }
             if (frameDivider.DividerWidth == 0.0 && (frameDivider.HorDividers > 0 || frameDivider.VertDividers > 0)) {
                 ShowWarningError(state,
-                                 std::format("{}: In FrameAndDivider {} {} = 0 ",
+                                 std::format("{}: In FrameAndDivider {} {} = 0",
                                              state.dataHeatBalMgr->CurrentModuleObject,
                                              frameDivider.Name,
                                              state.dataIPShortCut->cNumericFieldNames(9)));
