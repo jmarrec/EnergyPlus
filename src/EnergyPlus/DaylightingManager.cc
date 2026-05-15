@@ -653,7 +653,7 @@ void CalcDayltgCoefficients(EnergyPlusData &state)
 
                             // write daylight factors - 4 sky types for each daylight ref point
                             print(state.files.dfs,
-                                  "{},{},{:.5f},{:.5f},{:.5f},{:.5f}\n",
+                                  "{},{},{:#G},{:#G},{:#G},{:#G}\n",
                                   IHR,
                                   dl->DaylRefPt(thisDayltgCtrl.refPts(refPtNum).num).Name,
                                   illums.sky[(int)SkyType::Clear],
