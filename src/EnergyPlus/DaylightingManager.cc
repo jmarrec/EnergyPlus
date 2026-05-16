@@ -1646,8 +1646,8 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
         } else if (ALF < 0.1524 && extWinType == ExtWinType::AdjZone) {
             if (dl->RefErrIndex(iRefPoint, IWin) == 0) { // only show error message once
                 ShowWarningError(state,
-                                 EnergyPlus::format("{}: For Daylghting:Controls=\"{}\" External Window=\"{}\"in Zone=\"{}\" reference "
-                                                    "point is less than 0.15m (6\") from window plane ",
+                                 EnergyPlus::format("{}: For Daylighting:Controls=\"{}\" External Window=\"{}\" in Zone=\"{}\" reference "
+                                                    "point is less than 0.15 m (6\") from window plane ",
                                                     routineName,
                                                     dl->daylightControl(daylightCtrlNum).Name,
                                                     surf.Name,
