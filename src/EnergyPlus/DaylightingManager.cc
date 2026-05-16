@@ -1635,7 +1635,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
             if (D1a > 0.0 && D1b > 0.0 && D1b <= HW && D1a <= WW) {
                 ShowSevereError(state,
                                 std::format("{}: Daylighting calculation cannot be done for Daylighting:Controls={} because reference point "
-                                            "#{} is less than 0.15m (6\") from window plane {}",
+                                            "#{} is less than 0.15 m (6\") from window plane {}",
                                             routineName,
                                             dl->daylightControl(daylightCtrlNum).Name,
                                             iRefPoint,
@@ -1667,7 +1667,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
                 ShowWarningError(
                     state,
                     EnergyPlus::format("CalcDaylightCoeffMapPoints: For Zone=\"{}\" External Window=\"{}\"in Zone=\"{}\" map point is less than "
-                                       "0.15m (6\") from window plane ",
+                                       "0.15 m (6\") from window plane ",
                                        state.dataHeatBal->Zone(zoneNum).Name,
                                        surf.Name,
                                        state.dataHeatBal->Zone(surf.Zone).Name));
