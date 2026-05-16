@@ -152,7 +152,7 @@ void CoilCoolingDXCurveFitSpeed::instantiateFromInputSpec(EnergyPlus::EnergyPlus
                               "Waste Heat Modifier Function of Temperature Curve Name = " + input_data.waste_heat_function_of_temperature_curve_name);
             ShowContinueError(
                 state, "...Waste Heat Modifier Function of Temperature Curve Name output is not equal to 1.0 (+ or - 10%) at rated conditions.");
-            ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3f}", CurveVal));
+            ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
         }
     }
 
@@ -183,21 +183,19 @@ void CoilCoolingDXCurveFitSpeed::instantiateFromInputSpec(EnergyPlus::EnergyPlus
             CurveInput += 0.01;
         }
         if (MinCurveVal < 0.7) {
-            ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
-            ShowContinueError(
-                state, EnergyPlus::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
+            ShowWarningError(state, std::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
             ShowContinueError(state,
-                              EnergyPlus::format("...Curve minimum must be >= 0.7, curve min at PLR = {:.2f} is {:.3f}", MinCurvePLR, MinCurveVal));
+                              std::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
+            ShowContinueError(state, std::format("...Curve minimum must be >= 0.7, curve min at PLR = {:.2f} is {:.3f}", MinCurvePLR, MinCurveVal));
             ShowContinueError(state, "...Setting curve minimum to 0.7 and simulation continues.");
             Curve::SetCurveOutputMinValue(state, this->indexPLRFPLF, errorsFound, 0.7);
         }
 
         if (MaxCurveVal > 1.0) {
-            ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
-            ShowContinueError(
-                state, EnergyPlus::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
+            ShowWarningError(state, std::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
             ShowContinueError(state,
-                              EnergyPlus::format("...Curve maximum must be <= 1.0, curve max at PLR = {:.2f} is {:.3f}", MaxCurvePLR, MaxCurveVal));
+                              std::format("...{}=\"{}\" has out of range value.", fieldName, input_data.part_load_fraction_correlation_curve_name));
+            ShowContinueError(state, std::format("...Curve maximum must be <= 1.0, curve max at PLR = {:.2f} is {:.3f}", MaxCurvePLR, MaxCurveVal));
             ShowContinueError(state, "...Setting curve maximum to 1.0 and simulation continues.");
             Curve::SetCurveOutputMaxValue(state, this->indexPLRFPLF, errorsFound, 1.0);
         }

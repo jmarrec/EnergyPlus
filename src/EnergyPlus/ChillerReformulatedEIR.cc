@@ -127,9 +127,8 @@ ReformulatedEIRChillerSpecs *ReformulatedEIRChillerSpecs::factory(EnergyPlusData
         return thisObj;
     }
     // If we didn't find it, fatal
-    ShowFatalError(
-        state,
-        EnergyPlus::format("LocalReformulatedElectEIRChillerFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state,
+                   std::format("LocalReformulatedElectEIRChillerFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -236,7 +235,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
     int NumElecReformEIRChillers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject);
 
     if (NumElecReformEIRChillers <= 0) {
-        ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", s_ipsc->cCurrentModuleObject));
+        ShowSevereError(state, std::format("No {} equipment specified in input file", s_ipsc->cCurrentModuleObject));
         ErrorsFound = true;
     }
 
@@ -273,16 +272,16 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
         thisChiller.ChillerCapFTIndex = Curve::GetCurveIndex(state, s_ipsc->cAlphaArgs(2));
         thisChiller.CAPFTName = s_ipsc->cAlphaArgs(2);
         if (thisChiller.ChillerCapFTIndex == 0) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaArgs(2)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaArgs(2)));
             ErrorsFound = true;
         }
 
         thisChiller.ChillerEIRFTIndex = Curve::GetCurveIndex(state, s_ipsc->cAlphaArgs(3));
         thisChiller.EIRFTName = s_ipsc->cAlphaArgs(3);
         if (thisChiller.ChillerEIRFTIndex == 0) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
             ErrorsFound = true;
         }
 
@@ -297,8 +296,8 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
         thisChiller.EIRFPLRName = s_ipsc->cAlphaArgs(5);
         thisChiller.ChillerEIRFPLRIndex = Curve::GetCurveIndex(state, s_ipsc->cAlphaArgs(5));
         if (thisChiller.ChillerEIRFPLRIndex == 0) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(5), s_ipsc->cAlphaArgs(5)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(5), s_ipsc->cAlphaArgs(5)));
             ErrorsFound = true;
         }
 
@@ -309,25 +308,25 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
         } else if (Util::SameString(PartLoadCurveType, "Lift") && state.dataCurveManager->curves(thisChiller.ChillerEIRFPLRIndex)->numDims == 3) {
             thisChiller.PartLoadCurveType = PLR::Lift;
         } else {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             ShowContinueError(state,
-                              EnergyPlus::format("Invalid {}={} for {}={}",
-                                                 s_ipsc->cAlphaFieldNames(5),
-                                                 s_ipsc->cAlphaArgs(5),
-                                                 s_ipsc->cAlphaFieldNames(4),
-                                                 s_ipsc->cAlphaArgs(4)));
+                              std::format("Invalid {}={} for {}={}",
+                                          s_ipsc->cAlphaFieldNames(5),
+                                          s_ipsc->cAlphaArgs(5),
+                                          s_ipsc->cAlphaFieldNames(4),
+                                          s_ipsc->cAlphaArgs(4)));
             ErrorsFound = true;
         }
 
         // Chilled water inlet/outlet node names are necessary
         if (s_ipsc->lAlphaFieldBlanks(6)) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, EnergyPlus::format("{} is blank.", s_ipsc->cAlphaFieldNames(6)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("{} is blank.", s_ipsc->cAlphaFieldNames(6)));
             ErrorsFound = true;
         }
         if (s_ipsc->lAlphaFieldBlanks(7)) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, EnergyPlus::format("{} is blank.", s_ipsc->cAlphaFieldNames(7)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("{} is blank.", s_ipsc->cAlphaFieldNames(7)));
             ErrorsFound = true;
         }
 
@@ -356,13 +355,13 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
 
         // Condenser inlet/outlet node names are necessary
         if (s_ipsc->lAlphaFieldBlanks(8)) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, EnergyPlus::format("{} is blank.", s_ipsc->cAlphaFieldNames(8)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("{} is blank.", s_ipsc->cAlphaFieldNames(8)));
             ErrorsFound = true;
         }
         if (s_ipsc->lAlphaFieldBlanks(9)) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, EnergyPlus::format("{} is blank.", s_ipsc->cAlphaFieldNames(9)));
+            ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowContinueError(state, std::format("{} is blank.", s_ipsc->cAlphaFieldNames(9)));
             ErrorsFound = true;
         }
 

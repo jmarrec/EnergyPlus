@@ -1574,10 +1574,9 @@ void GetUserConvCoeffs(EnergyPlusData &state)
             }
         }
         if (Count > 0) {
-            ShowSevereMessage(state,
-                              std::format("{}{}",
-                                          RoutineName,
-                                          EnergyPlus::format("{} surfaces had different outside convection algorithms specified when", Count)));
+            ShowSevereMessage(
+                state,
+                std::format("{}{}", RoutineName, std::format("{} surfaces had different outside convection algorithms specified when", Count)));
             ShowContinueError(state,
                               "the Zone Outside Convection Algorithm specifies \"SimpleCombined\". SimpleCombined will be used for these surfaces.");
             if (!state.dataGlobal->DisplayExtraWarnings) {
@@ -5493,7 +5492,7 @@ void ShowWarningWindowLocation(EnergyPlusData &state, int &errorIdx, ErrorObject
 {
     if (errorIdx == 0) {
         ShowSevereMessage(state, std::format("{}: Convection model not evaluated (bad relative window location)", eoh.routineName));
-        ShowContinueError(state, EnergyPlus::format("Value for window location = {}", winLoc));
+        ShowContinueError(state, std::format("Value for window location = {}", static_cast<int>(winLoc)));
         ShowContinueError(state, std::format("Occurs for {} named {}", eoh.objectType, eoh.objectName));
         ShowContinueError(state, "Convection surface heat transfer coefficient set to 9.999 [W/m2-K] and the simulation continues");
     }

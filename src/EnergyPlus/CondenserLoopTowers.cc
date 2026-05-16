@@ -126,7 +126,7 @@ namespace CondenserLoopTowers {
             return thisObj;
         }
         // If we didn't find it, fatal
-        ShowFatalError(state, EnergyPlus::format("CoolingTowerFactory: Error getting inputs for tower named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(state, std::format("CoolingTowerFactory: Error getting inputs for tower named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -152,7 +152,7 @@ namespace CondenserLoopTowers {
             this->calculateMerkelVariableSpeedTower(state, CurLoad, RunFlag);
             break;
         default:
-            ShowFatalError(state, EnergyPlus::format("Plant Equipment Type specified for {} is not a Cooling Tower.", this->Name));
+            ShowFatalError(state, std::format("Plant Equipment Type specified for {} is not a Cooling Tower.", this->Name));
         }
         this->calculateWaterUsage(state);
         this->update(state);
@@ -389,8 +389,7 @@ namespace CondenserLoopTowers {
                     tower.BasinHeaterSetPointTemp = 2.0;
                 }
                 if (tower.BasinHeaterSetPointTemp < 2.0) {
-                    ShowWarningCustom(
-                        state, eoh, EnergyPlus::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(18)));
+                    ShowWarningCustom(state, eoh, std::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(18)));
                 }
             }
 
@@ -448,9 +447,9 @@ namespace CondenserLoopTowers {
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, tower.OutdoorAirInletNodeNum)) {
                     ShowSevereCustom(state,
                                      eoh,
-                                     EnergyPlus::format("Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}"
-                                                        "does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.",
-                                                        AlphArray(10)));
+                                     std::format("Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}"
+                                                 "does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.",
+                                                 AlphArray(10)));
                     ErrorsFound = true;
                 }
             }
@@ -702,8 +701,7 @@ namespace CondenserLoopTowers {
                     tower.BasinHeaterSetPointTemp = 2.0;
                 }
                 if (tower.BasinHeaterSetPointTemp < 2.0) {
-                    ShowWarningCustom(
-                        state, eoh, EnergyPlus::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(26)));
+                    ShowWarningCustom(state, eoh, std::format("{} is less than 2 deg C. Freezing could occur.", s_ipsc->cNumericFieldNames(26)));
                 }
             }
 
@@ -788,50 +786,49 @@ namespace CondenserLoopTowers {
             //   Can't tell yet if autosized, check later in initialize.
             if (tower.HighSpeedAirFlowRate <= tower.LowSpeedAirFlowRate && tower.HighSpeedAirFlowRate != DataSizing::AutoSize) {
                 ShowSevereError(state,
-                                EnergyPlus::format("{} \"{}\". Low speed air flow rate must be less than the high speed air flow rate.",
-                                                   s_ipsc->cCurrentModuleObject,
-                                                   tower.Name));
+                                std::format("{} \"{}\". Low speed air flow rate must be less than the high speed air flow rate.",
+                                            s_ipsc->cCurrentModuleObject,
+                                            tower.Name));
                 ErrorsFound = true;
             }
             //   Low speed air flow rate must be greater than free convection air flow rate.
             //   Can't tell yet if autosized, check later in initialize.
             if (tower.LowSpeedAirFlowRate <= tower.FreeConvAirFlowRate && tower.LowSpeedAirFlowRate != DataSizing::AutoSize) {
                 ShowSevereError(state,
-                                EnergyPlus::format("{} \"{}\". Free convection air flow rate must be less than the low speed air flow rate.",
-                                                   s_ipsc->cCurrentModuleObject,
-                                                   tower.Name));
+                                std::format("{} \"{}\". Free convection air flow rate must be less than the low speed air flow rate.",
+                                            s_ipsc->cCurrentModuleObject,
+                                            tower.Name));
                 ErrorsFound = true;
             }
 
             //   Check various inputs if Performance Input Method = "UA and Design Water Flow Rate"
             if (tower.PerformanceInputMethod_Num == PIM::UFactor) {
                 if (tower.DesignWaterFlowRate == 0.0) {
-                    ShowSevereError(
-                        state,
-                        EnergyPlus::format("{} \"{}\". Tower performance input method requires a design water flow rate greater than zero.",
-                                           s_ipsc->cCurrentModuleObject,
-                                           tower.Name));
+                    ShowSevereError(state,
+                                    std::format("{} \"{}\". Tower performance input method requires a design water flow rate greater than zero.",
+                                                s_ipsc->cCurrentModuleObject,
+                                                tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.HighSpeedTowerUA <= tower.LowSpeedTowerUA && tower.HighSpeedTowerUA != DataSizing::AutoSize) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{} \"{}\". Tower UA at low fan speed must be less than the tower UA at high fan speed.",
-                                                       s_ipsc->cCurrentModuleObject,
-                                                       tower.Name));
+                                    std::format("{} \"{}\". Tower UA at low fan speed must be less than the tower UA at high fan speed.",
+                                                s_ipsc->cCurrentModuleObject,
+                                                tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.LowSpeedTowerUA <= tower.FreeConvTowerUA && tower.LowSpeedTowerUA != DataSizing::AutoSize) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format("{} \"{}\". Tower UA at free convection air flow rate must be less than the tower UA at low fan speed.",
-                                           s_ipsc->cCurrentModuleObject,
-                                           tower.Name));
+                        std::format("{} \"{}\". Tower UA at free convection air flow rate must be less than the tower UA at low fan speed.",
+                                    s_ipsc->cCurrentModuleObject,
+                                    tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.FreeConvTowerUA > 0.0 && tower.FreeConvAirFlowRate == 0.0) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
+                        std::format(
                             "{} \"{}\". Free convection air flow rate must be greater than zero when free convection UA is greater than zero.",
                             s_ipsc->cCurrentModuleObject,
                             tower.Name));
@@ -840,46 +837,43 @@ namespace CondenserLoopTowers {
             } else if (tower.PerformanceInputMethod_Num == PIM::NominalCapacity) {
                 if (tower.TowerNominalCapacity == 0.0) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{} \"{}\". Tower performance input method requires valid high-speed nominal capacity.",
-                                                       s_ipsc->cCurrentModuleObject,
-                                                       tower.Name));
+                                    std::format("{} \"{}\". Tower performance input method requires valid high-speed nominal capacity.",
+                                                s_ipsc->cCurrentModuleObject,
+                                                tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.TowerLowSpeedNomCap == 0.0) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{} \"{}\". Tower performance input method requires valid low-speed nominal capacity.",
-                                                       s_ipsc->cCurrentModuleObject,
-                                                       tower.Name));
+                                    std::format("{} \"{}\". Tower performance input method requires valid low-speed nominal capacity.",
+                                                s_ipsc->cCurrentModuleObject,
+                                                tower.Name));
                     ErrorsFound = true;
                 }
                 if (tower.DesignWaterFlowRate != 0.0) {
                     if (tower.DesignWaterFlowRate > 0.0) {
-                        ShowWarningError(
-                            state,
-                            EnergyPlus::format("{} \"{}\". Nominal capacity input method and design water flow rate have been specified.",
-                                               s_ipsc->cCurrentModuleObject,
-                                               tower.Name));
+                        ShowWarningError(state,
+                                         std::format("{} \"{}\". Nominal capacity input method and design water flow rate have been specified.",
+                                                     s_ipsc->cCurrentModuleObject,
+                                                     tower.Name));
                     } else {
                         ShowSevereError(
                             state,
-                            EnergyPlus::format(
-                                "{} \"{}\". Nominal capacity input method has been specified and design water flow rate is being autosized.",
-                                s_ipsc->cCurrentModuleObject,
-                                tower.Name));
+                            std::format("{} \"{}\". Nominal capacity input method has been specified and design water flow rate is being autosized.",
+                                        s_ipsc->cCurrentModuleObject,
+                                        tower.Name));
                     }
                     ShowContinueError(state, "Design water flow rate will be set according to nominal tower capacity.");
                 }
                 if (tower.HighSpeedTowerUA != 0.0) {
                     if (tower.HighSpeedTowerUA > 0.0) {
-                        ShowWarningError(
-                            state,
-                            EnergyPlus::format("{} \"{}\". Nominal capacity input method and tower UA at high fan speed have been specified.",
-                                               s_ipsc->cCurrentModuleObject,
-                                               tower.Name));
+                        ShowWarningError(state,
+                                         std::format("{} \"{}\". Nominal capacity input method and tower UA at high fan speed have been specified.",
+                                                     s_ipsc->cCurrentModuleObject,
+                                                     tower.Name));
                     } else {
                         ShowSevereError(
                             state,
-                            EnergyPlus::format(
+                            std::format(
                                 "{} \"{}\". Nominal capacity input method has been specified and tower UA at high fan speed is being autosized.",
                                 s_ipsc->cCurrentModuleObject,
                                 tower.Name));
@@ -888,11 +882,10 @@ namespace CondenserLoopTowers {
                 }
                 if (tower.LowSpeedTowerUA != 0.0) {
                     if (tower.LowSpeedTowerUA > 0.0) {
-                        ShowWarningError(
-                            state,
-                            EnergyPlus::format("{} \"{}\". Nominal capacity input method and tower UA at low fan speed have been specified.",
-                                               s_ipsc->cCurrentModuleObject,
-                                               tower.Name));
+                        ShowWarningError(state,
+                                         std::format("{} \"{}\". Nominal capacity input method and tower UA at low fan speed have been specified.",
+                                                     s_ipsc->cCurrentModuleObject,
+                                                     tower.Name));
                     } else {
                         ShowSevereError(
                             state,
