@@ -248,8 +248,8 @@ namespace BaseboardRadiator {
             static constexpr std::string_view availabilityScheduleFieldName = "Availability Schedule Name";
             static constexpr std::string_view heatingDesignCapacityMethodFieldName = "Heating Design Capacity Method";
 
-            int ConvHWBaseboardNum = 0;
             if (baseboardObjects != inputProcessor->epJSON.end()) {
+                int ConvHWBaseboardNum = 0;
                 for (auto const &baseboardInstance : baseboardObjects.value().items()) {
                     auto const &baseboardFields = baseboardInstance.value();
                     auto const baseboardName = Util::makeUPPER(baseboardInstance.key());

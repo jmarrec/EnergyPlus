@@ -4901,7 +4901,7 @@ namespace UnitarySystems {
                             if (this->m_heatCoilType == HVAC::CoilType::HeatingDXVariableSpeed ||
                                 this->m_heatCoilType == HVAC::CoilType::HeatingDXMultiSpeed ||
                                 this->m_heatCoilType == HVAC::CoilType::HeatingDXSingleSpeed) {
-                                auto &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex];
+                                auto const &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex];
                                 newCoil.performance->ReportCoolingCoilCrankcasePower = false;
                             }
                         }

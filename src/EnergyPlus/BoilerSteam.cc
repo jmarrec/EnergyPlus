@@ -171,8 +171,8 @@ namespace BoilerSteam {
         auto const &boilerSchemaProps = inputProcessor->getObjectSchemaProps(state, state.dataIPShortCut->cCurrentModuleObject);
         auto const boilerObjects = inputProcessor->epJSON.find(state.dataIPShortCut->cCurrentModuleObject);
 
-        int BoilerNum = 1;
         if (boilerObjects != inputProcessor->epJSON.end()) {
+            int BoilerNum = 1;
             for (auto const &boilerInstance : boilerObjects.value().items()) {
                 auto const &boilerFields = boilerInstance.value();
                 auto const boilerName = Util::makeUPPER(boilerInstance.key());
