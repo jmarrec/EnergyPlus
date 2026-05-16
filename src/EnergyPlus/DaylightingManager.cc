@@ -1479,6 +1479,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
 
     // METHODOLOGY EMPLOYED:
     // switch as need to serve both reference points and map points based on calledFrom
+    static constexpr std::string_view routineName{"FigureDayltgCoeffsAtPointsSetupForWindow"};
     auto &dl = state.dataDayltg;
     auto &s_surf = state.dataSurface;
 
@@ -1632,26 +1633,25 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
 
             //            ! Error message if ref pt is too close to window.
             if (D1a > 0.0 && D1b > 0.0 && D1b <= HW && D1a <= WW) {
-                ShowSevereError(
-                    state,
-                    EnergyPlus::format(
-                        "CalcDaylightCoeffRefPoints: Daylighting calculation cannot be done for Daylighting:Controls={} because reference point "
-                        "#{} is less than 0.15m (6\") from window plane {}",
-                        dl->daylightControl(daylightCtrlNum).Name,
-                        iRefPoint,
-                        surf.Name));
+                ShowSevereError(state,
+                                EnergyPlus::format("{}: Daylighting calculation cannot be done for Daylighting:Controls={} because reference point "
+                                                   "#{} is less than 0.15m (6\") from window plane {}",
+                                                   routineName,
+                                                   dl->daylightControl(daylightCtrlNum).Name,
+                                                   iRefPoint,
+                                                   surf.Name));
                 ShowContinueError(state, EnergyPlus::format("Distance=[{:.5R}]. This is too close; check position of reference point.", ALF));
                 ShowFatalError(state, "Program terminates due to preceding condition.");
             }
         } else if (ALF < 0.1524 && extWinType == ExtWinType::AdjZone) {
             if (dl->RefErrIndex(iRefPoint, IWin) == 0) { // only show error message once
-                ShowWarningError(
-                    state,
-                    EnergyPlus::format("CalcDaylightCoeffRefPoints: For Daylghting:Controls=\"{}\" External Window=\"{}\"in Zone=\"{}\" reference "
-                                       "point is less than 0.15m (6\") from window plane ",
-                                       dl->daylightControl(daylightCtrlNum).Name,
-                                       surf.Name,
-                                       state.dataHeatBal->Zone(surf.Zone).Name));
+                ShowWarningError(state,
+                                 EnergyPlus::format("{}: For Daylighting:Controls=\"{}\" External Window=\"{}\" in Zone=\"{}\" reference "
+                                                    "point is less than 0.15 m (6\") from window plane ",
+                                                    routineName,
+                                                    dl->daylightControl(daylightCtrlNum).Name,
+                                                    surf.Name,
+                                                    state.dataHeatBal->Zone(surf.Zone).Name));
                 ShowContinueError(
                     state,
                     EnergyPlus::format("Distance=[{:.1R} m] to ref point=[{:.1R},{:.1R},{:.1R}], Inaccuracy in Daylighting Calcs may result.",
