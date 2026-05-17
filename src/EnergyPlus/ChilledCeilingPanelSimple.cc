@@ -443,7 +443,7 @@ void GetCoolingPanelInput(EnergyPlusData &state)
                                          cCMO_CoolingPanel_Simple,
                                          s_ipsc->cAlphaArgs(1),
                                          s_ipsc->cNumericFieldNames(7)));
-            ShowContinueError(state, std::format("...reset to minimum value=[{:.2f}].", MinWaterFlowRate));
+            ShowContinueError(state, std::format("...reset to minimum value=[{:#G}].", MinWaterFlowRate));
             thisCP.WaterVolFlowRateMax = MinWaterFlowRate;
         } else if (thisCP.WaterVolFlowRateMax > MaxWaterFlowRate) {
             ShowWarningError(state,
@@ -452,7 +452,7 @@ void GetCoolingPanelInput(EnergyPlusData &state)
                                          cCMO_CoolingPanel_Simple,
                                          s_ipsc->cAlphaArgs(1),
                                          s_ipsc->cNumericFieldNames(7)));
-            ShowContinueError(state, std::format("...reset to maximum value=[{:.2f}].", MaxWaterFlowRate));
+            ShowContinueError(state, std::format("...reset to maximum value=[{:#G}].", MaxWaterFlowRate));
             thisCP.WaterVolFlowRateMax = MaxWaterFlowRate;
         }
 
@@ -1042,9 +1042,9 @@ void SizeCoolingPanel(EnergyPlusData &state, int const CoolingPanelNum)
                                         std::format("SizeCoolingPanel: Potential issue with equipment sizing for "
                                                     "ZoneHVAC:CoolingPanel:RadiantConvective:Water = \"{}\".",
                                                     thisCP.Name));
-                            ShowContinueError(state, std::format("User-Specified Maximum Cool Water Flow of {:.5f} [m3/s]", WaterVolFlowMaxCoolUser));
+                            ShowContinueError(state, std::format("User-Specified Maximum Cool Water Flow of {:#G} [m3/s]", WaterVolFlowMaxCoolUser));
                             ShowContinueError(
-                                state, std::format("differs from Design Size Maximum Cool Water Flow of {:.5f} [m3/s]", WaterVolFlowMaxCoolDes));
+                                state, std::format("differs from Design Size Maximum Cool Water Flow of {:#G} [m3/s]", WaterVolFlowMaxCoolDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
