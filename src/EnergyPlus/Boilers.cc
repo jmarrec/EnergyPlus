@@ -715,9 +715,9 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpBoilerVolFlowRate - VolFlowRateUser) / VolFlowRateUser) > state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeBoilerHotWater: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state, std::format("User-Specified Design Water Flow Rate of {:.2f} [m3/s]", VolFlowRateUser));
+                                ShowContinueError(state, std::format("User-Specified Design Water Flow Rate of {:#G} [m3/s]", VolFlowRateUser));
                                 ShowContinueError(
-                                    state, std::format("differs from Design Size Design Water Flow Rate of {:.2f} [m3/s]", tmpBoilerVolFlowRate));
+                                    state, std::format("differs from Design Size Design Water Flow Rate of {:#G} [m3/s]", tmpBoilerVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }

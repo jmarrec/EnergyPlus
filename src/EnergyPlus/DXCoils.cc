@@ -7860,9 +7860,9 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                                                         HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                                         thisDXCoil.Name));
                                 ShowContinueError(state,
-                                                  std::format("User-Specified Secondary Coil Air Flow Rate of {:.5f} [m3/s]", SecCoilAirFlowUser));
+                                                  std::format("User-Specified Secondary Coil Air Flow Rate of {:#G} [m3/s]", SecCoilAirFlowUser));
                                 ShowContinueError(
-                                    state, std::format("differs from Design Size Secondary Coil Air Flow Rate of {:.5f} [m3/s]", SecCoilAirFlowDes));
+                                    state, std::format("differs from Design Size Secondary Coil Air Flow Rate of {:#G} [m3/s]", SecCoilAirFlowDes));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -8303,10 +8303,10 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                                                     HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                                     thisDXCoil.Name));
                             ShowContinueError(
-                                state, std::format("User-Specified Evaporative Condenser Air Flow Rate of {:.5f} [m3/s]", MSEvapCondAirFlowUser));
+                                state, std::format("User-Specified Evaporative Condenser Air Flow Rate of {:#G} [m3/s]", MSEvapCondAirFlowUser));
                             ShowContinueError(
                                 state,
-                                std::format("differs from Design Size Evaporative Condenser Air Flow Rate of {:.5f} [m3/s]", MSEvapCondAirFlowDes));
+                                std::format("differs from Design Size Evaporative Condenser Air Flow Rate of {:#G} [m3/s]", MSEvapCondAirFlowDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -8514,9 +8514,9 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                                                         HVAC::coilTypeNames[(int)thisDXCoil.coilType],
                                                         thisDXCoil.Name));
                                 ShowContinueError(state,
-                                                  std::format("User-Specified Secondary Coil Air Flow Rate of {:.5f} [m3/s]", SecCoilAirFlowUser));
+                                                  std::format("User-Specified Secondary Coil Air Flow Rate of {:#G} [m3/s]", SecCoilAirFlowUser));
                                 ShowContinueError(
-                                    state, std::format("differs from Design Size Secondary Coil Air Flow Rate of {:.5f} [m3/s]", SecCoilAirFlowDes));
+                                    state, std::format("differs from Design Size Secondary Coil Air Flow Rate of {:#G} [m3/s]", SecCoilAirFlowDes));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }

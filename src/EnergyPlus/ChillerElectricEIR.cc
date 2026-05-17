@@ -1410,10 +1410,10 @@ void ElectricEIRChillerSpecs::size(EnergyPlusData &state)
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeChillerElectricEIR: Potential issue with equipment sizing for {}", this->Name));
                                 ShowContinueError(
-                                    state, std::format("User-Specified Reference Chilled Water Flow Rate of {:.5f} [m3/s]", EvapVolFlowRateUser));
+                                    state, std::format("User-Specified Reference Chilled Water Flow Rate of {:#G} [m3/s]", EvapVolFlowRateUser));
                                 ShowContinueError(
                                     state,
-                                    std::format("differs from Design Size Reference Chilled Water Flow Rate of {:.5f} [m3/s]", tmpEvapVolFlowRate));
+                                    std::format("differs from Design Size Reference Chilled Water Flow Rate of {:#G} [m3/s]", tmpEvapVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1534,10 +1534,10 @@ void ElectricEIRChillerSpecs::size(EnergyPlusData &state)
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("SizeChillerElectricEIR: Potential issue with equipment sizing for {}", this->Name));
                                 ShowContinueError(
-                                    state, std::format("User-Specified Reference Condenser Fluid Flow Rate of {:.5f} [m3/s]", CondVolFlowRateUser));
+                                    state, std::format("User-Specified Reference Condenser Fluid Flow Rate of {:#G} [m3/s]", CondVolFlowRateUser));
                                 ShowContinueError(
                                     state,
-                                    std::format("differs from Design Size Reference Condenser Fluid Flow Rate of {:.5f} [m3/s]", tmpCondVolFlowRate));
+                                    std::format("differs from Design Size Reference Condenser Fluid Flow Rate of {:#G} [m3/s]", tmpCondVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1638,11 +1638,10 @@ void ElectricEIRChillerSpecs::size(EnergyPlusData &state)
                         if ((std::abs(tempHeatRecVolFlowRate - nomHeatRecVolFlowRateUser) / nomHeatRecVolFlowRateUser) >
                             state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(state, std::format("SizeChillerElectricEIR: Potential issue with equipment sizing for {}", this->Name));
+                            ShowContinueError(state,
+                                              std::format("User-Specified Heat Recovery Water Flow Rate of {:#G} [m3/s]", nomHeatRecVolFlowRateUser));
                             ShowContinueError(
-                                state, std::format("User-Specified Heat Recovery Water Flow Rate of {:.5f} [m3/s]", nomHeatRecVolFlowRateUser));
-                            ShowContinueError(
-                                state,
-                                std::format("differs from Design Size Heat Recovery Water Flow Rate of {:.5f} [m3/s]", tempHeatRecVolFlowRate));
+                                state, std::format("differs from Design Size Heat Recovery Water Flow Rate of {:#G} [m3/s]", tempHeatRecVolFlowRate));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }

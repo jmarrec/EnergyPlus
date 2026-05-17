@@ -738,9 +738,9 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
                                 ShowMessage(state, std::format("{}: Potential issue with equipment sizing for {}", RoutineName, this->Name));
                                 ShowContinueError(
                                     state,
-                                    std::format("User-Specified Chilled Water Maximum Requested Flow Rate of {:.5f} [m3/s]", EvapVolFlowRateUser));
+                                    std::format("User-Specified Chilled Water Maximum Requested Flow Rate of {:#G} [m3/s]", EvapVolFlowRateUser));
                                 ShowContinueError(state,
-                                                  std::format("differs from Design Size Chilled Water Maximum Requested Flow Rate of {:.5f} [m3/s]",
+                                                  std::format("differs from Design Size Chilled Water Maximum Requested Flow Rate of {:#G} [m3/s]",
                                                               tmpEvapVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
@@ -807,9 +807,9 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, std::format("{}: Potential issue with equipment sizing for {}", RoutineName, this->Name));
                                 ShowContinueError(
-                                    state, std::format("User-Specified Condenser Maximum Requested Flow Rate of {:.5f} [m3/s]", CondVolFlowRateUser));
+                                    state, std::format("User-Specified Condenser Maximum Requested Flow Rate of {:#G} [m3/s]", CondVolFlowRateUser));
                                 ShowContinueError(state,
-                                                  std::format("differs from Design Size Condenser Maximum Requested Flow Rate of {:.5f} [m3/s]",
+                                                  std::format("differs from Design Size Condenser Maximum Requested Flow Rate of {:#G} [m3/s]",
                                                               tmpCondVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");

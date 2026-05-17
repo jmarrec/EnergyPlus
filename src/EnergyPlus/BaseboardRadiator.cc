@@ -682,11 +682,11 @@ namespace BaseboardRadiator {
                                         std::format(
                                             "SizeBaseboard: Potential issue with equipment sizing for ZoneHVAC:Baseboard:Convective:Water=\"{}\".",
                                             this->EquipID));
-                                    ShowContinueError(
-                                        state, std::format("User-Specified Maximum Water Flow Rate of {:.5f} [m3/s]", WaterVolFlowRateMaxUser));
+                                    ShowContinueError(state,
+                                                      std::format("User-Specified Maximum Water Flow Rate of {:#G} [m3/s]", WaterVolFlowRateMaxUser));
                                     ShowContinueError(
                                         state,
-                                        std::format("differs from Design Size Maximum Water Flow Rate of {:.5f} [m3/s]", WaterVolFlowRateMaxDes));
+                                        std::format("differs from Design Size Maximum Water Flow Rate of {:#G} [m3/s]", WaterVolFlowRateMaxDes));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }
