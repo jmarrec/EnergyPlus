@@ -3869,7 +3869,7 @@ std::string ValueToString(ErlValueType const &Value)
         } else if (std::abs(Value.Number) > floatToSciCutoff) {
             String = std::format("{:.6f}", Value.Number); // floating point representation
         } else {
-            String = std::format("{:.6e}", Value.Number); // scientific notation representation for small numbers
+            String = std::format("{:.6E}", Value.Number); // scientific notation representation for small numbers
         }
         break;
 
