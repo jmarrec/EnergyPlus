@@ -9296,13 +9296,13 @@ void TestSurfTempCalcHeatBalanceInsideSurf(EnergyPlusData &state, Real64 TH12, i
                     if (!zone.TempOutOfBoundsReported) {
                         ShowContinueError(state, std::format("Zone=\"{}\", Diagnostic Details:", zone.Name));
                         if (zone.FloorArea > 0.0) {
-                            ShowContinueError(state, std::format("...Internal Heat Gain [{:#G}] W/m2", zone.InternalHeatGains / zone.FloorArea));
+                            ShowContinueError(state, std::format("...Internal Heat Gain [{:.5f}] W/m2", zone.InternalHeatGains / zone.FloorArea));
                         } else {
-                            ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:#G}] W", zone.InternalHeatGains));
+                            ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:.5f}] W", zone.InternalHeatGains));
                         }
                         if (state.afn->simulation_control.type == AirflowNetwork::ControlType::NoMultizoneOrDistribution) {
-                            ShowContinueError(state, std::format("...Infiltration/Ventilation [{:#G}] m3/s", zone.NominalInfilVent));
-                            ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:#G}] m3/s", zone.NominalMixing));
+                            ShowContinueError(state, std::format("...Infiltration/Ventilation [{:.5f}] m3/s", zone.NominalInfilVent));
+                            ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:.5f}] m3/s", zone.NominalMixing));
                         } else {
                             ShowContinueError(state, "...Airflow Network Simulation: Nominal Infiltration/Ventilation/Mixing not available.");
                         }
@@ -9340,13 +9340,13 @@ void TestSurfTempCalcHeatBalanceInsideSurf(EnergyPlusData &state, Real64 TH12, i
                     if (!zone.TempOutOfBoundsReported) {
                         ShowContinueError(state, std::format("Zone=\"{}\", Diagnostic Details:", zone.Name));
                         if (zone.FloorArea > 0.0) {
-                            ShowContinueError(state, std::format("...Internal Heat Gain [{:#G}] W/m2", zone.InternalHeatGains / zone.FloorArea));
+                            ShowContinueError(state, std::format("...Internal Heat Gain [{:.5f}] W/m2", zone.InternalHeatGains / zone.FloorArea));
                         } else {
-                            ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:#G}] W", zone.InternalHeatGains));
+                            ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:.5f}] W", zone.InternalHeatGains));
                         }
                         if (state.afn->simulation_control.type == AirflowNetwork::ControlType::NoMultizoneOrDistribution) {
-                            ShowContinueError(state, std::format("...Infiltration/Ventilation [{:#G}] m3/s", zone.NominalInfilVent));
-                            ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:#G}] m3/s", zone.NominalMixing));
+                            ShowContinueError(state, std::format("...Infiltration/Ventilation [{:.5f}] m3/s", zone.NominalInfilVent));
+                            ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:.5f}] m3/s", zone.NominalMixing));
                         } else {
                             ShowContinueError(state, "...Airflow Network Simulation: Nominal Infiltration/Ventilation/Mixing not available.");
                         }
@@ -9396,13 +9396,13 @@ void TestSurfTempCalcHeatBalanceInsideSurf(EnergyPlusData &state, Real64 TH12, i
                 if (!zone.TempOutOfBoundsReported) {
                     ShowContinueError(state, std::format("Zone=\"{}\", Diagnostic Details:", zone.Name));
                     if (zone.FloorArea > 0.0) {
-                        ShowContinueError(state, std::format("...Internal Heat Gain [{:#G}] W/m2", zone.InternalHeatGains / zone.FloorArea));
+                        ShowContinueError(state, std::format("...Internal Heat Gain [{:.5f}] W/m2", zone.InternalHeatGains / zone.FloorArea));
                     } else {
-                        ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:#G}] W", zone.InternalHeatGains / zone.FloorArea));
+                        ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:.5f}] W", zone.InternalHeatGains));
                     }
                     if (state.afn->simulation_control.type == AirflowNetwork::ControlType::NoMultizoneOrDistribution) {
-                        ShowContinueError(state, std::format("...Infiltration/Ventilation [{:#G}] m3/s", zone.NominalInfilVent));
-                        ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:#G}] m3/s", zone.NominalMixing));
+                        ShowContinueError(state, std::format("...Infiltration/Ventilation [{:.5f}] m3/s", zone.NominalInfilVent));
+                        ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:.5f}] m3/s", zone.NominalMixing));
                     } else {
                         ShowContinueError(state, "...Airflow Network Simulation: Nominal Infiltration/Ventilation/Mixing not available.");
                     }
@@ -9421,13 +9421,13 @@ void TestSurfTempCalcHeatBalanceInsideSurf(EnergyPlusData &state, Real64 TH12, i
                 if (!zone.TempOutOfBoundsReported) {
                     ShowContinueError(state, std::format("Zone=\"{}\", Diagnostic Details:", zone.Name));
                     if (zone.FloorArea > 0.0) {
-                        ShowContinueError(state, std::format("...Internal Heat Gain [{:#G}] W/m2", zone.InternalHeatGains / zone.FloorArea));
+                        ShowContinueError(state, std::format("...Internal Heat Gain [{:.5f}] W/m2", zone.InternalHeatGains / zone.FloorArea));
                     } else {
-                        ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:#G}] W", zone.InternalHeatGains / zone.FloorArea));
+                        ShowContinueError(state, std::format("...Internal Heat Gain (no floor) [{:.5f}] W", zone.InternalHeatGains));
                     }
                     if (state.afn->simulation_control.type == AirflowNetwork::ControlType::NoMultizoneOrDistribution) {
-                        ShowContinueError(state, std::format("...Infiltration/Ventilation [{:#G}] m3/s", zone.NominalInfilVent));
-                        ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:#G}] m3/s", zone.NominalMixing));
+                        ShowContinueError(state, std::format("...Infiltration/Ventilation [{:.5f}] m3/s", zone.NominalInfilVent));
+                        ShowContinueError(state, std::format("...Mixing/Cross Mixing [{:.5f}] m3/s", zone.NominalMixing));
                     } else {
                         ShowContinueError(state, "...Airflow Network Simulation: Nominal Infiltration/Ventilation/Mixing not available.");
                     }

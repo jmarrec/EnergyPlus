@@ -2583,17 +2583,18 @@ namespace HeatBalFiniteDiffManager {
                         if (state.dataHeatBal->Zone(ZoneNum).FloorArea > 0.0) {
                             ShowContinueError(
                                 state,
-                                std::format("...Internal Heat Gain [{:#G}] W/m2",
+                                std::format("...Internal Heat Gain [{:.5f}] W/m2",
                                             state.dataHeatBal->Zone(ZoneNum).InternalHeatGains / state.dataHeatBal->Zone(ZoneNum).FloorArea));
                         } else {
                             ShowContinueError(
-                                state, std::format("...Internal Heat Gain (no floor) [{:#G}] W", state.dataHeatBal->Zone(ZoneNum).InternalHeatGains));
+                                state,
+                                std::format("...Internal Heat Gain (no floor) [{:.5f}] W", state.dataHeatBal->Zone(ZoneNum).InternalHeatGains));
                         }
                         if (state.afn->simulation_control.type == AirflowNetwork::ControlType::NoMultizoneOrDistribution) {
                             ShowContinueError(
-                                state, std::format("...Infiltration/Ventilation [{:#G}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalInfilVent));
+                                state, std::format("...Infiltration/Ventilation [{:.5f}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalInfilVent));
                             ShowContinueError(state,
-                                              std::format("...Mixing/Cross Mixing [{:#G}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalMixing));
+                                              std::format("...Mixing/Cross Mixing [{:.5f}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalMixing));
                         } else {
                             ShowContinueError(state, "...Airflow Network Simulation: Nominal Infiltration/Ventilation/Mixing not available.");
                         }
@@ -2637,17 +2638,18 @@ namespace HeatBalFiniteDiffManager {
                         if (state.dataHeatBal->Zone(ZoneNum).FloorArea > 0.0) {
                             ShowContinueError(
                                 state,
-                                std::format("...Internal Heat Gain [{:#G}] W/m2",
+                                std::format("...Internal Heat Gain [{:.5f}] W/m2",
                                             state.dataHeatBal->Zone(ZoneNum).InternalHeatGains / state.dataHeatBal->Zone(ZoneNum).FloorArea));
                         } else {
                             ShowContinueError(
-                                state, std::format("...Internal Heat Gain (no floor) [{:#G}] W", state.dataHeatBal->Zone(ZoneNum).InternalHeatGains));
+                                state,
+                                std::format("...Internal Heat Gain (no floor) [{:.5f}] W", state.dataHeatBal->Zone(ZoneNum).InternalHeatGains));
                         }
                         if (state.afn->simulation_control.type == AirflowNetwork::ControlType::NoMultizoneOrDistribution) {
                             ShowContinueError(
-                                state, std::format("...Infiltration/Ventilation [{:#G}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalInfilVent));
+                                state, std::format("...Infiltration/Ventilation [{:.5f}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalInfilVent));
                             ShowContinueError(state,
-                                              std::format("...Mixing/Cross Mixing [{:#G}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalMixing));
+                                              std::format("...Mixing/Cross Mixing [{:.5f}] m3/s", state.dataHeatBal->Zone(ZoneNum).NominalMixing));
                         } else {
                             ShowContinueError(state, "...Airflow Network Simulation: Nominal Infiltration/Ventilation/Mixing not available.");
                         }

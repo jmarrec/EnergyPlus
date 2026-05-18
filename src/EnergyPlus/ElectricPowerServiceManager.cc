@@ -3334,7 +3334,7 @@ ElectricStorage::ElectricStorage( // main constructor
                                               state.dataIPShortCut->cNumericFieldNames(15)));
                 for (int i = 15; i <= 16; ++i) {
                     ShowContinueError(state,
-                                      std::format("{} = {:#G}", state.dataIPShortCut->cNumericFieldNames(i), state.dataIPShortCut->rNumericArgs(i)));
+                                      std::format("{} = {:.5f}", state.dataIPShortCut->cNumericFieldNames(i), state.dataIPShortCut->rNumericArgs(i)));
                 }
                 errorsFound = true;
             }
