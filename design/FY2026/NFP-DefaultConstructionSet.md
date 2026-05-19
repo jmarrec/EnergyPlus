@@ -302,7 +302,12 @@ A new shoebox example file will be added demonstrating:
 - At least one surface per category (exterior wall, interior wall, ground floor, adiabatic, exterior window, interior door).
 - A few surfaces with hardcoded `Construction Name` to verify they are unaffected.
 
-**Transition:** No transition rules are needed. Existing files with explicit construction names continue to work without modification.
+**Transition rules required:**
+
+- **`Space`** — a new field (`Default Construction Set Name`) is inserted as A4, before the existing extensible `Tag` fields (which shift from A4/A5/A6 to A5/A6/A7). A transition rule must insert an empty string at position A4 to preserve existing tag values.
+- **`Building`** — a new optional field (`Default Construction Set Name`) is appended as the last field (after `Minimum Number of Warmup Days`). No data change needed; existing IDFs simply omit it.
+- **`BuildingSurface:Detailed`**, **`FenestrationSurface:Detailed`**, **`InternalMass`** — `Construction Name` changes from required to optional. No data change needed; existing IDFs with explicit constructions are unaffected.
+- **`FenestrationSurface:Detailed` `Surface Type`** — four new keys added (`FixedWindow`, `OperableWindow`, `Skylight`, `OverheadDoor`). No data change needed; existing `Window` values remain valid and are treated as `FixedWindow` for `DefaultConstructionSet` resolution.
 
 ## References ##
 
