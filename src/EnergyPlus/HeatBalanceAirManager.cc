@@ -4005,14 +4005,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         if (state.dataHeatBal->Ventilation(Loop).minIndoorTempSched != nullptr) {
             print(state.files.eio, "{},", state.dataHeatBal->Ventilation(Loop).minIndoorTempSched->Name);
         } else {
-            print(state.files.eio, "{:.2R},", state.dataHeatBal->Ventilation(Loop).MinIndoorTemperature);
+            print(state.files.eio, "{:.2f},", state.dataHeatBal->Ventilation(Loop).MinIndoorTemperature);
         }
 
         const auto print_temperature = [&](Sched::Schedule const *ptr, const Real64 value) {
             if (ptr != nullptr) {
                 print(state.files.eio, "Schedule: {},", ptr->Name);
             } else {
-                print(state.files.eio, "{:.2R},", value);
+                print(state.files.eio, "{:.2f},", value);
             }
         };
 
@@ -4021,7 +4021,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         print_temperature(state.dataHeatBal->Ventilation(Loop).minOutdoorTempSched, state.dataHeatBal->Ventilation(Loop).MinOutdoorTemperature);
         print_temperature(state.dataHeatBal->Ventilation(Loop).maxOutdoorTempSched, state.dataHeatBal->Ventilation(Loop).MaxOutdoorTemperature);
 
-        print(state.files.eio, "{:.2R}\n", state.dataHeatBal->Ventilation(Loop).MaxWindSpeed);
+        print(state.files.eio, "{:.2f}\n", state.dataHeatBal->Ventilation(Loop).MaxWindSpeed);
     }
 
     TotMixingFlow.dimension(state.dataGlobal->NumOfZones, 0.0);
@@ -4056,7 +4056,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                               state.dataHeatBal->Mixing(Loop).DesignLevel * Constant::rSecsInHour);
 
         print(state.files.eio, "{},", state.dataHeatBal->Zone(state.dataHeatBal->Mixing(Loop).FromZone).Name);
-        print(state.files.eio, "{:.2R}\n", state.dataHeatBal->Mixing(Loop).DeltaTemperature);
+        print(state.files.eio, "{:.2f}\n", state.dataHeatBal->Mixing(Loop).DeltaTemperature);
     }
 
     for (int Loop = 1; Loop <= state.dataHeatBal->TotCrossMixing; ++Loop) {
@@ -4092,7 +4092,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                               state.dataHeatBal->CrossMixing(Loop).DesignLevel * Constant::rSecsInHour);
 
         print(state.files.eio, "{},", state.dataHeatBal->Zone(state.dataHeatBal->CrossMixing(Loop).FromZone).Name);
-        print(state.files.eio, "{:.2R}\n", state.dataHeatBal->CrossMixing(Loop).DeltaTemperature);
+        print(state.files.eio, "{:.2f}\n", state.dataHeatBal->CrossMixing(Loop).DeltaTemperature);
     }
 
     if (state.dataHeatBal->TotRefDoorMixing > 0) {

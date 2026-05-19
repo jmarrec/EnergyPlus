@@ -2455,21 +2455,21 @@ namespace Fluid {
                 print(state.files.debug, "Viscosity:");
                 Temperature = glycol->ViscTemps(1) - incr;
                 ReturnValue = glycol->getViscosity(state, Temperature, routineName);
-                print(state.files.debug, ",{:.4R}", ReturnValue);
+                print(state.files.debug, ",{:.4f}", ReturnValue);
                 for (int Loop = 1; Loop <= glycol->NumViscTempPoints - 1; ++Loop) {
                     Temperature = glycol->ViscTemps(Loop);
                     ReturnValue = glycol->getViscosity(state, Temperature, routineName);
-                    print(state.files.debug, ",{:.4R}", ReturnValue);
+                    print(state.files.debug, ",{:.4f}", ReturnValue);
                     Temperature = glycol->ViscTemps(Loop) + (glycol->ViscTemps(Loop + 1) - glycol->ViscTemps(Loop)) / 2.0;
                     ReturnValue = glycol->getViscosity(state, Temperature, routineName);
-                    print(state.files.debug, ",{:.4R}", ReturnValue);
+                    print(state.files.debug, ",{:.4f}", ReturnValue);
                 }
                 Temperature = glycol->ViscTemps(glycol->NumViscTempPoints);
                 ReturnValue = glycol->getViscosity(state, Temperature, routineName);
-                print(state.files.debug, ",{:.4R}", ReturnValue);
+                print(state.files.debug, ",{:.4f}", ReturnValue);
                 Temperature = glycol->ViscTemps(glycol->NumViscTempPoints) + incr;
                 ReturnValue = glycol->getViscosity(state, Temperature, routineName);
-                print(state.files.debug, ",{:.4R}\n", ReturnValue);
+                print(state.files.debug, ",{:.4f}\n", ReturnValue);
             }
         }
     }

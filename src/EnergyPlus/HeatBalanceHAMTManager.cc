@@ -1077,7 +1077,7 @@ namespace HeatBalanceHAMTManager {
             print(state.files.eio, Format_108);
 
             for (auto const *mat : s_mat->materials) {
-                static constexpr std::string_view Format_111("Material Nominal Resistance,{},{:.4R}\n");
+                static constexpr std::string_view Format_111("Material Nominal Resistance,{},{:.4f}\n");
                 print(state.files.eio, Format_111, mat->Name, mat->NominalR);
             }
         }
