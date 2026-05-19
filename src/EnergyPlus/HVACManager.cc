@@ -1354,14 +1354,14 @@ void SimHVAC(EnergyPlusData &state)
                         std::string HistoryTrace;
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                             HistoryTrace += std::format(
-                                "{:#G},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantFlowDemandToSupplyTolValue[StackDepth]);
+                                "{:.5f},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantFlowDemandToSupplyTolValue[StackDepth]);
                         }
                         ShowContinueError(
                             state, std::format("Demand-to-Supply interface mass flow rate check value iteration history trace: {}", HistoryTrace));
                         HistoryTrace = "";
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                             HistoryTrace += std::format(
-                                "{:#G},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantFlowSupplyToDemandTolValue[StackDepth]);
+                                "{:.5f},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantFlowSupplyToDemandTolValue[StackDepth]);
                         }
                         ShowContinueError(
                             state, std::format("Supply-to-Demand interface mass flow rate check value iteration history trace: {}", HistoryTrace));
@@ -1535,14 +1535,14 @@ void SimHVAC(EnergyPlusData &state)
                         std::string HistoryTrace;
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                             HistoryTrace += std::format(
-                                "{:#G},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantTempDemandToSupplyTolValue[StackDepth]);
+                                "{:.5f},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantTempDemandToSupplyTolValue[StackDepth]);
                         }
                         ShowContinueError(
                             state, std::format("Demand-to-Supply interface temperature check value iteration history trace: {}", HistoryTrace));
                         HistoryTrace = "";
                         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
                             HistoryTrace += std::format(
-                                "{:#G},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantTempSupplyToDemandTolValue[StackDepth]);
+                                "{:.5f},", state.dataConvergeParams->PlantConvergence(LoopNum).PlantTempSupplyToDemandTolValue[StackDepth]);
                         }
                         ShowContinueError(
                             state, std::format("Supply-to-Demand interface temperature check value iteration history trace: {}", HistoryTrace));
@@ -3064,19 +3064,19 @@ void ConvergenceErrors(EnergyPlusData &state,
         ShowContinueError(state, "Check values should be zero. Most Recent values listed first.");
         std::string HistoryTrace;
         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
-            HistoryTrace += std::format("{:#G},", DemandToSupply[StackDepth]);
+            HistoryTrace += std::format("{:.5f},", DemandToSupply[StackDepth]);
         }
         ShowContinueError(state, std::format("Demand-to-Supply interface {} check value iteration history trace: {}", CaseName, HistoryTrace));
         HistoryTrace = "";
         for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
-            HistoryTrace += std::format("{:#G},", SupplyDeck1ToDemand[StackDepth]);
+            HistoryTrace += std::format("{:.5f},", SupplyDeck1ToDemand[StackDepth]);
         }
         ShowContinueError(state, std::format("Supply-to-demand interface deck 1 {} check value iteration history trace: {}", CaseName, HistoryTrace));
 
         if (state.dataAirLoop->AirToZoneNodeInfo(AirSysNum).NumSupplyNodes >= 2) {
             HistoryTrace = "";
             for (int StackDepth = 0; StackDepth < DataConvergParams::ConvergLogStackDepth; ++StackDepth) {
-                HistoryTrace += std::format("{:#G},", SupplyDeck2ToDemand[StackDepth]);
+                HistoryTrace += std::format("{:.5f},", SupplyDeck2ToDemand[StackDepth]);
             }
             ShowContinueError(state,
                               std::format("Supply-to-demand interface deck 2 {} check value iteration history trace: {}", CaseName, HistoryTrace));
