@@ -51489,8 +51489,8 @@ FanPerformance:NightVentilation,
   A1 , \field Fan Name
        \required-field
        \type object-list
-       \object-list FansCVandVAV
-       \object-list FansComponentModel
+       \object-list FansCVandOnOffandVAV
+       \object-list FansZoneExhaust
   N1 , \field Fan Total Efficiency
        \type real
        \required-field
