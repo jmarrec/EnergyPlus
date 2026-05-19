@@ -116,11 +116,11 @@ TEST_F(EnergyPlusFixture, HighTempRadiantSystemTest_GetHighTempRadiantSystem)
                           "   **   ~~~   ** Heating Setpoint Temperature Schedule Name = RADIANT HEATING SETPOINTS, item not found.",
                           "   ** Severe  ** Fraction of radiation distributed to surfaces and people sums up to less than 1 for ZONERADHEATER",
                           "   **   ~~~   ** This would result in some of the radiant energy delivered by the high temp radiant heater being lost.",
-                          "   **   ~~~   ** The sum of all radiation fractions to surfaces = 0.80000",
-                          "   **   ~~~   ** The radiant fraction to people = 0.04000",
-                          "   **   ~~~   ** So, all radiant fractions including surfaces and people = 0.84000",
+                          "   **   ~~~   ** The sum of all radiation fractions to surfaces = 0.800000",
+                          "   **   ~~~   ** The radiant fraction to people = 0.0400000",
+                          "   **   ~~~   ** So, all radiant fractions including surfaces and people = 0.840000",
                           "   **   ~~~   ** This means that the fraction of radiant energy that would be lost from the high temperature radiant "
-                          "heater would be = 0.16000",
+                          "heater would be = 0.160000",
                           "   **   ~~~   ** Please check and correct this so that all radiant energy is accounted for in "
                           "ZoneHVAC:HighTemperatureRadiant = ZONERADHEATER"});
 

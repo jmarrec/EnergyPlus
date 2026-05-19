@@ -555,11 +555,11 @@ namespace HighTempRadiantSystem {
                 ShowContinueError(state, "This would result in some of the radiant energy delivered by the high temp radiant heater being lost.");
                 ShowContinueError(state, std::format("The sum of all radiation fractions to surfaces = {:#G}", TotalFracToSurfs));
                 ShowContinueError(state, std::format("The radiant fraction to people = {:#G}", highTempRadSys.FracDistribPerson));
-                ShowContinueError(state, std::format("So, all radiant fractions including surfaces and people = {:.5f}", AllFracsSummed));
+                ShowContinueError(state, std::format("So, all radiant fractions including surfaces and people = {:#G}", AllFracsSummed));
                 ShowContinueError(
                     state,
                     std::format("This means that the fraction of radiant energy that would be lost from the high temperature radiant heater "
-                                "would be = {:.5f}",
+                                "would be = {:#G}",
                                 FracOfRadPotentiallyLost));
                 ShowContinueError(state,
                                   std::format("Please check and correct this so that all radiant energy is accounted for in {} = {}",
