@@ -9549,7 +9549,7 @@ Space,
        \memo named <Zone Name>-Remainder will be created.
        \memo Input references to Space Names must have a matching Space object
        \memo (default space names may not be referenced except in output variable keys).
-       \min-fields 7
+       \min-fields 6
        \extensible:1
   A1,  \field Name
        \note Name of the Space.
