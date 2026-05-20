@@ -3031,11 +3031,11 @@ void CheckAirLoopFlowBalance(EnergyPlusData &state)
                                                 state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).Name));
                     ShowContinueErrorTimeStamp(state, "");
                     ShowContinueError(state,
-                                      std::format("  Flows [m3/s at standard density]: Supply={:.5f}  Return={:.5f}  Outdoor Air={:.5f}",
+                                      std::format("  Flows [m3/s at standard density]: Supply={:#G}  Return={:#G}  Outdoor Air={:#G}",
                                                   thisAirLoopFlow.SupFlow / state.dataEnvrn->StdRhoAir,
                                                   thisAirLoopFlow.SysRetFlow / state.dataEnvrn->StdRhoAir,
                                                   thisAirLoopFlow.OAFlow / state.dataEnvrn->StdRhoAir));
-                    ShowContinueError(state, std::format("  Imbalance={:.5f}", unbalancedExhaustDelta / state.dataEnvrn->StdRhoAir));
+                    ShowContinueError(state, std::format("  Imbalance={:#G}", unbalancedExhaustDelta / state.dataEnvrn->StdRhoAir));
                     ShowContinueError(state, "  This error will only be reported once per system.");
                     thisAirLoopFlow.FlowError = true;
                 }

@@ -2115,7 +2115,7 @@ namespace HeatRecovery {
                     if (this->LowFlowErrCount == 1) {
                         ShowWarningError(state, std::format("{} \"{}\"", HVAC::hxTypeNames[(int)this->type], this->Name));
                         ShowContinueError(state, "Average air volume flow rate is <50% or >130% of the nominal HX supply air volume flow rate.");
-                        ShowContinueErrorTimeStamp(state, std::format("Air volume flow rate ratio = {:.3f}.", HXAirVolFlowRatio));
+                        ShowContinueErrorTimeStamp(state, std::format("Air volume flow rate ratio = {:#G}.", HXAirVolFlowRatio));
                     } else {
                         ShowRecurringWarningErrorAtEnd(
                             state,
