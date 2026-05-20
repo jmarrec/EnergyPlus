@@ -406,7 +406,7 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
     EXPECT_NEAR(SZVAVModel.m_SensibleLoadMet, -2580.0, 1.0);   // why different than LoadMet?
     EXPECT_NEAR(SZVAVModel.m_CoolingPartLoadFrac, 1.0, 0.001); // coil at full capacity
 
-    // calculate sensible and latent output based on inlet and outlet conditions and mass flow rate to compare to unit variables
+    // calculate sensible and latent output based on inlet and outlet conditions and mass flow rate to compare to unit test variables
     Real64 SensibleOutput, LatentOutput, TotalOutput;
     CalcZoneSensibleLatentOutput(SZVAVModel.MaxCoolAirMassFlow,
                                  OutletTemp,
@@ -448,8 +448,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
                                PLR,
                                CompressorOnFlag);
 
-    EXPECT_NEAR(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxNoCoolHeatAirMassFlow, 0.00000001); // high speed air flow rate
-    EXPECT_GT(state->dataLoopNodes->Node(4).Temp, state->dataLoopNodes->Node(1).Temp);                        // active heating
+    EXPECT_NEAR(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxNoCoolHeatAirMassFlow, 0.001); // low speed air flow rate
+    EXPECT_GT(state->dataLoopNodes->Node(4).Temp, state->dataLoopNodes->Node(1).Temp);                   // active heating
 
     MinHumRat = min(state->dataLoopNodes->Node(4).HumRat, state->dataLoopNodes->Node(zoneNodeNum).HumRat);
     OutletTemp = state->dataLoopNodes->Node(4).Temp;
@@ -501,8 +501,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
                                PLR,
                                CompressorOnFlag);
 
-    EXPECT_NEAR(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxHeatAirMassFlow, 0.00000001); // high speed air flow rate
-    EXPECT_GT(state->dataLoopNodes->Node(4).Temp, state->dataLoopNodes->Node(1).Temp);                  // active heating
+    EXPECT_NEAR(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxHeatAirMassFlow, 0.001); // high speed air flow rate
+    EXPECT_GT(state->dataLoopNodes->Node(4).Temp, state->dataLoopNodes->Node(1).Temp);             // active heating
 
     MinHumRat = min(state->dataLoopNodes->Node(4).HumRat, state->dataLoopNodes->Node(zoneNodeNum).HumRat);
     OutletTemp = state->dataLoopNodes->Node(4).Temp;

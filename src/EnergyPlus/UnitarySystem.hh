@@ -912,7 +912,7 @@ namespace UnitarySystems {
                                                          Real64 par13_SATempTarget,
                                                          Real64 systemMaxAirFlowRate,
                                                          bool isCoolingLoad,
-                                                         Real64 par16_IterationMethod);
+                                                         bool const iterWaterAirOrNot);
 
         void simulate(EnergyPlusData &state,
                       std::string_view Name,

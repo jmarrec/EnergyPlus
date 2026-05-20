@@ -601,7 +601,7 @@ namespace SZVAVModel {
         int coilAirOutletNode(0);
         Real64 HeatCoilLoad(0.0);
         Real64 SupHeaterLoad(0.0);
-        Real64 iterWaterAirOrNot(0.0);
+        bool iterWaterAirOrNot(false);
 
         Real64 TempSensOutput; // iterative sensible capacity [W]
         Real64 TempLatOutput;  // iterative latent capacity [W]
@@ -763,7 +763,7 @@ namespace SZVAVModel {
             }
 
             if ((CoolingLoad && TempSensOutput < ZoneLoad) || (HeatingLoad && TempSensOutput > ZoneLoad)) { // low speed fan can meet load
-                // don't iterate on air flow in region 1 using iterWaterAirOrNot = 0.0 as default
+                // don't iterate on air flow in region 1 using iterWaterAirOrNot = false as default
                 auto fR1 = [&state,
                             SysIndex,
                             FirstHVACIteration,
@@ -815,7 +815,7 @@ namespace SZVAVModel {
 
             if ((CoolingLoad && boundaryLoadMet < ZoneLoad) || (HeatingLoad && boundaryLoadMet > ZoneLoad)) { // in Region 2 of figure
 
-                iterWaterAirOrNot = 1.0; // iterate on air and/or water flow in region 2
+                iterWaterAirOrNot = true; // iterate on air and/or water flow in region 2
                 outletTemp = state.dataLoopNodes->Node(OutletNode).Temp;
                 minHumRat = state.dataLoopNodes->Node(SZVAVModel.NodeNumOfControlledZone).HumRat;
                 if (outletTemp < ZoneTemp) {
@@ -979,7 +979,7 @@ namespace SZVAVModel {
                     return; // system cannot meet load, leave at max capacity
                 }
 
-                iterWaterAirOrNot = 0.0; // don't iterate on air flow in region 3
+                iterWaterAirOrNot = false; // don't iterate on air flow in region 3
                 // otherwise iterate on load
                 auto fR3 = [&state,
                             SysIndex,

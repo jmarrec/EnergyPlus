@@ -16873,7 +16873,7 @@ namespace UnitarySystems {
                                                           Real64 par13_SATempTarget,
                                                           Real64 systemMaxAirFlowRate,
                                                           bool const isCoolingLoad,
-                                                          Real64 par16_IterationMethod)
+                                                          bool const iterWaterAirOrNot)
     {
 
         // FUNCTION INFORMATION:
@@ -16898,11 +16898,10 @@ namespace UnitarySystems {
         } else {
             SATempTarget = par13_SATempTarget;
         }
-        bool modulateAirFlow = (par16_IterationMethod > 0.0);
 
         bool HXUnitOn = true;
 
-        if (modulateAirFlow) {
+        if (iterWaterAirOrNot) {
             // in Region 2
 
             // set air flow rate bounded by low speed and high speed air flow rates
