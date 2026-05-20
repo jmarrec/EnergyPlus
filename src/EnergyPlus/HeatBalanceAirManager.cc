@@ -1405,7 +1405,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     thisVentilation.DesignLevel = rNumericArgs(1);
                     if (lNumericFieldBlanks(1)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Ventilation will result.",
+                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank. Zero ventilation will result.",
                                                      RoutineName,
                                                      cCurrentModuleObject,
                                                      thisVentilation.Name,
@@ -1420,7 +1420,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                             thisVentilation.DesignLevel = rNumericArgs(2) * thisSpace.FloorArea;
                             if (thisSpace.FloorArea <= 0.0) {
                                 ShowWarningError(state,
-                                                 std::format("{}{}=\"{}\", {} specifies {}, but Space Floor Area = 0.  0 Ventilation will result.",
+                                                 std::format("{}{}=\"{}\", {} specifies {}, but Space Floor Area = 0. Zero ventilation will result.",
                                                              RoutineName,
                                                              cCurrentModuleObject,
                                                              thisVentilation.Name,
@@ -1439,7 +1439,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(2)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Ventilation will result.",
+                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank. Zero ventilation will result.",
                                                      RoutineName,
                                                      cCurrentModuleObject,
                                                      thisVentilation.Name,
@@ -1455,7 +1455,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                             if (thisSpace.TotOccupants <= 0.0) {
                                 ShowWarningError(
                                     state,
-                                    std::format("{}{}=\"{}\", {} specifies {}, but Zone Total Occupants = 0.  0 Ventilation will result.",
+                                    std::format("{}{}=\"{}\", {} specifies {}, but Zone Total Occupants = 0. Zero ventilation will result.",
                                                 RoutineName,
                                                 cCurrentModuleObject,
                                                 thisVentilation.Name,
@@ -1474,7 +1474,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(3)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {}specifies {}, but that field is blank.  0 Ventilation will result.",
+                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank. Zero Ventilation will result.",
                                                      RoutineName,
                                                      cCurrentModuleObject,
                                                      thisVentilation.Name,
@@ -1489,7 +1489,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                             thisVentilation.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::rSecsInHour;
                             if (thisSpace.Volume <= 0.0) {
                                 ShowWarningError(state,
-                                                 std::format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0.  0 Ventilation will result.",
+                                                 std::format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0. Zero ventilation will result.",
                                                              RoutineName,
                                                              cCurrentModuleObject,
                                                              thisVentilation.Name,
@@ -1508,7 +1508,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(4)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Ventilation will result.",
+                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank. Zero ventilation will result.",
                                                      RoutineName,
                                                      cCurrentModuleObject,
                                                      thisVentilation.Name,
@@ -3080,7 +3080,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     if (lNumericFieldBlanks(4)) {
                         ShowWarningError(state,
-                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank.Zero Cross Mixing will result.",
+                                         std::format("{}{}=\"{}\", {} specifies {}, but that field is blank. Zero Cross Mixing will result.",
                                                      RoutineName,
                                                      cCurrentModuleObject,
                                                      thisMixingInput.Name,
