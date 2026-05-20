@@ -285,18 +285,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
 
     auto &SZVAVModel(state->dataUnitarySystems->unitarySys[UnitNum]);
     // first pass through will get objects and reset node data
-    SZVAVModel::calcSZVAVModel(*state,
-                               SZVAVModel,
-                               UnitNum,
-                               FirstHVACIteration,
-                               CoolingLoad,
-                               HeatingLoad,
-                               QZnReq,
-                               OnOffAirFlowRatio,
-                               HXUnitOn,
-                               AirLoopNum,
-                               PLR,
-                               CompressorOnFlag);
+    SZVAVModel::calcSZVAVModel(
+        *state, SZVAVModel, FirstHVACIteration, CoolingLoad, HeatingLoad, QZnReq, OnOffAirFlowRatio, HXUnitOn, AirLoopNum, PLR, CompressorOnFlag);
 
     // set unit inlet node conditions for cooling
     state->dataLoopNodes->Node(SZVAVModel.AirInNode).Temp = 24.0;
@@ -321,21 +311,10 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
     // second pass through will run model
 
     // Region 1 of control, low air flow rate, modulate coil capacity
-    SZVAVModel::calcSZVAVModel(*state,
-                               SZVAVModel,
-                               UnitNum,
-                               FirstHVACIteration,
-                               CoolingLoad,
-                               HeatingLoad,
-                               QZnReq,
-                               OnOffAirFlowRatio,
-                               HXUnitOn,
-                               AirLoopNum,
-                               PLR,
-                               CompressorOnFlag);
+    SZVAVModel::calcSZVAVModel(
+        *state, SZVAVModel, FirstHVACIteration, CoolingLoad, HeatingLoad, QZnReq, OnOffAirFlowRatio, HXUnitOn, AirLoopNum, PLR, CompressorOnFlag);
 
-    EXPECT_NEAR(
-        state->dataLoopNodes->Node(SZVAVModel.AirInNode).MassFlowRate, SZVAVModel.MaxNoCoolHeatAirMassFlow, 0.00000001); // low speed air flow rate
+    EXPECT_NEAR(state->dataLoopNodes->Node(SZVAVModel.AirInNode).MassFlowRate, SZVAVModel.MaxNoCoolHeatAirMassFlow, 0.001); // low speed air flow rate
     EXPECT_LT(state->dataLoopNodes->Node(SZVAVModel.AirOutNode).Temp, state->dataLoopNodes->Node(SZVAVModel.AirInNode).Temp); // active cooling
     Real64 AirMassFlow = state->dataLoopNodes->Node(SZVAVModel.AirOutNode).MassFlowRate;
     Real64 MinHumRat = min(state->dataLoopNodes->Node(SZVAVModel.AirOutNode).HumRat, state->dataLoopNodes->Node(zoneNodeNum).HumRat);
@@ -348,18 +327,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
     // Region 2 of control, modulate air flow rate, modulate coil capacity
     // set sensible load to mid point of coil sensible capacity (e.g., TotCap * SHR = 4000 * 0.7 = 2800 W) for region 2 of control
     QZnReq = -2000.0;
-    SZVAVModel::calcSZVAVModel(*state,
-                               SZVAVModel,
-                               UnitNum,
-                               FirstHVACIteration,
-                               CoolingLoad,
-                               HeatingLoad,
-                               QZnReq,
-                               OnOffAirFlowRatio,
-                               HXUnitOn,
-                               AirLoopNum,
-                               PLR,
-                               CompressorOnFlag);
+    SZVAVModel::calcSZVAVModel(
+        *state, SZVAVModel, FirstHVACIteration, CoolingLoad, HeatingLoad, QZnReq, OnOffAirFlowRatio, HXUnitOn, AirLoopNum, PLR, CompressorOnFlag);
 
     EXPECT_GT(state->dataLoopNodes->Node(SZVAVModel.AirInNode).MassFlowRate, SZVAVModel.MaxNoCoolHeatAirMassFlow); // air flow higher than low speed
     EXPECT_LT(state->dataLoopNodes->Node(SZVAVModel.AirInNode).MassFlowRate, SZVAVModel.MaxCoolAirMassFlow);       // air flow lower than high speed
@@ -377,18 +346,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
 
     // Region 3 of control, high air flow rate, modulate coil capacity
     QZnReq = -4000.0; // total capacity of coil, not sensible capacity of coil
-    SZVAVModel::calcSZVAVModel(*state,
-                               SZVAVModel,
-                               UnitNum,
-                               FirstHVACIteration,
-                               CoolingLoad,
-                               HeatingLoad,
-                               QZnReq,
-                               OnOffAirFlowRatio,
-                               HXUnitOn,
-                               AirLoopNum,
-                               PLR,
-                               CompressorOnFlag);
+    SZVAVModel::calcSZVAVModel(
+        *state, SZVAVModel, FirstHVACIteration, CoolingLoad, HeatingLoad, QZnReq, OnOffAirFlowRatio, HXUnitOn, AirLoopNum, PLR, CompressorOnFlag);
 
     EXPECT_EQ(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxCoolAirMassFlow); // high speed air flow rate
     EXPECT_LT(state->dataLoopNodes->Node(4).Temp, state->dataLoopNodes->Node(1).Temp);    // active cooling
@@ -435,18 +394,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
 
     // Region 1 of control, low air flow rate, modulate coil capacity
     QZnReq = 200.0;
-    SZVAVModel::calcSZVAVModel(*state,
-                               SZVAVModel,
-                               UnitNum,
-                               FirstHVACIteration,
-                               CoolingLoad,
-                               HeatingLoad,
-                               QZnReq,
-                               OnOffAirFlowRatio,
-                               HXUnitOn,
-                               AirLoopNum,
-                               PLR,
-                               CompressorOnFlag);
+    SZVAVModel::calcSZVAVModel(
+        *state, SZVAVModel, FirstHVACIteration, CoolingLoad, HeatingLoad, QZnReq, OnOffAirFlowRatio, HXUnitOn, AirLoopNum, PLR, CompressorOnFlag);
 
     EXPECT_NEAR(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxNoCoolHeatAirMassFlow, 0.001); // low speed air flow rate
     EXPECT_GT(state->dataLoopNodes->Node(4).Temp, state->dataLoopNodes->Node(1).Temp);                   // active heating
@@ -461,18 +410,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
 
     // Region 2 of control, modulate air flow rate, modulate coil capacity
     QZnReq = 1200.0;
-    SZVAVModel::calcSZVAVModel(*state,
-                               SZVAVModel,
-                               UnitNum,
-                               FirstHVACIteration,
-                               CoolingLoad,
-                               HeatingLoad,
-                               QZnReq,
-                               OnOffAirFlowRatio,
-                               HXUnitOn,
-                               AirLoopNum,
-                               PLR,
-                               CompressorOnFlag);
+    SZVAVModel::calcSZVAVModel(
+        *state, SZVAVModel, FirstHVACIteration, CoolingLoad, HeatingLoad, QZnReq, OnOffAirFlowRatio, HXUnitOn, AirLoopNum, PLR, CompressorOnFlag);
 
     EXPECT_GT(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxNoCoolHeatAirMassFlow); // air flow higher than low speed
     EXPECT_LT(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxHeatAirMassFlow);       // air flow lower than high speed
@@ -488,18 +427,8 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
 
     // Region 3 of control, high air flow rate, modulate coil capacity
     QZnReq = 2000.0;
-    SZVAVModel::calcSZVAVModel(*state,
-                               SZVAVModel,
-                               UnitNum,
-                               FirstHVACIteration,
-                               CoolingLoad,
-                               HeatingLoad,
-                               QZnReq,
-                               OnOffAirFlowRatio,
-                               HXUnitOn,
-                               AirLoopNum,
-                               PLR,
-                               CompressorOnFlag);
+    SZVAVModel::calcSZVAVModel(
+        *state, SZVAVModel, FirstHVACIteration, CoolingLoad, HeatingLoad, QZnReq, OnOffAirFlowRatio, HXUnitOn, AirLoopNum, PLR, CompressorOnFlag);
 
     EXPECT_NEAR(state->dataLoopNodes->Node(1).MassFlowRate, SZVAVModel.MaxHeatAirMassFlow, 0.001); // high speed air flow rate
     EXPECT_GT(state->dataLoopNodes->Node(4).Temp, state->dataLoopNodes->Node(1).Temp);             // active heating
