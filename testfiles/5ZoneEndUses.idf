@@ -118,7 +118,7 @@
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
-  Timestep,4;
+  Timestep,1;
 
   SurfaceConvectionAlgorithm:Inside,Simple;
 
@@ -1691,10 +1691,14 @@
     SPACE4-1 BBHeat 1,       !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
-    1500,                    !- Capacity at Low Temperature {W}
-    0,                       !- Low Temperature {C}
-    500,                     !- Capacity at High Temperature {W}
-    10,                      !- High Temperature {C}
+    !-1500,                    !- Capacity at Low Temperature {W}
+    !-0,                       !- Low Temperature {C}
+    !-500,                     !- Capacity at High Temperature {W}
+    !-10,                      !- High Temperature {C}
+    autosize,
+    autosize,
+    autosize,
+    autosize,
     0.5,                     !- Fraction Radiant
     Baseboard Heat;          !- End-Use Subcategory
 
