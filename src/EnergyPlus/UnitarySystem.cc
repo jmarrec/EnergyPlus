@@ -4901,7 +4901,7 @@ namespace UnitarySystems {
                             if (this->m_heatCoilType == HVAC::CoilType::HeatingDXVariableSpeed ||
                                 this->m_heatCoilType == HVAC::CoilType::HeatingDXMultiSpeed ||
                                 this->m_heatCoilType == HVAC::CoilType::HeatingDXSingleSpeed) {
-                                auto &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex];
+                                auto const &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex];
                                 newCoil.performance->ReportCoolingCoilCrankcasePower = false;
                             }
                         }
@@ -5986,9 +5986,9 @@ namespace UnitarySystems {
                         ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, thisObjectName));
                         ShowContinueError(state, "Input for Cooling Supply Air Flow Rate Method = FlowPerCoolingCapacity.");
                         ShowContinueError(state,
-                                          EnergyPlus::format("Suspicious Cooling Supply Air Flow Rate Per Unit of Capacity = {:.7R} [m3/s/W] when "
-                                                             "cooling coil is present.",
-                                                             this->m_MaxCoolAirVolFlow));
+                                          std::format("Suspicious Cooling Supply Air Flow Rate Per Unit of Capacity = {:#G} [m3/s/W] when "
+                                                      "cooling coil is present.",
+                                                      this->m_MaxCoolAirVolFlow));
                         if (this->m_MaxCoolAirVolFlow < 0.0) {
                             errorsFound = true;
                         }
@@ -6118,9 +6118,9 @@ namespace UnitarySystems {
                         ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, thisObjectName));
                         ShowContinueError(state, "Input for Heating Supply Air Flow Rate Method = FlowPerHeatingCapacity.");
                         ShowContinueError(state,
-                                          EnergyPlus::format("Suspicious Heating Supply Air Flow Rate Per Unit of Capacity = {:.7R} [m3/s/W] when "
-                                                             "heating coil is present.",
-                                                             this->m_MaxHeatAirVolFlow));
+                                          std::format("Suspicious Heating Supply Air Flow Rate Per Unit of Capacity = {:#G} [m3/s/W] when "
+                                                      "heating coil is present.",
+                                                      this->m_MaxHeatAirVolFlow));
                         if (this->m_MaxHeatAirVolFlow < 0.0) {
                             errorsFound = true;
                         }
@@ -6284,9 +6284,8 @@ namespace UnitarySystems {
                         ShowContinueError(state, "Input for No Load Supply Air Flow Rate Method = FlowPerCoolingCapacity.");
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(
-                                "Suspicious No Load Supply Air Flow Rate Per Unit of Capacity During Cooling Operation = {:.7R} [m3/s/W].",
-                                this->m_MaxNoCoolHeatAirVolFlow));
+                            std::format("Suspicious No Load Supply Air Flow Rate Per Unit of Capacity During Cooling Operation = {:#G} [m3/s/W].",
+                                        this->m_MaxNoCoolHeatAirVolFlow));
                         if (this->m_MaxNoCoolHeatAirVolFlow < 0.0) {
                             errorsFound = true;
                         }
@@ -6315,9 +6314,8 @@ namespace UnitarySystems {
                         ShowContinueError(state, "Input for No Load Supply Air Flow Rate Method = FlowPerHeatingCapacity.");
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(
-                                "Suspicious No Load Supply Air Flow Rate Per Unit of Capacity During Heating Operation = {:.7R} [m3/s/W].",
-                                this->m_MaxNoCoolHeatAirVolFlow));
+                            std::format("Suspicious No Load Supply Air Flow Rate Per Unit of Capacity During Heating Operation = {:#G} [m3/s/W].",
+                                        this->m_MaxNoCoolHeatAirVolFlow));
                         if (this->m_MaxNoCoolHeatAirVolFlow < 0.0) {
                             errorsFound = true;
                         }
@@ -9434,7 +9432,6 @@ namespace UnitarySystems {
                 UnitarySys &SZVAVModel(state.dataUnitarySystems->unitarySys[this->m_UnitarySysNum]);
                 SZVAVModel::calcSZVAVModel(state,
                                            SZVAVModel,
-                                           this->m_UnitarySysNum,
                                            FirstHVACIteration,
                                            state.dataUnitarySystems->CoolingLoad,
                                            state.dataUnitarySystems->HeatingLoad,
@@ -16862,7 +16859,6 @@ namespace UnitarySystems {
 
     Real64 UnitarySys::calcUnitarySystemWaterFlowResidual(EnergyPlusData &state,
                                                           Real64 const PartLoadRatio, // coil part load ratio
-                                                          int UnitarySysNum,
                                                           bool FirstHVACIteration,
                                                           Real64 QZnReq,
                                                           int AirControlNode,
@@ -16875,7 +16871,7 @@ namespace UnitarySystems {
                                                           Real64 par13_SATempTarget,
                                                           Real64 systemMaxAirFlowRate,
                                                           bool const isCoolingLoad,
-                                                          Real64 par16_IterationMethod)
+                                                          bool const iterWaterAirOrNot)
     {
 
         // FUNCTION INFORMATION:
@@ -16892,7 +16888,6 @@ namespace UnitarySystems {
         Real64 SupHeaterLoad = 0.0;
 
         // Convert parameters to usable variables
-        UnitarySys &thisSys = state.dataUnitarySystems->unitarySys[UnitarySysNum];
         Real64 SATempTarget = 0.0;
         bool LoadIsTarget = false;
         if (par13_SATempTarget == 0.0) {
@@ -16900,28 +16895,33 @@ namespace UnitarySystems {
         } else {
             SATempTarget = par13_SATempTarget;
         }
-        bool iterateOnAirOnly = (par16_IterationMethod > 1.0);
 
         bool HXUnitOn = true;
 
-        if (iterateOnAirOnly) {
+        if (iterWaterAirOrNot) {
+            // in Region 2
 
             // set air flow rate bounded by low speed and high speed air flow rates
-            state.dataLoopNodes->Node(AirControlNode).MassFlowRate = airMdot * (lowSpeedRatio + (PartLoadRatio * (1.0 - lowSpeedRatio)));
+            state.dataLoopNodes->Node(AirControlNode).MassFlowRate = systemMaxAirFlowRate * (lowSpeedRatio + (PartLoadRatio * (1.0 - lowSpeedRatio)));
             // FanPartLoadRatio is used to pass info over to function SetAverageAirFlow since air and coil PLR are disassociated in the model
             // FanPartLoadRatio is a report variable that is updated (overwritten) in ReportUnitarySystem
-            thisSys.FanPartLoadRatio = PartLoadRatio;
+            this->FanPartLoadRatio = PartLoadRatio;
             //            if( WaterControlNode > 0 ) Node( WaterControlNode ).MassFlowRate = highWaterMdot;
+            if (WaterControlNode > 0) {
+                Real64 waterMdot = highWaterMdot * PartLoadRatio;
+                state.dataLoopNodes->Node(WaterControlNode).MassFlowRate = waterMdot;
+            }
 
         } else {
+            // in Region 1 or 3 where air flow is constant and water flow or compressor is modulated to meet the load
 
             state.dataLoopNodes->Node(AirControlNode).MassFlowRate = airMdot;
             if (lowSpeedRatio != 1.0) {
                 // division by zero when lowSpeedRatio == 1.0
-                thisSys.FanPartLoadRatio =
+                this->FanPartLoadRatio =
                     max(0.0, ((airMdot - (systemMaxAirFlowRate * lowSpeedRatio)) / ((1.0 - lowSpeedRatio) * systemMaxAirFlowRate)));
             } else {
-                thisSys.FanPartLoadRatio = 1.0;
+                this->FanPartLoadRatio = 1.0;
             }
             if (WaterControlNode > 0) {
                 Real64 waterMdot = highWaterMdot * PartLoadRatio;
@@ -16932,42 +16932,42 @@ namespace UnitarySystems {
         Real64 coolingPLR = 0.0;
         Real64 heatingPLR = 0.0;
 
-        if (WaterControlNode > 0 && WaterControlNode == thisSys.CoolCoilFluidInletNode) {
+        if (WaterControlNode > 0 && WaterControlNode == this->CoolCoilFluidInletNode) {
             // cooling load using water cooling coil
             coolingPLR = PartLoadRatio;
-            thisSys.m_CoolingPartLoadFrac = PartLoadRatio;
-            if (thisSys.MaxCoolCoilFluidFlow > 0.0) {
-                thisSys.CoolCoilWaterFlowRatio = state.dataLoopNodes->Node(WaterControlNode).MassFlowRate / thisSys.MaxCoolCoilFluidFlow;
+            this->m_CoolingPartLoadFrac = PartLoadRatio;
+            if (this->MaxCoolCoilFluidFlow > 0.0) {
+                this->CoolCoilWaterFlowRatio = state.dataLoopNodes->Node(WaterControlNode).MassFlowRate / this->MaxCoolCoilFluidFlow;
             }
-        } else if (WaterControlNode > 0 && WaterControlNode == thisSys.HeatCoilFluidInletNode) {
+        } else if (WaterControlNode > 0 && WaterControlNode == this->HeatCoilFluidInletNode) {
             // heating load using water heating coil
             heatingPLR = PartLoadRatio;
-            thisSys.m_HeatingPartLoadFrac = PartLoadRatio;
-            if (thisSys.MaxHeatCoilFluidFlow > 0.0) {
-                thisSys.HeatCoilWaterFlowRatio = state.dataLoopNodes->Node(WaterControlNode).MassFlowRate / thisSys.MaxHeatCoilFluidFlow;
+            this->m_HeatingPartLoadFrac = PartLoadRatio;
+            if (this->MaxHeatCoilFluidFlow > 0.0) {
+                this->HeatCoilWaterFlowRatio = state.dataLoopNodes->Node(WaterControlNode).MassFlowRate / this->MaxHeatCoilFluidFlow;
             }
         } else if (isCoolingLoad) { // non-water coil with cooling load
             coolingPLR = PartLoadRatio;
-            thisSys.m_CoolingPartLoadFrac = coolingPLR;
+            this->m_CoolingPartLoadFrac = coolingPLR;
         } else { // must be non-water coil with heating load
             heatingPLR = PartLoadRatio;
-            thisSys.m_HeatingPartLoadFrac = heatingPLR;
+            this->m_HeatingPartLoadFrac = heatingPLR;
         }
 
         Real64 SensOutput = 0.0;
         Real64 LatOutput = 0.0;
-        thisSys.calcUnitarySystemToLoad(state,
-                                        AirLoopNum,
-                                        FirstHVACIteration,
-                                        coolingPLR,
-                                        heatingPLR,
-                                        OnOffAirFlowRat,
-                                        SensOutput,
-                                        LatOutput,
-                                        HXUnitOn,
-                                        HeatCoilLoad,
-                                        SupHeaterLoad,
-                                        HVAC::CompressorOp::On);
+        this->calcUnitarySystemToLoad(state,
+                                      AirLoopNum,
+                                      FirstHVACIteration,
+                                      coolingPLR,
+                                      heatingPLR,
+                                      OnOffAirFlowRat,
+                                      SensOutput,
+                                      LatOutput,
+                                      HXUnitOn,
+                                      HeatCoilLoad,
+                                      SupHeaterLoad,
+                                      HVAC::CompressorOp::On);
 
         if (LoadIsTarget) {
             // Calculate residual based on output magnitude
@@ -16977,7 +16977,7 @@ namespace UnitarySystems {
             return (SensOutput - QZnReq) / QZnReq;
 
         } // Calculate residual based on outlet temperature
-        return (state.dataLoopNodes->Node(thisSys.AirOutNode).Temp - SATempTarget) * 10.0;
+        return (state.dataLoopNodes->Node(this->AirOutNode).Temp - SATempTarget) * 10.0;
     }
 
     void UnitarySys::setSpeedVariables(EnergyPlusData &state,
