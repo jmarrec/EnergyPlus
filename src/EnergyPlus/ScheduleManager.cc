@@ -1400,15 +1400,15 @@ namespace Sched {
                 continue;
             }
 
-            // Validate rule orders
+            // Validate rule orders, checking for duplicates
             std::vector<Sched::RuleSchedule *> ruleSchedules;
             for (Sched::RuleSchedule * ruleSchedule : s_sched->ruleSchedules) {
                 if (ruleSchedule->scheduleRulesetName == Alphas(1)) {
                     ruleSchedules.push_back(ruleSchedule);
                 }
             }
-            for (int i = 0; i < ruleSchedules.size(); ++i) {
-                for (int j = i + 1; j < ruleSchedules.size(); ++j) {
+            for (std::size_t i = 0; i < ruleSchedules.size(); ++i) {
+                for (std::size_t j = i + 1; j < ruleSchedules.size(); ++j) {
                     if (ruleSchedules[i]->ruleOrder == ruleSchedules[j]->ruleOrder) {
                         ShowWarningMessage(state,
                                            std::format("{}: {} has rules with duplicate rule order ({})",
