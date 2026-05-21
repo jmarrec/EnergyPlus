@@ -693,8 +693,20 @@ std::string cSurfaceClass(SurfaceClass const ClassNo)
     case SurfaceClass::Window: {
         ClassName = "Window";
     } break;
+    case SurfaceClass::FixedWindow: {
+        ClassName = "FixedWindow";
+    } break;
+    case SurfaceClass::OperableWindow: {
+        ClassName = "OperableWindow";
+    } break;
+    case SurfaceClass::Skylight: {
+        ClassName = "Skylight";
+    } break;
     case SurfaceClass::GlassDoor: {
         ClassName = "Glass Door";
+    } break;
+    case SurfaceClass::OverheadDoor: {
+        ClassName = "OverheadDoor";
     } break;
     case SurfaceClass::Door: {
         ClassName = "Door";

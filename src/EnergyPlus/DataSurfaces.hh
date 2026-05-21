@@ -157,7 +157,11 @@ namespace DataSurfaces {
         Detached_B,
         Detached_F,
         Window,
+        FixedWindow,
+        OperableWindow,
+        Skylight,
         GlassDoor,
+        OverheadDoor,
         Door,
         Shading,
         Overhang,
@@ -166,6 +170,25 @@ namespace DataSurfaces {
         TDD_Diffuser,
         Num // The counter representing the total number of surface class, always stays at the bottom
     };
+
+    // Window-like surface classes
+    constexpr bool SurfaceClassIsWindow(SurfaceClass const surfClass)
+    {
+        return (surfClass == SurfaceClass::Window || surfClass == SurfaceClass::FixedWindow || surfClass == SurfaceClass::OperableWindow ||
+                surfClass == SurfaceClass::Skylight);
+    }
+
+    // Glazed surfaces include windows and glazed doors
+    constexpr bool SurfaceClassIsGlazed(SurfaceClass const surfClass)
+    {
+        return (surfClass == SurfaceClass::GlassDoor || SurfaceClassIsWindow(surfClass));
+    }
+
+    // Door surfaces include opaque doors, overhead doors, and glass doors
+    constexpr bool SurfaceClassIsDoor(SurfaceClass const surfClass)
+    {
+        return (surfClass == SurfaceClass::Door || surfClass == SurfaceClass::OverheadDoor || surfClass == SurfaceClass::GlassDoor);
+    }
 
     // A coarse grain version of SurfaceClass
     enum class FWC

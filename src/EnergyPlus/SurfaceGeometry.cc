@@ -629,9 +629,8 @@ namespace SurfaceGeometry {
                     ++state.dataHeatBal->Zone(ZoneNum).NumSurfaces;
                 }
 
-                if (thisSurface.HeatTransSurf && (thisSurface.Class == SurfaceClass::Window || thisSurface.Class == SurfaceClass::GlassDoor ||
-                                                  thisSurface.Class == SurfaceClass::Door || thisSurface.Class == SurfaceClass::TDD_Dome ||
-                                                  thisSurface.Class == SurfaceClass::TDD_Diffuser)) {
+                if (thisSurface.HeatTransSurf && (SurfaceClassIsWindow(thisSurface.Class) || SurfaceClassIsDoor(thisSurface.Class) ||
+                                                  thisSurface.Class == SurfaceClass::TDD_Dome || thisSurface.Class == SurfaceClass::TDD_Diffuser)) {
                     ++state.dataHeatBal->Zone(ZoneNum).NumSubSurfaces;
                 }
 
@@ -1198,7 +1197,6 @@ namespace SurfaceGeometry {
                            TotRectIZWindows,
                            TotRectIZDoors,
                            TotRectIZGlazedDoors,
-                           state.dataSurfaceGeometry->SubSurfIDs,
                            AddedSubSurfaces,
                            NeedToAddSubSurfaces);
 
@@ -1339,7 +1337,7 @@ namespace SurfaceGeometry {
                     newSurf.BaseSurf = Found;
                     auto &foundBaseSurf = state.dataSurfaceGeometry->SurfaceTmp(Found);
                     foundBaseSurf.Area -= newSurf.Area;
-                    if (newSurf.Class == SurfaceClass::Window || newSurf.Class == SurfaceClass::GlassDoor) {
+                    if (SurfaceClassIsGlazed(newSurf.Class)) {
                         foundBaseSurf.NetAreaShadowCalc -= newSurf.Area / newSurf.Multiplier;
                     } else { // Door, TDD:Diffuser, TDD:DOME
                         foundBaseSurf.NetAreaShadowCalc -= newSurf.Area;
@@ -1575,7 +1573,8 @@ namespace SurfaceGeometry {
                     if (state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).spaceNum != spaceNum) {
                         continue;
                     }
-                    if (state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class != SurfaceClass::Door) {
+                    if (state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class != SurfaceClass::Door &&
+                        state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class != SurfaceClass::OverheadDoor) {
                         continue;
                     }
 
@@ -1597,8 +1596,7 @@ namespace SurfaceGeometry {
                     if (state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).ExtBoundCond > 0) {
                         continue; // Exterior window
                     }
-                    if ((state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class != SurfaceClass::Window) &&
-                        (state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class != SurfaceClass::GlassDoor)) {
+                    if (!SurfaceClassIsGlazed(state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class)) {
                         continue;
                     }
 
@@ -1620,8 +1618,7 @@ namespace SurfaceGeometry {
                     if (state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).ExtBoundCond <= 0) {
                         continue;
                     }
-                    if ((state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class != SurfaceClass::Window) &&
-                        (state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class != SurfaceClass::GlassDoor)) {
+                    if (!SurfaceClassIsGlazed(state.dataSurfaceGeometry->SurfaceTmp(SubSurfNum).Class)) {
                         continue;
                     }
 
@@ -2463,13 +2460,18 @@ namespace SurfaceGeometry {
 
         for (int SurfNum = 1; SurfNum <= MovedSurfs; ++SurfNum) { // TotSurfaces
             auto &surf = state.dataSurface->Surface(SurfNum);
-            // GLASSDOORs and TDD:DIFFUSERs will be treated as windows in the subsequent heat transfer and daylighting
-            // calculations. Reset class to 'Window' after saving the original designation in SurfaceWindow.
+            // GLASSDOORs, TDD:DIFFUSERs, FixedWindows, OperableWindows, and Skylights will be treated as windows
+            // in the subsequent heat transfer and daylighting calculations. Reset class to 'Window' after saving
+            // the original designation. OverheadDoors are treated as Doors.
 
             surf.OriginalClass = surf.Class;
 
-            if (surf.Class == SurfaceClass::GlassDoor || surf.Class == SurfaceClass::TDD_Diffuser) {
+            if (SurfaceClassIsGlazed(surf.Class) || surf.Class == SurfaceClass::TDD_Diffuser) {
                 surf.Class = SurfaceClass::Window;
+            }
+
+            if (surf.Class == SurfaceClass::OverheadDoor) {
+                surf.Class = SurfaceClass::Door;
             }
 
             if (surf.Class == SurfaceClass::TDD_Dome) {
@@ -3032,8 +3034,7 @@ namespace SurfaceGeometry {
                     thisSpace.HTSurfaceLast = SurfNum;
 
                     // Window surfaces are grouped next within each space
-                    if ((surf.Class == DataSurfaces::SurfaceClass::Window) || (surf.Class == DataSurfaces::SurfaceClass::GlassDoor) ||
-                        (surf.Class == DataSurfaces::SurfaceClass::TDD_Diffuser)) {
+                    if (SurfaceClassIsGlazed(surf.Class) || surf.Class == DataSurfaces::SurfaceClass::TDD_Diffuser) {
                         if (thisSpace.WindowSurfaceFirst == 0) {
                             thisSpace.WindowSurfaceFirst = SurfNum;
                         }
@@ -5059,7 +5060,7 @@ namespace SurfaceGeometry {
             }
 
             surfTemp.Name = s_ipsc->cAlphaArgs(1); // Set the Surface Name in the Derived Type
-            ValidChk = Util::FindItemInList(s_ipsc->cAlphaArgs(2), SubSurfCls, 6);
+            ValidChk = Util::FindItemInList(s_ipsc->cAlphaArgs(2), SubSurfCls, 10);
             if (ValidChk == 0) {
                 ShowSevereError(state,
                                 std::format("{}=\"{}\", invalid {}=\"{}",
@@ -5087,8 +5088,7 @@ namespace SurfaceGeometry {
             state.dataConstruction->Construct(surfTemp.Construction).IsUsed = true;
             surfTemp.ConstructionStoredInputValue = surfTemp.Construction;
 
-            if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor || surfTemp.Class == SurfaceClass::TDD_Diffuser ||
-                surfTemp.Class == SurfaceClass::TDD_Dome) {
+            if (SurfaceClassIsGlazed(surfTemp.Class) || surfTemp.Class == SurfaceClass::TDD_Diffuser || surfTemp.Class == SurfaceClass::TDD_Dome) {
 
                 if (surfTemp.Construction != 0) {
                     auto const &construction = state.dataConstruction->Construct(surfTemp.Construction);
@@ -5275,12 +5275,10 @@ namespace SurfaceGeometry {
             }
             surfTemp.Vertex.allocate(surfTemp.Sides);
             surfTemp.NewVertex.allocate(surfTemp.Sides);
-            if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor || surfTemp.Class == SurfaceClass::Door) {
+            // Only windows and doors can have Multiplier > 1
+            if (SurfaceClassIsWindow(surfTemp.Class) || SurfaceClassIsDoor(surfTemp.Class)) {
                 surfTemp.Multiplier = int(s_ipsc->rNumericArgs(2));
-            }
-            // Only windows, glass doors and doors can have Multiplier > 1:
-            if ((surfTemp.Class != SurfaceClass::Window && surfTemp.Class != SurfaceClass::GlassDoor && surfTemp.Class != SurfaceClass::Door) &&
-                s_ipsc->rNumericArgs(2) > 1.0) {
+            } else if (s_ipsc->rNumericArgs(2) > 1.0) {
                 ShowWarningError(state,
                                  std::format("{}=\"{}\", invalid {}=[{:.1f}].",
                                              s_ipsc->cCurrentModuleObject,
@@ -5303,8 +5301,7 @@ namespace SurfaceGeometry {
             surfTemp.activeShadedConstruction = 0;
             surfTemp.shadedStormWinConstructionList.clear();
 
-            if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor || surfTemp.Class == SurfaceClass::TDD_Diffuser ||
-                surfTemp.Class == SurfaceClass::TDD_Dome) {
+            if (SurfaceClassIsGlazed(surfTemp.Class) || surfTemp.Class == SurfaceClass::TDD_Diffuser || surfTemp.Class == SurfaceClass::TDD_Dome) {
 
                 if (surfTemp.ExtBoundCond == DataSurfaces::OtherSideCoefNoCalcExt || surfTemp.ExtBoundCond == DataSurfaces::OtherSideCoefCalcExt) {
                     ShowSevereError(
@@ -5356,17 +5353,16 @@ namespace SurfaceGeometry {
     }
 
     void GetRectSubSurfaces(EnergyPlusData &state,
-                            bool &ErrorsFound,                       // Error flag indicator (true if errors found)
-                            int &SurfNum,                            // Count of Current SurfaceNumber
-                            int const TotWindows,                    // Number of Window SubSurfaces to obtain
-                            int const TotDoors,                      // Number of Door SubSurfaces to obtain
-                            int const TotGlazedDoors,                // Number of Glass Door SubSurfaces to obtain
-                            int const TotIZWindows,                  // Number of Interzone Window SubSurfaces to obtain
-                            int const TotIZDoors,                    // Number of Interzone Door SubSurfaces to obtain
-                            int const TotIZGlazedDoors,              // Number of Interzone Glass Door SubSurfaces to obtain
-                            const Array1D<SurfaceClass> &SubSurfIDs, // ID Assignments for valid sub surface classes
-                            int &AddedSubSurfaces,                   // Subsurfaces added when windows reference Window5
-                            int &NeedToAddSubSurfaces                // Number of surfaces to add, based on unentered IZ surfaces
+                            bool &ErrorsFound,          // Error flag indicator (true if errors found)
+                            int &SurfNum,               // Count of Current SurfaceNumber
+                            int const TotWindows,       // Number of Window SubSurfaces to obtain
+                            int const TotDoors,         // Number of Door SubSurfaces to obtain
+                            int const TotGlazedDoors,   // Number of Glass Door SubSurfaces to obtain
+                            int const TotIZWindows,     // Number of Interzone Window SubSurfaces to obtain
+                            int const TotIZDoors,       // Number of Interzone Door SubSurfaces to obtain
+                            int const TotIZGlazedDoors, // Number of Interzone Glass Door SubSurfaces to obtain
+                            int &AddedSubSurfaces,      // Subsurfaces added when windows reference Window5
+                            int &NeedToAddSubSurfaces   // Number of surfaces to add, based on unentered IZ surfaces
     )
     {
 
@@ -5390,8 +5386,9 @@ namespace SurfaceGeometry {
         bool GettingIZSurfaces;
         int FrameField;
         int OtherSurfaceField;
-        int ClassItem;
         int IZFound;
+
+        SurfaceClass surfClass = SurfaceClass::Invalid;
 
         auto &s_ipsc = state.dataIPShortCut;
         for (int Item = 1; Item <= 6; ++Item) {
@@ -5402,37 +5399,37 @@ namespace SurfaceGeometry {
                 GettingIZSurfaces = false;
                 FrameField = 5;
                 OtherSurfaceField = 0;
-                ClassItem = 1;
+                surfClass = DataSurfaces::SurfaceClass::Window;
             } else if (Item == 2) {
                 ItemsToGet = TotDoors;
                 GettingIZSurfaces = false;
                 FrameField = 0;
                 OtherSurfaceField = 0;
-                ClassItem = 2;
+                surfClass = DataSurfaces::SurfaceClass::Door;
             } else if (Item == 3) {
                 ItemsToGet = TotGlazedDoors;
                 GettingIZSurfaces = false;
                 FrameField = 5;
                 OtherSurfaceField = 0;
-                ClassItem = 3;
+                surfClass = DataSurfaces::SurfaceClass::GlassDoor;
             } else if (Item == 4) {
                 ItemsToGet = TotIZWindows;
                 GettingIZSurfaces = true;
                 FrameField = 0;
                 OtherSurfaceField = 4;
-                ClassItem = 1;
+                surfClass = DataSurfaces::SurfaceClass::Window;
             } else if (Item == 5) {
                 ItemsToGet = TotIZDoors;
                 GettingIZSurfaces = true;
                 FrameField = 0;
                 OtherSurfaceField = 4;
-                ClassItem = 2;
+                surfClass = DataSurfaces::SurfaceClass::Door;
             } else { // Item = 6
                 ItemsToGet = TotIZGlazedDoors;
                 GettingIZSurfaces = true;
                 FrameField = 0;
                 OtherSurfaceField = 4;
-                ClassItem = 3;
+                surfClass = DataSurfaces::SurfaceClass::GlassDoor;
             }
 
             for (Loop = 1; Loop <= ItemsToGet; ++Loop) {
@@ -5469,8 +5466,10 @@ namespace SurfaceGeometry {
                 ++SurfNum;
                 auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
 
-                surfTemp.Name = s_ipsc->cAlphaArgs(1);  // Set the Surface Name in the Derived Type
-                surfTemp.Class = SubSurfIDs(ClassItem); // Set class number
+                surfTemp.Name = s_ipsc->cAlphaArgs(1); // Set the Surface Name in the Derived Type
+                assert(std::find(state.dataSurfaceGeometry->SubSurfIDs.begin(), state.dataSurfaceGeometry->SubSurfIDs.end(), surfClass) !=
+                       state.dataSurfaceGeometry->SubSurfIDs.end());
+                surfTemp.Class = surfClass;
 
                 surfTemp.Construction =
                     Util::FindItemInList(s_ipsc->cAlphaArgs(2), state.dataConstruction->Construct, state.dataHeatBal->TotConstructs);
@@ -6057,7 +6056,7 @@ namespace SurfaceGeometry {
         // Warning if window has multiplier > 1 and SolarDistribution = FullExterior or FullInteriorExterior
 
         auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
-        if ((surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor) &&
+        if (SurfaceClassIsGlazed(surfTemp.Class) &&
             static_cast<int>(state.dataHeatBal->SolarDistribution) > static_cast<int>(DataHeatBalance::Shadowing::Minimal) &&
             surfTemp.Multiplier > 1.0) {
             if (state.dataGlobal->DisplayExtraWarnings) {
@@ -6095,8 +6094,7 @@ namespace SurfaceGeometry {
 
         // Disallow glass transmittance dirt factor for interior windows and glass doors
 
-        if (surfTemp.ExtBoundCond != DataSurfaces::ExternalEnvironment &&
-            (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor)) {
+        if (surfTemp.ExtBoundCond != DataSurfaces::ExternalEnvironment && SurfaceClassIsGlazed(surfTemp.Class)) {
             ConstrNum = surfTemp.Construction;
             if (ConstrNum > 0) {
                 for (int Lay = 1; Lay <= state.dataConstruction->Construct(ConstrNum).TotLayers; ++Lay) {
@@ -6160,9 +6158,7 @@ namespace SurfaceGeometry {
                     // Net area of base surface with unity window multipliers (used in shadowing checks)
                     // For Windows, Glass Doors and Doors, just one area is subtracted.  For the rest, should be
                     // full area.
-                    if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor) {
-                        state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).NetAreaShadowCalc -= surfTemp.Area / surfTemp.Multiplier;
-                    } else if (surfTemp.Class == SurfaceClass::Door) { // Door, TDD:Diffuser, TDD:DOME
+                    if (SurfaceClassIsWindow(surfTemp.Class) || SurfaceClassIsDoor(surfTemp.Class)) {
                         state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).NetAreaShadowCalc -= surfTemp.Area / surfTemp.Multiplier;
                     } else {
                         state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).NetAreaShadowCalc -= surfTemp.Area;
@@ -6252,7 +6248,7 @@ namespace SurfaceGeometry {
         surfTemp.CosAzim = CosSurfAzimuth;
         surfTemp.SinTilt = SinSurfTilt;
         surfTemp.CosTilt = CosSurfTilt;
-        if (surfTemp.Class != SurfaceClass::Window && surfTemp.Class != SurfaceClass::GlassDoor && surfTemp.Class != SurfaceClass::Door) {
+        if (!SurfaceClassIsWindow(surfTemp.Class) && !SurfaceClassIsDoor(surfTemp.Class)) {
             surfTemp.ViewFactorGround = 0.5 * (1.0 - surfTemp.CosTilt);
         }
         // Outward normal unit vector (pointing away from room)
@@ -9398,7 +9394,7 @@ namespace SurfaceGeometry {
                 }
             }
 
-            if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor || surfTemp.Class == SurfaceClass::Door) {
+            if (SurfaceClassIsWindow(surfTemp.Class) || SurfaceClassIsDoor(surfTemp.Class)) {
                 surfTemp.Area *= surfTemp.Multiplier;
             }
             // Can perform tests on this surface here
