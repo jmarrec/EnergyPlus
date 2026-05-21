@@ -1400,6 +1400,25 @@ namespace Sched {
                 continue;
             }
 
+            // Validate rule orders
+            std::vector<Sched::RuleSchedule *> ruleSchedules;
+            for (Sched::RuleSchedule * ruleSchedule : s_sched->ruleSchedules) {
+                if (ruleSchedule->scheduleRulesetName == Alphas(1)) {
+                    ruleSchedules.push_back(ruleSchedule);
+                }
+            }
+            for (int i = 0; i < ruleSchedules.size(); ++i) {
+                for (int j = i + 1; j < ruleSchedules.size(); ++j) {
+                    if (ruleSchedules[i]->ruleOrder == ruleSchedules[j]->ruleOrder) {
+                        ShowWarningMessage(state,
+                                           std::format("{}: {} has rules with duplicate rule order ({})",
+                                                       routineName,
+                                                       Alphas(1),
+                                                       ruleSchedules[i]->ruleOrder));
+                    }
+                }
+            }
+
             auto *sched = AddScheduleDetailed(state, Alphas(1));
             sched->type = SchedType::Ruleset;
 
@@ -1416,6 +1435,7 @@ namespace Sched {
             if (defaultDaySched == nullptr) {
                 ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(3), Alphas(3));
                 ErrorsFound = true;
+                continue;
             }
 
             auto *summerDesignDaySchedule = defaultDaySched;
@@ -1478,32 +1498,32 @@ namespace Sched {
                         }
 
                         if (ruleSched->applySunday) {
-                            weekSched->dayScheds[1] = ruleSched->daySched;
+                            weekSched->dayScheds[(int)Sched::DayType::Sunday] = ruleSched->daySched;
                         }
                         if (ruleSched->applyMonday) {
-                            weekSched->dayScheds[2] = ruleSched->daySched;
+                            weekSched->dayScheds[(int)Sched::DayType::Monday] = ruleSched->daySched;
                         }
                         if (ruleSched->applyTuesday) {
-                            weekSched->dayScheds[3] = ruleSched->daySched;
+                            weekSched->dayScheds[(int)Sched::DayType::Tuesday] = ruleSched->daySched;
                         }
                         if (ruleSched->applyWednesday) {
-                            weekSched->dayScheds[4] = ruleSched->daySched;
+                            weekSched->dayScheds[(int)Sched::DayType::Wednesday] = ruleSched->daySched;
                         }
                         if (ruleSched->applyThursday) {
-                            weekSched->dayScheds[5] = ruleSched->daySched;
+                            weekSched->dayScheds[(int)Sched::DayType::Thursday] = ruleSched->daySched;
                         }
                         if (ruleSched->applyFriday) {
-                            weekSched->dayScheds[6] = ruleSched->daySched;
+                            weekSched->dayScheds[(int)Sched::DayType::Friday] = ruleSched->daySched;
                         }
                         if (ruleSched->applySaturday) {
-                            weekSched->dayScheds[7] = ruleSched->daySched;
+                            weekSched->dayScheds[(int)Sched::DayType::Saturday] = ruleSched->daySched;
                         }
 
-                        weekSched->dayScheds[8] = summerDesignDaySchedule;
-                        weekSched->dayScheds[9] = winterDesignDaySchedule;
-                        weekSched->dayScheds[10] = holidaySchedule;
-                        weekSched->dayScheds[11] = customDay1Schedule;
-                        weekSched->dayScheds[12] = customDay2Schedule;
+                        weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay] = summerDesignDaySchedule;
+                        weekSched->dayScheds[(int)Sched::DayType::WinterDesignDay] = winterDesignDaySchedule;
+                        weekSched->dayScheds[(int)Sched::DayType::Holiday] = holidaySchedule;
+                        weekSched->dayScheds[(int)Sched::DayType::CustomDay1] = customDay1Schedule;
+                        weekSched->dayScheds[(int)Sched::DayType::CustomDay2] = customDay2Schedule;
                     }
                     ++daysInYear[day];
                     sched->weekScheds[day] = weekSched;
@@ -1529,11 +1549,11 @@ namespace Sched {
                         for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
                             weekSched->dayScheds[iDayType] = defaultDaySched;
                         }
-                        weekSched->dayScheds[8] = summerDesignDaySchedule;
-                        weekSched->dayScheds[9] = winterDesignDaySchedule;
-                        weekSched->dayScheds[10] = holidaySchedule;
-                        weekSched->dayScheds[11] = customDay1Schedule;
-                        weekSched->dayScheds[12] = customDay2Schedule;
+                        weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay] = summerDesignDaySchedule;
+                        weekSched->dayScheds[(int)Sched::DayType::WinterDesignDay] = winterDesignDaySchedule;
+                        weekSched->dayScheds[(int)Sched::DayType::Holiday] = holidaySchedule;
+                        weekSched->dayScheds[(int)Sched::DayType::CustomDay1] = customDay1Schedule;
+                        weekSched->dayScheds[(int)Sched::DayType::CustomDay2] = customDay2Schedule;
                     }
                     sched->weekScheds[iDay] = weekSched;
                 }
