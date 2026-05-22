@@ -105,6 +105,7 @@ set(test_src
     Datasets.unit.cc
     DaylightingDevices.unit.cc
     DaylightingManager.unit.cc
+    ConstructionAssignmentSet.unit.cc
     DemandResponse.unit.cc
     DesiccantDehumidifiers.unit.cc
     DisplacementVentMgr.unit.cc
