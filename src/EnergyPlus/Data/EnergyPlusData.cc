@@ -95,6 +95,7 @@ EnergyPlusData::EnergyPlusData()
     this->dataDaylightingDevices = std::make_unique<DaylightingDevicesData>();
     this->dataDaylightingDevicesData = std::make_unique<DataDaylightingDevicesData>();
     this->dataDayltg = std::make_unique<DaylightingData>();
+    this->dataDefaultConstructions = std::make_unique<DefaultConstructionsData>();
     this->dataDefineEquipment = std::make_unique<DefineEquipData>();
     this->dataDemandManager = std::make_unique<DemandManagerData>();
     this->dataDesiccantDehumidifiers = std::make_unique<DesiccantDehumidifiersData>();
@@ -354,6 +355,7 @@ void EnergyPlusData::clear_state()
     this->dataDaylightingDevices->clear_state();
     this->dataDaylightingDevicesData->clear_state();
     this->dataDayltg->clear_state();
+    this->dataDefaultConstructions->clear_state();
     this->dataDefineEquipment->clear_state();
     this->dataDemandManager->clear_state();
     this->dataDesiccantDehumidifiers->clear_state();
@@ -632,6 +634,7 @@ void EnergyPlusData::init_constant_state(EnergyPlusData &state)
     this->dataDaylightingDevices->init_constant_state(state);
     this->dataDaylightingDevicesData->init_constant_state(state);
     this->dataDayltg->init_constant_state(state);
+    this->dataDefaultConstructions->init_constant_state(state);
     this->dataDefineEquipment->init_constant_state(state);
     this->dataDemandManager->init_constant_state(state);
     this->dataDesiccantDehumidifiers->init_constant_state(state);
@@ -896,6 +899,7 @@ void EnergyPlusData::init_state(EnergyPlusData &state)
     this->dataDaylightingDevices->init_state(state);
     this->dataDaylightingDevicesData->init_state(state);
     this->dataDayltg->init_state(state);
+    this->dataDefaultConstructions->init_state(state);
     this->dataDefineEquipment->init_state(state);
     this->dataDemandManager->init_state(state);
     this->dataDesiccantDehumidifiers->init_state(state);
