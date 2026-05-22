@@ -51482,8 +51482,9 @@ Fan:ZoneExhaust,
 FanPerformance:NightVentilation,
        \memo Specifies an alternate set of performance parameters for a fan. These alternate
        \memo parameters are used when a system manager (such as AvailabilityManager:NightVentilation)
-       \memo sets a specified flow rate. May be used with Fan:ConstantVolume, Fan:VariableVolume and
-       \memo Fan:ComponentModel. If the fan model senses that a fixed flow rate has been set, it
+       \memo sets a specified flow rate. May be used with Fan:ConstantVolume, Fan:VariableVolume,
+       \memo Fan:ZoneExhaust, and Fan:OnOff (not Fan:ComponentModel). Fan:SystemModel has its own
+       \memo night ventilation settings. If the fan model senses that a fixed flow rate has been set, it
        \memo will use these alternate performance parameters. It is assumed that the fan will
        \memo run at a fixed speed in the alternate mode.
   A1 , \field Fan Name
