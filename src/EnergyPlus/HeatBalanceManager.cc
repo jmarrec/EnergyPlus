@@ -75,6 +75,7 @@
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
 #include <EnergyPlus/DaylightingDevices.hh>
 #include <EnergyPlus/DaylightingManager.hh>
+#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/EconomicTariff.hh>
@@ -272,6 +273,8 @@ namespace HeatBalanceManager {
         GetFrameAndDividerData(state);
 
         GetConstructData(state, ErrorsFound); // Read constructs from input file/transfer from legacy data structure
+
+        ConstructionAssignments::GetConstructionAssignmentSetData(state, ErrorsFound);
 
         GetBuildingData(state, ErrorsFound); // Read building data from input file
 

@@ -130,6 +130,7 @@
 #include <EnergyPlus/DataZoneEquipment.hh>
 #include <EnergyPlus/DaylightingDevices.hh>
 #include <EnergyPlus/DaylightingManager.hh>
+#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/DemandManager.hh>
 #include <EnergyPlus/DesiccantDehumidifiers.hh>
 #include <EnergyPlus/DisplacementVentMgr.hh>
