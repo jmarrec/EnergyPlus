@@ -284,7 +284,7 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesWSHP(EnergyPlusData &state, bool
 
 void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool FirstHVACIteration, [[maybe_unused]] Real64 const currentLoad)
 {
-    if (!this->running) {
+    if (std::abs(currentLoad) < HVAC::SmallLoad || !this->running) {
         this->loadSideMassFlowRate = 0.0;
         this->sourceSideMassFlowRate = 0.0;
         PlantUtilities::SetComponentFlowRate(
