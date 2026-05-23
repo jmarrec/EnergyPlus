@@ -284,7 +284,8 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesWSHP(EnergyPlusData &state, bool
 
 void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool FirstHVACIteration, [[maybe_unused]] Real64 const currentLoad)
 {
-    if ((std::abs(currentLoad) < HVAC::SmallLoad && this->companionHeatPumpCoil == nullptr) || !this->running) {
+    auto &comp = DataPlant::CompData::getPlantComponent(state, this->loadSidePlantLoc);
+    if ((std::abs(currentLoad) < HVAC::SmallLoad || !this->running) && comp.FlowCtrl != DataBranchAirLoopPlant::ControlType::SeriesActive) {
         this->loadSideMassFlowRate = 0.0;
         this->sourceSideMassFlowRate = 0.0;
         PlantUtilities::SetComponentFlowRate(
@@ -2926,7 +2927,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
     // get setpoint on the load side outlet
     // Real64 loadSideOutletSetpointTemp = this->getLoadSideOutletSetPointTemp(state);
 
-    // Use a logic similar to that for a boilder: If the specified load is 0.0 or the boiler should not run
+    // Use a logic similar to that for a boiler: If the specified load is 0.0 or the boiler should not run
     // then we leave this subroutine. Before leaving
     // if the component control is SERIESACTIVE we set the component flow to inlet flow so that flow resolver
     // will not shut down the branch
