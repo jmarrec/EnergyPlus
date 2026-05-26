@@ -66,7 +66,33 @@ namespace DataSurfaces {
 
 namespace ConstructionAssignments {
 
+    enum class SearchDistanceType
+    {
+        Invalid = -1,
+        HardAssigned = 0,
+        Space,
+        // SpaceType
+        // BuildingStory
+        Building,
+        // BuildingSpaceType,
+        Num,
+    };
+
+    struct ConstructionWithSearchDistance
+    {
+        SearchDistanceType searchDistance = SearchDistanceType::Invalid;
+        int constructionNum = 0;
+    };
+
     void GetConstructionAssignmentSetData(EnergyPlusData &state, bool &ErrorsFound); // If errors found in input
+
+    // For a given surface, this function will call constructionWithSearchDistance for the surface and its adjacent surface (if it exists) and
+    // resolve which construction to return based on the search distance for both
+    int resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface);
+
+    // This is a helper only, use resolveConstructionWithSearchDistance instead for public usage
+    // This function looks up a construction for the surface, checking surface, space, and building-level construction assignment sets.
+    ConstructionWithSearchDistance constructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface);
 
     struct SubSurfaceConstructionAssignmentsData
     {
