@@ -137,6 +137,129 @@ namespace DefaultConstructions {
         }
     }
 
+    ConstructionWithSearchDistance constructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface)
+    {
+
+        if (surface.Construction > 0) {
+            return {.searchDistance = SearchDistanceType::HardAssigned, .constructionNum = surface.Construction};
+        }
+        auto &s_dc = state.dataDefaultConstructions;
+
+        int spaceNum = surface.spaceNum;
+        if (spaceNum > 0) {
+            auto const &thisSpace = state.dataHeatBal->space(spaceNum);
+            int const cIdx = thisSpace.defaultConstructionSetIndex;
+            if (cIdx >= 0) {
+                auto const &dcs = s_dc->defaultConstructionSets[cIdx];
+                int constrNum = dcs.getDefaultConstruction(surface);
+                if (constrNum > 0) {
+                    return {.searchDistance = SearchDistanceType::Space, .constructionNum = constrNum};
+                }
+            }
+        }
+
+        {
+            int const cIdx = s_dc->buildingDefaultConstructionSetIndex;
+            if (cIdx >= 0) {
+                auto const &dcs = s_dc->defaultConstructionSets[cIdx];
+                int constrNum = dcs.getDefaultConstruction(surface);
+                if (constrNum > 0) {
+                    return {.searchDistance = SearchDistanceType::Building, .constructionNum = constrNum};
+                }
+            }
+        }
+
+        return {.searchDistance = SearchDistanceType::Invalid, .constructionNum = 0};
+    }
+
+    int resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface)
+    {
+
+        ConstructionWithSearchDistance thisCWSD = constructionWithSearchDistance(state, surface);
+
+        // If no adjacent surface, return
+        if (surface.ExtBoundCond <= 0) {
+            return thisCWSD.constructionNum;
+        }
+
+        // TODO: should I resolve with adjacent surface too?
+        auto const &otherSurface = state.dataSurface->Surface(surface.ExtBoundCond);
+        ConstructionWithSearchDistance adjacentCWSD = constructionWithSearchDistance(state, otherSurface);
+
+        bool const thisFound = thisCWSD.searchDistance != SearchDistanceType::Invalid;
+        bool const adjacentFound = adjacentCWSD.searchDistance != SearchDistanceType::Invalid;
+
+        if (thisFound && !adjacentFound) {
+            // return this construction
+            return thisCWSD.constructionNum;
+        }
+
+        if (!thisFound && adjacentFound) {
+            // return adjacent construction
+            return adjacentCWSD.constructionNum;
+        }
+
+        if (!thisFound && !adjacentFound) {
+            // no constructions, nothing to be done
+            return 0;
+        }
+
+        // both surfaces return a construction
+
+        if (thisCWSD.constructionNum == adjacentCWSD.constructionNum) {
+            // both surfaces have same construction
+            return thisCWSD.constructionNum;
+        }
+
+        // both surfaces return a construction and they are not the same
+
+        if (thisCWSD.searchDistance < adjacentCWSD.searchDistance) {
+            // lower search distance to construction
+            return thisCWSD.constructionNum;
+        }
+
+        if (thisCWSD.searchDistance > adjacentCWSD.searchDistance) {
+            // lower search distance to adjacent construction
+            return adjacentCWSD.constructionNum;
+        }
+
+        // both surfaces return a construction, they are not the same, and both have same search distance
+
+        // TODO: if they are reversedEqualLayers -> IS THIS NEEDED REALLY?
+        {
+            const auto &thisConstruct = state.dataConstruction->Construct(thisCWSD.constructionNum);
+            const auto &adjacentConstruct = state.dataConstruction->Construct(adjacentCWSD.constructionNum);
+            bool is_reversed_equal_layers = true;
+            if (thisConstruct.TotLayers != adjacentConstruct.TotLayers) {
+                is_reversed_equal_layers = false;
+            } else {
+                int adjacentLayerNum = 0;
+                for (int thisLayerNum = thisConstruct.TotLayers; thisLayerNum >= 1; --thisLayerNum) {
+                    ++adjacentLayerNum;
+                    if (thisConstruct.LayerPoint(thisLayerNum) != adjacentConstruct.LayerPoint(adjacentLayerNum)) {
+                        is_reversed_equal_layers = false;
+                        break;
+                    }
+                }
+            }
+
+            if (is_reversed_equal_layers) {
+                // these constructions are reverse equal
+                return thisCWSD.constructionNum;
+            }
+        }
+
+        // give up for now
+        ShowWarningError(
+            state,
+            std::format(
+                R"(resolveConstructionWithSearchDistance: Surface="{}" and adjacent surface="{}" have different constructions with the same search distance. Using construction="{}".)",
+                surface.Name,
+                otherSurface.Name,
+                state.dataConstruction->Construct(thisCWSD.constructionNum).Name));
+        return thisCWSD.constructionNum;
+    }
+
     void GetDefaultConstructionSetData(EnergyPlusData &state, bool &ErrorsFound)
     {
         static constexpr std::string_view routineName = "GetDefaultConstructionSetData: ";
