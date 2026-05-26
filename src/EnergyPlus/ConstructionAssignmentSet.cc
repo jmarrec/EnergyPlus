@@ -53,6 +53,7 @@
 #include <EnergyPlus/Construction.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
+#include <EnergyPlus/DataSurfaces.hh>
 #include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
@@ -60,6 +61,81 @@
 namespace EnergyPlus {
 
 namespace ConstructionAssignments {
+
+    int ConstructionAssignmentSetData::getConstructionAssignment(DataSurfaces::SurfaceData const &surface) const
+    {
+        int extBoundCond = surface.ExtBoundCond;
+
+        // Base opaque surfaces
+        if (surface.Class == DataSurfaces::SurfaceClass::Wall || surface.Class == DataSurfaces::SurfaceClass::Floor ||
+            surface.Class == DataSurfaces::SurfaceClass::Roof) {
+
+            SurfaceConstructionAssignmentsData const *surfConstrs = nullptr;
+            if (extBoundCond == DataSurfaces::ExternalEnvironment || extBoundCond == DataSurfaces::OtherSideCoefNoCalcExt ||
+                extBoundCond == DataSurfaces::OtherSideCoefCalcExt) {
+                surfConstrs = exteriorSurfConstructions.get();
+            } else if (extBoundCond == DataSurfaces::Ground || extBoundCond == DataSurfaces::GroundFCfactorMethod ||
+                       extBoundCond == DataSurfaces::KivaFoundation) {
+                surfConstrs = groundContactSurfConstructions.get();
+            } else if (surface.ExtBoundCondName == surface.Name) {
+                // Adiabatic: surface points to itself.
+                // ExtBoundCondName == Name is preserved through BC reconciliation.
+                return adiabaticSurfConstrNum;
+            } else {
+                surfConstrs = interiorSurfConstructions.get();
+            }
+
+            if (surfConstrs == nullptr) {
+                return 0;
+            }
+            if (surface.Class == DataSurfaces::SurfaceClass::Floor) {
+                return surfConstrs->floorConstrNum;
+            }
+            if (surface.Class == DataSurfaces::SurfaceClass::Roof) {
+                return surfConstrs->roofCeilingConstrNum;
+            }
+            return surfConstrs->wallConstrNum;
+        }
+
+        // Interior mass
+        if (surface.Class == DataSurfaces::SurfaceClass::IntMass) {
+            return interiorPartitionConstrNum;
+        }
+
+        // Subsurfaces — extBoundCond is inherited from base surface (see GetHTSubSurfaceData)
+        SubSurfaceConstructionAssignmentsData const *subSurfConstrs = nullptr;
+        if (extBoundCond == DataSurfaces::ExternalEnvironment || extBoundCond == DataSurfaces::OtherSideCoefNoCalcExt ||
+            extBoundCond == DataSurfaces::OtherSideCoefCalcExt) {
+            subSurfConstrs = exteriorSubSurfConstructions.get();
+        } else {
+            subSurfConstrs = interiorSubSurfConstructions.get();
+        }
+
+        if (subSurfConstrs == nullptr) {
+            return 0;
+        }
+        switch (surface.OriginalClass) {
+        case DataSurfaces::SurfaceClass::Window:
+        case DataSurfaces::SurfaceClass::FixedWindow:
+            return subSurfConstrs->fixedWindowConstrNum;
+        case DataSurfaces::SurfaceClass::OperableWindow:
+            return subSurfConstrs->operableWindowConstrNum;
+        case DataSurfaces::SurfaceClass::Skylight:
+            return subSurfConstrs->skylightConstrNum;
+        case DataSurfaces::SurfaceClass::Door:
+            return subSurfConstrs->doorConstrNum;
+        case DataSurfaces::SurfaceClass::GlassDoor:
+            return subSurfConstrs->glassDoorConstrNum;
+        case DataSurfaces::SurfaceClass::OverheadDoor:
+            return subSurfConstrs->overheadDoorConstrNum;
+        case DataSurfaces::SurfaceClass::TDD_Dome:
+            return subSurfConstrs->tddDomeConstrNum;
+        case DataSurfaces::SurfaceClass::TDD_Diffuser:
+            return subSurfConstrs->tddDiffuserConstrNum;
+        default:
+            return 0;
+        }
+    }
 
     void GetConstructionAssignmentSetData(EnergyPlusData &state, bool &ErrorsFound)
     {

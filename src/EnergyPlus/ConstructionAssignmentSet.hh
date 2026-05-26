@@ -60,6 +60,9 @@ namespace EnergyPlus {
 
 // Forward declarations
 struct EnergyPlusData;
+namespace DataSurfaces {
+    struct SurfaceData;
+}
 
 namespace ConstructionAssignments {
 
@@ -99,6 +102,8 @@ namespace ConstructionAssignments {
         // Direct Constructions indices
         int interiorPartitionConstrNum = 0;
         int adiabaticSurfConstrNum = 0;
+
+        int getConstructionAssignment(DataSurfaces::SurfaceData const &surface) const;
     };
 } // namespace ConstructionAssignments
 
