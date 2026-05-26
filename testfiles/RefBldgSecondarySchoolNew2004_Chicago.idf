@@ -6856,7 +6856,7 @@
 
   FenestrationSurface:Detailed,
     Auditorium_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Auditorium_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6871,7 +6871,7 @@
 
   FenestrationSurface:Detailed,
     Auditorium_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Auditorium_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6886,7 +6886,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Aux_Gym_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6901,7 +6901,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_1_Wall_2_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Aux_Gym_ZN_1_FLR_1_Wall_2,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6916,7 +6916,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6931,7 +6931,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_Wall_2_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Wall_2,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6946,7 +6946,7 @@
 
   FenestrationSurface:Detailed,
     Bathrooms_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Bathrooms_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6961,7 +6961,7 @@
 
   FenestrationSurface:Detailed,
     Bathrooms_ZN_1_FLR_1_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Bathrooms_ZN_1_FLR_1_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6976,7 +6976,7 @@
 
   FenestrationSurface:Detailed,
     Bathrooms_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Bathrooms_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -6991,7 +6991,7 @@
 
   FenestrationSurface:Detailed,
     Bathrooms_ZN_1_FLR_2_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Bathrooms_ZN_1_FLR_2_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7006,7 +7006,7 @@
 
   FenestrationSurface:Detailed,
     Cafeteria_ZN_1_FLR_1_Wall_2_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Cafeteria_ZN_1_FLR_1_Wall_2,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7021,7 +7021,7 @@
 
   FenestrationSurface:Detailed,
     Cafeteria_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Cafeteria_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7036,7 +7036,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_1_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7051,7 +7051,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_1_ZN_1_FLR_1_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_1_ZN_1_FLR_1_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7066,7 +7066,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_1_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_1_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7081,7 +7081,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_1_ZN_1_FLR_2_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_1_ZN_1_FLR_2_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7096,7 +7096,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_2_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7111,7 +7111,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_2_ZN_1_FLR_1_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_2_ZN_1_FLR_1_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7126,7 +7126,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_2_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_2_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7141,7 +7141,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_2_ZN_1_FLR_2_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_2_ZN_1_FLR_2_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7156,7 +7156,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_3_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7171,7 +7171,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_3_ZN_1_FLR_1_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_3_ZN_1_FLR_1_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7186,7 +7186,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_3_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_3_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7201,7 +7201,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_1_Pod_3_ZN_1_FLR_2_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_1_Pod_3_ZN_1_FLR_2_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7216,7 +7216,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_1_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7231,7 +7231,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_1_ZN_1_FLR_1_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_1_ZN_1_FLR_1_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7246,7 +7246,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_1_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_1_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7261,7 +7261,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_1_ZN_1_FLR_2_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_1_ZN_1_FLR_2_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7276,7 +7276,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_2_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7291,7 +7291,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_2_ZN_1_FLR_1_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_2_ZN_1_FLR_1_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7306,7 +7306,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_2_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_2_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7321,7 +7321,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_2_ZN_1_FLR_2_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_2_ZN_1_FLR_2_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7336,7 +7336,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_3_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7351,7 +7351,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_3_ZN_1_FLR_1_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_3_ZN_1_FLR_1_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7366,7 +7366,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_3_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_3_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7381,7 +7381,7 @@
 
   FenestrationSurface:Detailed,
     Corner_Class_2_Pod_3_ZN_1_FLR_2_Wall_4_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corner_Class_2_Pod_3_ZN_1_FLR_2_Wall_4,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7396,7 +7396,7 @@
 
   FenestrationSurface:Detailed,
     Corridor_Pod_1_ZN_1_FLR_1_Wall_6_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corridor_Pod_1_ZN_1_FLR_1_Wall_6,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7411,7 +7411,7 @@
 
   FenestrationSurface:Detailed,
     Corridor_Pod_1_ZN_1_FLR_2_Wall_6_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corridor_Pod_1_ZN_1_FLR_2_Wall_6,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7426,7 +7426,7 @@
 
   FenestrationSurface:Detailed,
     Corridor_Pod_2_ZN_1_FLR_1_Wall_6_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corridor_Pod_2_ZN_1_FLR_1_Wall_6,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7441,7 +7441,7 @@
 
   FenestrationSurface:Detailed,
     Corridor_Pod_2_ZN_1_FLR_2_Wall_6_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corridor_Pod_2_ZN_1_FLR_2_Wall_6,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7456,7 +7456,7 @@
 
   FenestrationSurface:Detailed,
     Corridor_Pod_3_ZN_1_FLR_1_Wall_6_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corridor_Pod_3_ZN_1_FLR_1_Wall_6,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7471,7 +7471,7 @@
 
   FenestrationSurface:Detailed,
     Corridor_Pod_3_ZN_1_FLR_2_Wall_6_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Corridor_Pod_3_ZN_1_FLR_2_Wall_6,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7486,7 +7486,7 @@
 
   FenestrationSurface:Detailed,
     Kitchen_ZN_1_FLR_1_Wall_2_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Kitchen_ZN_1_FLR_1_Wall_2,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7501,7 +7501,7 @@
 
   FenestrationSurface:Detailed,
     LIBRARY_MEDIA_CENTER_Wall_2_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     LIBRARY_MEDIA_CENTER_Wall_2,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7516,7 +7516,7 @@
 
   FenestrationSurface:Detailed,
     LIBRARY_MEDIA_CENTER_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     LIBRARY_MEDIA_CENTER_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7531,7 +7531,7 @@
 
   FenestrationSurface:Detailed,
     Lobby_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Lobby_ZN_1_FLR_1_Wall_1, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7546,7 +7546,7 @@
 
   FenestrationSurface:Detailed,
     Lobby_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Lobby_ZN_1_FLR_2_Wall_1, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7561,7 +7561,7 @@
 
   FenestrationSurface:Detailed,
     Main_Corridor_ZN_1_FLR_1_Wall_11_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Main_Corridor_ZN_1_FLR_1_Wall_11,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7576,7 +7576,7 @@
 
   FenestrationSurface:Detailed,
     Main_Corridor_ZN_1_FLR_1_Wall_7_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Main_Corridor_ZN_1_FLR_1_Wall_7,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7591,7 +7591,7 @@
 
   FenestrationSurface:Detailed,
     Main_Corridor_ZN_1_FLR_2_Wall_11_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Main_Corridor_ZN_1_FLR_2_Wall_11,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7606,7 +7606,7 @@
 
   FenestrationSurface:Detailed,
     Main_Corridor_ZN_1_FLR_2_Wall_7_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Main_Corridor_ZN_1_FLR_2_Wall_7,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7621,7 +7621,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_1_Pod_1_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7636,7 +7636,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_1_Pod_1_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_1_Pod_1_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7651,7 +7651,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_1_Pod_2_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7666,7 +7666,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_1_Pod_2_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_1_Pod_2_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7681,7 +7681,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_1_Pod_3_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7696,7 +7696,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_1_Pod_3_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_1_Pod_3_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7711,7 +7711,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_2_Pod_1_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7726,7 +7726,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_2_Pod_1_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_2_Pod_1_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7741,7 +7741,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_2_Pod_2_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7756,7 +7756,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_2_Pod_2_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_2_Pod_2_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7771,7 +7771,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_2_Pod_3_ZN_1_FLR_1_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7786,7 +7786,7 @@
 
   FenestrationSurface:Detailed,
     Mult_Class_2_Pod_3_ZN_1_FLR_2_Wall_3_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Mult_Class_2_Pod_3_ZN_1_FLR_2_Wall_3,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7801,7 +7801,7 @@
 
   FenestrationSurface:Detailed,
     Offices_ZN_1_FLR_1_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Offices_ZN_1_FLR_1_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7816,7 +7816,7 @@
 
   FenestrationSurface:Detailed,
     Offices_ZN_1_FLR_1_Wall_2_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Offices_ZN_1_FLR_1_Wall_2,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7831,7 +7831,7 @@
 
   FenestrationSurface:Detailed,
     Offices_ZN_1_FLR_2_Wall_1_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Offices_ZN_1_FLR_2_Wall_1,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7846,7 +7846,7 @@
 
   FenestrationSurface:Detailed,
     Offices_ZN_1_FLR_2_Wall_2_window_1,  !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Window Non-res Fixed,    !- Construction Name
     Offices_ZN_1_FLR_2_Wall_2,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7869,7 +7869,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_1,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7884,7 +7884,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_10,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7899,7 +7899,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_11,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7914,7 +7914,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_12,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7929,7 +7929,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_13,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7944,7 +7944,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_14,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7959,7 +7959,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_15,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7974,7 +7974,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_16,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -7989,7 +7989,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_17,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8004,7 +8004,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_18,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8019,7 +8019,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_19,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8034,7 +8034,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_2,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8049,7 +8049,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_20,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8064,7 +8064,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_21,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8079,7 +8079,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_22,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8094,7 +8094,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_23,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8109,7 +8109,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_24,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8124,7 +8124,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_25,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8139,7 +8139,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_26,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8154,7 +8154,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_27,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8169,7 +8169,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_28,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8184,7 +8184,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_29,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8199,7 +8199,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_3,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8214,7 +8214,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_30,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8229,7 +8229,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_31,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8244,7 +8244,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_32,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8259,7 +8259,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_33,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8274,7 +8274,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_34,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8289,7 +8289,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_35,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8304,7 +8304,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_36,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8319,7 +8319,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_4,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8334,7 +8334,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_5,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8349,7 +8349,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_6,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8364,7 +8364,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_7,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8379,7 +8379,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_8,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8394,7 +8394,7 @@
 
   FenestrationSurface:Detailed,
     Aux_Gym_ZN_1_FLR_2_skylight_9,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Aux_Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8409,7 +8409,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_1,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8424,7 +8424,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_10,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8439,7 +8439,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_11,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8454,7 +8454,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_12,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8469,7 +8469,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_13,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8484,7 +8484,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_14,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8499,7 +8499,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_15,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8514,7 +8514,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_16,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8529,7 +8529,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_17,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8544,7 +8544,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_18,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8559,7 +8559,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_19,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8574,7 +8574,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_2,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8589,7 +8589,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_20,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8604,7 +8604,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_21,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8619,7 +8619,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_22,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8634,7 +8634,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_23,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8649,7 +8649,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_24,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8664,7 +8664,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_25,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8679,7 +8679,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_26,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8694,7 +8694,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_27,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8709,7 +8709,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_28,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8724,7 +8724,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_29,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8739,7 +8739,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_3,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8754,7 +8754,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_30,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8769,7 +8769,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_31,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8784,7 +8784,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_32,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8799,7 +8799,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_33,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8814,7 +8814,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_34,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8829,7 +8829,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_35,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8844,7 +8844,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_36,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8859,7 +8859,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_37,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8874,7 +8874,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_38,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8889,7 +8889,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_39,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8904,7 +8904,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_4,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8919,7 +8919,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_40,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8934,7 +8934,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_41,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8949,7 +8949,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_42,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8964,7 +8964,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_43,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8979,7 +8979,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_44,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -8994,7 +8994,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_45,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9009,7 +9009,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_46,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9024,7 +9024,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_47,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9039,7 +9039,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_48,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9054,7 +9054,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_49,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9069,7 +9069,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_5,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9084,7 +9084,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_50,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9099,7 +9099,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_51,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9114,7 +9114,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_52,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9129,7 +9129,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_53,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9144,7 +9144,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_54,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9159,7 +9159,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_6,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9174,7 +9174,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_7,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9189,7 +9189,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_8,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -9204,7 +9204,7 @@
 
   FenestrationSurface:Detailed,
     Gym_ZN_1_FLR_2_skylight_9,  !- Name
-    Window,                  !- Surface Type
+    Skylight,                  !- Surface Type
     Skylight cons 456,       !- Construction Name
     Gym_ZN_1_FLR_2_Ceiling,  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object

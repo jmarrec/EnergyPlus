@@ -73,6 +73,7 @@
 #include <EnergyPlus/DataWindowEquivalentLayer.hh>
 #include <EnergyPlus/DataZoneEquipment.hh>
 #include <EnergyPlus/DaylightingManager.hh>
+#include <EnergyPlus/DefaultConstructionSet.hh>
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/General.hh>
@@ -2285,6 +2286,39 @@ namespace SurfaceGeometry {
             }
         }
 
+        // Resolve default constructions for surfaces with no explicit construction assigned.
+        // Done after BC reconciliation so ExtBoundCond is a real surface index (enabling
+        // adjacent-surface DCS lookup). iz- surfaces get AssignReverseConstructionNumber applied
+        // since AssignReverseConstructionNumber(0) was a no-op earlier.
+        for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+            auto &surf = state.dataSurface->Surface(SurfNum);
+            if (!surf.HeatTransSurf || surf.Construction != 0) {
+                continue;
+            }
+            int constrNum = DefaultConstructions::resolveConstructionWithSearchDistance(state, surf);
+            if (constrNum == 0) {
+                continue;
+            }
+            if (surf.Name.size() > 3 && surf.Name.substr(0, 3) == "iz-") {
+                constrNum = DataHeatBalance::AssignReverseConstructionNumber(state, constrNum, SurfError);
+            }
+            surf.Construction = constrNum;
+            surf.ConstructionStoredInputValue = constrNum;
+        }
+
+        // Verify every heat-transfer surface now has a construction
+        for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+            auto const &surf = state.dataSurface->Surface(SurfNum);
+            if (!surf.HeatTransSurf || surf.Construction != 0) {
+                continue;
+            }
+            ShowSevereError(state,
+                            std::format("{}Surface=\"{}\" has no construction assigned and no applicable Default Construction Set was found.",
+                                        RoutineName,
+                                        surf.Name));
+            SurfError = true;
+        }
+
         setSurfaceFirstLast(state);
 
         // Set up Floor Areas for Zones and Spaces
@@ -3913,33 +3947,39 @@ namespace SurfaceGeometry {
                     surfTemp.Class = BaseSurfIDs(ClassItem);
                 }
 
-                surfTemp.Construction =
-                    Util::FindItemInList(s_ipsc->cAlphaArgs(ArgPointer), state.dataConstruction->Construct, state.dataHeatBal->TotConstructs);
-
-                if (surfTemp.Construction == 0) {
-                    ErrorsFound = true;
-                    ShowSevereError(state,
-                                    std::format("{}=\"{}\", invalid {}=\"{}\".",
-                                                s_ipsc->cCurrentModuleObject,
-                                                surfTemp.Name,
-                                                s_ipsc->cAlphaFieldNames(ArgPointer),
-                                                s_ipsc->cAlphaArgs(ArgPointer)));
-                } else if (state.dataConstruction->Construct(surfTemp.Construction).TypeIsWindow) {
-                    ErrorsFound = true;
-                    ShowSevereError(state,
-                                    std::format("{}=\"{}\", invalid {}=\"{}\" - has Window materials.",
-                                                s_ipsc->cCurrentModuleObject,
-                                                surfTemp.Name,
-                                                s_ipsc->cAlphaFieldNames(ArgPointer),
-                                                s_ipsc->cAlphaArgs(ArgPointer)));
-                    if (Item == 1) {
-                        ShowContinueError(state, std::format("...because {}={}", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaArgs(2)));
-                    } else {
-                        ShowContinueError(state, std::format("...because Surface Type={}", BaseSurfCls(ClassItem)));
-                    }
+                // Allow a blank construction for Building:SurfaceDetailed, it will be resolved based on DefaultConstructionSet
+                bool constructionIsBlank = s_ipsc->lAlphaFieldBlanks(ArgPointer);
+                if ((Item == 1) && constructionIsBlank) {
+                    // Process later
                 } else {
-                    state.dataConstruction->Construct(surfTemp.Construction).IsUsed = true;
-                    surfTemp.ConstructionStoredInputValue = surfTemp.Construction;
+                    surfTemp.Construction =
+                        Util::FindItemInList(s_ipsc->cAlphaArgs(ArgPointer), state.dataConstruction->Construct, state.dataHeatBal->TotConstructs);
+
+                    if (surfTemp.Construction == 0) {
+                        ErrorsFound = true;
+                        ShowSevereError(state,
+                                        std::format("{}=\"{}\", invalid {}=\"{}\".",
+                                                    s_ipsc->cCurrentModuleObject,
+                                                    surfTemp.Name,
+                                                    s_ipsc->cAlphaFieldNames(ArgPointer),
+                                                    s_ipsc->cAlphaArgs(ArgPointer)));
+                    } else if (state.dataConstruction->Construct(surfTemp.Construction).TypeIsWindow) {
+                        ErrorsFound = true;
+                        ShowSevereError(state,
+                                        std::format("{}=\"{}\", invalid {}=\"{}\" - has Window materials.",
+                                                    s_ipsc->cCurrentModuleObject,
+                                                    surfTemp.Name,
+                                                    s_ipsc->cAlphaFieldNames(ArgPointer),
+                                                    s_ipsc->cAlphaArgs(ArgPointer)));
+                        if (Item == 1) {
+                            ShowContinueError(state, std::format("...because {}={}", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaArgs(2)));
+                        } else {
+                            ShowContinueError(state, std::format("...because Surface Type={}", BaseSurfCls(ClassItem)));
+                        }
+                    } else {
+                        state.dataConstruction->Construct(surfTemp.Construction).IsUsed = true;
+                        surfTemp.ConstructionStoredInputValue = surfTemp.Construction;
+                    }
                 }
                 surfTemp.HeatTransSurf = true;
                 surfTemp.BaseSurf = SurfNum;
@@ -5073,51 +5113,56 @@ namespace SurfaceGeometry {
                 surfTemp.Class = SubSurfIDs(ValidChk); // Set class number
             }
 
-            surfTemp.Construction = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataConstruction->Construct, state.dataHeatBal->TotConstructs);
+            bool constructionIsBlank = s_ipsc->lAlphaFieldBlanks(3);
+            if (!constructionIsBlank) {
+                surfTemp.Construction =
+                    Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataConstruction->Construct, state.dataHeatBal->TotConstructs);
 
-            if (surfTemp.Construction == 0) {
-                ShowSevereError(state,
-                                std::format("{}=\"{}\", invalid {}=\"{}\".",
-                                            s_ipsc->cCurrentModuleObject,
-                                            surfTemp.Name,
-                                            s_ipsc->cAlphaFieldNames(3),
-                                            s_ipsc->cAlphaArgs(3)));
-                ErrorsFound = true;
-                continue;
-            }
-            state.dataConstruction->Construct(surfTemp.Construction).IsUsed = true;
-            surfTemp.ConstructionStoredInputValue = surfTemp.Construction;
-
-            if (SurfaceClassIsGlazed(surfTemp.Class) || surfTemp.Class == SurfaceClass::TDD_Diffuser || surfTemp.Class == SurfaceClass::TDD_Dome) {
-
-                if (surfTemp.Construction != 0) {
-                    auto const &construction = state.dataConstruction->Construct(surfTemp.Construction);
-                    if (!construction.TypeIsWindow && !construction.TypeIsAirBoundary) {
-                        ErrorsFound = true;
-                        ShowSevereError(state,
-                                        std::format("{}=\"{}\" has an opaque surface construction; it should have a window construction.",
-                                                    s_ipsc->cCurrentModuleObject,
-                                                    surfTemp.Name));
-                    }
-                    if (state.dataConstruction->Construct(surfTemp.Construction).SourceSinkPresent) {
-                        ErrorsFound = true;
-                        ShowSevereError(state,
-                                        std::format("{}=\"{}\": Windows are not allowed to have embedded sources/sinks",
-                                                    s_ipsc->cCurrentModuleObject,
-                                                    surfTemp.Name));
-                    }
-                }
-
-            } else if (surfTemp.Construction != 0) {
-                if (state.dataConstruction->Construct(surfTemp.Construction).TypeIsWindow) {
-                    ErrorsFound = true;
+                if (surfTemp.Construction == 0) {
                     ShowSevereError(state,
-                                    std::format("{}=\"{}\", invalid {}=\"{}\" - has Window materials.",
+                                    std::format("{}=\"{}\", invalid {}=\"{}\".",
                                                 s_ipsc->cCurrentModuleObject,
                                                 surfTemp.Name,
                                                 s_ipsc->cAlphaFieldNames(3),
                                                 s_ipsc->cAlphaArgs(3)));
-                    ShowContinueError(state, std::format("...because {}={}", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaArgs(2)));
+                    ErrorsFound = true;
+                    continue;
+                }
+                state.dataConstruction->Construct(surfTemp.Construction).IsUsed = true;
+                surfTemp.ConstructionStoredInputValue = surfTemp.Construction;
+
+                if (SurfaceClassIsGlazed(surfTemp.Class) || surfTemp.Class == SurfaceClass::TDD_Diffuser ||
+                    surfTemp.Class == SurfaceClass::TDD_Dome) {
+
+                    if (surfTemp.Construction != 0) {
+                        auto const &construction = state.dataConstruction->Construct(surfTemp.Construction);
+                        if (!construction.TypeIsWindow && !construction.TypeIsAirBoundary) {
+                            ErrorsFound = true;
+                            ShowSevereError(state,
+                                            std::format("{}=\"{}\" has an opaque surface construction; it should have a window construction.",
+                                                        s_ipsc->cCurrentModuleObject,
+                                                        surfTemp.Name));
+                        }
+                        if (state.dataConstruction->Construct(surfTemp.Construction).SourceSinkPresent) {
+                            ErrorsFound = true;
+                            ShowSevereError(state,
+                                            std::format("{}=\"{}\": Windows are not allowed to have embedded sources/sinks",
+                                                        s_ipsc->cCurrentModuleObject,
+                                                        surfTemp.Name));
+                        }
+                    }
+
+                } else if (surfTemp.Construction != 0) {
+                    if (state.dataConstruction->Construct(surfTemp.Construction).TypeIsWindow) {
+                        ErrorsFound = true;
+                        ShowSevereError(state,
+                                        std::format("{}=\"{}\", invalid {}=\"{}\" - has Window materials.",
+                                                    s_ipsc->cCurrentModuleObject,
+                                                    surfTemp.Name,
+                                                    s_ipsc->cAlphaFieldNames(3),
+                                                    s_ipsc->cAlphaArgs(3)));
+                        ShowContinueError(state, std::format("...because {}={}", s_ipsc->cAlphaFieldNames(2), s_ipsc->cAlphaArgs(2)));
+                    }
                 }
             }
 
@@ -6021,7 +6066,7 @@ namespace SurfaceGeometry {
             } // End of check if window has a construction
         }
 
-        if (state.dataConstruction->Construct(surfTemp.Construction).WindowTypeEQL) {
+        if (surfTemp.Construction != 0 && state.dataConstruction->Construct(surfTemp.Construction).WindowTypeEQL) {
             if (surfTemp.FrameDivider > 0) {
                 // Equivalent Layer window does not have frame/divider model
                 ShowSevereError(state,

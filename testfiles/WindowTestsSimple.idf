@@ -752,7 +752,7 @@
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -784,7 +784,7 @@
 
   FenestrationSurface:Detailed,
     Zn001:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -816,7 +816,7 @@
 
   FenestrationSurface:Detailed,
     Zn001:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -848,7 +848,7 @@
 
   FenestrationSurface:Detailed,
     Zn001:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -914,7 +914,7 @@
 
   FenestrationSurface:Detailed,
     Zn002:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -946,7 +946,7 @@
 
   FenestrationSurface:Detailed,
     Zn002:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -978,7 +978,7 @@
 
   FenestrationSurface:Detailed,
     Zn002:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1010,7 +1010,7 @@
 
   FenestrationSurface:Detailed,
     Zn002:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1076,7 +1076,7 @@
 
   FenestrationSurface:Detailed,
     Zn003:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1108,7 +1108,7 @@
 
   FenestrationSurface:Detailed,
     Zn003:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1140,7 +1140,7 @@
 
   FenestrationSurface:Detailed,
     Zn003:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1172,7 +1172,7 @@
 
   FenestrationSurface:Detailed,
     Zn003:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1238,7 +1238,7 @@
 
   FenestrationSurface:Detailed,
     Zn004:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1270,7 +1270,7 @@
 
   FenestrationSurface:Detailed,
     Zn004:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1302,7 +1302,7 @@
 
   FenestrationSurface:Detailed,
     Zn004:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1334,7 +1334,7 @@
 
   FenestrationSurface:Detailed,
     Zn004:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1400,7 +1400,7 @@
 
   FenestrationSurface:Detailed,
     Zn005:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1432,7 +1432,7 @@
 
   FenestrationSurface:Detailed,
     Zn005:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1464,7 +1464,7 @@
 
   FenestrationSurface:Detailed,
     Zn005:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1496,7 +1496,7 @@
 
   FenestrationSurface:Detailed,
     Zn005:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1562,7 +1562,7 @@
 
   FenestrationSurface:Detailed,
     Zn006:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     TPW,                     !- Construction Name
     Zn006:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1594,7 +1594,7 @@
 
   FenestrationSurface:Detailed,
     Zn006:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     TPW,                     !- Construction Name
     Zn006:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1626,7 +1626,7 @@
 
   FenestrationSurface:Detailed,
     Zn006:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     TPW,                     !- Construction Name
     Zn006:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1658,7 +1658,7 @@
 
   FenestrationSurface:Detailed,
     Zn006:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     TPW,                     !- Construction Name
     Zn006:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1724,7 +1724,7 @@
 
   FenestrationSurface:Detailed,
     Zn007:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     QPW,                     !- Construction Name
     Zn007:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1756,7 +1756,7 @@
 
   FenestrationSurface:Detailed,
     Zn007:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     QPW,                     !- Construction Name
     Zn007:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1788,7 +1788,7 @@
 
   FenestrationSurface:Detailed,
     Zn007:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     QPW,                     !- Construction Name
     Zn007:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1820,7 +1820,7 @@
 
   FenestrationSurface:Detailed,
     Zn007:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     QPW,                     !- Construction Name
     Zn007:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1886,7 +1886,7 @@
 
   FenestrationSurface:Detailed,
     Zn008:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DPM,                     !- Construction Name
     Zn008:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1918,7 +1918,7 @@
 
   FenestrationSurface:Detailed,
     Zn008:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DPM,                     !- Construction Name
     Zn008:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1950,7 +1950,7 @@
 
   FenestrationSurface:Detailed,
     Zn008:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DPM,                     !- Construction Name
     Zn008:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1982,7 +1982,7 @@
 
   FenestrationSurface:Detailed,
     Zn008:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     DPM,                     !- Construction Name
     Zn008:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2048,7 +2048,7 @@
 
   FenestrationSurface:Detailed,
     Zn009:Wall001:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SCWINDOW,                !- Construction Name
     Zn009:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2080,7 +2080,7 @@
 
   FenestrationSurface:Detailed,
     Zn009:Wall002:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SCWINDOW,                !- Construction Name
     Zn009:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2112,7 +2112,7 @@
 
   FenestrationSurface:Detailed,
     Zn009:Wall003:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SCWINDOW,                !- Construction Name
     Zn009:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2144,7 +2144,7 @@
 
   FenestrationSurface:Detailed,
     Zn009:Wall004:Win001,    !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     SCWINDOW,                !- Construction Name
     Zn009:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object

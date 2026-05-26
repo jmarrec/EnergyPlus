@@ -1,0 +1,171 @@
+DefaultConstructionSet,
+  Default Construction Set,               !- Name
+  Exterior Surface Constructions,         !- Default Exterior Surface Constructions Name
+  Interior Surface Constructions,         !- Default Interior Surface Constructions Name
+  Ground Surface Constructions,           !- Default Ground Contact Surface Constructions Name
+  Exterior SubSurface Constructions,      !- Default Exterior SubSurface Constructions Name
+  Interior SubSurface Constructions,      !- Default Interior SubSurface Constructions Name
+  Interior Partition Construction,        !- Interior Partition Construction Name
+  Adiabatic Surface Construction;         !- Adiabatic Surface Construction Name
+
+DefaultSurfaceConstructions,
+  Exterior Surface Constructions,         !- Name
+  Exterior Floor Construction,            !- Floor Construction Name
+  Exterior Wall Construction,             !- Wall Construction Name
+  Exterior Roof Construction;             !- Roof Ceiling Construction Name
+
+DefaultSurfaceConstructions,
+  Interior Surface Constructions,         !- Name
+  Interior Floor Construction,            !- Floor Construction Name
+  Interior Wall Construction,             !- Wall Construction Name
+  Interior Roof Construction;             !- Roof Ceiling Construction Name
+
+DefaultSurfaceConstructions,
+  Ground Surface Constructions,           !- Name
+  Ground Floor Construction,              !- Floor Construction Name
+  Ground Wall Construction,               !- Wall Construction Name
+  Ground Roof Construction;               !- Roof Ceiling Construction Name
+
+DefaultSubSurfaceConstructions,
+  Exterior SubSurface Constructions,      !- Name
+  Exterior FixedWindow Construction,      !- Fixed Window Construction Name
+  Exterior OperableWindow Construction,   !- Operable Window Construction Name
+  Exterior Door Construction,             !- Door Construction Name
+  Exterior GlassDoor Construction,        !- Glass Door Construction Name
+  Exterior OverheadDoor Construction,     !- Overhead Door Construction Name
+  Exterior Skylight Construction,         !- Skylight Construction Name
+  Exterior TubularDaylightDome Construction, !- Tubular Daylight Dome Construction Name
+  Exterior TubularDaylightDiffuser Construction; !- Tubular Daylight Diffuser Construction Name
+
+DefaultSubSurfaceConstructions,
+  Interior SubSurface Constructions,      !- Name
+  Interior FixedWindow Construction,      !- Fixed Window Construction Name
+  Interior OperableWindow Construction,   !- Operable Window Construction Name
+  Interior Door Construction,             !- Door Construction Name
+  Interior GlassDoor Construction,        !- Glass Door Construction Name
+  Interior OverheadDoor Construction,     !- Overhead Door Construction Name
+  Interior Skylight Construction,         !- Skylight Construction Name
+  Interior TubularDaylightDome Construction, !- Tubular Daylight Dome Construction Name
+  Interior TubularDaylightDiffuser Construction; !- Tubular Daylight Diffuser Construction Name
+
+Construction,
+  Exterior Floor Construction,            !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Exterior Wall Construction,             !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Exterior Roof Construction,             !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Interior Floor Construction,            !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Interior Wall Construction,             !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Interior Roof Construction,             !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Ground Floor Construction,              !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Ground Wall Construction,               !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Ground Roof Construction,               !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Exterior FixedWindow Construction,      !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior OperableWindow Construction,   !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior Door Construction,             !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Exterior GlassDoor Construction,        !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior OverheadDoor Construction,     !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Exterior Skylight Construction,         !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior TubularDaylightDome Construction, !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior TubularDaylightDiffuser Construction, !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior FixedWindow Construction,      !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior OperableWindow Construction,   !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior Door Construction,             !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Interior GlassDoor Construction,        !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior OverheadDoor Construction,     !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Interior Skylight Construction,         !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior TubularDaylightDome Construction, !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior TubularDaylightDiffuser Construction, !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior Partition Construction,        !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Construction,
+  Adiabatic Surface Construction,         !- Name
+  Mat Opaque;                             !- Outside Layer
+
+Material:NoMass,
+  Mat Opaque,                             !- Name
+  Rough,                                  !- Roughness
+  0.5,                                    !- Thermal Resistance {m2-K/W}
+  0.9,                                    !- Thermal Absorptance
+  0.9,                                    !- Solar Absorptance
+  0.9;                                    !- Visible Absorptance
+
+WindowMaterial:SimpleGlazingSystem,
+  Mat Glazing,                            !- Name
+  0.1,                                    !- U-Factor {W/m2-K}
+  0.65;                                   !- Solar Heat Gain Coefficient
+

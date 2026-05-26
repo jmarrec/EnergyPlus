@@ -3361,7 +3361,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door1,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3376,7 +3376,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door2,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3391,7 +3391,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door3,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3406,7 +3406,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door4,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3421,7 +3421,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door5,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3436,7 +3436,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door12,      !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3451,7 +3451,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door11,      !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3466,7 +3466,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door10,      !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3481,7 +3481,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door9,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3496,7 +3496,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door8,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3511,7 +3511,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door7,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3526,7 +3526,7 @@
 
   FenestrationSurface:Detailed,
     Dock_Wall_3_Door6,       !- Name
-    Door,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     Door Const,              !- Construction Name
     Dock_Wall_3_Subsurface3, !- Building Surface Name
     ,                        !- Outside Boundary Condition Object

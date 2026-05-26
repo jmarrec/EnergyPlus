@@ -1125,7 +1125,7 @@
 
   FenestrationSurface:Detailed,
     WINDOW1,                 !- Name
-    WINDOW,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     WIN-CON-LIGHT,           !- Construction Name
     Surface_1,               !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1140,7 +1140,7 @@
 
   FenestrationSurface:Detailed,
     DoorInSurface_3,         !- Name
-    DOOR,                    !- Surface Type
+    OverheadDoor,            !- Surface Type
     DOOR-CON,                !- Construction Name
     Surface_3,               !- Building Surface Name
     DoorInSurface_17,        !- Outside Boundary Condition Object
@@ -1155,7 +1155,7 @@
 
   FenestrationSurface:Detailed,
     WINDOW2,                 !- Name
-    WINDOW,                  !- Surface Type
+    OperableWindow,          !- Surface Type
     WIN-CON-LIGHT,           !- Construction Name
     Surface_15,              !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1170,7 +1170,7 @@
 
   FenestrationSurface:Detailed,
     DoorInSurface_17,        !- Name
-    DOOR,                    !- Surface Type
+    Door,                    !- Surface Type
     DOOR-CON,                !- Construction Name
     Surface_17,              !- Building Surface Name
     DoorInSurface_3,         !- Outside Boundary Condition Object
@@ -1185,7 +1185,7 @@
 
   FenestrationSurface:Detailed,
     WINDOW1_T,               !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     WIN-CON-LIGHT,           !- Construction Name
     Surface_1_T,             !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1215,7 +1215,7 @@
 
   FenestrationSurface:Detailed,
     WINDOW2_T,               !- Name
-    WINDOW,                  !- Surface Type
+    Skylight,                !- Surface Type
     WIN-CON-LIGHT,           !- Construction Name
     Surface_15_T,            !- Building Surface Name
     ,                        !- Outside Boundary Condition Object

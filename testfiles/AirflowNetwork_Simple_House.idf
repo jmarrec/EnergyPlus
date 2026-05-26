@@ -902,7 +902,7 @@
 
   FenestrationSurface:Detailed,
     NorthWindow,             !- Name
-    Window,                  !- Surface Type
+    FixedWindow,             !- Surface Type
     Dbl Clr 3mm/6mm Air,     !- Construction Name
     Living:North,            !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -917,7 +917,7 @@
 
   FenestrationSurface:Detailed,
     EastWindow,              !- Name
-    Window,                  !- Surface Type
+    OperableWindow,          !- Surface Type
     Dbl Clr 3mm/6mm Air,     !- Construction Name
     Living:East,             !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -932,7 +932,7 @@
 
   FenestrationSurface:Detailed,
     SouthWindow,             !- Name
-    Window,                  !- Surface Type
+    Skylight,                !- Surface Type
     Dbl Clr 3mm/6mm Air,     !- Construction Name
     Living:South,            !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
