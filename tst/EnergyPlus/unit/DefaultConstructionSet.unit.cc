@@ -264,6 +264,59 @@ TEST_F(EnergyPlusFixture, DefaultConstructionSet_BadSurfConstrRef)
     EXPECT_TRUE(compare_err_stream_substring(R"(invalid default_exterior_surface_constructions_name="NONEXISTENT SURF CONSTRS" not found.)", false));
 }
 
+TEST_F(EnergyPlusFixture, DefaultConstructionSet_WindowConstrInOpaqueSurfaceField)
+{
+    // Using a window construction for an opaque surface field (wall) should produce an error.
+    std::string const idf_objects = std::string(idf_constructions) + R"(
+  DefaultSurfaceConstructions,
+    Bad Surf Type,            !- Name
+    Constr Floor,             !- Floor Construction Name
+    Constr Window,            !- Wall Construction Name
+    Constr Roof;              !- Roof Ceiling Construction Name
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    DefaultConstructions::GetDefaultConstructionSetData(*state, ErrorsFound);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(
+        compare_err_stream_substring(R"(DefaultSurfaceConstructions="BAD SURF TYPE", invalid wall_construction_name="CONSTR WINDOW")", false));
+    EXPECT_TRUE(compare_err_stream_substring(R"(has Window material)", false));
+}
+
+TEST_F(EnergyPlusFixture, DefaultConstructionSet_WrongConstrTypeInSubSurfaceFields)
+{
+    // Opaque construction in a glazed field → "not a window or air boundary construction".
+    // Window construction in a door (non-glazed) field → "has Window material".
+    std::string const idf_objects = std::string(idf_constructions) + R"(
+  DefaultSubSurfaceConstructions,
+    Bad SubSurf Type,         !- Name
+    Constr Door,              !- Fixed Window Construction Name
+    ,                         !- Operable Window Construction Name
+    Constr Window,            !- Door Construction Name
+    ,                         !- Glass Door Construction Name
+    ,                         !- Overhead Door Construction Name
+    ;                         !- Skylight Construction Name
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    DefaultConstructions::GetDefaultConstructionSetData(*state, ErrorsFound);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream_substring(
+        R"(DefaultSubSurfaceConstructions="BAD SUBSURF TYPE", invalid fixed_window_construction_name="CONSTR DOOR")", false));
+    EXPECT_TRUE(compare_err_stream_substring(R"(has an opaque surface construction; it should have a window construction)", false));
+    EXPECT_TRUE(
+        compare_err_stream_substring(R"(DefaultSubSurfaceConstructions="BAD SUBSURF TYPE", invalid door_construction_name="CONSTR WINDOW")", false));
+    EXPECT_TRUE(compare_err_stream_substring(R"(has Window material)", false));
+}
+
 TEST(DefaultConstructionSet_GetDefaultConstruction, AllCases)
 {
     // Verify getDefaultConstruction returns the correct slot for every surface type and BC.

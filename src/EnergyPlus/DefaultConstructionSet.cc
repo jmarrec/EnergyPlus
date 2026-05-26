@@ -178,8 +178,22 @@ namespace DefaultConstructions {
                     auto &data = s_dc->defaultSurfaceConstructions.emplace_back(std::make_shared<DefaultSurfaceConstructionsData>());
                     data->Name = Util::makeUPPER(instance.key());
 
-                    auto lookUpConstrNum = [&](const char *fieldName) {
-                        return getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
+                    auto lookUpConstrNum = [&](const char *fieldName) -> int {
+                        const int constrNum = getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
+                        if (constrNum > 0) {
+                            auto const &thisContruct = state.dataConstruction->Construct(constrNum);
+                            if (thisContruct.TypeIsWindow) {
+                                ShowSevereError(state,
+                                                std::format(R"({}{}="{}", invalid {}="{}" - has Window material.)",
+                                                            routineName,
+                                                            cCurrentModuleObject,
+                                                            data->Name,
+                                                            fieldName,
+                                                            thisContruct.Name));
+                                ErrorsFound = true;
+                            }
+                        }
+                        return constrNum;
                     };
                     data->floorConstrNum = lookUpConstrNum("floor_construction_name");
                     data->wallConstrNum = lookUpConstrNum("wall_construction_name");
@@ -203,17 +217,58 @@ namespace DefaultConstructions {
                     auto &data = s_dc->defaultSubSurfaceConstructions.emplace_back(std::make_shared<DefaultSubSurfaceConstructionsData>());
                     data->Name = Util::makeUPPER(instance.key());
 
-                    auto lookUpConstrNum = [&](const char *fieldName) {
-                        return getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
+                    auto lookUpConstrNum = [&](const char *fieldName, bool isGlazed) -> int {
+                        const int constrNum = getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
+                        if (constrNum > 0) {
+                            auto const &thisContruct = state.dataConstruction->Construct(constrNum);
+                            if (isGlazed) {
+                                if (!thisContruct.TypeIsWindow && !thisContruct.TypeIsAirBoundary) {
+                                    ShowSevereError(
+                                        state,
+                                        std::format(
+                                            R"({}{}="{}", invalid {}="{}" - has an opaque surface construction; it should have a window construction.)",
+                                            routineName,
+                                            cCurrentModuleObject,
+                                            data->Name,
+                                            fieldName,
+                                            thisContruct.Name));
+                                    ErrorsFound = true;
+                                }
+                                if (thisContruct.SourceSinkPresent) {
+                                    // Windows are not allowed to have embedded sources/sinks
+                                    ShowSevereError(state,
+                                                    std::format(R"({}{}="{}", invalid {}="{}" - has embedded source/sink.)",
+                                                                routineName,
+                                                                cCurrentModuleObject,
+                                                                data->Name,
+                                                                fieldName,
+                                                                thisContruct.Name));
+                                    ErrorsFound = true;
+                                }
+
+                            } else {
+                                if (thisContruct.TypeIsWindow) {
+                                    ShowSevereError(state,
+                                                    std::format(R"({}{}="{}", invalid {}="{}" - has Window material.)",
+                                                                routineName,
+                                                                cCurrentModuleObject,
+                                                                data->Name,
+                                                                fieldName,
+                                                                thisContruct.Name));
+                                    ErrorsFound = true;
+                                }
+                            }
+                        }
+                        return constrNum;
                     };
-                    data->fixedWindowConstrNum = lookUpConstrNum("fixed_window_construction_name");
-                    data->operableWindowConstrNum = lookUpConstrNum("operable_window_construction_name");
-                    data->doorConstrNum = lookUpConstrNum("door_construction_name");
-                    data->glassDoorConstrNum = lookUpConstrNum("glass_door_construction_name");
-                    data->overheadDoorConstrNum = lookUpConstrNum("overhead_door_construction_name");
-                    data->skylightConstrNum = lookUpConstrNum("skylight_construction_name");
-                    data->tddDomeConstrNum = lookUpConstrNum("tubular_daylight_dome_construction_name");
-                    data->tddDiffuserConstrNum = lookUpConstrNum("tubular_daylight_diffuser_construction_name");
+                    data->fixedWindowConstrNum = lookUpConstrNum("fixed_window_construction_name", true);
+                    data->operableWindowConstrNum = lookUpConstrNum("operable_window_construction_name", true);
+                    data->doorConstrNum = lookUpConstrNum("door_construction_name", false);
+                    data->glassDoorConstrNum = lookUpConstrNum("glass_door_construction_name", true);
+                    data->overheadDoorConstrNum = lookUpConstrNum("overhead_door_construction_name", false);
+                    data->skylightConstrNum = lookUpConstrNum("skylight_construction_name", true);
+                    data->tddDomeConstrNum = lookUpConstrNum("tubular_daylight_dome_construction_name", true);
+                    data->tddDiffuserConstrNum = lookUpConstrNum("tubular_daylight_diffuser_construction_name", true);
                 }
             }
         }
