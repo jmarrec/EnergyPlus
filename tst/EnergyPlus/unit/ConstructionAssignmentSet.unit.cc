@@ -173,20 +173,20 @@ TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_ParseAll)
     // Sub-surface set
     ASSERT_EQ(1u, s_dc->subSurfaceConstructionAssignments.size());
     auto const &ssc = s_dc->subSurfaceConstructionAssignments[0];
-    EXPECT_EQ("EXT SUBSURF CONSTRS", ssc.Name);
-    EXPECT_GT(ssc.fixedWindowConstrNum, 0);
-    EXPECT_GT(ssc.operableWindowConstrNum, 0);
-    EXPECT_GT(ssc.doorConstrNum, 0);
-    EXPECT_GT(ssc.glassDoorConstrNum, 0);
-    EXPECT_GT(ssc.overheadDoorConstrNum, 0);
-    EXPECT_GT(ssc.skylightConstrNum, 0);
-    EXPECT_EQ(0, ssc.tddDomeConstrNum);     // not specified
-    EXPECT_EQ(0, ssc.tddDiffuserConstrNum); // not specified
+    EXPECT_EQ("EXT SUBSURF CONSTRS", ssc->Name);
+    EXPECT_GT(ssc->fixedWindowConstrNum, 0);
+    EXPECT_GT(ssc->operableWindowConstrNum, 0);
+    EXPECT_GT(ssc->doorConstrNum, 0);
+    EXPECT_GT(ssc->glassDoorConstrNum, 0);
+    EXPECT_GT(ssc->overheadDoorConstrNum, 0);
+    EXPECT_GT(ssc->skylightConstrNum, 0);
+    EXPECT_EQ(0, ssc->tddDomeConstrNum);     // not specified
+    EXPECT_EQ(0, ssc->tddDiffuserConstrNum); // not specified
 
     // Surface sets
     ASSERT_EQ(2u, s_dc->surfaceConstructionAssignments.size());
-    EXPECT_EQ("EXT SURF CONSTRS", s_dc->surfaceConstructionAssignments[0].Name);
-    EXPECT_EQ("INT SURF CONSTRS", s_dc->surfaceConstructionAssignments[1].Name);
+    EXPECT_EQ("EXT SURF CONSTRS", s_dc->surfaceConstructionAssignments[0]->Name);
+    EXPECT_EQ("INT SURF CONSTRS", s_dc->surfaceConstructionAssignments[1]->Name);
 
     // Construction set
     ASSERT_EQ(1u, s_dc->constructionAssignmentSets.size());

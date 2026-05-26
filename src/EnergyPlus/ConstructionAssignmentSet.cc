@@ -163,39 +163,7 @@ namespace ConstructionAssignments {
             return num;
         };
 
-        // 1. Parse SubSurfaceConstructionAssignments
-        {
-            const std::string cCurrentModuleObject = "SubSurfaceConstructionAssignments";
-            auto const instances = ip->epJSON.find(cCurrentModuleObject);
-            if (instances != ip->epJSON.end()) {
-
-                s_dc->subSurfaceConstructionAssignments.reserve(instances.value().size());
-
-                auto const &objectSchemaProps = ip->getObjectSchemaProps(state, cCurrentModuleObject);
-                for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
-                    ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
-                    auto const &fields = instance.value();
-                    SubSurfaceConstructionAssignmentsData data;
-                    data.Name = Util::makeUPPER(instance.key());
-
-                    auto lookUpConstrNum = [&](const char *fieldName) {
-                        return getConstrNum(cCurrentModuleObject, data.Name, fields, objectSchemaProps, fieldName);
-                    };
-                    data.fixedWindowConstrNum = lookUpConstrNum("fixed_window_construction_name");
-                    data.operableWindowConstrNum = lookUpConstrNum("operable_window_construction_name");
-                    data.doorConstrNum = lookUpConstrNum("door_construction_name");
-                    data.glassDoorConstrNum = lookUpConstrNum("glass_door_construction_name");
-                    data.overheadDoorConstrNum = lookUpConstrNum("overhead_door_construction_name");
-                    data.skylightConstrNum = lookUpConstrNum("skylight_construction_name");
-                    data.tddDomeConstrNum = lookUpConstrNum("tubular_daylight_dome_construction_name");
-                    data.tddDiffuserConstrNum = lookUpConstrNum("tubular_daylight_diffuser_construction_name");
-
-                    s_dc->subSurfaceConstructionAssignments.push_back(std::move(data));
-                }
-            }
-        }
-
-        // 2. Parse SurfaceConstructionAssignments
+        // Parse SurfaceConstructionAssignments
         {
             const std::string cCurrentModuleObject = "SurfaceConstructionAssignments";
             auto const instances = ip->epJSON.find(cCurrentModuleObject);
@@ -207,21 +175,50 @@ namespace ConstructionAssignments {
                 for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
                     ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
                     auto const &fields = instance.value();
-                    SurfaceConstructionAssignmentsData data;
-                    data.Name = Util::makeUPPER(instance.key());
+                    auto &data = s_dc->surfaceConstructionAssignments.emplace_back(std::make_shared<SurfaceConstructionAssignmentsData>());
+                    data->Name = Util::makeUPPER(instance.key());
 
                     auto lookUpConstrNum = [&](const char *fieldName) {
-                        return getConstrNum(cCurrentModuleObject, data.Name, fields, objectSchemaProps, fieldName);
+                        return getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
                     };
-                    data.floorConstrNum = lookUpConstrNum("floor_construction_name");
-                    data.wallConstrNum = lookUpConstrNum("wall_construction_name");
-                    data.roofCeilingConstrNum = lookUpConstrNum("roof_ceiling_construction_name");
-                    s_dc->surfaceConstructionAssignments.push_back(std::move(data));
+                    data->floorConstrNum = lookUpConstrNum("floor_construction_name");
+                    data->wallConstrNum = lookUpConstrNum("wall_construction_name");
+                    data->roofCeilingConstrNum = lookUpConstrNum("roof_ceiling_construction_name");
                 }
             }
         }
 
-        // 3. Parse ConstructionAssignmentSet (references the above, so must come last)
+        // Parse SubSurfaceConstructionAssignments
+        {
+            const std::string cCurrentModuleObject = "SubSurfaceConstructionAssignments";
+            auto const instances = ip->epJSON.find(cCurrentModuleObject);
+            if (instances != ip->epJSON.end()) {
+
+                s_dc->subSurfaceConstructionAssignments.reserve(instances.value().size());
+
+                auto const &objectSchemaProps = ip->getObjectSchemaProps(state, cCurrentModuleObject);
+                for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
+                    ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
+                    auto const &fields = instance.value();
+                    auto &data = s_dc->subSurfaceConstructionAssignments.emplace_back(std::make_shared<SubSurfaceConstructionAssignmentsData>());
+                    data->Name = Util::makeUPPER(instance.key());
+
+                    auto lookUpConstrNum = [&](const char *fieldName) {
+                        return getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
+                    };
+                    data->fixedWindowConstrNum = lookUpConstrNum("fixed_window_construction_name");
+                    data->operableWindowConstrNum = lookUpConstrNum("operable_window_construction_name");
+                    data->doorConstrNum = lookUpConstrNum("door_construction_name");
+                    data->glassDoorConstrNum = lookUpConstrNum("glass_door_construction_name");
+                    data->overheadDoorConstrNum = lookUpConstrNum("overhead_door_construction_name");
+                    data->skylightConstrNum = lookUpConstrNum("skylight_construction_name");
+                    data->tddDomeConstrNum = lookUpConstrNum("tubular_daylight_dome_construction_name");
+                    data->tddDiffuserConstrNum = lookUpConstrNum("tubular_daylight_diffuser_construction_name");
+                }
+            }
+        }
+
+        // Parse ConstructionAssignmentSet (references the above, so must come last)
         {
             const std::string cCurrentModuleObject = "ConstructionAssignmentSet";
             auto const instances = ip->epJSON.find(cCurrentModuleObject);
@@ -233,7 +230,8 @@ namespace ConstructionAssignments {
                 for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
                     ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
                     auto const &fields = instance.value();
-                    ConstructionAssignmentSetData dcs;
+
+                    ConstructionAssignmentSetData &dcs = s_dc->constructionAssignmentSets.emplace_back();
                     dcs.Name = Util::makeUPPER(instance.key());
 
                     auto getUC = [&](const char *key) { return Util::makeUPPER(ip->getAlphaFieldValue(fields, objectSchemaProps, key)); };
@@ -245,7 +243,7 @@ namespace ConstructionAssignments {
                         }
                         auto it = std::find_if(s_dc->surfaceConstructionAssignments.begin(),
                                                s_dc->surfaceConstructionAssignments.end(),
-                                               [&name](const SurfaceConstructionAssignmentsData &d) { return d.Name == name; });
+                                               [&name](const std::shared_ptr<SurfaceConstructionAssignmentsData> &d) { return d->Name == name; });
                         if (it == s_dc->surfaceConstructionAssignments.end()) {
                             ShowSevereError(
                                 state,
@@ -253,7 +251,7 @@ namespace ConstructionAssignments {
                             ErrorsFound = true;
                             return nullptr;
                         }
-                        return std::make_shared<SurfaceConstructionAssignmentsData>(*it);
+                        return *it;
                     };
 
                     auto findSubSurfConstr = [&](const char *key) -> std::shared_ptr<SubSurfaceConstructionAssignmentsData> {
@@ -263,7 +261,7 @@ namespace ConstructionAssignments {
                         }
                         auto it = std::find_if(s_dc->subSurfaceConstructionAssignments.begin(),
                                                s_dc->subSurfaceConstructionAssignments.end(),
-                                               [&name](const SubSurfaceConstructionAssignmentsData &d) { return d.Name == name; });
+                                               [&name](const std::shared_ptr<SubSurfaceConstructionAssignmentsData> &d) { return d->Name == name; });
                         if (it == s_dc->subSurfaceConstructionAssignments.end()) {
                             ShowSevereError(
                                 state,
@@ -271,7 +269,7 @@ namespace ConstructionAssignments {
                             ErrorsFound = true;
                             return nullptr;
                         }
-                        return std::make_shared<SubSurfaceConstructionAssignmentsData>(*it);
+                        return *it;
                     };
 
                     dcs.exteriorSurfConstructions = findSurfConstr("exterior_surface_construction_assignments_name");
@@ -285,7 +283,6 @@ namespace ConstructionAssignments {
                     };
                     dcs.interiorPartitionConstrNum = lookUpConstrNum("interior_partition_construction_name");
                     dcs.adiabaticSurfConstrNum = lookUpConstrNum("adiabatic_surface_construction_name");
-                    s_dc->constructionAssignmentSets.push_back(std::move(dcs));
                 }
             }
         }
