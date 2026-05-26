@@ -316,7 +316,7 @@ namespace Sched {
 
         // Fill the dayScheds with the Missing Day Schedule (Always Off)
         for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
-            //ruleSched->dayScheds[iDayType] = s_sched->daySchedules[SchedNum_AlwaysOff];
+            // ruleSched->dayScheds[iDayType] = s_sched->daySchedules[SchedNum_AlwaysOff];
         }
 
         ruleSched->Num = (int)s_sched->ruleSchedules.size();
@@ -1141,7 +1141,7 @@ namespace Sched {
                 ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(3), Alphas(3));
                 ErrorsFound = true;
             } else {
-              ruleSched->daySched = daySched;
+                ruleSched->daySched = daySched;
             }
             ruleSched->applySunday = false;
             if ((Alphas(4)) == "YES") {
@@ -1209,7 +1209,7 @@ namespace Sched {
         }
 
         //!! Get Week Schedules - compact
-        //Count = NumRegWeekSchedules;
+        // Count = NumRegWeekSchedules;
         CurrentModuleObject = "Schedule:Week:Compact";
         for (int Loop = 1; Loop <= NumCptWeekSchedules; ++Loop) {
             s_ip->getObjectItem(state,
@@ -1270,7 +1270,7 @@ namespace Sched {
                 break;
             }
         }
-        //NumRegWeekSchedules = Count;
+        // NumRegWeekSchedules = Count;
 
         //!! Get Schedules (all types)
 
@@ -1402,7 +1402,7 @@ namespace Sched {
 
             // Validate rule orders, checking for duplicates
             std::vector<Sched::RuleSchedule *> ruleSchedules;
-            for (Sched::RuleSchedule * ruleSchedule : s_sched->ruleSchedules) {
+            for (Sched::RuleSchedule *ruleSchedule : s_sched->ruleSchedules) {
                 if (ruleSchedule->scheduleRulesetName == Alphas(1)) {
                     ruleSchedules.push_back(ruleSchedule);
                 }
@@ -1410,11 +1410,9 @@ namespace Sched {
             for (std::size_t i = 0; i < ruleSchedules.size(); ++i) {
                 for (std::size_t j = i + 1; j < ruleSchedules.size(); ++j) {
                     if (ruleSchedules[i]->ruleOrder == ruleSchedules[j]->ruleOrder) {
-                        ShowWarningMessage(state,
-                                           std::format("{}: {} has rules with duplicate rule order ({})",
-                                                       routineName,
-                                                       Alphas(1),
-                                                       ruleSchedules[i]->ruleOrder));
+                        ShowWarningMessage(
+                            state,
+                            std::format("{}: {} has rules with duplicate rule order ({})", routineName, Alphas(1), ruleSchedules[i]->ruleOrder));
                     }
                 }
             }
@@ -1440,43 +1438,43 @@ namespace Sched {
 
             auto *summerDesignDaySchedule = defaultDaySched;
             if (!lAlphaBlanks(4)) {
-              summerDesignDaySchedule = GetDaySchedule(state, Alphas(4));
-              if (summerDesignDaySchedule == nullptr) {
-                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(4), Alphas(4));
-                  ErrorsFound = true;
-              }
+                summerDesignDaySchedule = GetDaySchedule(state, Alphas(4));
+                if (summerDesignDaySchedule == nullptr) {
+                    ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(4), Alphas(4));
+                    ErrorsFound = true;
+                }
             }
             auto *winterDesignDaySchedule = defaultDaySched;
             if (!lAlphaBlanks(5)) {
-              winterDesignDaySchedule = GetDaySchedule(state, Alphas(5));
-              if (winterDesignDaySchedule == nullptr) {
-                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(5), Alphas(5));
-                  ErrorsFound = true;
-              }
+                winterDesignDaySchedule = GetDaySchedule(state, Alphas(5));
+                if (winterDesignDaySchedule == nullptr) {
+                    ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(5), Alphas(5));
+                    ErrorsFound = true;
+                }
             }
             auto *holidaySchedule = defaultDaySched;
             if (!lAlphaBlanks(6)) {
-              holidaySchedule = GetDaySchedule(state, Alphas(6));
-              if (holidaySchedule == nullptr) {
-                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(6), Alphas(6));
-                  ErrorsFound = true;
-              }
+                holidaySchedule = GetDaySchedule(state, Alphas(6));
+                if (holidaySchedule == nullptr) {
+                    ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(6), Alphas(6));
+                    ErrorsFound = true;
+                }
             }
             auto *customDay1Schedule = defaultDaySched;
             if (!lAlphaBlanks(7)) {
-              customDay1Schedule = GetDaySchedule(state, Alphas(7));
-              if (customDay1Schedule == nullptr) {
-                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(7), Alphas(7));
-                  ErrorsFound = true;
-              }
+                customDay1Schedule = GetDaySchedule(state, Alphas(7));
+                if (customDay1Schedule == nullptr) {
+                    ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(7), Alphas(7));
+                    ErrorsFound = true;
+                }
             }
             auto *customDay2Schedule = defaultDaySched;
             if (!lAlphaBlanks(8)) {
-              customDay2Schedule = GetDaySchedule(state, Alphas(8));
-              if (customDay2Schedule == nullptr) {
-                  ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(8), Alphas(8));
-                  ErrorsFound = true;
-              }
+                customDay2Schedule = GetDaySchedule(state, Alphas(8));
+                if (customDay2Schedule == nullptr) {
+                    ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(8), Alphas(8));
+                    ErrorsFound = true;
+                }
             }
 
             std::array<int, 367> daysInYear;
@@ -2953,13 +2951,13 @@ namespace Sched {
 
         int ruleOrder = 99999;
         std::vector<Sched::RuleSchedule *> ruleSchedules;
-        for (Sched::RuleSchedule * ruleSchedule : s_sched->ruleSchedules) {
+        for (Sched::RuleSchedule *ruleSchedule : s_sched->ruleSchedules) {
             if (ruleSchedule->scheduleRulesetName == scheduleRulesetName) {
                 if (ruleSchedule->dateSpecificationType == "DATERANGE") {
                     int startPointer = General::OrdinalDay(ruleSchedule->startMonth, ruleSchedule->startDay, 1);
                     int endPointer = General::OrdinalDay(ruleSchedule->endMonth, ruleSchedule->endDay, 1);
                     if (((startPointer <= day) && (day <= endPointer)) ||
-                       ((endPointer < startPointer) && ((startPointer <= day) || (day <= endPointer)))) {
+                        ((endPointer < startPointer) && ((startPointer <= day) || (day <= endPointer)))) {
                         if (ruleSchedule->ruleOrder < ruleOrder) {
                             ruleSchedules.push_back(ruleSchedule);
                             ruleOrder = ruleSchedule->ruleOrder;
