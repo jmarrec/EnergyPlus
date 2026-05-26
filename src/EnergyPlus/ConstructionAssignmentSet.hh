@@ -110,8 +110,9 @@ namespace ConstructionAssignments {
 struct ConstructionAssignmentsData : BaseGlobalStruct
 {
 
-    std::vector<ConstructionAssignments::SubSurfaceConstructionAssignmentsData> subSurfaceConstructionAssignments;
-    std::vector<ConstructionAssignments::SurfaceConstructionAssignmentsData> surfaceConstructionAssignments;
+    std::vector<std::shared_ptr<ConstructionAssignments::SurfaceConstructionAssignmentsData>> surfaceConstructionAssignments;
+    std::vector<std::shared_ptr<ConstructionAssignments::SubSurfaceConstructionAssignmentsData>> subSurfaceConstructionAssignments;
+
     std::vector<ConstructionAssignments::ConstructionAssignmentSetData> constructionAssignmentSets;
 
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
@@ -124,9 +125,9 @@ struct ConstructionAssignmentsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        subSurfaceConstructionAssignments.clear();
-        surfaceConstructionAssignments.clear();
         constructionAssignmentSets.clear();
+        surfaceConstructionAssignments.clear();
+        subSurfaceConstructionAssignments.clear();
     }
 };
 
