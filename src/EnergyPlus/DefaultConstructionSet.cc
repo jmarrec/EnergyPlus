@@ -286,6 +286,21 @@ namespace DefaultConstructions {
                 }
             }
         }
+        // Resolve Building-level default construction set (name was stored before DCS data was loaded)
+        if (!s_dc->buildingDefaultConstructionSetName.empty()) {
+            auto it = std::find_if(s_dc->defaultConstructionSets.begin(),
+                                   s_dc->defaultConstructionSets.end(),
+                                   [&](const DefaultConstructionSetData &d) { return d.Name == s_dc->buildingDefaultConstructionSetName; });
+            if (it == s_dc->defaultConstructionSets.end()) {
+                ShowSevereError(state,
+                                std::format(R"({}Building: invalid Default Construction Set Name="{}" not found.)",
+                                            routineName,
+                                            s_dc->buildingDefaultConstructionSetName));
+                ErrorsFound = true;
+            } else {
+                s_dc->buildingDefaultConstructionSetIndex = static_cast<int>(std::distance(s_dc->defaultConstructionSets.begin(), it));
+            }
+        }
     }
 
 } // namespace DefaultConstructions

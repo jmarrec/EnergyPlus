@@ -115,6 +115,9 @@ struct DefaultConstructionsData : BaseGlobalStruct
 
     std::vector<DefaultConstructions::DefaultConstructionSetData> defaultConstructionSets;
 
+    std::string buildingDefaultConstructionSetName; // Raw name from Building object, set before DCS data is loaded
+    int buildingDefaultConstructionSetIndex = -1;   // 0-based index into defaultConstructionSets, or -1 if none
+
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
     {
     }
@@ -128,6 +131,8 @@ struct DefaultConstructionsData : BaseGlobalStruct
         defaultConstructionSets.clear();
         defaultSurfaceConstructions.clear();
         defaultSubSurfaceConstructions.clear();
+        buildingDefaultConstructionSetName.clear();
+        buildingDefaultConstructionSetIndex = -1;
     }
 };
 

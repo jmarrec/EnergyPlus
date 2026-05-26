@@ -1392,3 +1392,138 @@ TEST_F(EnergyPlusFixture, DefaultConstructionSet_GetDefaultConstruction)
     checkDefaultConstruction("Interior Door Construction", "InteriorDoor - Door - Reversed");
     checkDefaultConstruction("Interior Door Construction", "InteriorDoor - Door");
 }
+
+TEST_F(EnergyPlusFixture, DefaultConstructionSet_SpaceResolvesIndex)
+{
+    // Verify that a Space with default_construction_set_name has its defaultConstructionSetIndex
+    // set to the correct 0-based index into dataDefaultConstructions->defaultConstructionSets.
+    std::string const idf_objects = std::string(idf_constructions) + R"(
+  DefaultSurfaceConstructions,
+    Ext Surf Constrs,        !- Name
+    Constr Floor,            !- Floor Construction Name
+    Constr Wall,             !- Wall Construction Name
+    Constr Roof;             !- Roof Ceiling Construction Name
+
+  DefaultConstructionSet,
+    DCS A,                   !- Name
+    Ext Surf Constrs,        !- Default Exterior Surface Constructions Name
+    ,                        !- Default Interior Surface Constructions Name
+    ,                        !- Default Ground Contact Surface Constructions Name
+    ,                        !- Default Exterior SubSurface Constructions Name
+    ,                        !- Default Interior SubSurface Constructions Name
+    ,                        !- Interior Partition Construction Name
+    ;                        !- Adiabatic Surface Construction Name
+
+  DefaultConstructionSet,
+    DCS B,                   !- Name
+    ,                        !- Default Exterior Surface Constructions Name
+    ,                        !- Default Interior Surface Constructions Name
+    ,                        !- Default Ground Contact Surface Constructions Name
+    ,                        !- Default Exterior SubSurface Constructions Name
+    ,                        !- Default Interior SubSurface Constructions Name
+    ,                        !- Interior Partition Construction Name
+    ;                        !- Adiabatic Surface Construction Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Space,
+    SpaceWithDCS,                           !- Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    Space Type 1,                           !- Space Type
+    DCS B;                                  !- Default Construction Set Name
+
+  Space,
+    SpaceWithoutDCS,                           !- Name
+    TestZone,                               !- Zone Name
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    DefaultConstructions::GetDefaultConstructionSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    auto &s_dc = state->dataDefaultConstructions;
+    ASSERT_EQ(2u, s_dc->defaultConstructionSets.size());
+
+    // Find the index of "DCS B" — it may not be 1 due to JSON key ordering.
+    int dcsBIndex = -1;
+    for (int i = 0; i < static_cast<int>(s_dc->defaultConstructionSets.size()); ++i) {
+        if (s_dc->defaultConstructionSets[i].Name == "DCS B") {
+            dcsBIndex = i;
+            break;
+        }
+    }
+    ASSERT_GE(dcsBIndex, 0) << "DCS B not found in defaultConstructionSets";
+
+    int spaceWithDCS = Util::FindItemInList(std::string("SPACEWITHDCS"), state->dataHeatBal->space);
+    ASSERT_GT(spaceWithDCS, 0);
+    EXPECT_EQ(dcsBIndex, state->dataHeatBal->space(spaceWithDCS).defaultConstructionSetIndex);
+
+    int spaceWithoutDCS = Util::FindItemInList(std::string("SPACEWITHOUTDCS"), state->dataHeatBal->space);
+    ASSERT_GT(spaceWithoutDCS, 0);
+    EXPECT_EQ(-1, state->dataHeatBal->space(spaceWithoutDCS).defaultConstructionSetIndex);
+}
+
+TEST_F(EnergyPlusFixture, DefaultConstructionSet_SpaceBadDCSName)
+{
+    // A Space referencing a non-existent DefaultConstructionSet name should produce a severe error.
+    std::string const idf_objects = std::string(idf_constructions) + R"(
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Space,
+    BadSpace,                               !- Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    Space Type 1,                           !- Space Type
+    NONEXISTENT DCS;                        !- Default Construction Set Name
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    DefaultConstructions::GetDefaultConstructionSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream_substring(R"(invalid default_construction_set_name="NONEXISTENT DCS" not found.)", false));
+}
