@@ -2514,7 +2514,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_Validation)
         "  default day;              !- Default Day Schedule Name",
         " ",
         "Schedule:Rule,",
-        "  schedule rule Jan1-Jun30, !- Name",
+        "  schedule rule Jan2-Dec31, !- Name",
         "  schedule ruleset,         !- Schedule Ruleset Name",
         "  1,                        !- Rule Order",
         "  day schedule,             !- Day Schedule Name",
@@ -2612,7 +2612,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
         "  always off;                 !- Default Day Schedule Name",
         " ",
         "Schedule:Rule,",
-        "  schedule rule Jan1-Dec31 1, !- Name",
+        "  schedule rule Oct19 Apr2 Feb29, !- Name",
         "  schedule ruleset,           !- Schedule Ruleset Name",
         "  0,                          !- Rule Order",
         "  specific dates rule,        !- Day Schedule Name",
@@ -2636,7 +2636,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
         "  29;                         !- Specific Day 3",
         " ",
         "Schedule:Rule,",
-        "  schedule rule Jan1-Jan31 1, !- Name",
+        "  schedule rule Jan1-Dec31,   !- Name",
         "  schedule ruleset,           !- Schedule Ruleset Name",
         "  1,                          !- Rule Order",
         "  date range rule,            !- Day Schedule Name",
@@ -2721,5 +2721,118 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
     auto &daySched9 = weekSched9->dayScheds[(int)Sched::DayType::Monday];
     for (auto v : daySched9->tsVals) {
         EXPECT_EQ(0.6, v);
+    }
+}
+
+TEST_F(EnergyPlusFixture, ScheduleRuleset_DateRangeWrapAround)
+{
+    // Test date range specification with wrap-around
+    std::string const idf_objects = delimited_string({
+        "ScheduleTypeLimits,",
+        "  Fractional,                 !- Name",
+        "  0,                          !- Lower Limit Value",
+        "  1,                          !- Upper Limit Value",
+        "  Continuous;                 !- Numeric Type",
+        " ",
+        "Schedule:Day:Interval,",
+        "  always off,                 !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  No,                         !- Interpolate to Timestep",
+        "  24:00,                      !- Time 1",
+        "  0.0;                        !- Value Until Time 1",
+        " ",
+        "Schedule:Day:Interval,",
+        "  date range rule,            !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  No,                         !- Interpolate to Timestep",
+        "  24:00,                      !- Time 1",
+        "  0.2;                        !- Value Until Time 1",
+        " ",
+        "Schedule:Day:Interval,",
+        "  date range wraparound rule, !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  No,                         !- Interpolate to Timestep",
+        "  24:00,                      !- Time 1",
+        "  0.3;                        !- Value Until Time 1",
+        " ", 
+        "Schedule:Ruleset,",
+        "  schedule ruleset,           !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  always off;                 !- Default Day Schedule Name",
+        " ",
+        "Schedule:Rule,",
+        "  schedule rule Jan1-Dec31,   !- Name",
+        "  schedule ruleset,           !- Schedule Ruleset Name",
+        "  1,                          !- Rule Order",
+        "  date range rule,            !- Day Schedule Name",
+        "  Yes,                        !- Apply Sunday",
+        "  Yes,                        !- Apply Monday",
+        "  Yes,                        !- Apply Tuesday",
+        "  Yes,                        !- Apply Wednesday",
+        "  Yes,                        !- Apply Thursday",
+        "  Yes,                        !- Apply Friday",
+        "  Yes,                        !- Apply Saturday",
+        "  DateRange,                  !- Date Specification Type",
+        "  1,                          !- Start Month",
+        "  1,                          !- Start Day",
+        "  12,                         !- End Month",
+        "  31;                         !- End Day",
+        " ",
+        "Schedule:Rule,",
+        "  schedule rule Nov1-Jan31,   !- Name",
+        "  schedule ruleset,           !- Schedule Ruleset Name",
+        "  0,                          !- Rule Order",
+        "  date range wraparound rule, !- Day Schedule Name",
+        "  Yes,                        !- Apply Sunday",
+        "  Yes,                        !- Apply Monday",
+        "  Yes,                        !- Apply Tuesday",
+        "  Yes,                        !- Apply Wednesday",
+        "  Yes,                        !- Apply Thursday",
+        "  Yes,                        !- Apply Friday",
+        "  Yes,                        !- Apply Saturday",
+        "  DateRange,                  !- Date Specification Type",
+        "  11,                         !- Start Month",
+        "  1,                          !- Start Day",
+        "  1,                          !- End Month",
+        "  31;                         !- End Day",
+        " ",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    auto &s_glob = state->dataGlobal;
+
+    s_glob->TimeStepsInHour = 4;
+    s_glob->MinutesInTimeStep = 15;
+
+    state->init_state(*state);
+
+    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE RULESET"));
+    EXPECT_NE(sch, nullptr);
+    EXPECT_EQ(367, sch->weekScheds.size());
+    EXPECT_EQ(sch->weekScheds.front(), nullptr);
+
+    auto &weekSched1 = sch->weekScheds[General::OrdinalDay(1, 31, 1)];
+    auto &daySched1 = weekSched1->dayScheds[(int)Sched::DayType::Monday];
+    for (auto v : daySched1->tsVals) {
+        EXPECT_EQ(0.3, v);
+    }
+
+    auto &weekSched2 = sch->weekScheds[General::OrdinalDay(2, 1, 1)];
+    auto &daySched2 = weekSched2->dayScheds[(int)Sched::DayType::Monday];
+    for (auto v : daySched2->tsVals) {
+        EXPECT_EQ(0.2, v);
+    }
+
+    auto &weekSched3 = sch->weekScheds[General::OrdinalDay(10, 31, 1)];
+    auto &daySched3 = weekSched3->dayScheds[(int)Sched::DayType::Monday];
+    for (auto v : daySched3->tsVals) {
+        EXPECT_EQ(0.2, v);
+    }
+
+    auto &weekSched4 = sch->weekScheds[General::OrdinalDay(11, 1, 1)];
+    auto &daySched4 = weekSched4->dayScheds[(int)Sched::DayType::Monday];
+    for (auto v : daySched4->tsVals) {
+        EXPECT_EQ(0.3, v);
     }
 }

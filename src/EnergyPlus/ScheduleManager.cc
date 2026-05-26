@@ -2958,7 +2958,8 @@ namespace Sched {
                 if (ruleSchedule->dateSpecificationType == "DATERANGE") {
                     int startPointer = General::OrdinalDay(ruleSchedule->startMonth, ruleSchedule->startDay, 1);
                     int endPointer = General::OrdinalDay(ruleSchedule->endMonth, ruleSchedule->endDay, 1);
-                    if ((startPointer <= day) && (day <= endPointer)) {
+                    if (((startPointer <= day) && (day <= endPointer)) ||
+                       ((endPointer < startPointer) && ((startPointer <= day) || (day <= endPointer)))) {
                         if (ruleSchedule->ruleOrder < ruleOrder) {
                             ruleSchedules.push_back(ruleSchedule);
                             ruleOrder = ruleSchedule->ruleOrder;
