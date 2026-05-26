@@ -7028,8 +7028,8 @@ namespace InternalHeatGains {
             CheckZoneSizing(state, CompType, thisBBHeat.Name);
         }
 
-        bool SizingDesRunThisZone = true;
-        CheckThisZoneForSizing(state, state.dataSize->CurZoneEqNum, SizingDesRunThisZone);
+        bool SizingDesRunThisZone = false;
+        CheckThisZoneForSizing(state, NZ, SizingDesRunThisZone);
 
         if (SizingDesRunThisZone) {
             LowTemperatureDes = state.dataSize->FinalZoneSizing(NZ).OutTempAtHeatPeak;
