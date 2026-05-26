@@ -286,6 +286,21 @@ namespace ConstructionAssignments {
                 }
             }
         }
+        // Resolve Building-level construction assignment set (name was stored before CAS data was loaded)
+        if (!s_dc->buildingConstructionAssignmentSetName.empty()) {
+            auto it = std::find_if(s_dc->constructionAssignmentSets.begin(),
+                                   s_dc->constructionAssignmentSets.end(),
+                                   [&](const ConstructionAssignmentSetData &d) { return d.Name == s_dc->buildingConstructionAssignmentSetName; });
+            if (it == s_dc->constructionAssignmentSets.end()) {
+                ShowSevereError(state,
+                                std::format(R"({}Building: invalid Construction Assignment Set Name="{}" not found.)",
+                                            routineName,
+                                            s_dc->buildingConstructionAssignmentSetName));
+                ErrorsFound = true;
+            } else {
+                s_dc->buildingConstructionAssignmentSetIndex = static_cast<int>(std::distance(s_dc->constructionAssignmentSets.begin(), it));
+            }
+        }
     }
 
 } // namespace ConstructionAssignments
