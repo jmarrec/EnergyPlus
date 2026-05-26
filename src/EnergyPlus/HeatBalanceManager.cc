@@ -706,6 +706,9 @@ namespace HeatBalanceManager {
             state.dataHeatBal->MinNumberOfWarmupDays = DataHeatBalance::DefaultMinNumberOfWarmupDays;
         }
 
+        // Construction Assignment Set Name (resolved after ConstructionAssignmentSet data is loaded in GetConstructionAssignmentSetData)
+        state.dataConstructionAssignments->buildingConstructionAssignmentSetName = Util::makeUPPER(AlphaName(4));
+
         constexpr const char *Format_720(" Building Information,{},{:.3f},{},{:#G},{:#G},{},{},{}\n");
         constexpr const char *Format_721("! <Building Information>, Building Name,North Axis {{deg}},Terrain,  Loads Convergence Tolerance "
                                          "Value,Temperature Convergence Tolerance Value,  Solar Distribution,Maximum Number of Warmup Days,Minimum "
@@ -2471,6 +2474,25 @@ namespace HeatBalanceManager {
                     ++state.dataGlobal->numSpaceTypes;
                     state.dataHeatBal->spaceTypes(state.dataGlobal->numSpaceTypes) = thisSpace.spaceType;
                     thisSpace.spaceTypeNum = state.dataGlobal->numSpaceTypes;
+                }
+
+                std::string dcsName = Util::makeUPPER(ip->getAlphaFieldValue(objectFields, objectSchemaProps, "construction_assignment_set_name"));
+                if (!dcsName.empty()) {
+                    auto &dcSets = state.dataConstructionAssignments->constructionAssignmentSets;
+                    auto it = std::find_if(dcSets.begin(), dcSets.end(), [&dcsName](const ConstructionAssignments::ConstructionAssignmentSetData &d) {
+                        return d.Name == dcsName;
+                    });
+                    if (it == dcSets.end()) {
+                        ShowSevereError(state,
+                                        std::format(R"({}{}="{}", invalid construction_assignment_set_name="{}" not found.)",
+                                                    RoutineName,
+                                                    cCurrentModuleObject,
+                                                    thisSpace.Name,
+                                                    dcsName));
+                        ErrorsFound = true;
+                    } else {
+                        thisSpace.constructionAssignmentSetIndex = static_cast<int>(std::distance(dcSets.begin(), it));
+                    }
                 }
 
                 auto extensibles = objectFields.find("tags");

@@ -115,6 +115,9 @@ struct ConstructionAssignmentsData : BaseGlobalStruct
 
     std::vector<ConstructionAssignments::ConstructionAssignmentSetData> constructionAssignmentSets;
 
+    std::string buildingConstructionAssignmentSetName; // Raw name from Building object, set before CAS data is loaded
+    int buildingConstructionAssignmentSetIndex = -1;   // 0-based index into constructionAssignmentSets, or -1 if none
+
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
     {
     }
@@ -128,6 +131,8 @@ struct ConstructionAssignmentsData : BaseGlobalStruct
         constructionAssignmentSets.clear();
         surfaceConstructionAssignments.clear();
         subSurfaceConstructionAssignments.clear();
+        buildingConstructionAssignmentSetName.clear();
+        buildingConstructionAssignmentSetIndex = -1;
     }
 };
 
