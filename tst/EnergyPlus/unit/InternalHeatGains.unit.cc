@@ -65,6 +65,7 @@
 #include <EnergyPlus/DisplacementVentMgr.hh>
 #include <EnergyPlus/ElectricPowerServiceManager.hh>
 #include <EnergyPlus/ExteriorEnergyUse.hh>
+#include <EnergyPlus/GeneralRoutines.hh>
 #include <EnergyPlus/HVACManager.hh>
 #include <EnergyPlus/HeatBalanceInternalHeatGains.hh>
 #include <EnergyPlus/HeatBalanceManager.hh>
@@ -1447,6 +1448,119 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
     EXPECT_NEAR(spaceRpt2.BaseHeatPower, 1500.0 * 0.75, 0.01);
     // space CO2 not implemented yet - EXPECT_NEAR(spaceRpt2.CO2Rate, 0.0001125 * 0.75, 0.01);
     EXPECT_NEAR(spaceRpt2.ITEqSHI, 0, 0.01);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboard)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Main Zone;",
+
+        "Space,",
+        "Space 1,            !- Name",
+        "Main Zone,             !- Zone Name",
+        ",                   !- Ceiling Height {m}",
+        ",                   !- Volume {m3}",
+        "5.0;                !- Floor Area {m2}",
+
+        "Space,",
+        "Space 2,            !- Name",
+        "Main Zone,             !- Zone Name",
+        ",                   !- Ceiling Height {m}",
+        ",                   !- Volume {m3}",
+        "15.0;                !- Floor Area {m2}",
+        "SpaceList, All Spaces, Space 1, Space 2;"
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        "  ZoneBaseboard:OutdoorTemperatureControlled,",
+        "    Main Zone BBHeat,           !- Name",
+        "    Main Zone,                  !- Zone Name",
+        "    Schedule1,               !- Schedule Name",
+        "    autosize,                !- Capacity at Low Temperature {W}",
+        "    autosize,                !- Low Temperature {C}",
+        "    autosize,                !- Capacity at High Temperature {W}",
+        "    autosize,                !- High Temperature {C}",
+        "    0.5,                     !- Fraction Radiant",
+        "    Baseboard Heat,          !- End - Use Subcategory",
+        "    25.0;                    !- Design Zone Heating Setpoint",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    state->dataEnvrn->DayOfYear_Schedule = 1;
+    state->dataEnvrn->DayOfMonth = 1;
+    state->dataEnvrn->DayOfWeek = 1;
+    state->dataGlobal->HourOfDay = 1;
+    state->dataGlobal->TimeStep = 1;
+    Sched::UpdateScheduleVals(*state);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+    ZoneEquipmentManager::GetZoneEquipment(*state);
+    HeatBalanceManager::AllocateHeatBalArrays(*state);
+    state->dataHeatBal->Zone(1).FloorArea = 20.0;
+    state->dataHeatBal->space(1).FloorArea = 5.0;
+    state->dataHeatBal->space(2).FloorArea = 15.0;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_EQ(state->dataHeatBal->TotBBHeat, 2);
+
+    EnergyPlus::createFacilityElectricPowerServiceObject(*state); // Needs to happen before InitInternalHeatGains
+
+    EXPECT_FALSE(state->dataGlobal->ZoneSizingCalc);
+    auto &thisBBHeat1 = state->dataHeatBal->ZoneBBHeat(1);
+    auto &thisBBHeat2 = state->dataHeatBal->ZoneBBHeat(2);
+    EXPECT_TRUE(thisBBHeat1.MySizeFlag);
+    EXPECT_TRUE(thisBBHeat2.MySizeFlag);
+
+    int NZ1 = thisBBHeat1.ZonePtr;
+    int NZ2 = thisBBHeat2.ZonePtr;
+    EXPECT_EQ(NZ1, NZ2);
+
+    state->dataSize->ZoneSizingRunDone = true;
+    state->dataSize->NumZoneSizingInput = 1;
+    state->dataSize->ZoneSizingInput.allocate(1);
+    state->dataSize->ZoneSizingInput(1).ZoneNum = NZ1;
+    state->dataSize->FinalZoneSizing.allocate(1);
+    state->dataSize->FinalZoneSizing(NZ1).OutTempAtHeatPeak = -17.3;
+    state->dataSize->FinalZoneSizing(NZ1).MCPIAtHeatPeak = 10.0;
+    state->dataSize->FinalZoneSizing(NZ1).MCPVAtHeatPeak = 20.0;
+
+    bool SizingDesRunThisZone = false;
+    CheckThisZoneForSizing(*state, NZ1, SizingDesRunThisZone);
+    EXPECT_TRUE(SizingDesRunThisZone);
+
+    // First time should be all good, because ZoneRpt/spaceRpt values initialize to zero
+    InternalHeatGains::InitInternalHeatGains(*state);
+    EXPECT_FALSE(thisBBHeat1.MySizeFlag);
+    EXPECT_FALSE(thisBBHeat2.MySizeFlag);
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    EXPECT_EQ(0.0, thisBBHeat1.ExtSurfCondLoad);
+    EXPECT_EQ(0.0, thisBBHeat2.ExtSurfCondLoad);
+
+    EXPECT_EQ(25.0, thisBBHeat1.ZnHtgSetTemp);
+    EXPECT_EQ(-17.3, thisBBHeat1.LowTemperature);
+    EXPECT_EQ(25.0, thisBBHeat1.HighTemperature);
+    EXPECT_EQ(317.25, thisBBHeat1.CapatLowTemperature);
+    EXPECT_EQ(0.0, thisBBHeat1.CapatHighTemperature);
+
+    EXPECT_EQ(25.0, thisBBHeat2.ZnHtgSetTemp);
+    EXPECT_EQ(-17.3, thisBBHeat2.LowTemperature);
+    EXPECT_EQ(25.0, thisBBHeat2.HighTemperature);
+    EXPECT_EQ(951.75, thisBBHeat2.CapatLowTemperature);
+    EXPECT_EQ(0.0, thisBBHeat2.CapatHighTemperature);
 }
 
 TEST_F(EnergyPlusFixture, InternalHeatGains_AdjustedSupplyGoodInletNode)
