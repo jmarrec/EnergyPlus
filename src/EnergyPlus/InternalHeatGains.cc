@@ -78,6 +78,7 @@
 #include <EnergyPlus/ElectricPowerServiceManager.hh>
 #include <EnergyPlus/FuelCellElectricGenerator.hh>
 #include <EnergyPlus/General.hh>
+#include <EnergyPlus/GeneralRoutines.hh>
 #include <EnergyPlus/HeatBalanceIntRadExchange.hh>
 #include <EnergyPlus/HeatBalanceInternalHeatGains.hh>
 #include <EnergyPlus/HybridModel.hh>
@@ -7009,15 +7010,10 @@ namespace InternalHeatGains {
         static constexpr std::string_view RoutineName("SizeOaControlledBaseboard");
         std::string_view const CompType = "ZoneBaseboard:OutdoorTemperatureControlled";
 
-        bool IsAutosize = false;               // True if autosize
         Real64 LowTemperatureDes = 0.0;        // Autosize low temperature for reporting
-        Real64 LowTemperatureUser = 0.0;       // Hardsize low temperature for reporting
         Real64 HighTemperatureDes = 0.0;       // Autosize high temperature for reporting
-        Real64 HighTemperatureUser = 0.0;      // Hardsize high temperature for reporting
         Real64 CapatLowTemperatureDes = 0.0;   // Autosize capacity at low temperature for reporting
-        Real64 CapatLowTemperatureUser = 0.0;  // Hardsize capacity at low temperature for reporting
         Real64 CapatHighTemperatureDes = 0.0;  // Autosize capacity at high temperature for reporting
-        Real64 CapatHighTemperatureUser = 0.0; // Hardsize capacity at high temperature for reporting
         Real64 DeltaTMax = 0.0;                // Maximum temperature difference
         Real64 DeltaTMin = 0.0;                // Minimum temperature difference
         Real64 ZnInfilSensLoad = 0.0;          // Zone infiltration sensible load
@@ -7027,191 +7023,225 @@ namespace InternalHeatGains {
         auto &thisBBHeat = state.dataHeatBal->ZoneBBHeat(BaseboardNum);
         int NZ = thisBBHeat.ZonePtr;
 
-        if (thisBBHeat.LowTemperature == DataSizing::AutoSize) {
-            IsAutosize = true;
+        if (thisBBHeat.LowTemperature == DataSizing::AutoSize  ||
+            thisBBHeat.HighTemperature == DataSizing::AutoSize ||
+            thisBBHeat.CapatLowTemperature == DataSizing::AutoSize ||
+            thisBBHeat.CapatHighTemperature == DataSizing::AutoSize) {
+            CheckZoneSizing(state, CompType, thisBBHeat.Name);
         }
 
-        LowTemperatureDes = state.dataSize->FinalZoneSizing(NZ).OutTempAtHeatPeak;
-        if (IsAutosize) {
-            thisBBHeat.LowTemperature = LowTemperatureDes;
-            BaseSizer::reportSizerOutput(
-                state, CompType, thisBBHeat.Name, "Design Size Low Temperature [C]", LowTemperatureDes);
-        } else {
-            LowTemperatureUser = thisBBHeat.LowTemperature;
-            BaseSizer::reportSizerOutput(state,
-                                         CompType,
-                                         thisBBHeat.Name,
-                                         "Design Size Low Temperature [C]",
-                                         LowTemperatureDes,
-                                         "User-Specified Low Temperature [C]",
-                                         LowTemperatureUser);
-            if (state.dataGlobal->DisplayExtraWarnings) {
-                if ((abs(LowTemperatureDes - LowTemperatureUser) / LowTemperatureUser) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
-                    ShowMessage(
-                        state,
-                        EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
-                                           RoutineName, thisBBHeat.Name));
-                    ShowContinueError(state, EnergyPlus::format("User-Specified Low Temperature of {:.2R} [C]", LowTemperatureUser));
-                    ShowContinueError(state, EnergyPlus::format("differs from Design Size Low Temperature of {:.R} [C]", LowTemperatureDes));
-                    ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
-                    ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
-                }
-            }
-        }
+        bool SizingDesRunThisZone = true;
+        CheckThisZoneForSizing(state, state.dataSize->CurZoneEqNum, SizingDesRunThisZone);
 
-        IsAutosize = false;
-        if (thisBBHeat.HighTemperature == DataSizing::AutoSize) {
-            IsAutosize = true;
-        }
-
-        HighTemperatureDes = thisBBHeat.ZnHtgSetTemp;
-        if (IsAutosize) {
-            thisBBHeat.HighTemperature = HighTemperatureDes;
-            BaseSizer::reportSizerOutput(
-                state, CompType, thisBBHeat.Name, "Design Size High Temperature [C]", HighTemperatureDes);
-        } else {
-            HighTemperatureUser = thisBBHeat.HighTemperature;
-            BaseSizer::reportSizerOutput(state,
-                                         CompType,
-                                         thisBBHeat.Name,
-                                         "Design Size High Temperature [C]",
-                                         HighTemperatureDes,
-                                         "User-Specified High Temperature [C]",
-                                         HighTemperatureUser);
-            if (state.dataGlobal->DisplayExtraWarnings) {
-                if ((abs(HighTemperatureDes - HighTemperatureUser) / HighTemperatureUser) >
-                    state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
-                    ShowMessage(
-                        state,
-                        EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
-                                           RoutineName, thisBBHeat.Name));
-                    ShowContinueError(state, EnergyPlus::format("User-Specified High Temperature of {:.R} [C]", HighTemperatureUser));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("differs from Design Size High Temperature of {:.R} [C]", HighTemperatureDes));
-                    ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
-                    ShowContinueError(state, "Verify that the value entered is intended and is consistent wth other components.");
-                }
-            }
-        }
+        if (SizingDesRunThisZone) {
+            LowTemperatureDes = state.dataSize->FinalZoneSizing(NZ).OutTempAtHeatPeak;
             
-        DeltaTMax = thisBBHeat.ZnHtgSetTemp - state.dataSize->FinalZoneSizing(NZ).OutTempAtHeatPeak;
-        DeltaTMin = thisBBHeat.ZnHtgSetTemp - thisBBHeat.HighTemperature;
-        if (DeltaTMax < 0.0) {
-            ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, thisBBHeat.Name));
-            ShowContinueError(state, "Minimum outdoor temperature is greater than zone setpoint temperature. ");
-            ShowContinueError(state, "Check if a heating design day was attached and temperature settings were correct.");
-        } else if (DeltaTMin < 0.0) {
-            ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, thisBBHeat.Name));
-            ShowContinueError(state, "High temperature is greater than zone setpoint temperature. ");
-            ShowContinueError(state, "Check if temperature settings were correct.");
+            if (thisBBHeat.LowTemperature == DataSizing::AutoSize) {
+                thisBBHeat.LowTemperature = LowTemperatureDes;
+                BaseSizer::reportSizerOutput(
+                    state, CompType, thisBBHeat.Name, "Design Size Low Temperature [C]", thisBBHeat.LowTemperature);
+            } else {
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "Design Size Low Temperature [C]",
+                                             LowTemperatureDes,
+                                             "User-Specified Low Temperature [C]",
+                                             thisBBHeat.LowTemperature);
+                if (state.dataGlobal->DisplayExtraWarnings) {
+                    if ((abs(LowTemperatureDes - thisBBHeat.LowTemperature) / thisBBHeat.LowTemperature) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                        ShowMessage(
+                            state,
+                            EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
+                                               RoutineName, thisBBHeat.Name));
+                        ShowContinueError(state, EnergyPlus::format("User-Specified Low Temperature of {:.2R} [C]", thisBBHeat.LowTemperature));
+                        ShowContinueError(state, EnergyPlus::format("differs from Design Size Low Temperature of {:.R} [C]", LowTemperatureDes));
+                        ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
+                        ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
+                    }
+                }
+            }
+        } else {
+            if (thisBBHeat.LowTemperature == DataSizing::AutoSize) {
+                  // CheckZoneSizing above should have caught this
+            } else {
+                BaseSizer::reportSizerOutput(
+                    state, CompType, thisBBHeat.Name, "User-Specified Low Temperature [C]", thisBBHeat.LowTemperature);
+            }
         }
+        
+        if (SizingDesRunThisZone) {
+            HighTemperatureDes = thisBBHeat.ZnHtgSetTemp;
 
-        // Find surfaces exposed to outdoor environment and calculate conductional load over the surfaces found
-        for (int spaceNum : state.dataHeatBal->Zone(NZ).spaceIndexes) {
-            auto const &thisSpace = state.dataHeatBal->space(spaceNum);
-            for (int SurfNum : thisSpace.surfaces) {
-                auto const &surf = state.dataSurface->Surface(SurfNum);
-                Real64 NominalUwithConvCoeffs = 0.0;
-                if (surf.Construction > 0 && surf.Construction <= state.dataHeatBal->TotConstructs) {
-                    bool isWithConvCoefValid = false;
-                    NominalUwithConvCoeffs = DataHeatBalance::ComputeNominalUwithConvCoeffs(state, SurfNum, isWithConvCoefValid);
+            if (thisBBHeat.HighTemperature == DataSizing::AutoSize) {
+                thisBBHeat.HighTemperature = HighTemperatureDes;
+                BaseSizer::reportSizerOutput(
+                    state, CompType, thisBBHeat.Name, "Design Size High Temperature [C]", thisBBHeat.HighTemperature);
+            } else {
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "Design Size High Temperature [C]",
+                                             HighTemperatureDes,
+                                             "User-Specified High Temperature [C]",
+                                             thisBBHeat.HighTemperature);
+                if (state.dataGlobal->DisplayExtraWarnings) {
+                    if ((abs(HighTemperatureDes - thisBBHeat.HighTemperature) / thisBBHeat.HighTemperature) >
+                        state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                        ShowMessage(
+                            state,
+                            EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
+                                               RoutineName, thisBBHeat.Name));
+                        ShowContinueError(state, EnergyPlus::format("User-Specified High Temperature of {:.R} [C]", thisBBHeat.HighTemperature));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("differs from Design Size High Temperature of {:.R} [C]", HighTemperatureDes));
+                        ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
+                        ShowContinueError(state, "Verify that the value entered is intended and is consistent wth other components.");
+                    }
                 }
-                if (surf.ExtBoundCond == ExternalEnvironment) {
-                    ExtSurfCondLoadThisSurf = NominalUwithConvCoeffs * surf.Area * DeltaTMax;
-                    thisBBHeat.ExtSurfCondLoad += ExtSurfCondLoadThisSurf;
-                }
+            }
+        } else {
+            if (thisBBHeat.HighTemperature == DataSizing::AutoSize) {
+                // CheckZoneSizing above should have caught this
+            } else {
+                BaseSizer::reportSizerOutput(
+                    state, CompType, thisBBHeat.Name, "User-Specified High Temperature [C]", thisBBHeat.HighTemperature);
+
             }
         }
 
-        // See if infiltration and ventilation were defined
-        ZnInfilSensLoad = state.dataSize->FinalZoneSizing(NZ).MCPIAtHeatPeak * DeltaTMax;
-        ZnVentSensLoad = state.dataSize->FinalZoneSizing(NZ).MCPVAtHeatPeak * DeltaTMax;
+        if (SizingDesRunThisZone) {
+            DeltaTMax = thisBBHeat.ZnHtgSetTemp - LowTemperatureDes;
+            DeltaTMin = thisBBHeat.ZnHtgSetTemp - thisBBHeat.HighTemperature;
+            if (DeltaTMax < 0.0) {
+                ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, thisBBHeat.Name));
+                ShowContinueError(state, "Minimum outdoor temperature is greater than zone setpoint temperature. ");
+                ShowContinueError(state, "Check if a heating design day was attached and temperature settings were correct.");
+            } else if (DeltaTMin < 0.0) {
+                ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, thisBBHeat.Name));
+                ShowContinueError(state, "High temperature is greater than zone setpoint temperature. ");
+                ShowContinueError(state, "Check if temperature settings were correct.");
+            }
 
-        IsAutosize = false;
-        if (thisBBHeat.CapatLowTemperature == DataSizing::AutoSize) {
-            IsAutosize = true;
-        }
-
-        CapatLowTemperatureDes = thisBBHeat.ExtSurfCondLoad + ZnInfilSensLoad + ZnVentSensLoad;
-        // Set it zero, if no winter design day or wrong temp setting
-        if (CapatLowTemperatureDes < 0.0) {
-            CapatLowTemperatureDes = 0.0;
-        }
-
-        if (IsAutosize) {
-            thisBBHeat.CapatLowTemperature = CapatLowTemperatureDes;
-            BaseSizer::reportSizerOutput(state,
-                                         CompType,
-                                         thisBBHeat.Name,
-                                         "Design Size Capacity at Low Temperature [W]",
-                                         CapatLowTemperatureDes);
-        } else {
-            CapatLowTemperatureUser = thisBBHeat.CapatLowTemperature;
-            BaseSizer::reportSizerOutput(state,
-                                         CompType,
-                                         thisBBHeat.Name,
-                                         "Design Size Capacity at Low Temperature [W]",
-                                         CapatLowTemperatureDes,
-                                         "User-Specified Capacity at Low Temperature [W]",
-                                         CapatLowTemperatureUser);
-            if (state.dataGlobal->DisplayExtraWarnings) {
-                if ((abs(CapatLowTemperatureDes - CapatLowTemperatureUser) / CapatLowTemperatureUser) >
-                    state.dataSize->AutoVsHardSizingThreshold) {
-                    ShowMessage(
-                        state,
-                        EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
-                                           RoutineName, thisBBHeat.Name));
-                    ShowContinueError(state,
-                                      EnergyPlus::format("User-Specified Capacity at Low Temperature of {:.R} [W]", CapatLowTemperatureUser));
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format("differs from Design Size Capacity at Low Temperature of {:.R} [W]", CapatLowTemperatureDes));
-                    ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
-                    ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
+            // Find surfaces exposed to outdoor environment and calculate conductional load over the surfaces found
+            for (int spaceNum : state.dataHeatBal->Zone(NZ).spaceIndexes) {
+                auto const &thisSpace = state.dataHeatBal->space(spaceNum);
+                for (int SurfNum : thisSpace.surfaces) {
+                    auto const &surf = state.dataSurface->Surface(SurfNum);
+                    Real64 NominalUwithConvCoeffs = 0.0;
+                    if (surf.Construction > 0 && surf.Construction <= state.dataHeatBal->TotConstructs) {
+                        bool isWithConvCoefValid = false;
+                        NominalUwithConvCoeffs = DataHeatBalance::ComputeNominalUwithConvCoeffs(state, SurfNum, isWithConvCoefValid);
+                    }
+                    if (surf.ExtBoundCond == ExternalEnvironment) {
+                        ExtSurfCondLoadThisSurf = NominalUwithConvCoeffs * surf.Area * DeltaTMax;
+                        thisBBHeat.ExtSurfCondLoad += ExtSurfCondLoadThisSurf;
+                    }
                 }
             }
-        }
 
-        IsAutosize = false;
-        if (thisBBHeat.CapatHighTemperature == DataSizing::AutoSize) {
-            IsAutosize = true;
-        }
-        CapatHighTemperatureDes = thisBBHeat.CapatLowTemperature * DeltaTMin / DeltaTMax;
-        // Set it zero, if no winter design day or wrong temp setting
-        if (CapatHighTemperatureDes < 0.0) {
-            CapatHighTemperatureDes = 0.0;
-        }
-        if (IsAutosize) {
-            thisBBHeat.CapatHighTemperature = CapatHighTemperatureDes;
-            BaseSizer::reportSizerOutput(state,
-                                         CompType,
-                                         thisBBHeat.Name,
-                                         "Design Size Capacity at High Temperature [W]",
-                                         CapatHighTemperatureDes);
-        } else {
-            CapatHighTemperatureUser = thisBBHeat.CapatHighTemperature;
-            BaseSizer::reportSizerOutput(state,
-                                         CompType,
-                                         thisBBHeat.Name,
-                                         "Design Size Capacity at High Temperature [W]",
-                                         CapatHighTemperatureDes,
-                                         "User-Specified Capacity at High Temperature [W]",
-                                         CapatHighTemperatureUser);
-            if (state.dataGlobal->DisplayExtraWarnings) {
-                if ((abs(CapatHighTemperatureDes - CapatHighTemperatureUser) / CapatHighTemperatureUser) >
-                    state.dataSize->AutoVsHardSizingThreshold) {
-                    ShowMessage(
-                        state,
-                        EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
-                                           RoutineName, thisBBHeat.Name));
-                    ShowContinueError(
-                        state, EnergyPlus::format("User-Specified Capacity at High Temperature of {:.R} [W]", CapatHighTemperatureUser));
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format("differs from Design Size Capacity at High Temperature of {:.R} [W]", CapatHighTemperatureDes));
-                    ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
-                    ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
+            // See if infiltration and ventilation were defined
+            ZnInfilSensLoad = state.dataSize->FinalZoneSizing(NZ).MCPIAtHeatPeak * DeltaTMax;
+            ZnVentSensLoad = state.dataSize->FinalZoneSizing(NZ).MCPVAtHeatPeak * DeltaTMax;
+            
+            CapatLowTemperatureDes = thisBBHeat.ExtSurfCondLoad + ZnInfilSensLoad + ZnVentSensLoad;
+            // Set it zero, if no winter design day or wrong temp setting
+            if (CapatLowTemperatureDes < 0.0) {
+                CapatLowTemperatureDes = 0.0;
+            }            
+            
+            if (thisBBHeat.CapatLowTemperature == DataSizing::AutoSize) {
+                thisBBHeat.CapatLowTemperature = CapatLowTemperatureDes;
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "Design Size Capacity at Low Temperature [W]",
+                                             thisBBHeat.CapatLowTemperature);
+            } else {
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "Design Size Capacity at Low Temperature [W]",
+                                             CapatLowTemperatureDes,
+                                             "User-Specified Capacity at Low Temperature [W]",
+                                             thisBBHeat.CapatLowTemperature);
+                if (state.dataGlobal->DisplayExtraWarnings) {
+                    if ((abs(CapatLowTemperatureDes - thisBBHeat.CapatLowTemperature) / thisBBHeat.CapatLowTemperature) >
+                        state.dataSize->AutoVsHardSizingThreshold) {
+                        ShowMessage(
+                            state,
+                            EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
+                                               RoutineName, thisBBHeat.Name));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("User-Specified Capacity at Low Temperature of {:.R} [W]", thisBBHeat.CapatLowTemperature));
+                        ShowContinueError(
+                            state,
+                            EnergyPlus::format("differs from Design Size Capacity at Low Temperature of {:.R} [W]", CapatLowTemperatureDes));
+                        ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
+                        ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
+                    }
                 }
+            }
+        } else {
+            if (thisBBHeat.CapatLowTemperature == DataSizing::AutoSize) {
+                // CheckZoneSizing above should have caught this
+            } else {
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "User-Specified Capacity at Low Temperature [W]",
+                                             thisBBHeat.CapatLowTemperature);
+            }          
+        }
+        
+        if (SizingDesRunThisZone) {
+            CapatHighTemperatureDes = thisBBHeat.CapatLowTemperature * DeltaTMin / DeltaTMax;
+            // Set it zero, if no winter design day or wrong temp setting
+            if (CapatHighTemperatureDes < 0.0) {
+                CapatHighTemperatureDes = 0.0;
+            }
+
+            if (thisBBHeat.CapatHighTemperature == DataSizing::AutoSize) {
+                thisBBHeat.CapatHighTemperature = CapatHighTemperatureDes;
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "Design Size Capacity at High Temperature [W]",
+                                             thisBBHeat.CapatHighTemperature);
+            } else {
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "Design Size Capacity at High Temperature [W]",
+                                             CapatHighTemperatureDes,
+                                             "User-Specified Capacity at High Temperature [W]",
+                                             thisBBHeat.CapatHighTemperature);
+                if (state.dataGlobal->DisplayExtraWarnings) {
+                    if ((abs(CapatHighTemperatureDes - thisBBHeat.CapatHighTemperature) / thisBBHeat.CapatHighTemperature) >
+                        state.dataSize->AutoVsHardSizingThreshold) {
+                        ShowMessage(
+                            state,
+                            EnergyPlus::format("{}: Potential issue with equipment sizing for {}",
+                                               RoutineName, thisBBHeat.Name));
+                        ShowContinueError(
+                            state, EnergyPlus::format("User-Specified Capacity at High Temperature of {:.R} [W]", thisBBHeat.CapatHighTemperature));
+                        ShowContinueError(
+                            state,
+                            EnergyPlus::format("differs from Design Size Capacity at High Temperature of {:.R} [W]", CapatHighTemperatureDes));
+                        ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
+                        ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
+                    }
+                }
+            }
+        } else {
+            if (thisBBHeat.CapatHighTemperature == DataSizing::AutoSize) {
+                // CheckZoneSizing above should have caught this
+            } else {
+                BaseSizer::reportSizerOutput(state,
+                                             CompType,
+                                             thisBBHeat.Name,
+                                             "User-Specified Capacity at High Temperature [W]",
+                                             thisBBHeat.CapatHighTemperature);
             }
         }
     }
