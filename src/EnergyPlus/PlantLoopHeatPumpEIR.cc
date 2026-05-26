@@ -301,7 +301,7 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool
         // or if parallel configuration and no load, the unit is turned off
         auto &comp = DataPlant::CompData::getPlantComponent(state, this->loadSidePlantLoc);
         if (((this->minSourceTempLimit > this->sourceSideInletTemp || this->maxSourceTempLimit < this->sourceSideInletTemp) ||
-             (std::abs(currentLoad) < HVAC::SmallLoad && comp.FlowCtrl != DataBranchAirLoopPlant::ControlType::SeriesActive)) &&
+             (std::abs(currentLoad) < HVAC::SmallLoad && this->sysControlType == ControlType::Load && comp.FlowCtrl != DataBranchAirLoopPlant::ControlType::SeriesActive)) &&
             !this->heatRecoveryIsActive) {
             this->loadSideMassFlowRate = 0.0;
             this->sourceSideMassFlowRate = 0.0;
