@@ -520,8 +520,8 @@ void sizeZoneSpaceEquipmentPart1(EnergyPlusData &state,
     zsCalcSizing.CoolZoneTemp = zoneNode.Temp;
     zsCalcSizing.CoolZoneHumRat = zoneNode.HumRat;
     zsCalcSizing.HeatOutTemp = state.dataEnvrn->OutDryBulbTemp;
-    zsCalcSizing.HeatMCPI = state.dataZoneTempPredictorCorrector->zoneHeatBalance(zoneNum).MCPI; // FIXME
-    zsCalcSizing.HeatMCPV = state.dataZoneTempPredictorCorrector->zoneHeatBalance(zoneNum).MCPV; // FIXME
+    zsCalcSizing.HeatMCPI = state.dataZoneTempPredictorCorrector->zoneHeatBalance(zoneNum).MCPI;
+    zsCalcSizing.HeatMCPV = state.dataZoneTempPredictorCorrector->zoneHeatBalance(zoneNum).MCPV;
     zsCalcSizing.HeatOutHumRat = state.dataEnvrn->OutHumRat;
     zsCalcSizing.CoolOutTemp = state.dataEnvrn->OutDryBulbTemp;
     zsCalcSizing.CoolOutHumRat = state.dataEnvrn->OutHumRat;
@@ -1480,8 +1480,8 @@ void updateZoneSizingDuringDay(DataSizing::ZoneSizingData &zsSizing,
     zsCalcSizing.HeatLoadSeq(timeStepInDay) += zsCalcSizing.HeatLoad * fracTimeStepZone;
     zsCalcSizing.HeatZoneTempSeq(timeStepInDay) += zsCalcSizing.HeatZoneTemp * fracTimeStepZone;
     zsCalcSizing.HeatOutTempSeq(timeStepInDay) += zsCalcSizing.HeatOutTemp * fracTimeStepZone;
-    zsCalcSizing.HeatMCPISeq(timeStepInDay) += zsCalcSizing.HeatMCPI * fracTimeStepZone; // FIXME
-    zsCalcSizing.HeatMCPVSeq(timeStepInDay) += zsCalcSizing.HeatMCPV * fracTimeStepZone; // FIXME
+    zsCalcSizing.HeatMCPISeq(timeStepInDay) += zsCalcSizing.HeatMCPI * fracTimeStepZone;
+    zsCalcSizing.HeatMCPVSeq(timeStepInDay) += zsCalcSizing.HeatMCPV * fracTimeStepZone;
     zsCalcSizing.HeatZoneRetTempSeq(timeStepInDay) += zsCalcSizing.HeatZoneRetTemp * fracTimeStepZone;
     zsCalcSizing.HeatZoneHumRatSeq(timeStepInDay) += zsCalcSizing.HeatZoneHumRat * fracTimeStepZone;
     zsCalcSizing.HeatOutHumRatSeq(timeStepInDay) += zsCalcSizing.HeatOutHumRat * fracTimeStepZone;
@@ -1551,8 +1551,8 @@ void updateZoneSizingEndDay(DataSizing::ZoneSizingData &zsCalcSizing,
             zsCalcSizing.DesHeatMassFlow = zsCalcSizing.HeatFlowSeq(TimeStepIndex);
             zsCalcSizing.ZoneTempAtHeatPeak = zsCalcSizing.HeatZoneTempSeq(TimeStepIndex);
             zsCalcSizing.OutTempAtHeatPeak = zsCalcSizing.HeatOutTempSeq(TimeStepIndex);
-            zsCalcSizing.MCPIAtHeatPeak = zsCalcSizing.HeatMCPISeq(TimeStepIndex); // FIXME
-            zsCalcSizing.MCPVAtHeatPeak = zsCalcSizing.HeatMCPVSeq(TimeStepIndex); // FIXME
+            zsCalcSizing.MCPIAtHeatPeak = zsCalcSizing.HeatMCPISeq(TimeStepIndex);
+            zsCalcSizing.MCPVAtHeatPeak = zsCalcSizing.HeatMCPVSeq(TimeStepIndex);
             zsCalcSizing.ZoneRetTempAtHeatPeak = zsCalcSizing.HeatZoneRetTempSeq(TimeStepIndex);
             zsCalcSizing.ZoneHumRatAtHeatPeak = zsCalcSizing.HeatZoneHumRatSeq(TimeStepIndex);
             zsCalcSizing.OutHumRatAtHeatPeak = zsCalcSizing.HeatOutHumRatSeq(TimeStepIndex);
