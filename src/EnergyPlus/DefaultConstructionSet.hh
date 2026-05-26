@@ -110,8 +110,9 @@ namespace DefaultConstructions {
 struct DefaultConstructionsData : BaseGlobalStruct
 {
 
-    std::vector<DefaultConstructions::DefaultSubSurfaceConstructionsData> defaultSubSurfaceConstructions;
-    std::vector<DefaultConstructions::DefaultSurfaceConstructionsData> defaultSurfaceConstructions;
+    std::vector<std::shared_ptr<DefaultConstructions::DefaultSurfaceConstructionsData>> defaultSurfaceConstructions;
+    std::vector<std::shared_ptr<DefaultConstructions::DefaultSubSurfaceConstructionsData>> defaultSubSurfaceConstructions;
+
     std::vector<DefaultConstructions::DefaultConstructionSetData> defaultConstructionSets;
 
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
@@ -124,9 +125,9 @@ struct DefaultConstructionsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        defaultSubSurfaceConstructions.clear();
-        defaultSurfaceConstructions.clear();
         defaultConstructionSets.clear();
+        defaultSurfaceConstructions.clear();
+        defaultSubSurfaceConstructions.clear();
     }
 };
 

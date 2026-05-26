@@ -163,39 +163,7 @@ namespace DefaultConstructions {
             return num;
         };
 
-        // 1. Parse DefaultSubSurfaceConstructions
-        {
-            const std::string cCurrentModuleObject = "DefaultSubSurfaceConstructions";
-            auto const instances = ip->epJSON.find(cCurrentModuleObject);
-            if (instances != ip->epJSON.end()) {
-
-                s_dc->defaultSubSurfaceConstructions.reserve(instances.value().size());
-
-                auto const &objectSchemaProps = ip->getObjectSchemaProps(state, cCurrentModuleObject);
-                for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
-                    ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
-                    auto const &fields = instance.value();
-                    DefaultSubSurfaceConstructionsData data;
-                    data.Name = Util::makeUPPER(instance.key());
-
-                    auto lookUpConstrNum = [&](const char *fieldName) {
-                        return getConstrNum(cCurrentModuleObject, data.Name, fields, objectSchemaProps, fieldName);
-                    };
-                    data.fixedWindowConstrNum = lookUpConstrNum("fixed_window_construction_name");
-                    data.operableWindowConstrNum = lookUpConstrNum("operable_window_construction_name");
-                    data.doorConstrNum = lookUpConstrNum("door_construction_name");
-                    data.glassDoorConstrNum = lookUpConstrNum("glass_door_construction_name");
-                    data.overheadDoorConstrNum = lookUpConstrNum("overhead_door_construction_name");
-                    data.skylightConstrNum = lookUpConstrNum("skylight_construction_name");
-                    data.tddDomeConstrNum = lookUpConstrNum("tubular_daylight_dome_construction_name");
-                    data.tddDiffuserConstrNum = lookUpConstrNum("tubular_daylight_diffuser_construction_name");
-
-                    s_dc->defaultSubSurfaceConstructions.push_back(std::move(data));
-                }
-            }
-        }
-
-        // 2. Parse DefaultSurfaceConstructions
+        // Parse DefaultSurfaceConstructions
         {
             const std::string cCurrentModuleObject = "DefaultSurfaceConstructions";
             auto const instances = ip->epJSON.find(cCurrentModuleObject);
@@ -207,21 +175,50 @@ namespace DefaultConstructions {
                 for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
                     ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
                     auto const &fields = instance.value();
-                    DefaultSurfaceConstructionsData data;
-                    data.Name = Util::makeUPPER(instance.key());
+                    auto &data = s_dc->defaultSurfaceConstructions.emplace_back(std::make_shared<DefaultSurfaceConstructionsData>());
+                    data->Name = Util::makeUPPER(instance.key());
 
                     auto lookUpConstrNum = [&](const char *fieldName) {
-                        return getConstrNum(cCurrentModuleObject, data.Name, fields, objectSchemaProps, fieldName);
+                        return getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
                     };
-                    data.floorConstrNum = lookUpConstrNum("floor_construction_name");
-                    data.wallConstrNum = lookUpConstrNum("wall_construction_name");
-                    data.roofCeilingConstrNum = lookUpConstrNum("roof_ceiling_construction_name");
-                    s_dc->defaultSurfaceConstructions.push_back(std::move(data));
+                    data->floorConstrNum = lookUpConstrNum("floor_construction_name");
+                    data->wallConstrNum = lookUpConstrNum("wall_construction_name");
+                    data->roofCeilingConstrNum = lookUpConstrNum("roof_ceiling_construction_name");
                 }
             }
         }
 
-        // 3. Parse DefaultConstructionSet (references the above, so must come last)
+        // Parse DefaultSubSurfaceConstructions
+        {
+            const std::string cCurrentModuleObject = "DefaultSubSurfaceConstructions";
+            auto const instances = ip->epJSON.find(cCurrentModuleObject);
+            if (instances != ip->epJSON.end()) {
+
+                s_dc->defaultSubSurfaceConstructions.reserve(instances.value().size());
+
+                auto const &objectSchemaProps = ip->getObjectSchemaProps(state, cCurrentModuleObject);
+                for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
+                    ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
+                    auto const &fields = instance.value();
+                    auto &data = s_dc->defaultSubSurfaceConstructions.emplace_back(std::make_shared<DefaultSubSurfaceConstructionsData>());
+                    data->Name = Util::makeUPPER(instance.key());
+
+                    auto lookUpConstrNum = [&](const char *fieldName) {
+                        return getConstrNum(cCurrentModuleObject, data->Name, fields, objectSchemaProps, fieldName);
+                    };
+                    data->fixedWindowConstrNum = lookUpConstrNum("fixed_window_construction_name");
+                    data->operableWindowConstrNum = lookUpConstrNum("operable_window_construction_name");
+                    data->doorConstrNum = lookUpConstrNum("door_construction_name");
+                    data->glassDoorConstrNum = lookUpConstrNum("glass_door_construction_name");
+                    data->overheadDoorConstrNum = lookUpConstrNum("overhead_door_construction_name");
+                    data->skylightConstrNum = lookUpConstrNum("skylight_construction_name");
+                    data->tddDomeConstrNum = lookUpConstrNum("tubular_daylight_dome_construction_name");
+                    data->tddDiffuserConstrNum = lookUpConstrNum("tubular_daylight_diffuser_construction_name");
+                }
+            }
+        }
+
+        // Parse DefaultConstructionSet (references the above, so must come last)
         {
             const std::string cCurrentModuleObject = "DefaultConstructionSet";
             auto const instances = ip->epJSON.find(cCurrentModuleObject);
@@ -233,7 +230,8 @@ namespace DefaultConstructions {
                 for (auto instance = instances.value().begin(); instance != instances.value().end(); ++instance) {
                     ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
                     auto const &fields = instance.value();
-                    DefaultConstructionSetData dcs;
+
+                    DefaultConstructionSetData &dcs = s_dc->defaultConstructionSets.emplace_back();
                     dcs.Name = Util::makeUPPER(instance.key());
 
                     auto getUC = [&](const char *key) { return Util::makeUPPER(ip->getAlphaFieldValue(fields, objectSchemaProps, key)); };
@@ -245,7 +243,7 @@ namespace DefaultConstructions {
                         }
                         auto it = std::find_if(s_dc->defaultSurfaceConstructions.begin(),
                                                s_dc->defaultSurfaceConstructions.end(),
-                                               [&name](const DefaultSurfaceConstructionsData &d) { return d.Name == name; });
+                                               [&name](const std::shared_ptr<DefaultSurfaceConstructionsData> &d) { return d->Name == name; });
                         if (it == s_dc->defaultSurfaceConstructions.end()) {
                             ShowSevereError(
                                 state,
@@ -253,7 +251,7 @@ namespace DefaultConstructions {
                             ErrorsFound = true;
                             return nullptr;
                         }
-                        return std::make_shared<DefaultSurfaceConstructionsData>(*it);
+                        return *it;
                     };
 
                     auto findSubSurfConstr = [&](const char *key) -> std::shared_ptr<DefaultSubSurfaceConstructionsData> {
@@ -263,7 +261,7 @@ namespace DefaultConstructions {
                         }
                         auto it = std::find_if(s_dc->defaultSubSurfaceConstructions.begin(),
                                                s_dc->defaultSubSurfaceConstructions.end(),
-                                               [&name](const DefaultSubSurfaceConstructionsData &d) { return d.Name == name; });
+                                               [&name](const std::shared_ptr<DefaultSubSurfaceConstructionsData> &d) { return d->Name == name; });
                         if (it == s_dc->defaultSubSurfaceConstructions.end()) {
                             ShowSevereError(
                                 state,
@@ -271,7 +269,7 @@ namespace DefaultConstructions {
                             ErrorsFound = true;
                             return nullptr;
                         }
-                        return std::make_shared<DefaultSubSurfaceConstructionsData>(*it);
+                        return *it;
                     };
 
                     dcs.exteriorSurfConstructions = findSurfConstr("default_exterior_surface_constructions_name");
@@ -285,7 +283,6 @@ namespace DefaultConstructions {
                     };
                     dcs.interiorPartitionConstrNum = lookUpConstrNum("interior_partition_construction_name");
                     dcs.adiabaticSurfConstrNum = lookUpConstrNum("adiabatic_surface_construction_name");
-                    s_dc->defaultConstructionSets.push_back(std::move(dcs));
                 }
             }
         }
