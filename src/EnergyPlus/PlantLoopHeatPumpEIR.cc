@@ -284,8 +284,7 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesWSHP(EnergyPlusData &state, bool
 
 void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool FirstHVACIteration, [[maybe_unused]] Real64 const currentLoad)
 {
-    auto &comp = DataPlant::CompData::getPlantComponent(state, this->loadSidePlantLoc);
-    if ((std::abs(currentLoad) < HVAC::SmallLoad || !this->running) && comp.FlowCtrl != DataBranchAirLoopPlant::ControlType::SeriesActive) {
+    if (!this->running) {
         this->loadSideMassFlowRate = 0.0;
         this->sourceSideMassFlowRate = 0.0;
         PlantUtilities::SetComponentFlowRate(
@@ -299,7 +298,10 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool
         // Set flows if the heat pump is running
     } else { // the heat pump must run
         // apply min/max operating limits based on source side entering fluid temperature
-        if ((this->minSourceTempLimit > this->sourceSideInletTemp || this->maxSourceTempLimit < this->sourceSideInletTemp) &&
+        // or if parallel configuration and no load, the unit is turned off
+        auto &comp = DataPlant::CompData::getPlantComponent(state, this->loadSidePlantLoc);
+        if (((this->minSourceTempLimit > this->sourceSideInletTemp || this->maxSourceTempLimit < this->sourceSideInletTemp) ||
+             (std::abs(currentLoad) < HVAC::SmallLoad && comp.FlowCtrl != DataBranchAirLoopPlant::ControlType::SeriesActive)) &&
             !this->heatRecoveryIsActive) {
             this->loadSideMassFlowRate = 0.0;
             this->sourceSideMassFlowRate = 0.0;
