@@ -1616,27 +1616,27 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
     auto &zoneRpt2 = state->dataHeatBal->ZoneRpt(2);
     EXPECT_NEAR(zoneRpt2.BaseHeatPower, (0.0 + 5.0) * (1000.0 - 1500.0) / (5.0 + 5.0) + 1500.0, 0.01);
 
-    std::string error_string = delimited_string(
-        {"   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-         "   **   ~~~   ** User-Specified Low Temperature of -5.0 [C]",
-         "   **   ~~~   ** differs from Design Size Low Temperature of -17.3 [C]",
-         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
-         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
-         "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-         "   **   ~~~   ** User-Specified High Temperature of 5.0 [C]",
-         "   **   ~~~   ** differs from Design Size High Temperature of 20.0 [C]",
-         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
-         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
-         "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-         "   **   ~~~   ** User-Specified Capacity at Low Temperature of 1500.0 [W]",
-         "   **   ~~~   ** differs from Design Size Capacity at Low Temperature of 1119.0 [W]",
-         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
-         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
-         "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-         "   **   ~~~   ** User-Specified Capacity at High Temperature of 1000.0 [W]",
-         "   **   ~~~   ** differs from Design Size Capacity at High Temperature of 603.2 [W]",
-         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
-         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components."});
+    std::string error_string =
+        delimited_string({"   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified Low Temperature of -5.0 [C]",
+                          "   **   ~~~   ** differs from Design Size Low Temperature of -17.3 [C]",
+                          "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+                          "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
+                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified High Temperature of 5.0 [C]",
+                          "   **   ~~~   ** differs from Design Size High Temperature of 20.0 [C]",
+                          "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+                          "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
+                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified Capacity at Low Temperature of 1500.0 [W]",
+                          "   **   ~~~   ** differs from Design Size Capacity at Low Temperature of 1119.0 [W]",
+                          "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+                          "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
+                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified Capacity at High Temperature of 1000.0 [W]",
+                          "   **   ~~~   ** differs from Design Size Capacity at High Temperature of 603.2 [W]",
+                          "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+                          "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components."});
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 
