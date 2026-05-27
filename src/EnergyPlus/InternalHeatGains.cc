@@ -7055,8 +7055,8 @@ namespace InternalHeatGains {
                     if (thisBBHeat.LowTemperature != 0.0 && (abs(LowTemperatureDes - thisBBHeat.LowTemperature) / abs(thisBBHeat.LowTemperature)) >
                                                                 state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
-                        ShowContinueError(state, EnergyPlus::format("User-Specified Low Temperature of {:.2R} [C]", thisBBHeat.LowTemperature));
-                        ShowContinueError(state, EnergyPlus::format("differs from Design Size Low Temperature of {:.R} [C]", LowTemperatureDes));
+                        ShowContinueError(state, EnergyPlus::format("User-Specified Low Temperature of {:.1R} [C]", thisBBHeat.LowTemperature));
+                        ShowContinueError(state, EnergyPlus::format("differs from Design Size Low Temperature of {:.1R} [C]", LowTemperatureDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
@@ -7088,8 +7088,8 @@ namespace InternalHeatGains {
                     if (thisBBHeat.HighTemperature != 0.0 && (abs(HighTemperatureDes - thisBBHeat.HighTemperature) /
                                                               abs(thisBBHeat.HighTemperature)) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
-                        ShowContinueError(state, EnergyPlus::format("User-Specified High Temperature of {:.R} [C]", thisBBHeat.HighTemperature));
-                        ShowContinueError(state, EnergyPlus::format("differs from Design Size High Temperature of {:.R} [C]", HighTemperatureDes));
+                        ShowContinueError(state, EnergyPlus::format("User-Specified High Temperature of {:.1R} [C]", thisBBHeat.HighTemperature));
+                        ShowContinueError(state, EnergyPlus::format("differs from Design Size High Temperature of {:.1R} [C]", HighTemperatureDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
@@ -7165,9 +7165,9 @@ namespace InternalHeatGains {
                                                                   abs(thisBBHeat.CapatLowTemperature)) > state.dataSize->AutoVsHardSizingThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(
-                            state, EnergyPlus::format("User-Specified Capacity at Low Temperature of {:.R} [W]", thisBBHeat.CapatLowTemperature));
+                            state, EnergyPlus::format("User-Specified Capacity at Low Temperature of {:.1R} [W]", thisBBHeat.CapatLowTemperature));
                         ShowContinueError(
-                            state, EnergyPlus::format("differs from Design Size Capacity at Low Temperature of {:.R} [W]", CapatLowTemperatureDes));
+                            state, EnergyPlus::format("differs from Design Size Capacity at Low Temperature of {:.1R} [W]", CapatLowTemperatureDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
@@ -7207,9 +7207,9 @@ namespace InternalHeatGains {
                             state.dataSize->AutoVsHardSizingThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(
-                            state, EnergyPlus::format("User-Specified Capacity at High Temperature of {:.R} [W]", thisBBHeat.CapatHighTemperature));
+                            state, EnergyPlus::format("User-Specified Capacity at High Temperature of {:.1R} [W]", thisBBHeat.CapatHighTemperature));
                         ShowContinueError(
-                            state, EnergyPlus::format("differs from Design Size Capacity at High Temperature of {:.R} [W]", CapatHighTemperatureDes));
+                            state, EnergyPlus::format("differs from Design Size Capacity at High Temperature of {:.1R} [W]", CapatHighTemperatureDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
