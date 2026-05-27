@@ -2,6 +2,8 @@ set(SRC sqlite3.h sqlite3.c)
 
 add_library(sqlite ${SRC})
 
+set_target_properties(sqlite PROPERTIES XCODE_ATTRIBUTE_GCC_WARN_64_TO_32_BIT_CONVERSION NO)
+
 if(MSVC) # visual c++ (VS 2013)
   target_compile_options(sqlite PRIVATE -W0)                                                
 elseif(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")# g++/Clang

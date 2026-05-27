@@ -11,6 +11,9 @@ target_compile_definitions(
 if(NOT MSVC)  # This is really only needed with newer Clang, but gcc is fine with it
   target_compile_options(nlohmann_json INTERFACE -Wno-deprecated-declarations)
 endif()
+if(CMAKE_GENERATOR STREQUAL "Xcode")
+  target_compile_options(nlohmann_json INTERFACE -Wno-shorten-64-to-32)
+endif()
 target_include_directories(
         nlohmann_json
         SYSTEM INTERFACE
@@ -221,4 +224,3 @@ add_subdirectory(libtk205)
 mark_as_advanced(FORCE libtk205_STATIC_LIB)
 mark_as_advanced(FORCE libtk205_COVERAGE)
 mark_as_advanced(FORCE libtk205_BUILD_TESTING)
-

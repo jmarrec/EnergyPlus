@@ -13,7 +13,7 @@ add_custom_command(
 )
 
 add_executable(generate_embeddable_epJSON_schema embedded/generate_embeddable_epJSON_schema.cpp)
-target_link_libraries(generate_embeddable_epJSON_schema PRIVATE project_options project_fp_options project_warnings fmt::fmt)
+target_link_libraries(generate_embeddable_epJSON_schema PRIVATE project_options project_fp_options project_warnings fmt::fmt nlohmann_json)
 set_target_properties(generate_embeddable_epJSON_schema PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/scripts")
 # See https://en.cppreference.com/w/cpp/filesystem#Notes
 if ((CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1) OR
