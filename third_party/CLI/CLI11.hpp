@@ -158,10 +158,17 @@
 #endif
 
 /** <codecvt> availability */
-#if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER) && __GNUC__ < 5
+#ifndef CLI11_HAS_CODECVT
+#if defined(__APPLE__) && defined(__clang__)
+#define CLI11_HAS_CODECVT 0
+#elif defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER) && __GNUC__ < 5
 #define CLI11_HAS_CODECVT 0
 #else
 #define CLI11_HAS_CODECVT 1
+#endif
+#endif
+
+#if CLI11_HAS_CODECVT
 #include <codecvt>
 #endif
 
