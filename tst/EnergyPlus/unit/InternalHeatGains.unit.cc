@@ -1450,42 +1450,69 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
     EXPECT_NEAR(spaceRpt2.ITEqSHI, 0, 0.01);
 }
 
-TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboard)
+TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureControlled)
 {
 
     std::string const idf_objects = delimited_string({
-        "Zone,Main Zone;",
+        "  Zone,",
+        "    Main Zone;",
 
-        "Space,",
-        "Space 1,            !- Name",
-        "Main Zone,             !- Zone Name",
-        ",                   !- Ceiling Height {m}",
-        ",                   !- Volume {m3}",
-        "5.0;                !- Floor Area {m2}",
+        "  Zone,",
+        "    Second Zone;",
 
-        "Space,",
-        "Space 2,            !- Name",
-        "Main Zone,             !- Zone Name",
-        ",                   !- Ceiling Height {m}",
-        ",                   !- Volume {m3}",
-        "15.0;                !- Floor Area {m2}",
-        "SpaceList, All Spaces, Space 1, Space 2;"
+        "  Space,",
+        "    Space 1,            !- Name",
+        "    Main Zone,          !- Zone Name",
+        "    ,                   !- Ceiling Height {m}",
+        "    ,                   !- Volume {m3}",
+        "    5.0;                !- Floor Area {m2}",
 
-        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "  Space,",
+        "    Space 2,            !- Name",
+        "    Main Zone,          !- Zone Name",
+        "    ,                   !- Ceiling Height {m}",
+        "    ,                   !- Volume {m3}",
+        "    15.0;               !- Floor Area {m2}",
 
-        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "  SpaceList,",
+        "    All Spaces,"
+        "    Space 1,",
+        "    Space 2;",
+
+        "  ScheduleTypeLimits,",
+        "    SchType1,",
+        "    0.0,",
+        "    1.0,",
+        "    Continuous,",
+        "    Dimensionless;",
+
+        "  Schedule:Constant,",
+        "    Schedule1,",
+        "    SchType1,",
+        "    1.0;",
 
         "  ZoneBaseboard:OutdoorTemperatureControlled,",
-        "    Main Zone BBHeat,           !- Name",
-        "    Main Zone,                  !- Zone Name",
-        "    Schedule1,               !- Schedule Name",
-        "    autosize,                !- Capacity at Low Temperature {W}",
-        "    autosize,                !- Low Temperature {C}",
-        "    autosize,                !- Capacity at High Temperature {W}",
-        "    autosize,                !- High Temperature {C}",
-        "    0.5,                     !- Fraction Radiant",
-        "    Baseboard Heat,          !- End - Use Subcategory",
-        "    25.0;                    !- Design Zone Heating Setpoint",
+        "    Main Zone BBHeat,   !- Name",
+        "    Main Zone,          !- Zone Name",
+        "    Schedule1,          !- Schedule Name",
+        "    autosize,           !- Capacity at Low Temperature {W}",
+        "    autosize,           !- Low Temperature {C}",
+        "    autosize,           !- Capacity at High Temperature {W}",
+        "    autosize,           !- High Temperature {C}",
+        "    0.5,                !- Fraction Radiant",
+        "    Baseboard Heat,     !- End - Use Subcategory",
+        "    25.0;               !- Design Zone Heating Setpoint",
+
+        "  ZoneBaseboard:OutdoorTemperatureControlled,",
+        "    Second Zone BBHeat, !- Name",
+        "    Second Zone,        !- Zone Name",
+        "    Schedule1,          !- Schedule Name",
+        "    1500,               !- Capacity at Low Temperature {W}",
+        "    -5,                 !- Low Temperature {C}",
+        "    1000,               !- Capacity at High Temperature {W}",
+        "    5,                  !- High Temperature {C}",
+        "    0.5,                !- Fraction Radiant",
+        "    Baseboard Heat;     !- End - Use Subcategory",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1511,56 +1538,106 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboard)
     state->dataHeatBal->Zone(1).FloorArea = 20.0;
     state->dataHeatBal->space(1).FloorArea = 5.0;
     state->dataHeatBal->space(2).FloorArea = 15.0;
+    state->dataHeatBal->Zone(2).FloorArea = 30.0;
+    state->dataHeatBal->space(3).FloorArea = 30.0;
 
     InternalHeatGains::GetInternalHeatGainsInput(*state);
 
-    EXPECT_EQ(state->dataHeatBal->TotBBHeat, 2);
+    EXPECT_EQ(state->dataHeatBal->TotBBHeat, 3);
 
     EnergyPlus::createFacilityElectricPowerServiceObject(*state); // Needs to happen before InitInternalHeatGains
 
     EXPECT_FALSE(state->dataGlobal->ZoneSizingCalc);
     auto &thisBBHeat1 = state->dataHeatBal->ZoneBBHeat(1);
     auto &thisBBHeat2 = state->dataHeatBal->ZoneBBHeat(2);
-    EXPECT_TRUE(thisBBHeat1.MySizeFlag);
-    EXPECT_TRUE(thisBBHeat2.MySizeFlag);
+    auto &thisBBHeat3 = state->dataHeatBal->ZoneBBHeat(3);
 
     int NZ1 = thisBBHeat1.ZonePtr;
     int NZ2 = thisBBHeat2.ZonePtr;
+    int NZ3 = thisBBHeat3.ZonePtr;
     EXPECT_EQ(NZ1, NZ2);
 
     state->dataSize->ZoneSizingRunDone = true;
-    state->dataSize->NumZoneSizingInput = 1;
-    state->dataSize->ZoneSizingInput.allocate(1);
+    state->dataSize->NumZoneSizingInput = 2;
+    state->dataSize->ZoneSizingInput.allocate(state->dataSize->NumZoneSizingInput);
     state->dataSize->ZoneSizingInput(1).ZoneNum = NZ1;
-    state->dataSize->FinalZoneSizing.allocate(1);
+    state->dataSize->ZoneSizingInput(2).ZoneNum = NZ3;
+    state->dataSize->FinalZoneSizing.allocate(state->dataSize->NumZoneSizingInput);
     state->dataSize->FinalZoneSizing(NZ1).OutTempAtHeatPeak = -17.3;
     state->dataSize->FinalZoneSizing(NZ1).MCPIAtHeatPeak = 10.0;
     state->dataSize->FinalZoneSizing(NZ1).MCPVAtHeatPeak = 20.0;
+    state->dataSize->FinalZoneSizing(NZ3).OutTempAtHeatPeak = -17.3;
+    state->dataSize->FinalZoneSizing(NZ3).MCPIAtHeatPeak = 10.0;
+    state->dataSize->FinalZoneSizing(NZ3).MCPVAtHeatPeak = 20.0;
 
     bool SizingDesRunThisZone = false;
     CheckThisZoneForSizing(*state, NZ1, SizingDesRunThisZone);
     EXPECT_TRUE(SizingDesRunThisZone);
+    SizingDesRunThisZone = false;
+    CheckThisZoneForSizing(*state, NZ3, SizingDesRunThisZone);
+    EXPECT_TRUE(SizingDesRunThisZone);
 
-    // First time should be all good, because ZoneRpt/spaceRpt values initialize to zero
+    state->dataGlobal->DisplayExtraWarnings = true;
     InternalHeatGains::InitInternalHeatGains(*state);
-    EXPECT_FALSE(thisBBHeat1.MySizeFlag);
-    EXPECT_FALSE(thisBBHeat2.MySizeFlag);
-    EXPECT_TRUE(compare_err_stream("", true));
 
     EXPECT_EQ(0.0, thisBBHeat1.ExtSurfCondLoad);
     EXPECT_EQ(0.0, thisBBHeat2.ExtSurfCondLoad);
+    EXPECT_EQ(0.0, thisBBHeat3.ExtSurfCondLoad);
 
     EXPECT_EQ(25.0, thisBBHeat1.ZnHtgSetTemp);
     EXPECT_EQ(-17.3, thisBBHeat1.LowTemperature);
     EXPECT_EQ(25.0, thisBBHeat1.HighTemperature);
-    EXPECT_EQ(317.25, thisBBHeat1.CapatLowTemperature);
+    EXPECT_EQ(1269.0 * 0.25, thisBBHeat1.CapatLowTemperature);
     EXPECT_EQ(0.0, thisBBHeat1.CapatHighTemperature);
 
     EXPECT_EQ(25.0, thisBBHeat2.ZnHtgSetTemp);
     EXPECT_EQ(-17.3, thisBBHeat2.LowTemperature);
     EXPECT_EQ(25.0, thisBBHeat2.HighTemperature);
-    EXPECT_EQ(951.75, thisBBHeat2.CapatLowTemperature);
+    EXPECT_EQ(1269.0 * 0.75, thisBBHeat2.CapatLowTemperature);
     EXPECT_EQ(0.0, thisBBHeat2.CapatHighTemperature);
+
+    EXPECT_EQ(20.0, thisBBHeat3.ZnHtgSetTemp);
+    EXPECT_EQ(-5.0, thisBBHeat3.LowTemperature);
+    EXPECT_EQ(5.0, thisBBHeat3.HighTemperature);
+    EXPECT_EQ(1500.0, thisBBHeat3.CapatLowTemperature);
+    EXPECT_EQ(1000.0, thisBBHeat3.CapatHighTemperature);
+
+    InternalHeatGains::ReportInternalHeatGains(*state);
+
+    auto &zoneRpt1 = state->dataHeatBal->ZoneRpt(1);
+    EXPECT_NEAR(zoneRpt1.BaseHeatPower, (0.0 + 17.3) * (0.0 - 1269.0) / (25.0 + 17.3) + 1269.0, 0.01);
+
+    auto &spaceRpt1 = state->dataHeatBal->spaceRpt(1);
+    EXPECT_NEAR(spaceRpt1.BaseHeatPower, (0.0 + 17.3) * (0.0 - 1269.0 * 0.25) / (25.0 + 17.3) + 1269.0 * 0.25, 0.01);
+
+    auto &spaceRpt2 = state->dataHeatBal->spaceRpt(2);
+    EXPECT_NEAR(spaceRpt2.BaseHeatPower, (0.0 + 17.3) * (0.0 - 1269.0 * 0.75) / (25.0 + 17.3) + 1269.0 * 0.75, 0.01);
+
+    auto &zoneRpt2 = state->dataHeatBal->ZoneRpt(2);
+    EXPECT_NEAR(zoneRpt2.BaseHeatPower, (0.0 + 5.0) * (1000.0 - 1500.0) / (5.0 + 5.0) + 1500.0, 0.01);
+
+    std::string error_string = delimited_string(
+        {"   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+         "   **   ~~~   ** User-Specified Low Temperature of -5.0 [C]",
+         "   **   ~~~   ** differs from Design Size Low Temperature of -17.3 [C]",
+         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
+         "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+         "   **   ~~~   ** User-Specified High Temperature of 5.0 [C]",
+         "   **   ~~~   ** differs from Design Size High Temperature of 20.0 [C]",
+         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
+         "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+         "   **   ~~~   ** User-Specified Capacity at Low Temperature of 1500.0 [W]",
+         "   **   ~~~   ** differs from Design Size Capacity at Low Temperature of 1119.0 [W]",
+         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
+         "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
+         "   **   ~~~   ** User-Specified Capacity at High Temperature of 1000.0 [W]",
+         "   **   ~~~   ** differs from Design Size Capacity at High Temperature of 603.2 [W]",
+         "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
+         "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components."});
+    EXPECT_TRUE(compare_err_stream(error_string, true));
 }
 
 TEST_F(EnergyPlusFixture, InternalHeatGains_AdjustedSupplyGoodInletNode)
