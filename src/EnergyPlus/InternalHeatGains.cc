@@ -7063,8 +7063,7 @@ namespace InternalHeatGains {
                                              "User-Specified Low Temperature [C]",
                                              thisBBHeat.LowTemperature);
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    if (std::abs(LowTemperatureDes - thisBBHeat.LowTemperature) >
-                        state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                    if (std::abs(LowTemperatureDes - thisBBHeat.LowTemperature) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(state, EnergyPlus::format("User-Specified Low Temperature of {:.1R} [C]", thisBBHeat.LowTemperature));
                         ShowContinueError(state, EnergyPlus::format("differs from Design Size Low Temperature of {:.1R} [C]", LowTemperatureDes));
@@ -7096,8 +7095,7 @@ namespace InternalHeatGains {
                                              "User-Specified High Temperature [C]",
                                              thisBBHeat.HighTemperature);
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    if (std::abs(HighTemperatureDes - thisBBHeat.HighTemperature) >
-                        state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                    if (std::abs(HighTemperatureDes - thisBBHeat.HighTemperature) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(state, EnergyPlus::format("User-Specified High Temperature of {:.1R} [C]", thisBBHeat.HighTemperature));
                         ShowContinueError(state, EnergyPlus::format("differs from Design Size High Temperature of {:.1R} [C]", HighTemperatureDes));
