@@ -6893,6 +6893,7 @@ namespace InternalHeatGains {
 
         for (int Loop = 1; Loop <= state.dataHeatBal->TotBBHeat; ++Loop) {
             if (!state.dataGlobal->ZoneSizingCalc && state.dataHeatBal->ZoneBBHeat(Loop).MySizeFlag) {
+                // for each coil, do the sizing once.
                 SizeOaControlledBaseboard(state, Loop);
                 state.dataHeatBal->ZoneBBHeat(Loop).MySizeFlag = false;
             }
@@ -7012,10 +7013,19 @@ namespace InternalHeatGains {
 
     void SizeOaControlledBaseboard(EnergyPlusData &state, int const BaseboardNum)
     {
+        // SUBROUTINE INFORMATION:
+        //       AUTHOR         Daeho Kang
+        //       DATE WRITTEN   March 2014
+        //       MODIFIED       May 2026 Joe Robertson, refactor the original from #4236 (pre-dates EnergyPlusData state, SpaceData spaces, etc.)
+
+        // PURPOSE OF THIS SUBROUTINE:
+        // This subroutine is to size numeric fields for outdoor air controlled baseboard heater.
+
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("SizeOaControlledBaseboard");
         std::string_view const CompType = "ZoneBaseboard:OutdoorTemperatureControlled";
 
+        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         Real64 LowTemperatureDes = 0.0;       // Autosize low temperature for reporting
         Real64 HighTemperatureDes = 0.0;      // Autosize high temperature for reporting
         Real64 CapatLowTemperatureDes = 0.0;  // Autosize capacity at low temperature for reporting
@@ -7025,7 +7035,6 @@ namespace InternalHeatGains {
         Real64 ZnInfilSensLoad = 0.0;         // Zone infiltration sensible load
         Real64 ZnVentSensLoad = 0.0;          // Zone ventilation sensible load
         Real64 ExtSurfCondLoadThisSurf = 0.0; // Conductional load through a specific exterior surface
-
         auto &thisBBHeat = state.dataHeatBal->ZoneBBHeat(BaseboardNum);
         int NZ = thisBBHeat.ZonePtr;
 
@@ -7035,10 +7044,12 @@ namespace InternalHeatGains {
         }
 
         bool SizingDesRunThisZone = false;
-        CheckThisZoneForSizing(state, NZ, SizingDesRunThisZone);
+        std::string const ZoneName = state.dataHeatBal->Zone(NZ).Name;
+        state.dataSize->CurZoneEqNum = Util::FindItemInList(ZoneName, state.dataHeatBal->Zone);
+        CheckThisZoneForSizing(state, state.dataSize->CurZoneEqNum, SizingDesRunThisZone);
 
         if (SizingDesRunThisZone) {
-            LowTemperatureDes = state.dataSize->FinalZoneSizing(NZ).OutTempAtHeatPeak;
+            LowTemperatureDes = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).OutTempAtHeatPeak;
 
             if (thisBBHeat.LowTemperature == DataSizing::AutoSize) {
                 thisBBHeat.LowTemperature = LowTemperatureDes;
@@ -7139,8 +7150,8 @@ namespace InternalHeatGains {
             if (zoneArea > 0.0) {
                 spaceFrac = thisSpace.FloorArea / zoneArea;
             }
-            ZnInfilSensLoad = state.dataSize->FinalZoneSizing(NZ).MCPIAtHeatPeak * DeltaTMax * spaceFrac;
-            ZnVentSensLoad = state.dataSize->FinalZoneSizing(NZ).MCPVAtHeatPeak * DeltaTMax * spaceFrac;
+            ZnInfilSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPIAtHeatPeak * DeltaTMax * spaceFrac;
+            ZnVentSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPVAtHeatPeak * DeltaTMax * spaceFrac;
 
             CapatLowTemperatureDes = thisBBHeat.ExtSurfCondLoad + ZnInfilSensLoad + ZnVentSensLoad;
             // Set it zero, if no winter design day or wrong temp setting

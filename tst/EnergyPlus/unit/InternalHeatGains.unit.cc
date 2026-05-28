@@ -1571,10 +1571,14 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
     state->dataSize->FinalZoneSizing(NZ3).MCPVAtHeatPeak = 20.0;
 
     bool SizingDesRunThisZone = false;
-    CheckThisZoneForSizing(*state, NZ1, SizingDesRunThisZone);
+    std::string ZoneName = state->dataHeatBal->Zone(NZ1).Name;
+    state->dataSize->CurZoneEqNum = Util::FindItemInList(ZoneName, state->dataHeatBal->Zone);
+    CheckThisZoneForSizing(*state, state->dataSize->CurZoneEqNum, SizingDesRunThisZone);
     EXPECT_TRUE(SizingDesRunThisZone);
     SizingDesRunThisZone = false;
-    CheckThisZoneForSizing(*state, NZ3, SizingDesRunThisZone);
+    ZoneName = state->dataHeatBal->Zone(NZ2).Name;
+    state->dataSize->CurZoneEqNum = Util::FindItemInList(ZoneName, state->dataHeatBal->Zone);
+    CheckThisZoneForSizing(*state, state->dataSize->CurZoneEqNum, SizingDesRunThisZone);
     EXPECT_TRUE(SizingDesRunThisZone);
 
     state->dataGlobal->DisplayExtraWarnings = true;
