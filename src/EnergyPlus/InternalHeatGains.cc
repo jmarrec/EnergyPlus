@@ -7063,8 +7063,8 @@ namespace InternalHeatGains {
                                              "User-Specified Low Temperature [C]",
                                              thisBBHeat.LowTemperature);
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    if (thisBBHeat.LowTemperature != 0.0 && (abs(LowTemperatureDes - thisBBHeat.LowTemperature) / abs(thisBBHeat.LowTemperature)) >
-                                                                state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                    if (std::abs(LowTemperatureDes - thisBBHeat.LowTemperature) >
+                        state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(state, EnergyPlus::format("User-Specified Low Temperature of {:.1R} [C]", thisBBHeat.LowTemperature));
                         ShowContinueError(state, EnergyPlus::format("differs from Design Size Low Temperature of {:.1R} [C]", LowTemperatureDes));
@@ -7096,8 +7096,8 @@ namespace InternalHeatGains {
                                              "User-Specified High Temperature [C]",
                                              thisBBHeat.HighTemperature);
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    if (thisBBHeat.HighTemperature != 0.0 && (abs(HighTemperatureDes - thisBBHeat.HighTemperature) /
-                                                              abs(thisBBHeat.HighTemperature)) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                    if (std::abs(HighTemperatureDes - thisBBHeat.HighTemperature) >
+                        state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(state, EnergyPlus::format("User-Specified High Temperature of {:.1R} [C]", thisBBHeat.HighTemperature));
                         ShowContinueError(state, EnergyPlus::format("differs from Design Size High Temperature of {:.1R} [C]", HighTemperatureDes));
@@ -7172,8 +7172,9 @@ namespace InternalHeatGains {
                                              "User-Specified Capacity at Low Temperature [W]",
                                              thisBBHeat.CapatLowTemperature);
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    if (thisBBHeat.CapatLowTemperature != 0.0 && (abs(CapatLowTemperatureDes - thisBBHeat.CapatLowTemperature) /
-                                                                  abs(thisBBHeat.CapatLowTemperature)) > state.dataSize->AutoVsHardSizingThreshold) {
+                    if (thisBBHeat.CapatLowTemperature != 0.0 &&
+                        (std::abs(CapatLowTemperatureDes - thisBBHeat.CapatLowTemperature) / std::abs(thisBBHeat.CapatLowTemperature)) >
+                            state.dataSize->AutoVsHardSizingThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(
                             state, EnergyPlus::format("User-Specified Capacity at Low Temperature of {:.1R} [W]", thisBBHeat.CapatLowTemperature));
@@ -7214,7 +7215,7 @@ namespace InternalHeatGains {
                                              thisBBHeat.CapatHighTemperature);
                 if (state.dataGlobal->DisplayExtraWarnings) {
                     if (thisBBHeat.CapatHighTemperature != 0.0 &&
-                        (abs(CapatHighTemperatureDes - thisBBHeat.CapatHighTemperature) / abs(thisBBHeat.CapatHighTemperature)) >
+                        (std::abs(CapatHighTemperatureDes - thisBBHeat.CapatHighTemperature) / std::abs(thisBBHeat.CapatHighTemperature)) >
                             state.dataSize->AutoVsHardSizingThreshold) {
                         ShowMessage(state, EnergyPlus::format("{}: Potential issue with equipment sizing for {}", RoutineName, thisBBHeat.Name));
                         ShowContinueError(
