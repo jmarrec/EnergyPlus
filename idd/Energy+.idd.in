@@ -23145,27 +23145,23 @@ ZoneBaseboard:OutdoorTemperatureControlled,
        \object-list ScheduleNames
        \note units in Schedule should be fraction applied to capacity of the baseboard heat equipment, generally (0.0 - 1.0)
   N1 , \field Capacity at Low Temperature
-       \required-field
        \type real
        \units W
        \minimum> 0
        \autosizable
        \default autosize
   N2 , \field Low Temperature
-       \required-field
        \units C
        \type real
        \autosizable
        \default autosize
   N3 , \field Capacity at High Temperature
-       \required-field
        \type real
        \units W
        \minimum 0
        \autosizable
        \default autosize
   N4 , \field High Temperature
-       \required-field
        \units C
        \type real
        \autosizable
