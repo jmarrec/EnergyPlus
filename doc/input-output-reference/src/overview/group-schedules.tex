@@ -274,7 +274,7 @@ The yearly schedule is used to cover the entire year using references to week sc
 
 \paragraph{Field: Name}\label{field-name-5-021}
 
-This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, \hyperref[scheduleruleset]{Schedule:Ruleset}, nd \hyperref[schedulefile]{Schedule:File}) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
+This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, \hyperref[scheduleruleset]{Schedule:Ruleset}, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
 
 \paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-3}
 
@@ -418,7 +418,9 @@ Schedule:Compact,
 
 \subsection{Schedule:Ruleset}\label{scheduleruleset}
 
-TODO
+A Schedule:Ruleset defines a yearly schedule using a default day profile and a prioritized list of override rules (\hyperref[schedulerule]{Schedule:Rule} objects).
+Rules are evaluated in ascending Rule Order; the first matching rule for a given day is used.
+If no rule matches, the Default Day Schedule is used.
 
 \subsubsection{Inputs}\label{inputs-scheduleruleset}
 
@@ -426,6 +428,7 @@ TODO
 
 This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, Schedule:Ruleset, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule.
 It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
+It is also referenced by optional \hyperref[schedulerule]{Schedule:Rule} objects.
 
 \paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-scheduleruleset}
 
@@ -472,7 +475,9 @@ Schedule:Ruleset,
 
 \subsection{Schedule:Rule}\label{schedulerule}
 
-TODO
+A Schedule:Rule defines one override rule for a \hyperref[scheduleruleset]{Schedule:Ruleset}.
+Rules are evaluated in ascending Rule Order; the first matching rule wins.
+A rule matches a day if: (a) the day falls within the date specification, AND (b) the corresponding Apply <DayOfWeek> field is Yes.
 
 \subsubsection{Inputs}\label{inputs-schedulerule}
 
@@ -486,7 +491,8 @@ This field should reference the appropriate parent \hyperref[scheduleruleset]{Sc
 
 \paragraph{Field: Rule Order}\label{field-rule-order-schedulerule}
 
-This field determines the ``priority'' for this rule amongst other rules. 0 = highest priority.
+This numeric field determines the ``priority'' for this rule amongst other rules (0 = highest priority).
+For a given ruleset, schedule rules may overlap in terms of their applicable dates; in this case, the rule with the least rule order value is given priority.
 
 \paragraph{Field: Day Schedule Name}\label{field-day-schedule-name-schedulerule}
 
@@ -495,30 +501,37 @@ This field is the name of the day schedule (ref. Schedule:Day:Hourly, Schedule:D
 \paragraph{Field: Apply Sunday}\label{field-apply-sunday-schedulerule}
 
 This field determines whether the day schedule is used for each Sunday in which the rule applies.
+Default: No.
 
 \paragraph{Field: Apply Monday}\label{field-apply-monday-schedulerule}
 
 This field determines whether the day schedule is used for each Monday in which the rule applies.
+Default: No.
 
 \paragraph{Field: Apply Tuesday}\label{field-apply-tuesday-schedulerule}
 
 This field determines whether the day schedule is used for each Tuesday in which the rule applies.
+Default: No.
 
 \paragraph{Field: Apply Wednesday}\label{field-apply-wednesday-schedulerule}
 
 This field determines whether the day schedule is used for each Wednesday in which the rule applies.
+Default: No.
 
 \paragraph{Field: Apply Thursday}\label{field-apply-thursday-schedulerule}
 
 This field determines whether the day schedule is used for each Thursday in which the rule applies.
+Default: No.
 
 \paragraph{Field: Apply Friday}\label{field-apply-friday-schedulerule}
 
 This field determines whether the day schedule is used for each Friday in which the rule applies.
+Default: No.
 
 \paragraph{Field: Apply Saturday}\label{field-apply-saturday-schedulerule}
 
 This field determines whether the day schedule is used for each Saturday in which the rule applies.
+Default: No.
 
 \paragraph{Field: Date Specification Type}\label{field-date-specification-type-schedulerule}
 
@@ -530,23 +543,40 @@ Default: DateRange.
 
 \paragraph{Field: Start Month}\label{field-start-month-schedulerule}
 
-This field contains the start month for which the rule applies. Default: 1.
+This numeric field contains the starting month number (1 = January, 2 = February, etc.) for which the rule applies.
+Start month is used only when Date Specification Type = DateRange.
+Default: 1.
 
 \paragraph{Field: Start Day}\label{field-date-start-day-schedulerule}
 
-This field contains the start day of the month for which the rule applies. Default: 1.
+This numeric field contains the starting day of the starting month (must be valid for month) for which the rule applies.
+Start day is used only when Date Specification Type = DateRange.
+Default: 1.
 
 \paragraph{Field: End Month}\label{field-end-month-schedulerule}
 
-This field contains the end month for which the rule applies. Default: 12.
+This numeric field contains the ending month number (11 = November, 12 = December, etc.) for which the rule applies.
+End month is used only when Date Specification Type = DateRange.
+Default: 12.
 
 \paragraph{Field: End Day}\label{field-end-day-schedulerule}
 
-This field contains the end day of the month for which the rule applies. Default: 31.
+This numeric field contains the ending day of the ending month (must be valid for month) for which the rule applies.
+End day is used only when Date Specification Type = DateRange.
+Default: 31.
+
+\paragraph{Field Set: Specific Month/Day}
+
+This object is extensible, so sets of the next two numeric fields can be added to the end of this object.
+Specific months and days are used only when Date Specification Type = SpecificDates.
 
 \paragraph{Field: Specific Month \#}\label{field-specific-month-schedulerule}
 
+This numeric field contains the specific month for which the rule applies.
+
 \paragraph{Field: Specific Day \#}\label{field-specific-day-schedulerule}
+
+This numeric field contains the specific day of the specific month (must be valid for month) for which the rule applies.
 
 An example of IDF input:
 
