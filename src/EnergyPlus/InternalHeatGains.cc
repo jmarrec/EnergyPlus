@@ -7209,7 +7209,8 @@ namespace InternalHeatGains {
                         ShowContinueError(
                             state, EnergyPlus::format("User-Specified Capacity at High Temperature of {:.1R} [W]", thisBBHeat.CapatHighTemperature));
                         ShowContinueError(
-                            state, EnergyPlus::format("differs from Design Size Capacity at High Temperature of {:.1R} [W]", CapatHighTemperatureDes));
+                            state,
+                            EnergyPlus::format("differs from Design Size Capacity at High Temperature of {:.1R} [W]", CapatHighTemperatureDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
