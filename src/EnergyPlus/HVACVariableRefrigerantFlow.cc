@@ -2067,7 +2067,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
             ErrorsFound = true;
         }
 
-        if (thisVrfSys.ThermostatPriority == ThermostatCtrlType::ScheduledPriority) {
+        if (thisVrfSys.ThermostatPriority == ThermostatCtrlType::Scheduled) {
             if (lAlphaFieldBlanks(26)) {
                 ShowSevereEmptyField(state, eoh, cAlphaFieldNames(26), cAlphaFieldNames(25), cAlphaArgs(25));
             } else if ((thisVrfSys.prioritySched = Sched::GetSchedule(state, cAlphaArgs(26))) == nullptr) {
@@ -2761,7 +2761,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
         } else if (Util::SameString(ThermostatPriorityType, "ThermostatOffsetPriority")) {
             thisVrfFluidCtrl.ThermostatPriority = ThermostatCtrlType::ThermostatOffsetPriority;
         } else if (Util::SameString(ThermostatPriorityType, "Scheduled")) {
-            thisVrfFluidCtrl.ThermostatPriority = ThermostatCtrlType::ScheduledPriority;
+            thisVrfFluidCtrl.ThermostatPriority = ThermostatCtrlType::Scheduled;
         } else if (Util::SameString(ThermostatPriorityType, "MasterThermostatPriority")) {
             thisVrfFluidCtrl.ThermostatPriority = ThermostatCtrlType::MasterThermostatPriority;
             if (thisVrfFluidCtrl.MasterZonePtr == 0) {
@@ -6608,7 +6608,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                         EnableSystem = true;
                     }
                 } break;
-                case ThermostatCtrlType::ScheduledPriority:
+                case ThermostatCtrlType::Scheduled:
                 case ThermostatCtrlType::MasterThermostatPriority: {
                     // can't switch modes if scheduled (i.e., would be switching to unscheduled mode)
                     // or master TSTAT used (i.e., master zone only has a specific load - can't switch)
@@ -6708,7 +6708,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                         EnableSystem = true;
                     }
                 } break;
-                case ThermostatCtrlType::ScheduledPriority:
+                case ThermostatCtrlType::Scheduled:
                 case ThermostatCtrlType::MasterThermostatPriority: {
                 } break;
                 default:
@@ -10214,7 +10214,7 @@ void InitializeOperatingMode(EnergyPlusData &state,
             state.dataHVACVarRefFlow->CoolingLoad(VRFCond) = false;
         }
     } break;
-    case ThermostatCtrlType::ScheduledPriority: {
+    case ThermostatCtrlType::Scheduled: {
         if (state.dataHVACVarRefFlow->VRF(VRFCond).prioritySched->getCurrentVal() == 0) {
             state.dataHVACVarRefFlow->HeatingLoad(VRFCond) = true;
             state.dataHVACVarRefFlow->CoolingLoad(VRFCond) = false;

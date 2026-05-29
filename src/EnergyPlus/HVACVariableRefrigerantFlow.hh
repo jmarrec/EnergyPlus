@@ -55,7 +55,6 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataGlobalConstants.hh>
-#include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FluidProperties.hh>
@@ -64,7 +63,6 @@
 #include <EnergyPlus/SingleDuct.hh>
 #include <EnergyPlus/StandardRatings.hh>
 #include <EnergyPlus/UnitarySystem.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
 
 namespace EnergyPlus {
 
@@ -88,14 +86,14 @@ namespace HVACVariableRefrigerantFlow {
         LoadPriority,             // total of zone loads dictate operation in cooling or heating
         ZonePriority,             // # of zones requiring cooling or heating dictate operation in cooling or heating
         ThermostatOffsetPriority, // zone with largest deviation from setpoint dictates operation
-        ScheduledPriority,        // cooling and heating modes are scheduled
+        Scheduled,                // cooling and heating modes are scheduled
         MasterThermostatPriority, // Master zone thermostat dictates operation
         FirstOnPriority,          // first unit to respond dictates operation (not used at this time)
         Num
     };
 
     static constexpr std::array<std::string_view, static_cast<int>(ThermostatCtrlType::Num)> ThermostatCtrlTypeUC = {
-        "LOADPRIORITY", "ZONEPRIORITY", "THERMOSTATOFFSETPRIORITY", "SCHEDULEDPRIORITY", "MASTERTHERMOSTATPRIORITY",
+        "LOADPRIORITY", "ZONEPRIORITY", "THERMOSTATOFFSETPRIORITY", "SCHEDULED", "MASTERTHERMOSTATPRIORITY",
         // "FIRSTONPRIORITY",
     };
 
