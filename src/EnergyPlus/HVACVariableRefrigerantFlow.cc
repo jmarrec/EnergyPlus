@@ -10281,9 +10281,6 @@ void InitializeOperatingMode(EnergyPlusData &state,
             state.dataHVACVarRefFlow->CoolingLoad(VRFCond) = false;
         }
     } break;
-    case ThermostatCtrlType::FirstOnPriority: {
-        // na
-    } break;
     default:
         break;
     }
