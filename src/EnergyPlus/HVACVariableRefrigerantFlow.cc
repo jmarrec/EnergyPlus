@@ -10216,11 +10216,11 @@ void InitializeOperatingMode(EnergyPlusData &state,
     } break;
     case ThermostatCtrlType::Scheduled: {
         if (state.dataHVACVarRefFlow->VRF(VRFCond).prioritySched->getCurrentVal() == 0) {
-            state.dataHVACVarRefFlow->HeatingLoad(VRFCond) = true;
-            state.dataHVACVarRefFlow->CoolingLoad(VRFCond) = false;
-        } else if (state.dataHVACVarRefFlow->VRF(VRFCond).prioritySched->getCurrentVal() == 1) {
             state.dataHVACVarRefFlow->HeatingLoad(VRFCond) = false;
             state.dataHVACVarRefFlow->CoolingLoad(VRFCond) = true;
+        } else if (state.dataHVACVarRefFlow->VRF(VRFCond).prioritySched->getCurrentVal() == 1) {
+            state.dataHVACVarRefFlow->HeatingLoad(VRFCond) = true;
+            state.dataHVACVarRefFlow->CoolingLoad(VRFCond) = false;
         } else {
             state.dataHVACVarRefFlow->HeatingLoad(VRFCond) = false;
             state.dataHVACVarRefFlow->CoolingLoad(VRFCond) = false;
