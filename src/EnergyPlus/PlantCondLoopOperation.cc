@@ -2901,6 +2901,7 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                             }
                         }
                     }
+                    break;
                 } else {
                     this_op_scheme.Available = false;
                 }
