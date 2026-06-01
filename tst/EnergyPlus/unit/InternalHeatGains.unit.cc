@@ -1569,6 +1569,7 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
     state->dataSize->FinalZoneSizing(NZ3).OutTempAtHeatPeak = -17.3;
     state->dataSize->FinalZoneSizing(NZ3).MCPIAtHeatPeak = 10.0;
     state->dataSize->FinalZoneSizing(NZ3).MCPVAtHeatPeak = 20.0;
+    state->dataSize->ZoneEqSizing.allocate(state->dataSize->NumZoneSizingInput);
 
     bool SizingDesRunThisZone = false;
     std::string ZoneName = state->dataHeatBal->Zone(NZ1).Name;
@@ -1581,6 +1582,10 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
     CheckThisZoneForSizing(*state, state->dataSize->CurZoneEqNum, SizingDesRunThisZone);
     EXPECT_TRUE(SizingDesRunThisZone);
 
+    std::vector<std::string> FieldNames = {"Capacity at Low Temperature", "Low Temperature", "Capacity at High Temperature", "High Temperature"};
+    thisBBHeat1.FieldNames = FieldNames;
+    thisBBHeat2.FieldNames = FieldNames;
+    thisBBHeat3.FieldNames = FieldNames;
     state->dataGlobal->DisplayExtraWarnings = true;
     InternalHeatGains::InitInternalHeatGains(*state);
 
@@ -1621,24 +1626,30 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
     EXPECT_NEAR(zoneRpt2.BaseHeatPower, (0.0 + 5.0) * (1000.0 - 1500.0) / (5.0 + 5.0) + 1500.0, 0.01);
 
     std::string error_string =
-        delimited_string({"   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-                          "   **   ~~~   ** User-Specified Low Temperature of -5.0 [C]",
-                          "   **   ~~~   ** differs from Design Size Low Temperature of -17.3 [C]",
+        delimited_string({"   ** Warning ** SizeOaControlledBaseboard: Potential issue with equipment sizing for ZoneBaseboard:OutdoorTemperatureControlled SPACE 1 MAIN ZONE BBHEAT",
+                          "   **   ~~~   ** ...Rated Total Heating Capacity = 0.00 [W]",
+                          "   **   ~~~   ** ...Capacity passed by parent object to size child component = 0.00 [W]",
+                          "   ** Warning ** SizeOaControlledBaseboard: Potential issue with equipment sizing for ZoneBaseboard:OutdoorTemperatureControlled SPACE 2 MAIN ZONE BBHEAT",
+                          "   **   ~~~   ** ...Rated Total Heating Capacity = 0.00 [W]",
+                          "   **   ~~~   ** ...Capacity passed by parent object to size child component = 0.00 [W]",
+                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for ZoneBaseboard:OutdoorTemperatureControlled SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified Low Temperature [C] = -5.0",
+                          "   **   ~~~   ** differs from Design Size Low Temperature [C] = -17.3",
                           "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
                           "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
-                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-                          "   **   ~~~   ** User-Specified High Temperature of 5.0 [C]",
-                          "   **   ~~~   ** differs from Design Size High Temperature of 20.0 [C]",
+                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for ZoneBaseboard:OutdoorTemperatureControlled SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified High Temperature [C] = 5.0",
+                          "   **   ~~~   ** differs from Design Size High Temperature [C] = 20.0",
                           "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
                           "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
-                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-                          "   **   ~~~   ** User-Specified Capacity at Low Temperature of 1500.0 [W]",
-                          "   **   ~~~   ** differs from Design Size Capacity at Low Temperature of 1119.0 [W]",
+                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for ZoneBaseboard:OutdoorTemperatureControlled SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified Capacity at Low Temperature [W] = 1500.00",
+                          "   **   ~~~   ** differs from Design Size Capacity at Low Temperature [W] = 1119.00",
                           "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
                           "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
-                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for SECOND ZONE BBHEAT",
-                          "   **   ~~~   ** User-Specified Capacity at High Temperature of 1000.0 [W]",
-                          "   **   ~~~   ** differs from Design Size Capacity at High Temperature of 603.2 [W]",
+                          "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for ZoneBaseboard:OutdoorTemperatureControlled SECOND ZONE BBHEAT",
+                          "   **   ~~~   ** User-Specified Capacity at High Temperature [W] = 1000.00",
+                          "   **   ~~~   ** differs from Design Size Capacity at High Temperature [W] = 603.217",
                           "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
                           "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components."});
     EXPECT_TRUE(compare_err_stream(error_string, true));

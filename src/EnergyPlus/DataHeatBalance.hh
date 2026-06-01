@@ -1090,6 +1090,7 @@ namespace DataHeatBalance {
         Real64 ConGainEnergy = 0.0;    // Convective heat gain [J]
         Real64 TotGainEnergy = 0.0;    // Total heat gain [J]
         std::string EndUseSubcategory; // user defined name for the end use category
+        std::vector<std::string> FieldNames;
         bool MySizeFlag = true;
     };
 
