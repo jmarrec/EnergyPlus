@@ -1188,12 +1188,6 @@ TEST_F(EnergyPlusFixture, FindRangeBasedOrUncontrolledInputTest)
 
 TEST_F(EnergyPlusFixture, OperationSchemePriority)
 {
-    std::string currentModuleObject;
-    int numSchemes;
-    int loopNum;
-    int schemeNum;
-    bool errorFound;
-
     std::string const idf_objects = delimited_string(
         {"PlantLoop,",
          "    Condenser Loop,                       !- Name",
