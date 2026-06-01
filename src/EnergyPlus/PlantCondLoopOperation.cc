@@ -2850,7 +2850,6 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
         // Update the OpScheme schedules
         for (int LoopNum = 1; LoopNum <= state.dataPlnt->TotNumLoops; ++LoopNum) {
             auto &this_loop = state.dataPlnt->PlantLoop(LoopNum);
-            bool foundAvailableOpScheme = false;
             for (int OpNum = 1; OpNum <= this_loop.NumOpSchemes; ++OpNum) {
                 auto &this_op_scheme = this_loop.OpScheme(OpNum);
 
@@ -2865,24 +2864,24 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
 
                 if (this_op_scheme.sched->getCurrentVal() > 0.0) {
                     this_op_scheme.Available = true;
-                    if (!foundAvailableOpScheme) {
-                        for (int ListNum = 1, ListNum_end = this_op_scheme.NumEquipLists; ListNum <= ListNum_end; ++ListNum) {
-                            auto &this_equip_list = this_op_scheme.EquipList(ListNum);
-                            // The component loop loads the pointers from the OpScheme data structure
-                            for (int CompNum = 1; CompNum <= this_equip_list.NumComps; ++CompNum) {
+                    for (int ListNum = 1, ListNum_end = this_op_scheme.NumEquipLists; ListNum <= ListNum_end; ++ListNum) {
+                        auto &this_equip_list = this_op_scheme.EquipList(ListNum);
+                        // The component loop loads the pointers from the OpScheme data structure
+                        for (int CompNum = 1; CompNum <= this_equip_list.NumComps; ++CompNum) {
 
-                                // set up a reference to the component instance on the list data structure
-                                auto const &this_list_component = this_equip_list.Comp(CompNum);
+                            // set up a reference to the component instance on the list data structure
+                            auto const &this_list_component = this_equip_list.Comp(CompNum);
 
-                                // then look up the component topological position from this structure
-                                int LoopPtr = this_list_component.LoopNumPtr;
-                                LoopSidePtr = this_list_component.LoopSideNumPtr;
-                                int BranchPtr = this_list_component.BranchNumPtr;
-                                int CompPtr = this_list_component.CompNumPtr;
+                            // then look up the component topological position from this structure
+                            int LoopPtr = this_list_component.LoopNumPtr;
+                            LoopSidePtr = this_list_component.LoopSideNumPtr;
+                            int BranchPtr = this_list_component.BranchNumPtr;
+                            int CompPtr = this_list_component.CompNumPtr;
 
-                                // then set up a reference to the component on the plant data structure
-                                auto &this_loop_component = state.dataPlnt->PlantLoop(LoopPtr).LoopSide(LoopSidePtr).Branch(BranchPtr).Comp(CompPtr);
+                            // then set up a reference to the component on the plant data structure
+                            auto &this_loop_component = state.dataPlnt->PlantLoop(LoopPtr).LoopSide(LoopSidePtr).Branch(BranchPtr).Comp(CompPtr);
 
+                            if (this_loop_component.CurCompLevelOpNum == 0) {
                                 if (this_loop_component.CurOpSchemeType != OpScheme::Pump) {
                                     this_loop_component.CurOpSchemeType = this_op_scheme.Type;
                                 } else {
@@ -2901,7 +2900,6 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                                 }
                             }
                         }
-                        foundAvailableOpScheme = true;
                     }
                 } else {
                     this_op_scheme.Available = false;
