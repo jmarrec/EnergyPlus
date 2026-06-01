@@ -56225,11 +56225,11 @@
 
   PlantEquipmentOperationSchemes,
     Plant Loop Operation,    !- Name
-    PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 1 Object Type
-    WSHPPlant Heat Operation Scheme,  !- Control Scheme 1 Name
+    PlantEquipmentOperation:CoolingLoad,  !- Control Scheme 1 Object Type
+    WSHPPlant Cool Operation Scheme,  !- Control Scheme 1 Name
     All On,                  !- Control Scheme 1 Schedule Name
-    PlantEquipmentOperation:CoolingLoad,  !- Control Scheme 2 Object Type
-    WSHPPlant Cool Operation Scheme,  !- Control Scheme 2 Name
+    PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 2 Object Type
+    WSHPPlant Heat Operation Scheme,  !- Control Scheme 2 Name
     All On;                  !- Control Scheme 2 Schedule Name
 
 !-   ===========  ALL OBJECTS IN CLASS: ENERGYMANAGEMENTSYSTEM:SENSOR ===========

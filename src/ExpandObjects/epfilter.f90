@@ -30891,12 +30891,12 @@ IF (isMwpOperTypeDefault) THEN
   CALL CreateNewObj('PlantEquipmentOperationSchemes')
   CALL AddToObjFld('Name', base + mwpNameOff,' Operation')
   IF ((isTowerPresent) .AND. (isBoilerPresent)) THEN
-    CALL AddToObjStr('Control Scheme Object Type','PlantEquipmentOperation:HeatingLoad')
-    CALL AddToObjFld('Control Scheme Name', base + mwpNameOff,' Heat Operation All Hours')
-    CALL AddToObjStr('Control Scheme Schedule Name','HVACTemplate-Always 1')
     CALL AddToObjStr('Control Scheme Object Type','PlantEquipmentOperation:CoolingLoad')
     CALL AddToObjFld('Control Scheme Name', base + mwpNameOff,' Cool Operation All Hours')
     CALL AddToObjStr('Control Scheme Schedule Name','HVACTemplate-Always 1',.TRUE.)
+    CALL AddToObjStr('Control Scheme Object Type','PlantEquipmentOperation:HeatingLoad')
+    CALL AddToObjFld('Control Scheme Name', base + mwpNameOff,' Heat Operation All Hours')
+    CALL AddToObjStr('Control Scheme Schedule Name','HVACTemplate-Always 1')
   ELSEIF ((isTowerPresent) .AND. (.NOT. isBoilerPresent)) THEN
     CALL AddToObjStr('Control Scheme Object Type','PlantEquipmentOperation:CoolingLoad')
     CALL AddToObjFld('Control Scheme Name', base + mwpNameOff,' Cool Operation All Hours')
@@ -30907,14 +30907,6 @@ IF (isMwpOperTypeDefault) THEN
     CALL AddToObjStr('Control Scheme Schedule Name','HVACTemplate-Always 1',.TRUE.)
   ENDIF
   CALL AddAlwaysSchedule('1')
-  !***PlantEquipmentOperation:HeatingLoad
-  IF (isBoilerPresent) THEN
-    CALL CreateNewObj('PlantEquipmentOperation:HeatingLoad')
-    CALL AddToObjFld('Name', base + mwpNameOff,' Heat Operation All Hours')
-    CALL AddToObjStr('Load Range Lower Limit 1 {W}','0')
-    CALL AddToObjStr('Load Range Upper Limit 1 {W}','1000000000000000')
-    CALL AddToObjFld('Priority Control 1 Equipment List Name', base + mwpNameOff,' All Heating Equipment',.TRUE.)
-  END IF
   !***PlantEquipmentOperation:CoolingLoad
   IF (isTowerPresent) THEN
     CALL CreateNewObj('PlantEquipmentOperation:CoolingLoad')
@@ -30922,6 +30914,14 @@ IF (isMwpOperTypeDefault) THEN
     CALL AddToObjStr('Load Range Lower Limit 1 {W}','0')
     CALL AddToObjStr('Load Range Upper Limit 1 {W}','1000000000000000')
     CALL AddToObjFld('Priority Control 1 Equipment List Name', base + mwpNameOff,' All Cooling Equipment',.TRUE.)
+  END IF
+  !***PlantEquipmentOperation:HeatingLoad
+  IF (isBoilerPresent) THEN
+    CALL CreateNewObj('PlantEquipmentOperation:HeatingLoad')
+    CALL AddToObjFld('Name', base + mwpNameOff,' Heat Operation All Hours')
+    CALL AddToObjStr('Load Range Lower Limit 1 {W}','0')
+    CALL AddToObjStr('Load Range Upper Limit 1 {W}','1000000000000000')
+    CALL AddToObjFld('Priority Control 1 Equipment List Name', base + mwpNameOff,' All Heating Equipment',.TRUE.)
   END IF
   !***PlantEquipmentList
   IF (isBoilerPresent) THEN
