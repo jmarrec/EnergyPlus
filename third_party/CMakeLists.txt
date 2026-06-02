@@ -11,13 +11,14 @@ target_compile_definitions(
 if(NOT MSVC)  # This is really only needed with newer Clang, but gcc is fine with it
   target_compile_options(nlohmann_json INTERFACE -Wno-deprecated-declarations)
 endif()
+target_compile_options(nlohmann_json INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,AppleClang>:-Wno-shorten-64-to-32>)
 target_include_directories(
         nlohmann_json
         SYSTEM INTERFACE
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/nlohmann>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 set_source_files_properties(
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/nlohmann>/json.hpp
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/nlohmann/json.hpp
   TARGET_DIRECTORY nlohmann_json
   PROPERTIES COMPILE_FLAGS -Wno-deprecated-declarations
 )
@@ -86,6 +87,9 @@ set(CMAKE_CXX_STANDARD 20)
 
 if(NOT MSVC)
   add_compile_options(-Wno-pedantic -Wno-unused-parameter -Wno-unknown-pragmas)
+  if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15.0)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-dangling-reference> $<$<COMPILE_LANGUAGE:CXX>:-Wno-restrict>)
+  endif()
 else()
   add_compile_options(/wd4267 /wd4996 /wd4068 /wd4244 /wd4589)
 endif()
@@ -130,6 +134,26 @@ if(BUILD_TESTING)
   set_target_properties(gtest_main PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock_main PROPERTIES FOLDER ThirdParty/gtest)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    foreach(_gtest_target gtest gtest_main gmock gmock_main)
+      if(TARGET ${_gtest_target})
+        target_compile_options(${_gtest_target}
+          PRIVATE
+            -Wno-character-conversion
+            -Wno-deprecated-declarations
+        )
+      endif()
+    endforeach()
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    foreach(_gtest_target gtest gtest_main gmock gmock_main)
+      if(TARGET ${_gtest_target})
+        target_compile_options(${_gtest_target}
+          PRIVATE
+            -Wno-deprecated-declarations
+        )
+      endif()
+    endforeach()
+  endif()
 endif()
 
 add_subdirectory(ObjexxFCL)
@@ -159,6 +183,10 @@ set_target_properties(re2 PROPERTIES FOLDER ThirdParty/re2)
 add_subdirectory(fmt-8.0.1)
 target_compile_definitions(fmt PRIVATE FMT_USE_FULL_CACHE_DRAGONBOX=1)
 set_target_properties(fmt PROPERTIES FOLDER ThirdParty/fmt)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  target_compile_options(fmt PUBLIC -Wno-deprecated-literal-operator)
+  target_compile_definitions(fmt PUBLIC "FMT_CONSTEVAL=")
+endif()
 mark_as_advanced(FORCE FMT_SYSTEM_HEADERS)
 
 # Kiva
