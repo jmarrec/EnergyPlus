@@ -160,12 +160,6 @@ add_subdirectory(re2)
 set_target_properties(re2 PROPERTIES FOLDER ThirdParty/re2)
 
 add_subdirectory(fmt-8.0.1)
-
-if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  target_compile_definitions(fmt PUBLIC FMT_CONSTEVAL=)
-  target_compile_options(fmt PUBLIC -Wno-deprecated-literal-operator)
-endif()
-
 target_compile_definitions(fmt PRIVATE FMT_USE_FULL_CACHE_DRAGONBOX=1)
 set_target_properties(fmt PROPERTIES FOLDER ThirdParty/fmt)
 mark_as_advanced(FORCE FMT_SYSTEM_HEADERS)
