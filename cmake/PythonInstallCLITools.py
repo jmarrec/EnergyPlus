@@ -61,7 +61,7 @@ from sys import executable
 
 PKGS = {
     "energyplus_launch": "3.7.4",
-    "energyplus_transition_tools": "2.1.4",
+    "energyplus_transition_tools": "2.1.5",
     "ghedesigner": "2.1.1",
 }
 
