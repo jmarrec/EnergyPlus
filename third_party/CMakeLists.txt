@@ -163,11 +163,7 @@ add_subdirectory(fmt-8.0.1)
 
 if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   target_compile_definitions(fmt PUBLIC FMT_CONSTEVAL=)
-  include(CheckCXXCompilerFlag)
-  check_cxx_compiler_flag("-Wno-deprecated-literal-operator" HAS_DEPRECATED_LITERAL_OPERATOR_WARNING)
-  if(HAS_DEPRECATED_LITERAL_OPERATOR_WARNING)
-    target_compile_options(fmt PUBLIC -Wno-deprecated-literal-operator)
-  endif()
+  target_compile_options(fmt PUBLIC -Wno-deprecated-literal-operator)
 endif()
 
 target_compile_definitions(fmt PRIVATE FMT_USE_FULL_CACHE_DRAGONBOX=1)
