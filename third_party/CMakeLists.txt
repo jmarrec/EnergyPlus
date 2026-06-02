@@ -11,13 +11,14 @@ target_compile_definitions(
 if(NOT MSVC)  # This is really only needed with newer Clang, but gcc is fine with it
   target_compile_options(nlohmann_json INTERFACE -Wno-deprecated-declarations)
 endif()
+target_compile_options(nlohmann_json INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,AppleClang>:-Wno-shorten-64-to-32>)
 target_include_directories(
         nlohmann_json
         SYSTEM INTERFACE
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/nlohmann>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 set_source_files_properties(
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/nlohmann>/json.hpp
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/nlohmann/json.hpp
   TARGET_DIRECTORY nlohmann_json
   PROPERTIES COMPILE_FLAGS -Wno-deprecated-declarations
 )
@@ -130,9 +131,24 @@ if(BUILD_TESTING)
   set_target_properties(gtest_main PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock_main PROPERTIES FOLDER ThirdParty/gtest)
-  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     foreach(_gtest_target gtest gtest_main gmock gmock_main)
-      target_compile_options(${_gtest_target} PUBLIC -Wno-character-conversion -Wno-deprecated-declarations)
+      if(TARGET ${_gtest_target})
+        target_compile_options(${_gtest_target}
+          PRIVATE
+            -Wno-character-conversion
+            -Wno-deprecated-declarations
+        )
+      endif()
+    endforeach()
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    foreach(_gtest_target gtest gtest_main gmock gmock_main)
+      if(TARGET ${_gtest_target})
+        target_compile_options(${_gtest_target}
+          PRIVATE
+            -Wno-deprecated-declarations
+        )
+      endif()
     endforeach()
   endif()
 endif()

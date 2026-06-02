@@ -83,9 +83,16 @@ macro(CREATE_TEST_TARGETS BASE_NAME SRC DEPENDENCIES USE_PCH)
 
     target_link_libraries(${BASE_NAME}_tests PRIVATE ${ALL_DEPENDENCIES} gtest)
 
+    if(APPLE AND CMAKE_GENERATOR STREQUAL "Xcode")
+      set(_gtest_discovery_mode PRE_TEST)
+    else()
+      set(_gtest_discovery_mode POST_BUILD)
+    endif()
+
     gtest_discover_tests(${BASE_NAME}_tests
-            DISCOVERY_TIMEOUT 30
-            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+      DISCOVERY_MODE ${_gtest_discovery_mode}
+      DISCOVERY_TIMEOUT 30
     )
 
   endif()
