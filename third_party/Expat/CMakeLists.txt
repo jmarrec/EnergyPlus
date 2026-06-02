@@ -32,6 +32,6 @@ set_target_properties(
   epexpat
   PROPERTIES
   INSTALL_NAME_DIR "@executable_path"
-  XCODE_ATTRIBUTE_GCC_WARN_64_TO_32_BIT_CONVERSION NO
 )
+
 

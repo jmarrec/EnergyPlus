@@ -85,13 +85,7 @@ set(RE2_SOURCES
 
 add_library(re2 ${RE2_SOURCES})
 target_include_directories(re2 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-set_target_properties(
-    re2
-    PROPERTIES
-    SOVERSION ${SONAME}
-    VERSION ${SONAME}.0.0
-    XCODE_ATTRIBUTE_GCC_WARN_64_TO_32_BIT_CONVERSION NO
-)
+set_target_properties(re2 PROPERTIES SOVERSION ${SONAME} VERSION ${SONAME}.0.0)
 add_library(re2::re2 ALIAS re2)
 
 if(UNIX)
