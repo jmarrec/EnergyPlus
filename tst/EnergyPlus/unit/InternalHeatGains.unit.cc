@@ -1369,6 +1369,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
 
     EnergyPlus::createFacilityElectricPowerServiceObject(*state); // Needs to happen before InitInternalHeatGains
 
+    state->dataSize->FinalZoneSizing.allocate(1);
+    state->dataSize->ZoneEqSizing.allocate(1);
+
     // First time should be all good, because ZoneRpt/spaceRpt values initialize to zero
     InternalHeatGains::InitInternalHeatGains(*state);
     InternalHeatGains::ReportInternalHeatGains(*state);
@@ -1475,7 +1478,7 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
         "    15.0;               !- Floor Area {m2}",
 
         "  SpaceList,",
-        "    All Spaces,"
+        "    All Spaces,",
         "    Space 1,",
         "    Space 2;",
 
@@ -1582,10 +1585,6 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
     CheckThisZoneForSizing(*state, state->dataSize->CurZoneEqNum, SizingDesRunThisZone);
     EXPECT_TRUE(SizingDesRunThisZone);
 
-    std::vector<std::string> FieldNames = {"Capacity at Low Temperature", "Low Temperature", "Capacity at High Temperature", "High Temperature"};
-    thisBBHeat1.FieldNames = FieldNames;
-    thisBBHeat2.FieldNames = FieldNames;
-    thisBBHeat3.FieldNames = FieldNames;
     state->dataGlobal->DisplayExtraWarnings = true;
     InternalHeatGains::InitInternalHeatGains(*state);
 
