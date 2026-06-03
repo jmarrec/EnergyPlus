@@ -7339,15 +7339,15 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
     EXPECT_EQ(0, finalSysSizing.CoolDDNum);
     EXPECT_EQ("", finalSysSizing.CoolDesDay);
 
-    std::string error_string =
-        delimited_string({"   ** Warning ** In calculating capacity for coil HEAT PUMP ACDXCOIL 1 COOLING COIL when system cooling load is not available, the air state would yield negative coil capacity sizing.",
-                          "   **   ~~~   ** The air properties are: T_mix = 0.0000",
-                          "   **   ~~~   **                         T_supply = 32.2220",
-                          "   **   ~~~   **                         H_mix = 25.0094",
-                          "   **   ~~~   **                         H_supply = 52864.6672",
-                          "   **   ~~~   **                         W_mix = 0.0000",
-                          "   **   ~~~   **                         W_supply = 8.0000E-003",
-                          "   **   ~~~   ** Cooling capacity is set to zero during sizing; simulation continues."});
+    std::string error_string = delimited_string({"   ** Warning ** In calculating capacity for coil HEAT PUMP ACDXCOIL 1 COOLING COIL when system "
+                                                 "cooling load is not available, the air state would yield negative coil capacity sizing.",
+                                                 "   **   ~~~   ** The air properties are: T_mix = 0.0000",
+                                                 "   **   ~~~   **                         T_supply = 32.2220",
+                                                 "   **   ~~~   **                         H_mix = 25.0094",
+                                                 "   **   ~~~   **                         H_supply = 52864.6672",
+                                                 "   **   ~~~   **                         W_mix = 0.0000",
+                                                 "   **   ~~~   **                         W_supply = 8.0000E-003",
+                                                 "   **   ~~~   ** Cooling capacity is set to zero during sizing; simulation continues."});
     EXPECT_TRUE(compare_err_stream_substring(error_string, true));
 }
 
@@ -8963,15 +8963,16 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity2)
     EXPECT_EQ(2, finalSysSizing.CoolDDNum);
     EXPECT_EQ("CHICAGO_IL_USA ANNUAL COOLING 1% DESIGN CONDITIONS DB/MCWB", finalSysSizing.CoolDesDay);
 
-    std::string error_string =
-        delimited_string({"   ** Warning ** In calculating capacity for coil HEAT PUMP ACDXCOIL 1 COOLING COIL on design day CHICAGO_IL_USA ANNUAL COOLING 1% DESIGN CONDITIONS DB/MCWB when system cooling load is available, the air state would yield negative coil capacity sizing.",
-                          "   **   ~~~   ** The air properties are: T_mix = 46.4047",
-                          "   **   ~~~   **                         T_supply = 45.0000",
-                          "   **   ~~~   **                         H_mix = 64848.1520",
-                          "   **   ~~~   **                         H_supply = 65894.5420",
-                          "   **   ~~~   **                         W_mix = 7.0419E-003",
-                          "   **   ~~~   **                         W_supply = 8.0000E-003",
-                          "   **   ~~~   ** Cooling capacity is set to zero during sizing; simulation continues."});
+    std::string error_string = delimited_string(
+        {"   ** Warning ** In calculating capacity for coil HEAT PUMP ACDXCOIL 1 COOLING COIL on design day CHICAGO_IL_USA ANNUAL COOLING 1% DESIGN "
+         "CONDITIONS DB/MCWB when system cooling load is available, the air state would yield negative coil capacity sizing.",
+         "   **   ~~~   ** The air properties are: T_mix = 46.4047",
+         "   **   ~~~   **                         T_supply = 45.0000",
+         "   **   ~~~   **                         H_mix = 64848.1520",
+         "   **   ~~~   **                         H_supply = 65894.5420",
+         "   **   ~~~   **                         W_mix = 7.0419E-003",
+         "   **   ~~~   **                         W_supply = 8.0000E-003",
+         "   **   ~~~   ** Cooling capacity is set to zero during sizing; simulation continues."});
     EXPECT_TRUE(compare_err_stream_substring(error_string, true));
 }
 
