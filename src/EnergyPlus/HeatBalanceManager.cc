@@ -2612,6 +2612,11 @@ namespace HeatBalanceManager {
         using OutAirNodeManager::SetOutAirNodes;
         using WindowEquivalentLayer::InitEquivalentLayerWindowCalculations;
 
+        if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
+            HeatBalanceSurfaceManager::InitEMSControlledConstructions(state);
+            HeatBalanceSurfaceManager::InitEMSControlledSurfaceProperties(state);
+        }
+
         if (state.dataGlobal->BeginSimFlag) {
             AllocateHeatBalArrays(state); // Allocate the Module Arrays
             if (state.dataHeatBal->AnyCTF || state.dataHeatBal->AnyEMPD) {
@@ -2654,11 +2659,6 @@ namespace HeatBalanceManager {
                     state.dataSurface->SurfaceWindow(SurfNum).thetaFace.begin(), state.dataSurface->SurfaceWindow(SurfNum).thetaFace.end(), 296.15);
                 state.dataSurface->SurfWinEffInsSurfTemp(SurfNum) = 23.0;
             }
-        }
-
-        if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
-            HeatBalanceSurfaceManager::InitEMSControlledConstructions(state);
-            HeatBalanceSurfaceManager::InitEMSControlledSurfaceProperties(state);
         }
 
         // Init storm window pointers
