@@ -92,9 +92,9 @@ option(USE_GLYCOL_CACHING "Use glycol cashing routines" ON)
 option(USE_PSYCH_STATS "Compute psychrometric stats" OFF)
 option(USE_PSYCH_ERRORS "Report psychrometric errors " ON)
 
-if(APPLE AND BUILD_TESTING AND OPENGL_FOUND)
+if(APPLE AND CMAKE_GENERATOR STREQUAL "Xcode" AND OPENGL_FOUND)
   set(OPENGL_FOUND FALSE)
-  message(STATUS "Disabling OpenGL for macOS test builds to avoid Cocoa window creation in energyplus_tests")
+  message(STATUS "Disabling OpenGL for Xcode-generated builds to avoid Cocoa window creation during build/test execution")
 endif()
 
 mark_as_advanced(BUILD_OBJEXXFCL_TESTING)
