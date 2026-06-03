@@ -206,7 +206,12 @@ namespace Python {
         EnergyPlus::print("PyPreConfig initialized:\n{}\n", preConfig);
 #    endif
         // PyPreConfig_InitIsolatedConfig(&preConfig);
+        // PyPreConfig_InitIsolatedConfig sets configure_locale=0 which likely caused Decent CI failures (is locale not being set up properly on those
+        // machines?)
+        // https://github.com/python/cpython/blob/v3.12.2/Python/preconfig.c#L310-L345
         preConfig.utf8_mode = 1;
+        // disable use_environment so VIRTUAL_ENV/PYTHONPATH don't leak the user's venv into EnergyPlus's embedded Python
+        preConfig.use_environment = 0;
 #    if DEBUG_PYTHON_CONFIG
         EnergyPlus::print("Final PyPreConfig:\n{}\n", preConfig);
 #    endif
