@@ -233,6 +233,9 @@ namespace Python {
             ShowFatalError(state, std::format("Could not initialize program_name on PyConfig... {}", status));
         }
 
+        // Ensure site.py doesn't run, this picks up your virtualenv, even with isolated config
+        config.site_import = 0;
+
         status = PyConfig_Read(&config);
         if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, std::format("Could not read back the PyConfig... {}", status));
