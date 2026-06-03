@@ -4132,12 +4132,20 @@ namespace VariableSpeedCoils {
 
                         CoolCapAtPeak = (rhoair * VolFlowRate * (MixEnth - SupEnth)) + FanCoolLoad;
                         if (CoolCapAtPeak < 0) { // This conditional will also catch the initialization value, -999.0
-                            ShowWarningError(
-                                state,
-                                std::format(
-                                    "In calculating capacity for coil {} on design day {}, the air state would yield negative coil capacity sizing.",
-                                    varSpeedCoil.Name,
-                                    state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).CoolDesDay));
+                            if (state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).CoolDDNum > 0) {
+                                ShowWarningError(
+                                    state,
+                                    std::format(
+                                        "In calculating capacity for coil {} on design day {} when system cooling load is available, the air state would yield negative coil capacity sizing.",
+                                        varSpeedCoil.Name,
+                                        state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).CoolDesDay));
+                            } else {
+                                ShowWarningError(
+                                    state,
+                                    std::format(
+                                        "In calculating capacity for coil {} when system cooling load is not available, the air state would yield negative coil capacity sizing.",
+                                        varSpeedCoil.Name));
+                            }
                             ShowContinueError(state, EnergyPlus::format("The air properties are: T_mix = {:.4R}", MixTemp));
                             ShowContinueError(state, EnergyPlus::format("                        T_supply = {:.4R}", SupTemp));
                             ShowContinueError(state, EnergyPlus::format("                        H_mix = {:.4R}", MixEnth));
