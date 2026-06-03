@@ -277,7 +277,7 @@ main_gui(True)
         auto *updaterCLISubCommand = auxiliaryToolsSubcommand->add_subcommand("updater-cli", "IDF Version Updater CLI");
         updaterCLISubCommand->allow_extras();
         updaterCLISubCommand->footer("You can pass extra arguments after the updater-cli keyword, they will be forwarded to IDF Version Updater.\n"
-                "To get updater-cli's help, invoke without any arguments.");
+                                     "To get updater-cli's help, invoke without any arguments.");
 
         updaterCLISubCommand->callback([&state, updaterCLISubCommand] {
             EnergyPlus::Python::PythonEngine engine(state);
@@ -291,6 +291,13 @@ main([)python";
             if (fwd_args.empty()) {
                 cmd += "\"--help\"";
             } else {
+                // Unless specifically passed, we pass eplus-dir to the current executable directory, so it doesn't try to auto find in the usual
+                // installation paths
+                bool eplus_dir_provided =
+                    std::any_of(fwd_args.begin(), fwd_args.end(), [](const std::string &a) { return a == "-e" || a == "--eplus-dir"; });
+                if (!eplus_dir_provided) {
+                    cmd += EnergyPlus::format(R"("--eplus-dir", "{}", )", state.dataStrGlobals->exeDirectoryPath.generic_string());
+                }
                 for (const auto &arg : fwd_args) {
                     cmd += EnergyPlus::format("\"{}\", ", arg);
                 }
