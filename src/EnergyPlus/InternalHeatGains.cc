@@ -7055,6 +7055,8 @@ namespace InternalHeatGains {
         if (state.dataSize->CurZoneEqNum > 0) {
             auto &ZoneEqSizing = state.dataSize->ZoneEqSizing(state.dataSize->CurZoneEqNum);
 
+            bool PrintFlag = true; // TRUE when sizing information is reported in the eio file
+            bool errorsFound = false;
             std::string SizingString = std::format("{} [C]", thisBBHeat.FieldNames[1]);
             if (SizingDesRunThisZone) {
                 LowTemperatureDes = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).OutTempAtHeatPeak;
@@ -7123,69 +7125,73 @@ namespace InternalHeatGains {
                 }
             }
 
-            DeltaTMax = thisBBHeat.ZnHtgSetTemp - LowTemperatureDes;
-            DeltaTMin = thisBBHeat.ZnHtgSetTemp - thisBBHeat.HighTemperature;
-            if (DeltaTMax < 0.0) {
-                ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, CompName));
-                ShowContinueError(state, "Minimum outdoor temperature is greater than zone setpoint temperature.");
-                ShowContinueError(state, "Check if a heating design day was attached and temperature settings were correct.");
-            } else if (DeltaTMin < 0.0) {
-                ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, CompName));
-                ShowContinueError(state, "High temperature is greater than zone setpoint temperature.");
-                ShowContinueError(state, "Check if temperature settings were correct.");
-            }
-
-            // Find surfaces exposed to outdoor environment and calculate conductional load over the surfaces found
-            thisBBHeat.ExtSurfCondLoad = 0.0;
-            int const spaceNum = thisBBHeat.spaceIndex;
-            auto const &thisSpace = state.dataHeatBal->space(spaceNum);
-            for (int SurfNum : thisSpace.surfaces) {
-                auto const &surf = state.dataSurface->Surface(SurfNum);
-                Real64 NominalUwithConvCoeffs = 0.0;
-                if (surf.Construction > 0 && surf.Construction <= state.dataHeatBal->TotConstructs) {
-                    bool isWithConvCoefValid = false;
-                    NominalUwithConvCoeffs = DataHeatBalance::ComputeNominalUwithConvCoeffs(state, SurfNum, isWithConvCoefValid);
+            if (SizingDesRunThisZone) {
+                DeltaTMax = thisBBHeat.ZnHtgSetTemp - LowTemperatureDes;
+                DeltaTMin = thisBBHeat.ZnHtgSetTemp - thisBBHeat.HighTemperature;
+                if (DeltaTMax < 0.0) {
+                    ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, CompName));
+                    ShowContinueError(state, "Minimum outdoor temperature is greater than zone setpoint temperature.");
+                    ShowContinueError(state, "Check if a heating design day was attached and temperature settings were correct.");
+                } else if (DeltaTMin < 0.0) {
+                    ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, CompName));
+                    ShowContinueError(state, "High temperature is greater than zone setpoint temperature.");
+                    ShowContinueError(state, "Check if temperature settings were correct.");
                 }
-                if (surf.ExtBoundCond == ExternalEnvironment) {
-                    ExtSurfCondLoadThisSurf = NominalUwithConvCoeffs * surf.Area * DeltaTMax;
-                    thisBBHeat.ExtSurfCondLoad += ExtSurfCondLoadThisSurf;
+
+                // Find surfaces exposed to outdoor environment and calculate conductional load over the surfaces found
+                thisBBHeat.ExtSurfCondLoad = 0.0;
+                int const spaceNum = thisBBHeat.spaceIndex;
+                auto const &thisSpace = state.dataHeatBal->space(spaceNum);
+                for (int SurfNum : thisSpace.surfaces) {
+                    auto const &surf = state.dataSurface->Surface(SurfNum);
+                    Real64 NominalUwithConvCoeffs = 0.0;
+                    if (surf.Construction > 0 && surf.Construction <= state.dataHeatBal->TotConstructs) {
+                        bool isWithConvCoefValid = false;
+                        NominalUwithConvCoeffs = DataHeatBalance::ComputeNominalUwithConvCoeffs(state, SurfNum, isWithConvCoefValid);
+                    }
+                    if (surf.ExtBoundCond == ExternalEnvironment) {
+                        ExtSurfCondLoadThisSurf = NominalUwithConvCoeffs * surf.Area * DeltaTMax;
+                        thisBBHeat.ExtSurfCondLoad += ExtSurfCondLoadThisSurf;
+                    }
                 }
+
+                // See if infiltration and ventilation were defined (allocate zone load by space floor area fraction)
+                Real64 spaceFrac = 1.0;
+                Real64 const zoneArea = state.dataHeatBal->Zone(NZ).FloorArea;
+                if (zoneArea > 0.0) {
+                    spaceFrac = thisSpace.FloorArea / zoneArea;
+                }
+                ZnInfilSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPIAtHeatPeak * DeltaTMax * spaceFrac;
+                ZnVentSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPVAtHeatPeak * DeltaTMax * spaceFrac;
+
+                CapatLowTemperatureDes = thisBBHeat.ExtSurfCondLoad + ZnInfilSensLoad + ZnVentSensLoad;
+                // Set it to zero if no winter design day or wrong temp setting
+                if (CapatLowTemperatureDes < 0.0) {
+                    CapatLowTemperatureDes = 0.0;
+                }
+
+                ZoneEqSizing.HeatingCapacity = true;
+                ZoneEqSizing.DesHeatingLoad = CapatLowTemperatureDes;
             }
 
-            // See if infiltration and ventilation were defined (allocate zone load by space floor area fraction)
-            Real64 spaceFrac = 1.0;
-            Real64 const zoneArea = state.dataHeatBal->Zone(NZ).FloorArea;
-            if (zoneArea > 0.0) {
-                spaceFrac = thisSpace.FloorArea / zoneArea;
-            }
-            ZnInfilSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPIAtHeatPeak * DeltaTMax * spaceFrac;
-            ZnVentSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPVAtHeatPeak * DeltaTMax * spaceFrac;
-
-            CapatLowTemperatureDes = thisBBHeat.ExtSurfCondLoad + ZnInfilSensLoad + ZnVentSensLoad;
-            // Set it to zero if no winter design day or wrong temp setting
-            if (CapatLowTemperatureDes < 0.0) {
-                CapatLowTemperatureDes = 0.0;
-            }
-
-            ZoneEqSizing.HeatingCapacity = true;
-            ZoneEqSizing.DesHeatingLoad = CapatLowTemperatureDes;
             TempSize = thisBBHeat.CapatLowTemperature;
             SizingString = std::format("{} [W]", thisBBHeat.FieldNames[0]);
-            bool PrintFlag = true; // TRUE when sizing information is reported in the eio file
-            bool errorsFound = false;
             HeatingCapacitySizer sizerCapatLowTemperature;
             sizerCapatLowTemperature.overrideSizingString(SizingString);
             sizerCapatLowTemperature.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
             thisBBHeat.CapatLowTemperature = sizerCapatLowTemperature.size(state, TempSize, errorsFound);
 
-            CapatHighTemperatureDes = (DeltaTMax != 0.0) ? (thisBBHeat.CapatLowTemperature * DeltaTMin / DeltaTMax) : 0.0;
-            // Set it zero, if no winter design day or wrong temp setting
-            if (CapatHighTemperatureDes < 0.0) {
-                CapatHighTemperatureDes = 0.0;
+            if (SizingDesRunThisZone) {
+                CapatHighTemperatureDes = (DeltaTMax != 0.0) ? (thisBBHeat.CapatLowTemperature * DeltaTMin / DeltaTMax) : 0.0;
+                // Set it zero, if no winter design day or wrong temp setting
+                if (CapatHighTemperatureDes < 0.0) {
+                    CapatHighTemperatureDes = 0.0;
+                }
+
+                ZoneEqSizing.HeatingCapacity = true;
+                ZoneEqSizing.DesHeatingLoad = CapatHighTemperatureDes;
             }
 
-            ZoneEqSizing.HeatingCapacity = true;
-            ZoneEqSizing.DesHeatingLoad = CapatHighTemperatureDes;
             TempSize = thisBBHeat.CapatHighTemperature;
             SizingString = std::format("{} [W]", thisBBHeat.FieldNames[2]);
             HeatingCapacitySizer sizerCapatHighTemperature;
