@@ -100,6 +100,100 @@ template <> struct std::formatter<PyStatus>
         return ctx.out();
     }
 };
+
+#    if DEBUG_PYTHON_CONFIG
+#        include <cwchar>
+#        include <iostream>
+static std::string narrowWide(const wchar_t *ws)
+{
+    if (ws == nullptr) {
+        return "(null)";
+    }
+    std::mbstate_t state{};
+    const wchar_t *tmp = ws;
+#        ifndef NDEBUG
+    // LC_TYPE is set to C.UTF-8 in PyPreConfig_InitPythonConfig already
+    const char *ctype = std::setlocale(LC_CTYPE, nullptr);
+    assert(ctype != nullptr && (std::strstr(ctype, "UTF-8") != nullptr || std::strstr(ctype, "utf8") != nullptr));
+#        endif
+
+    std::size_t n = std::wcsrtombs(nullptr, &tmp, 0, &state);
+    if (n == static_cast<std::size_t>(-1)) {
+        return "(conversion error)";
+    }
+    std::string result(n, '\0');
+    n = std::wcsrtombs(result.data(), &ws, n, &state);
+    if (n == static_cast<std::size_t>(-1)) {
+        return "(conversion error)";
+    }
+    return result;
+}
+
+template <> struct std::formatter<PyPreConfig>
+{
+    constexpr auto parse(std::format_parse_context &ctx) -> std::format_parse_context::iterator
+    {
+        return ctx.begin();
+    }
+
+    auto format(const PyPreConfig &c, std::format_context &ctx) const -> std::format_context::iterator
+    {
+        auto it = ctx.out();
+        it = std::format_to(it, "PyPreConfig(\n");
+        it = std::format_to(it, "  parse_argv={}\n", c.parse_argv);
+        it = std::format_to(it, "  isolated={}\n", c.isolated);
+        it = std::format_to(it, "  use_environment={}\n", c.use_environment);
+        it = std::format_to(it, "  configure_locale={}\n", c.configure_locale);
+        it = std::format_to(it, "  coerce_c_locale={}\n", c.coerce_c_locale);
+        it = std::format_to(it, "  coerce_c_locale_warn={}\n", c.coerce_c_locale_warn);
+        it = std::format_to(it, "  utf8_mode={}\n", c.utf8_mode);
+        it = std::format_to(it, "  dev_mode={}\n", c.dev_mode);
+        it = std::format_to(it, "  allocator={}\n", c.allocator);
+#        ifdef MS_WINDOWS
+        it = std::format_to(it, "  legacy_windows_fs_encoding={}\n", c.legacy_windows_fs_encoding);
+#        endif
+        it = std::format_to(it, ")");
+        return it;
+    }
+};
+
+template <> struct std::formatter<PyConfig>
+{
+    constexpr auto parse(std::format_parse_context &ctx)
+    {
+        return ctx.begin();
+    }
+
+    std::format_context::iterator format(const PyConfig &c, std::format_context &ctx) const
+    {
+        auto it = ctx.out();
+
+        it = std::format_to(it, "PyConfig(\n");
+        it = std::format_to(it, "  isolated={}\n", c.isolated);
+        it = std::format_to(it, "  use_environment={}\n", c.use_environment);
+        it = std::format_to(it, "  site_import={}\n", c.site_import);
+        it = std::format_to(it, "  program_name={}\n", narrowWide(c.program_name));
+        it = std::format_to(it, "  home={}\n", narrowWide(c.home));
+        it = std::format_to(it, "  base_prefix={}\n", narrowWide(c.base_prefix));
+        it = std::format_to(it, "  prefix={}\n", narrowWide(c.prefix));
+        it = std::format_to(it, "  exec_prefix={}\n", narrowWide(c.exec_prefix));
+        it = std::format_to(it, "  base_exec_prefix={}\n", narrowWide(c.base_exec_prefix));
+        it = std::format_to(it, "  pythonpath_env={}\n", narrowWide(c.pythonpath_env));
+        it = std::format_to(it, "  executable={}\n", narrowWide(c.executable));
+
+        it = std::format_to(
+            it, "  module_search_paths_set={}, module_search_paths.length={}\n", c.module_search_paths_set, c.module_search_paths.length);
+        if (c.module_search_paths.items != nullptr) {
+            for (Py_ssize_t i = 0; i < c.module_search_paths.length; ++i) {
+                it = std::format_to(it, "    module_search_paths[{}]={}\n", i, narrowWide(c.module_search_paths.items[i]));
+            }
+        }
+        it = std::format_to(it, ")");
+        return it;
+    }
+};
+#    endif
+
 #endif
 
 namespace EnergyPlus {
@@ -228,8 +322,14 @@ namespace Python {
         // This is the other related line that caused Decent CI to start having trouble.  I'm putting it back to
         // PyPreConfig_InitPythonConfig, even though I think it should be isolated.  Will deal with this after IO freeze.
         PyPreConfig_InitPythonConfig(&preConfig);
+#    if DEBUG_PYTHON_CONFIG
+        std::print("PyPreConfig initialized:\n{}\n", preConfig);
+#    endif
         // PyPreConfig_InitIsolatedConfig(&preConfig);
         preConfig.utf8_mode = 1;
+#    if DEBUG_PYTHON_CONFIG
+        std::print("Final PyPreConfig:\n{}\n", preConfig);
+#    endif
         status = Py_PreInitialize(&preConfig);
         if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, std::format("Could not pre-initialize Python to speak UTF-8... {}", status));
@@ -237,6 +337,10 @@ namespace Python {
 
         PyConfig config;
         PyConfig_InitIsolatedConfig(&config);
+
+#    if DEBUG_PYTHON_CONFIG
+        std::print("Isolated config initialized:\n{}\n", config);
+#    endif
         config.isolated = 1;
 
         status = PyConfig_SetBytesString(&config, &config.program_name, PluginManagement::programName);
@@ -291,6 +395,9 @@ namespace Python {
             PyMem_RawFree(wcharPath);
         }
 
+#    if DEBUG_PYTHON_CONFIG
+        std::print("Final PyConfig:\n{}\n", config);
+#    endif
         // This was Py_InitializeFromConfig(&config), but was giving a seg fault when running inside
         // another Python instance, for example as part of an API run.  Per the example here:
         // https://docs.python.org/3/c-api/init_config.html#preinitialize-python-with-pypreconfig

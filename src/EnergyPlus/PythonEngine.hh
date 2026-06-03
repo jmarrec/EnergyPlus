@@ -55,6 +55,7 @@
 struct _object;
 using PyObject = _object;
 #    endif
+#    define DEBUG_PYTHON_CONFIG 1
 #endif
 
 namespace EnergyPlus {
