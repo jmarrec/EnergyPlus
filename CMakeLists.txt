@@ -13,12 +13,13 @@ endif()
 
 project(EnergyPlus)
 
-# Raise an error if attempting to compile on macOS older than 10.15 - it does not work
+# Raise an error if attempting to compile on macOS older than 13.0 - it does not work
+# 10.15 minimum for std::filesystem, and 13.0 minimum for std::format
 if (APPLE)
   if(NOT CMAKE_OSX_DEPLOYMENT_TARGET)
-    message(FATAL_ERROR "CMAKE_OSX_DEPLOYMENT_TARGET not set. Please set CMAKE_OSX_DEPLOYMENT_TARGET to 10.15 or greater and try again.")
-  elseif (CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS "10.15")
-    message(FATAL_ERROR "The minimum required version for macOS is 10.15, however CMAKE_OSX_DEPLOYMENT_TARGET is set to ${CMAKE_OSX_DEPLOYMENT_TARGET}.")
+    message(FATAL_ERROR "CMAKE_OSX_DEPLOYMENT_TARGET not set. Please set CMAKE_OSX_DEPLOYMENT_TARGET to 13.0 or greater and try again.")
+  elseif (CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS "13.0")
+    message(FATAL_ERROR "The minimum required version for macOS is 13.0, however CMAKE_OSX_DEPLOYMENT_TARGET is set to ${CMAKE_OSX_DEPLOYMENT_TARGET}.")
   endif()
 endif()
 
