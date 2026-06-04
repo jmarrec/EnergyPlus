@@ -134,26 +134,15 @@ if(BUILD_TESTING)
   set_target_properties(gtest_main PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock_main PROPERTIES FOLDER ThirdParty/gtest)
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    foreach(_gtest_target gtest gtest_main gmock gmock_main)
-      if(TARGET ${_gtest_target})
-        target_compile_options(${_gtest_target}
-          PRIVATE
-            -Wno-character-conversion
-            -Wno-deprecated-declarations
-        )
-      endif()
-    endforeach()
-  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-    foreach(_gtest_target gtest gtest_main gmock gmock_main)
-      if(TARGET ${_gtest_target})
-        target_compile_options(${_gtest_target}
-          PRIVATE
-            -Wno-deprecated-declarations
-        )
-      endif()
-    endforeach()
-  endif()
+  foreach(_gtest_target gtest gtest_main gmock gmock_main)
+    if(TARGET ${_gtest_target})
+      target_compile_options(${_gtest_target}
+        PRIVATE
+          $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-Wno-character-conversion>
+          $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:-Wno-deprecated-declarations>
+      )
+    endif()
+  endforeach()
 endif()
 
 add_subdirectory(ObjexxFCL)
@@ -183,12 +172,8 @@ set_target_properties(re2 PROPERTIES FOLDER ThirdParty/re2)
 add_subdirectory(fmt-8.0.1)
 target_compile_definitions(fmt PRIVATE FMT_USE_FULL_CACHE_DRAGONBOX=1)
 set_target_properties(fmt PROPERTIES FOLDER ThirdParty/fmt)
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  target_compile_options(fmt PUBLIC -Wno-deprecated-literal-operator)
-endif()
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  target_compile_definitions(fmt PUBLIC "FMT_CONSTEVAL=")
-endif()
+target_compile_options(fmt PUBLIC $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-Wno-deprecated-literal-operator>)
+target_compile_definitions(fmt PUBLIC $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:FMT_CONSTEVAL=>)
 mark_as_advanced(FORCE FMT_SYSTEM_HEADERS)
 
 # Kiva
@@ -251,4 +236,3 @@ add_subdirectory(libtk205)
 mark_as_advanced(FORCE libtk205_STATIC_LIB)
 mark_as_advanced(FORCE libtk205_COVERAGE)
 mark_as_advanced(FORCE libtk205_BUILD_TESTING)
-
