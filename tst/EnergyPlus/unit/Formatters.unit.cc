@@ -173,5 +173,7 @@ TEST(Formatters, Formatters_join)
         std::vector<double> CondTempArray{0.0000, 0.1000, 0.2000, 0.3000, 0.4000, 0.5000, 0.6000, 0.7000, 0.8000, 0.9000, 1.0000};
         EXPECT_EQ("PLR           =    0.00   0.10   0.20   0.30   0.40   0.50   0.60   0.70   0.80   0.90   1.00",
                   fmt::format("PLR           = {:7.2F}", fmt::join(CondTempArray, "")));
+        EXPECT_EQ("PLR           =    0.00   0.10   0.20   0.30   0.40   0.50   0.60   0.70   0.80   0.90   1.00",
+                  std::format("PLR           = {:7.2F}", EnergyPlus::join(CondTempArray, "")));
     }
 }

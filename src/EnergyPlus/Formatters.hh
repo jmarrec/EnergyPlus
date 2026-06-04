@@ -135,4 +135,44 @@ template <class... Args> void print(std::format_string<Args...> fmt, Args &&...a
 }
 } // namespace std
 
+namespace detail {
+template <typename R> struct format_join_view
+{
+    const R &range;
+    std::string_view sep;
+};
+} // namespace detail
+
+template <typename R> struct std::formatter<::detail::format_join_view<R>>
+{
+    std::formatter<std::ranges::range_value_t<R>> element_formatter;
+
+    constexpr auto parse(std::format_parse_context &ctx) -> std::format_parse_context::iterator
+    {
+        return element_formatter.parse(ctx);
+    }
+
+    auto format(const ::detail::format_join_view<R> &jv, std::format_context &ctx) const -> std::format_context::iterator
+    {
+        auto it = ctx.out();
+        bool first = true;
+        for (const auto &elem : jv.range) {
+            if (!first) {
+                it = std::ranges::copy(jv.sep, it).out;
+            }
+            first = false;
+            it = element_formatter.format(elem, ctx);
+        }
+        return it;
+    }
+};
+
+namespace EnergyPlus {
+template <typename R> auto join(const R &r, std::string_view sep)
+{
+    return ::detail::format_join_view<R>{r, sep};
+}
+
+} // namespace EnergyPlus
+
 #endif
