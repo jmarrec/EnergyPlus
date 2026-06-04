@@ -7332,10 +7332,12 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
 
     auto &finalSysSizing = state->dataSize->FinalSysSizing(state->dataSize->CurSysNum);
     EXPECT_GT(finalSysSizing.HeatCap, 0);
+    EXPECT_GT(finalSysSizing.SysDesHeatLoad, 0);
     EXPECT_EQ(1, finalSysSizing.HeatDDNum);
     EXPECT_EQ("CHICAGO_IL_USA ANNUAL HEATING 99% DESIGN CONDITIONS DB", finalSysSizing.HeatDesDay);
     EXPECT_EQ(0, finalSysSizing.SensCoolCap);
     EXPECT_EQ(0, finalSysSizing.TotCoolCap);
+    EXPECT_EQ(0, finalSysSizing.SysDesCoolLoad);
     EXPECT_EQ(0, finalSysSizing.CoolDDNum);
     EXPECT_EQ("", finalSysSizing.CoolDesDay);
 
@@ -7351,7 +7353,7 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
     EXPECT_TRUE(compare_err_stream_substring(error_string, true));
 }
 
-TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity2)
+TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity_WithCoolingLoad)
 {
     // #11250: test that it's possible to calculate a negative cooling coil capacity when system cooling load is available
     std::string const idf_objects = delimited_string({
@@ -8957,9 +8959,11 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity2)
     auto &finalSysSizing = state->dataSize->FinalSysSizing(state->dataSize->CurSysNum);
     EXPECT_GT(finalSysSizing.HeatCap, 0);
     EXPECT_EQ(1, finalSysSizing.HeatDDNum);
+    EXPECT_GT(finalSysSizing.SysDesHeatLoad, 0);
     EXPECT_EQ("CHICAGO_IL_USA ANNUAL HEATING 99% DESIGN CONDITIONS DB", finalSysSizing.HeatDesDay);
     EXPECT_GT(finalSysSizing.SensCoolCap, 0);
     EXPECT_EQ(0, finalSysSizing.TotCoolCap);
+    EXPECT_GT(finalSysSizing.SysDesCoolLoad, 0);
     EXPECT_EQ(2, finalSysSizing.CoolDDNum);
     EXPECT_EQ("CHICAGO_IL_USA ANNUAL COOLING 1% DESIGN CONDITIONS DB/MCWB", finalSysSizing.CoolDesDay);
 
