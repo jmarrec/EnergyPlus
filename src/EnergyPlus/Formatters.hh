@@ -66,10 +66,15 @@ concept formattable =
     std::formatter<std::remove_reference_t<T>, CharT>{}.parse(std::declval<std::basic_format_parse_context<CharT> &>());
 };
 
+template <typename T> concept set_like = std::ranges::range<T> && requires
+{
+    typename T::key_type;
+};
+
 template <typename T>
 concept formattable_range =
     // A range
-    std::ranges::range<T> // A range
+    std::ranges::range<T>
     // A range of formattable elements. It'd be a nicer error message to include it, but that prevents using it for a range of range
     // eg : std::vector<std::vector<int>>.
     // && std::formattable<std::ranges::range_value_t<T>, char>
@@ -88,15 +93,18 @@ template <formattable_range Container> struct std::formatter<Container>
 
     auto format(const Container &v, std::format_context &ctx) const -> std::format_context::iterator
     {
+        constexpr char open = set_like<Container> ? '{' : '[';
+        constexpr char close = set_like<Container> ? '}' : ']';
+        constexpr bool quoted = std::is_same_v<T, std::string> || std::is_same_v<T, std::string_view>;
+
         auto it = ctx.out();
-        *it++ = '[';
-        bool first = true;
-        for (const auto &elem : v) {
+        *it++ = open;
+        for (bool first = true; const auto &elem : v) {
             if (!first) {
                 it = std::format_to(it, ", ");
             }
             first = false;
-            if constexpr (std::is_same_v<T, std::string> || std::is_same_v<T, std::string_view>) {
+            if constexpr (quoted) {
                 it = std::format_to(it, "\"");
                 it = element_formatter.format(elem, ctx);
                 it = std::format_to(it, "\"");
@@ -104,7 +112,7 @@ template <formattable_range Container> struct std::formatter<Container>
                 it = element_formatter.format(elem, ctx);
             }
         }
-        *it++ = ']';
+        *it++ = close;
         return it;
     }
 };
