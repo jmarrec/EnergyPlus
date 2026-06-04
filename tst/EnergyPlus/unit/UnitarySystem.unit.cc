@@ -7341,9 +7341,9 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
     EXPECT_EQ(0, finalSysSizing.CoolDDNum);
     EXPECT_EQ("", finalSysSizing.CoolDesDay);
 
-    EXPECT_TRUE(compare_err_stream_substring(
-        "   ** Warning ** In calculating capacity for coil HEAT PUMP ACDXCOIL 1 COOLING COIL when system cooling load is not available, the air state would yield negative coil capacity sizing.",
-        false));
+    EXPECT_TRUE(compare_err_stream_substring("   ** Warning ** In calculating capacity for coil HEAT PUMP ACDXCOIL 1 COOLING COIL when system "
+                                             "cooling load is not available, the air state would yield negative coil capacity sizing.",
+                                             false));
     EXPECT_TRUE(compare_err_stream_substring("   **   ~~~   ** Cooling capacity is set to zero during sizing; simulation continues.", true));
 }
 
@@ -8963,7 +8963,7 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity_WithCoolingLoad)
 
     EXPECT_TRUE(compare_err_stream_substring(
         "   ** Warning ** In calculating capacity for coil HEAT PUMP ACDXCOIL 1 COOLING COIL on design day CHICAGO_IL_USA ANNUAL COOLING 1% DESIGN "
-         "CONDITIONS DB/MCWB when system cooling load is available, the air state would yield negative coil capacity sizing.",
+        "CONDITIONS DB/MCWB when system cooling load is available, the air state would yield negative coil capacity sizing.",
         false));
     EXPECT_TRUE(compare_err_stream_substring("   **   ~~~   ** Cooling capacity is set to zero during sizing; simulation continues.", true));
 }
