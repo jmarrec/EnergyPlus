@@ -72,7 +72,6 @@
 
 // Third Party Headers
 #include <fast_float/fast_float.h>
-#include <fmt/format.h>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Boilers.hh>
@@ -107,6 +106,7 @@
 #include <EnergyPlus/Fans.hh>
 #include <EnergyPlus/FileSystem.hh>
 #include <EnergyPlus/FluidCoolers.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/HVACVariableRefrigerantFlow.hh>
 #include <EnergyPlus/HeatingCoils.hh>
@@ -5291,20 +5291,19 @@ void WriteTabularReports(EnergyPlusData &state)
     }
 
     constexpr static std::string_view variable_fmt = " {}={:12}\n";
-    constexpr static auto variable_fmt_syntax = check_syntax(variable_fmt); // (AUTO_OK) not sure what this is
     state.files.audit.ensure_open(state, "WriteTabularReports", state.files.outputControl.audit);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "MonthlyInputCount", ort->MonthlyInputCount);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeMonthlyInput", ort->sizeMonthlyInput);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "MonthlyFieldSetInputCount", ort->MonthlyFieldSetInputCount);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeMonthlyFieldSetInput", ort->sizeMonthlyFieldSetInput);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "MonthlyTablesCount", ort->MonthlyTablesCount);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "MonthlyColumnsCount", ort->MonthlyColumnsCount);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeReportName", state.dataOutRptPredefined->sizeReportName);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "numReportName", state.dataOutRptPredefined->numReportName);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeSubTable", state.dataOutRptPredefined->sizeSubTable);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "numSubTable", state.dataOutRptPredefined->numSubTable);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeColumnTag", state.dataOutRptPredefined->sizeColumnTag);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "numColumnTag", state.dataOutRptPredefined->numColumnTag);
+    print(state.files.audit, variable_fmt, "MonthlyInputCount", ort->MonthlyInputCount);
+    print(state.files.audit, variable_fmt, "sizeMonthlyInput", ort->sizeMonthlyInput);
+    print(state.files.audit, variable_fmt, "MonthlyFieldSetInputCount", ort->MonthlyFieldSetInputCount);
+    print(state.files.audit, variable_fmt, "sizeMonthlyFieldSetInput", ort->sizeMonthlyFieldSetInput);
+    print(state.files.audit, variable_fmt, "MonthlyTablesCount", ort->MonthlyTablesCount);
+    print(state.files.audit, variable_fmt, "MonthlyColumnsCount", ort->MonthlyColumnsCount);
+    print(state.files.audit, variable_fmt, "sizeReportName", state.dataOutRptPredefined->sizeReportName);
+    print(state.files.audit, variable_fmt, "numReportName", state.dataOutRptPredefined->numReportName);
+    print(state.files.audit, variable_fmt, "sizeSubTable", state.dataOutRptPredefined->sizeSubTable);
+    print(state.files.audit, variable_fmt, "numSubTable", state.dataOutRptPredefined->numSubTable);
+    print(state.files.audit, variable_fmt, "sizeColumnTag", state.dataOutRptPredefined->sizeColumnTag);
+    print(state.files.audit, variable_fmt, "numColumnTag", state.dataOutRptPredefined->numColumnTag);
 
     int sizeTableEntry = 0;
     int numTableEntry = 0;
@@ -5313,10 +5312,10 @@ void WriteTabularReports(EnergyPlusData &state)
         numTableEntry += state.dataOutRptPredefined->subTable(i).numEntries;
     }
 
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeTableEntry", sizeTableEntry);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "numTableEntry", numTableEntry);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "sizeCompSizeTableEntry", state.dataOutRptPredefined->sizeCompSizeTableEntry);
-    print<variable_fmt_syntax>(state.files.audit, variable_fmt, "numCompSizeTableEntry", state.dataOutRptPredefined->numCompSizeTableEntry);
+    print(state.files.audit, variable_fmt, "sizeTableEntry", sizeTableEntry);
+    print(state.files.audit, variable_fmt, "numTableEntry", numTableEntry);
+    print(state.files.audit, variable_fmt, "sizeCompSizeTableEntry", state.dataOutRptPredefined->sizeCompSizeTableEntry);
+    print(state.files.audit, variable_fmt, "numCompSizeTableEntry", state.dataOutRptPredefined->numCompSizeTableEntry);
 }
 
 void setTabularReportStyles(EnergyPlusData &state)
@@ -11054,7 +11053,7 @@ void WriteCompCostTable(EnergyPlusData &state)
         columnWidth = {7, 30, 16, 10, 16, 16}; // array assignment - for all columns
 
         for (int item = 1; item <= (int)state.dataCostEstimateManager->CostLineItem.size(); ++item) {
-            tableBody(1, item) = fmt::to_string(state.dataCostEstimateManager->CostLineItem(item).LineNumber);
+            tableBody(1, item) = std::to_string(state.dataCostEstimateManager->CostLineItem(item).LineNumber);
             tableBody(2, item) = state.dataCostEstimateManager->CostLineItem(item).LineName;
             if (currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPound ||
                 currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPoundExceptElectricity) {
@@ -11280,7 +11279,7 @@ void WriteVeriSumTable(EnergyPlusData &state)
         tableBody(1, 8) = RealToStr(currentStyle.formatReals, state.dataHeatBal->BuildingAzimuth, 2);                           // north axis angle
         tableBody(1, 9) = RealToStr(currentStyle.formatReals, state.dataHeatBal->BuildingRotationAppendixG, 2); // Rotation for Appendix G
         tableBody(1, 10) = RealToStr(currentStyle.formatReals, ort->gatherElapsedTimeBEPS, 2);                  // hours simulated
-        //  tableBody(9,1) = TRIM(fmt::to_string(numTableEntry)) !number of table entries for predefined tables
+        //  tableBody(9,1) = TRIM(std::to_string(numTableEntry)) !number of table entries for predefined tables
 
         if (currentStyle.produceTabular) {
             WriteSubtitle(state, "General");
@@ -12229,7 +12228,7 @@ void writeVeriSumSpaceTables(EnergyPlusData &state, const tabularReportStyle &st
                 spaceTableBody(colSpacePlugProcess, spaceTableRowNum) = RealToStr(style.formatReals, 0.0, 4);
             }
 
-            spaceTableBody(colSpaceTags, spaceTableRowNum) = fmt::format("{}", fmt::join(curSpace.tags, ", "));
+            spaceTableBody(colSpaceTags, spaceTableRowNum) = std::format("{}", EnergyPlus::join(curSpace.tags, ", "));
 
             // If not part of total, goes directly to this row
             if (!useSpaceFloorArea) {
@@ -14696,7 +14695,7 @@ void WriteEioTables(EnergyPlusData &state)
                                 break; // should never happen since same test as original could
                             }
                             std::vector<std::string> dataFields = splitCommaString(bodyLine);
-                            rowHead(rowNum) = fmt::to_string(rowNum);
+                            rowHead(rowNum) = std::to_string(rowNum);
                             for (int iCol = 1; iCol <= numCols && iCol < int(dataFields.size()); ++iCol) {
                                 if (currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPound ||
                                     currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPoundExceptElectricity ||
@@ -17231,11 +17230,11 @@ void OutputCompLoadSummary(EnergyPlusData &state,
         }
 
         tableBody(1, 1) = std::format("{:.{}f}", curCompLoad.outsideAirRatio, 4); // outside Air
-        tableBody(1, 2) = fmt::format("{:0.3E}", curCompLoad.airflowPerFlrArea);  // airflow per floor area
-        tableBody(1, 3) = fmt::format("{:0.3E}", curCompLoad.airflowPerTotCap);   // airflow per total capacity
-        tableBody(1, 4) = fmt::format("{:0.3E}", curCompLoad.areaPerTotCap);      // area per total capacity
-        tableBody(1, 5) = fmt::format("{:0.3E}", curCompLoad.totCapPerArea);      // total capacity per area
-        tableBody(1, 6) = fmt::format("{:.{}f}", curCompLoad.numPeople, 1);       // number of people
+        tableBody(1, 2) = std::format("{:0.3E}", curCompLoad.airflowPerFlrArea);  // airflow per floor area
+        tableBody(1, 3) = std::format("{:0.3E}", curCompLoad.airflowPerTotCap);   // airflow per total capacity
+        tableBody(1, 4) = std::format("{:0.3E}", curCompLoad.areaPerTotCap);      // area per total capacity
+        tableBody(1, 5) = std::format("{:0.3E}", curCompLoad.totCapPerArea);      // total capacity per area
+        tableBody(1, 6) = std::format("{:.{}f}", curCompLoad.numPeople, 1);       // number of people
 
         if (style.produceTabular) {
             WriteSubtitle(state, engineeringCheckName);
@@ -17272,7 +17271,7 @@ void OutputCompLoadSummary(EnergyPlusData &state,
 
             columnHead(1) = "Zone Name";
             for (int zi = 1; zi <= maxRow; ++zi) {
-                rowHead(zi) = fmt::to_string(zi);
+                rowHead(zi) = std::to_string(zi);
                 if (curCompLoad.zoneIndices(zi) > 0) {
                     tableBody(1, zi) = state.dataHeatBal->Zone(curCompLoad.zoneIndices(zi)).Name;
                 }

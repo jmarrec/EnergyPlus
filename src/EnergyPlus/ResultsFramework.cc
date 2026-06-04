@@ -61,12 +61,12 @@
 #include <ObjexxFCL/string.functions.hh>
 
 // Third Party Headers
-#include <fmt/format.h>
 #include <milo/dtoa.h>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataStringGlobals.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/OutputReportTabular.hh>
@@ -373,8 +373,8 @@ namespace ResultsFramework {
             std::swap(curMin, lastMinute);
         }
         // future start of ISO 8601 datetime output
-        // fmt::format("YYYY-{:02d}/{:02d}T{:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin);
-        // fmt::format("{:02d}/{:02d} {:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin);
+        // std::format("YYYY-{:02d}/{:02d}T{:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin);
+        // std::format("{:02d}/{:02d} {:02d}:{:02d}:00", month, dayOfMonth, hourOfDay, curMin);
         if (iso8601) {
             TS.emplace_back(EnergyPlus::format("{:04d}-{:02d}-{:02d}T{:02d}:{:02d}:00", calendarYear, month, dayOfMonth, hourOfDay, curMin));
         } else {
@@ -857,7 +857,7 @@ namespace ResultsFramework {
                 last = (result + 1).base();
             }
 
-            print<FormatSyntax::FMT>(outputFile, "{},", fmt::join(item.second.begin(), last, ","));
+            print<FormatSyntax::FMT>(outputFile, "{}", std::format("{}", EnergyPlus::join(std::ranges::subrange(item.second.begin(), last), ",")));
             print<FormatSyntax::FMT>(outputFile, "{}\n", *last);
         }
 

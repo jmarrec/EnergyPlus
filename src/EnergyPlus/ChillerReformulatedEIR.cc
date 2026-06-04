@@ -69,6 +69,7 @@
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/FaultsManager.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
@@ -1641,8 +1642,8 @@ void ReformulatedEIRChillerSpecs::size(EnergyPlusData &state)
                 ShowContinueError(state,
                                   "EIR as a function of PLR curve output at various part-load ratios and condenser water temperatures shown below:");
                 ShowContinueError(state, "PLR           =    0.00   0.10   0.20   0.30   0.40   0.50   0.60   0.70   0.80   0.90   1.00");
-                ShowContinueError(state, fmt::format("Cond Temp(C) = {:7.2F}", fmt::join(CondTempArray, " ")));
-                ShowContinueError(state, fmt::format("Curve Output = {:7.2F}", fmt::join(CurveValArray, " ")));
+                ShowContinueError(state, std::format("Cond Temp(C) = {:7.2F}", EnergyPlus::join(CondTempArray, "")));
+                ShowContinueError(state, std::format("Curve Output = {:7.2F}", EnergyPlus::join(CurveValArray, "")));
                 ErrorsFound = true;
             }
         }

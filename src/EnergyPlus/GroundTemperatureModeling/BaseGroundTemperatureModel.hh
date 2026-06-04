@@ -51,6 +51,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/Formatters.hh>
 
 namespace EnergyPlus {
 
@@ -119,7 +120,7 @@ namespace GroundTemp {
                 "<Site:GroundTemperature:{}>,Jan{{C}},Feb{{C}},Mar{{C}},Apr{{C}},May{{C}},Jun{{C}},Jul{{C}},Aug{{C}},Sep{{C}},Oct{{"
                 "C}},Nov{{C}},Dec{{C}}\n",
                 name);
-            print<FormatSyntax::FMT>(os, " Site:GroundTemperature:{}, {}\n", name, fmt::format("{:6.2F}", fmt::join(data, ", ")));
+            print<FormatSyntax::FMT>(os, " Site:GroundTemperature:{}, {}\n", name, std::format("{:6.2F}", EnergyPlus::join(data, ", ")));
         }
     };
 
