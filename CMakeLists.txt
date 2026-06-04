@@ -45,6 +45,10 @@ set(EP_CXX_PCH_HEADERS
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/ObjexxFCL/src/ObjexxFCL/Array.functions.hh>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/ObjexxFCL/src/ObjexxFCL/Array1D.hh>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/nlohmann/json.hpp>")
+set(EP_TEST_CXX_PCH_HEADERS
+    ${EP_CXX_PCH_HEADERS}
+    "$<$<COMPILE_LANGUAGE:CXX>:<gtest/gtest.h>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/tst/EnergyPlus/unit/Fixtures/EnergyPlusFixture.hh>")
 
 option(ENABLE_UNITY "Enable Unity Build" OFF)
 

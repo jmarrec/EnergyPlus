@@ -799,7 +799,7 @@ target_link_libraries(
          libtk205)
 
 target_link_libraries(energypluslib PRIVATE project_options project_fp_options project_warnings)
-ep_enable_pch(energypluslib)
+ep_enable_pch(energypluslib "${EP_CXX_PCH_HEADERS}")
 
 if(OPENGL_FOUND)
   target_link_libraries(energypluslib PUBLIC penumbra)
