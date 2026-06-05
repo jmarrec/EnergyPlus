@@ -272,8 +272,8 @@ namespace InternalHeatGains {
         int IOStat;
 
         // Formats
-        static constexpr std::string_view Format_720(" Zone Internal Gains Nominal, {},{:.2f},{:.1f},");
-        static constexpr std::string_view Format_722(" {} Internal Gains Nominal, {},{},{},{:.2f},{:.1f},");
+        static constexpr std::string_view Format_720(" Zone Internal Gains Nominal, {},{:.2f},{:.2f},");
+        static constexpr std::string_view Format_722(" {} Internal Gains Nominal, {},{},{},{:.2f},{:.2f},");
         static constexpr std::string_view Format_723(
             "! <{} Internal Gains Nominal>,Name,Schedule Name,Zone Name,Zone Floor Area {{m2}},# Zone Occupants,{}");
         static constexpr std::string_view Format_724(" {}, {}\n");
@@ -2731,7 +2731,7 @@ namespace InternalHeatGains {
             auto const &zone = state.dataHeatBal->Zone(people.ZonePtr);
 
             print(state.files.eio, Format_722, "People", people.Name, people.sched->Name, zone.Name, zone.FloorArea, zone.TotOccupants);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople);
 
             print_and_divide_if_greater_than_zero(people.NumberOfPeople, zone.FloorArea);
 
@@ -2752,30 +2752,30 @@ namespace InternalHeatGains {
 
             print(state.files.eio, "{},", yesNoNames[(int)people.Show55Warning]);
             print(state.files.eio, "{:.4E},", people.CO2RateFactor);
-            print(state.files.eio, "{:.1f},", people.NomMinNumberPeople);
-            print(state.files.eio, "{:.1f},", people.NomMaxNumberPeople);
+            print(state.files.eio, "{:.2f},", people.NomMinNumberPeople);
+            print(state.files.eio, "{:.2f},", people.NomMaxNumberPeople);
 
             Real64 SchMin, SchMax;
 
             // weekdays
             std::tie(SchMin, SchMax) = people.sched->getMinMaxValsByDayType(state, Sched::DayTypeGroup::Weekday);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMin);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMax);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMin);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMax);
 
             // weekends/holidays
             std::tie(SchMin, SchMax) = people.sched->getMinMaxValsByDayType(state, Sched::DayTypeGroup::WeekEndHoliday);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMin);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMax);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMin);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMax);
 
             // summer design days
             std::tie(SchMin, SchMax) = people.sched->getMinMaxValsByDayType(state, Sched::DayTypeGroup::SummerDesignDay);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMin);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMax);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMin);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMax);
 
             // winter design days
             std::tie(SchMin, SchMax) = people.sched->getMinMaxValsByDayType(state, Sched::DayTypeGroup::WinterDesignDay);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMin);
-            print(state.files.eio, "{:.1f},", people.NumberOfPeople * SchMax);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMin);
+            print(state.files.eio, "{:.2f},", people.NumberOfPeople * SchMax);
 
             if (people.Fanger || people.Pierce || people.KSU || people.CoolingEffectASH55 || people.AnkleDraftASH55) {
 
@@ -2855,7 +2855,7 @@ namespace InternalHeatGains {
             // weekdays
             std::tie(SchMin, SchMax) = light.sched->getMinMaxValsByDayType(state, Sched::DayTypeGroup::Weekday);
             print(state.files.eio, "{:.3f},", light.DesignLevel * SchMin);
-            print(state.files.eio, "{:.1f},", light.DesignLevel * SchMax);
+            print(state.files.eio, "{:.3f},", light.DesignLevel * SchMax);
 
             // weekends/holidays
             std::tie(SchMin, SchMax) = light.sched->getMinMaxValsByDayType(state, Sched::DayTypeGroup::WeekEndHoliday);
