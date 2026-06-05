@@ -1702,7 +1702,7 @@ void CheckBranchEquipInZoneHVACEquipList(EnergyPlusData &state, int const branch
         case DataZoneEquipment::ZoneEquipType::LowTemperatureRadiantConstFlow:
         case DataZoneEquipment::ZoneEquipType::LowTemperatureRadiantVarFlow:
         case DataZoneEquipment::ZoneEquipType::CoolingPanel:
-            for (int eqList = 1; eqList <= state.dataZoneEquip->ZoneEquipList.size(); ++eqList) {
+            for (int eqList = 1; eqList <= static_cast<int>(state.dataZoneEquip->ZoneEquipList.size()); ++eqList) {
                 for (int eqNum = 1; eqNum <= state.dataZoneEquip->ZoneEquipList(eqList).NumOfEquipTypes; ++eqNum) {
                     // search name string first as it is more likely to be unique
                     if (Util::SameString(state.dataBranchInputManager->Branch(branchNum).Component(comp).Name,
