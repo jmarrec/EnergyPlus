@@ -12873,9 +12873,10 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
     HeatBalanceManager::GetConstructData(*state, ErrorsFound);
     HeatBalanceManager::GetBuildingData(*state, ErrorsFound);
 
-    EXPECT_TRUE(compare_err_stream_substring(
-        "   ** Severe  ** ProcessSurfaceVertices: Divider area exceeds glazed opening for window FENESTRATIONSURFACE",
-        "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[-137.50] m2.", true));
+    EXPECT_TRUE(
+        compare_err_stream_substring("   ** Severe  ** ProcessSurfaceVertices: Divider area exceeds glazed opening for window FENESTRATIONSURFACE",
+                                     "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[-137.50] m2.",
+                                     true));
 }
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_GetVerticesDropDuplicates)
