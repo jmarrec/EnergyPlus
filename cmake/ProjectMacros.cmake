@@ -1,41 +1,6 @@
 include(CMakeParseArguments)
 include(GoogleTest)
 
-if(NOT COMMAND ep_enable_pch)
-  function(ep_enable_pch target_name pch_headers)
-    if(NOT ENABLE_PCH)
-      return()
-    endif()
-
-    if(NOT TARGET "${target_name}")
-      message(FATAL_ERROR "ep_enable_pch called with unknown target: ${target_name}")
-    endif()
-
-    if(NOT pch_headers)
-      message(FATAL_ERROR "ep_enable_pch called with empty PCH headers list for target: ${target_name}")
-    endif()
-
-    target_precompile_headers("${target_name}" PRIVATE ${pch_headers})
-
-    if(MSVC)
-      get_target_property(_target_cxx_launcher "${target_name}" CXX_COMPILER_LAUNCHER)
-      if(_target_cxx_launcher STREQUAL "_target_cxx_launcher-NOTFOUND")
-        set(_target_cxx_launcher "${CMAKE_CXX_COMPILER_LAUNCHER}")
-      endif()
-
-      if(_target_cxx_launcher)
-        set_property(TARGET "${target_name}" PROPERTY CXX_COMPILER_LAUNCHER "")
-
-        get_property(_ep_pch_launcher_notice GLOBAL PROPERTY EP_PCH_MSVCLAUNCHER_NOTICE)
-        if(NOT _ep_pch_launcher_notice)
-          message(STATUS "Disabling the C++ compiler launcher for PCH-enabled targets on MSVC")
-          set_property(GLOBAL PROPERTY EP_PCH_MSVCLAUNCHER_NOTICE TRUE)
-        endif()
-      endif()
-    endif()
-  endfunction()
-endif()
-
 # Create source groups automatically based on file path
 macro(CREATE_SRC_GROUPS SRC)
   foreach(F ${SRC})
@@ -56,8 +21,12 @@ macro(CREATE_TEST_TARGETS BASE_NAME SRC DEPENDENCIES USE_PCH)
     add_executable(${BASE_NAME}_tests ${SRC})
     target_link_libraries(${BASE_NAME}_tests PRIVATE project_options project_warnings)
 
-    if(${USE_PCH})
-      ep_enable_pch(${BASE_NAME}_tests "${EP_TEST_CXX_PCH_HEADERS}")
+    # If USE_PCH was passed (it's used by third_party/ObjexxFCL/CMakeLists.txt too, with False on purpose) AND the global ENABLE_PCH is on
+    # IMPORTANT: In a function, arguments are true variables in the usual CMake sense.
+    # In a macro, they are not, they are string replacements much like the C preprocessor would do with a macro
+    # if(USE_PCH) can't work, we MUST use if(${USE_PCH}): https://cmake.org/cmake/help/latest/command/macro.html#argument-caveats
+    if(${USE_PCH} AND ENABLE_PCH)
+      target_precompile_headers(${BASE_NAME}_tests PRIVATE ${EP_TEST_CXX_PCH_HEADERS})
     endif()
 
     if(ENABLE_GTEST_DEBUG_MODE)

@@ -799,7 +799,9 @@ target_link_libraries(
          libtk205)
 
 target_link_libraries(energypluslib PRIVATE project_options project_fp_options project_warnings)
-ep_enable_pch(energypluslib "${EP_CXX_PCH_HEADERS}")
+if(ENABLE_PCH)
+  target_precompile_headers(energypluslib PRIVATE ${EP_CXX_PCH_HEADERS})
+endif()
 
 if(OPENGL_FOUND)
   target_link_libraries(energypluslib PUBLIC penumbra)
