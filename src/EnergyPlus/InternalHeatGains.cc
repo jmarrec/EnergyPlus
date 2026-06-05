@@ -57,6 +57,8 @@
 #include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
+#include <EnergyPlus/Autosizing/Base.hh>
+#include <EnergyPlus/Autosizing/HeatingCapacitySizing.hh>
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataContaminantBalance.hh>
@@ -77,6 +79,7 @@
 #include <EnergyPlus/ElectricPowerServiceManager.hh>
 #include <EnergyPlus/FuelCellElectricGenerator.hh>
 #include <EnergyPlus/General.hh>
+#include <EnergyPlus/GeneralRoutines.hh>
 #include <EnergyPlus/HeatBalanceIntRadExchange.hh>
 #include <EnergyPlus/HeatBalanceInternalHeatGains.hh>
 #include <EnergyPlus/HybridModel.hh>
@@ -2453,6 +2456,7 @@ namespace InternalHeatGains {
                     thisZoneBBHeat.Name = thisBBHeatInput.names(Item1);
                     thisZoneBBHeat.spaceIndex = spaceNum;
                     thisZoneBBHeat.ZonePtr = zoneNum;
+                    thisZoneBBHeat.FieldNames.assign(IHGNumericFieldNames.begin(), IHGNumericFieldNames.end());
 
                     if (IHGAlphaFieldBlanks(3)) {
                         ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(3));
@@ -2488,11 +2492,21 @@ namespace InternalHeatGains {
                             ErrorsFound = true;
                         }
                     }
-                    thisZoneBBHeat.CapatLowTemperature = IHGNumbers(1) * spaceFrac;
+                    thisZoneBBHeat.CapatLowTemperature = IHGNumbers(1);
+                    if (thisZoneBBHeat.CapatLowTemperature != DataSizing::AutoSize) {
+                        thisZoneBBHeat.CapatLowTemperature *= spaceFrac;
+                    }
                     thisZoneBBHeat.LowTemperature = IHGNumbers(2);
-                    thisZoneBBHeat.CapatHighTemperature = IHGNumbers(3) * spaceFrac;
+                    thisZoneBBHeat.CapatHighTemperature = IHGNumbers(3);
+                    if (thisZoneBBHeat.CapatHighTemperature != DataSizing::AutoSize) {
+                        thisZoneBBHeat.CapatHighTemperature *= spaceFrac;
+                    }
                     thisZoneBBHeat.HighTemperature = IHGNumbers(4);
                     thisZoneBBHeat.FractionRadiant = IHGNumbers(5);
+                    thisZoneBBHeat.ZnHtgSetTemp = IHGNumbers(6);
+                    if (IHGNumericFieldBlanks(6)) {
+                        thisZoneBBHeat.ZnHtgSetTemp = 20.0; // Set a default of 20 deg. C, if blank
+                    }
                     thisZoneBBHeat.FractionConvected = 1.0 - thisZoneBBHeat.FractionRadiant;
                     if (thisZoneBBHeat.FractionConvected < 0.0) {
                         ShowSevereError(state, std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, bbModuleObject, thisBBHeatInput.Name));
@@ -6880,6 +6894,12 @@ namespace InternalHeatGains {
         }
 
         for (int Loop = 1; Loop <= state.dataHeatBal->TotBBHeat; ++Loop) {
+            if (!state.dataGlobal->ZoneSizingCalc && state.dataHeatBal->ZoneBBHeat(Loop).MySizeFlag) {
+                // for each coil, do the sizing once.
+                SizeOaControlledBaseboard(state, Loop);
+                state.dataHeatBal->ZoneBBHeat(Loop).MySizeFlag = false;
+            }
+
             auto &thisBBHeat = state.dataHeatBal->ZoneBBHeat(Loop);
             int NZ = thisBBHeat.ZonePtr;
             if (state.dataHeatBal->Zone(NZ).OutDryBulbTemp >= thisBBHeat.HighTemperature) {
@@ -6990,6 +7010,194 @@ namespace InternalHeatGains {
                     }
                 }
             }
+        }
+    }
+
+    void SizeOaControlledBaseboard(EnergyPlusData &state, int const BaseboardNum)
+    {
+        // SUBROUTINE INFORMATION:
+        //       AUTHOR         Daeho Kang
+        //       DATE WRITTEN   March 2014
+        //       MODIFIED       May 2026 Joe Robertson, refactor the original from #4236 (pre-dates EnergyPlusData state, SpaceData spaces, etc.)
+
+        // PURPOSE OF THIS SUBROUTINE:
+        // This subroutine is to size numeric fields for outdoor air controlled baseboard heater.
+
+        // SUBROUTINE PARAMETER DEFINITIONS:
+        static constexpr std::string_view RoutineName("SizeOaControlledBaseboard");
+        std::string_view const CompType = "ZoneBaseboard:OutdoorTemperatureControlled";
+
+        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+        Real64 LowTemperatureDes = 0.0;       // Autosize low temperature for reporting
+        Real64 HighTemperatureDes = 0.0;      // Autosize high temperature for reporting
+        Real64 CapatLowTemperatureDes = 0.0;  // Autosize capacity at low temperature for reporting
+        Real64 CapatHighTemperatureDes = 0.0; // Autosize capacity at high temperature for reporting
+        Real64 DeltaTMax = 0.0;               // Maximum temperature difference
+        Real64 DeltaTMin = 0.0;               // Minimum temperature difference
+        Real64 ZnInfilSensLoad = 0.0;         // Zone infiltration sensible load
+        Real64 ZnVentSensLoad = 0.0;          // Zone ventilation sensible load
+        Real64 ExtSurfCondLoadThisSurf = 0.0; // Conductional load through a specific exterior surface
+        Real64 TempSize;                      // autosized value of coil input field
+        auto &thisBBHeat = state.dataHeatBal->ZoneBBHeat(BaseboardNum);
+        std::string_view const CompName = thisBBHeat.Name;
+        int NZ = thisBBHeat.ZonePtr;
+
+        if (thisBBHeat.LowTemperature == DataSizing::AutoSize || thisBBHeat.HighTemperature == DataSizing::AutoSize ||
+            thisBBHeat.CapatLowTemperature == DataSizing::AutoSize || thisBBHeat.CapatHighTemperature == DataSizing::AutoSize) {
+            CheckZoneSizing(state, CompType, CompName);
+        }
+
+        bool SizingDesRunThisZone = false;
+        std::string const ZoneName = state.dataHeatBal->Zone(NZ).Name;
+        state.dataSize->CurZoneEqNum = Util::FindItemInList(ZoneName, state.dataHeatBal->Zone);
+        CheckThisZoneForSizing(state, state.dataSize->CurZoneEqNum, SizingDesRunThisZone);
+
+        if (state.dataSize->CurZoneEqNum > 0) {
+            auto &ZoneEqSizing = state.dataSize->ZoneEqSizing(state.dataSize->CurZoneEqNum);
+
+            bool PrintFlag = true; // TRUE when sizing information is reported in the eio file
+            bool errorsFound = false;
+            std::string SizingString = std::format("{} [C]", thisBBHeat.FieldNames[1]);
+            if (SizingDesRunThisZone) {
+                LowTemperatureDes = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).OutTempAtHeatPeak;
+
+                if (thisBBHeat.LowTemperature == DataSizing::AutoSize) {
+                    thisBBHeat.LowTemperature = LowTemperatureDes;
+                    BaseSizer::reportSizerOutput(state, CompType, CompName, "Design Size " + SizingString, thisBBHeat.LowTemperature);
+                } else {
+                    BaseSizer::reportSizerOutput(state,
+                                                 CompType,
+                                                 CompName,
+                                                 "Design Size " + SizingString,
+                                                 LowTemperatureDes,
+                                                 "User-Specified " + SizingString,
+                                                 thisBBHeat.LowTemperature);
+                    if (state.dataGlobal->DisplayExtraWarnings) {
+                        if (std::abs(LowTemperatureDes - thisBBHeat.LowTemperature) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                            ShowMessage(state,
+                                        EnergyPlus::format("{}: Potential issue with equipment sizing for {} {}", RoutineName, CompType, CompName));
+                            ShowContinueError(state, EnergyPlus::format("User-Specified {} = {:.1R}", SizingString, thisBBHeat.LowTemperature));
+                            ShowContinueError(state, EnergyPlus::format("differs from Design Size {} = {:.1R}", SizingString, LowTemperatureDes));
+                            ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
+                            ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
+                        }
+                    }
+                }
+            } else {
+                if (thisBBHeat.LowTemperature == DataSizing::AutoSize) {
+                    // CheckZoneSizing above should have caught this
+                } else {
+                    BaseSizer::reportSizerOutput(state, CompType, CompName, "User-Specified " + SizingString, thisBBHeat.LowTemperature);
+                }
+            }
+
+            SizingString = std::format("{} [C]", thisBBHeat.FieldNames[3]);
+            if (SizingDesRunThisZone) {
+                HighTemperatureDes = thisBBHeat.ZnHtgSetTemp;
+
+                if (thisBBHeat.HighTemperature == DataSizing::AutoSize) {
+                    thisBBHeat.HighTemperature = HighTemperatureDes;
+                    BaseSizer::reportSizerOutput(state, CompType, CompName, "Design Size " + SizingString, thisBBHeat.HighTemperature);
+                } else {
+                    BaseSizer::reportSizerOutput(state,
+                                                 CompType,
+                                                 CompName,
+                                                 "Design Size " + SizingString,
+                                                 HighTemperatureDes,
+                                                 "User-Specified " + SizingString,
+                                                 thisBBHeat.HighTemperature);
+                    if (state.dataGlobal->DisplayExtraWarnings) {
+                        if (std::abs(HighTemperatureDes - thisBBHeat.HighTemperature) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
+                            ShowMessage(state,
+                                        EnergyPlus::format("{}: Potential issue with equipment sizing for {} {}", RoutineName, CompType, CompName));
+                            ShowContinueError(state, EnergyPlus::format("User-Specified {} = {:.1R}", SizingString, thisBBHeat.HighTemperature));
+                            ShowContinueError(state, EnergyPlus::format("differs from Design Size {} = {:.1R}", SizingString, HighTemperatureDes));
+                            ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
+                            ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
+                        }
+                    }
+                }
+            } else {
+                if (thisBBHeat.HighTemperature == DataSizing::AutoSize) {
+                    // CheckZoneSizing above should have caught this
+                } else {
+                    BaseSizer::reportSizerOutput(state, CompType, CompName, "User-Specified " + SizingString, thisBBHeat.HighTemperature);
+                }
+            }
+
+            if (SizingDesRunThisZone) {
+                DeltaTMax = thisBBHeat.ZnHtgSetTemp - LowTemperatureDes;
+                DeltaTMin = thisBBHeat.ZnHtgSetTemp - thisBBHeat.HighTemperature;
+                if (DeltaTMax < 0.0) {
+                    ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, CompName));
+                    ShowContinueError(state, "Minimum outdoor temperature is greater than zone setpoint temperature.");
+                    ShowContinueError(state, "Check if a heating design day was attached and temperature settings were correct.");
+                } else if (DeltaTMin < 0.0) {
+                    ShowSevereMessage(state, EnergyPlus::format("{} = {}", RoutineName, CompName));
+                    ShowContinueError(state, "High temperature is greater than zone setpoint temperature.");
+                    ShowContinueError(state, "Check if temperature settings were correct.");
+                }
+
+                // Find surfaces exposed to outdoor environment and calculate conductional load over the surfaces found
+                thisBBHeat.ExtSurfCondLoad = 0.0;
+                int const spaceNum = thisBBHeat.spaceIndex;
+                auto const &thisSpace = state.dataHeatBal->space(spaceNum);
+                for (int SurfNum : thisSpace.surfaces) {
+                    auto const &surf = state.dataSurface->Surface(SurfNum);
+                    Real64 NominalUwithConvCoeffs = 0.0;
+                    if (surf.Construction > 0 && surf.Construction <= state.dataHeatBal->TotConstructs) {
+                        bool isWithConvCoefValid = false;
+                        NominalUwithConvCoeffs = DataHeatBalance::ComputeNominalUwithConvCoeffs(state, SurfNum, isWithConvCoefValid);
+                    }
+                    if (surf.ExtBoundCond == ExternalEnvironment) {
+                        ExtSurfCondLoadThisSurf = NominalUwithConvCoeffs * surf.Area * DeltaTMax;
+                        thisBBHeat.ExtSurfCondLoad += ExtSurfCondLoadThisSurf;
+                    }
+                }
+
+                // See if infiltration and ventilation were defined (allocate zone load by space floor area fraction)
+                Real64 spaceFrac = 1.0;
+                Real64 const zoneArea = state.dataHeatBal->Zone(NZ).FloorArea;
+                if (zoneArea > 0.0) {
+                    spaceFrac = thisSpace.FloorArea / zoneArea;
+                }
+                ZnInfilSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPIAtHeatPeak * DeltaTMax * spaceFrac;
+                ZnVentSensLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MCPVAtHeatPeak * DeltaTMax * spaceFrac;
+
+                CapatLowTemperatureDes = thisBBHeat.ExtSurfCondLoad + ZnInfilSensLoad + ZnVentSensLoad;
+                // Set it to zero if no winter design day or wrong temp setting
+                if (CapatLowTemperatureDes < 0.0) {
+                    CapatLowTemperatureDes = 0.0;
+                }
+
+                ZoneEqSizing.HeatingCapacity = true;
+                ZoneEqSizing.DesHeatingLoad = CapatLowTemperatureDes;
+            }
+
+            TempSize = thisBBHeat.CapatLowTemperature;
+            SizingString = std::format("{} [W]", thisBBHeat.FieldNames[0]);
+            HeatingCapacitySizer sizerCapatLowTemperature;
+            sizerCapatLowTemperature.overrideSizingString(SizingString);
+            sizerCapatLowTemperature.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
+            thisBBHeat.CapatLowTemperature = sizerCapatLowTemperature.size(state, TempSize, errorsFound);
+
+            if (SizingDesRunThisZone) {
+                CapatHighTemperatureDes = (DeltaTMax != 0.0) ? (thisBBHeat.CapatLowTemperature * DeltaTMin / DeltaTMax) : 0.0;
+                // Set it zero, if no winter design day or wrong temp setting
+                if (CapatHighTemperatureDes < 0.0) {
+                    CapatHighTemperatureDes = 0.0;
+                }
+
+                ZoneEqSizing.HeatingCapacity = true;
+                ZoneEqSizing.DesHeatingLoad = CapatHighTemperatureDes;
+            }
+
+            TempSize = thisBBHeat.CapatHighTemperature;
+            SizingString = std::format("{} [W]", thisBBHeat.FieldNames[2]);
+            HeatingCapacitySizer sizerCapatHighTemperature;
+            sizerCapatHighTemperature.overrideSizingString(SizingString);
+            sizerCapatHighTemperature.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
+            thisBBHeat.CapatHighTemperature = sizerCapatHighTemperature.size(state, TempSize, errorsFound);
         }
     }
 
