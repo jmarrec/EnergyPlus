@@ -211,8 +211,8 @@ namespace EvaporativeFluidCoolers {
         Real64 TankSupplyVdot = 0.0;
         Real64 TankSupplyVol = 0.0;
         Real64 StarvedMakeUpVdot = 0.0;
-        Real64 StarvedMakeUpVol = 0.0;
         EvapFluidCoolerInletConds inletConds;
+        Real64 StarvedMakeUpVol = 0.0;
 
         static EvapFluidCoolerSpecs *factory(EnergyPlusData &state, DataPlant::PlantEquipmentType objectType, std::string const &objectName);
 
