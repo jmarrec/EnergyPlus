@@ -13040,7 +13040,7 @@ namespace SurfaceGeometry {
                                               state.dataSurface->FrameDivider(FrDivNum).HorDividers *
                                                   state.dataSurface->FrameDivider(FrDivNum).VertDividers * DivWidth);
                         state.dataSurface->SurfWinDividerArea(ThisSurf) = DivArea * surf.Multiplier;
-                        if ((surf.Area - state.dataSurface->SurfWinDividerArea(ThisSurf)) <= 0.0) {
+                        if (state.dataSurface->SurfWinDividerArea(ThisSurf) <= 0.0) {
                             ShowSevereError(state, std::format("{}Divider area exceeds glazed opening for window {}", RoutineName, surf.Name));
                             ShowContinueError(state,
                                               std::format("Window surface area=[{:.2f}] m2, divider area=[{:.2f}] m2.",
@@ -13049,15 +13049,6 @@ namespace SurfaceGeometry {
                             ErrorInSurface = true;
                         }
                         surf.Area -= state.dataSurface->SurfWinDividerArea(ThisSurf); // Glazed area
-                        if (DivArea <= 0.0) {
-                            ShowWarningError(state, std::format("{}Calculated Divider Area <= 0.0 for Window={}", RoutineName, surf.Name));
-                            if (state.dataSurface->FrameDivider(FrDivNum).HorDividers == 0) {
-                                ShowContinueError(state, "..Number of Horizontal Dividers = 0.");
-                            }
-                            if (state.dataSurface->FrameDivider(FrDivNum).VertDividers == 0) {
-                                ShowContinueError(state, "..Number of Vertical Dividers = 0.");
-                            }
-                        }
                     }
 
                     if ((FrWidth > 0.0) && (FrArea > 0.0) && !ErrorInSurface) {
