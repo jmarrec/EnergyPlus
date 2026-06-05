@@ -11,13 +11,14 @@ target_compile_definitions(
 if(NOT MSVC)  # This is really only needed with newer Clang, but gcc is fine with it
   target_compile_options(nlohmann_json INTERFACE -Wno-deprecated-declarations)
 endif()
+target_compile_options(nlohmann_json INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,AppleClang>:-Wno-shorten-64-to-32>)
 target_include_directories(
         nlohmann_json
         SYSTEM INTERFACE
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/nlohmann>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 set_source_files_properties(
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/nlohmann>/json.hpp
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/nlohmann/json.hpp
   TARGET_DIRECTORY nlohmann_json
   PROPERTIES COMPILE_FLAGS -Wno-deprecated-declarations
 )
@@ -133,6 +134,15 @@ if(BUILD_TESTING)
   set_target_properties(gtest_main PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock_main PROPERTIES FOLDER ThirdParty/gtest)
+  foreach(_gtest_target gtest gtest_main gmock gmock_main)
+    if(TARGET ${_gtest_target})
+      target_compile_options(${_gtest_target}
+        PRIVATE
+          $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-Wno-character-conversion>
+          $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:-Wno-deprecated-declarations>
+      )
+    endif()
+  endforeach()
 endif()
 
 add_subdirectory(ObjexxFCL)
@@ -162,6 +172,8 @@ set_target_properties(re2 PROPERTIES FOLDER ThirdParty/re2)
 add_subdirectory(fmt-8.0.1)
 target_compile_definitions(fmt PRIVATE FMT_USE_FULL_CACHE_DRAGONBOX=1)
 set_target_properties(fmt PROPERTIES FOLDER ThirdParty/fmt)
+target_compile_options(fmt PUBLIC $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-Wno-deprecated-literal-operator>)
+target_compile_definitions(fmt PUBLIC $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:FMT_CONSTEVAL=>)
 mark_as_advanced(FORCE FMT_SYSTEM_HEADERS)
 
 # Kiva
@@ -224,4 +236,3 @@ add_subdirectory(libtk205)
 mark_as_advanced(FORCE libtk205_STATIC_LIB)
 mark_as_advanced(FORCE libtk205_COVERAGE)
 mark_as_advanced(FORCE libtk205_BUILD_TESTING)
-
