@@ -79,8 +79,9 @@ jobs:
       shell: bash
       run: |
         echo "Found the regression tests!"
-        # We turn off the PCH in that case, since that's how develop builds it
-        echo "ENABLE_PCH=OFF" >> $GITHUB_ENV
+        # We adjust the ENABLE_PCH to match what is on develop
+        # IMPORTANT: keep this in sync with the ENABLE_PCH from run_and_cache_regressions_develop.yml
+        echo "ENABLE_PCH=ON" >> $GITHUB_ENV
 
     - name: Compute PCH files hash
       id: compute-pch-hash
