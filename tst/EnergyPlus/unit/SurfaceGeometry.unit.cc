@@ -12619,7 +12619,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetSurfaceGroundSurfsTest)
                           "    10.00000,0.0,0.0,             !- X,Y,Z ==> Vertex 3 {m}",
                           "    10.00000,0.0,10.00000;        !- X,Y,Z ==> Vertex 4 {m}",
 
-                          "  BuildingSurface:Detailed,"
+                          "  BuildingSurface:Detailed,",
                           "    Floor,                        !- Name",
                           "    Floor,                        !- Surface Type",
                           "    WallConstruction,             !- Construction Name",
@@ -12636,7 +12636,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetSurfaceGroundSurfsTest)
                           "    10.00000,10.000000,0,         !- X,Y,Z ==> Vertex 3 {m}",
                           "    10.00000,0.000000,0;          !- X,Y,Z ==> Vertex 4 {m}",
 
-                          "  Zone,"
+                          "  Zone,",
                           "    Zone,                         !- Name",
                           "    0,                            !- Direction of Relative North {deg}",
                           "    6.000000,                     !- X Origin {m}",
@@ -12832,7 +12832,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
                           "    10.00000,0.0,0.0,             !- X,Y,Z ==> Vertex 3 {m}",
                           "    10.00000,0.0,10.00000;        !- X,Y,Z ==> Vertex 4 {m}",
 
-                          "  BuildingSurface:Detailed,"
+                          "  BuildingSurface:Detailed,",
                           "    Floor,                        !- Name",
                           "    Floor,                        !- Surface Type",
                           "    WallConstruction,             !- Construction Name",
@@ -12849,7 +12849,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
                           "    10.00000,10.000000,0,         !- X,Y,Z ==> Vertex 3 {m}",
                           "    10.00000,0.000000,0;          !- X,Y,Z ==> Vertex 4 {m}",
 
-                          "  Zone,"
+                          "  Zone,",
                           "    Zone,                         !- Name",
                           "    0,                            !- Direction of Relative North {deg}",
                           "    6.000000,                     !- X Origin {m}",
