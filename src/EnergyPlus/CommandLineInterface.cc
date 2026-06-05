@@ -257,7 +257,7 @@ main_gui(True)
             exit(0);
         });
 
-        auto *updaterSubCommand = auxiliaryToolsSubcommand->add_subcommand("updater", "IDF Version Updater");
+        auto *updaterSubCommand = auxiliaryToolsSubcommand->add_subcommand("updater", "IDF Version Updater GUI");
         updaterSubCommand->add_option("args", python_fwd_args, "Extra Arguments forwarded to IDF Version Updater")->option_text("ARG ...");
         updaterSubCommand->positionals_at_end(true);
         updaterSubCommand->footer("You can pass extra arguments after the updater keyword, they will be forwarded to IDF Version Updater.");
@@ -270,6 +270,39 @@ main_gui(True)
 from energyplus_transition.runner import main_gui
 main_gui(True)
 )python";
+            engine.exec(cmd);
+            exit(0);
+        });
+
+        auto *updaterCLISubCommand = auxiliaryToolsSubcommand->add_subcommand("updater-cli", "IDF Version Updater CLI");
+        updaterCLISubCommand->allow_extras();
+        updaterCLISubCommand->footer("You can pass extra arguments after the updater-cli keyword, they will be forwarded to IDF Version Updater.\n"
+                                     "To get updater-cli's help, invoke without any arguments.");
+
+        updaterCLISubCommand->callback([&state, updaterCLISubCommand] {
+            EnergyPlus::Python::PythonEngine engine(state);
+            auto const &fwd_args = updaterCLISubCommand->remaining();
+
+            std::string cmd = R"python(import sys
+sys.argv = ["energyplus auxiliary updater-cli"]
+
+from energyplus_transition.cli import main
+main([)python";
+            if (fwd_args.empty()) {
+                cmd += "\"--help\"";
+            } else {
+                // Unless specifically passed, we pass eplus-dir to the current executable directory, so it doesn't try to auto find in the usual
+                // installation paths
+                bool eplus_dir_provided =
+                    std::any_of(fwd_args.begin(), fwd_args.end(), [](const std::string &a) { return a == "-e" || a == "--eplus-dir"; });
+                if (!eplus_dir_provided) {
+                    cmd += EnergyPlus::format(R"("--eplus-dir", "{}", )", state.dataStrGlobals->exeDirectoryPath.generic_string());
+                }
+                for (const auto &arg : fwd_args) {
+                    cmd += EnergyPlus::format("\"{}\", ", arg);
+                }
+            }
+            cmd += "])\n";
             engine.exec(cmd);
             exit(0);
         });
