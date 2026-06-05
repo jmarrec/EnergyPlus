@@ -70,16 +70,23 @@ jobs:
         echo "Develop GIT SHA is '${CURRENT_SHA}'"
         echo "CURRENT_SHA=$CURRENT_SHA" >> $GITHUB_ENV
 
+    - name: Compute PCH files hash
+      id: compute-pch-hash
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        PCH_HASH=${{ hashFiles('src/EnergyPlus/Data/EnergyPlusData.hh', 'src/EnergyPlus/DataGlobalConstants.hh', 'src/EnergyPlus/DataGlobals.hh', 'third_party/ObjexxFCL/src/ObjexxFCL/Array.functions.hh', 'third_party/ObjexxFCL/src/ObjexxFCL/Array1D.hh', 'third_party/nlohmann/json.hpp', 'tst/EnergyPlus/unit/Fixtures/EnergyPlusFixture.hh') }}
+        echo "pch_hash=pch-hash=${PCH_HASH}-"" >> $GITHUB_OUTPUT
+
     - name: Restore Cache CCACHE
       uses: actions/cache/restore@v5
       id: cacheccache-restore
       with:
         path: |
           ${{ steps.setup-runner.outputs.ccache-dir }}
-        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.CURRENT_SHA }}
+        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ env.CURRENT_SHA }}
         restore-keys: |
-          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
-          ccache-${{ matrix.os }}-
+          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ steps.compute-pch-hash.outputs.pch_hash }}
 
     - name: Did restoring the CCache-cache work?
       shell: bash
