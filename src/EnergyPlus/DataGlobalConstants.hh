@@ -621,6 +621,8 @@ namespace Constant {
 
     Real64 constexpr MaxCap(1.0e+20); // limit of zone terminal unit capacity
 
+    [[maybe_unused]] Real64 constexpr NewConstantZero = 0.0;
+
 } // namespace Constant
 
 } // namespace EnergyPlus
