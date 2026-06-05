@@ -308,12 +308,9 @@ endif()
 # Executable name will be EnergyPlus_tests
 # Execute energyplus_tests --help for options using gtest runner
 # Execute energyplus_tests with no arguments to run all tests
-create_test_targets(energyplus "${test_src}" "${test_dependencies}" True)
+create_test_targets(energyplus "${test_src}" "${test_dependencies}")
 if(ENABLE_PCH)
-  get_target_property(_pch energyplus_tests PRECOMPILE_HEADERS)
-  if(NOT _pch)
-    message(WARNING "ep_enable_pch: no PCH headers set on target energyplus_tests")
-  endif()
+  target_precompile_headers(energyplus_tests PRIVATE ${EP_TEST_CXX_PCH_HEADERS})
 endif()
 
 # For CommandLineInterface.unit.cc, make an in.idf / in.epw in the test directory so we can test the legacy CLI (applies to CTest which sets the current directory to this one)

@@ -15,19 +15,11 @@ macro(CREATE_SRC_GROUPS SRC)
 endmacro()
 
 # Create test targets
-macro(CREATE_TEST_TARGETS BASE_NAME SRC DEPENDENCIES USE_PCH)
+macro(CREATE_TEST_TARGETS BASE_NAME SRC DEPENDENCIES)
   if(BUILD_TESTING)
 
     add_executable(${BASE_NAME}_tests ${SRC})
     target_link_libraries(${BASE_NAME}_tests PRIVATE project_options project_warnings)
-
-    # If USE_PCH was passed (it's used by third_party/ObjexxFCL/CMakeLists.txt too, with False on purpose) AND the global ENABLE_PCH is on
-    # IMPORTANT: In a function, arguments are true variables in the usual CMake sense.
-    # In a macro, they are not, they are string replacements much like the C preprocessor would do with a macro
-    # if(USE_PCH) can't work, we MUST use if(${USE_PCH}): https://cmake.org/cmake/help/latest/command/macro.html#argument-caveats
-    if(${USE_PCH} AND ENABLE_PCH)
-      target_precompile_headers(${BASE_NAME}_tests PRIVATE ${EP_TEST_CXX_PCH_HEADERS})
-    endif()
 
     if(ENABLE_GTEST_DEBUG_MODE)
       target_compile_definitions(${BASE_NAME}_tests PRIVATE ENABLE_GTEST_DEBUG_MODE)
