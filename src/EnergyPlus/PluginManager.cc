@@ -45,13 +45,8 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// C++ Headers
-#include <algorithm>
-#include <format>
-
 // Third Party Headers
 #if LINK_WITH_PYTHON
-
 #    ifdef _DEBUG
 // We don't want to try to import a debug build of Python here
 // so if we are building a Debug build of the C++ code, we need
@@ -63,7 +58,14 @@
 #    else
 #        include <Python.h>
 #    endif
+#endif
 
+// C++ Headers
+#include <algorithm>
+#include <format>
+
+// Third Party Headers
+#if LINK_WITH_PYTHON
 #    include <fmt/format.h>
 template <> struct fmt::formatter<PyStatus>
 {

@@ -45,9 +45,6 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// C++ Headers
-#include <format>
-
 // Third Party Headers
 #if LINK_WITH_PYTHON
 #    ifdef _DEBUG
@@ -61,7 +58,13 @@
 #    else
 #        include <Python.h>
 #    endif
+#endif
 
+// C++ Headers
+#include <format>
+
+// Third Party Headers
+#if LINK_WITH_PYTHON
 #    include <fmt/format.h>
 namespace fmt {
 template <> struct formatter<PyStatus>
