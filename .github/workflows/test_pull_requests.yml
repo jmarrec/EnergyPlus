@@ -83,24 +83,16 @@ jobs:
         # IMPORTANT: keep this in sync with the ENABLE_PCH from run_and_cache_regressions_develop.yml
         echo "ENABLE_PCH=ON" >> $GITHUB_ENV
 
-    - name: Compute PCH files hash
-      id: compute-pch-hash
-      if: runner.os == 'Windows'
-      shell: bash
-      run: |
-        PCH_HASH=${{ hashFiles('src/EnergyPlus/Data/EnergyPlusData.hh', 'src/EnergyPlus/DataGlobalConstants.hh', 'src/EnergyPlus/DataGlobals.hh', 'third_party/ObjexxFCL/src/ObjexxFCL/Array.functions.hh', 'third_party/ObjexxFCL/src/ObjexxFCL/Array1D.hh', 'third_party/nlohmann/json.hpp', 'tst/EnergyPlus/unit/Fixtures/EnergyPlusFixture.hh') }}
-        echo "pch_hash=pch-hash=${PCH_HASH}-"" >> $GITHUB_OUTPUT
-
     - name: Restore Cache CCACHE
       uses: actions/cache/restore@v5
       id: cacheccache-restore
       with:
         path: |
           ${{ steps.setup-runner.outputs.ccache-dir }}
-        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ github.head_ref }}
+        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ github.head_ref }}
         restore-keys: |
-          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ env.DEVELOP_SHA }}
-          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ steps.compute-pch-hash.outputs.pch_hash }}
+          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ env.DEVELOP_SHA }}
+          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-
 
     - name: Did restoring the CCache-cache work?
       shell: bash
