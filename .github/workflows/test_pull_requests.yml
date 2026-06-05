@@ -96,11 +96,10 @@ jobs:
       with:
         path: |
           ${{ steps.setup-runner.outputs.ccache-dir }}
-        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ github.head_ref }}-pch=${{ env.ENABLE_PCH }}
+        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ github.head_ref }}
         restore-keys: |
-          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ github.head_ref }}
-          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ env.DEVELOP_SHA }}
-          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ steps.compute-pch-hash.outputs.pch_hash }}
+          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ steps.compute-pch-hash.outputs.pch_hash }}${{ env.DEVELOP_SHA }}
+          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-pch=${{ env.ENABLE_PCH }}-${{ steps.compute-pch-hash.outputs.pch_hash }}
 
     - name: Did restoring the CCache-cache work?
       shell: bash
