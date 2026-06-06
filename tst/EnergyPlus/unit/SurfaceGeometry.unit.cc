@@ -12743,8 +12743,8 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
                           "    0.9,                          !- Frame Thermal Hemispherical Emissivity",
                           "    DividedLite,                  !- Divider Type",
                           "    0.5,                          !- Divider Width {m}",
-                          "    50,                           !- Number of Horizontal Dividers",
-                          "    50,                           !- Number of Vertical Dividers",
+                          "    20,                           !- Number of Horizontal Dividers",
+                          "    19,                           !- Number of Vertical Dividers",
                           "    0.00,                         !- Divider Outside Projection {m}",
                           "    0.00,                         !- Divider Inside Projection {m}",
                           "    5.0,                          !- Divider Conductance {W/m2-K}",
@@ -12873,10 +12873,11 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
     HeatBalanceManager::GetConstructData(*state, ErrorsFound);
     HeatBalanceManager::GetBuildingData(*state, ErrorsFound);
 
-    EXPECT_TRUE(
-        compare_err_stream_substring("   ** Severe  ** ProcessSurfaceVertices: Divider area exceeds glazed opening for window FENESTRATIONSURFACE",
-                                     "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[-137.50] m2.",
-                                     true));
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** ProcessSurfaceVertices: Divider area exceeds glazed opening for window FENESTRATIONSURFACE",
+        "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[95.10] m2.",
+
+    })));
 }
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_GetVerticesDropDuplicates)
