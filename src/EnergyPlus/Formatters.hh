@@ -60,16 +60,13 @@
 
 template <typename T, typename CharT = char>
 concept formattable =
-    requires(std::remove_reference_t<T> & v, std::basic_format_context<std::back_insert_iterator<std::basic_string<CharT>>, CharT> ctx)
-{
-    std::formatter<std::remove_reference_t<T>, CharT>{}.format(v, ctx);
-    std::formatter<std::remove_reference_t<T>, CharT>{}.parse(std::declval<std::basic_format_parse_context<CharT> &>());
-};
+    requires(std::remove_reference_t<T> &v, std::basic_format_context<std::back_insert_iterator<std::basic_string<CharT>>, CharT> ctx) {
+        std::formatter<std::remove_reference_t<T>, CharT>{}.format(v, ctx);
+        std::formatter<std::remove_reference_t<T>, CharT>{}.parse(std::declval<std::basic_format_parse_context<CharT> &>());
+    };
 
-template <typename T> concept set_like = std::ranges::range<T> && requires
-{
-    typename T::key_type;
-};
+template <typename T>
+concept set_like = std::ranges::range<T> && requires { typename T::key_type; };
 
 template <typename T>
 concept formattable_range =
