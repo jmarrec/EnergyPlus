@@ -65,9 +65,6 @@ namespace fs = std::experimental::filesystem;
 #include <string>
 
 // Third Party Headers
-// #include <fmt/format.h>
-#include <fmt/os.h>
-#include <fmt/ostream.h>
 #include <nlohmann/json.hpp>
 
 // EnergyPlus Headers
@@ -212,24 +209,18 @@ namespace FileSystem {
         static_assert(is_all_json_type(fileType) || is_flat_file_type(fileType), "Must be a valid file type");
 #ifdef _WIN32
         auto filePathStr = filePath.string();
-        auto path = filePathStr.c_str();
+        auto path_c_str = filePathStr.c_str();
 #else
-        auto path = filePath.c_str();
+        auto path_c_str = filePath.c_str();
 #endif
 
-        if constexpr (is_json_type(fileType) || is_flat_file_type(fileType)) {
-            auto f = fmt::output_file(path, fmt::buffer_size = (2 << 17));
-            f.print("{}", data);
-        } else if constexpr (is_binary_json_type(fileType)) {
-            auto close_file = [](FILE *f) { fclose(f); };
-            auto holder = std::unique_ptr<FILE, decltype(close_file)>(fopen(path, "wb"), close_file);
-            if (!holder) {
-                throw FatalError(std::format("Could not open file: {}", filePath.string()));
-            }
-
-            auto f = holder.get();
-            fmt::print(f, "{}", data);
+        auto close_file = [](FILE *f) { std::fclose(f); };
+        constexpr const char *mode = is_binary_json_type(fileType) ? "wb" : "w";
+        auto holder = std::unique_ptr<FILE, decltype(close_file)>(std::fopen(path_c_str, mode), close_file);
+        if (!holder) {
+            throw FatalError(std::format("Could not open file: {}", filePath.string()));
         }
+        std::fwrite(data.data(), 1, data.size(), holder.get());
     }
 
     template <FileTypes fileType, std::same_as<nlohmann::json> T>
