@@ -1708,9 +1708,8 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
             }
             if (!nameFound) {
                 if (Util::SameString(AlphArray(iReport), standard62RptSummaryName) || Util::SameString(AlphArray(iReport), "Std62")) {
-                    ShowWarningError(
-                        state,
-                        std::format("{} Field[{}]=\"{}\", Report is not enabled.", CurrentModuleObject, iReport, AlphArray(iReport)));
+                    ShowWarningError(state,
+                                     std::format("{} Field[{}]=\"{}\", Report is not enabled.", CurrentModuleObject, iReport, AlphArray(iReport)));
                     ShowContinueError(state, "Do Zone Sizing or Do System Sizing must be enabled in SimulationControl.");
 
                 } else {
