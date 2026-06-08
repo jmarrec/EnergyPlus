@@ -51,9 +51,6 @@
 #endif
 #include <format>
 
-// Third Party Headers
-#include <fmt/format.h>
-
 // EnergyPlus Headers
 #include <EnergyPlus/Timer.hh>
 

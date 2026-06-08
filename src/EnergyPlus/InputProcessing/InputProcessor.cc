@@ -59,7 +59,6 @@
 
 // Third Party Headers
 #include <embedded/EmbeddedEpJSONSchema.hh>
-#include <fmt/os.h>
 #include <milo/dtoa.h>
 #include <milo/itoa.h>
 
