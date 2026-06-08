@@ -134,11 +134,15 @@ if(BUILD_TESTING)
   set_target_properties(gtest_main PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock PROPERTIES FOLDER ThirdParty/gtest)
   set_target_properties(gmock_main PROPERTIES FOLDER ThirdParty/gtest)
+
+  set(is_clang "$<CXX_COMPILER_ID:Clang>")
+  set(v21_or_later "$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,21>")
+  set(is_clang_v21_or_later "$<AND:${is_clang},${v21_or_later}>")
   foreach(_gtest_target gtest gtest_main gmock gmock_main)
     if(TARGET ${_gtest_target})
       target_compile_options(${_gtest_target}
         PRIVATE
-          $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-Wno-character-conversion>
+          "$<${is_clang_v21_or_later}:-Wno-character-conversion>"
           $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:-Wno-deprecated-declarations>
       )
     endif()
