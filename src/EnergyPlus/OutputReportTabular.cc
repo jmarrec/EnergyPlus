@@ -50,6 +50,7 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <iomanip>
 #include <map>
 #include <string_view>
@@ -66,12 +67,14 @@
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
 
-// Third-party Headers
+// Local Headers
+#include <AirflowNetwork/Solver.hpp>
+
+// Third Party Headers
 #include <fast_float/fast_float.h>
 #include <fmt/format.h>
 
 // EnergyPlus Headers
-#include <AirflowNetwork/Solver.hpp>
 #include <EnergyPlus/Boilers.hh>
 #include <EnergyPlus/ChillerElectricEIR.hh>
 #include <EnergyPlus/ChillerReformulatedEIR.hh>
@@ -201,7 +204,7 @@ std::ofstream &open_tbl_stream(EnergyPlusData &state, int const iStyle, fs::path
     if (output_to_file) {
         tbl_stream.open(filePath);
         if (!tbl_stream) {
-            ShowFatalError(state, EnergyPlus::format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath));
+            ShowFatalError(state, EnergyPlus::format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath.string()));
         }
     } else {
         tbl_stream.setstate(std::ios_base::badbit);
@@ -252,7 +255,8 @@ void UpdateTabularReports(EnergyPlusData &state, OutputProcessor::TimeStepType t
                 } else {
                     if (state.dataHeatBal->Resilience(ZoneNum).ColdStressTempThresh != ColdTempThresh) {
                         ShowWarningMessage(
-                            state, fmt::format("Zone {} has multiple people objects with different Cold Stress Temperature Threshold.", ZoneNum));
+                            state,
+                            EnergyPlus::format("Zone {} has multiple people objects with different Cold Stress Temperature Threshold.", ZoneNum));
                     }
                 }
 
@@ -262,7 +266,8 @@ void UpdateTabularReports(EnergyPlusData &state, OutputProcessor::TimeStepType t
                 } else {
                     if (state.dataHeatBal->Resilience(ZoneNum).HeatStressTempThresh != HeatTempThresh) {
                         ShowWarningMessage(
-                            state, fmt::format("Zone {} has multiple people objects with different Heat Stress Temperature Threshold.", ZoneNum));
+                            state,
+                            EnergyPlus::format("Zone {} has multiple people objects with different Heat Stress Temperature Threshold.", ZoneNum));
                     }
                 }
             }
@@ -1356,7 +1361,7 @@ void GetInputTabularStyle(EnergyPlusData &state)
         } else {
             ShowWarningError(
                 state,
-                EnergyPlus::format(
+                std::format(
                     "{}: Invalid {}=\"{}\". Commas will be used.", CurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(1), AlphArray(1)));
             ort->numStyles = 1;
             ort->TableStyle(1) = TableStyle::Comma;
@@ -1368,17 +1373,17 @@ void GetInputTabularStyle(EnergyPlusData &state)
             ort->unitsStyle_Tabular = SetUnitsStyleFromString(AlphArray(2));
             if (ort->unitsStyle_Tabular == UnitsStyle::NotFound) {
                 ShowWarningError(state,
-                                 EnergyPlus::format("{}: Invalid {}=\"{}\". No unit conversion will be performed. Normal SI units will be shown.",
-                                                    CurrentModuleObject,
-                                                    state.dataIPShortCut->cAlphaFieldNames(2),
-                                                    AlphArray(2)));
+                                 std::format("{}: Invalid {}=\"{}\". No unit conversion will be performed. Normal SI units will be shown.",
+                                             CurrentModuleObject,
+                                             state.dataIPShortCut->cAlphaFieldNames(2),
+                                             AlphArray(2)));
             }
         } else {
             ort->unitsStyle_Tabular = UnitsStyle::None;
             AlphArray(2) = "None";
         }
     } else if (NumTabularStyle > 1) {
-        ShowWarningError(state, EnergyPlus::format("{}: Only one instance of this object is allowed. Commas will be used.", CurrentModuleObject));
+        ShowWarningError(state, std::format("{}: Only one instance of this object is allowed. Commas will be used.", CurrentModuleObject));
         ort->TableStyle = TableStyle::Comma;
         ort->del = std::string(1, DataStringGlobals::CharComma); // comma
         AlphArray(1) = "COMMA";
@@ -1705,13 +1710,13 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
                 if (Util::SameString(AlphArray(iReport), standard62RptSummaryName) || Util::SameString(AlphArray(iReport), "Std62")) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("{} Field[{}]=\"{}\", Report is not enabled.", CurrentModuleObject, standard62RptSummaryName, iReport));
+                        std::format("{} Field[{}]=\"{}\", Report is not enabled.", CurrentModuleObject, iReport, AlphArray(iReport)));
                     ShowContinueError(state, "Do Zone Sizing or Do System Sizing must be enabled in SimulationControl.");
 
                 } else {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
+                        std::format(
                             "{} Field[{}]=\"{}\", invalid report name -- will not be reported.", CurrentModuleObject, iReport, AlphArray(iReport)));
                     //      ErrorsFound=.TRUE.
                 }
@@ -1719,11 +1724,11 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
         }
         CreatePredefinedMonthlyReports(state);
     } else if (NumTabularPredefined > 1) {
-        ShowSevereError(state, EnergyPlus::format("{}: Only one instance of this object is allowed.", CurrentModuleObject));
+        ShowSevereError(state, std::format("{}: Only one instance of this object is allowed.", CurrentModuleObject));
         ErrorsFound = true;
     }
     if (ErrorsFound) {
-        ShowFatalError(state, EnergyPlus::format("{}: Preceding errors cause termination.", CurrentModuleObject));
+        ShowFatalError(state, std::format("{}: Preceding errors cause termination.", CurrentModuleObject));
     }
     // if the BEPS report has been called for than initialize its arrays
     if (ort->displayTabularBEPS || ort->displayDemandEndUse || ort->displaySourceEnergyEndUseSummary || ort->displayLEEDSummary) {
@@ -1789,28 +1794,28 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
 
         // loop through all of the resources and end uses and sub end uses for the entire facility
         for (int iResource = 1; iResource <= numResourceTypes; ++iResource) {
-            std::string meterName = EnergyPlus::format("{}:FACILITY", ort->resourceTypeNames(iResource));
+            std::string meterName = std::format("{}:FACILITY", ort->resourceTypeNames(iResource));
             int meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
             ort->meterNumTotalsBEPS(iResource) = meterNumber;
 
             for (int jEndUse = 1; jEndUse <= static_cast<int>(Constant::EndUse::Num); ++jEndUse) {
-                meterName = EnergyPlus::format("{}:{}", ort->endUseNames(jEndUse), ort->resourceTypeNames(iResource)); //// ':FACILITY'
+                meterName = std::format("{}:{}", ort->endUseNames(jEndUse), ort->resourceTypeNames(iResource)); //// ':FACILITY'
                 meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
                 ort->meterNumEndUseBEPS(iResource, jEndUse) = meterNumber;
 
                 for (int kEndUseSub = 1; kEndUseSub <= op->EndUseCategory(jEndUse).NumSubcategories; ++kEndUseSub) {
-                    meterName = EnergyPlus::format("{}:{}:{}",
-                                                   op->EndUseCategory(jEndUse).SubcategoryName(kEndUseSub),
-                                                   ort->endUseNames(jEndUse),
-                                                   ort->resourceTypeNames(iResource));
+                    meterName = std::format("{}:{}:{}",
+                                            op->EndUseCategory(jEndUse).SubcategoryName(kEndUseSub),
+                                            ort->endUseNames(jEndUse),
+                                            ort->resourceTypeNames(iResource));
                     meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
                     ort->meterNumEndUseSubBEPS(kEndUseSub, jEndUse, iResource) = meterNumber;
                 }
                 for (int kEndUseSpType = 1; kEndUseSpType <= op->EndUseCategory(jEndUse).numSpaceTypes; ++kEndUseSpType) {
-                    meterName = EnergyPlus::format("{}:{}:SpaceType:{}",
-                                                   ort->endUseNames(jEndUse),
-                                                   ort->resourceTypeNames(iResource),
-                                                   op->EndUseCategory(jEndUse).spaceTypeName(kEndUseSpType));
+                    meterName = std::format("{}:{}:SpaceType:{}",
+                                            ort->endUseNames(jEndUse),
+                                            ort->resourceTypeNames(iResource),
+                                            op->EndUseCategory(jEndUse).spaceTypeName(kEndUseSpType));
                     meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
                     ort->meterNumEndUseSpTypeBEPS(kEndUseSpType, jEndUse, iResource) = meterNumber;
                 }
@@ -1818,7 +1823,7 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
         }
 
         for (int iResource = 1; iResource <= numSourceTypes; ++iResource) {
-            int const meterNumber = GetMeterIndex(state, Util::makeUPPER(EnergyPlus::format("{}Emissions:Source", ort->sourceTypeNames(iResource))));
+            int const meterNumber = GetMeterIndex(state, Util::makeUPPER(std::format("{}Emissions:Source", ort->sourceTypeNames(iResource))));
             ort->meterNumTotalsSource(iResource) = meterNumber;
         }
 
@@ -2089,17 +2094,17 @@ void InitializePredefinedMonthlyTitles(EnergyPlusData &state)
     if (numNamedMonthly != NumMonthlyReports) {
         ShowFatalError(
             state,
-            EnergyPlus::format("InitializePredefinedMonthlyTitles: Number of Monthly Reports in OutputReportTabular=[{}] does not match number in "
-                               "DataOutputs=[{}].",
-                               numNamedMonthly,
-                               NumMonthlyReports));
+            std::format("InitializePredefinedMonthlyTitles: Number of Monthly Reports in OutputReportTabular=[{}] does not match number in "
+                        "DataOutputs=[{}].",
+                        numNamedMonthly,
+                        NumMonthlyReports));
     } else {
         for (int xcount = 1; xcount <= numNamedMonthly; ++xcount) {
             if (!Util::SameString(MonthlyNamedReports(xcount), ort->namedMonthly(xcount).title)) {
                 ShowSevereError(state,
                                 "InitializePredefinedMonthlyTitles: Monthly Report Titles in OutputReportTabular do not match titles in DataOutput.");
-                ShowContinueError(state, EnergyPlus::format("first mismatch at ORT [{}] =\"{}\".", numNamedMonthly, ort->namedMonthly(xcount).title));
-                ShowContinueError(state, EnergyPlus::format("same location in DO =\"{}\".", MonthlyNamedReports(xcount)));
+                ShowContinueError(state, std::format("first mismatch at ORT [{}] =\"{}\".", numNamedMonthly, ort->namedMonthly(xcount).title));
+                ShowContinueError(state, std::format("same location in DO =\"{}\".", MonthlyNamedReports(xcount)));
                 ShowFatalError(state, "Preceding condition causes termination.");
             }
         }
@@ -3350,15 +3355,15 @@ void WriteTableOfContents(EnergyPlusData &state)
                             int const curTable = ort->OutputTableBinned(iInput).resIndex + (jTable - 1);
                             std::string curName;
                             if (ort->ip()) {
-                                std::string origName = EnergyPlus::format("{} [{}]",
-                                                                          ort->OutputTableBinned(iInput).varOrMeter,
-                                                                          Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
+                                std::string origName = std::format("{} [{}]",
+                                                                   ort->OutputTableBinned(iInput).varOrMeter,
+                                                                   Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
                                 [[maybe_unused]] int indexUnitConv = -1;
                                 LookupSItoIP(state, origName, indexUnitConv, curName);
                             } else {
-                                curName = EnergyPlus::format("{}[{}]",
-                                                             ort->OutputTableBinned(iInput).varOrMeter,
-                                                             Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
+                                curName = std::format("{}[{}]",
+                                                      ort->OutputTableBinned(iInput).varOrMeter,
+                                                      Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
                             }
                             if (ort->OutputTableBinned(iInput).sched == nullptr) {
                                 tbl_stream << "<a href=\"#" << MakeAnchorName(curName, ort->BinObjVarID(curTable).namesOfObj) << "\">"
@@ -3410,7 +3415,7 @@ void AddTOCReportPeriod(const int nReportPeriods,
 {
     static std::string const Entire_Facility("Entire Facility");
     for (int i = 1; i <= nReportPeriods; i++) {
-        std::string ReportPeriod_Resilience_Summary = fmt::format("{} Resilience Summary for Reporting Period {}: {} {}",
+        std::string ReportPeriod_Resilience_Summary = std::format("{} Resilience Summary for Reporting Period {}: {} {}",
                                                                   kw,
                                                                   i,
                                                                   ReportPeriodInputData(i).title,
@@ -4405,7 +4410,7 @@ void CalcHeatEmissionReport(EnergyPlusData &state)
     for (int iCoil = 1; iCoil <= state.dataHeatingCoils->NumHeatingCoils; ++iCoil) {
         auto const &thisCoil = state.dataHeatingCoils->HeatingCoil(iCoil);
 
-        if (thisCoil.heatCoilType == HVAC::CoilType::HeatingGasMultiStage || thisCoil.heatCoilType == HVAC::CoilType::HeatingGasOrOtherFuel) {
+        if (thisCoil.coilType == HVAC::CoilType::HeatingGasMultiStage || thisCoil.coilType == HVAC::CoilType::HeatingGasOrOtherFuel) {
             state.dataHeatBal->SysTotalHVACRejectHeatLoss += thisCoil.FuelUseLoad + thisCoil.ParasiticFuelConsumption - thisCoil.HeatingCoilLoad;
         }
     }
@@ -5276,9 +5281,8 @@ void WriteTabularReports(EnergyPlusData &state)
             WriteVisualResilienceTablesRepPeriod(state, i);
         }
 
-        state.dataRptCoilSelection->coilSelectionReportObj->finishCoilSummaryReportTable(
-            state);                   // call to write out the coil selection summary table data
-        WritePredefinedTables(state); // moved to come after zone load components is finished
+        ReportCoilSelection::finishCoilSummaryReportTable(state); // call to write out the coil selection summary table data
+        WritePredefinedTables(state);                             // moved to come after zone load components is finished
 
         if (state.dataGlobal->DoWeathSim) {
             WriteMonthlyTables(state);
@@ -7233,8 +7237,8 @@ void WriteMonthlyTables(EnergyPlusData &state)
                     // do the unit conversions
                     if (currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPound ||
                         currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPoundExceptElectricity) {
-                        varNameWithUnits = EnergyPlus::format(
-                            "{} [{}]", ort->MonthlyColumns(curCol).varName, Constant::unitNames[(int)ort->MonthlyColumns(curCol).units]);
+                        varNameWithUnits =
+                            std::format("{} [{}]", ort->MonthlyColumns(curCol).varName, Constant::unitNames[(int)ort->MonthlyColumns(curCol).units]);
                         LookupSItoIP(state, varNameWithUnits, indexUnitConv, curUnits);
                         GetUnitConversion(state, indexUnitConv, curConversionFactor, state.dataOutRptTab->curConversionOffset, curUnits);
                     } else if (Util::SameString(Constant::unitNames[(int)ort->MonthlyColumns(curCol).units], "J")) {
@@ -7598,8 +7602,8 @@ void WriteTimeBinTables(EnergyPlusData &state)
 
         for (int iInObj = 1; iInObj <= ort->OutputTableBinnedCount; ++iInObj) {
             int const firstReport = ort->OutputTableBinned(iInObj).resIndex;
-            curNameWithSIUnits = EnergyPlus::format(
-                "{} [{}]", ort->OutputTableBinned(iInObj).varOrMeter, Constant::unitNames[(int)ort->OutputTableBinned(iInObj).units]);
+            curNameWithSIUnits =
+                std::format("{} [{}]", ort->OutputTableBinned(iInObj).varOrMeter, Constant::unitNames[(int)ort->OutputTableBinned(iInObj).units]);
             Real64 curIntervalStart;
             Real64 curIntervalSize;
             int indexUnitConv = -1;
@@ -7636,7 +7640,7 @@ void WriteTimeBinTables(EnergyPlusData &state)
             tableBody(1, 1) = "less than";
             tableBody(1, 2) = RealToStr(currentStyle.formatReals, curIntervalStart, numIntervalDigits);
             for (int nCol = 1; nCol <= curIntervalCount; ++nCol) {
-                columnHead(nCol + 1) = fmt::format("{} [hr]", nCol);
+                columnHead(nCol + 1) = std::format("{} [hr]", nCol);
                 // beginning of interval
                 tableBody(nCol + 1, 1) =
                     RealToStr(currentStyle.formatReals, curIntervalStart + (nCol - 1) * curIntervalSize, numIntervalDigits) + "<=";
@@ -11750,16 +11754,15 @@ void WriteVeriSumTable(EnergyPlusData &state)
                     //      wallAreaE + wallAreaW),3)))//, &, //, //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals,
                     //      SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied),3)))//', m2.'), ShowContinueError(state, "Check classes of surfaces
                     //      and tilts for discrepancies."));
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format("Total wall area by ASHRAE 90.1 definition={} m2.",
-                                           stripped(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS + wallAreaE + wallAreaW), 3))));
                     ShowContinueError(state,
-                                      EnergyPlus::format("Total exterior wall area from user entered classes={} m2.",
-                                                         stripped(RealToStr(currentStyle.formatReals, totExtGrossWallArea_Multiplied, 3))));
+                                      std::format("Total wall area by ASHRAE 90.1 definition={} m2.",
+                                                  stripped(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS + wallAreaE + wallAreaW), 3))));
                     ShowContinueError(state,
-                                      EnergyPlus::format("Total ground contact wall area from user entered classes={} m2.",
-                                                         stripped(RealToStr(currentStyle.formatReals, totExtGrossGroundWallArea_Multiplied, 3))));
+                                      std::format("Total exterior wall area from user entered classes={} m2.",
+                                                  stripped(RealToStr(currentStyle.formatReals, totExtGrossWallArea_Multiplied, 3))));
+                    ShowContinueError(state,
+                                      std::format("Total ground contact wall area from user entered classes={} m2.",
+                                                  stripped(RealToStr(currentStyle.formatReals, totExtGrossGroundWallArea_Multiplied, 3))));
                 }
             }
         }
@@ -12461,9 +12464,9 @@ void WriteAdaptiveComfortTable(EnergyPlusData &state)
 std::string formatReportPeriodTimestamp(const int year, const int month, const int day, const int hour)
 {
     if (year != 0) {
-        return fmt::format("{}/{}/{} {}:00", year, month, day, hour);
+        return std::format("{}/{}/{} {}:00", year, month, day, hour);
     }
-    return fmt::format("{}/{} {}:00", month, day, hour);
+    return std::format("{}/{} {}:00", month, day, hour);
 }
 
 void WriteReportHeaderReportingPeriod(EnergyPlusData &state,
@@ -12473,7 +12476,7 @@ void WriteReportHeaderReportingPeriod(EnergyPlusData &state,
 {
     WriteReportHeaders(
         state,
-        fmt::format("{} Resilience Summary for Reporting Period {}: {}", reportKeyWord, periodIdx, ReportPeriodInputData(periodIdx).title),
+        std::format("{} Resilience Summary for Reporting Period {}: {}", reportKeyWord, periodIdx, ReportPeriodInputData(periodIdx).title),
         "Entire Facility",
         OutputProcessor::StoreType::Average);
 
@@ -12703,9 +12706,9 @@ void WriteThermalResilienceTablesRepPeriod(EnergyPlusData &state, int const peri
                 if (ort->displayThermalResilienceSummaryExplicitly) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("Writing Reporting Period Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort "
-                                           "Pierce Model Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
-                                           state.dataHeatBal->People(iPeople).Name));
+                        std::format("Writing Reporting Period Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort "
+                                    "Pierce Model Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
+                                    state.dataHeatBal->People(iPeople).Name));
                 }
             }
         }
@@ -13534,9 +13537,9 @@ void WriteThermalResilienceTables(EnergyPlusData &state)
                 if (ort->displayThermalResilienceSummaryExplicitly) {
                     ShowWarningError(
                         state,
-                        EnergyPlus::format("Writing Annual Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort Pierce Model "
-                                           "Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
-                                           state.dataHeatBal->People(iPeople).Name));
+                        std::format("Writing Annual Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort Pierce Model "
+                                    "Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
+                                    state.dataHeatBal->People(iPeople).Name));
                 }
             }
         }
@@ -13781,9 +13784,9 @@ void WriteVisualResilienceTables(EnergyPlusData &state)
             if (state.dataOutRptTab->displayVisualResilienceSummaryExplicitly) {
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("Writing Annual Visual Resilience Summary - Lighting Level Hours reports: Zone Average Daylighting Reference "
-                                       "Point Illuminance output is required, but no Daylighting Controls are defined in Zone:{}",
-                                       state.dataHeatBal->Zone(ZoneNum).Name));
+                    std::format("Writing Annual Visual Resilience Summary - Lighting Level Hours reports: Zone Average Daylighting Reference "
+                                "Point Illuminance output is required, but no Daylighting Controls are defined in Zone:{}",
+                                state.dataHeatBal->Zone(ZoneNum).Name));
             }
         }
     }
@@ -13898,7 +13901,7 @@ void WriteHeatEmissionTable(EnergyPlusData &state)
 
     if (state.dataOutRptTab->displayHeatEmissionsSummary) {
 
-        for (auto &currentStyle : ort->tabularReportPasses) {
+        for (auto const &currentStyle : ort->tabularReportPasses) {
 
             if (currentStyle.produceTabular) {
                 WriteReportHeaders(state, "Annual Heat Emissions Report", "Entire Facility", OutputProcessor::StoreType::Average);
@@ -14957,7 +14960,7 @@ void ComputeLoadComponentDecayCurve(EnergyPlusData &state)
         int coolDesSelected = state.dataSize->CalcFinalZoneSizing(zoneNum).CoolDDNum;
         // loop over timesteps after pulse occurred
         if (coolDesSelected != 0) {
-            auto &surfCLClDay = ort->surfCompLoads[coolDesSelected - 1];
+            auto const &surfCLClDay = ort->surfCompLoads[coolDesSelected - 1];
             int timeOfPulse = ort->radiantPulseTimestep(coolDesSelected, zoneNum);
             // if the CoolDesSelected time is on a different day than
             // when the pulse occurred, need to scan back and find when
@@ -14985,7 +14988,7 @@ void ComputeLoadComponentDecayCurve(EnergyPlusData &state)
         }
         int const heatDesSelected = state.dataSize->CalcFinalZoneSizing(zoneNum).HeatDDNum;
         if (heatDesSelected != 0) {
-            auto &surfCLHtDay = ort->surfCompLoads[heatDesSelected - 1];
+            auto const &surfCLHtDay = ort->surfCompLoads[heatDesSelected - 1];
             int timeOfPulse = ort->radiantPulseTimestep(heatDesSelected, zoneNum);
             // scan back to the day that the heating pulse occurs, if necessary
             if (timeOfPulse == 0) {
@@ -15928,8 +15931,7 @@ void computeSpaceZoneCompLoads(EnergyPlusData &state,
                                    iSpace);
     CollectPeakZoneConditions(state, coolCompLoadTables, coolDesSelected, timeCoolMax, iZone, true, iSpace);
     // send latent load info to coil summary report
-    state.dataRptCoilSelection->coilSelectionReportObj->setZoneLatentLoadCoolingIdealPeak(
-        iZone, coolCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
+    ReportCoilSelection::setZoneLatentLoadCoolingIdealPeak(state, iZone, coolCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
 
     int heatDesSelected = calcFinalSizing.HeatDDNum;
     heatCompLoadTables.desDayNum = heatDesSelected;
@@ -15967,8 +15969,7 @@ void computeSpaceZoneCompLoads(EnergyPlusData &state,
     CollectPeakZoneConditions(state, heatCompLoadTables, heatDesSelected, timeHeatMax, iZone, false, iSpace);
 
     // send latent load info to coil summary report
-    state.dataRptCoilSelection->coilSelectionReportObj->setZoneLatentLoadHeatingIdealPeak(
-        iZone, heatCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
+    ReportCoilSelection::setZoneLatentLoadHeatingIdealPeak(state, iZone, heatCompLoadTables.cells(LoadCompCol::Latent, LoadCompRow::GrdTot));
 
     AddAreaColumnForZone(componentAreas, coolCompLoadTables);
     AddAreaColumnForZone(componentAreas, heatCompLoadTables);
@@ -16425,10 +16426,10 @@ void CollectPeakZoneConditions(EnergyPlusData &state,
         if (isCooling) {
             // Time of Peak Load
             if ((desDaySelected > 0) && ((size_t)desDaySelected <= state.dataWeather->DesDayInput.size())) {
-                compLoad.peakDateHrMin = EnergyPlus::format("{}/{} {}",
-                                                            state.dataWeather->DesDayInput(desDaySelected).Month,
-                                                            state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
-                                                            state.dataRptCoilSelection->coilSelectionReportObj->getTimeText(state, timeOfMax));
+                compLoad.peakDateHrMin = std::format("{}/{} {}",
+                                                     state.dataWeather->DesDayInput(desDaySelected).Month,
+                                                     state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
+                                                     ReportCoilSelection::getTimeText(state, timeOfMax));
             } else {
                 compLoad.peakDateHrMin = szCalcFinalSizing.CoolPeakDateHrMin;
             }
@@ -16477,10 +16478,10 @@ void CollectPeakZoneConditions(EnergyPlusData &state,
         } else {
             // Time of Peak Load
             if ((size_t)desDaySelected <= state.dataWeather->DesDayInput.size()) {
-                compLoad.peakDateHrMin = EnergyPlus::format("{}/{} {}",
-                                                            state.dataWeather->DesDayInput(desDaySelected).Month,
-                                                            state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
-                                                            state.dataRptCoilSelection->coilSelectionReportObj->getTimeText(state, timeOfMax));
+                compLoad.peakDateHrMin = std::format("{}/{} {}",
+                                                     state.dataWeather->DesDayInput(desDaySelected).Month,
+                                                     state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
+                                                     ReportCoilSelection::getTimeText(state, timeOfMax));
             } else {
                 compLoad.peakDateHrMin = szCalcFinalSizing.HeatPeakDateHrMin;
             }
@@ -17230,7 +17231,7 @@ void OutputCompLoadSummary(EnergyPlusData &state,
             rowHead(6) = "Number of People";
         }
 
-        tableBody(1, 1) = fmt::format("{:.{}f}", curCompLoad.outsideAirRatio, 4); // outside Air
+        tableBody(1, 1) = std::format("{:.{}f}", curCompLoad.outsideAirRatio, 4); // outside Air
         tableBody(1, 2) = fmt::format("{:0.3E}", curCompLoad.airflowPerFlrArea);  // airflow per floor area
         tableBody(1, 3) = fmt::format("{:0.3E}", curCompLoad.airflowPerTotCap);   // airflow per total capacity
         tableBody(1, 4) = fmt::format("{:0.3E}", curCompLoad.areaPerTotCap);      // area per total capacity
@@ -17578,7 +17579,7 @@ void WriteTable(EnergyPlusData &state,
                 tbl_stream << InsertCurrencySymbol(state, outputLine, false) << '\n';
             }
             if (!footnoteText.empty()) {
-                tbl_stream << fmt::format("{}\n", footnoteText);
+                tbl_stream << std::format("{}\n", footnoteText);
             }
             tbl_stream << "\n\n";
 
@@ -17627,7 +17628,7 @@ void WriteTable(EnergyPlusData &state,
                 tbl_stream << InsertCurrencySymbol(state, outputLine, false) << '\n';
             }
             if (!footnoteText.empty()) {
-                tbl_stream << fmt::format("{}\n", footnoteText);
+                tbl_stream << std::format("{}\n", footnoteText);
             }
             tbl_stream << "\n\n";
 
@@ -17669,7 +17670,7 @@ void WriteTable(EnergyPlusData &state,
             // end the table
             tbl_stream << "</table>\n";
             if (!footnoteText.empty()) {
-                tbl_stream << fmt::format("<div class=\"footnote\" style=\"font-style: italic;\">{}</div>\n", footnoteText);
+                tbl_stream << std::format("<div class=\"footnote\" style=\"font-style: italic;\">{}</div>\n", footnoteText);
             }
             tbl_stream << "<br><br>\n";
         } else if (thisStyle == TableStyle::XML) {
@@ -17800,9 +17801,9 @@ void WriteTable(EnergyPlusData &state,
                 }
                 if (!footnoteText.empty()) {
                     if (footnoteText.find("<br") != std::string_view::npos) {
-                        tbl_stream << fmt::format("  <footnote><![CDATA[{}]]></footnote>\n", footnoteText);
+                        tbl_stream << std::format("  <footnote><![CDATA[{}]]></footnote>\n", footnoteText);
                     } else {
-                        tbl_stream << fmt::format("  <footnote>{}</footnote>\n", footnoteText);
+                        tbl_stream << std::format("  <footnote>{}</footnote>\n", footnoteText);
                     }
                 }
             }
@@ -18592,7 +18593,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
 
     if (!formatReals) {
         // No rounding
-        return EnergyPlus::format("{}", RealIn);
+        return std::format("{}", RealIn);
     }
     int nDigits = numDigits;
     if (RealIn < 0.0) {
@@ -18606,7 +18607,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
     }
 
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
-        return EnergyPlus::format("{:12.6E}", RealIn);
+        return std::format("{:12.6E}", RealIn);
     }
     return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
 
@@ -18655,10 +18656,10 @@ std::string DateToString(int const codedDate) // word containing encoded month, 
     //   Convert the coded date format into a usable
     //   string
 
-    int Month;  // month in integer format (1-12)
-    int Day;    // day in integer format (1-31)
-    int Hour;   // hour in integer format (1-24)
-    int Minute; // minute in integer format (0:59)
+    int Month;  // month in integer EnergyPlus::format(1-12)
+    int Day;    // day in integer EnergyPlus::format(1-31)
+    int Hour;   // hour in integer EnergyPlus::format(1-24)
+    int Minute; // minute in integer EnergyPlus::format(0:59)
     static constexpr std::array<std::string_view, 12> Months{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
     if (codedDate == 0) {
@@ -18676,7 +18677,7 @@ std::string DateToString(int const codedDate) // word containing encoded month, 
         Minute = 0;
     }
 
-    return fmt::format("{:02}-{:3}-{:02}:{:02}", Day, Months[Month - 1], Hour, Minute);
+    return std::format("{:02}-{:3}-{:02}:{:02}", Day, Months[Month - 1], Hour, Minute);
 }
 
 bool isNumber(std::string const &s)
@@ -19403,7 +19404,7 @@ void LookupSItoIP(EnergyPlusData &state, std::string const &stringInWithSI, int 
 
     // Add warning if units not found.
     if (unitConvIndex == 0 && !noBrackets) {
-        ShowWarningError(state, EnergyPlus::format("Unable to find a unit conversion from {} into IP units", stringInWithSI));
+        ShowWarningError(state, std::format("Unable to find a unit conversion from {} into IP units", stringInWithSI));
         ShowContinueError(state, "Applying default conversion factor of 1.0");
     }
 }
@@ -19640,7 +19641,7 @@ Real64 getSpecificUnitMultiplier(EnergyPlusData &state, std::string const &SIuni
     if (state.dataOutRptTab->foundGsum != 0) {
         getSpecificUnitMultiplier = ort->UnitConv(state.dataOutRptTab->foundGsum).mult;
     } else {
-        ShowWarningError(state, EnergyPlus::format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
+        ShowWarningError(state, std::format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
         ShowContinueError(state, "Applying default conversion factor of 1.0");
         getSpecificUnitMultiplier = 1.0;
     }
@@ -19695,7 +19696,7 @@ Real64 getSpecificUnitDivider(EnergyPlusData &state, std::string const &SIunit, 
     if (mult != 0) {
         getSpecificUnitDivider = 1 / mult;
     } else {
-        ShowWarningError(state, EnergyPlus::format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
+        ShowWarningError(state, std::format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
         ShowContinueError(state, "Applying default conversion factor of 1.0");
         getSpecificUnitDivider = 1.0;
     }

@@ -48,13 +48,16 @@
 // C++ Headers
 #include <algorithm>
 #include <cmath>
+#include <format>
 #include <string>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 
-// EnergyPlus Headers
+// Local Headers
 #include <AirflowNetwork/Solver.hpp>
+
+// EnergyPlus Headers
 #include <EnergyPlus/BaseboardElectric.hh>
 #include <EnergyPlus/BaseboardRadiator.hh>
 #include <EnergyPlus/ChilledCeilingPanelSimple.hh>
@@ -517,6 +520,8 @@ void sizeZoneSpaceEquipmentPart1(EnergyPlusData &state,
     zsCalcSizing.CoolZoneTemp = zoneNode.Temp;
     zsCalcSizing.CoolZoneHumRat = zoneNode.HumRat;
     zsCalcSizing.HeatOutTemp = state.dataEnvrn->OutDryBulbTemp;
+    zsCalcSizing.HeatMCPI = state.dataZoneTempPredictorCorrector->zoneHeatBalance(zoneNum).MCPI;
+    zsCalcSizing.HeatMCPV = state.dataZoneTempPredictorCorrector->zoneHeatBalance(zoneNum).MCPV;
     zsCalcSizing.HeatOutHumRat = state.dataEnvrn->OutHumRat;
     zsCalcSizing.CoolOutTemp = state.dataEnvrn->OutDryBulbTemp;
     zsCalcSizing.CoolOutHumRat = state.dataEnvrn->OutHumRat;
@@ -1475,6 +1480,8 @@ void updateZoneSizingDuringDay(DataSizing::ZoneSizingData &zsSizing,
     zsCalcSizing.HeatLoadSeq(timeStepInDay) += zsCalcSizing.HeatLoad * fracTimeStepZone;
     zsCalcSizing.HeatZoneTempSeq(timeStepInDay) += zsCalcSizing.HeatZoneTemp * fracTimeStepZone;
     zsCalcSizing.HeatOutTempSeq(timeStepInDay) += zsCalcSizing.HeatOutTemp * fracTimeStepZone;
+    zsCalcSizing.HeatMCPISeq(timeStepInDay) += zsCalcSizing.HeatMCPI * fracTimeStepZone;
+    zsCalcSizing.HeatMCPVSeq(timeStepInDay) += zsCalcSizing.HeatMCPV * fracTimeStepZone;
     zsCalcSizing.HeatZoneRetTempSeq(timeStepInDay) += zsCalcSizing.HeatZoneRetTemp * fracTimeStepZone;
     zsCalcSizing.HeatZoneHumRatSeq(timeStepInDay) += zsCalcSizing.HeatZoneHumRat * fracTimeStepZone;
     zsCalcSizing.HeatOutHumRatSeq(timeStepInDay) += zsCalcSizing.HeatOutHumRat * fracTimeStepZone;
@@ -1544,6 +1551,8 @@ void updateZoneSizingEndDay(DataSizing::ZoneSizingData &zsCalcSizing,
             zsCalcSizing.DesHeatMassFlow = zsCalcSizing.HeatFlowSeq(TimeStepIndex);
             zsCalcSizing.ZoneTempAtHeatPeak = zsCalcSizing.HeatZoneTempSeq(TimeStepIndex);
             zsCalcSizing.OutTempAtHeatPeak = zsCalcSizing.HeatOutTempSeq(TimeStepIndex);
+            zsCalcSizing.MCPIAtHeatPeak = zsCalcSizing.HeatMCPISeq(TimeStepIndex);
+            zsCalcSizing.MCPVAtHeatPeak = zsCalcSizing.HeatMCPVSeq(TimeStepIndex);
             zsCalcSizing.ZoneRetTempAtHeatPeak = zsCalcSizing.HeatZoneRetTempSeq(TimeStepIndex);
             zsCalcSizing.ZoneHumRatAtHeatPeak = zsCalcSizing.HeatZoneHumRatSeq(TimeStepIndex);
             zsCalcSizing.OutHumRatAtHeatPeak = zsCalcSizing.HeatOutHumRatSeq(TimeStepIndex);
@@ -1660,6 +1669,8 @@ void updateZoneSizingEndDay(DataSizing::ZoneSizingData &zsCalcSizing,
         zsCalcFinalSizing.HeatOutHumRatSeq = zsCalcSizing.HeatOutHumRatSeq;
         zsCalcFinalSizing.ZoneTempAtHeatPeak = zsCalcSizing.ZoneTempAtHeatPeak;
         zsCalcFinalSizing.OutTempAtHeatPeak = zsCalcSizing.OutTempAtHeatPeak;
+        zsCalcFinalSizing.MCPIAtHeatPeak = zsCalcSizing.MCPIAtHeatPeak;
+        zsCalcFinalSizing.MCPVAtHeatPeak = zsCalcSizing.MCPVAtHeatPeak;
         zsCalcFinalSizing.ZoneRetTempAtHeatPeak = zsCalcSizing.ZoneRetTempAtHeatPeak;
         zsCalcFinalSizing.ZoneHumRatAtHeatPeak = zsCalcSizing.ZoneHumRatAtHeatPeak;
         zsCalcFinalSizing.OutHumRatAtHeatPeak = zsCalcSizing.OutHumRatAtHeatPeak;
@@ -1683,6 +1694,8 @@ void updateZoneSizingEndDay(DataSizing::ZoneSizingData &zsCalcSizing,
             zsCalcFinalSizing.HeatOutHumRatSeq = zsCalcSizing.HeatOutHumRatSeq;
             zsCalcFinalSizing.ZoneTempAtHeatPeak = zsCalcSizing.ZoneTempAtHeatPeak;
             zsCalcFinalSizing.OutTempAtHeatPeak = zsCalcSizing.OutTempAtHeatPeak;
+            zsCalcFinalSizing.MCPIAtHeatPeak = zsCalcSizing.MCPIAtHeatPeak;
+            zsCalcFinalSizing.MCPVAtHeatPeak = zsCalcSizing.MCPVAtHeatPeak;
             zsCalcFinalSizing.ZoneRetTempAtHeatPeak = zsCalcSizing.ZoneRetTempAtHeatPeak;
             zsCalcFinalSizing.ZoneHumRatAtHeatPeak = zsCalcSizing.ZoneHumRatAtHeatPeak;
             zsCalcFinalSizing.OutHumRatAtHeatPeak = zsCalcSizing.OutHumRatAtHeatPeak;
@@ -1843,6 +1856,8 @@ void updateZoneSizingEndDay(DataSizing::ZoneSizingData &zsCalcSizing,
             if ((zsCalcSizing.HeatZoneTempSeq(TimeStepIndex) < zsCalcSizing.ZoneTempAtHeatPeak) || FirstIteration) {
                 zsCalcSizing.ZoneTempAtHeatPeak = zsCalcSizing.HeatZoneTempSeq(TimeStepIndex);
                 zsCalcSizing.OutTempAtHeatPeak = zsCalcSizing.HeatOutTempSeq(TimeStepIndex);
+                zsCalcSizing.MCPIAtHeatPeak = zsCalcSizing.HeatMCPISeq(TimeStepIndex);
+                zsCalcSizing.MCPVAtHeatPeak = zsCalcSizing.HeatMCPVSeq(TimeStepIndex);
                 zsCalcSizing.ZoneRetTempAtHeatPeak = zsCalcSizing.HeatZoneRetTempSeq(TimeStepIndex);
                 zsCalcSizing.ZoneHumRatAtHeatPeak = zsCalcSizing.HeatZoneHumRatSeq(TimeStepIndex);
                 zsCalcSizing.OutHumRatAtHeatPeak = zsCalcSizing.HeatOutHumRatSeq(TimeStepIndex);
@@ -1859,6 +1874,8 @@ void updateZoneSizingEndDay(DataSizing::ZoneSizingData &zsCalcSizing,
             zsCalcFinalSizing.HeatOutHumRatSeq = zsCalcSizing.HeatOutHumRatSeq;
             zsCalcFinalSizing.ZoneTempAtHeatPeak = zsCalcSizing.ZoneTempAtHeatPeak;
             zsCalcFinalSizing.OutTempAtHeatPeak = zsCalcSizing.OutTempAtHeatPeak;
+            zsCalcFinalSizing.MCPIAtHeatPeak = zsCalcSizing.MCPIAtHeatPeak;
+            zsCalcFinalSizing.MCPVAtHeatPeak = zsCalcSizing.MCPVAtHeatPeak;
             zsCalcFinalSizing.ZoneRetTempAtHeatPeak = zsCalcSizing.ZoneRetTempAtHeatPeak;
             zsCalcFinalSizing.ZoneHumRatAtHeatPeak = zsCalcSizing.ZoneHumRatAtHeatPeak;
             zsCalcFinalSizing.OutHumRatAtHeatPeak = zsCalcSizing.OutHumRatAtHeatPeak;
@@ -1964,6 +1981,8 @@ void updateZoneSizingEndZoneSizingCalc1(EnergyPlusData &state, int const zoneNum
     zoneCFS.DesHeatDens = 0.0;
     zoneCFS.ZoneTempAtHeatPeak = 0.0;
     zoneCFS.OutTempAtHeatPeak = 0.0;
+    zoneCFS.MCPIAtHeatPeak = 0.0;
+    zoneCFS.MCPVAtHeatPeak = 0.0;
     zoneCFS.ZoneRetTempAtHeatPeak = 0.0;
     zoneCFS.ZoneHumRatAtHeatPeak = 0.0;
     zoneCFS.OutHumRatAtHeatPeak = 0.0;
@@ -2085,6 +2104,8 @@ void updateZoneSizingEndZoneSizingCalc1(EnergyPlusData &state, int const zoneNum
         zoneCFS.DesHeatDens += spaceCFS.DesHeatDens * spaceCFS.DesHeatMassFlow;
         zoneCFS.ZoneTempAtHeatPeak += spaceCFS.ZoneTempAtHeatPeak * spaceCFS.DesHeatMassFlow;
         zoneCFS.OutTempAtHeatPeak += spaceCFS.OutTempAtHeatPeak * spaceCFS.DesHeatMassFlow;
+        zoneCFS.MCPIAtHeatPeak += spaceCFS.MCPIAtHeatPeak * spaceCFS.DesHeatMassFlow;
+        zoneCFS.MCPVAtHeatPeak += spaceCFS.MCPVAtHeatPeak * spaceCFS.DesHeatMassFlow;
         zoneCFS.ZoneRetTempAtHeatPeak += spaceCFS.ZoneRetTempAtHeatPeak * spaceCFS.DesHeatMassFlow;
         zoneCFS.ZoneHumRatAtHeatPeak += spaceCFS.ZoneHumRatAtHeatPeak * spaceCFS.DesHeatMassFlow;
         zoneCFS.OutHumRatAtHeatPeak += spaceCFS.OutHumRatAtHeatPeak * spaceCFS.DesHeatMassFlow;
@@ -2201,6 +2222,8 @@ void updateZoneSizingEndZoneSizingCalc1(EnergyPlusData &state, int const zoneNum
         zoneCFS.DesHeatDens /= zoneCFS.DesHeatMassFlow;
         zoneCFS.ZoneTempAtHeatPeak /= zoneCFS.DesHeatMassFlow;
         zoneCFS.OutTempAtHeatPeak /= zoneCFS.DesHeatMassFlow;
+        zoneCFS.MCPIAtHeatPeak /= zoneCFS.DesHeatMassFlow;
+        zoneCFS.MCPVAtHeatPeak /= zoneCFS.DesHeatMassFlow;
         zoneCFS.ZoneRetTempAtHeatPeak /= zoneCFS.DesHeatMassFlow;
         zoneCFS.ZoneHumRatAtHeatPeak /= zoneCFS.DesHeatMassFlow;
         zoneCFS.OutHumRatAtHeatPeak /= zoneCFS.DesHeatMassFlow;
@@ -2776,6 +2799,8 @@ void updateZoneSizingEndZoneSizingCalc4(DataSizing::ZoneSizingData &zsSizing, Da
     zsSizing.DesHeatMassFlow = zsCalcSizing.DesHeatMassFlow;
     zsSizing.ZoneTempAtHeatPeak = zsCalcSizing.ZoneTempAtHeatPeak;
     zsSizing.OutTempAtHeatPeak = zsCalcSizing.OutTempAtHeatPeak;
+    zsSizing.MCPIAtHeatPeak = zsCalcSizing.MCPIAtHeatPeak;
+    zsSizing.MCPVAtHeatPeak = zsCalcSizing.MCPVAtHeatPeak;
     zsSizing.ZoneRetTempAtHeatPeak = zsCalcSizing.ZoneRetTempAtHeatPeak;
     zsSizing.ZoneHumRatAtHeatPeak = zsCalcSizing.ZoneHumRatAtHeatPeak;
     zsSizing.OutHumRatAtHeatPeak = zsCalcSizing.OutHumRatAtHeatPeak;
@@ -2815,6 +2840,8 @@ void updateZoneSizingEndZoneSizingCalc5(DataSizing::ZoneSizingData &zsFinalSizin
     zsFinalSizing.DesHeatMassFlow = zsCalcFinalSizing.DesHeatMassFlow;
     zsFinalSizing.ZoneTempAtHeatPeak = zsCalcFinalSizing.ZoneTempAtHeatPeak;
     zsFinalSizing.OutTempAtHeatPeak = zsCalcFinalSizing.OutTempAtHeatPeak;
+    zsFinalSizing.MCPIAtHeatPeak = zsCalcFinalSizing.MCPIAtHeatPeak;
+    zsFinalSizing.MCPVAtHeatPeak = zsCalcFinalSizing.MCPVAtHeatPeak;
     zsFinalSizing.ZoneRetTempAtHeatPeak = zsCalcFinalSizing.ZoneRetTempAtHeatPeak;
     zsFinalSizing.ZoneHumRatAtHeatPeak = zsCalcFinalSizing.ZoneHumRatAtHeatPeak;
     zsFinalSizing.OutHumRatAtHeatPeak = zsCalcFinalSizing.OutHumRatAtHeatPeak;
@@ -3033,10 +3060,9 @@ void updateZoneSizingEndZoneSizingCalc7(EnergyPlusData &state,
         // initialize sizing conditions if they have not been set (i.e., no corresponding load) to zone condition
         // issue 6006, heating coils sizing to 0 when no heating load in zone
         if (zoneSizingF.DesCoolSetPtSeq.empty()) {
-            ShowSevereError(state,
-                            EnergyPlus::format("{}:  Thermostat cooling set point temperatures are not initialized for Zone = {}",
-                                               RoutineName,
-                                               zsFinalSizing.ZoneName));
+            ShowSevereError(
+                state,
+                std::format("{}:  Thermostat cooling set point temperatures are not initialized for Zone = {}", RoutineName, zsFinalSizing.ZoneName));
             ShowFatalError(state, "Please send your input file to the EnergyPlus support/development team for further investigation.");
         } else {
             zsFinalSizing.ZoneTempAtCoolPeak = *std::min_element(zoneSizingF.DesCoolSetPtSeq.begin(), zoneSizingF.DesCoolSetPtSeq.end());
@@ -3183,9 +3209,9 @@ void updateZoneSizingEndZoneSizingCalc7(EnergyPlusData &state,
         // initialize sizing conditions if they have not been set (i.e., no corresponding load) to zone condition
         // issue 6006, heating coils sizing to 0 when no heating load in zone
         if (zoneSizingDDF.DesHeatSetPtSeq.empty()) {
-            ShowSevereError(state,
-                            EnergyPlus::format(
-                                "{}:  Thermostat heating set point temperatures not initialized for Zone = {}", RoutineName, zsFinalSizing.ZoneName));
+            ShowSevereError(
+                state,
+                std::format("{}:  Thermostat heating set point temperatures not initialized for Zone = {}", RoutineName, zsFinalSizing.ZoneName));
             ShowFatalError(state, "Please send your input file to the EnergyPlus support/development team for further investigation.");
         } else {
             zsFinalSizing.ZoneTempAtHeatPeak = *std::max_element(zoneSizingDDF.DesHeatSetPtSeq.begin(), zoneSizingDDF.DesHeatSetPtSeq.end());
@@ -3607,11 +3633,10 @@ void SimZoneEquipment(EnergyPlusData &state, bool const FirstHVACIteration, bool
                 break;
             }
             default: {
-                ShowSevereError(state,
-                                EnergyPlus::format("Error found in Supply Air Path={}", state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).Name));
-                ShowContinueError(state,
-                                  EnergyPlus::format("Invalid Supply Air Path Component={}",
-                                                     state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).ComponentType(CompNum)));
+                ShowSevereError(state, std::format("Error found in Supply Air Path={}", state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).Name));
+                ShowContinueError(
+                    state,
+                    std::format("Invalid Supply Air Path Component={}", state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).ComponentType(CompNum)));
                 ShowFatalError(state, "Preceding condition causes termination.");
 
                 break;
@@ -4162,11 +4187,10 @@ void SimZoneEquipment(EnergyPlusData &state, bool const FirstHVACIteration, bool
 
             } break;
             default: {
-                ShowSevereError(state,
-                                EnergyPlus::format("Error found in Supply Air Path={}", state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).Name));
-                ShowContinueError(state,
-                                  EnergyPlus::format("Invalid Supply Air Path Component={}",
-                                                     state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).ComponentType(CompNum)));
+                ShowSevereError(state, std::format("Error found in Supply Air Path={}", state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).Name));
+                ShowContinueError(
+                    state,
+                    std::format("Invalid Supply Air Path Component={}", state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).ComponentType(CompNum)));
                 ShowFatalError(state, "Preceding condition causes termination.");
             } break;
             }
@@ -5228,10 +5252,9 @@ void CalcZoneMassBalance(EnergyPlusData &state, bool const FirstHVACIteration)
                             Real64 sysUnbalancedVolFlow = sysUnbalancedFlow / state.dataEnvrn->StdRhoAir;
                             Real64 unbalancedVolFlow = max(0.0, sysUnbalancedVolFlow - incomingVolFlow);
                             if (unbalancedVolFlow > HVAC::SmallAirVolFlow) {
-                                ShowWarningError(
-                                    state,
-                                    EnergyPlus::format("In zone {} there is unbalanced air flow. Load due to induced outdoor air is neglected.",
-                                                       thisZoneEquip.ZoneName));
+                                ShowWarningError(state,
+                                                 std::format("In zone {} there is unbalanced air flow. Load due to induced outdoor air is neglected.",
+                                                             thisZoneEquip.ZoneName));
                                 ShowContinueErrorTimeStamp(state, "");
                                 ShowContinueError(state,
                                                   EnergyPlus::format("  Flows [m3/s]: Inlets: {:.6R}  Unbalanced exhausts: {:.6R}  Returns: {:.6R}",
@@ -5773,11 +5796,10 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             if (hybridControlVentilation.MinIndoorTemperature > hybridControlVentilation.MaxIndoorTemperature) {
                 ++hybridControlVentilation.IndoorTempErrCount;
                 if (hybridControlVentilation.IndoorTempErrCount < 2) {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format("Ventilation indoor temperature control: The minimum indoor temperature is above the maximum indoor "
-                                           "temperature in {}",
-                                           hybridControlVentilation.Name));
+                    ShowWarningError(state,
+                                     std::format("Ventilation indoor temperature control: The minimum indoor temperature is above the maximum indoor "
+                                                 "temperature in {}",
+                                                 hybridControlVentilation.Name));
                     ShowContinueError(state, "The minimum indoor temperature is set to the maximum indoor temperature. Simulation continues.");
                     ShowContinueErrorTimeStamp(state, " Occurrence info:");
                 } else {
@@ -5801,11 +5823,10 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             if (hybridControlVentilation.MinOutdoorTemperature > hybridControlVentilation.MaxOutdoorTemperature) {
                 ++hybridControlVentilation.OutdoorTempErrCount;
                 if (hybridControlVentilation.OutdoorTempErrCount < 2) {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format("Ventilation outdoor temperature control: The minimum outdoor temperature is above the maximum "
-                                           "outdoor temperature in {}",
-                                           hybridControlVentilation.Name));
+                    ShowWarningError(state,
+                                     std::format("Ventilation outdoor temperature control: The minimum outdoor temperature is above the maximum "
+                                                 "outdoor temperature in {}",
+                                                 hybridControlVentilation.Name));
                     ShowContinueError(state, "The minimum outdoor temperature is set to the maximum outdoor temperature. Simulation continues.");
                     ShowContinueErrorTimeStamp(state, " Occurrence info:");
                 } else {
@@ -6118,9 +6139,8 @@ void CalcAirFlowSimple(EnergyPlusData &state,
                     if (thisMixing.IndoorTempErrCount < 2) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
-                                "Mixing zone temperature control: The minimum zone temperature is above the maximum zone temperature in {}",
-                                thisMixing.Name));
+                            std::format("Mixing zone temperature control: The minimum zone temperature is above the maximum zone temperature in {}",
+                                        thisMixing.Name));
                         ShowContinueError(state, "The minimum zone temperature is set to the maximum zone temperature. Simulation continues.");
                         ShowContinueErrorTimeStamp(state, " Occurrence info:");
                     } else {
@@ -6156,7 +6176,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
                     if (thisMixing.SourceTempErrCount < 2) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
+                            std::format(
                                 "Mixing source temperature control: The minimum source temperature is above the maximum source temperature in {}",
                                 thisMixing.Name));
                         ShowContinueError(state, "The minimum source temperature is set to the maximum source temperature. Simulation continues.");
@@ -6193,11 +6213,10 @@ void CalcAirFlowSimple(EnergyPlusData &state,
                 if (MixingTmin > MixingTmax) {
                     ++thisMixing.OutdoorTempErrCount;
                     if (thisMixing.OutdoorTempErrCount < 2) {
-                        ShowWarningError(
-                            state,
-                            EnergyPlus::format("Mixing outdoor temperature control: The minimum outdoor temperature is above the maximum "
-                                               "outdoor temperature in {}",
-                                               thisMixing.Name));
+                        ShowWarningError(state,
+                                         std::format("Mixing outdoor temperature control: The minimum outdoor temperature is above the maximum "
+                                                     "outdoor temperature in {}",
+                                                     thisMixing.Name));
                         ShowContinueError(state, "The minimum outdoor temperature is set to the maximum source temperature. Simulation continues.");
                         ShowContinueErrorTimeStamp(state, " Occurrence info:");
                     } else {
@@ -6390,7 +6409,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
                     if (thisCrossMixing.IndoorTempErrCount < 2) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
+                            std::format(
                                 "CrossMixing zone temperature control: The minimum zone temperature is above the maximum zone temperature in {}",
                                 thisCrossMixing.Name));
                         ShowContinueError(state, "The minimum zone temperature is set to the maximum zone temperature. Simulation continues.");
@@ -6428,9 +6447,9 @@ void CalcAirFlowSimple(EnergyPlusData &state,
                     if (thisCrossMixing.SourceTempErrCount < 2) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format("CrossMixing source temperature control: The minimum source temperature is above the maximum source "
-                                               "temperature in {}",
-                                               thisCrossMixing.Name));
+                            std::format("CrossMixing source temperature control: The minimum source temperature is above the maximum source "
+                                        "temperature in {}",
+                                        thisCrossMixing.Name));
                         ShowContinueError(state, "The minimum source temperature is set to the maximum source temperature. Simulation continues.");
                         ShowContinueErrorTimeStamp(state, " Occurrence info:");
                     } else {
@@ -6465,11 +6484,10 @@ void CalcAirFlowSimple(EnergyPlusData &state,
                 if (MixingTmin > MixingTmax) {
                     ++thisCrossMixing.OutdoorTempErrCount;
                     if (thisCrossMixing.OutdoorTempErrCount < 2) {
-                        ShowWarningError(
-                            state,
-                            EnergyPlus::format("CrossMixing outdoor temperature control: The minimum outdoor temperature is above the maximum "
-                                               "outdoor temperature in {}",
-                                               state.dataHeatBal->Mixing(j).Name));
+                        ShowWarningError(state,
+                                         std::format("CrossMixing outdoor temperature control: The minimum outdoor temperature is above the maximum "
+                                                     "outdoor temperature in {}",
+                                                     state.dataHeatBal->Mixing(j).Name));
                         ShowContinueError(state, "The minimum outdoor temperature is set to the maximum source temperature. Simulation continues.");
                         ShowContinueErrorTimeStamp(state, " Occurrence info:");
                     } else {
@@ -7067,7 +7085,7 @@ void AutoCalcDOASControlStrategy(EnergyPlusData &state)
                                            headerAlreadyPrinted);
             }
             if (zoneSizingInput.DOASLowSetpoint > zoneSizingInput.DOASHighSetpoint) {
-                ShowSevereError(state, EnergyPlus::format("For Sizing:Zone = {}", zoneSizingInput.ZoneName));
+                ShowSevereError(state, std::format("For Sizing:Zone = {}", zoneSizingInput.ZoneName));
                 ShowContinueError(state, "... Dedicated Outside Air Low Setpoint for Design must be less than the High Setpoint");
                 ErrorsFound = true;
             }

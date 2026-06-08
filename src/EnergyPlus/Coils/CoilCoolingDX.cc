@@ -45,10 +45,13 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// C++ Headers
 #include <memory>
 
+// ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh> // needs to be in BranchNodeConnections.hh
 
+// EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/Coils/CoilCoolingDX.hh>
 #include <EnergyPlus/Coils/CoilCoolingDXAshrae205Performance.hh>
@@ -91,7 +94,7 @@ std::shared_ptr<CoilCoolingDXPerformanceBase> CoilCoolingDX::makePerformanceSubc
         return std::make_shared<CoilCoolingDXCurveFitPerformance>(state, performance_object_name);
     }
 
-    ShowFatalError(state, EnergyPlus::format("Could not find Coil:Cooling:DX:Performance object with name: {}", performance_object_name));
+    ShowFatalError(state, std::format("Could not find Coil:Cooling:DX:Performance object with name: {}", performance_object_name));
     return nullptr;
 }
 
@@ -148,11 +151,13 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
 {
     static constexpr std::string_view routineName = "CoilCoolingDX::instantiateFromInputSpec";
 
-    ErrorObjectHeader eoh{routineName, "CoilCoolingDX", input_data.name};
+    ErrorObjectHeader eoh{routineName, "Coil:Cooling:DX", input_data.name};
 
     this->original_input_specs = input_data;
     bool errorsFound = false;
     this->name = input_data.name;
+    this->coilType = HVAC::CoilType::CoolingDX;
+    this->coilReportNum = ReportCoilSelection::getReportIndex(state, this->name, this->coilType);
 
     // initialize reclaim heat parameters
     this->reclaimHeat.Name = this->name;
@@ -318,14 +323,14 @@ void CoilCoolingDX::oneTimeInit(EnergyPlusData &state)
     if (this->performance->compressorFuelType != Constant::eFuel::Electricity) {
         std::string_view const sFuelType = Constant::eFuelNames[static_cast<int>(this->performance->compressorFuelType)];
         SetupOutputVariable(state,
-                            EnergyPlus::format("Cooling Coil {} Rate", sFuelType),
+                            std::format("Cooling Coil {} Rate", sFuelType),
                             Constant::Units::W,
                             this->performance->compressorFuelRate,
                             OutputProcessor::TimeStepType::System,
                             OutputProcessor::StoreType::Average,
                             this->name);
         SetupOutputVariable(state,
-                            EnergyPlus::format("Cooling Coil {} Energy", sFuelType),
+                            std::format("Cooling Coil {} Energy", sFuelType),
                             Constant::Units::J,
                             this->performance->compressorFuelConsumption,
                             OutputProcessor::TimeStepType::System,
@@ -798,23 +803,21 @@ void CoilCoolingDX::simulate(EnergyPlusData &state,
             // report out final coil sizing info
             Real64 ratedSensCap(0.0);
             ratedSensCap = this->performance->ratedGrossTotalCap() * this->performance->grossRatedSHR(state);
-            state.dataRptCoilSelection->coilSelectionReportObj->setCoilFinalSizes(state,
-                                                                                  this->name,
-                                                                                  state.dataCoilCoolingDX->coilCoolingDXObjectName,
-                                                                                  this->performance->ratedGrossTotalCap(),
-                                                                                  ratedSensCap,
-                                                                                  this->performance->ratedEvapAirFlowRate(state),
-                                                                                  -999.0);
+            ReportCoilSelection::setCoilFinalSizes(state,
+                                                   this->coilReportNum,
+                                                   this->performance->ratedGrossTotalCap(),
+                                                   ratedSensCap,
+                                                   this->performance->ratedEvapAirFlowRate(state),
+                                                   -999.0);
 
             // report out fan information
             // should work for all fan types
             if (this->supplyFanIndex > 0) {
-                state.dataRptCoilSelection->coilSelectionReportObj->setCoilSupplyFanInfo(state,
-                                                                                         this->name,
-                                                                                         state.dataCoilCoolingDX->coilCoolingDXObjectName,
-                                                                                         state.dataFans->fans(this->supplyFanIndex)->Name,
-                                                                                         state.dataFans->fans(this->supplyFanIndex)->type,
-                                                                                         this->supplyFanIndex);
+                ReportCoilSelection::setCoilSupplyFanInfo(state,
+                                                          this->coilReportNum,
+                                                          state.dataFans->fans(this->supplyFanIndex)->Name,
+                                                          state.dataFans->fans(this->supplyFanIndex)->type,
+                                                          this->supplyFanIndex);
             }
 
             // report out coil rating conditions, just create a set of dummy nodes and run calculate on them
@@ -894,22 +897,21 @@ void CoilCoolingDX::simulate(EnergyPlusData &state,
 
             Real64 const ratedOutletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(
                 state, dummyEvapOutlet.Temp, dummyEvapOutlet.HumRat, DataEnvironment::StdPressureSeaLevel, "Coil:Cooling:DX::simulate");
-            state.dataRptCoilSelection->coilSelectionReportObj->setRatedCoilConditions(state,
-                                                                                       this->name,
-                                                                                       state.dataCoilCoolingDX->coilCoolingDXObjectName,
-                                                                                       coolingRate,
-                                                                                       sensCoolingRate,
-                                                                                       ratedInletEvapMassFlowRate,
-                                                                                       RatedInletAirTemp,
-                                                                                       dummyInletAirHumRat,
-                                                                                       RatedInletWetBulbTemp,
-                                                                                       dummyEvapOutlet.Temp,
-                                                                                       dummyEvapOutlet.HumRat,
-                                                                                       ratedOutletWetBulb,
-                                                                                       RatedOutdoorAirTemp,
-                                                                                       ratedOutdoorAirWetBulb,
-                                                                                       this->performance->ratedCBF(state),
-                                                                                       -999.0);
+            ReportCoilSelection::setRatedCoilConditions(state,
+                                                        this->coilReportNum,
+                                                        coolingRate,
+                                                        sensCoolingRate,
+                                                        ratedInletEvapMassFlowRate,
+                                                        RatedInletAirTemp,
+                                                        dummyInletAirHumRat,
+                                                        RatedInletWetBulbTemp,
+                                                        dummyEvapOutlet.Temp,
+                                                        dummyEvapOutlet.HumRat,
+                                                        ratedOutletWetBulb,
+                                                        RatedOutdoorAirTemp,
+                                                        ratedOutdoorAirWetBulb,
+                                                        this->performance->ratedCBF(state),
+                                                        -999.0);
 
             this->reportCoilFinalSizes = false;
         }
