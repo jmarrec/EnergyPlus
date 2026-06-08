@@ -72,7 +72,7 @@ TEST(Formatters, Formatters_Path)
     EXPECT_EQ("foo\\bar\\baz", std::format("{}", fs::path("foo\\bar\\baz")));
     EXPECT_EQ("foo/bar/baz", std::format("{:g}", fs::path("foo/bar/baz")));
 #ifdef _WIN32
-    EXPECT_EQ("foo\\bar\\baz", std::format("{:g}", fs::path("foo/bar/baz")));
+    EXPECT_EQ("foo/bar/baz", std::format("{:g}", fs::path("foo\\bar\\baz")));
 #endif
 }
 
