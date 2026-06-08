@@ -1731,9 +1731,6 @@ void CheckBranchEquipInZoneHVACEquipList(EnergyPlusData &state, int const branch
         default:
             continue;
         }
-        if (found) {
-            break;
-        }
     }
 }
 } // namespace EnergyPlus
