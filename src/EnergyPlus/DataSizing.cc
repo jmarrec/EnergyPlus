@@ -147,6 +147,8 @@ void ZoneSizingData::zeroMemberData()
     std::fill(this->HeatZoneTempSeq.begin(), this->HeatZoneTempSeq.end(), 0.0);
     std::fill(this->DesHeatSetPtSeq.begin(), this->DesHeatSetPtSeq.end(), 0.0);
     std::fill(this->HeatOutTempSeq.begin(), this->HeatOutTempSeq.end(), 0.0);
+    std::fill(this->HeatMCPISeq.begin(), this->HeatMCPISeq.end(), 0.0);
+    std::fill(this->HeatMCPVSeq.begin(), this->HeatMCPVSeq.end(), 0.0);
     std::fill(this->HeatZoneRetTempSeq.begin(), this->HeatZoneRetTempSeq.end(), 0.0);
     std::fill(this->HeatTstatTempSeq.begin(), this->HeatTstatTempSeq.end(), 0.0);
     std::fill(this->HeatZoneHumRatSeq.begin(), this->HeatZoneHumRatSeq.end(), 0.0);
@@ -290,6 +292,8 @@ void ZoneSizingData::allocateMemberArrays(int const numOfTimeStepInDay)
     this->CoolZoneTempSeq.dimension(numOfTimeStepInDay, 0.0);
     this->DesCoolSetPtSeq.dimension(numOfTimeStepInDay, 0.0);
     this->HeatOutTempSeq.dimension(numOfTimeStepInDay, 0.0);
+    this->HeatMCPISeq.dimension(numOfTimeStepInDay, 0.0);
+    this->HeatMCPVSeq.dimension(numOfTimeStepInDay, 0.0);
     this->CoolOutTempSeq.dimension(numOfTimeStepInDay, 0.0);
     this->HeatZoneRetTempSeq.dimension(numOfTimeStepInDay, 0.0);
     this->HeatTstatTempSeq.dimension(numOfTimeStepInDay, 0.0);

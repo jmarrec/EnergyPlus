@@ -3551,7 +3551,7 @@ namespace HeatBalanceManager {
 
             if (frameDivider.DividerWidth > 0.0 && (frameDivider.HorDividers == 0 && frameDivider.VertDividers == 0)) {
                 ShowWarningError(state,
-                                 std::format("{}: In FrameAndDivider {} {} > 0 ",
+                                 std::format("{}: In FrameAndDivider {} {} > 0",
                                              state.dataHeatBalMgr->CurrentModuleObject,
                                              frameDivider.Name,
                                              state.dataIPShortCut->cNumericFieldNames(9)));
@@ -3561,6 +3561,23 @@ namespace HeatBalanceManager {
                                               state.dataIPShortCut->cNumericFieldNames(11)));
                 ShowContinueError(state, std::format("...{} set to 0.", state.dataIPShortCut->cNumericFieldNames(9)));
                 frameDivider.DividerWidth = 0.0;
+            }
+            if (frameDivider.DividerWidth == 0.0 && (frameDivider.HorDividers > 0 || frameDivider.VertDividers > 0)) {
+                ShowWarningError(state,
+                                 std::format("{}: In FrameAndDivider {} {} = 0",
+                                             state.dataHeatBalMgr->CurrentModuleObject,
+                                             frameDivider.Name,
+                                             state.dataIPShortCut->cNumericFieldNames(9)));
+                ShowContinueError(state,
+                                  std::format("...but {} > 0 or {} > 0.",
+                                              state.dataIPShortCut->cNumericFieldNames(10),
+                                              state.dataIPShortCut->cNumericFieldNames(11)));
+                ShowContinueError(state,
+                                  std::format("...{} and {} set to 0.",
+                                              state.dataIPShortCut->cNumericFieldNames(10),
+                                              state.dataIPShortCut->cNumericFieldNames(11)));
+                frameDivider.HorDividers = 0;
+                frameDivider.VertDividers = 0;
             }
             // Prevent InsideSillDepth < InsideReveal
             if (frameDivider.InsideSillDepth < state.dataSurface->FrameDivider(FrameDividerNum).InsideReveal) {

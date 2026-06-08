@@ -13040,51 +13040,47 @@ namespace SurfaceGeometry {
                                               state.dataSurface->FrameDivider(FrDivNum).HorDividers *
                                                   state.dataSurface->FrameDivider(FrDivNum).VertDividers * DivWidth);
                         state.dataSurface->SurfWinDividerArea(ThisSurf) = DivArea * surf.Multiplier;
-                        if ((surf.Area - state.dataSurface->SurfWinDividerArea(ThisSurf)) <= 0.0) {
+                        if (DivArea <= 0.0) {
+                            ShowSevereError(state, std::format("{}Calculated Divider Area <= 0.0 for Window={}", RoutineName, surf.Name));
+                            ErrorInSurface = true;
+                        } else if ((surf.Area - state.dataSurface->SurfWinDividerArea(ThisSurf)) <= 0.0) {
                             ShowSevereError(state, std::format("{}Divider area exceeds glazed opening for window {}", RoutineName, surf.Name));
                             ShowContinueError(state,
                                               std::format("Window surface area=[{:.2f}] m2, divider area=[{:.2f}] m2.",
                                                           surf.Area,
                                                           state.dataSurface->SurfWinDividerArea(ThisSurf)));
                             ErrorInSurface = true;
-                        }
-                        surf.Area -= state.dataSurface->SurfWinDividerArea(ThisSurf); // Glazed area
-                        if (DivArea <= 0.0) {
-                            ShowWarningError(state, std::format("{}Calculated Divider Area <= 0.0 for Window={}", RoutineName, surf.Name));
-                            if (state.dataSurface->FrameDivider(FrDivNum).HorDividers == 0) {
-                                ShowContinueError(state, "..Number of Horizontal Dividers = 0.");
-                            }
-                            if (state.dataSurface->FrameDivider(FrDivNum).VertDividers == 0) {
-                                ShowContinueError(state, "..Number of Vertical Dividers = 0.");
-                            }
                         } else {
-                            auto &surfWin = state.dataSurface->SurfaceWindow(ThisSurf);
-                            surfWin.glazedFrac = surf.Area / (surf.Area + state.dataSurface->SurfWinDividerArea(ThisSurf));
-                            // Correction factor for portion of divider subject to divider projection correction
-                            DivFrac = (1.0 - state.dataSurface->FrameDivider(FrDivNum).HorDividers *
-                                                 state.dataSurface->FrameDivider(FrDivNum).VertDividers * pow_2(DivWidth) / DivArea);
-                            state.dataSurface->SurfWinProjCorrDivOut(ThisSurf) =
-                                DivFrac * state.dataSurface->FrameDivider(FrDivNum).DividerProjectionOut / DivWidth;
-                            state.dataSurface->SurfWinProjCorrDivIn(ThisSurf) =
-                                DivFrac * state.dataSurface->FrameDivider(FrDivNum).DividerProjectionIn / DivWidth;
-                            // Correction factor for portion of frame subject to frame projection correction
-                            if (FrWidth > 0.0) {
-                                state.dataSurface->SurfWinProjCorrFrOut(ThisSurf) =
-                                    (state.dataSurface->FrameDivider(FrDivNum).FrameProjectionOut / FrWidth) *
-                                    (ThisHeight + ThisWidth -
-                                     (state.dataSurface->FrameDivider(FrDivNum).HorDividers +
-                                      state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
-                                         DivWidth) /
-                                    (ThisHeight + ThisWidth + 2 * FrWidth);
-                                state.dataSurface->SurfWinProjCorrFrIn(ThisSurf) =
-                                    (state.dataSurface->FrameDivider(FrDivNum).FrameProjectionIn / FrWidth) *
-                                    (ThisHeight + ThisWidth -
-                                     (state.dataSurface->FrameDivider(FrDivNum).HorDividers +
-                                      state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
-                                         DivWidth) /
-                                    (ThisHeight + ThisWidth + 2 * FrWidth);
-                            }
+                            surf.Area -= state.dataSurface->SurfWinDividerArea(ThisSurf); // Glazed area
                         }
+                    }
+
+                    if ((FrWidth > 0.0) && (FrArea > 0.0) && !ErrorInSurface) {
+                        // Correction factor for portion of frame subject to frame projection correction
+                        state.dataSurface->SurfWinProjCorrFrOut(ThisSurf) =
+                            (state.dataSurface->FrameDivider(FrDivNum).FrameProjectionOut / FrWidth) *
+                            (ThisHeight + ThisWidth -
+                             (state.dataSurface->FrameDivider(FrDivNum).HorDividers + state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
+                                 DivWidth) /
+                            (ThisHeight + ThisWidth + 2 * FrWidth);
+                        state.dataSurface->SurfWinProjCorrFrIn(ThisSurf) =
+                            (state.dataSurface->FrameDivider(FrDivNum).FrameProjectionIn / FrWidth) *
+                            (ThisHeight + ThisWidth -
+                             (state.dataSurface->FrameDivider(FrDivNum).HorDividers + state.dataSurface->FrameDivider(FrDivNum).VertDividers) *
+                                 DivWidth) /
+                            (ThisHeight + ThisWidth + 2 * FrWidth);
+                    }
+
+                    if ((DivWidth > 0.0) && (DivArea > 0.0) && !ErrorInSurface) {
+                        auto &surfWin = state.dataSurface->SurfaceWindow(ThisSurf);
+                        surfWin.glazedFrac = surf.Area / (surf.Area + state.dataSurface->SurfWinDividerArea(ThisSurf));
+                        // Correction factor for portion of divider subject to divider projection correction
+                        DivFrac = (1.0 - state.dataSurface->FrameDivider(FrDivNum).HorDividers *
+                                             state.dataSurface->FrameDivider(FrDivNum).VertDividers * pow_2(DivWidth) / DivArea);
+                        state.dataSurface->SurfWinProjCorrDivOut(ThisSurf) =
+                            DivFrac * state.dataSurface->FrameDivider(FrDivNum).DividerProjectionOut / DivWidth;
+                        state.dataSurface->SurfWinProjCorrDivIn(ThisSurf) =
+                            DivFrac * state.dataSurface->FrameDivider(FrDivNum).DividerProjectionIn / DivWidth;
                     }
                 }
             } break;

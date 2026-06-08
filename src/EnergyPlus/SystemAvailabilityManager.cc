@@ -3486,8 +3486,6 @@ namespace Avail {
         // on and the loop flow rate fractionis set to the specified night ventilation
         // value.
 
-        using namespace DataAirLoop;
-
         bool TempCheck;   // TRUE if one zone's temperature is above the value of the vent temp sched
         bool DelTCheck;   // TRUE if the control zone temperature - outside temperature > VentDelT
         bool LowLimCheck; // TRUE if one zones's air temperature is below this value
