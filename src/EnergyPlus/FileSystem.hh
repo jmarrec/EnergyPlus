@@ -207,18 +207,6 @@ namespace FileSystem {
         }
     }
 
-    template <class T, class... Ts> struct is_any : std::disjunction<std::is_same<std::remove_cv_t<T>, std::remove_cv_t<Ts>>...>
-    {
-    };
-
-    template <class T>
-    inline constexpr bool enable_unique_ptr_v =
-        is_any<T, std::unique_ptr<fs::path>, std::unique_ptr<fmt::ostream>, std::unique_ptr<std::ostream>, std::unique_ptr<FILE *>>::value;
-
-    template <class T, FileTypes fileType>
-    inline constexpr bool enable_json_v =
-        is_all_json_type(fileType) && is_any<T, nlohmann::json>::value && !is_any<T, std::string_view, std::string, char *>::value;
-
     template <FileTypes fileType> void writeFile(fs::path const &filePath, const std::string_view data)
     {
         static_assert(is_all_json_type(fileType) || is_flat_file_type(fileType), "Must be a valid file type");
@@ -244,8 +232,9 @@ namespace FileSystem {
         }
     }
 
-    template <FileTypes fileType, class T, typename = std::enable_if_t<enable_json_v<T, fileType>>>
-    void writeFile(fs::path const &filePath, T &data, int const indent = 4)
+    template <FileTypes fileType, std::same_as<nlohmann::json> T>
+        requires(is_all_json_type(fileType))
+    void writeFile(fs::path const &filePath, const T &data, int const indent = 4)
     {
         auto const json_str = getJSON<fileType>(data, indent);
         writeFile<fileType>(filePath, std::string_view(json_str));
