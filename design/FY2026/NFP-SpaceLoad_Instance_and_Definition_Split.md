@@ -40,8 +40,9 @@ Every internal gains object type is split into two complementary objects:
 
 The **Definition** object holds all physical characteristics that are intrinsic to the load type: the design level calculation method and its associated values (equipment level, watts per floor area, watts per person, etc.), heat gain fractions (radiant, latent, lost, return air, ...), and any other type-specific properties such as CO₂ generation rate, fuel type, thermal comfort model selections, and ITE-specific parameters. Because a definition carries no zone or space reference, it can be shared freely across the model.
 
-The **Instance** object holds at least three things: a reference to a Definition by name, a zone/space/zonelist/spacelist assignment, and an operating schedule. It also carries the end-use subcategory and any other fields that are specific to a particular installation (e.g., `Return Air Heat Gain Node Name` and `Exhaust Air Heat Gain Node Name` for `Lights`, which are zone-topology-specific).
-
+The **Instance** object holds at least three things: a reference to a Definition by name, a zone/space/zonelist/spacelist assignment, and an operating schedule.
+It also carries the end-use subcategory and any other fields that are specific to a particular installation (e.g., `Return Air Heat Gain Node Name` and `Exhaust Air Heat Gain Node Name` for `Lights`, which are zone-topology-specific).
+In addition, a `Mulitiplier` field (default 1) is added: this value multiplies the Definition value. This allows greater flexibility to define a single definition but handle different physical installations: for example a single Definition representing one object (a Workstation, or a light bulb) can be definited with an absolute Watts value, and the Instance object has the count of these objects.
 
 ## Approach ##
 
@@ -80,7 +81,36 @@ ElectricEquipment,
   Workstation Def,        !- Electric Equipment Definition Name
   Zone 1,                 !- Zone or ZoneList or Space or SpaceList Name
   Office Schedule,        !- Schedule Name
+  1.0,                    !- Multiplier
   Workstations;           !- End-Use Subcategory
+```
+
+Another example with a Lights object:
+
+```
+Lights,
+  Space 1 Lights,                         !- Name
+  60 W Incandescent Bulb,                 !- Lights Definition Name
+  Space 1,                                !- Zone or ZoneList or Space or SpaceList Name
+  Lights Schedule,                        !- Schedule Name
+  1.0,                                    !- Fraction Replaceable
+  12,                                     !- Multiplier
+  General,                                !- End-Use Subcategory
+  ,                                       !- Return Air Heat Gain Node Name
+  ;                                       !- Exhaust Air Heat Gain Node Name
+
+Lights:Definition,
+  60W Incandescent Bulb,                  !- Name
+  LightingLevel,                          !- Design Level Calculation Method
+  60.0,                                   !- Lighting Level {W}
+  ,                                       !- Watts per Floor Area {W/m2}
+  ,                                       !- Watts per Person {W/person}
+  0,                                      !- Return Air Fraction
+  0,                                      !- Fraction Radiant
+  0,                                      !- Fraction Visible
+  No,                                     !- Return Air Fraction Calculated from Plenum Temperature
+  0.0,                                    !- Return Air Fraction Function of Plenum Temperature Coefficient 1
+  0.0;                                    !- Return Air Fraction Function of Plenum Temperature Coefficient 2 {1/K}
 ```
 
 Below is the proposed IDD for each object
@@ -182,18 +212,22 @@ People,
        \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
        \type object-list
        \object-list ScheduleNames
+  N1, \field Multiplier
+       \type integer
+       \minimum 1
+       \default 1
   A12, \field Ankle Level Air Velocity Schedule Name
        \note units in the schedule are m/s
        \note this is the schedule of the air speed at the 0.1 m above the floor
        \note optional (only required for runs of thermal comfort models AnkleDraftASH55)
        \type object-list
        \object-list ScheduleNames
-  N1, \field Cold Stress Temperature Threshold
+  N2, \field Cold Stress Temperature Threshold
        \note this is the indoor safe temperature threshold for cold stress
        \type real
        \units C
        \default 15.56
-  N2; \field Heat Stress Temperature Threshold
+  N3; \field Heat Stress Temperature Threshold
        \note this is the indoor safe temperature threshold for heat stress
        \type real
        \units C
@@ -394,6 +428,10 @@ Lights,
        \minimum 0
        \maximum 1
        \default 1.0
+  N2, \field Multiplier
+       \type integer
+       \minimum 1
+       \default 1
   A5, \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
@@ -526,6 +564,10 @@ ElectricEquipment,
        \type object-list
        \required-field
        \object-list ScheduleNames
+  N1, \field Multiplier
+       \type integer
+       \minimum 1
+       \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
@@ -629,6 +671,10 @@ GasEquipment,
        \type object-list
        \required-field
        \object-list ScheduleNames
+  N1, \field Multiplier
+       \type integer
+       \minimum 1
+       \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
@@ -745,6 +791,10 @@ HotWaterEquipment,
        \type object-list
        \required-field
        \object-list ScheduleNames
+  N1, \field Multiplier
+       \type integer
+       \minimum 1
+       \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
@@ -849,6 +899,10 @@ SteamEquipment,
        \type object-list
        \required-field
        \object-list ScheduleNames
+  N1, \field Multiplier
+       \type integer
+       \minimum 1
+       \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
@@ -972,6 +1026,10 @@ OtherEquipment,
        \type object-list
        \required-field
        \object-list ScheduleNames
+  N1, \field Multiplier
+       \type integer
+       \minimum 1
+       \default 1
   A6; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
@@ -1076,6 +1134,10 @@ OtherEquipment:Definition,
 | Return Temperature Difference                                           | ElectricEquipment:ITE:AirCooled:Definition |
 | Return Temperature Difference Schedule                                  | ElectricEquipment:ITE:AirCooled:Definition |
 
+
+Note: this object already has a sort of "Multiplier" fields in the sense that it has a "Number of Units" field, but that field only applies if Design Power Input Calculation Method is "Watts/Unit". This is changed to be a proper Multiplier field to match the other objects, and it will also apply if Design Power Input Calculation Method is "Watts/Area".
+Similarly, Design Power Input Calculation Method choices are changed: key "Watts/Units" is renamed to "EquipmentLevel" to match the other objects terminology.
+
 ```
 ElectricEquipment:ITE:AirCooled,
        \memo This object describes air-cooled electric information technology equipment (ITE) which has
@@ -1097,7 +1159,7 @@ ElectricEquipment:ITE:AirCooled,
        \required-field
        \object-list ZoneNames
        \object-list SpaceNames
-  N1, \field Number of Units
+  N1, \field Multiplier
        \type real
        \minimum 0
        \default 1
@@ -1166,11 +1228,11 @@ ElectricEquipment:ITE:AirCooled:Definition,
        \key FlowControlWithApproachTemperatures
   A3, \field Design Power Input Calculation Method
        \note The entered calculation method is used to specify the design power input
-       \note Watts/Unit => Watts per Unit -- Design Power = Watts per Unit * Number of Units
+       \note Choices: EquipmentLevel => Equipment Level -- simply enter watts of equipment
        \note Watts/Area => Watts per Floor Area -- Design Power = Watts per Floor Area * Floor Area
        \type choice
-       \default Watts/Unit
-       \key Watts/Unit
+       \default EquipmentLevel
+       \key EquipmentLevel
        \key Watts/Area
   N1, \field Watts per Unit
        \type real
