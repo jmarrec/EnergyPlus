@@ -857,7 +857,7 @@ namespace ResultsFramework {
                 last = (result + 1).base();
             }
 
-            print<FormatSyntax::FMT>(outputFile, "{}", std::format("{}", EnergyPlus::join(std::ranges::subrange(item.second.begin(), last), ",")));
+            print<FormatSyntax::FMT>(outputFile, "{},", std::format("{}", EnergyPlus::join(std::ranges::subrange(item.second.begin(), last), ",")));
             print<FormatSyntax::FMT>(outputFile, "{}\n", *last);
         }
 
