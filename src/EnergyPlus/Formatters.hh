@@ -91,7 +91,7 @@ template <formattable_range Container> struct std::formatter<Container>
         return element_formatter.parse(ctx);
     }
 
-    auto format(const Container &v, std::format_context &ctx) const -> std::format_context::iterator
+    template <typename FormatContext> auto format(const Container &v, FormatContext &ctx) const
     {
         constexpr char open = set_like<Container> ? '{' : '[';
         constexpr char close = set_like<Container> ? '}' : ']';
@@ -152,7 +152,7 @@ template <typename R> struct std::formatter<::detail::format_join_view<R>>
         return element_formatter.parse(ctx);
     }
 
-    auto format(const ::detail::format_join_view<R> &jv, std::format_context &ctx) const -> std::format_context::iterator
+    template <typename FormatContext> auto format(const ::detail::format_join_view<R> &jv, FormatContext &ctx) const
     {
         auto it = ctx.out();
         bool first = true;

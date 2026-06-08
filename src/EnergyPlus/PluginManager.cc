@@ -86,7 +86,7 @@ template <> struct std::formatter<PyStatus>
         return ctx.begin();
     }
 
-    auto format(const PyStatus &status, std::format_context &ctx) const -> std::format_context::iterator
+    template <typename FormatContext> auto format(const PyStatus &status, FormatContext &ctx) const
     {
         if (PyStatus_Exception(status) == 0) {
             return ctx.out();

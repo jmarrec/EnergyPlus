@@ -335,14 +335,17 @@ template <> struct std::formatter<fs::path>
 
         // Check if reached the end of the range:
         if (it != end && *it != '}') {
-            throw format_error("invalid format");
+            throw std::format_error("invalid format");
         };
 
         // Return an iterator past the end of the parsed range:
         return it;
     }
 
-    auto format(const fs::path &p, std::format_context &ctx) const -> std::format_context::iterator
+    // For older clang/apple-clang, use a templated FormatContext and no trailing return
+    // https://github.com/llvm/llvm-project/issues/66466#issuecomment-1720807809
+    // auto format(const fs::path &p, std::format_context &ctx) const -> std::format_context::iterator
+    template <typename FormatContext> auto format(const fs::path &p, FormatContext &ctx) const
     {
         return std::format_to(ctx.out(), "{}", generic_string ? EnergyPlus::FileSystem::toGenericString(p) : EnergyPlus::FileSystem::toString(p));
     }
