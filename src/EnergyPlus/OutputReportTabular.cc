@@ -5308,7 +5308,7 @@ void WriteTabularReports(EnergyPlusData &state)
 
     int sizeTableEntry = 0;
     int numTableEntry = 0;
-    for (int i = 1; i < state.dataOutRptPredefined->numSubTable; ++i) {
+    for (int i = 1; i <= state.dataOutRptPredefined->numSubTable; ++i) {
         sizeTableEntry += state.dataOutRptPredefined->subTable(i).sizeEntries;
         numTableEntry += state.dataOutRptPredefined->subTable(i).numEntries;
     }
