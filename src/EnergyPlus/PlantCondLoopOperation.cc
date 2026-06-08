@@ -2867,8 +2867,6 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                     for (int ListNum = 1, ListNum_end = this_op_scheme.NumEquipLists; ListNum <= ListNum_end; ++ListNum) {
                         auto &this_equip_list = this_op_scheme.EquipList(ListNum);
                         // The component loop loads the pointers from the OpScheme data structure
-                        // If the component happens to be active in more than schedule, the *LAST*
-                        // schedule found will be activated
                         for (int CompNum = 1; CompNum <= this_equip_list.NumComps; ++CompNum) {
 
                             // set up a reference to the component instance on the list data structure
@@ -2883,20 +2881,22 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                             // then set up a reference to the component on the plant data structure
                             auto &this_loop_component = state.dataPlnt->PlantLoop(LoopPtr).LoopSide(LoopSidePtr).Branch(BranchPtr).Comp(CompPtr);
 
-                            if (this_loop_component.CurOpSchemeType != OpScheme::Pump) {
-                                this_loop_component.CurOpSchemeType = this_op_scheme.Type;
-                            } else {
-                                ShowSevereError(state,
-                                                "Invalid [pump] component found on equipment list.  Pumps are not allowed on equipment lists.");
-                                ShowContinueError(state,
-                                                  std::format("Problem component name = {}", this_op_scheme.EquipList(ListNum).Comp(CompNum).Name));
-                                ShowContinueError(state, "Remove pump component and place other plant equipment on the list to correct.");
-                                errFlag2 = true;
-                            }
+                            if (this_loop_component.CurCompLevelOpNum == 0) {
+                                if (this_loop_component.CurOpSchemeType != OpScheme::Pump) {
+                                    this_loop_component.CurOpSchemeType = this_op_scheme.Type;
+                                } else {
+                                    ShowSevereError(state,
+                                                    "Invalid [pump] component found on equipment list.  Pumps are not allowed on equipment lists.");
+                                    ShowContinueError(
+                                        state, std::format("Problem component name = {}", this_op_scheme.EquipList(ListNum).Comp(CompNum).Name));
+                                    ShowContinueError(state, "Remove pump component and place other plant equipment on the list to correct.");
+                                    errFlag2 = true;
+                                }
 
-                            for (int CompOpNum = 1; CompOpNum <= this_loop_component.NumOpSchemes; ++CompOpNum) {
-                                if (this_loop_component.OpScheme(CompOpNum).OpSchemePtr == OpNum) {
-                                    this_loop_component.CurCompLevelOpNum = CompOpNum;
+                                for (int CompOpNum = 1; CompOpNum <= this_loop_component.NumOpSchemes; ++CompOpNum) {
+                                    if (this_loop_component.OpScheme(CompOpNum).OpSchemePtr == OpNum) {
+                                        this_loop_component.CurCompLevelOpNum = CompOpNum;
+                                    }
                                 }
                             }
                         }
