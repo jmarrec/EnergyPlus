@@ -12753,6 +12753,50 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
                           "    0.8,                          !- Divider Visible Absorptance",
                           "    0.9;                          !- Divider Thermal Hemispherical Emissivity",
 
+                          "  WindowProperty:FrameAndDivider,",
+                          "    BadDividerGeometry2,          !- Name",
+                          "    0.05,                         !- Frame Width {m}",
+                          "    0.01,                         !- Frame Outside Projection {m}",
+                          "    0.01,                         !- Frame Inside Projection {m}",
+                          "    5.0,                          !- Frame Conductance {W/m2-K}",
+                          "    1.2,                          !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+                          "    0.8,                          !- Frame Solar Absorptance",
+                          "    0.8,                          !- Frame Visible Absorptance",
+                          "    0.9,                          !- Frame Thermal Hemispherical Emissivity",
+                          "    DividedLite,                  !- Divider Type",
+                          "    0.5,                          !- Divider Width {m}",
+                          "    20,                           !- Number of Horizontal Dividers",
+                          "    20,                           !- Number of Vertical Dividers",
+                          "    0.00,                         !- Divider Outside Projection {m}",
+                          "    0.00,                         !- Divider Inside Projection {m}",
+                          "    5.0,                          !- Divider Conductance {W/m2-K}",
+                          "    1.2,                          !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+                          "    0.8,                          !- Divider Solar Absorptance",
+                          "    0.8,                          !- Divider Visible Absorptance",
+                          "    0.9;                          !- Divider Thermal Hemispherical Emissivity",
+
+                          "  WindowProperty:FrameAndDivider,",
+                          "    BadDividerGeometry3,          !- Name",
+                          "    0.05,                         !- Frame Width {m}",
+                          "    0.01,                         !- Frame Outside Projection {m}",
+                          "    0.01,                         !- Frame Inside Projection {m}",
+                          "    5.0,                          !- Frame Conductance {W/m2-K}",
+                          "    1.2,                          !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+                          "    0.8,                          !- Frame Solar Absorptance",
+                          "    0.8,                          !- Frame Visible Absorptance",
+                          "    0.9,                          !- Frame Thermal Hemispherical Emissivity",
+                          "    DividedLite,                  !- Divider Type",
+                          "    0.5,                          !- Divider Width {m}",
+                          "    50,                           !- Number of Horizontal Dividers",
+                          "    50,                           !- Number of Vertical Dividers",
+                          "    0.00,                         !- Divider Outside Projection {m}",
+                          "    0.00,                         !- Divider Inside Projection {m}",
+                          "    5.0,                          !- Divider Conductance {W/m2-K}",
+                          "    1.2,                          !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+                          "    0.8,                          !- Divider Solar Absorptance",
+                          "    0.8,                          !- Divider Visible Absorptance",
+                          "    0.9;                          !- Divider Thermal Hemispherical Emissivity",
+
                           "  FenestrationSurface:Detailed,",
                           "    FenestrationSurface,          !- Name",
                           "    Window,                       !- Surface Type",
@@ -12761,6 +12805,36 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
                           "    ,                             !- Outside Boundary Condition Object",
                           "    0.5000000,                    !- View Factor to Ground",
                           "    BadDividerGeometry,           !- Frame and Divider Name",
+                          "    1.0,                          !- Multiplier",
+                          "    4,                            !- Number of Vertices",
+                          "    0.200000,0.0,9.900000,        !- X,Y,Z ==> Vertex 1 {m}",
+                          "    0.200000,0.0,0.1000000,       !- X,Y,Z ==> Vertex 2 {m}",
+                          "    9.900000,0.0,0.1000000,       !- X,Y,Z ==> Vertex 3 {m}",
+                          "    9.900000,0.0,9.900000;        !- X,Y,Z ==> Vertex 4 {m}",
+
+                          "  FenestrationSurface:Detailed,",
+                          "    FenestrationSurface2,         !- Name",
+                          "    Window,                       !- Surface Type",
+                          "    WindowConstruction,           !- Construction Name",
+                          "    Wall2,                        !- Building Surface Name",
+                          "    ,                             !- Outside Boundary Condition Object",
+                          "    0.5000000,                    !- View Factor to Ground",
+                          "    BadDividerGeometry2,          !- Frame and Divider Name",
+                          "    1.0,                          !- Multiplier",
+                          "    4,                            !- Number of Vertices",
+                          "    0.200000,0.0,9.900000,        !- X,Y,Z ==> Vertex 1 {m}",
+                          "    0.200000,0.0,0.1000000,       !- X,Y,Z ==> Vertex 2 {m}",
+                          "    9.900000,0.0,0.1000000,       !- X,Y,Z ==> Vertex 3 {m}",
+                          "    9.900000,0.0,9.900000;        !- X,Y,Z ==> Vertex 4 {m}",
+
+                          "  FenestrationSurface:Detailed,",
+                          "    FenestrationSurface3,         !- Name",
+                          "    Window,                       !- Surface Type",
+                          "    WindowConstruction,           !- Construction Name",
+                          "    Wall3,                        !- Building Surface Name",
+                          "    ,                             !- Outside Boundary Condition Object",
+                          "    0.5000000,                    !- View Factor to Ground",
+                          "    BadDividerGeometry3,          !- Frame and Divider Name",
                           "    1.0,                          !- Multiplier",
                           "    4,                            !- Number of Vertices",
                           "    0.200000,0.0,9.900000,        !- X,Y,Z ==> Vertex 1 {m}",
@@ -12833,6 +12907,40 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
                           "    10.00000,0.0,10.00000;        !- X,Y,Z ==> Vertex 4 {m}",
 
                           "  BuildingSurface:Detailed,",
+                          "    Wall2,                        !- Name",
+                          "    Wall,                         !- Surface Type",
+                          "    WallConstruction,             !- Construction Name",
+                          "    Zone,                         !- Zone Name",
+                          "    ,                             !- Space Name",
+                          "    Outdoors,                     !- Outside Boundary Condition",
+                          "    ,                             !- Outside Boundary Condition Object",
+                          "    SunExposed,                   !- Sun Exposure",
+                          "    WindExposed,                  !- Wind Exposure",
+                          "    0.5000000,                    !- View Factor to Ground",
+                          "    4,                            !- Number of Vertices",
+                          "    1.0,0.000000,10.00000,        !- X,Y,Z ==> Vertex 1 {m}",
+                          "    1.0,0.000000,0.0,             !- X,Y,Z ==> Vertex 2 {m}",
+                          "    11.00000,0.0,0.0,             !- X,Y,Z ==> Vertex 3 {m}",
+                          "    11.00000,0.0,10.00000;        !- X,Y,Z ==> Vertex 4 {m}",
+
+                          "  BuildingSurface:Detailed,",
+                          "    Wall3,                        !- Name",
+                          "    Wall,                         !- Surface Type",
+                          "    WallConstruction,             !- Construction Name",
+                          "    Zone,                         !- Zone Name",
+                          "    ,                             !- Space Name",
+                          "    Outdoors,                     !- Outside Boundary Condition",
+                          "    ,                             !- Outside Boundary Condition Object",
+                          "    SunExposed,                   !- Sun Exposure",
+                          "    WindExposed,                  !- Wind Exposure",
+                          "    0.5000000,                    !- View Factor to Ground",
+                          "    4,                            !- Number of Vertices",
+                          "    2.0,0.000000,10.00000,        !- X,Y,Z ==> Vertex 1 {m}",
+                          "    2.0,0.000000,0.0,             !- X,Y,Z ==> Vertex 2 {m}",
+                          "    12.00000,0.0,0.0,             !- X,Y,Z ==> Vertex 3 {m}",
+                          "    12.00000,0.0,10.00000;        !- X,Y,Z ==> Vertex 4 {m}",
+
+                          "  BuildingSurface:Detailed,",
                           "    Floor,                        !- Name",
                           "    Floor,                        !- Surface Type",
                           "    WallConstruction,             !- Construction Name",
@@ -12873,11 +12981,34 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
     HeatBalanceManager::GetConstructData(*state, ErrorsFound);
     HeatBalanceManager::GetBuildingData(*state, ErrorsFound);
 
+    EXPECT_TRUE(ErrorsFound);
     EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** ProcessSurfaceVertices: Horizontal dividers exceed glazed opening height for window FENESTRATIONSURFACE",
+        "   **   ~~~   ** ProcessSurfaceVertices: Number of horizontal dividers=[20], divider width=[0.50] m, glazed opening height=[9.80] m.",
         "   ** Severe  ** ProcessSurfaceVertices: Divider area exceeds glazed opening for window FENESTRATIONSURFACE",
         "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[95.10] m2.",
-
+        "   ** Severe  ** ProcessSurfaceVertices: Horizontal dividers exceed glazed opening height for window FENESTRATIONSURFACE2",
+        "   **   ~~~   ** ProcessSurfaceVertices: Number of horizontal dividers=[20], divider width=[0.50] m, glazed opening height=[9.80] m.",
+        "   ** Severe  ** ProcessSurfaceVertices: Vertical dividers exceed glazed opening width for window FENESTRATIONSURFACE2",
+        "   **   ~~~   ** ProcessSurfaceVertices: Number of vertical dividers=[20], divider width=[0.50] m, glazed opening width=[9.70] m.",
+        "   ** Severe  ** ProcessSurfaceVertices: Horizontal dividers exceed glazed opening height for window FENESTRATIONSURFACE3",
+        "   **   ~~~   ** ProcessSurfaceVertices: Number of horizontal dividers=[50], divider width=[0.50] m, glazed opening height=[9.80] m.",
+        "   ** Severe  ** ProcessSurfaceVertices: Vertical dividers exceed glazed opening width for window FENESTRATIONSURFACE3",
+        "   **   ~~~   ** ProcessSurfaceVertices: Number of vertical dividers=[50], divider width=[0.50] m, glazed opening width=[9.70] m.",
+        "   ** Severe  ** ProcessSurfaceVertices: Divider area exceeds glazed opening for window FENESTRATIONSURFACE3",
+        "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[-137.50] m2."
     })));
+
+    int surfNum1 = Util::FindItemInList("FENESTRATIONSURFACE", state->dataSurface->Surface);
+    EXPECT_GT(surfNum1, 0);
+    int surfNum2 = Util::FindItemInList("FENESTRATIONSURFACE2", state->dataSurface->Surface);
+    EXPECT_GT(surfNum2, 0);
+    int surfNum3 = Util::FindItemInList("FENESTRATIONSURFACE3", state->dataSurface->Surface);
+    EXPECT_GT(surfNum3, 0);
+
+    EXPECT_GT(state->dataSurface->SurfWinDividerArea(surfNum1), state->dataSurface->Surface(surfNum1).Area);
+    EXPECT_GT(95.06 - state->dataSurface->SurfWinDividerArea(surfNum2), 0);
+    EXPECT_GT(0, state->dataSurface->SurfWinDividerArea(surfNum3));
 }
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_GetVerticesDropDuplicates)
