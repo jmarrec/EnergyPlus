@@ -59,6 +59,7 @@
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FileSystem.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/PluginManager.hh>
 #if LINK_WITH_PYTHON
 #    include <EnergyPlus/PythonEngine.hh>
@@ -216,20 +217,20 @@ Built on Platform: {}
         bool debugCLI = std::any_of(args.begin(), args.end(), [](const auto &arg) { return arg == "--debug-cli"; });
         if (debugCLI) {
             {
-                fmt::print("ProcessArgs: received args\n");
+                std::print("ProcessArgs: received args\n");
                 int na = 0;
                 for (const auto &a : args) {
-                    fmt::print("* {}: '{}'\n", na++, a);
+                    std::print("* {}: '{}'\n", na++, a);
                 }
             }
             {
-                fmt::print("\nAfter massaging/expanding of args\n");
+                std::print("\nAfter massaging/expanding of args\n");
                 int na = 0;
                 for (const auto &a : arguments) {
-                    fmt::print("* {}: '{}'\n", na++, a);
+                    std::print("* {}: '{}'\n", na++, a);
                 }
             }
-            fmt::print("\n");
+            std::print("\n");
         }
         // bool debugCLI = false;
         app.add_flag("--debug-cli", debugCLI, "Print the result of the CLI assignments to the console and exit")->group(""); // Empty group to hide it
@@ -357,7 +358,7 @@ run_manager_from_cli()
         }
 
         if (debugCLI) {
-            fmt::print(stderr,
+            std::print(stderr,
                        R"debug(
 state.dataGlobal->AnnualSimulation = {},
 state.dataGlobal->DDOnlySimulation = {},
@@ -392,7 +393,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                        state.files.inputWeatherFilePath.filePath,
                        state.dataStrGlobals->inputFilePath);
 
-            fmt::print(stderr, "--debug-cli passed: exiting early\n");
+            std::print(stderr, "--debug-cli passed: exiting early\n");
 
             exit(0);
         }
