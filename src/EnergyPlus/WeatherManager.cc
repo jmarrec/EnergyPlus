@@ -784,7 +784,7 @@ namespace Weather {
             state.dataEnvrn->DayOfYear = envCurr.StartJDay;
             state.dataEnvrn->DayOfMonth = envCurr.StartDay;
             state.dataGlobal->CalendarYear = envCurr.StartYear;
-            state.dataGlobal->CalendarYearChr = fmt::to_string(state.dataGlobal->CalendarYear);
+            state.dataGlobal->CalendarYearChr = std::to_string(state.dataGlobal->CalendarYear);
             state.dataEnvrn->Month = envCurr.StartMonth;
             state.dataGlobal->NumOfDayInEnvrn = envCurr.TotalDays; // Set day loop maximum from DataGlobals
 
@@ -1023,7 +1023,7 @@ namespace Weather {
                                   StDate,
                                   EnDate,
                                   Sched::dayTypeNames[TWeekDay],
-                                  fmt::to_string(envCurr.TotalDays),
+                                  std::to_string(envCurr.TotalDays),
                                   "Use RunPeriod Specified Day",
                                   AlpUseDST,
                                   AlpUseSpec,
@@ -2400,9 +2400,9 @@ namespace Weather {
                                              LiquidPrecip);
                 } else if (WeatherDataLine.eof) {
                     if (NumRewinds > 0) {
-                        std::string date = fmt::to_string(thisEnviron.StartMonth) + '/' + fmt::to_string(thisEnviron.StartDay);
+                        std::string date = std::to_string(thisEnviron.StartMonth) + '/' + std::to_string(thisEnviron.StartDay);
                         if (thisEnviron.MatchYear) {
-                            date += '/' + fmt::to_string(thisEnviron.StartYear);
+                            date += '/' + std::to_string(thisEnviron.StartYear);
                         }
                         ShowSevereError(state, std::format("Multiple rewinds on EPW while searching for first day {}", date));
                     } else {
@@ -4638,7 +4638,7 @@ namespace Weather {
         if (state.dataWeather->EnvironmentReportNbr != 1) { //  problem
             ShowFatalError(state, "ReportOutputFileHeaders: Assigned report number for Environment title is not 1.  Contact Support.");
         }
-        state.dataWeather->EnvironmentReportChr = fmt::to_string(state.dataWeather->EnvironmentReportNbr);
+        state.dataWeather->EnvironmentReportChr = std::to_string(state.dataWeather->EnvironmentReportNbr);
         strip(state.dataWeather->EnvironmentReportChr);
         print(state.files.eso, "{}{}\n", state.dataWeather->EnvironmentReportChr, EnvironmentString);
         print(state.files.mtr, "{}{}\n", state.dataWeather->EnvironmentReportChr, EnvironmentString);

@@ -2272,8 +2272,8 @@ namespace Sched {
                     YesNoContinous = "Yes";
                 } else {
                     YesNoContinous = "No";
-                    minValStr = fmt::to_string((int)schedType->minVal);
-                    maxValStr = fmt::to_string((int)schedType->maxVal);
+                    minValStr = std::to_string((int)schedType->minVal);
+                    maxValStr = std::to_string((int)schedType->maxVal);
                 }
             } else {
                 YesNoLimited = "No";

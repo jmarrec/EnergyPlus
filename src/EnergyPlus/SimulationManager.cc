@@ -523,7 +523,7 @@ namespace SimulationManager {
                 }
 
                 ++state.dataGlobal->DayOfSim;
-                state.dataGlobal->DayOfSimChr = fmt::to_string(state.dataGlobal->DayOfSim);
+                state.dataGlobal->DayOfSimChr = std::to_string(state.dataGlobal->DayOfSim);
                 if (!state.dataGlobal->WarmupFlag) {
                     ++state.dataEnvrn->CurrentOverallSimDay;
                     DisplaySimDaysProgress(state, state.dataEnvrn->CurrentOverallSimDay, state.dataEnvrn->TotalOverallSimDays);
@@ -535,7 +535,7 @@ namespace SimulationManager {
 
                 if (state.dataGlobal->WarmupFlag) {
                     ++state.dataReportFlag->NumOfWarmupDays;
-                    state.dataReportFlag->cWarmupDay = fmt::to_string(state.dataReportFlag->NumOfWarmupDays);
+                    state.dataReportFlag->cWarmupDay = std::to_string(state.dataReportFlag->NumOfWarmupDays);
                     DisplayString(state, "Warming up {" + state.dataReportFlag->cWarmupDay + '}');
                 } else if (state.dataGlobal->DayOfSim == 1) {
                     if (state.dataSysVars->ReportDuringWarmup) {
@@ -902,7 +902,7 @@ namespace SimulationManager {
                 state.dataGlobal->TimeStepsInHour = 2; // Force 30 minute time steps on CI
             }
             if (state.dataGlobal->TimeStepsInHour <= 0 || state.dataGlobal->TimeStepsInHour > 60) {
-                Alphas(1) = fmt::to_string(state.dataGlobal->TimeStepsInHour);
+                Alphas(1) = std::to_string(state.dataGlobal->TimeStepsInHour);
                 ShowWarningError(state, std::format("{}: Requested number ({}) invalid, Defaulted to 4", CurrentModuleObject, Alphas(1)));
                 state.dataGlobal->TimeStepsInHour = 4;
             } else if (mod(60, state.dataGlobal->TimeStepsInHour) != 0) {
@@ -1526,13 +1526,13 @@ namespace SimulationManager {
             Alphas(2) = "ScriptF";
         }
         Alphas(3) = overrideModeValue;
-        Alphas(4) = fmt::to_string(state.dataGlobal->TimeStepsInHour);
+        Alphas(4) = std::to_string(state.dataGlobal->TimeStepsInHour);
         if (state.dataHeatBal->OverrideZoneAirSolutionAlgo) {
             Alphas(5) = "Yes";
         } else {
             Alphas(5) = "No";
         }
-        Alphas(6) = fmt::to_string(state.dataHeatBal->MinNumberOfWarmupDays);
+        Alphas(6) = std::to_string(state.dataHeatBal->MinNumberOfWarmupDays);
         if (state.dataEnvrn->forceBeginEnvResetSuppress) {
             Alphas(7) = "Yes";
         } else {
@@ -1595,8 +1595,8 @@ namespace SimulationManager {
             Util::appendPerfLog(state, "Zone Radiant Exchange Algorithm", "ScriptF");
         }
         Util::appendPerfLog(state, "Override Mode", currentOverrideModeValue);
-        Util::appendPerfLog(state, "Number of Timesteps per Hour", fmt::to_string(state.dataGlobal->TimeStepsInHour));
-        Util::appendPerfLog(state, "Minimum Number of Warmup Days", fmt::to_string(state.dataHeatBal->MinNumberOfWarmupDays));
+        Util::appendPerfLog(state, "Number of Timesteps per Hour", std::to_string(state.dataGlobal->TimeStepsInHour));
+        Util::appendPerfLog(state, "Minimum Number of Warmup Days", std::to_string(state.dataHeatBal->MinNumberOfWarmupDays));
         Util::appendPerfLog(state, "SuppressAllBeginEnvironmentResets", bool_to_string(state.dataEnvrn->forceBeginEnvResetSuppress));
         Util::appendPerfLog(state, "Minimum System Timestep", EnergyPlus::format("{:.1R}", state.dataConvergeParams->MinTimeStepSys * 60.0));
         Util::appendPerfLog(state, "MaxZoneTempDiff", EnergyPlus::format("{:.2R}", state.dataConvergeParams->MaxZoneTempDiff));
@@ -1958,17 +1958,17 @@ namespace SimulationManager {
             if (state.dataSysVars->iEnvSetThreads == 0) {
                 cEnvSetThreads = "Not Set";
             } else {
-                cEnvSetThreads = fmt::to_string(state.dataSysVars->iEnvSetThreads);
+                cEnvSetThreads = std::to_string(state.dataSysVars->iEnvSetThreads);
             }
             if (state.dataSysVars->iepEnvSetThreads == 0) {
                 cepEnvSetThreads = "Not Set";
             } else {
-                cepEnvSetThreads = fmt::to_string(state.dataSysVars->iepEnvSetThreads);
+                cepEnvSetThreads = std::to_string(state.dataSysVars->iepEnvSetThreads);
             }
             if (state.dataSysVars->iIDFSetThreads == 0) {
                 cIDFSetThreads = "Not Set";
             } else {
-                cIDFSetThreads = fmt::to_string(state.dataSysVars->iIDFSetThreads);
+                cIDFSetThreads = std::to_string(state.dataSysVars->iIDFSetThreads);
             }
             if (state.dataSysVars->lnumActiveSims) {
                 print(state.files.eio,

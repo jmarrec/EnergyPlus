@@ -9708,7 +9708,6 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
         if (!state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation) {
             if ((HPSetPointTemp - DeadBandTempDiff) <= this->SetPointTemp) {
                 Real64 HPMinTemp = HPSetPointTemp - DeadBandTempDiff;
-                const std::string HPMinTempChar = fmt::to_string(HPMinTemp);
                 ++HeatPump.HPSetPointError;
                 //  add logic for warmup, DataGlobals::KickOffSimulation and doing sizing here
                 if (HeatPump.HPSetPointError == 1) {
@@ -9718,7 +9717,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                     "the heat pump water heater. Heat Pump will be disabled and simulation continues.",
                                     HeatPump.Type,
                                     HeatPump.Name));
-                    ShowContinueErrorTimeStamp(state, std::format(" ...Heat Pump cut-in temperature={}", HPMinTempChar));
+                    ShowContinueErrorTimeStamp(state, std::format(" ...Heat Pump cut-in temperature={}", HPMinTemp));
                 } else {
                     ShowRecurringWarningErrorAtEnd(state,
                                                    HeatPump.Type + " \"" + HeatPump.Name +

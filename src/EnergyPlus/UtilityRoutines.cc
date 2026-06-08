@@ -421,12 +421,12 @@ int AbortEnergyPlus(EnergyPlusData &state)
     ShowRecurringErrors(state);
     SummarizeErrors(state);
     CloseMiscOpenFiles(state);
-    NumWarnings = fmt::to_string(state.dataErrTracking->TotalWarningErrors);
-    NumSevere = fmt::to_string(state.dataErrTracking->TotalSevereErrors);
-    NumWarningsDuringWarmup = fmt::to_string(state.dataErrTracking->TotalWarningErrorsDuringWarmup);
-    NumSevereDuringWarmup = fmt::to_string(state.dataErrTracking->TotalSevereErrorsDuringWarmup);
-    NumWarningsDuringSizing = fmt::to_string(state.dataErrTracking->TotalWarningErrorsDuringSizing);
-    NumSevereDuringSizing = fmt::to_string(state.dataErrTracking->TotalSevereErrorsDuringSizing);
+    NumWarnings = std::to_string(state.dataErrTracking->TotalWarningErrors);
+    NumSevere = std::to_string(state.dataErrTracking->TotalSevereErrors);
+    NumWarningsDuringWarmup = std::to_string(state.dataErrTracking->TotalWarningErrorsDuringWarmup);
+    NumSevereDuringWarmup = std::to_string(state.dataErrTracking->TotalSevereErrorsDuringWarmup);
+    NumWarningsDuringSizing = std::to_string(state.dataErrTracking->TotalWarningErrorsDuringSizing);
+    NumSevereDuringSizing = std::to_string(state.dataErrTracking->TotalSevereErrorsDuringSizing);
 
     // catch up with timings if in middle
     state.dataSysVars->runtimeTimer.tock();
@@ -530,17 +530,17 @@ int EndEnergyPlus(EnergyPlusData &state)
     ShowRecurringErrors(state);
     SummarizeErrors(state);
     CloseMiscOpenFiles(state);
-    NumWarnings = fmt::to_string(state.dataErrTracking->TotalWarningErrors);
+    NumWarnings = std::to_string(state.dataErrTracking->TotalWarningErrors);
     strip(NumWarnings);
-    NumSevere = fmt::to_string(state.dataErrTracking->TotalSevereErrors);
+    NumSevere = std::to_string(state.dataErrTracking->TotalSevereErrors);
     strip(NumSevere);
-    NumWarningsDuringWarmup = fmt::to_string(state.dataErrTracking->TotalWarningErrorsDuringWarmup);
+    NumWarningsDuringWarmup = std::to_string(state.dataErrTracking->TotalWarningErrorsDuringWarmup);
     strip(NumWarningsDuringWarmup);
-    NumSevereDuringWarmup = fmt::to_string(state.dataErrTracking->TotalSevereErrorsDuringWarmup);
+    NumSevereDuringWarmup = std::to_string(state.dataErrTracking->TotalSevereErrorsDuringWarmup);
     strip(NumSevereDuringWarmup);
-    NumWarningsDuringSizing = fmt::to_string(state.dataErrTracking->TotalWarningErrorsDuringSizing);
+    NumWarningsDuringSizing = std::to_string(state.dataErrTracking->TotalWarningErrorsDuringSizing);
     strip(NumWarningsDuringSizing);
-    NumSevereDuringSizing = fmt::to_string(state.dataErrTracking->TotalSevereErrorsDuringSizing);
+    NumSevereDuringSizing = std::to_string(state.dataErrTracking->TotalSevereErrorsDuringSizing);
     strip(NumSevereDuringSizing);
 
     state.dataSysVars->runtimeTimer.tock();

@@ -2823,7 +2823,7 @@ namespace Curve {
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         for (auto *thisCurve : state.dataCurveManager->curves) {
             for (int dim = 1; dim <= thisCurve->numDims; ++dim) {
-                std::string numStr = fmt::to_string(dim);
+                std::string numStr = std::to_string(dim);
                 SetupOutputVariable(state,
                                     std::format("Performance Curve Input Variable {} Value", numStr),
                                     Constant::Units::None,
@@ -3065,7 +3065,7 @@ namespace Curve {
 
         ErrorObjectHeader eoh{routineName, objectType, objectName};
 
-        std::string validDimsString = fmt::to_string(validDims[0]);
+        std::string validDimsString = std::to_string(validDims[0]);
         for (std::size_t i = 1; i < validDims.size(); i++) {
             validDimsString += std::format(" or {}", validDims[i]);
         }
