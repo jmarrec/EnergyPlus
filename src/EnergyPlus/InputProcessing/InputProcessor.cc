@@ -262,7 +262,7 @@ void cleanEPJSON(json &epjson)
 void InputProcessor::processInput(EnergyPlusData &state)
 {
     if (!FileSystem::fileExists(state.dataStrGlobals->inputFilePath)) {
-        ShowFatalError(state, EnergyPlus::format("Input file path {} not found", state.dataStrGlobals->inputFilePath.string()));
+        ShowFatalError(state, std::format("Input file path {} not found", state.dataStrGlobals->inputFilePath));
         return;
     }
 

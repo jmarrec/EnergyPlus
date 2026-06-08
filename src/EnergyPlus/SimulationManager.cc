@@ -1780,7 +1780,7 @@ namespace SimulationManager {
     {
         auto result = std::make_unique<std::ofstream>(filePath, mode); // (AUTO_OK_UPTR)
         if (!result->good()) {
-            ShowFatalError(state, std::format("OpenOutputFiles: Could not open file {} for output (write).", filePath.string()));
+            ShowFatalError(state, std::format("OpenOutputFiles: Could not open file {} for output (write).", filePath));
         }
         return result;
     }
@@ -1799,7 +1799,7 @@ namespace SimulationManager {
             result = std::make_unique<fmt::ostream>(std::move(f));
         } catch (const std::system_error &error) {
             ShowSevereError(state, error.what());
-            ShowFatalError(state, std::format("OpenOutputFiles: Could not open file {} for output (write).", filePath.string()));
+            ShowFatalError(state, std::format("OpenOutputFiles: Could not open file {} for output (write).", filePath));
         }
         return result;
     }

@@ -204,7 +204,7 @@ std::ofstream &open_tbl_stream(EnergyPlusData &state, int const iStyle, fs::path
     if (output_to_file) {
         tbl_stream.open(filePath);
         if (!tbl_stream) {
-            ShowFatalError(state, EnergyPlus::format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath.string()));
+            ShowFatalError(state, std::format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath));
         }
     } else {
         tbl_stream.setstate(std::ios_base::badbit);

@@ -603,7 +603,7 @@ namespace Sched {
                                 ShowSevereError(state, error);
                             }
                         }
-                        ShowContinueError(state, EnergyPlus::format("Error Occurred in {}", state.files.TempFullFilePath.filePath.string()));
+                        ShowContinueError(state, std::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                         ShowFatalError(state, "Program terminates due to previous condition.");
                     }
                     for (const auto &[warning, isContinued] : csvParser.warnings()) {
@@ -632,8 +632,8 @@ namespace Sched {
                         if (!csvParser.hasErrors()) {
                             isCSV = true;
                             ShowWarningMessage(state,
-                                               EnergyPlus::format("Extension of file {} is unrecognized, but parsed as CSV successfully",
-                                                                  state.files.TempFullFilePath.filePath.string()));
+                                               std::format("Extension of file {} is unrecognized, but parsed as CSV successfully",
+                                                           state.files.TempFullFilePath.filePath));
                             schedule_file_shading_result = it.first;
                         }
                     } catch (...) {
@@ -647,8 +647,8 @@ namespace Sched {
                             s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath, std::move(schedule_data));
                         schedule_file_shading_result = it.first;
                         ShowWarningMessage(state,
-                                           EnergyPlus::format("Extension of file {} is unrecognized, but parsed as JSON successfully",
-                                                              state.files.TempFullFilePath.filePath.string()));
+                                           std::format("Extension of file {} is unrecognized, but parsed as JSON successfully",
+                                                       state.files.TempFullFilePath.filePath));
                         isJSON = true;
                     } catch (...) {
                         // We're testing to see if this is json, if any exception exists, then throw the standard error about an unknown extension
@@ -1688,7 +1688,7 @@ namespace Sched {
                                     ShowSevereCustom(state, eoh, error);
                                 }
                             }
-                            ShowContinueError(state, std::format("Error Occurred in {}", state.files.TempFullFilePath.filePath.string()));
+                            ShowContinueError(state, std::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                             ShowFatalError(state, "Program terminates due to previous condition.");
                         }
                         for (const auto &[warning, isContinued] : csvParser.warnings()) {
@@ -1716,7 +1716,7 @@ namespace Sched {
                                 isCSV = true;
                                 ShowWarningMessage(state,
                                                    std::format("Extension of file {} is unrecognized, but parsed as CSV successfully",
-                                                               state.files.TempFullFilePath.filePath.string()));
+                                                               state.files.TempFullFilePath.filePath));
                             }
                         } catch (...) {
                             // We're testing to see if this is a csv, if any exception exists, then throw the standard error about an unknown
@@ -1730,7 +1730,7 @@ namespace Sched {
                                 result = it.first;
                                 ShowWarningMessage(state,
                                                    std::format("Extension of file {} is unrecognized, but parsed as JSON successfully",
-                                                               state.files.TempFullFilePath.filePath.string()));
+                                                               state.files.TempFullFilePath.filePath));
                                 isJSON = true;
                             } catch (...) {
                                 // We're testing to see if this is json, if any exception exists, then throw the standard error about an unknown
@@ -1754,7 +1754,7 @@ namespace Sched {
                         state,
                         eoh,
                         std::format("Requested column number {}, but found only {} columns.", curcolCount, result->second["values"].size()));
-                    ShowContinueError(state, std::format("Error Occurred in {}", state.files.TempFullFilePath.filePath.string()));
+                    ShowContinueError(state, std::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                     ShowFatalError(state, "Program terminates due to previous condition.");
                 }
                 auto const &column_json = result->second["values"][curcolCount - 1];
@@ -1766,7 +1766,7 @@ namespace Sched {
                 } catch (nlohmann::json::type_error &e) {
                     ShowSevereCustom(state, eoh, std::format("Column number {} has non-numeric data.", curcolCount));
                     ShowContinueError(state, e.what());
-                    ShowContinueError(state, std::format("Error Occurred in {}", state.files.TempFullFilePath.filePath.string()));
+                    ShowContinueError(state, std::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                     ShowFatalError(state, "Program terminates due to previous condition.");
                 }
 
@@ -1883,7 +1883,7 @@ namespace Sched {
                         eoh,
                         std::format(
                             "For header '{}', Requested column number {}, but found only {} columns.", header, column + 1, values_json.size()));
-                    ShowContinueError(state, std::format("Error Occurred in {}", schedule_file_shading_result->first.string()));
+                    ShowContinueError(state, std::format("Error Occurred in {}", schedule_file_shading_result->first));
                     ShowFatalError(state, "Program terminates due to previous condition.");
                 }
 
@@ -1893,7 +1893,7 @@ namespace Sched {
                 } catch (nlohmann::json::type_error &e) {
                     ShowSevereCustom(state, eoh, std::format("Column number {} has non-numeric data.", column + 1));
                     ShowContinueError(state, e.what());
-                    ShowContinueError(state, std::format("Error Occurred in {}", schedule_file_shading_result->first.string()));
+                    ShowContinueError(state, std::format("Error Occurred in {}", schedule_file_shading_result->first));
                     ShowFatalError(state, "Program terminates due to previous condition.");
                 }
 

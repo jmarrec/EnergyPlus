@@ -325,8 +325,8 @@ namespace Util {
                     fsPerfLog.open(state.dataStrGlobals->outputPerfLogFilePath, std::fstream::out); // open file normally
                     if (!fsPerfLog) {
                         ShowFatalError(state,
-                                       EnergyPlus::format("appendPerfLog: Could not open file \"{}\" for output (write).",
-                                                          state.dataStrGlobals->outputPerfLogFilePath.string()));
+                                       std::format("appendPerfLog: Could not open file \"{}\" for output (write).",
+                                                   state.dataStrGlobals->outputPerfLogFilePath));
                     }
                     fsPerfLog << state.dataUtilityRoutines->appendPerfLog_headerRow << std::endl;
                     fsPerfLog << state.dataUtilityRoutines->appendPerfLog_valuesRow << std::endl;
@@ -336,8 +336,8 @@ namespace Util {
                     fsPerfLog.open(state.dataStrGlobals->outputPerfLogFilePath, std::fstream::app); // append to already existing file
                     if (!fsPerfLog) {
                         ShowFatalError(state,
-                                       EnergyPlus::format("appendPerfLog: Could not open file \"{}\" for output (append).",
-                                                          state.dataStrGlobals->outputPerfLogFilePath.string()));
+                                       std::format("appendPerfLog: Could not open file \"{}\" for output (append).",
+                                                   state.dataStrGlobals->outputPerfLogFilePath));
                     }
                     fsPerfLog << state.dataUtilityRoutines->appendPerfLog_valuesRow << std::endl;
                 }
@@ -452,7 +452,7 @@ int AbortEnergyPlus(EnergyPlusData &state)
         auto tempfl = state.files.endFile.try_open(state.files.outputControl.end);
 
         if (!tempfl.good()) {
-            DisplayString(state, EnergyPlus::format("AbortEnergyPlus: Could not open file {} for output (write).", tempfl.filePath.string()));
+            DisplayString(state, std::format("AbortEnergyPlus: Could not open file {} for output (write).", tempfl.filePath));
         }
         print(
             tempfl, "EnergyPlus Terminated--Fatal Error Detected. {} Warning; {} Severe Errors; Elapsed Time={}\n", NumWarnings, NumSevere, Elapsed);
@@ -572,7 +572,7 @@ int EndEnergyPlus(EnergyPlusData &state)
     {
         auto tempfl = state.files.endFile.try_open(state.files.outputControl.end);
         if (!tempfl.good()) {
-            DisplayString(state, EnergyPlus::format("EndEnergyPlus: Could not open file {} for output (write).", tempfl.filePath.string()));
+            DisplayString(state, std::format("EndEnergyPlus: Could not open file {} for output (write).", tempfl.filePath));
         }
         print(tempfl, "EnergyPlus Completed Successfully-- {} Warning; {} Severe Errors; Elapsed Time={}\n", NumWarnings, NumSevere, Elapsed);
     }
