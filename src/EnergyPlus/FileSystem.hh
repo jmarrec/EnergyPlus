@@ -244,67 +244,11 @@ namespace FileSystem {
         }
     }
 
-    template <FileTypes fileType> void writeFile(fmt::ostream &os, const std::string_view data)
-    {
-        static_assert(fileType > FileTypes::Invalid, "Must be a valid file type");
-        os.print("{}", data);
-    }
-
-    template <FileTypes fileType> void writeFile(std::ostream &os, const std::string_view data)
-    {
-        static_assert(fileType > FileTypes::Invalid, "Must be a valid file type");
-        fmt::print(os, "{}", data);
-    }
-
-    template <FileTypes fileType> void writeFile(FILE *f, const std::string_view data)
-    {
-        static_assert(fileType > FileTypes::Invalid, "Must be a valid file type");
-        fmt::print(f, "{}", data);
-    }
-
-    template <class T, FileTypes fileType, typename = std::enable_if_t<enable_unique_ptr_v<T>>> void writeFile(T &os, const std::string_view data)
-    {
-        static_assert(fileType > FileTypes::Invalid, "Must be a valid file type");
-        if (os) {
-            writeFile<fileType>(*os, data);
-        }
-    }
-
     template <FileTypes fileType, class T, typename = std::enable_if_t<enable_json_v<T, fileType>>>
     void writeFile(fs::path const &filePath, T &data, int const indent = 4)
     {
         auto const json_str = getJSON<fileType>(data, indent);
         writeFile<fileType>(filePath, std::string_view(json_str));
-    }
-
-    template <FileTypes fileType, class T, typename = std::enable_if_t<enable_json_v<T, fileType>>>
-    void writeFile(fmt::ostream &os, T &data, int const indent = 4)
-    {
-        auto const json_str = getJSON<fileType>(data, indent);
-        writeFile<fileType>(os, std::string_view(json_str));
-    }
-
-    template <FileTypes fileType, class T, typename = std::enable_if_t<enable_json_v<T, fileType>>>
-    void writeFile(std::ostream &os, T &data, int const indent = 4)
-    {
-        auto const json_str = getJSON<fileType>(data, indent);
-        writeFile<fileType>(os, std::string_view(json_str));
-    }
-
-    template <FileTypes fileType, class T, typename = std::enable_if_t<enable_json_v<T, fileType>>>
-    void writeFile(FILE *f, T &data, int const indent = 4)
-    {
-        auto const json_str = getJSON<fileType>(data, indent);
-        writeFile<fileType>(f, std::string_view(json_str));
-    }
-
-    template <FileTypes fileType, class T, class T2, typename = std::enable_if_t<enable_json_v<T2, fileType> && enable_unique_ptr_v<T>>>
-    void writeFile(T &os, T2 &data, int const indent = 4)
-    {
-        if (os) {
-            auto const json_str = getJSON<fileType>(data, indent);
-            writeFile<fileType>(*os, std::string_view(json_str));
-        }
     }
 
     std::string toString(fs::path const &p);
