@@ -236,7 +236,7 @@ namespace FileSystem {
             auto close_file = [](FILE *f) { fclose(f); };
             auto holder = std::unique_ptr<FILE, decltype(close_file)>(fopen(path, "wb"), close_file);
             if (!holder) {
-                throw FatalError(fmt::format("Could not open file: {}", static_cast<std::string>(path)));
+                throw FatalError(std::format("Could not open file: {}", filePath));
             }
 
             auto f = holder.get();
