@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <cassert>
+#include <format>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -2956,9 +2957,9 @@ void storeIterationResults(EnergyPlusData &state,
             dynFormat = "";
         }
         if (mod(i, 2) == 1) {
-            dynFormat += fmt::format("Ebf({:3})", (i + 1) / 2);
+            dynFormat += std::format("Ebf({:3})", (i + 1) / 2);
         } else {
-            dynFormat += fmt::format("Ebb({:3})", (i + 1) / 2);
+            dynFormat += std::format("Ebb({:3})", (i + 1) / 2);
         }
         if (i != 2 * nlayer) {
             dynFormat += "===";
@@ -2976,7 +2977,7 @@ void storeIterationResults(EnergyPlusData &state,
 
     // Write headers for Rb and Rf
     for (i = 1; i <= 2 * nlayer; ++i) {
-        const std::string a = fmt::format("{:3}", (i + 1) / 2); // this is just to simulate correct integer in brackets
+        const std::string a = std::format("{:3}", (i + 1) / 2); // this is just to simulate correct integer in brackets
         if (i == 1) {
             dynFormat = "";
         }
@@ -3000,7 +3001,7 @@ void storeIterationResults(EnergyPlusData &state,
 
     // Write header for temperatures
     for (i = 1; i <= 2 * nlayer; ++i) {
-        const std::string a = fmt::format("{:3}", i);
+        const std::string a = std::format("{:3}", i);
         if (i == 1) {
             dynFormat = "";
         }
@@ -3025,7 +3026,7 @@ void storeIterationResults(EnergyPlusData &state,
     if (index == 0) {
         dynFormat = "  ";
         for (i = 1; i <= 2 * nlayer; ++i) {
-            const std::string a = fmt::format("{:3}", i);
+            const std::string a = std::format("{:3}", i);
             if (i != 2 * nlayer) {
                 dynFormat += "theta(" + a + "),";
             } else {

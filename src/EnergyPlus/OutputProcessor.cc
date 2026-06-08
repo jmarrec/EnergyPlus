@@ -2789,7 +2789,7 @@ namespace OutputProcessor {
         }
 
         if (state.files.eso.good()) {
-            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, fmt::format_int(repValue).c_str());
+            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, repValue);
         }
     } // WriteNumericData()
 
@@ -3736,7 +3736,7 @@ void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType co
         ReportMeters(state, ReportFreq::Year, TimePrint);
 
         state.dataGlobal->CalendarYear += 1;
-        state.dataGlobal->CalendarYearChr = fmt::to_string(state.dataGlobal->CalendarYear);
+        state.dataGlobal->CalendarYearChr = std::to_string(state.dataGlobal->CalendarYear);
     }
 } // UpdateDataandReport()
 
