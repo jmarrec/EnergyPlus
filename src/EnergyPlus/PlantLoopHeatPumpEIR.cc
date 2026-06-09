@@ -298,8 +298,18 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool
         // Set flows if the heat pump is running
     } else { // the heat pump must run
         // apply min/max operating limits based on source side entering fluid temperature
-        if ((this->minSourceTempLimit > this->sourceSideInletTemp || this->maxSourceTempLimit < this->sourceSideInletTemp) &&
-            !this->heatRecoveryIsActive) {
+        // or if parallel configuration and no/very small load, the unit is turned off
+        bool tempOutOfRange = this->minSourceTempLimit > this->sourceSideInletTemp || this->maxSourceTempLimit < this->sourceSideInletTemp;
+        auto &comp = DataPlant::CompData::getPlantComponent(state, this->loadSidePlantLoc);
+        bool loadIndicator = false;
+        if (this->sysControlType == ControlType::Setpoint) {
+            Real64 leavingSetpoint = this->getLoadSideOutletSetPointTemp(state);
+            loadIndicator = std::abs(leavingSetpoint - this->loadSideInletTemp) < HVAC::SmallTempDiff;
+        } else {
+            loadIndicator = std::abs(currentLoad) < HVAC::SmallLoad;
+        }
+        bool lowLoadCondition = loadIndicator && comp.FlowCtrl != DataBranchAirLoopPlant::ControlType::SeriesActive;
+        if (tempOutOfRange || lowLoadCondition) {
             this->loadSideMassFlowRate = 0.0;
             this->sourceSideMassFlowRate = 0.0;
             this->running = false;
@@ -2926,7 +2936,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
     // get setpoint on the load side outlet
     // Real64 loadSideOutletSetpointTemp = this->getLoadSideOutletSetPointTemp(state);
 
-    // Use a logic similar to that for a boilder: If the specified load is 0.0 or the boiler should not run
+    // Use a logic similar to that for a boiler: If the specified load is 0.0 or the boiler should not run
     // then we leave this subroutine. Before leaving
     // if the component control is SERIESACTIVE we set the component flow to inlet flow so that flow resolver
     // will not shut down the branch
