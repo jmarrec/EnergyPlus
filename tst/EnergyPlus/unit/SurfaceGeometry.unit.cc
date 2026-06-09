@@ -12985,8 +12985,6 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
     EXPECT_TRUE(compare_err_stream_substring(
         delimited_string({"   ** Severe  ** ProcessSurfaceVertices: Horizontal dividers exceed glazed opening height for window FENESTRATIONSURFACE",
                           "   **   ~~~   ** Number of horizontal dividers=[20], divider width=[0.50] m, glazed opening height=[9.80] m.",
-                          "   ** Severe  ** ProcessSurfaceVertices: Divider area exceeds glazed opening for window FENESTRATIONSURFACE",
-                          "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[95.10] m2.",
                           "   ** Severe  ** ProcessSurfaceVertices: Horizontal dividers exceed glazed opening height for window FENESTRATIONSURFACE2",
                           "   **   ~~~   ** Number of horizontal dividers=[20], divider width=[0.50] m, glazed opening height=[9.80] m.",
                           "   ** Severe  ** ProcessSurfaceVertices: Vertical dividers exceed glazed opening width for window FENESTRATIONSURFACE2",
@@ -12994,20 +12992,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_BadDividerGeometry)
                           "   ** Severe  ** ProcessSurfaceVertices: Horizontal dividers exceed glazed opening height for window FENESTRATIONSURFACE3",
                           "   **   ~~~   ** Number of horizontal dividers=[50], divider width=[0.50] m, glazed opening height=[9.80] m.",
                           "   ** Severe  ** ProcessSurfaceVertices: Vertical dividers exceed glazed opening width for window FENESTRATIONSURFACE3",
-                          "   **   ~~~   ** Number of vertical dividers=[50], divider width=[0.50] m, glazed opening width=[9.70] m.",
-                          "   ** Severe  ** ProcessSurfaceVertices: Calculated divider area <= 0.0 for window FENESTRATIONSURFACE3",
-                          "   **   ~~~   ** Window surface area=[95.06] m2, divider area=[-137.50] m2."})));
-
-    int surfNum1 = Util::FindItemInList("FENESTRATIONSURFACE", state->dataSurface->Surface);
-    EXPECT_GT(surfNum1, 0);
-    int surfNum2 = Util::FindItemInList("FENESTRATIONSURFACE2", state->dataSurface->Surface);
-    EXPECT_GT(surfNum2, 0);
-    int surfNum3 = Util::FindItemInList("FENESTRATIONSURFACE3", state->dataSurface->Surface);
-    EXPECT_GT(surfNum3, 0);
-
-    EXPECT_GT(state->dataSurface->SurfWinDividerArea(surfNum1), state->dataSurface->Surface(surfNum1).Area);
-    EXPECT_GT(95.06, state->dataSurface->SurfWinDividerArea(surfNum2)); // divider error doesn't exceed but we still get other severe error(s)
-    EXPECT_GT(0, state->dataSurface->SurfWinDividerArea(surfNum3));
+                          "   **   ~~~   ** Number of vertical dividers=[50], divider width=[0.50] m, glazed opening width=[9.70] m."})));
 }
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_GetVerticesDropDuplicates)
