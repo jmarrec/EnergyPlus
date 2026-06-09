@@ -1327,13 +1327,13 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                     *eiostream << "NoWind" << ",";
                 }
                 if (RptType == 10) {
-                    *eiostream << std::format("{:#G}", thisSurface.ViewFactorGround) << "," << std::format("{:#G}", thisSurface.ViewFactorSky) << ","
-                               << std::format("{:#G}", thisSurface.ViewFactorGroundIR) << "," << std::format("{:#G}", thisSurface.ViewFactorSkyIR)
-                               << "," << fmt::to_string(thisSurface.Sides) << '\n';
+                    *eiostream << std::format("{:.2f}", thisSurface.ViewFactorGround) << "," << std::format("{:.2f}", thisSurface.ViewFactorSky)
+                               << "," << std::format("{:.2f}", thisSurface.ViewFactorGroundIR) << ","
+                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << fmt::to_string(thisSurface.Sides) << '\n';
                 } else {
-                    *eiostream << std::format("{:#G}", thisSurface.ViewFactorGround) << "," << std::format("{:#G}", thisSurface.ViewFactorSky) << ","
-                               << std::format("{:#G}", thisSurface.ViewFactorGroundIR) << "," << std::format("{:#G}", thisSurface.ViewFactorSkyIR)
-                               << "," << fmt::to_string(thisSurface.Sides) << ",";
+                    *eiostream << std::format("{:.2f}", thisSurface.ViewFactorGround) << "," << std::format("{:.2f}", thisSurface.ViewFactorSky)
+                               << "," << std::format("{:.2f}", thisSurface.ViewFactorGroundIR) << ","
+                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << fmt::to_string(thisSurface.Sides) << ",";
                     for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                         if (vert != thisSurface.Sides) {
                             *eiostream << std::format("{:.2f}", thisSurface.Vertex(vert).x) << ","
