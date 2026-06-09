@@ -4393,9 +4393,9 @@ void reportZoneSizingEio(EnergyPlusData &state,
     }
 
     static constexpr std::string_view Format_991_Space(
-        " Space Sizing Information, {}, {}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {}, {}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {:.5f}\n");
+        " Space Sizing Information, {}, {}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {}, {}, {:.5f}, {:.5E}, {:.5f}, {:.5f}, {:.5f}, {:.5f}\n");
     static constexpr std::string_view Format_991_Zone(
-        " Zone Sizing Information, {}, {}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {}, {}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {:.5f}\n");
+        " Zone Sizing Information, {}, {}, {:.5f}, {:.5f}, {:.5f}, {:.5f}, {}, {}, {:.5f}, {:.5E}, {:.5f}, {:.5f}, {:.5f}, {:.5f}\n");
     if (isSpace) {
         print(state.files.eio,
               Format_991_Space,
