@@ -309,7 +309,7 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool
             loadIndicator = std::abs(currentLoad) < HVAC::SmallLoad;
         }
         bool lowLoadCondition = loadIndicator && comp.FlowCtrl != DataBranchAirLoopPlant::ControlType::SeriesActive;
-        if ((tempOutOfRange || lowLoadCondition) && !this->heatRecoveryAvailable) {
+        if (tempOutOfRange || lowLoadCondition) {
             this->loadSideMassFlowRate = 0.0;
             this->sourceSideMassFlowRate = 0.0;
             this->running = false;
