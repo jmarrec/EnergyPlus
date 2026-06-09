@@ -876,22 +876,20 @@ void EIRPlantLoopHeatPump::capModFTCurveCheck(EnergyPlusData &state, const Real6
 {
     if (capacityModifierFuncTemp < 0.0) {
         if (this->capModFTErrorIndex == 0) {
-            ShowSevereMessage(state, EnergyPlus::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
+            ShowSevereMessage(state, std::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
             ShowContinueError(
-                state,
-                EnergyPlus::format(" Capacity Modifier curve (function of Temperatures) output is negative ({:.3f}).", capacityModifierFuncTemp));
-            ShowContinueError(
-                state,
-                EnergyPlus::format(" Negative value occurs using a water temperature of {:.2f}C and an outdoor air temperature of {:.2f}C.",
-                                   loadSideOutletSetpointTemp,
-                                   this->sourceSideInletTemp));
+                state, std::format(" Capacity Modifier curve (function of Temperatures) output is negative ({:.3f}).", capacityModifierFuncTemp));
+            ShowContinueError(state,
+                              std::format(" Negative value occurs using a water temperature of {:.2f}C and an outdoor air temperature of {:.2f}C.",
+                                          loadSideOutletSetpointTemp,
+                                          this->sourceSideInletTemp));
             ShowContinueErrorTimeStamp(state, " Resetting curve output to zero and continuing simulation.");
         }
         ShowRecurringWarningErrorAtEnd(
             state,
-            EnergyPlus::format("{} \"{}\": Capacity Modifier curve (function of Temperatures) output is negative warning continues...",
-                               DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
-                               this->name),
+            std::format("{} \"{}\": Capacity Modifier curve (function of Temperatures) output is negative warning continues...",
+                        DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
+                        this->name),
             this->capModFTErrorIndex,
             capacityModifierFuncTemp,
             capacityModifierFuncTemp);
@@ -905,25 +903,22 @@ void EIRPlantLoopHeatPump::heatRecoveryCapModFTCurveCheck(EnergyPlusData &state,
 {
     if (capacityModifierFuncTemp < 0.0) {
         if (this->heatRecCapModFTErrorIndex == 0) {
-            ShowSevereMessage(state, EnergyPlus::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
-            ShowContinueError(
-                state,
-                EnergyPlus::format(" Heat Recovery mode Capacity Modifier curve (function of Temperatures) output is negative ({:.3f}).",
-                                   capacityModifierFuncTemp));
-            ShowContinueError(
-                state,
-                EnergyPlus::format(" Negative value occurs using a load side water temperature of {:.2f}C and heat recovery entering water "
-                                   "temperature of {:.2f}C.",
-                                   loadSideOutletSetpointTemp,
-                                   this->heatRecoveryInletTemp));
+            ShowSevereMessage(state, std::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
+            ShowContinueError(state,
+                              std::format(" Heat Recovery mode Capacity Modifier curve (function of Temperatures) output is negative ({:.3f}).",
+                                          capacityModifierFuncTemp));
+            ShowContinueError(state,
+                              std::format(" Negative value occurs using a load side water temperature of {:.2f}C and heat recovery entering water "
+                                          "temperature of {:.2f}C.",
+                                          loadSideOutletSetpointTemp,
+                                          this->heatRecoveryInletTemp));
             ShowContinueErrorTimeStamp(state, " Resetting curve output to zero and continuing simulation.");
         }
         ShowRecurringWarningErrorAtEnd(
             state,
-            EnergyPlus::format(
-                "{} \"{}\": Heat Recovery mode Capacity Modifier curve (function of Temperatures) output is negative warning continues...",
-                DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
-                this->name),
+            std::format("{} \"{}\": Heat Recovery mode Capacity Modifier curve (function of Temperatures) output is negative warning continues...",
+                        DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
+                        this->name),
             this->heatRecCapModFTErrorIndex,
             capacityModifierFuncTemp,
             capacityModifierFuncTemp);
@@ -935,24 +930,21 @@ void EIRPlantLoopHeatPump::eirModCurveCheck(EnergyPlusData &state, Real64 &eirMo
 {
     if (eirModifierFuncTemp < 0.0) {
         if (this->eirModFTErrorIndex == 0) {
-            ShowSevereMessage(state, EnergyPlus::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
+            ShowSevereMessage(state, std::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
+            ShowContinueError(state, std::format(" EIR Modifier curve (function of Temperatures) output is negative ({:.3f}).", eirModifierFuncTemp));
             ShowContinueError(state,
-                              EnergyPlus::format(" EIR Modifier curve (function of Temperatures) output is negative ({:.3f}).", eirModifierFuncTemp));
-            ShowContinueError(
-                state,
-                EnergyPlus::format(" Negative value occurs using a water temperature of {:.2f}C and an outdoor air temperature of {:.2f}C.",
-                                   this->loadSideOutletTemp,
-                                   this->sourceSideInletTemp));
+                              std::format(" Negative value occurs using a water temperature of {:.2f}C and an outdoor air temperature of {:.2f}C.",
+                                          this->loadSideOutletTemp,
+                                          this->sourceSideInletTemp));
             ShowContinueErrorTimeStamp(state, " Resetting curve output to zero and continuing simulation.");
         }
-        ShowRecurringWarningErrorAtEnd(
-            state,
-            EnergyPlus::format("{} \"{}\": EIR Modifier curve (function of Temperatures) output is negative warning continues...",
-                               DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
-                               this->name),
-            this->eirModFTErrorIndex,
-            eirModifierFuncTemp,
-            eirModifierFuncTemp);
+        ShowRecurringWarningErrorAtEnd(state,
+                                       std::format("{} \"{}\": EIR Modifier curve (function of Temperatures) output is negative warning continues...",
+                                                   DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
+                                                   this->name),
+                                       this->eirModFTErrorIndex,
+                                       eirModifierFuncTemp,
+                                       eirModifierFuncTemp);
         eirModifierFuncTemp = 0.0;
     }
 }
@@ -961,23 +953,22 @@ void EIRPlantLoopHeatPump::heatRecoveryEIRModCurveCheck(EnergyPlusData &state, R
 {
     if (eirModifierFuncTemp < 0.0) {
         if (this->heatRecEIRModFTErrorIndex == 0 && heatRecoveryEIRFTempCurveIndex > 0) {
-            ShowSevereMessage(state, EnergyPlus::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
-            ShowContinueError(state,
-                              EnergyPlus::format(" Heat Recovery mode EIR Modifier curve (function of Temperatures) output is negative ({:.3f}).",
-                                                 eirModifierFuncTemp));
+            ShowSevereMessage(state, std::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
             ShowContinueError(
                 state,
-                EnergyPlus::format(" Negative value occurs using a load side water temperature of {:.2f}C and heat recovery entering water "
-                                   "temperature of {:.2f}C.",
-                                   this->loadSideOutletTemp,
-                                   this->heatRecoveryInletTemp));
+                std::format(" Heat Recovery mode EIR Modifier curve (function of Temperatures) output is negative ({:.3f}).", eirModifierFuncTemp));
+            ShowContinueError(state,
+                              std::format(" Negative value occurs using a load side water temperature of {:.2f}C and heat recovery entering water "
+                                          "temperature of {:.2f}C.",
+                                          this->loadSideOutletTemp,
+                                          this->heatRecoveryInletTemp));
             ShowContinueErrorTimeStamp(state, " Resetting curve output to zero and continuing simulation.");
         }
         ShowRecurringWarningErrorAtEnd(
             state,
-            EnergyPlus::format("{} \"{}\": Heat Recovery mode EIR Modifier curve (function of Temperatures) output is negative warning continues...",
-                               DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
-                               this->name),
+            std::format("{} \"{}\": Heat Recovery mode EIR Modifier curve (function of Temperatures) output is negative warning continues...",
+                        DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
+                        this->name),
             this->eirModFTErrorIndex,
             eirModifierFuncTemp,
             eirModifierFuncTemp);
@@ -989,8 +980,8 @@ void EIRPlantLoopHeatPump::eirModFPLRCurveCheck(EnergyPlusData &state, Real64 &e
 {
     if (eirModifierFuncPLR < 0.0) {
         if (this->eirModFPLRErrorIndex == 0) {
-            ShowSevereMessage(state, EnergyPlus::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
-            ShowContinueError(state, EnergyPlus::format(" EIR Modifier curve (function of PLR) output is negative ({:.3f}).", eirModifierFuncPLR));
+            ShowSevereMessage(state, std::format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
+            ShowContinueError(state, std::format(" EIR Modifier curve (function of PLR) output is negative ({:.3f}).", eirModifierFuncPLR));
             ShowContinueError(state, std::format(" Negative value occurs using a Part Load Ratio of {:.2f}", this->partLoadRatio));
             ShowContinueErrorTimeStamp(state, " Resetting curve output to zero and continuing simulation.");
         }
@@ -1397,8 +1388,8 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
                             if ((std::abs(tmpCapacity - hardSizedCapacity) / hardSizedCapacity) > state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowWarningMessage(
                                     state, std::format("EIRPlantLoopHeatPump::size(): Potential issue with equipment sizing for {}", this->name));
-                                ShowContinueError(state, EnergyPlus::format("User-Specified {} of {:.2R} [W]", capacityKW, hardSizedCapacity));
-                                ShowContinueError(state, EnergyPlus::format("differs from Design Size {} of {:.2R} [W]", capacityKW, tmpCapacity));
+                                ShowContinueError(state, std::format("User-Specified {} of {:.2f} [W]", capacityKW, hardSizedCapacity));
+                                ShowContinueError(state, std::format("differs from Design Size {} of {:.2f} [W]", capacityKW, tmpCapacity));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1433,9 +1424,8 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state,
                                             std::format("EIRPlantLoopHeatPump::size(): Potential issue with equipment sizing for {}", this->name));
-                                ShowContinueError(state, EnergyPlus::format("User-Specified {} of {:.2R} [m3/s]", flowRateKW, hardSizedLoadSideFlow));
-                                ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Size {} of {:.2R} [m3/s]", flowRateKW, tmpLoadVolFlow));
+                                ShowContinueError(state, std::format("User-Specified {} of {:.2f} [m3/s]", flowRateKW, hardSizedLoadSideFlow));
+                                ShowContinueError(state, std::format("differs from Design Size {} of {:.2f} [m3/s]", flowRateKW, tmpLoadVolFlow));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1572,10 +1562,10 @@ void EIRPlantLoopHeatPump::sizeSrcSideWSHP(EnergyPlusData &state)
                     if ((std::abs(tmpSourceVolFlow - hardSizedSourceSideFlow) / hardSizedSourceSideFlow) >
                         state.dataSize->AutoVsHardSizingThreshold) {
                         ShowMessage(state, std::format("EIRPlantLoopHeatPump::size(): Potential issue with equipment sizing for {}", this->name));
-                        ShowContinueError(
-                            state, EnergyPlus::format("User-Specified Source Side Volume Flow Rate of {:.2R} [m3/s]", hardSizedSourceSideFlow));
-                        ShowContinueError(
-                            state, EnergyPlus::format("differs from Design Size Source Side Volume Flow Rate of {:.2R} [m3/s]", tmpSourceVolFlow));
+                        ShowContinueError(state,
+                                          std::format("User-Specified Source Side Volume Flow Rate of {:.2f} [m3/s]", hardSizedSourceSideFlow));
+                        ShowContinueError(state,
+                                          std::format("differs from Design Size Source Side Volume Flow Rate of {:.2f} [m3/s]", tmpSourceVolFlow));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
@@ -1803,11 +1793,10 @@ void EIRPlantLoopHeatPump::sizeHeatRecoveryASHP(EnergyPlusData &state)
                         state.dataSize->AutoVsHardSizingThreshold) {
                         ShowMessage(state, std::format("EIRPlantLoopHeatPump::size(): Potential issue with equipment sizing for {}", this->name));
                         ShowContinueError(
+                            state, std::format("User-Specified Heat Recovery Side Volume Flow Rate of {:.2f} [m3/s]", hardSizedHeatRecoveryFlow));
+                        ShowContinueError(
                             state,
-                            EnergyPlus::format("User-Specified Heat Recovery Side Volume Flow Rate of {:.2R} [m3/s]", hardSizedHeatRecoveryFlow));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("differs from Design Size Heat Recovery Side Volume Flow Rate of {:.2R} [m3/s]",
-                                                             tmpHeatRecoveryVolFlow));
+                            std::format("differs from Design Size Heat Recovery Side Volume Flow Rate of {:.2f} [m3/s]", tmpHeatRecoveryVolFlow));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
@@ -4153,7 +4142,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                         ShowSevereError(state,
                                         std::format("cannot autosize capacity below maximum speed (name={}, field={})",
                                                     thisAWHP.name,
-                                                    EnergyPlus::format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1)));
+                                                    std::format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1)));
                         errorsFound = true;
                     }
                     thisAWHP.ratedCOP[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
