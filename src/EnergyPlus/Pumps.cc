@@ -1424,7 +1424,7 @@ void InitializePumps(EnergyPlusData &state, int const PumpNum)
                                               thisPump.MotorEffic * 100.0));
                 ShowContinueError(
                     state,
-                    std::format("Total_Efficiency % =(Rated_Volume_Flow_Rate [{:.3f}] * Rated_Pump_Head [{:.1f}] / Rated_Power_Use [{:.1f}]) * 100.",
+                    std::format("Total_Efficiency % =(Rated_Volume_Flow_Rate [{:.3E}] * Rated_Pump_Head [{:.1f}] / Rated_Power_Use [{:.1f}]) * 100.",
                                 thisPump.NomVolFlowRate,
                                 thisPump.NomPumpHead,
                                 thisPump.NomPowerUse));
@@ -1439,7 +1439,7 @@ void InitializePumps(EnergyPlusData &state, int const PumpNum)
                                               thisPump.MotorEffic * 100.0));
                 ShowContinueError(
                     state,
-                    std::format("Total_Efficiency % =(Rated_Volume_Flow_Rate [{:.3f}] * Rated_Pump_Head [{:.1f}] / Rated_Power_Use [{:.1f}]) * 100.",
+                    std::format("Total_Efficiency % =(Rated_Volume_Flow_Rate [{:.3E}] * Rated_Pump_Head [{:.1f}] / Rated_Power_Use [{:.1f}]) * 100.",
                                 thisPump.NomVolFlowRate,
                                 thisPump.NomPumpHead,
                                 thisPump.NomPowerUse));
@@ -1454,7 +1454,7 @@ void InitializePumps(EnergyPlusData &state, int const PumpNum)
                                               thisPump.MotorEffic * 100.0));
                 ShowContinueError(
                     state,
-                    std::format("Total_Efficiency % =(Rated_Volume_Flow_Rate [{:.3f}] * Rated_Pump_Head [{:.1f}] / Rated_Power_Use [{:.1f}]) * 100.",
+                    std::format("Total_Efficiency % =(Rated_Volume_Flow_Rate [{:.3E}] * Rated_Pump_Head [{:.1f}] / Rated_Power_Use [{:.1f}]) * 100.",
                                 thisPump.NomVolFlowRate,
                                 thisPump.NomPumpHead,
                                 thisPump.NomPowerUse));
