@@ -375,10 +375,6 @@ namespace BaseboardRadiator {
                                 state, std::format("Blank field not allowed for {}", numericFieldNames[iHeatFracOfAutosizedCapacityNumericNum - 1]));
                             ErrorsFound = true;
                         }
-                    } else {
-                        ShowSevereError(state, std::format("{} = {}", cCMO_BBRadiator_Water, thisBaseboard.EquipID));
-                        ShowContinueError(state, std::format("Illegal {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
-                        ErrorsFound = true;
                     }
 
                     thisBaseboard.UA = inputProcessor->getRealFieldValue(baseboardFields, baseboardSchemaProps, "u_factor_times_area_value");
@@ -693,6 +689,7 @@ namespace BaseboardRadiator {
                             }
                         }
                     }
+                    BaseSizer::reportSizerOutput(state, cCMO_BBRadiator_Water, this->EquipID, "Design Size Heating Load [W]", DesCoilLoad);
                 }
 
                 // UA sizing

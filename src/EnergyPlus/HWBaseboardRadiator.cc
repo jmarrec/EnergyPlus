@@ -1039,6 +1039,8 @@ namespace HWBaseboardRadiator {
                 } else {
                     hWBaseboard.RatedCapacity = TempSize;
                 }
+                BaseSizer::reportSizerOutput(
+                    state, cCMO_BBRadiator_Water, hWBaseboard.Name, "Design Size Heating Load [W]", zoneEqSizing.DesHeatingLoad);
                 RatedCapacityDes = TempSize;
                 state.dataSize->DataScalableCapSizingON = false;
             }
