@@ -279,8 +279,7 @@ json IdfParser::parse_idf(std::string_view idf, size_t &index, bool &success, js
                 success = false;
                 continue;
             }
-            u64toa(root[obj_name].size() + 1, s);
-            std::string name = std::format("{} {}", obj_name, s);
+            std::string name = std::format("{} {}", obj_name, root[obj_name].size() + 1);
 
             if (!obj.is_null()) {
                 auto const name_iter = obj.find("name");
@@ -445,8 +444,7 @@ json IdfParser::parse_object(
                 if (field == "name") {
                     root[field] = parse_string(idf, index);
                 } else {
-                    u64toa(cur_line_num, s);
-                    errors_.emplace_back(std::format("Line: {} - Field \"{}\" was not found.", s, field));
+                    errors_.emplace_back(std::format("Line: {} - Field \"{}\" was not found.", cur_line_num, field));
                 }
             } else {
                 json val = parse_value(idf, index, success, find_field_iter.value());

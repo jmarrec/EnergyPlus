@@ -1730,8 +1730,7 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
     }
 
     if ((!unusedInputs.empty()) && !state.dataGlobal->DisplayUnusedObjects) {
-        u64toa(unusedInputs.size(), s);
-        ShowMessage(state, "There are " + std::string(s) + " unused objects in input.");
+        ShowMessage(state, std::format("There are {} unused objects in input.", unusedInputs.size()));
         ShowMessage(state, "Use Output:Diagnostics,DisplayUnusedObjects; to see them.");
     }
 }
