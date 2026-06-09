@@ -158,7 +158,9 @@
 #endif
 
 /** <codecvt> availability */
-#if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER) && __GNUC__ < 5
+#if defined(__clang__)
+#define CLI11_HAS_CODECVT 0
+#elif defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER) && __GNUC__ < 5
 #define CLI11_HAS_CODECVT 0
 #else
 #define CLI11_HAS_CODECVT 1

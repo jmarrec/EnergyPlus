@@ -2,10 +2,11 @@
 !-Option OriginalOrderTop UseSpecialFormat
 !-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
 !-      Use '!' comments if they need to be retained when using the IDFEditor.
-! 5ZoneNightVent2.idf
+! 5ZoneNightVent4.idf
 ! Basic file description:  1 story building divided into 4 exterior and one interior conditioned zones and return plenum.
 !
-! Highlights:              Illustrates night ventilation using the ZoneVentilation:DesignFlowRate object
+! Highlights:              Illustrates night ventilation using night ventilation system availability manager and
+!                          FanPerformance:NightVentilation night ventilation settings.
 !
 ! Simulation Location/Run: FRESNO_CA_USA TMY2-93193, 2 design days, 1 run period,
 !                          Run Control executes the run period using the weather file
@@ -80,13 +81,15 @@
 !                                 boiler, electric compression chiller with water cooled condenser.
 !                                 All equipment is autosized.
 !
-!                                This input illustrates night venting using the Ventilation object.
-!                                We ventilate the building in the early morning hours. The runperiod is
-!                                a summer week in Fresno. We assume a ventilation
-!                                rate of 1/3 the supply air design value and adjust the fan inputs in
-!                                the ventilation object accordingly. Successful night ventilation modeling
-!                                depends critically on getting the ventilation fan consumption right. In
-!                                this case, we see a modest benefit with night ventilation compared to the
+!                                This input illustrates night venting using the night ventilation
+!                                system availability manager (AvailabilityManager:NightVentilation)
+!                                object. We ventilate the building in the early morning hours.
+!                                The runperiod is a summer week in Fresno. We assume a ventilation rate of 1/3 the
+!                                supply air design value and adjust the night ventilation fan performance
+!                                (FanPerformance:NightVentilation) object inputs accordingly.
+!                                Successful night ventilation modeling depends
+!                                critically on getting the ventilation fan consumption right. In
+!                                this case, we see no benefit with night ventilation compared to the
 !                                base case (5ZoneNightVent1.idf).
 !
 ! Zonal Equipment:                AirTerminal:SingleDuct:VAV:Reheat
@@ -138,7 +141,7 @@
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
   RunPeriod,
-    Run Period 1,            !- Name
+    Aug10-18,                !- Name
     8,                       !- Begin Month
     10,                      !- Begin Day of Month
     ,                        !- Begin Year
@@ -1643,58 +1646,13 @@
     Until: 24:00,0.00;       !- Field 18
 
   Schedule:Compact,
-    MixingAvailSched,        !- Name
-    Fraction,                !- Schedule Type Limits Name
-    Through: 3/31,           !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,1.00,       !- Field 3
-    Through: 9/30,           !- Field 5
-    For: Weekdays,           !- Field 6
-    Until: 7:00,1.00,        !- Field 7
-    Until: 17:00,1.00,       !- Field 9
-    Until: 24:00,1.00,       !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
-    Until: 24:00,0.00,       !- Field 14
-    For: SummerDesignDay WinterDesignDay, !- Field 16
-    Until: 24:00,1.00,       !- Field 17
-    Through: 12/31,          !- Field 19
-    For: AllDays,            !- Field 20
-    Until: 24:00,1.00;       !- Field 21
-
-  Schedule:Compact,
-    MinIndoorTemp,           !- Name
-    Any Number,              !- Schedule Type Limits Name
+    VentTempSched,           !- Name
+    Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
-    Until: 24:00,18;         !- Field 3
+    Until: 24:00,18.;        !- Field 3
 
-  Schedule:Compact,
-    MaxIndoorTemp,           !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,100;        !- Field 3
-
-  Schedule:Compact,
-    DeltaTemp,               !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,2;          !- Field 3
-
-  Schedule:Compact,
-    MinOutdoorTemp,          !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,-100;       !- Field 3
-
-  Schedule:Compact,
-    MaxOutdoorTemp,          !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,100;        !- Field 3
+  Schedule:Constant,AlwaysOn,On/Off,1.0;
 
   People,
     SPACE1-1 People 1,       !- Name
@@ -1886,30 +1844,12 @@
     0.3,                     !- Fraction Radiant
     0;                       !- Fraction Lost
 
-! Two identical ZoneInfiltration:DesignFlowRate objects in the SPACE1-1 are intended to demonstrate
-! the capability to allow multiple infiltration objects per zone only.
-! Two objects can be combined together.
-
   ZoneInfiltration:DesignFlowRate,
     SPACE1-1 Infil 1,        !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
     flow/zone,               !- Design Flow Rate Calculation Method
-    0.00835,                 !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
-    ,                        !- Air Changes per Hour {1/hr}
-    0,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0.2237,                  !- Velocity Term Coefficient
-    0;                       !- Velocity Squared Term Coefficient
-
-  ZoneInfiltration:DesignFlowRate,
-    SPACE1-1 Infil 2,        !- Name
-    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
-    INFIL-SCH,               !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.00835,                 !- Design Flow Rate {m3/s}
+    0.0167,                  !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
@@ -1973,286 +1913,6 @@
     0,                       !- Temperature Term Coefficient
     0.2237,                  !- Velocity Term Coefficient
     0;                       !- Velocity Squared Term Coefficient
-
-! Two identical ZoneVentilation objects in the SPACE1-1 and SPACE5-1 are intended
-! to demonstrate the capability to allow multiple ventilation objects per zone only.
-! Two objects can be combined together.
-
-  ZoneVentilation:DesignFlowRate,
-    SPACE1-1 Ventl 1,        !- Name
-    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.05295,                 !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    67.,                     !- Fan Pressure Rise {Pa}
-    0.7,                     !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    ,                        !- Minimum Indoor Temperature {C}
-    MinIndoorTemp,           !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    MaxIndoorTemp,           !- Maximum Indoor Temperature Schedule Name
-    ,                        !- Delta Temperature {deltaC}
-    DeltaTemp,               !- Delta Temperature Schedule Name
-    ,                        !- Minimum Outdoor Temperature {C}
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    ,                        !- Maximum Outdoor Temperature {C}
-    MaxOutdoorTemp,          !- Maximum Outdoor Temperature Schedule Name
-    40;                      !- Maximum Wind Speed {m/s}
-
-  ZoneVentilation:DesignFlowRate,
-    SPACE1-1 Ventl 2,        !- Name
-    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.05295,                 !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    67.,                     !- Fan Pressure Rise {Pa}
-    0.7,                     !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    ,                        !- Minimum Indoor Temperature {C}
-    MinIndoorTemp,           !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    MaxIndoorTemp,           !- Maximum Indoor Temperature Schedule Name
-    ,                        !- Delta Temperature {deltaC}
-    DeltaTemp,               !- Delta Temperature Schedule Name
-    ,                        !- Minimum Outdoor Temperature {C}
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    ,                        !- Maximum Outdoor Temperature {C}
-    MaxOutdoorTemp,          !- Maximum Outdoor Temperature Schedule Name
-    40;                      !- Maximum Wind Speed {m/s}
-
-  ZoneVentilation:DesignFlowRate,
-    SPACE2-1 Ventl 1,        !- Name
-    SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.0703,                  !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    67.,                     !- Fan Pressure Rise {Pa}
-    0.7,                     !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    18,                      !- Minimum Indoor Temperature {C}
-    ,                        !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    ,                        !- Maximum Indoor Temperature Schedule Name
-    2;                       !- Delta Temperature {deltaC}
-
-  ZoneVentilation:DesignFlowRate,
-    SPACE3-1 Ventl 1,        !- Name
-    SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.0995,                  !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    67.,                     !- Fan Pressure Rise {Pa}
-    0.7,                     !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    18,                      !- Minimum Indoor Temperature {C}
-    ,                        !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    ,                        !- Maximum Indoor Temperature Schedule Name
-    2;                       !- Delta Temperature {deltaC}
-
-  ZoneVentilation:DesignFlowRate,
-    SPACE4-1 Ventl 1,        !- Name
-    SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.0985,                  !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    67.,                     !- Fan Pressure Rise {Pa}
-    0.7,                     !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    18,                      !- Minimum Indoor Temperature {C}
-    ,                        !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    ,                        !- Maximum Indoor Temperature Schedule Name
-    2;                       !- Delta Temperature {deltaC}
-
-  ZoneVentilation:DesignFlowRate,
-    SPACE5-1 Ventl 1,        !- Name
-    SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.04715,                 !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    67.,                     !- Fan Pressure Rise {Pa}
-    0.7,                     !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    ,                        !- Minimum Indoor Temperature {C}
-    MinIndoorTemp,           !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    MaxIndoorTemp,           !- Maximum Indoor Temperature Schedule Name
-    ,                        !- Delta Temperature {deltaC}
-    DeltaTemp,               !- Delta Temperature Schedule Name
-    ,                        !- Minimum Outdoor Temperature {C}
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    ,                        !- Maximum Outdoor Temperature {C}
-    MaxOutdoorTemp,          !- Maximum Outdoor Temperature Schedule Name
-    40;                      !- Maximum Wind Speed {m/s}
-
-  ZoneVentilation:DesignFlowRate,
-    SPACE5-1 Ventl 2,        !- Name
-    SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.04715,                 !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    67.,                     !- Fan Pressure Rise {Pa}
-    0.7,                     !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    ,                        !- Minimum Indoor Temperature {C}
-    MinIndoorTemp,           !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    MaxIndoorTemp,           !- Maximum Indoor Temperature Schedule Name
-    ,                        !- Delta Temperature {deltaC}
-    DeltaTemp,               !- Delta Temperature Schedule Name
-    ,                        !- Minimum Outdoor Temperature {C}
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    ,                        !- Maximum Outdoor Temperature {C}
-    MaxOutdoorTemp,          !- Maximum Outdoor Temperature Schedule Name
-    40;                      !- Maximum Wind Speed {m/s}
-
-  ZoneVentilation:DesignFlowRate,
-    PLENUM-1 Ventl 1,        !- Name
-    PLENUM-1,                !- Zone or ZoneList or Space or SpaceList Name
-    NightVentSched,          !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.4685,                  !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    Intake,                  !- Ventilation Type
-    0,                       !- Fan Pressure Rise {Pa}
-    1,                       !- Fan Total Efficiency
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0,                       !- Velocity Squared Term Coefficient
-    18,                      !- Minimum Indoor Temperature {C}
-    ,                        !- Minimum Indoor Temperature Schedule Name
-    ,                        !- Maximum Indoor Temperature {C}
-    ,                        !- Maximum Indoor Temperature Schedule Name
-    2;                       !- Delta Temperature {deltaC}
-
-  ZoneMixing,
-    SPACE5-1 Mixng 1,        !- Name
-    SPACE5-1,                !- Zone or Space Name
-    MixingAvailSched,        !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.1059,                  !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    SPACE1-1,                !- Source Zone or Space Name
-    ,                        !- Delta Temperature {deltaC}
-    DeltaTemp,               !- Delta Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Receiving Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Receiving Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Source Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Source Temperature Schedule Name
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    MaxOutdoorTemp;          !- Maximum Outdoor Temperature Schedule Name
-
-  ZoneMixing,
-    SPACE3-1 Mixng 1,        !- Name
-    SPACE3-1,                !- Zone or Space Name
-    MixingAvailSched,        !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.1059,                  !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    SPACE5-1,                !- Source Zone or Space Name
-    ,                        !- Delta Temperature {deltaC}
-    DeltaTemp,               !- Delta Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Receiving Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Receiving Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Source Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Source Temperature Schedule Name
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    MaxOutdoorTemp;          !- Maximum Outdoor Temperature Schedule Name
-
-  ZoneCrossMixing,
-    SPACE2-1 XMixng 1,       !- Name
-    SPACE2-1,                !- Zone or Space Name
-    MixingAvailSched,        !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.1,                     !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    SPACE4-1,                !- Source Zone or Space Name
-    1.0,                     !- Delta Temperature {deltaC}
-    ,                        !- Delta Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Receiving Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Receiving Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Source Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Source Temperature Schedule Name
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    MaxOutdoorTemp;          !- Maximum Outdoor Temperature Schedule Name
-
-  ZoneCrossMixing,
-    SPACE4-1 XMixng 1,       !- Name
-    SPACE4-1,                !- Zone or Space Name
-    MixingAvailSched,        !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    0.1,                     !- Design Flow Rate {m3/s}
-    ,                        !- Flow Rate per Floor Area {m3/s-m2}
-    ,                        !- Flow Rate per Person {m3/s-person}
-    ,                        !- Air Changes per Hour {1/hr}
-    SPACE2-1,                !- Source Zone or Space Name
-    1.0,                     !- Delta Temperature {deltaC}
-    ,                        !- Delta Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Receiving Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Receiving Temperature Schedule Name
-    MinIndoorTemp,           !- Minimum Source Temperature Schedule Name
-    MaxIndoorTemp,           !- Maximum Source Temperature Schedule Name
-    MinOutdoorTemp,          !- Minimum Outdoor Temperature Schedule Name
-    MaxOutdoorTemp;          !- Maximum Outdoor Temperature Schedule Name
 
   Sizing:Parameters,
     1.3,                     !- Heating Sizing Factor
@@ -3238,12 +2898,18 @@
 
   AvailabilityManagerAssignmentList,
     VAV Sys 1 Avail List,    !- Name
-    AvailabilityManager:Scheduled,  !- Availability Manager 1 Object Type
+    AvailabilityManager:NightVentilation,  !- Availability Manager 1 Object Type
     VAV Sys 1 Avail;         !- Availability Manager 1 Name
 
-  AvailabilityManager:Scheduled,
+  AvailabilityManager:NightVentilation,
     VAV Sys 1 Avail,         !- Name
-    FanAvailSched;           !- Schedule Name
+    NightVentSched,          !- Applicability Schedule Name
+    FanAvailSched,           !- Fan Schedule Name
+    VentTempSched,           !- Ventilation Temperature Schedule Name
+    2.0,                     !- Ventilation Temperature Difference {deltaC}
+    15.,                     !- Ventilation Temperature Low Limit {C}
+    0.3333,                  !- Night Venting Flow Fraction
+    SPACE3-1;                !- Control Zone Name
 
   SetpointManager:Scheduled,
     Supply Air Temp Manager 1,  !- Name
@@ -3440,7 +3106,7 @@
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE1-1 VAV Reheat,     !- Name
-    FanAvailSched,           !- Availability Schedule Name
+    AlwaysOn,                !- Availability Schedule Name
     SPACE1-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE1-1 ATU In Node,    !- Air Inlet Node Name
     autosize,                !- Maximum Air Flow Rate {m3/s}
@@ -3460,7 +3126,7 @@
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE2-1 VAV Reheat,     !- Name
-    FanAvailSched,           !- Availability Schedule Name
+    AlwaysOn,                !- Availability Schedule Name
     SPACE2-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE2-1 ATU In Node,    !- Air Inlet Node Name
     autosize,                !- Maximum Air Flow Rate {m3/s}
@@ -3480,7 +3146,7 @@
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE3-1 VAV Reheat,     !- Name
-    FanAvailSched,           !- Availability Schedule Name
+    AlwaysOn,                !- Availability Schedule Name
     SPACE3-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE3-1 ATU In Node,    !- Air Inlet Node Name
     autosize,                !- Maximum Air Flow Rate {m3/s}
@@ -3500,7 +3166,7 @@
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE4-1 VAV Reheat,     !- Name
-    FanAvailSched,           !- Availability Schedule Name
+    AlwaysOn,                !- Availability Schedule Name
     SPACE4-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE4-1 ATU In Node,    !- Air Inlet Node Name
     autosize,                !- Maximum Air Flow Rate {m3/s}
@@ -3520,7 +3186,7 @@
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE5-1 VAV Reheat,     !- Name
-    FanAvailSched,           !- Availability Schedule Name
+    AlwaysOn,                !- Availability Schedule Name
     SPACE5-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE5-1 ATU In Node,    !- Air Inlet Node Name
     autosize,                !- Maximum Air Flow Rate {m3/s}
@@ -3929,6 +3595,14 @@
     Main Heating Coil 1 Outlet Node,  !- Air Inlet Node Name
     VAV Sys 1 Outlet Node;   !- Air Outlet Node Name
 
+  FanPerformance:NightVentilation,
+    Supply Fan 1,            !- Fan Name
+    0.7,                     !- Fan Total Efficiency
+    67.0,                    !- Pressure Rise {Pa}
+    autosize,                !- Maximum Flow Rate {m3/s}
+    0.9,                     !- Motor Efficiency
+    1.0;                     !- Motor in Airstream Fraction
+
   Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;
 
   Output:Variable,*,Zone Air Temperature,hourly;
@@ -3943,7 +3617,23 @@
 
   Output:Variable,*,Cooling Coil Sensible Cooling Rate,hourly;
 
+  Output:Variable,*,Fan Electricity Rate,hourly;
+
+  Output:Variable,*,Fan Rise in Air Temperature,hourly;
+
   Output:Variable,*,Zone Air Terminal VAV Damper Position,hourly;
+
+  Output:Variable,Outside Air Inlet Node 1,System Node Temperature,hourly;
+
+  Output:Variable,Outside Air Inlet Node 1,System Node Mass Flow Rate,hourly;
+
+  Output:Variable,Mixed Air Node 1,System Node Temperature,hourly;
+
+  Output:Variable,Mixed Air Node 1,System Node Mass Flow Rate,hourly;
+
+  Output:Variable,VAV Sys 1 Outlet Node,System Node Temperature,hourly;
+
+  Output:Variable,VAV Sys 1 Outlet Node,System Node Mass Flow Rate,hourly;
 
   Output:Variable,*,Chiller Evaporator Cooling Rate,hourly;
 
