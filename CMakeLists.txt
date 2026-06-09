@@ -39,6 +39,7 @@ add_library(project_options INTERFACE)
 target_compile_features(project_options INTERFACE cxx_std_20)
 
 option(ENABLE_PCH "Enable Precompiled Headers" ON)
+# List of headers to precompile: each project will build its own PCH, which is a good idea if any #define's change
 set(EP_CXX_PCH_HEADERS
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/src/EnergyPlus/DataGlobalConstants.hh>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/src/EnergyPlus/DataGlobals.hh>"
@@ -46,6 +47,10 @@ set(EP_CXX_PCH_HEADERS
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/ObjexxFCL/src/ObjexxFCL/Array.functions.hh>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/ObjexxFCL/src/ObjexxFCL/Array1D.hh>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/nlohmann/json.hpp>")
+set(EP_TEST_CXX_PCH_HEADERS
+    ${EP_CXX_PCH_HEADERS}
+    "$<$<COMPILE_LANGUAGE:CXX>:<gtest/gtest.h>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/tst/EnergyPlus/unit/Fixtures/EnergyPlusFixture.hh>")
 
 option(ENABLE_UNITY "Enable Unity Build" OFF)
 

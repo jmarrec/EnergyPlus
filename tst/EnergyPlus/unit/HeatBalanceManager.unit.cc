@@ -70,6 +70,7 @@
 #include <EnergyPlus/HVACSystemRootFindingAlgorithm.hh>
 #include <EnergyPlus/HeatBalanceAirManager.hh>
 #include <EnergyPlus/HeatBalanceManager.hh>
+#include <EnergyPlus/HeatBalanceSurfaceManager.hh>
 #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/Material.hh>
@@ -2398,6 +2399,38 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
     int surfNum = Util::FindItemInList("SURFACE1", state->dataSurface->Surface);
     EXPECT_EQ(state->dataSurface->Surface(surfNum).Construction, state->dataSurface->SurfEMSConstructionOverrideValue(surfNum));
     EXPECT_TRUE(state->dataSurface->SurfEMSConstructionOverrideON(surfNum));
+}
+
+TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSMaterialThermalAbsorptanceUpdatesConstructionProperties)
+{
+    constexpr Real64 initialThermalAbsorptance = 0.9;
+    constexpr Real64 emsThermalAbsorptance = 0.35;
+
+    state->dataMaterial->materials.allocate(1);
+    auto *mat = new Material::MaterialBase;
+    mat->Name = "ROOF MATERIAL";
+    mat->group = Material::Group::Regular;
+    mat->AbsorpThermal = initialThermalAbsorptance;
+    mat->AbsorpThermalInput = initialThermalAbsorptance;
+    mat->AbsorpThermalEMSOverrideOn = true;
+    mat->AbsorpThermalEMSOverride = emsThermalAbsorptance;
+    state->dataMaterial->materials(1) = mat;
+
+    state->dataHeatBal->TotConstructs = 1;
+    state->dataConstruction->Construct.allocate(1);
+    auto &construction = state->dataConstruction->Construct(1);
+    construction.Name = "ROOF CONSTRUCTION";
+    construction.TotLayers = 1;
+    construction.LayerPoint.allocate(1);
+    construction.LayerPoint(1) = 1;
+    construction.InsideAbsorpThermal = initialThermalAbsorptance;
+    construction.OutsideAbsorpThermal = initialThermalAbsorptance;
+
+    HeatBalanceSurfaceManager::InitEMSControlledSurfaceProperties(*state);
+
+    EXPECT_EQ(mat->AbsorpThermal, emsThermalAbsorptance);
+    EXPECT_EQ(construction.InsideAbsorpThermal, emsThermalAbsorptance);
+    EXPECT_EQ(construction.OutsideAbsorpThermal, emsThermalAbsorptance);
 }
 
 TEST_F(EnergyPlusFixture, HeatBalanceManager_GetSpaceData)
