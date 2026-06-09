@@ -636,6 +636,8 @@ namespace BaseboardRadiator {
                         } else {
                             TempSize = this->ScaledHeatingCapacity;
                         }
+                        BaseSizer::reportSizerOutput(
+                            state, cCMO_BBRadiator_Water, this->EquipID, "Design Size Heating Load [W]", zoneEqSizing.DesHeatingLoad);
                         bool PrintFlag = false; // TRUE when sizing information is reported in the eio file
                         bool errorsFound = false;
                         HeatingCapacitySizer sizerHeatingCapacity;
@@ -689,7 +691,6 @@ namespace BaseboardRadiator {
                             }
                         }
                     }
-                    BaseSizer::reportSizerOutput(state, cCMO_BBRadiator_Water, this->EquipID, "Design Size Heating Load [W]", DesCoilLoad);
                 }
 
                 // UA sizing
