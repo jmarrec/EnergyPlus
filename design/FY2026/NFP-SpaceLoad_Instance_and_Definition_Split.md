@@ -42,7 +42,7 @@ The **Definition** object holds all physical characteristics that are intrinsic 
 
 The **Instance** object holds at least three things: a reference to a Definition by name, a zone/space/zonelist/spacelist assignment, and an operating schedule.
 It also carries the end-use subcategory and any other fields that are specific to a particular installation (e.g., `Return Air Heat Gain Node Name` and `Exhaust Air Heat Gain Node Name` for `Lights`, which are zone-topology-specific).
-In addition, a `Mulitiplier` field (default 1) is added: this value multiplies the Definition value. This allows greater flexibility to define a single definition but handle different physical installations: for example a single Definition representing one object (a Workstation, or a light bulb) can be definited with an absolute Watts value, and the Instance object has the count of these objects.
+In addition, a `Multiplier` field (default 1) is added: this value multiplies the Definition value. This allows greater flexibility to define a single definition but handle different physical installations: for example a single Definition representing one object (a Workstation, or a light bulb) can be defined with an absolute Watts value, and the Instance object has the count of these objects.
 
 ## Approach ##
 
@@ -122,6 +122,7 @@ Below is the proposed IDD for each object
 | Name                                                 | People            |
 | Zone or ZoneList or Space or SpaceList Name          | People            |
 | Number of People Schedule Name                       | People            |
+| Multiplier                                           | People            |
 | Number of People Calculation Method                  | People:Definition |
 | Number of People                                     | People:Definition |
 | People per Floor Area                                | People:Definition |
@@ -213,8 +214,8 @@ People,
        \type object-list
        \object-list ScheduleNames
   N1, \field Multiplier
-       \type integer
-       \minimum 1
+       \type real
+       \minimum 0
        \default 1
   A12, \field Ankle Level Air Velocity Schedule Name
        \note units in the schedule are m/s
@@ -387,6 +388,7 @@ People:Definition,
 | Fraction Radiant                                                 | Lights:Definition |
 | Fraction Visible                                                 | Lights:Definition |
 | Fraction Replaceable                                             | Lights            |
+| Multiplier                                                       | Lights            |
 | End-Use Subcategory                                              | Lights            |
 | Return Air Fraction Calculated from Plenum Temperature           | Lights:Definition |
 | Return Air Fraction Function of Plenum Temperature Coefficient 1 | Lights:Definition |
@@ -429,8 +431,8 @@ Lights,
        \maximum 1
        \default 1.0
   N2, \field Multiplier
-       \type integer
-       \minimum 1
+       \type real
+       \minimum 0
        \default 1
   A5, \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
@@ -527,6 +529,7 @@ Lights:Definition,
 | Name                                        | ElectricEquipment            |
 | Zone or ZoneList or Space or SpaceList Name | ElectricEquipment            |
 | Schedule Name                               | ElectricEquipment            |
+| Multiplier                                  | ElectricEquipment            |
 | Design Level Calculation Method             | ElectricEquipment:Definition |
 | Design Level                                | ElectricEquipment:Definition |
 | Watts per Floor Area                        | ElectricEquipment:Definition |
@@ -565,8 +568,8 @@ ElectricEquipment,
        \required-field
        \object-list ScheduleNames
   N1, \field Multiplier
-       \type integer
-       \minimum 1
+       \type real
+       \minimum 0
        \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
@@ -633,6 +636,7 @@ ElectricEquipment:Definition,
 | Name                                        | GasEquipment            |
 | Zone or ZoneList or Space or SpaceList Name | GasEquipment            |
 | Schedule Name                               | GasEquipment            |
+| Multiplier                                  | GasEquipment            |
 | Design Level Calculation Method             | GasEquipment:Definition |
 | Design Level                                | GasEquipment:Definition |
 | Power per Floor Area                        | GasEquipment:Definition |
@@ -672,8 +676,8 @@ GasEquipment,
        \required-field
        \object-list ScheduleNames
   N1, \field Multiplier
-       \type integer
-       \minimum 1
+       \type real
+       \minimum 0
        \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
@@ -754,6 +758,7 @@ GasEquipment:Definition,
 | Name                                        | HotWaterEquipment            |
 | Zone or ZoneList or Space or SpaceList Name | HotWaterEquipment            |
 | Schedule Name                               | HotWaterEquipment            |
+| Multiplier                                  | HotWaterEquipment            |
 | Design Level Calculation Method             | HotWaterEquipment:Definition |
 | Design Level                                | HotWaterEquipment:Definition |
 | Power per Floor Area                        | HotWaterEquipment:Definition |
@@ -792,8 +797,8 @@ HotWaterEquipment,
        \required-field
        \object-list ScheduleNames
   N1, \field Multiplier
-       \type integer
-       \minimum 1
+       \type real
+       \minimum 0
        \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
@@ -862,6 +867,7 @@ HotWaterEquipment:Definition,
 | Name                                        | SteamEquipment            |
 | Zone or ZoneList or Space or SpaceList Name | SteamEquipment            |
 | Schedule Name                               | SteamEquipment            |
+| Multiplier                                  | SteamEquipment            |
 | Design Level Calculation Method             | SteamEquipment:Definition |
 | Design Level                                | SteamEquipment:Definition |
 | Power per Floor Area                        | SteamEquipment:Definition |
@@ -900,8 +906,8 @@ SteamEquipment,
        \required-field
        \object-list ScheduleNames
   N1, \field Multiplier
-       \type integer
-       \minimum 1
+       \type real
+       \minimum 0
        \default 1
   A5; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
@@ -971,6 +977,7 @@ SteamEquipment:Definition,
 | Fuel Type                                   | OtherEquipment            |
 | Zone or ZoneList or Space or SpaceList Name | OtherEquipment            |
 | Schedule Name                               | OtherEquipment            |
+| Multiplier                                  | OtherEquipment            |
 | Design Level Calculation Method             | OtherEquipment:Definition |
 | Design Level                                | OtherEquipment:Definition |
 | Power per Floor Area                        | OtherEquipment:Definition |
@@ -1027,8 +1034,8 @@ OtherEquipment,
        \required-field
        \object-list ScheduleNames
   N1, \field Multiplier
-       \type integer
-       \minimum 1
+       \type real
+       \minimum 0
        \default 1
   A6; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
@@ -1106,10 +1113,10 @@ OtherEquipment:Definition,
 | Air Flow Calculation Method                                             | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Power Input Calculation Method                                   | ElectricEquipment:ITE:AirCooled:Definition |
 | Watts per Unit                                                          | ElectricEquipment:ITE:AirCooled:Definition |
-| Number of Units                                                         | ElectricEquipment:ITE:AirCooled            |
+| Multiplier                                                              | ElectricEquipment:ITE:AirCooled            |
 | Watts per Floor Area                                                    | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Power Input Schedule Name                                        | ElectricEquipment:ITE:AirCooled            |
-| CPU Loading  Schedule Name                                              | ElectricEquipment:ITE:AirCooled:Definition |
+| CPU Loading Schedule Name                                               | ElectricEquipment:ITE:AirCooled            |
 | CPU Power Input Function of Loading and Air Temperature Curve Name      | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Fan Power Input Fraction                                         | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Fan Air Flow Rate per Power Input                                | ElectricEquipment:ITE:AirCooled:Definition |
@@ -1135,8 +1142,8 @@ OtherEquipment:Definition,
 | Return Temperature Difference Schedule                                  | ElectricEquipment:ITE:AirCooled:Definition |
 
 
-Note: this object already has a sort of "Multiplier" fields in the sense that it has a "Number of Units" field, but that field only applies if Design Power Input Calculation Method is "Watts/Unit". This is changed to be a proper Multiplier field to match the other objects, and it will also apply if Design Power Input Calculation Method is "Watts/Area".
-Similarly, Design Power Input Calculation Method choices are changed: key "Watts/Units" is renamed to "EquipmentLevel" to match the other objects terminology.
+Note: this object already has a sort of "Multiplier" field in the sense that it has a "Number of Units" field, but that field only applies if Design Power Input Calculation Method is "Watts/Unit". This is changed to be a proper Multiplier field to match the other objects, and it will also apply if Design Power Input Calculation Method is "Watts/Area".
+Similarly, Design Power Input Calculation Method choices are changed: key "Watts/Unit" is renamed to "EquipmentLevel" to match the other objects terminology.
 
 ```
 ElectricEquipment:ITE:AirCooled,
@@ -1385,7 +1392,7 @@ The existing per-type `GetInternalHeatGains*` logic then looks up the matching d
 
 No changes are needed to the downstream simulation code — the internal `ZoneEquip*` structs remain unchanged; only input parsing is affected.
 
-The `ZoneEquipDefinitionData` and similar structs are Plain Old Data (POD) structs, which are populated directly from epJSON without allocating any arrays, and is scoped only to the relevant portion of GetInternalHeatGains, therefore not increasing the memory burden of the `EnergyPlusData state`.
+The `ZoneEquipDefinitionData` and similar structs are Plain Old Data (POD) structs, which are populated directly from epJSON without allocating any arrays, and are scoped only to the relevant portion of GetInternalHeatGains, therefore not increasing the memory burden of the `EnergyPlusData state`.
 
 
 ### Backward compatibility / Transition
@@ -1393,6 +1400,7 @@ The `ZoneEquipDefinitionData` and similar structs are Plain Old Data (POD) struc
 A Transition rule (V26.2.0) is provided for each object type. The rule:
 1. Creates a new `<ObjectType>:Definition` object, naming it after the original object, and copies the physical fields into it.
 2. Rewrites the original `<ObjectType>` object to remove the physical fields and add the `Definition Name` reference pointing to the newly created definition.
+3. Maps the existing `ElectricEquipment:ITE:AirCooled` `Number of Units` value to `Multiplier`; other object types use the `Multiplier` default of 1 unless the transition output style requires writing the field explicitly.
 
 Existing IDF files therefore continue to work after transition without any manual edits. Each original object becomes a 1-to-1 instance/definition pair; users can then consolidate definitions manually when multiple instances share the same physical characteristics.
 
