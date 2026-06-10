@@ -634,7 +634,8 @@ namespace BaseboardRadiator {
                             TempSize = DataSizing::AutoSize;
                             state.dataSize->DataScalableCapSizingON = true;
                         }
-                        if (!state.dataSize->FinalZoneSizing.empty() && state.dataSize->CurZoneEqNum <= state.dataSize->FinalZoneSizing.size()) {
+                        if (!state.dataSize->FinalZoneSizing.empty() &&
+                            state.dataSize->CurZoneEqNum <= static_cast<int>(state.dataSize->FinalZoneSizing.size())) {
                             BaseSizer::reportSizerOutput(state,
                                                          cCMO_BBRadiator_Water,
                                                          this->EquipID,

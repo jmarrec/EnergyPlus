@@ -1037,7 +1037,8 @@ namespace HWBaseboardRadiator {
                 } else {
                     hWBaseboard.RatedCapacity = TempSize;
                 }
-                if (!state.dataSize->FinalZoneSizing.empty() && state.dataSize->CurZoneEqNum <= state.dataSize->FinalZoneSizing.size()) {
+                if (!state.dataSize->FinalZoneSizing.empty() &&
+                    state.dataSize->CurZoneEqNum <= static_cast<int>(state.dataSize->FinalZoneSizing.size())) {
                     BaseSizer::reportSizerOutput(state,
                                                  cCMO_BBRadiator_Water,
                                                  hWBaseboard.Name,
