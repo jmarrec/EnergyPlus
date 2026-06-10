@@ -13035,23 +13035,40 @@ namespace SurfaceGeometry {
                     // If exterior window has divider, subtract divider area to get glazed area
                     DivWidth = state.dataSurface->FrameDivider(surf.FrameDivider).DividerWidth;
                     if (DivWidth > 0.0 && !ErrorInSurface) {
-                        DivArea = DivWidth * (state.dataSurface->FrameDivider(FrDivNum).HorDividers * surf.Width +
-                                              state.dataSurface->FrameDivider(FrDivNum).VertDividers * surf.Height -
-                                              state.dataSurface->FrameDivider(FrDivNum).HorDividers *
-                                                  state.dataSurface->FrameDivider(FrDivNum).VertDividers * DivWidth);
-                        state.dataSurface->SurfWinDividerArea(ThisSurf) = DivArea * surf.Multiplier;
-                        if (DivArea <= 0.0) {
-                            ShowSevereError(state, std::format("{}Calculated Divider Area <= 0.0 for Window={}", RoutineName, surf.Name));
+                        if (DivWidth * state.dataSurface->FrameDivider(FrDivNum).HorDividers > surf.Height) {
+                            ShowSevereError(state,
+                                            std::format("{}Horizontal dividers exceed glazed opening height for window {}", RoutineName, surf.Name));
+                            ShowContinueError(
+                                state,
+                                std::format("Number of horizontal dividers=[{}], divider width=[{:.2f}] m, glazed opening height=[{:.2f}] m.",
+                                            state.dataSurface->FrameDivider(FrDivNum).HorDividers,
+                                            DivWidth,
+                                            surf.Height));
                             ErrorInSurface = true;
-                        } else if ((surf.Area - state.dataSurface->SurfWinDividerArea(ThisSurf)) <= 0.0) {
-                            ShowSevereError(state, std::format("{}Divider area exceeds glazed opening for window {}", RoutineName, surf.Name));
-                            ShowContinueError(state,
-                                              std::format("Window surface area=[{:.2f}] m2, divider area=[{:.2f}] m2.",
-                                                          surf.Area,
-                                                          state.dataSurface->SurfWinDividerArea(ThisSurf)));
+                        }
+                        if (DivWidth * state.dataSurface->FrameDivider(FrDivNum).VertDividers > surf.Width) {
+                            ShowSevereError(state,
+                                            std::format("{}Vertical dividers exceed glazed opening width for window {}", RoutineName, surf.Name));
+                            ShowContinueError(
+                                state,
+                                std::format("Number of vertical dividers=[{}], divider width=[{:.2f}] m, glazed opening width=[{:.2f}] m.",
+                                            state.dataSurface->FrameDivider(FrDivNum).VertDividers,
+                                            DivWidth,
+                                            surf.Width));
                             ErrorInSurface = true;
-                        } else {
-                            surf.Area -= state.dataSurface->SurfWinDividerArea(ThisSurf); // Glazed area
+                        }
+                        if (!ErrorInSurface) {
+                            // total divider length
+                            Real64 const DivLenTotal = state.dataSurface->FrameDivider(FrDivNum).HorDividers * surf.Width +
+                                                       state.dataSurface->FrameDivider(FrDivNum).VertDividers * surf.Height;
+                            // length of dividers overlapping themselves
+                            Real64 const DivLenOvlp = state.dataSurface->FrameDivider(FrDivNum).HorDividers *
+                                                      state.dataSurface->FrameDivider(FrDivNum).VertDividers * DivWidth;
+                            // actual divider area minus self-overlap
+                            DivArea = DivWidth * (DivLenTotal - DivLenOvlp);
+                            state.dataSurface->SurfWinDividerArea(ThisSurf) = DivArea * surf.Multiplier;
+                            // Glazed area
+                            surf.Area -= state.dataSurface->SurfWinDividerArea(ThisSurf);
                         }
                     }
 
