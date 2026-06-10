@@ -627,17 +627,20 @@ namespace BaseboardRadiator {
                                 this->ScaledHeatingCapacity * state.dataHeatBal->Zone(state.dataSize->DataZoneNumber).FloorArea;
                             TempSize = zoneEqSizing.DesHeatingLoad;
                             state.dataSize->DataScalableCapSizingON = true;
-                        } else if (CapSizingMethod == DataSizing::FractionOfAutosizedHeatingCapacity) {
+                        } else { // CapSizingMethod == DataSizing::FractionOfAutosizedHeatingCapacity
                             zoneEqSizing.HeatingCapacity = true;
                             state.dataSize->DataFracOfAutosizedHeatingCapacity = this->ScaledHeatingCapacity;
                             zoneEqSizing.DesHeatingLoad = finalZoneSizing.NonAirSysDesHeatLoad;
                             TempSize = DataSizing::AutoSize;
                             state.dataSize->DataScalableCapSizingON = true;
-                        } else {
-                            TempSize = this->ScaledHeatingCapacity;
                         }
-                        BaseSizer::reportSizerOutput(
-                            state, cCMO_BBRadiator_Water, this->EquipID, "Design Size Heating Load [W]", zoneEqSizing.DesHeatingLoad);
+                        if (!state.dataSize->FinalZoneSizing.empty() && state.dataSize->CurZoneEqNum <= state.dataSize->FinalZoneSizing.size()) {
+                            BaseSizer::reportSizerOutput(state,
+                                                         cCMO_BBRadiator_Water,
+                                                         this->EquipID,
+                                                         "Design Size Heating Load [W]",
+                                                         state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).NonAirSysDesHeatLoad);
+                        }
                         bool PrintFlag = false; // TRUE when sizing information is reported in the eio file
                         bool errorsFound = false;
                         HeatingCapacitySizer sizerHeatingCapacity;
