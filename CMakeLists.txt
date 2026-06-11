@@ -33,6 +33,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# We don't use C++20 modules: disable CMake's dependency scanning to avoid a separate
+# "Scanning ... for CXX dependencies" step (and compiler invocation) for every TU
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_library(project_options INTERFACE)
