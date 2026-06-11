@@ -407,45 +407,6 @@ template <typename... Args> void print(InputOutputFile &outputFile, std::string_
     fmt::print(*outputStream, format_str, std::forward<Args>(args)...);
 }
 
-template <typename... Args> std::string format(std::string_view format_str, Args &&...args)
-{
-    return fmt::format(fmt::runtime(format_str), std::forward<Args>(args)...);
-}
-
 } // namespace EnergyPlus
-
-// extern template the most commonly used format function calls
-// to save on compilation time. They will be explicitly instantiated
-// in IOFiles.cc
-extern template std::string EnergyPlus::format<int>(std::string_view, int &&);
-extern template std::string EnergyPlus::format<const char *const &>(std::string_view, const char *const &);
-extern template std::string EnergyPlus::format<int &, std::string &>(std::string_view, int &, std::string &);
-extern template std::string
-EnergyPlus::format<std::string &, std::string &, std::string &, double &>(std::string_view, std::string &, std::string &, std::string &, double &);
-extern template std::string EnergyPlus::format<const std::string_view &>(std::string_view, const std::string_view &);
-extern template std::string EnergyPlus::format<const std::string_view &, std::string &>(std::string_view, const std::string_view &, std::string &);
-extern template std::string EnergyPlus::format<std::string &, double &, double &>(std::string_view, std::string &, double &, double &);
-extern template std::string EnergyPlus::format<std::string &, std::string &, int &>(std::string_view, std::string &, std::string &, int &);
-extern template std::string EnergyPlus::format<double &, double &, double &>(std::string_view, double &, double &, double &);
-extern template std::string EnergyPlus::format<double &, std::string &>(std::string_view, double &, std::string &);
-extern template std::string EnergyPlus::format<std::string &>(std::string_view, std::string &);
-extern template std::string EnergyPlus::format<const int &, int &>(std::string_view, const int &, int &);
-extern template std::string EnergyPlus::format<double>(std::string_view, double &&);
-extern template std::string EnergyPlus::format<int &, int &>(std::string_view, int &, int &);
-extern template std::string EnergyPlus::format<const double &>(std::string_view, const double &);
-extern template std::string EnergyPlus::format<std::string &, int &>(std::string_view, std::string &, int &);
-extern template std::string EnergyPlus::format<std::string &, std::string &, double &>(std::string_view, std::string &, std::string &, double &);
-extern template std::string
-EnergyPlus::format<std::string &, double &, std::string &, double &>(std::string_view, std::string &, double &, std::string &, double &);
-extern template std::string EnergyPlus::format<const int &>(std::string_view, const int &);
-extern template std::string
-EnergyPlus::format<int &, const std::string &, std::string &>(std::string_view, int &, const std::string &, std::string &);
-extern template std::string EnergyPlus::format<int &, int &, const std::string &>(std::string_view, int &, int &, const std::string &);
-extern template std::string EnergyPlus::format<int &, int &, std::string_view &>(std::string_view, int &, int &, std::string_view &);
-extern template std::string EnergyPlus::format<int &, std::string_view &, std::string &>(std::string_view, int &, std::string_view &, std::string &);
-extern template std::string EnergyPlus::format<double &, double &>(std::string_view, double &, double &);
-extern template std::string EnergyPlus::format<int &>(std::string_view, int &);
-extern template std::string EnergyPlus::format<std::string &, double &>(std::string_view, std::string &, double &);
-extern template std::string EnergyPlus::format<double &>(std::string_view, double &);
 
 #endif

@@ -5120,10 +5120,10 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
 
     //    if (FS.WEQLSolverErrorIndex < 1) {
     //        ++FS.WEQLSolverErrorIndex;
-    //        ShowSevereError(state, format("CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"{}\"", FS.Name));
-    //        ShowContinueError(state, format("{}Net radiation analysis did not converge", RoutineName));
-    //        ShowContinueError(state, format("...Maximum error is = {:.6f}", MAXERR));
-    //        ShowContinueError(state, format("...Convergence tolerance is = {:.6f}", TOL));
+    //        ShowSevereError(state, std::format("CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"{}\"", FS.Name));
+    //        ShowContinueError(state, std::format("{}Net radiation analysis did not converge", RoutineName));
+    //        ShowContinueError(state, std::format("...Maximum error is = {:.6f}", MAXERR));
+    //        ShowContinueError(state, std::format("...Convergence tolerance is = {:.6f}", TOL));
     //        ShowContinueErrorTimeStamp(state, "");
     //    } else {
     //        ShowRecurringWarningErrorAtEnd(state, "CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"" + FS.Name + "\"; " + std::string{RoutineName} +
