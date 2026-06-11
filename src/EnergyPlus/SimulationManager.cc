@@ -2164,7 +2164,7 @@ namespace SimulationManager {
                   Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).ObjectName,
                   Node::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
-                  state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream);
+                  static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream));
             // Build ParentNodeLists
             if ((state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == Node::ConnectionType::Inlet) ||
                 (state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == Node::ConnectionType::Outlet)) {
@@ -2230,7 +2230,7 @@ namespace SimulationManager {
                   Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).ObjectName,
                   Node::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
-                  state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream);
+                  static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream));
         }
 
         int NumNonConnected = 0;

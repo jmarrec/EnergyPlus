@@ -12183,7 +12183,7 @@ namespace SurfaceGeometry {
                     if (faceNum <= NActFaces) {
                         auto &thisSurface = state.dataSurface->Surface(thisFace.SurfNum);
                         print(state.files.debug, "surface={} nsides={}\n", thisFace.SurfNum, thisFace.NSides);
-                        print(state.files.debug, "surface name={} class={}\n", thisSurface.Name, thisSurface.Class);
+                        print(state.files.debug, "surface name={} class={}\n", thisSurface.Name, DataSurfaces::cSurfaceClass(thisSurface.Class));
                         print(state.files.debug, "area={}\n", thisSurface.GrossArea);
                         for (int iside = 1; iside <= thisFace.NSides; ++iside) {
                             auto const &FacePoint(thisFace.FacePoints(iside));
@@ -12199,7 +12199,7 @@ namespace SurfaceGeometry {
                           "notused:surface={} name={} class={}\n",
                           surfacenotused(SurfNum),
                           state.dataSurface->Surface(surfacenotused(SurfNum)).Name,
-                          state.dataSurface->Surface(surfacenotused(SurfNum)).Class);
+                          DataSurfaces::cSurfaceClass(state.dataSurface->Surface(surfacenotused(SurfNum)).Class));
                 }
             }
 
