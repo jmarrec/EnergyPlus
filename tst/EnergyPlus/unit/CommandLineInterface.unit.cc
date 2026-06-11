@@ -56,8 +56,6 @@
 
 #include "Fixtures/EnergyPlusFixture.hh"
 
-#include <fmt/format.h>
-
 #include <algorithm>
 #include <array>
 #include <iterator>
@@ -190,7 +188,7 @@ public:
         } else if (expectedParams.suffixType == "C") {
             tableSuffix = "Table";
         }
-        fs::path const outputTblHtmFilePath = expectedParams.outDirPath / fmt::format("{}{}.htm", expectedParams.prefixOutName, tableSuffix);
+        fs::path const outputTblHtmFilePath = expectedParams.outDirPath / std::format("{}{}.htm", expectedParams.prefixOutName, tableSuffix);
         result &= FORMAT_EXPECT_EQ(outputTblHtmFilePath, state->dataStrGlobals->outputTblHtmFilePath, ss);
         if (!result) {
             return ::testing::AssertionFailure() << ss.str();
@@ -225,7 +223,7 @@ public:
         } else if (expectedParams.suffixType == "L") {
             tableSuffix = "Table";
         }
-        fs::path const outputTblHtmFilePath = expectedParams.outDirPath / fmt::format("{}{}.htm", expectedParams.prefixOutName, tableSuffix);
+        fs::path const outputTblHtmFilePath = expectedParams.outDirPath / std::format("{}{}.htm", expectedParams.prefixOutName, tableSuffix);
 
         EXPECT_EQ(outputTblHtmFilePath, state->dataStrGlobals->outputTblHtmFilePath);
     }
@@ -408,11 +406,11 @@ TEST_F(CommandLineInterfaceFixture, numThread)
     const std::array<TestCase, 3> test_data{{
         {4, 4, ""},
         {0, 1, "Invalid value for -j arg. Defaulting to 1."},
-        {100, Nproc, fmt::format("Invalid value for -j arg. Value exceeds num available. Defaulting to num available. -j {}", Nproc)},
+        {100, Nproc, std::format("Invalid value for -j arg. Value exceeds num available. Defaulting to num available. -j {}", Nproc)},
     }};
 
     for (auto [j, expectedCorrectedJ, error_message] : test_data) {
-        SCOPED_TRACE(fmt::format("Passing j={}", j));
+        SCOPED_TRACE(std::format("Passing j={}", j));
         expectedParams.numThread = expectedCorrectedJ;
         for (const std::string flag : {"-j", "--jobs"}) {
             SCOPED_TRACE("Flag: '" + flag + "'");
