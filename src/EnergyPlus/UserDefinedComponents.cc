@@ -664,7 +664,7 @@ namespace UserDefinedComponents {
                     for (int connectionIndex = 0; connectionIndex < NumPlantConnections; ++connectionIndex) {
                         int const connectionNum = connectionIndex + 1;
                         auto &plantConnection = userPlantComp.Loop[connectionIndex];
-                        const std::string LoopStr = fmt::to_string(connectionNum);
+                        const std::string LoopStr = std::to_string(connectionNum);
                         int aArgCount = connectionIndex * 6 + 3;
                         plantConnection.InletNodeNum = Node::GetOnlySingleNode(state,
                                                                                cAlphaArgs(aArgCount),
@@ -1160,7 +1160,7 @@ namespace UserDefinedComponents {
                                                                              static_cast<Node::CompFluidStream>(connectionNum),
                                                                              Node::ObjectIsNotParent);
 
-                        const std::string LoopStr = fmt::to_string(connectionNum);
+                        const std::string LoopStr = std::to_string(connectionNum);
                         // model input related internal variables
                         SetupEMSInternalVariable(
                             state, "Inlet Temperature for Air Connection " + LoopStr, userCoil.Name, "[C]", airConnection.InletTemp);
@@ -1737,7 +1737,7 @@ namespace UserDefinedComponents {
                         plantConnection.HowLoadServed = DataPlant::HowMet::NoneDemand;
                         plantConnection.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         // Setup Internal Variables
-                        const std::string LoopStr = fmt::to_string(connectionNum);
+                        const std::string LoopStr = std::to_string(connectionNum);
                         // model input related internal variables
                         SetupEMSInternalVariable(
                             state, "Inlet Temperature for Plant Connection " + LoopStr, userZoneAirHVAC.Name, "[C]", plantConnection.InletTemp);
@@ -2275,7 +2275,7 @@ namespace UserDefinedComponents {
                         plantConnection.HowLoadServed = DataPlant::HowMet::NoneDemand;
                         plantConnection.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         // Setup Internal Variables
-                        const std::string LoopStr = fmt::to_string(connectionNum);
+                        const std::string LoopStr = std::to_string(connectionNum);
                         // model input related internal variables
                         SetupEMSInternalVariable(
                             state, "Inlet Temperature for Plant Connection " + LoopStr, userAirTerminal.Name, "[C]", plantConnection.InletTemp);

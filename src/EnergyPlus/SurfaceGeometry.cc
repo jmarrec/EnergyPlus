@@ -3542,7 +3542,7 @@ namespace SurfaceGeometry {
                                                      s_ipsc->cCurrentModuleObject,
                                                      surfTemp.Name,
                                                      s_ipsc->cNumericFieldNames(1),
-                                                     fmt::to_string(surfTemp.Sides)));
+                                                     std::to_string(surfTemp.Sides)));
                         ShowContinueError(
                             state,
                             std::format("...but {} were entered. Only the indicated {} will be used.", numSides, s_ipsc->cNumericFieldNames(1)));
@@ -4301,7 +4301,7 @@ namespace SurfaceGeometry {
                                                      s_ipsc->cCurrentModuleObject,
                                                      surfTemp.Name,
                                                      s_ipsc->cNumericFieldNames(2),
-                                                     fmt::to_string(surfTemp.Sides)));
+                                                     std::to_string(surfTemp.Sides)));
                         ShowContinueError(
                             state,
                             std::format("...but {} were entered. Only the indicated {} will be used.", numSides, s_ipsc->cNumericFieldNames(2)));
@@ -5268,7 +5268,7 @@ namespace SurfaceGeometry {
                                                  s_ipsc->cCurrentModuleObject,
                                                  surfTemp.Name,
                                                  s_ipsc->cNumericFieldNames(3),
-                                                 fmt::to_string(surfTemp.Sides)));
+                                                 std::to_string(surfTemp.Sides)));
                     ShowContinueError(
                         state, std::format("...but {} were entered. Only the indicated {} will be used.", numSides, s_ipsc->cNumericFieldNames(3)));
                 }
@@ -13538,7 +13538,7 @@ namespace SurfaceGeometry {
             }
 
             // create unshaded construction with storm window
-            const std::string ChrNum = fmt::to_string(StormWinNum);
+            const std::string ChrNum = std::to_string(StormWinNum);
             std::string ConstrNameSt = "BARECONSTRUCTIONWITHSTORMWIN:" + ChrNum; // Name of unshaded construction with storm window
             // If this construction name already exists, set the surface's storm window construction number to it
             int ConstrNewSt = Util::FindItemInList(ConstrNameSt,

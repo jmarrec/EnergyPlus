@@ -2789,7 +2789,7 @@ namespace OutputProcessor {
         }
 
         if (state.files.eso.good()) {
-            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, fmt::format_int(repValue).c_str());
+            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, repValue);
         }
     } // WriteNumericData()
 
@@ -3736,7 +3736,7 @@ void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType co
         ReportMeters(state, ReportFreq::Year, TimePrint);
 
         state.dataGlobal->CalendarYear += 1;
-        state.dataGlobal->CalendarYearChr = fmt::to_string(state.dataGlobal->CalendarYear);
+        state.dataGlobal->CalendarYearChr = std::to_string(state.dataGlobal->CalendarYear);
     }
 } // UpdateDataandReport()
 
@@ -4052,8 +4052,8 @@ void SetInitialMeterReportingAndOutputNames(EnergyPlusData &state,
                 std::format(R"(Output:Meter:MeterFileOnly requested for "{}" ({}), already on "Output:Meter". Will report to both {} and {})",
                             meter->Name,
                             reportFreqNames[(freq == ReportFreq::EachCall) ? (int)ReportFreq::TimeStep : (int)freq],
-                            state.files.eso.filePath.filename().string(),
-                            state.files.mtr.filePath.filename().string()));
+                            state.files.eso.filePath.filename(),
+                            state.files.mtr.filePath.filename()));
         }
         if (!period.Rpt) {
             period.Rpt = true;
@@ -4902,7 +4902,7 @@ int initErrorFile(EnergyPlusData &state)
 {
     state.files.err_stream = std::make_unique<std::ofstream>(state.files.outputErrFilePath);
     if (state.files.err_stream->bad()) {
-        DisplayString(state, std::format("ERROR: Could not open file {} for output (write).", state.files.outputErrFilePath.string()));
+        DisplayString(state, std::format("ERROR: Could not open file {} for output (write).", state.files.outputErrFilePath));
         return EXIT_FAILURE;
     }
 

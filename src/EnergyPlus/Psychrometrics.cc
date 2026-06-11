@@ -179,7 +179,7 @@ namespace Psychrometrics {
                     if (!PsyReportIt[Loop]) {
                         continue;
                     }
-                    const std::string istring = fmt::to_string(state.dataPsychCache->NumTimesCalled[Loop]);
+                    const std::string istring = std::to_string(state.dataPsychCache->NumTimesCalled[Loop]);
                     if (state.dataPsychCache->NumIterations[Loop] > 0) {
                         AverageIterations = double(state.dataPsychCache->NumIterations[Loop]) / double(state.dataPsychCache->NumTimesCalled[Loop]);
                         print(auditFile, "{},{},{:.2R}\n", PsyRoutineNames[Loop], istring, AverageIterations);

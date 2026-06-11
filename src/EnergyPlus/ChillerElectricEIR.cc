@@ -70,6 +70,7 @@
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/FaultsManager.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
 #include <EnergyPlus/GlobalNames.hh>
@@ -728,10 +729,8 @@ void GetElectricEIRChillerInput(EnergyPlusData &state)
                 ShowSevereError(state, std::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "Energy input ratio as a function of part-load ratio curve shows negative values.");
                 ShowContinueError(state, "EIR as a function of PLR curve output at various part-load ratios shown below:");
-                ShowContinueError(
-                    state, fmt::format(fmt::runtime("PLR          = {:7." + std::to_string(DecimalPrecision) + "F}"), fmt::join(PLRArray, ",")));
-                ShowContinueError(
-                    state, fmt::format(fmt::runtime("Curve Output = {:7." + std::to_string(DecimalPrecision) + "F}"), fmt::join(CurveValArray, ",")));
+                ShowContinueError(state, std::format("PLR          = {:7.{}F}", EnergyPlus::join(PLRArray, ","), DecimalPrecision));
+                ShowContinueError(state, std::format("Curve Output = {:7.{}F}", EnergyPlus::join(CurveValArray, ","), DecimalPrecision));
                 ErrorsFound = true;
             }
         }
