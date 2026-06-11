@@ -14284,7 +14284,7 @@ void ReportRefrigerationComponents(EnergyPlusData &state)
                   System(SystemNum).NumMechSCServed,
                   System(SystemNum).NumCompressors + System(SystemNum).NumHiStageCompressors,
                   System(SystemNum).NumStages,
-                  System(SystemNum).intercoolerType,
+                  static_cast<int>(System(SystemNum).intercoolerType),
                   System(SystemNum).IntercoolerEffectiveness,
                   System(SystemNum).NumSubcoolers,
                   System(SystemNum).TCondenseMin);
