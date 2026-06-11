@@ -1250,7 +1250,7 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                     } break;
                     }
                     if (cNominalUwithConvCoeffs.empty()) {
-                        cNominalUwithConvCoeffs = std::format("{:.3f}", NominalUwithConvCoeffs);
+                        cNominalUwithConvCoeffs = std::format("{:.5f}", NominalUwithConvCoeffs);
                     } else {
                         cNominalUwithConvCoeffs = "[invalid]";
                     }
@@ -1263,7 +1263,7 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                             SolarDiffusing = "No";
                         }
                     } else {
-                        cNominalU = std::format("{:.3f}", state.dataHeatBal->NominalU(thisSurface.Construction));
+                        cNominalU = std::format("{:.5f}", state.dataHeatBal->NominalU(thisSurface.Construction));
                     }
                 } else {
                     cNominalUwithConvCoeffs = "**";
@@ -1327,13 +1327,13 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                     *eiostream << "NoWind" << ",";
                 }
                 if (RptType == 10) {
-                    *eiostream << std::format("{:.2f}", thisSurface.ViewFactorGround) << "," << std::format("{:.2f}", thisSurface.ViewFactorSky)
-                               << "," << std::format("{:.2f}", thisSurface.ViewFactorGroundIR) << ","
-                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << std::to_string(thisSurface.Sides) << '\n';
+                    *eiostream << std::format("{:.5f}", thisSurface.ViewFactorGround) << "," << std::format("{:.5f}", thisSurface.ViewFactorSky)
+                               << "," << std::format("{:.5f}", thisSurface.ViewFactorGroundIR) << ","
+                               << std::format("{:.5f}", thisSurface.ViewFactorSkyIR) << "," << std::to_string(thisSurface.Sides) << '\n';
                 } else {
-                    *eiostream << std::format("{:.2f}", thisSurface.ViewFactorGround) << "," << std::format("{:.2f}", thisSurface.ViewFactorSky)
-                               << "," << std::format("{:.2f}", thisSurface.ViewFactorGroundIR) << ","
-                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << std::to_string(thisSurface.Sides) << ",";
+                    *eiostream << std::format("{:.5f}", thisSurface.ViewFactorGround) << "," << std::format("{:.5f}", thisSurface.ViewFactorSky)
+                               << "," << std::format("{:.5f}", thisSurface.ViewFactorGroundIR) << ","
+                               << std::format("{:.5f}", thisSurface.ViewFactorSkyIR) << "," << std::to_string(thisSurface.Sides) << ",";
                     for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                         if (vert != thisSurface.Sides) {
                             *eiostream << std::format("{:.2f}", thisSurface.Vertex(vert).x) << ","
@@ -1356,9 +1356,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                         AlgoName = DataSurfaces::HeatTransAlgoStrs[(int)thisSurface.HeatTransferAlgorithm];
                         *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << "," << "Frame," << thisSurface.Name
                                    << "," << AlgoName << ",";
-                        *eiostream << ",N/A,N/A,," << std::format("{:.2f}", state.dataSurface->SurfWinFrameArea(surf)) << ","
-                                   << std::format("{:.2f}", state.dataSurface->SurfWinFrameArea(surf) / thisSurface.Multiplier) << ",*"
-                                   << ",N/A" << ",N/A," << std::format("{:.2f}", state.dataSurface->FrameDivider(fd).FrameWidth) << ",N/A" << '\n';
+                        *eiostream << ",N/A,N/A,," << std::format("{:.4f}", state.dataSurface->SurfWinFrameArea(surf)) << ","
+                                   << std::format("{:.4f}", state.dataSurface->SurfWinFrameArea(surf) / thisSurface.Multiplier) << ",*"
+                                   << ",N/A" << ",N/A," << std::format("{:.4f}", state.dataSurface->FrameDivider(fd).FrameWidth) << ",N/A" << '\n';
                     }
                     if (state.dataSurface->FrameDivider(fd).DividerWidth > 0.0) {
                         if (state.dataSurface->FrameDivider(fd).DividerType == DataSurfaces::FrameDividerType::DividedLite) {
@@ -1368,9 +1368,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                             *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << "," << "Divider:Suspended,"
                                        << thisSurface.Name << ",,";
                         }
-                        *eiostream << ",N/A,N/A,," << std::format("{:.2f}", state.dataSurface->SurfWinDividerArea(surf)) << ","
-                                   << std::format("{:.2f}", state.dataSurface->SurfWinDividerArea(surf) / thisSurface.Multiplier) << ",*"
-                                   << ",N/A" << ",N/A," << std::format("{:.2f}", state.dataSurface->FrameDivider(fd).DividerWidth) << ",N/A" << '\n';
+                        *eiostream << ",N/A,N/A,," << std::format("{:.4f}", state.dataSurface->SurfWinDividerArea(surf)) << ","
+                                   << std::format("{:.4f}", state.dataSurface->SurfWinDividerArea(surf) / thisSurface.Multiplier) << ",*"
+                                   << ",N/A" << ",N/A," << std::format("{:.4f}", state.dataSurface->FrameDivider(fd).DividerWidth) << ",N/A" << '\n';
                     }
                 }
             } else { // RptType=1  Vertices only

@@ -2747,8 +2747,8 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         print(state.files.eio, "! <Material:Air>,Material Name,ThermalResistance {{m2-K/w}}\n");
 
         // Formats
-        constexpr std::string_view Format_701(" Material Details,{},{:.4f},{},{:.4f},{:.3f},{:.3f},{:.3f},{:.4f},{:.4f},{:.4f}\n");
-        constexpr std::string_view Format_702(" Material:Air,{},{:.4f}\n");
+        constexpr std::string_view Format_701(" Material Details,{},{:.5f},{},{:.4f},{:.3f},{:.3f},{:.3f},{:.4f},{:.4f},{:.4f}\n");
+        constexpr std::string_view Format_702(" Material:Air,{},{:.5f}\n");
 
         for (auto const *mat : s_mat->materials) {
 
