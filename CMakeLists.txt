@@ -62,7 +62,7 @@ if(ENABLE_PCH AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # on every build even when sources/headers are unchanged. ccache hashes that .pch content for
   # both the direct-mode manifest and the preprocessor-mode result key, so every TU using
   # -include-pch becomes a guaranteed cache miss. See ccache manual, "Precompiled Headers".
-  target_compile_options(project_options INTERFACE -fno-pch-timestamp)
+  target_compile_options(project_options INTERFACE "$<$<COMPILE_LANGUAGE:CXX>:SHELL:-Xclang -fno-pch-timestamp>")
 endif()
 
 option(ENABLE_UNITY "Enable Unity Build" OFF)
