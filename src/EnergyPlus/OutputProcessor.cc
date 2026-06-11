@@ -2335,17 +2335,17 @@ namespace OutputProcessor {
         case ReportFreq::EachCall:
         case ReportFreq::TimeStep: {
             assert(Month != -1 && DayOfMonth != -1 && Hour != -1 && StartMinute != -1 && EndMinute != -1 && DST != -1 && !DayType.empty());
-            print<FormatSyntax::FMT>(outputFile,
-                                     "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
-                                     reportStr,
-                                     DayOfSimChr,
-                                     Month,
-                                     DayOfMonth,
-                                     DST,
-                                     Hour,
-                                     StartMinute,
-                                     EndMinute,
-                                     DayType);
+            print(outputFile,
+                  "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
+                  reportStr,
+                  DayOfSimChr,
+                  Month,
+                  DayOfMonth,
+                  DST,
+                  Hour,
+                  StartMinute,
+                  EndMinute,
+                  DayType);
 
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
@@ -2367,17 +2367,17 @@ namespace OutputProcessor {
 
         case ReportFreq::Hour: {
             assert(Month != -1 && DayOfMonth != -1 && Hour != -1 && DST != -1 && !DayType.empty());
-            print<FormatSyntax::FMT>(outputFile,
-                                     "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
-                                     reportStr,
-                                     DayOfSimChr,
-                                     Month,
-                                     DayOfMonth,
-                                     DST,
-                                     Hour,
-                                     0.0,
-                                     60.0,
-                                     DayType);
+            print(outputFile,
+                  "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
+                  reportStr,
+                  DayOfSimChr,
+                  Month,
+                  DayOfMonth,
+                  DST,
+                  Hour,
+                  0.0,
+                  60.0,
+                  DayType);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2397,7 +2397,7 @@ namespace OutputProcessor {
         } break;
         case ReportFreq::Day: {
             assert(Month != -1 && DayOfMonth != -1 && DST != -1 && !DayType.empty());
-            print<FormatSyntax::FMT>(outputFile, "{},{},{:2d},{:2d},{:2d},{}\n", reportStr, DayOfSimChr, Month, DayOfMonth, DST, DayType);
+            print(outputFile, "{},{},{:2d},{:2d},{:2d},{}\n", reportStr, DayOfSimChr, Month, DayOfMonth, DST, DayType);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2418,7 +2418,7 @@ namespace OutputProcessor {
 
         case ReportFreq::Month: {
             assert(Month != -1);
-            print<FormatSyntax::FMT>(outputFile, "{},{},{:2d}\n", reportStr, DayOfSimChr, Month);
+            print(outputFile, "{},{},{:2d}\n", reportStr, DayOfSimChr, Month);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2431,7 +2431,7 @@ namespace OutputProcessor {
         } break;
 
         case ReportFreq::Simulation: {
-            print<FormatSyntax::FMT>(outputFile, "{},{}\n", reportStr, DayOfSimChr);
+            print(outputFile, "{},{}\n", reportStr, DayOfSimChr);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2443,8 +2443,7 @@ namespace OutputProcessor {
         } break;
         default: {
             if (sql) {
-                sql->sqliteWriteMessage(
-                    format<FormatSyntax::FMT>("Illegal reportingInterval passed to WriteTimeStampFormatData: {}", (int)reportingInterval));
+                sql->sqliteWriteMessage(format("Illegal reportingInterval passed to WriteTimeStampFormatData: {}", (int)reportingInterval));
             }
         } break;
         } // switch (reportFreq)
@@ -2751,7 +2750,7 @@ namespace OutputProcessor {
         if (state.files.eso.good()) {
             char numericData[129];
             dtoa(repValue, numericData);
-            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, numericData);
+            print(state.files.eso, "{},{}\n", reportID, numericData);
         }
     } // WriteNumericData()
 
@@ -2783,7 +2782,7 @@ namespace OutputProcessor {
         }
 
         if (state.files.eso.good()) {
-            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, repValue);
+            print(state.files.eso, "{},{}\n", reportID, repValue);
         }
     } // WriteNumericData()
 

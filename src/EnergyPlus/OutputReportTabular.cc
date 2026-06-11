@@ -18599,7 +18599,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
         return std::format("{:12.6E}", RealIn);
     }
-    return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
+    return format(formDigitsA.at(nDigits), RealIn);
 
     //  WRITE(FMT=, UNIT=stringOut) RealIn
     // check if it did not fit
