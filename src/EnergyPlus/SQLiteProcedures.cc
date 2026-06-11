@@ -1246,12 +1246,12 @@ void SQLite::initializeTabularDataTable()
 
     sqliteExecuteCommand(sql);
 
-    sqliteExecuteCommand(EnergyPlus::format("INSERT INTO StringTypes VALUES({},'ReportName');", ReportNameId));
-    sqliteExecuteCommand(EnergyPlus::format("INSERT INTO StringTypes VALUES({},'ReportForString');", ReportForStringId));
-    sqliteExecuteCommand(EnergyPlus::format("INSERT INTO StringTypes VALUES({},'TableName');", TableNameId));
-    sqliteExecuteCommand(EnergyPlus::format("INSERT INTO StringTypes VALUES({},'RowName');", RowNameId));
-    sqliteExecuteCommand(EnergyPlus::format("INSERT INTO StringTypes VALUES({},'ColumnName');", ColumnNameId));
-    sqliteExecuteCommand(EnergyPlus::format("INSERT INTO StringTypes VALUES({},'Units');", UnitsId));
+    sqliteExecuteCommand(std::format("INSERT INTO StringTypes VALUES({},'ReportName');", ReportNameId));
+    sqliteExecuteCommand(std::format("INSERT INTO StringTypes VALUES({},'ReportForString');", ReportForStringId));
+    sqliteExecuteCommand(std::format("INSERT INTO StringTypes VALUES({},'TableName');", TableNameId));
+    sqliteExecuteCommand(std::format("INSERT INTO StringTypes VALUES({},'RowName');", RowNameId));
+    sqliteExecuteCommand(std::format("INSERT INTO StringTypes VALUES({},'ColumnName');", ColumnNameId));
+    sqliteExecuteCommand(std::format("INSERT INTO StringTypes VALUES({},'Units');", UnitsId));
 
     constexpr std::string_view sql2 = "CREATE TABLE Strings ( "
                                       "StringIndex INTEGER PRIMARY KEY, "

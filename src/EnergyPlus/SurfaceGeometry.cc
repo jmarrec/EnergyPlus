@@ -527,8 +527,8 @@ namespace SurfaceGeometry {
                                             RoutineName,
                                             thisZone.Name));
                             static constexpr std::string_view ValFmt("{:.2F}");
-                            std::string String1 = EnergyPlus::format(ValFmt, thisZone.CeilingHeight);
-                            std::string String2 = EnergyPlus::format(ValFmt, AverageHeight);
+                            std::string String1 = std::format(ValFmt, thisZone.CeilingHeight);
+                            std::string String2 = std::format(ValFmt, AverageHeight);
                             ShowContinueError(
                                 state,
                                 std::format("{}Entered Ceiling Height={}, Calculated Ceiling Height={}, entered height will be used in calculations.",
@@ -7765,11 +7765,11 @@ namespace SurfaceGeometry {
             if (calculationMethod != CalculationMethod::TotalExposedPerimeter && calculationMethod != CalculationMethod::ExposedPerimeterFraction &&
                 calculationMethod != CalculationMethod::Bysegment) {
                 ShowSevereError(state,
-                                EnergyPlus::format("{}=\"{}\", {} is not a valid choice for {}",
-                                                   s_ipsc->cCurrentModuleObject,
-                                                   s_ipsc->cAlphaArgs(1),
-                                                   calculationMethod,
-                                                   s_ipsc->cAlphaFieldNames(alpF)));
+                                std::format("{}=\"{}\", {} is not a valid choice for {}",
+                                            s_ipsc->cCurrentModuleObject,
+                                            s_ipsc->cAlphaArgs(1),
+                                            calculationMethod,
+                                            s_ipsc->cAlphaFieldNames(alpF)));
                 ErrorsFound = true;
             }
             alpF++;
@@ -7802,22 +7802,21 @@ namespace SurfaceGeometry {
 
                     data.useDetailedExposedPerimeter = false;
                 } else {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format("{}: {}, {} set as calculation method, but a value has been set for {}. This value will be ignored.",
-                                           s_ipsc->cCurrentModuleObject,
-                                           state.dataSurface->Surface(Found).Name,
-                                           calculationMethod,
-                                           s_ipsc->cNumericFieldNames(numF)));
+                    ShowWarningError(state,
+                                     std::format("{}: {}, {} set as calculation method, but a value has been set for {}. This value will be ignored.",
+                                                 s_ipsc->cCurrentModuleObject,
+                                                 state.dataSurface->Surface(Found).Name,
+                                                 calculationMethod,
+                                                 s_ipsc->cNumericFieldNames(numF)));
                 }
             } else {
                 if (calculationMethod == CalculationMethod::TotalExposedPerimeter) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{}: {}, {} set as calculation method, but no value has been set for {}",
-                                                       s_ipsc->cCurrentModuleObject,
-                                                       state.dataSurface->Surface(Found).Name,
-                                                       calculationMethod,
-                                                       s_ipsc->cNumericFieldNames(numF)));
+                                    std::format("{}: {}, {} set as calculation method, but no value has been set for {}",
+                                                s_ipsc->cCurrentModuleObject,
+                                                state.dataSurface->Surface(Found).Name,
+                                                calculationMethod,
+                                                s_ipsc->cNumericFieldNames(numF)));
                     ErrorsFound = true;
                 }
             }
@@ -7828,22 +7827,21 @@ namespace SurfaceGeometry {
                     data.exposedFraction = s_ipsc->rNumericArgs(numF);
                     data.useDetailedExposedPerimeter = false;
                 } else {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format("{}: {}, {} set as calculation method, but a value has been set for {}. This value will be ignored.",
-                                           s_ipsc->cCurrentModuleObject,
-                                           state.dataSurface->Surface(Found).Name,
-                                           calculationMethod,
-                                           s_ipsc->cNumericFieldNames(numF)));
+                    ShowWarningError(state,
+                                     std::format("{}: {}, {} set as calculation method, but a value has been set for {}. This value will be ignored.",
+                                                 s_ipsc->cCurrentModuleObject,
+                                                 state.dataSurface->Surface(Found).Name,
+                                                 calculationMethod,
+                                                 s_ipsc->cNumericFieldNames(numF)));
                 }
             } else {
                 if (calculationMethod == CalculationMethod::ExposedPerimeterFraction) {
                     ShowSevereError(state,
-                                    EnergyPlus::format("{}: {}, {} set as calculation method, but no value has been set for {}",
-                                                       s_ipsc->cCurrentModuleObject,
-                                                       state.dataSurface->Surface(Found).Name,
-                                                       calculationMethod,
-                                                       s_ipsc->cNumericFieldNames(numF)));
+                                    std::format("{}: {}, {} set as calculation method, but no value has been set for {}",
+                                                s_ipsc->cCurrentModuleObject,
+                                                state.dataSurface->Surface(Found).Name,
+                                                calculationMethod,
+                                                s_ipsc->cNumericFieldNames(numF)));
                     ErrorsFound = true;
                 }
             }
@@ -7883,12 +7881,11 @@ namespace SurfaceGeometry {
                 }
             } else {
                 if (calculationMethod == CalculationMethod::Bysegment) {
-                    ShowSevereError(
-                        state,
-                        EnergyPlus::format("{}: {}, {} set as calculation method, but no values have been set for Surface Segments Exposed",
-                                           s_ipsc->cCurrentModuleObject,
-                                           state.dataSurface->Surface(Found).Name,
-                                           calculationMethod));
+                    ShowSevereError(state,
+                                    std::format("{}: {}, {} set as calculation method, but no values have been set for Surface Segments Exposed",
+                                                s_ipsc->cCurrentModuleObject,
+                                                state.dataSurface->Surface(Found).Name,
+                                                calculationMethod));
                     ErrorsFound = true;
                 }
             }
@@ -15139,7 +15136,7 @@ namespace SurfaceGeometry {
                     for (int n = 1; n <= surfaceTmp.Sides; ++n) {
                         auto const &point = vertices(n);
                         static constexpr std::string_view ErrFmt = " ({:8.3F},{:8.3F},{:8.3F})";
-                        ShowContinueError(state, EnergyPlus::format(ErrFmt, point.x, point.y, point.z));
+                        ShowContinueError(state, std::format(ErrFmt, point.x, point.y, point.z));
                     }
                 }
             }

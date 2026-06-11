@@ -654,14 +654,13 @@ namespace Sched {
                         isJSON = false;
                     }
                     if (!isCSV && !isJSON) {
-                        ShowSevereError(
-                            state,
-                            EnergyPlus::format(R"({}: {}="{}", {}="{}" has an unknown file extension and cannot be read by this program.)",
-                                               routineName,
-                                               CurrentModuleObject,
-                                               Alphas(1),
-                                               cAlphaFields(3),
-                                               Alphas(3)));
+                        ShowSevereError(state,
+                                        std::format(R"({}: {}="{}", {}="{}" has an unknown file extension and cannot be read by this program.)",
+                                                    routineName,
+                                                    CurrentModuleObject,
+                                                    Alphas(1),
+                                                    cAlphaFields(3),
+                                                    Alphas(3)));
                         ShowFatalError(state, "Program terminates due to previous condition.");
                     }
                 }
