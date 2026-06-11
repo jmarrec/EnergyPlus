@@ -3024,9 +3024,7 @@ namespace Sched {
         }
 
         if (nonIntegral) {
-            std::string hHour; // these haven't been initialized?
-            std::string mMinute;
-            ShowContinueError(state, EnergyPlus::format("Until value to be used will be: {:2.2F}:{:2.2F}", hHour, mMinute));
+            ShowContinueError(state, std::format("Until value to be used will be: {:02}:{:02}", RetHH, RetMM));
         }
         if (interpolation == Interpolation::No) {
             if (!isMinuteMultipleOfTimestep(RetMM, s_glob->MinutesInTimeStep)) {

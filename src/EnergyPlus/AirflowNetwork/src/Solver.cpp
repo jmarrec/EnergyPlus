@@ -11585,7 +11585,7 @@ namespace AirflowNetwork {
                             ShowContinueError(m_state,
                                               EnergyPlus::format(
                                                   "The inlet node of the {} Fan:ZoneExhaust is not defined in the {}'s ZoneHVAC:EquipmentConnections",
-                                                  m_state.dataZoneEquip->ZoneEquipList(j).EquipName,
+                                                  m_state.dataZoneEquip->ZoneEquipList(j).EquipName(EquipTypeNum),
                                                   m_state.dataZoneEquip->ZoneEquipConfig(j).ZoneName));
                             ErrorsFound = true;
                         }
