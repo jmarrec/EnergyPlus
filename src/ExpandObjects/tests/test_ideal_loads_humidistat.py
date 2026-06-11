@@ -100,8 +100,9 @@ HVACTemplate:Zone:IdealLoadsAirSystem,
 ZoneControl:Humidistat,
   Zone 1 Humidistat,                                       !- Name
   Zone 1,                                                  !- Zone Name
-  HVACTemplate-Always 30,                                  !- Humidifying Relative Humidity Setpoint Schedule Name
-  HVACTemplate-Always 60;                                  !- Dehumidifying Relative Humidity Setpoint Schedule Name
+  HVACTemplate-Always 30,                                  !- Humidifying Setpoint Schedule Name
+  HVACTemplate-Always 60,                                  !- Dehumidifying Setpoint Schedule Name
+  RelativeHumidity;                                        !- Control Variable
 
 ScheduleTypeLimits,
   HVACTemplate Any Number;                                 !- Name
@@ -210,8 +211,8 @@ HVACTemplate:Zone:IdealLoadsAirSystem,
 ZoneControl:Humidistat,
   Zone Control Humidistat 1,              !- Name
   Zone 1,                                 !- Zone Name
-  Humidifying Setpoint Schedule,          !- Humidifying Relative Humidity Setpoint Schedule Name
-  Dehumidifying Setpoint Schedule;        !- Dehumidifying Relative Humidity Setpoint Schedule Name
+  Humidifying Setpoint Schedule,          !- Humidifying Setpoint Schedule Name
+  Dehumidifying Setpoint Schedule;        !- Dehumidifying Setpoint Schedule Name
 
 ScheduleTypeLimits,
   Any Number;                             !- Name
@@ -343,8 +344,8 @@ HVACTemplate:Zone:IdealLoadsAirSystem,
 ZoneControl:Humidistat,
   Zone Control Humidistat 1,              !- Name
   Zone 1,                                 !- Zone Name
-  Humidifying Setpoint Schedule,          !- Humidifying Relative Humidity Setpoint Schedule Name
-  ;                                       !- Dehumidifying Relative Humidity Setpoint Schedule Name
+  Humidifying Setpoint Schedule,          !- Humidifying Setpoint Schedule Name
+  ;                                       !- Dehumidifying Setpoint Schedule Name
 
 ScheduleTypeLimits,
   Any Number;                             !- Name
@@ -364,7 +365,7 @@ Schedule:Constant,
     assert (
         'ExpandObjects: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Dehumidification Control Type field '
         'is Humidistat, but the existing ZoneControl:Humidistat named "Zone Control Humidistat 1" for this zone '
-        "has a blank Dehumidifying Relative Humidity Setpoint Schedule Name."
+        "has a blank Dehumidifying Setpoint Schedule Name."
     ) in result.err_text
 
     assert "! HVACTemplate:Zone:IdealLoadsAirSystem," in result.existing_section_text
@@ -377,7 +378,7 @@ Output:PreprocessorMessage,
   In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Dehumidification,  !- message line
   Control Type field is Humidistat, but the existing ZoneControl:Humidistat,  !- message line
   named "Zone Control Humidistat 1" for this zone has a blank Dehumidifying,  !- message line
-  Relative Humidity Setpoint Schedule Name.;               !- message line"""
+  Setpoint Schedule Name.;                                 !- message line"""
         in result.new_section_text
     )
 
@@ -424,8 +425,9 @@ HVACTemplate:Zone:IdealLoadsAirSystem,
 ZoneControl:Humidistat,
   Zone Control Humidistat 1,              !- Name
   Zone 1,                                 !- Zone Name
-  ,                                       !- Humidifying Relative Humidity Setpoint Schedule Name
-  Dehumidifying Setpoint Schedule;        !- Dehumidifying Relative Humidity Setpoint Schedule Name
+  ,                                       !- Humidifying Setpoint Schedule Name
+  Dehumidifying Setpoint Schedule,        !- Dehumidifying Setpoint Schedule Name
+  RelativeHumidity;                       !- Control Variable
 
 ScheduleTypeLimits,
   Any Number;                             !- Name
@@ -445,7 +447,7 @@ Schedule:Constant,
     assert (
         'ExpandObjects: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Humidification Control Type field '
         'is Humidistat, but the existing ZoneControl:Humidistat named "Zone Control Humidistat 1" for this zone '
-        "has a blank Humidifying Relative Humidity Setpoint Schedule Name."
+        "has a blank Humidifying Setpoint Schedule Name."
     ) in result.err_text
 
     assert "! HVACTemplate:Zone:IdealLoadsAirSystem," in result.existing_section_text
@@ -458,6 +460,6 @@ Output:PreprocessorMessage,
   In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Humidification,  !- message line
   Control Type field is Humidistat, but the existing ZoneControl:Humidistat,  !- message line
   named "Zone Control Humidistat 1" for this zone has a blank Humidifying,  !- message line
-  Relative Humidity Setpoint Schedule Name.;               !- message line"""
+  Setpoint Schedule Name.;                                 !- message line"""
         in result.new_section_text
     )

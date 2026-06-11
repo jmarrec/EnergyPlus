@@ -11024,9 +11024,9 @@ DO iSys = 1, numCompactSysVAV
     CALL CreateNewObj('ZoneControl:Humidistat')
     CALL AddToObjFld('Name', base + vsAirHandlerNameOff,' Humidistat')
     CALL AddToObjFld('Zone Name', base + vsDehumCtrlZoneOff,'')
-    CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+    CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                      'HVACTemplate-Always ' // TRIM(FldVal(base + vsHumidSetPtOff)))
-    CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
+    CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
                      'HVACTemplate-Always ' // TRIM(FldVal(base + vsDehumSetPtOff)),.TRUE.)
 
     CALL AddAlwaysSchedule(FldVal(base + vsHumidSetPtOff))
@@ -11038,8 +11038,8 @@ DO iSys = 1, numCompactSysVAV
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + vsAirHandlerNameOff,' Dehumidification Humidistat')
       CALL AddToObjFld('Zone Name', base + vsDehumCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 1')
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name','HVACTemplate-Always 1')
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
                        'HVACTemplate-Always ' // TRIM(FldVal(base + vsDehumSetPtOff)),.TRUE.)
 
       CALL AddAlwaysSchedule('1')
@@ -11050,9 +11050,9 @@ DO iSys = 1, numCompactSysVAV
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + vsAirHandlerNameOff,' Humidification Humidistat')
       CALL AddToObjFld('Zone Name', base + vsHumidCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                        'HVACTemplate-Always ' // TRIM(FldVal(base + vsHumidSetPtOff)))
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
 
       CALL AddAlwaysSchedule(FldVal(base + vsHumidSetPtOff))
       CALL AddAlwaysSchedule('100')
@@ -12699,9 +12699,9 @@ DO iSys = 1, numCompactSysPVAV
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + pvavsAirHandlerNameOff,' Humidistat')
       CALL AddToObjFld('Zone Name', base + pvavsDehumCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                        'HVACTemplate-Always ' // TRIM(FldVal(base + pvavsHumidSetPtOff)))
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
                        'HVACTemplate-Always ' // TRIM(FldVal(base + pvavsDehumSetPtOff)),.TRUE.)
       CALL AddAlwaysSchedule(FldVal(base + pvavsHumidSetPtOff))
       CALL AddAlwaysSchedule(FldVal(base + pvavsDehumSetPtOff))
@@ -12712,8 +12712,8 @@ DO iSys = 1, numCompactSysPVAV
         CALL CreateNewObj('ZoneControl:Humidistat')
         CALL AddToObjFld('Name', base + pvavsAirHandlerNameOff,' Dehumidification Humidistat')
         CALL AddToObjFld('Zone Name', base + pvavsDehumCtrlZoneOff,'')
-        CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 1')
-        CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
+        CALL AddToObjStr('Humidifying Setpoint Schedule Name','HVACTemplate-Always 1')
+        CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
                          'HVACTemplate-Always ' // TRIM(FldVal(base + pvavsDehumSetPtOff)),.TRUE.)
 
         CALL AddAlwaysSchedule('1')
@@ -12725,9 +12725,9 @@ DO iSys = 1, numCompactSysPVAV
         CALL CreateNewObj('ZoneControl:Humidistat')
         CALL AddToObjFld('Name', base + pvavsAirHandlerNameOff,' Humidification Humidistat')
         CALL AddToObjFld('Zone Name', base + pvavsHumidCtrlZoneOff,'')
-        CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+        CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                          'HVACTemplate-Always ' // TRIM(FldVal(base + pvavsHumidSetPtOff)))
-        CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
+        CALL AddToObjStr('Dehumidifying Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
 
         CALL AddAlwaysSchedule(FldVal(base + pvavsHumidSetPtOff))
         CALL AddAlwaysSchedule('100')
@@ -14204,9 +14204,9 @@ DO iSys = 1, numCompactSysUnit
     CALL CreateNewObj('ZoneControl:Humidistat')
     CALL AddToObjFld('Name', base + usAirHandlerNameOff,' Humidistat')
     CALL AddToObjFld('Zone Name', base + usControlZoneOff,'')
-    CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+    CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                      'HVACTemplate-Always ' // TRIM(FldVal(base + usHumidSetPtOff)))
-    CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
+    CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
                      'HVACTemplate-Always ' // TRIM(FldVal(base + usDehumSetPtOff)),.TRUE.)
 
     CALL AddAlwaysSchedule(FldVal(base + usHumidSetPtOff))
@@ -14218,8 +14218,8 @@ DO iSys = 1, numCompactSysUnit
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + usAirHandlerNameOff,' Dehumidification Humidistat')
       CALL AddToObjFld('Zone Name', base + usControlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 1')
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name','HVACTemplate-Always 1')
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
                        'HVACTemplate-Always ' // TRIM(FldVal(base + usDehumSetPtOff)),.TRUE.)
 
       CALL AddAlwaysSchedule('1')
@@ -14230,9 +14230,9 @@ DO iSys = 1, numCompactSysUnit
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + usAirHandlerNameOff,' Humidification Humidistat')
       CALL AddToObjFld('Zone Name', base + usHumidCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                        'HVACTemplate-Always ' // TRIM(FldVal(base + usHumidSetPtOff)))
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
 
       CALL AddAlwaysSchedule(FldVal(base + usHumidSetPtOff))
       CALL AddAlwaysSchedule('100')
@@ -15193,9 +15193,9 @@ DO iSys = 1, numCompactSysUnitHP
     CALL CreateNewObj('ZoneControl:Humidistat')
     CALL AddToObjFld('Name', base + uhpsAirHandlerNameOff,' Humidistat')
     CALL AddToObjFld('Zone Name', base + uhpsHumidCtrlZoneOff,'')
-    CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+    CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                      'HVACTemplate-Always ' // TRIM(FldVal(base + uhpsHumidSetPtOff)))
-    CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', ' ',.TRUE.)
+    CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', ' ',.TRUE.)
     CALL AddAlwaysSchedule(FldVal(base + uhpsHumidSetPtOff))
     !Object ==> SetpointManager:SingleZone:Humidity:Minimum
     CALL CreateNewObj('SetpointManager:SingleZone:Humidity:Minimum')
@@ -16289,16 +16289,16 @@ DO iSys = 1, numCompactSysUnitarySystem
     CALL CreateNewObj('ZoneControl:Humidistat')
     CALL AddToObjFld('Name', base + ussAirHandlerNameOff,' Humidistat')
     CALL AddToObjFld('Zone Name', base + ussControlZoneOff,'')
-    CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', TRIM(humscheduleName))
-    CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
+    CALL AddToObjStr('Humidifying Setpoint Schedule Name', TRIM(humscheduleName))
+    CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
   ELSE
     IF (.NOT. isDehumidifyNone) THEN
   !   Dehumidification humidistat
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + ussAirHandlerNameOff,' Dehumidification Humidistat')
       CALL AddToObjFld('Zone Name', base + ussControlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 1')
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name','HVACTemplate-Always 1')
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
 
       CALL AddAlwaysSchedule('1')
     ENDIF
@@ -16307,8 +16307,8 @@ DO iSys = 1, numCompactSysUnitarySystem
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + ussAirHandlerNameOff,' Humidification Humidistat')
       CALL AddToObjFld('Zone Name', base + ussHumidCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', TRIM(humscheduleName))
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name', TRIM(humscheduleName))
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
 
       CALL AddAlwaysSchedule('100')
     ENDIF
@@ -20229,16 +20229,16 @@ DO iSys = 1, numCompactSysConstVol
     CALL CreateNewObj('ZoneControl:Humidistat')
     CALL AddToObjFld('Name', base + cvsAirHandlerNameOff,' Humidistat')
     CALL AddToObjFld('Zone Name', base + cvsDehumCtrlZoneOff,'')
-    CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', TRIM(humscheduleName))
-    CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
+    CALL AddToObjStr('Humidifying Setpoint Schedule Name', TRIM(humscheduleName))
+    CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
   ELSE
     IF (.NOT. isDehumidifyNone) THEN
   !   Dehumidification humidistat
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + cvsAirHandlerNameOff,' Dehumidification Humidistat')
       CALL AddToObjFld('Zone Name', base + cvsDehumCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 1')
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name','HVACTemplate-Always 1')
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
 
       CALL AddAlwaysSchedule('1')
     ENDIF
@@ -20247,8 +20247,8 @@ DO iSys = 1, numCompactSysConstVol
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + cvsAirHandlerNameOff,' Humidification Humidistat')
       CALL AddToObjFld('Zone Name', base + cvsHumidCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', TRIM(humscheduleName))
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name', TRIM(humscheduleName))
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
 
       CALL AddAlwaysSchedule('100')
     ENDIF
@@ -22000,16 +22000,16 @@ DO iSys = 1, numCompactSysDualDuct
     CALL CreateNewObj('ZoneControl:Humidistat')
     CALL AddToObjFld('Name', base + ddsAirHandlerNameOff,' Humidistat')
     CALL AddToObjFld('Zone Name', base + ddsDehumCtrlZoneOff,'')
-    CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', TRIM(humscheduleName))
-    CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
+    CALL AddToObjStr('Humidifying Setpoint Schedule Name', TRIM(humscheduleName))
+    CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
   ELSE
     IF (.NOT. isDehumidifyNone) THEN
   !   Dehumidification humidistat
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + ddsAirHandlerNameOff,' Dehumidification Humidistat')
       CALL AddToObjFld('Zone Name', base + ddsDehumCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 1')
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name','HVACTemplate-Always 1')
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', TRIM(dehumscheduleName),.TRUE.)
 
       CALL AddAlwaysSchedule('1')
     ENDIF
@@ -22018,8 +22018,8 @@ DO iSys = 1, numCompactSysDualDuct
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + ddsAirHandlerNameOff,' Humidification Humidistat')
       CALL AddToObjFld('Zone Name', base + ddsHumidCtrlZoneOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', TRIM(humscheduleName))
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name', TRIM(humscheduleName))
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
 
       CALL AddAlwaysSchedule('100')
     ENDIF
@@ -24668,13 +24668,13 @@ DO iPurchAir = 1, numCompactPurchAir
         CALL WriteError('In HVACTemplate:Zone:IdealLoadsAirSystem "'//TRIM(FldVal(base + pazNameOff))//'"'// &
                         ' the Humidification Control Type field is Humidistat, but the existing'// &
                         ' ZoneControl:Humidistat named "'//TRIM(existingHumidistatName)//'" for this zone'// &
-                        ' has a blank Humidifying Relative Humidity Setpoint Schedule Name.')
+                        ' has a blank Humidifying Setpoint Schedule Name.')
       END IF
       IF (isDehumCtrlTypeHumidistat .AND. (TRIM(FldVal(humidistatIdx + zchDehumidifyingSchedNameOff)) .EQ. '')) THEN
         CALL WriteError('In HVACTemplate:Zone:IdealLoadsAirSystem "'//TRIM(FldVal(base + pazNameOff))//'"'// &
                         ' the Dehumidification Control Type field is Humidistat, but the existing'// &
                         ' ZoneControl:Humidistat named "'//TRIM(existingHumidistatName)//'" for this zone'// &
-                        ' has a blank Dehumidifying Relative Humidity Setpoint Schedule Name.')
+                        ' has a blank Dehumidifying Setpoint Schedule Name.')
       END IF
 
     END IF
@@ -24686,10 +24686,11 @@ DO iPurchAir = 1, numCompactPurchAir
       CALL CreateNewObj('ZoneControl:Humidistat')
       CALL AddToObjFld('Name', base + pazNameOff,' Humidistat')
       CALL AddToObjFld('Zone Name', base + pazNameOff,'')
-      CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+      CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                        'HVACTemplate-Always ' // TRIM(FldVal(base + pazHumidSetPtOff)))
-      CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
-                       'HVACTemplate-Always ' // TRIM(FldVal(base + pazDehumSetPtOff)),.TRUE.)
+      CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
+                       'HVACTemplate-Always ' // TRIM(FldVal(base + pazDehumSetPtOff)))
+      CALL AddToObjStr('Control Variable', 'RelativeHumidity',.TRUE.)
 
       CALL AddAlwaysSchedule(FldVal(base + pazHumidSetPtOff))
       CALL AddAlwaysSchedule(FldVal(base + pazDehumSetPtOff))
@@ -24700,9 +24701,10 @@ DO iPurchAir = 1, numCompactPurchAir
         CALL CreateNewObj('ZoneControl:Humidistat')
         CALL AddToObjFld('Name', base + pazNameOff,' Humidistat')
         CALL AddToObjFld('Zone Name', base + pazNameOff,'')
-        CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 1')
-        CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name', &
-                         'HVACTemplate-Always ' // TRIM(FldVal(base + pazDehumSetPtOff)),.TRUE.)
+        CALL AddToObjStr('Humidifying Setpoint Schedule Name','HVACTemplate-Always 1')
+        CALL AddToObjStr('Dehumidifying Setpoint Schedule Name', &
+                         'HVACTemplate-Always ' // TRIM(FldVal(base + pazDehumSetPtOff)))
+        CALL AddToObjStr('Control Variable', 'RelativeHumidity',.TRUE.)
 
         CALL AddAlwaysSchedule('1')
         CALL AddAlwaysSchedule(FldVal(base + pazDehumSetPtOff))
@@ -24712,9 +24714,10 @@ DO iPurchAir = 1, numCompactPurchAir
         CALL CreateNewObj('ZoneControl:Humidistat')
         CALL AddToObjFld('Name', base + pazNameOff,' Humidification Humidistat')
         CALL AddToObjFld('Zone Name', base + pazNameOff,'')
-        CALL AddToObjStr('Humidifying Relative Humidity Setpoint Schedule Name', &
+        CALL AddToObjStr('Humidifying Setpoint Schedule Name', &
                          'HVACTemplate-Always ' // TRIM(FldVal(base + pazHumidSetPtOff)))
-        CALL AddToObjStr('Dehumidifying Relative Humidity Setpoint Schedule Name','HVACTemplate-Always 100',.TRUE.)
+        CALL AddToObjStr('Dehumidifying Setpoint Schedule Name','HVACTemplate-Always 100')
+        CALL AddToObjStr('Control Variable', 'RelativeHumidity',.TRUE.)
 
         CALL AddAlwaysSchedule(FldVal(base + pazHumidSetPtOff))
         CALL AddAlwaysSchedule('100')
