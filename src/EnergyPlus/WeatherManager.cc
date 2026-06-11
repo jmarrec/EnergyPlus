@@ -784,7 +784,7 @@ namespace Weather {
             state.dataEnvrn->DayOfYear = envCurr.StartJDay;
             state.dataEnvrn->DayOfMonth = envCurr.StartDay;
             state.dataGlobal->CalendarYear = envCurr.StartYear;
-            state.dataGlobal->CalendarYearChr = fmt::to_string(state.dataGlobal->CalendarYear);
+            state.dataGlobal->CalendarYearChr = std::to_string(state.dataGlobal->CalendarYear);
             state.dataEnvrn->Month = envCurr.StartMonth;
             state.dataGlobal->NumOfDayInEnvrn = envCurr.TotalDays; // Set day loop maximum from DataGlobals
 
@@ -1023,7 +1023,7 @@ namespace Weather {
                                   StDate,
                                   EnDate,
                                   Sched::dayTypeNames[TWeekDay],
-                                  fmt::to_string(envCurr.TotalDays),
+                                  std::to_string(envCurr.TotalDays),
                                   "Use RunPeriod Specified Day",
                                   AlpUseDST,
                                   AlpUseSpec,
@@ -2400,9 +2400,9 @@ namespace Weather {
                                              LiquidPrecip);
                 } else if (WeatherDataLine.eof) {
                     if (NumRewinds > 0) {
-                        std::string date = fmt::to_string(thisEnviron.StartMonth) + '/' + fmt::to_string(thisEnviron.StartDay);
+                        std::string date = std::to_string(thisEnviron.StartMonth) + '/' + std::to_string(thisEnviron.StartDay);
                         if (thisEnviron.MatchYear) {
-                            date += '/' + fmt::to_string(thisEnviron.StartYear);
+                            date += '/' + std::to_string(thisEnviron.StartYear);
                         }
                         ShowSevereError(state, std::format("Multiple rewinds on EPW while searching for first day {}", date));
                     } else {
@@ -4638,7 +4638,7 @@ namespace Weather {
         if (state.dataWeather->EnvironmentReportNbr != 1) { //  problem
             ShowFatalError(state, "ReportOutputFileHeaders: Assigned report number for Environment title is not 1.  Contact Support.");
         }
-        state.dataWeather->EnvironmentReportChr = fmt::to_string(state.dataWeather->EnvironmentReportNbr);
+        state.dataWeather->EnvironmentReportChr = std::to_string(state.dataWeather->EnvironmentReportNbr);
         strip(state.dataWeather->EnvironmentReportChr);
         print(state.files.eso, "{}{}\n", state.dataWeather->EnvironmentReportChr, EnvironmentString);
         print(state.files.mtr, "{}{}\n", state.dataWeather->EnvironmentReportChr, EnvironmentString);
@@ -8677,8 +8677,8 @@ namespace Weather {
             if (statFileExists) {
                 auto statFile = state.files.inStatFilePath.try_open();
                 if (!statFile.good()) {
-                    ShowSevereError(
-                        state, std::format("CalcAnnualAndMonthlyDryBulbTemp: Could not open file {} for input (read).", statFile.filePath.string()));
+                    ShowSevereError(state,
+                                    std::format("CalcAnnualAndMonthlyDryBulbTemp: Could not open file {} for input (read).", statFile.filePath));
                     ShowContinueError(state, "Water Mains Temperature will be set to a fixed default value of 10.0 C.");
                     return;
                 }
@@ -8698,7 +8698,7 @@ namespace Weather {
                     ShowSevereError(
                         state,
                         std::format("CalcAnnualAndMonthlyDryBulbTemp: Stat file '{}' does not have Monthly Statistics for Dry Bulb temperatures.",
-                                    statFile.filePath.string()));
+                                    statFile.filePath));
                     ShowContinueError(state, "Water Mains Temperature will be set to a fixed default value of 10.0 C.");
                     return;
                 }
@@ -8727,8 +8727,8 @@ namespace Weather {
                 auto epwFile = state.files.inputWeatherFilePath.try_open();
                 bool epwHasLeapYear(false);
                 if (!epwFile.good()) {
-                    ShowSevereError(
-                        state, std::format("CalcAnnualAndMonthlyDryBulbTemp: Could not open file {} for input (read).", epwFile.filePath.string()));
+                    ShowSevereError(state,
+                                    std::format("CalcAnnualAndMonthlyDryBulbTemp: Could not open file {} for input (read).", epwFile.filePath));
                     ShowContinueError(state, "Water Mains Temperature will be set to a fixed default value of 10.0 C.");
                     return;
                 }
@@ -8787,8 +8787,8 @@ namespace Weather {
                 this->OADryBulbWeatherDataProcessed = true;
             } else {
                 ShowSevereError(state, "CalcAnnualAndMonthlyDryBulbTemp: weather file or stat file does not exist.");
-                ShowContinueError(state, std::format("Weather file: {}.", state.files.inputWeatherFilePath.filePath.string()));
-                ShowContinueError(state, std::format("Stat file: {}.", state.files.inStatFilePath.filePath.string()));
+                ShowContinueError(state, std::format("Weather file: {}.", state.files.inputWeatherFilePath.filePath));
+                ShowContinueError(state, std::format("Stat file: {}.", state.files.inStatFilePath.filePath));
                 ShowContinueError(state, "Water Mains Monthly Temperature cannot be calculated using CorrelationFromWeatherFile method.");
                 ShowContinueError(state, "Instead a fixed default value of 10.0 C will be used.");
             }
