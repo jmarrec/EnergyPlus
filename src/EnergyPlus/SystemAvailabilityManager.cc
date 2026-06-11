@@ -1821,7 +1821,7 @@ namespace Avail {
         } break;
 
         default: {
-            ShowSevereError(state, EnergyPlus::format("AvailabilityManager Type not found: {}", type));
+            ShowSevereError(state, std::format("AvailabilityManager Type not found: {}", static_cast<int>(type)));
             ShowContinueError(state, std::format("Occurs in Manager={}", SysAvailName));
             ShowFatalError(state, "Preceding condition causes termination.");
         }

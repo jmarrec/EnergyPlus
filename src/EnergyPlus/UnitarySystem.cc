@@ -1068,9 +1068,9 @@ namespace UnitarySystems {
                 if (this->m_FaultyCoilSATFlag) {
                     if (this->m_ControlType != UnitarySysCtrlType::Setpoint) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("{}: {}",
-                                                            state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).type,
-                                                            state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).Name));
+                                         std::format("{}: {}",
+                                                     static_cast<int>(state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).type),
+                                                     state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).Name));
                         ShowContinueError(state, std::format("For : {}: {}", this->UnitType, this->Name));
                         ShowContinueError(state,
                                           "The specified unitary system is not controlled on leaving air temperature. The coil SAT sensor "
