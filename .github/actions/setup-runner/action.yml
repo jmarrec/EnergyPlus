@@ -87,7 +87,6 @@ runs:
         echo "MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }}" >> $GITHUB_ENV
 
         brew install ccache
-        ccache --set-config=compiler_check=content # darwin only
         # clang-19
         COMPILER="clang-$(clang -dumpversion | cut -d'.' -f 1)"
       fi;
@@ -104,6 +103,9 @@ runs:
       ccache --set-config=cache_dir=$CCACHE_DIR
       ccache --set-config=max_size=1G
       ccache --set-config=compression=true
+      # mtime-based compiler check is unreliable across fresh runner VMs (eg windows-11-arm),
+      # where the compiler binary's mtime differs even though its content doesn't, causing cache misses
+      ccache --set-config=compiler_check=content
       ccache --set-config=sloppiness=pch_defines,time_macros
       ccache -p
       echo "::endgroup::"
