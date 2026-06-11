@@ -171,3 +171,293 @@ ZoneHVAC:IdealLoadsAirSystem,
 """
 
     assert expected_addition_text.strip() in result.new_section_text
+
+
+def test_ideal_loads_with_exising_humidistat(prepare_and_run_expandobjects):
+
+    ori_idf_text = """
+Zone,
+  Zone 1;                                 !- Name
+
+HVACTemplate:Zone:IdealLoadsAirSystem,
+  Zone 1,                                 !- Zone Name
+  ,                                       !- Template Thermostat Name
+  ,                                       !- System Availability Schedule Name
+  ,                                       !- Maximum Heating Supply Air Temperature {C}
+  ,                                       !- Minimum Cooling Supply Air Temperature {C}
+  ,                                       !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Heating Limit
+  ,                                       !- Maximum Heating Air Flow Rate {m3/s}
+  ,                                       !- Maximum Sensible Heating Capacity {W}
+  ,                                       !- Cooling Limit
+  ,                                       !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                                       !- Maximum Total Cooling Capacity {W}
+  ,                                       !- Heating Availability Schedule Name
+  ,                                       !- Cooling Availability Schedule Name
+  Humidistat,                             !- Dehumidification Control Type
+  ,                                       !- Cooling Sensible Heat Ratio {dimensionless}
+  ,                                       !- Dehumidification Setpoint {percent}
+  Humidistat,                             !- Humidification Control Type
+  ,                                       !- Humidification Setpoint {percent}
+  ,                                       !- Outdoor Air Method
+  ,                                       !- Outdoor Air Flow Rate per Person {m3/s}
+  ,                                       !- Outdoor Air Flow Rate per Zone Floor Area {m3/s-m2}
+  ,                                       !- Outdoor Air Flow Rate per Zone {m3/s}
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Demand Controlled Ventilation Type
+
+ZoneControl:Humidistat,
+  Zone Control Humidistat 1,              !- Name
+  Zone 1,                                 !- Zone Name
+  Humidifying Setpoint Schedule,          !- Humidifying Relative Humidity Setpoint Schedule Name
+  Dehumidifying Setpoint Schedule;        !- Dehumidifying Relative Humidity Setpoint Schedule Name
+
+ScheduleTypeLimits,
+  Any Number;                             !- Name
+
+Schedule:Constant,
+  Humidifying Setpoint Schedule,          !- Name
+  Any Number,                             !- Schedule Type Limits Name
+  30.0;                                   !- Hourly Value
+
+Schedule:Constant,
+  Dehumidifying Setpoint Schedule,        !- Name
+  Any Number,                             !- Schedule Type Limits Name
+  60.0;                                   !- Hourly Value
+"""
+    result: ExpandObjectsResult = prepare_and_run_expandobjects(ori_idf_text=ori_idf_text)
+    assert result.err_text is not None
+    assert (
+        'ExpandObjects: Warning: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" a ZoneControl:Humidistat named '
+        '"Zone Control Humidistat 1" was already defined for this zone, so the HVACTemplate-generated humidistat '
+        "will not be created."
+    ) in result.err_text
+    assert (
+        "! HVACTemplate:Zone:IdealLoadsAirSystem," in result.idf_text
+    ), "Ideal Loads Air System should be preserved in the expanded IDF"
+
+    assert "ZoneControl:Humidistat," not in result.new_section_text
+    assert "HVACTemplate-Always 30," not in result.new_section_text
+    assert "HVACTemplate-Always 60," not in result.new_section_text
+
+    expected_addition_text = """
+ZoneHVAC:EquipmentConnections,
+  Zone 1,                                                  !- Zone Name
+  Zone 1 Equipment,                                        !- Zone Conditioning Equipment List Name
+  Zone 1 Ideal Loads Supply Inlet,                         !- Zone Air Inlet Node or NodeList Name
+  ,                                                        !- Zone Air Exhaust Node or NodeList Name
+  Zone 1 Zone Air Node,                                    !- Zone Air Node Name
+  Zone 1 Return Outlet;                                    !- Zone Return Air Node Name
+
+ZoneHVAC:EquipmentList,
+  Zone 1 Equipment,                                        !- Name
+  SequentialLoad,                                          !- Load Distribution Scheme
+  ZoneHVAC:IdealLoadsAirSystem,                            !- Zone Equipment Object Type
+  Zone 1 Ideal Loads Air System,                           !- Zone Equipment Name
+  1,                                                       !- Zone Equipment Cooling Sequence
+  1,                                                       !- Zone Equipment Heating or No-Load Sequence
+  ,                                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name
+  ;                                                        !- Zone Equipment Sequential Heating Fraction Schedule Name
+
+ZoneHVAC:IdealLoadsAirSystem,
+  Zone 1 Ideal Loads Air System,                           !- Name
+  ,                                                        !- Availability Schedule Name
+  Zone 1 Ideal Loads Supply Inlet,                         !- Zone Supply Air Node Name
+  ,                                                        !- Zone Exhaust Air Node Name
+  ,                                                        !- System Inlet Air Node Name
+  50,                                                      !- Maximum Heating Supply Air Temperature [C]
+  13,                                                      !- Minimum Cooling Supply Air Temperature [C]
+  0.0156,                                                  !- Maximum Heating Supply Air Humidity Ratio [kg-H20/kg-air]
+  0.0077,                                                  !- Minimum Cooling Supply Air Humidity Ratio [kg-H20/kg-air]
+  NoLimit,                                                 !- Heating Limit
+  ,                                                        !- Maximum Heating Air Flow Rate {m3/s}
+  ,                                                        !- Maximum Sensible Heating Capacity {m3/s}
+  NoLimit,                                                 !- Cooling Limit
+  ,                                                        !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                                                        !- Maximum Total Cooling Capacity {m3/s}
+  ,                                                        !- Heating Availability Schedule Name
+  ,                                                        !- Cooling Availability Schedule Name
+  Humidistat,                                              !- Dehumidification Control Type
+  0.7,                                                     !- Cooling Sensible Heat Ratio
+  Humidistat,                                              !- Humidification Control Type
+  ,                                                        !- Design Specification Outdoor Air Object Name
+  ,                                                        !- Outdoor Air Inlet Node Name
+  None,                                                    !- Demand Controlled Ventilation Type
+  NoEconomizer,                                            !- Outdoor Air Economizer Type
+  None,                                                    !- Heat Recovery Type
+  0.7,                                                     !- Sensible Heat Recovery Effectiveness
+  0.65;                                                    !- Latent Heat Recovery Effectiveness
+
+Output:PreprocessorMessage,
+  ExpandObjects,                                           !- Preprocessor Name
+  Warning,                                                 !- Error Severity
+  Warning: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" a,  !- message line
+  ZoneControl:Humidistat named "Zone Control Humidistat 1" was already,  !- message line
+  defined for this zone, so the HVACTemplate-generated humidistat will not be,  !- message line
+  created.;                                                !- message line
+"""
+
+    assert expected_addition_text.strip() in result.new_section_text
+
+
+def test_ideal_loads_with_exising_humidistat_but_no_dehum_schedule(prepare_and_run_expandobjects):
+    """Test IdealLoadsAirSystem with Humidistat but existing ZoneControl:Humidistat has no dehum schedule.
+
+    IdealLoadsAirSystem has Humidistat for both dehumidification and humidification control types.
+    The existing ZoneControl:Humidistat is missing the Dehumidifying Schedule => hard error
+    """
+
+    ori_idf_text = """
+Zone,
+  Zone 1;                                 !- Name
+
+HVACTemplate:Zone:IdealLoadsAirSystem,
+  Zone 1,                                 !- Zone Name
+  ,                                       !- Template Thermostat Name
+  ,                                       !- System Availability Schedule Name
+  ,                                       !- Maximum Heating Supply Air Temperature {C}
+  ,                                       !- Minimum Cooling Supply Air Temperature {C}
+  ,                                       !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Heating Limit
+  ,                                       !- Maximum Heating Air Flow Rate {m3/s}
+  ,                                       !- Maximum Sensible Heating Capacity {W}
+  ,                                       !- Cooling Limit
+  ,                                       !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                                       !- Maximum Total Cooling Capacity {W}
+  ,                                       !- Heating Availability Schedule Name
+  ,                                       !- Cooling Availability Schedule Name
+  Humidistat,                             !- Dehumidification Control Type
+  ,                                       !- Cooling Sensible Heat Ratio {dimensionless}
+  ,                                       !- Dehumidification Setpoint {percent}
+  Humidistat,                             !- Humidification Control Type
+  ,                                       !- Humidification Setpoint {percent}
+  ,                                       !- Outdoor Air Method
+  ,                                       !- Outdoor Air Flow Rate per Person {m3/s}
+  ,                                       !- Outdoor Air Flow Rate per Zone Floor Area {m3/s-m2}
+  ,                                       !- Outdoor Air Flow Rate per Zone {m3/s}
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Demand Controlled Ventilation Type
+
+ZoneControl:Humidistat,
+  Zone Control Humidistat 1,              !- Name
+  Zone 1,                                 !- Zone Name
+  Humidifying Setpoint Schedule,          !- Humidifying Relative Humidity Setpoint Schedule Name
+  ;                                       !- Dehumidifying Relative Humidity Setpoint Schedule Name
+
+ScheduleTypeLimits,
+  Any Number;                             !- Name
+
+Schedule:Constant,
+  Humidifying Setpoint Schedule,          !- Name
+  Any Number,                             !- Schedule Type Limits Name
+  30.0;                                   !- Hourly Value
+"""
+    result: ExpandObjectsResult = prepare_and_run_expandobjects(ori_idf_text=ori_idf_text)
+    assert result.err_text is not None
+    assert (
+        'ExpandObjects: Warning: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" a ZoneControl:Humidistat named '
+        '"Zone Control Humidistat 1" was already defined for this zone, so the HVACTemplate-generated humidistat '
+        "will not be created."
+    ) in result.err_text
+    assert (
+        'ExpandObjects: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Dehumidification Control Type field '
+        'is Humidistat, but the existing ZoneControl:Humidistat named "Zone Control Humidistat 1" for this zone '
+        "has a blank Dehumidifying Relative Humidity Setpoint Schedule Name."
+    ) in result.err_text
+
+    assert "! HVACTemplate:Zone:IdealLoadsAirSystem," in result.existing_section_text
+
+    assert (
+        """
+Output:PreprocessorMessage,
+  ExpandObjects,                                           !- Preprocessor Name
+  Fatal,                                                   !- Error Severity
+  In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Dehumidification,  !- message line
+  Control Type field is Humidistat, but the existing ZoneControl:Humidistat,  !- message line
+  named "Zone Control Humidistat 1" for this zone has a blank Dehumidifying,  !- message line
+  Relative Humidity Setpoint Schedule Name.;               !- message line"""
+        in result.new_section_text
+    )
+
+
+def test_ideal_loads_with_exising_humidistat_but_no_hum_schedule(prepare_and_run_expandobjects):
+    """Test IdealLoadsAirSystem with Humidistat but existing ZoneControl:Humidistat has no hum schedule.
+
+    IdealLoadsAirSystem has Humidistat for both dehumidification and humidification control types.
+    The existing ZoneControl:Humidistat is missing the Humidifying Schedule => hard error
+    """
+
+    ori_idf_text = """
+Zone,
+  Zone 1;                                 !- Name
+
+HVACTemplate:Zone:IdealLoadsAirSystem,
+  Zone 1,                                 !- Zone Name
+  ,                                       !- Template Thermostat Name
+  ,                                       !- System Availability Schedule Name
+  ,                                       !- Maximum Heating Supply Air Temperature {C}
+  ,                                       !- Minimum Cooling Supply Air Temperature {C}
+  ,                                       !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Heating Limit
+  ,                                       !- Maximum Heating Air Flow Rate {m3/s}
+  ,                                       !- Maximum Sensible Heating Capacity {W}
+  ,                                       !- Cooling Limit
+  ,                                       !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                                       !- Maximum Total Cooling Capacity {W}
+  ,                                       !- Heating Availability Schedule Name
+  ,                                       !- Cooling Availability Schedule Name
+  Humidistat,                             !- Dehumidification Control Type
+  ,                                       !- Cooling Sensible Heat Ratio {dimensionless}
+  ,                                       !- Dehumidification Setpoint {percent}
+  Humidistat,                             !- Humidification Control Type
+  ,                                       !- Humidification Setpoint {percent}
+  ,                                       !- Outdoor Air Method
+  ,                                       !- Outdoor Air Flow Rate per Person {m3/s}
+  ,                                       !- Outdoor Air Flow Rate per Zone Floor Area {m3/s-m2}
+  ,                                       !- Outdoor Air Flow Rate per Zone {m3/s}
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Demand Controlled Ventilation Type
+
+ZoneControl:Humidistat,
+  Zone Control Humidistat 1,              !- Name
+  Zone 1,                                 !- Zone Name
+  ,                                       !- Humidifying Relative Humidity Setpoint Schedule Name
+  Dehumidifying Setpoint Schedule;        !- Dehumidifying Relative Humidity Setpoint Schedule Name
+
+ScheduleTypeLimits,
+  Any Number;                             !- Name
+
+Schedule:Constant,
+  Dehumidifying Setpoint Schedule,        !- Name
+  Any Number,                             !- Schedule Type Limits Name
+  60.0;                                   !- Hourly Value
+"""
+    result: ExpandObjectsResult = prepare_and_run_expandobjects(ori_idf_text=ori_idf_text)
+    assert result.err_text is not None
+    assert (
+        'ExpandObjects: Warning: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" a ZoneControl:Humidistat named '
+        '"Zone Control Humidistat 1" was already defined for this zone, so the HVACTemplate-generated humidistat '
+        "will not be created."
+    ) in result.err_text
+    assert (
+        'ExpandObjects: In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Humidification Control Type field '
+        'is Humidistat, but the existing ZoneControl:Humidistat named "Zone Control Humidistat 1" for this zone '
+        "has a blank Humidifying Relative Humidity Setpoint Schedule Name."
+    ) in result.err_text
+
+    assert "! HVACTemplate:Zone:IdealLoadsAirSystem," in result.existing_section_text
+
+    assert (
+        """
+Output:PreprocessorMessage,
+  ExpandObjects,                                           !- Preprocessor Name
+  Fatal,                                                   !- Error Severity
+  In HVACTemplate:Zone:IdealLoadsAirSystem "Zone 1" the Humidification,  !- message line
+  Control Type field is Humidistat, but the existing ZoneControl:Humidistat,  !- message line
+  named "Zone Control Humidistat 1" for this zone has a blank Humidifying,  !- message line
+  Relative Humidity Setpoint Schedule Name.;               !- message line"""
+        in result.new_section_text
+    )
