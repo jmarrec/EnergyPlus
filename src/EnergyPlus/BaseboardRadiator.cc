@@ -375,10 +375,6 @@ namespace BaseboardRadiator {
                                 state, std::format("Blank field not allowed for {}", numericFieldNames[iHeatFracOfAutosizedCapacityNumericNum - 1]));
                             ErrorsFound = true;
                         }
-                    } else {
-                        ShowSevereError(state, std::format("{} = {}", cCMO_BBRadiator_Water, thisBaseboard.EquipID));
-                        ShowContinueError(state, std::format("Illegal {} = {}", heatingDesignCapacityMethodFieldName, heatingDesignCapacityMethod));
-                        ErrorsFound = true;
                     }
 
                     thisBaseboard.UA = inputProcessor->getRealFieldValue(baseboardFields, baseboardSchemaProps, "u_factor_times_area_value");
@@ -631,14 +627,20 @@ namespace BaseboardRadiator {
                                 this->ScaledHeatingCapacity * state.dataHeatBal->Zone(state.dataSize->DataZoneNumber).FloorArea;
                             TempSize = zoneEqSizing.DesHeatingLoad;
                             state.dataSize->DataScalableCapSizingON = true;
-                        } else if (CapSizingMethod == DataSizing::FractionOfAutosizedHeatingCapacity) {
+                        } else { // CapSizingMethod == DataSizing::FractionOfAutosizedHeatingCapacity
                             zoneEqSizing.HeatingCapacity = true;
                             state.dataSize->DataFracOfAutosizedHeatingCapacity = this->ScaledHeatingCapacity;
                             zoneEqSizing.DesHeatingLoad = finalZoneSizing.NonAirSysDesHeatLoad;
                             TempSize = DataSizing::AutoSize;
                             state.dataSize->DataScalableCapSizingON = true;
-                        } else {
-                            TempSize = this->ScaledHeatingCapacity;
+                        }
+                        if (!state.dataSize->FinalZoneSizing.empty() &&
+                            state.dataSize->CurZoneEqNum <= static_cast<int>(state.dataSize->FinalZoneSizing.size())) {
+                            BaseSizer::reportSizerOutput(state,
+                                                         cCMO_BBRadiator_Water,
+                                                         this->EquipID,
+                                                         "Design Size Heating Load [W]",
+                                                         state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).NonAirSysDesHeatLoad);
                         }
                         bool PrintFlag = false; // TRUE when sizing information is reported in the eio file
                         bool errorsFound = false;
