@@ -58,11 +58,6 @@
 #include <vector>
 
 // Third Party Headers
-#include <fmt/compile.h>
-#include <fmt/format.h>
-#include <fmt/os.h>
-#include <fmt/ostream.h>
-#include <fmt/printf.h>
 #include <nlohmann/json.hpp>
 
 // EnergyPlus Headers
@@ -387,9 +382,10 @@ public:
     }
 };
 
+// TODO: investigate if we can drop vformat (it accepts a runtime format string, unlike std::format which requires a compile-time constant)
 template <typename... Args> void print(std::ostream &os, std::string_view format_str, Args &&...args)
 {
-    fmt::print(os, fmt::runtime(format_str), std::forward<Args>(args)...);
+    os << std::vformat(format_str, std::make_format_args(args...));
 }
 
 template <typename... Args> void print(InputOutputFile &outputFile, std::string_view format_str, Args &&...args)
@@ -404,7 +400,7 @@ template <typename... Args> void print(InputOutputFile &outputFile, std::string_
         assert(outputFile.os);
         return nullptr;
     }();
-    fmt::print(*outputStream, format_str, std::forward<Args>(args)...);
+    *outputStream << std::vformat(format_str, std::make_format_args(args...));
 }
 
 } // namespace EnergyPlus
