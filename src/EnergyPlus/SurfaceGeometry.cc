@@ -7768,7 +7768,7 @@ namespace SurfaceGeometry {
                                 std::format("{}=\"{}\", {} is not a valid choice for {}",
                                             s_ipsc->cCurrentModuleObject,
                                             s_ipsc->cAlphaArgs(1),
-                                            calculationMethod,
+                                            s_ipsc->cAlphaArgs(alpF),
                                             s_ipsc->cAlphaFieldNames(alpF)));
                 ErrorsFound = true;
             }
@@ -7806,7 +7806,7 @@ namespace SurfaceGeometry {
                                      std::format("{}: {}, {} set as calculation method, but a value has been set for {}. This value will be ignored.",
                                                  s_ipsc->cCurrentModuleObject,
                                                  state.dataSurface->Surface(Found).Name,
-                                                 calculationMethod,
+                                                 CalculationMethodUC[static_cast<int>(calculationMethod)],
                                                  s_ipsc->cNumericFieldNames(numF)));
                 }
             } else {
@@ -7815,7 +7815,7 @@ namespace SurfaceGeometry {
                                     std::format("{}: {}, {} set as calculation method, but no value has been set for {}",
                                                 s_ipsc->cCurrentModuleObject,
                                                 state.dataSurface->Surface(Found).Name,
-                                                calculationMethod,
+                                                CalculationMethodUC[static_cast<int>(calculationMethod)],
                                                 s_ipsc->cNumericFieldNames(numF)));
                     ErrorsFound = true;
                 }
@@ -7831,7 +7831,7 @@ namespace SurfaceGeometry {
                                      std::format("{}: {}, {} set as calculation method, but a value has been set for {}. This value will be ignored.",
                                                  s_ipsc->cCurrentModuleObject,
                                                  state.dataSurface->Surface(Found).Name,
-                                                 calculationMethod,
+                                                 CalculationMethodUC[static_cast<int>(calculationMethod)],
                                                  s_ipsc->cNumericFieldNames(numF)));
                 }
             } else {
@@ -7840,7 +7840,7 @@ namespace SurfaceGeometry {
                                     std::format("{}: {}, {} set as calculation method, but no value has been set for {}",
                                                 s_ipsc->cCurrentModuleObject,
                                                 state.dataSurface->Surface(Found).Name,
-                                                calculationMethod,
+                                                CalculationMethodUC[static_cast<int>(calculationMethod)],
                                                 s_ipsc->cNumericFieldNames(numF)));
                     ErrorsFound = true;
                 }
@@ -7885,7 +7885,7 @@ namespace SurfaceGeometry {
                                     std::format("{}: {}, {} set as calculation method, but no values have been set for Surface Segments Exposed",
                                                 s_ipsc->cCurrentModuleObject,
                                                 state.dataSurface->Surface(Found).Name,
-                                                calculationMethod));
+                                                CalculationMethodUC[static_cast<int>(calculationMethod)]));
                     ErrorsFound = true;
                 }
             }

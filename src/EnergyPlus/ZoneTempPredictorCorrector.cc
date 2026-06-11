@@ -3410,7 +3410,7 @@ void CalcZoneAirTempSetPoints(EnergyPlusData &state)
             ShowSevereError(state,
                             std::format("CalcZoneAirTempSetpoints: Illegal control type for Zone={}, Found value={}, in Schedule={}",
                                         Zone(ActualZoneNum).Name,
-                                        TempControlType(ActualZoneNum),
+                                        setptTypeNames[(int)TempControlType(ActualZoneNum)],
                                         tempZone.setptTypeSched->Name));
 
         } break;

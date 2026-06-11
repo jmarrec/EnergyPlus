@@ -195,7 +195,8 @@ void SimAirZonePlenum(EnergyPlusData &state,
 
     } else {
         ShowSevereError(state, std::format("SimAirZonePlenum: Errors in Plenum={}", CompName));
-        ShowContinueError(state, std::format("ZonePlenum: Unhandled plenum type found:{}", iCompType));
+        ShowContinueError(
+            state, std::format("ZonePlenum: Unhandled plenum type found:{}", DataZoneEquipment::AirLoopHVACTypeNamesCC[static_cast<int>(iCompType)]));
         ShowFatalError(state, "Preceding conditions cause termination.");
     }
 }
