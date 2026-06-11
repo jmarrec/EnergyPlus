@@ -147,6 +147,7 @@ jobs:
       with:
         name: ccache-debug-${{ matrix.os }}
         path: .ccache-debug
+        include-hidden-files: true
         retention-days: 7
 
     - name: Save CCache cache
