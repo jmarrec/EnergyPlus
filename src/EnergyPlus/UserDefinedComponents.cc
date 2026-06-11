@@ -153,7 +153,7 @@ namespace UserDefinedComponents {
                 state,
                 std::format("SimUserDefinedPlantComponent: did not find where called from. Loop number called from ={}, loop side called from ={}.",
                             calledFromLocation.loopNum,
-                            calledFromLocation.loopSideNum));
+                            DataPlant::DemandSupplyNames[static_cast<int>(calledFromLocation.loopSideNum)]));
         }
     }
 
@@ -178,7 +178,7 @@ namespace UserDefinedComponents {
                                        "loop side called from ={}.",
                                        this->Name,
                                        calledFromLocation.loopNum,
-                                       calledFromLocation.loopSideNum));
+                                       DataPlant::DemandSupplyNames[static_cast<int>(calledFromLocation.loopSideNum)]));
         }
 
         auto const &plantConnection = this->Loop[thisLoop];
@@ -226,7 +226,7 @@ namespace UserDefinedComponents {
                                        "loop side called from ={}.",
                                        this->Name,
                                        calledFromLocation.loopNum,
-                                       calledFromLocation.loopSideNum));
+                                       DataPlant::DemandSupplyNames[static_cast<int>(calledFromLocation.loopSideNum)]));
         }
 
         this->initialize(state, thisLoop, CurLoad);
