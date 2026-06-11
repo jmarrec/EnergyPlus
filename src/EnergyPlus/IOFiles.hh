@@ -387,29 +387,6 @@ public:
     }
 };
 
-template <typename... Args> void vprint(std::ostream &os, std::string_view format_str, const Args &...args)
-{
-    //    assert(os.good());
-    auto buffer = fmt::memory_buffer();
-    try {
-        fmt::format_to(std::back_inserter(buffer), fmt::runtime(format_str), args...);
-    } catch (const fmt::format_error &) {
-        throw EnergyPlus::FatalError(fmt::format("Error with format, '{}', passed {} args", format_str, sizeof...(Args)));
-    }
-    os.write(buffer.data(), buffer.size());
-}
-
-template <typename... Args> std::string vprint(std::string_view format_str, const Args &...args)
-{
-    auto buffer = fmt::memory_buffer();
-    try {
-        fmt::format_to(std::back_inserter(buffer), fmt::runtime(format_str), args...);
-    } catch (const fmt::format_error &) {
-        throw EnergyPlus::FatalError(fmt::format("Error with format, '{}', passed {} args", format_str, sizeof...(Args)));
-    }
-    return fmt::to_string(buffer);
-}
-
 template <typename... Args> void print(std::ostream &os, std::string_view format_str, Args &&...args)
 {
     fmt::print(os, fmt::runtime(format_str), std::forward<Args>(args)...);
