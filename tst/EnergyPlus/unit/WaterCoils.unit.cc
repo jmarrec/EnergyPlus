@@ -1125,8 +1125,6 @@ TEST_F(WaterCoilsTest, CoilCoolingWaterDetailed_WarningMath)
     state->dataSize->PlantSizData(1).DeltaT = 5.0;
     state->dataSize->DataWaterLoopNum = 1;
 
-    OutputReportPredefined::SetPredefinedTables(*state);
-
     // run water coil sizing
     SizeWaterCoil(*state, CoilNum);
     EXPECT_DOUBLE_EQ(1.0, waterCoil1.DesAirVolFlowRate);
