@@ -57,6 +57,14 @@ set(EP_TEST_CXX_PCH_HEADERS
     "$<$<COMPILE_LANGUAGE:CXX>:<gtest/gtest.h>>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/tst/EnergyPlus/unit/Fixtures/EnergyPlusFixture.hh>")
 
+if(ENABLE_PCH AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  # Without this, Clang embeds a timestamp in the generated .pch, so its content hash differs
+  # on every build even when sources/headers are unchanged. ccache hashes that .pch content for
+  # both the direct-mode manifest and the preprocessor-mode result key, so every TU using
+  # -include-pch becomes a guaranteed cache miss. See ccache manual, "Precompiled Headers".
+  target_compile_options(project_options INTERFACE -fno-pch-timestamp)
+endif()
+
 option(ENABLE_UNITY "Enable Unity Build" OFF)
 
 add_library(project_fp_options INTERFACE)
