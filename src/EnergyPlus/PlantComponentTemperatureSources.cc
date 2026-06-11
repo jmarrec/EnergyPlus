@@ -536,10 +536,9 @@ namespace PlantComponentTemperatureSources {
                 }
             } else {
                 ShowSevereError(state, std::format("Input error for {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(
-                    state,
-                    EnergyPlus::format(R"(Invalid temperature specification type.  Expected either "Constant" or "Scheduled". Encountered {})",
-                                       state.dataIPShortCut->cAlphaArgs(4)));
+                ShowContinueError(state,
+                                  std::format(R"(Invalid temperature specification type.  Expected either "Constant" or "Scheduled". Encountered {})",
+                                              state.dataIPShortCut->cAlphaArgs(4)));
                 ErrorsFound = true;
             }
         }

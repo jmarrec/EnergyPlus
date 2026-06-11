@@ -14138,7 +14138,7 @@ void WritePredefinedTables(EnergyPlusData &state)
                                     if (currentStyle.formatReals) {
                                         tableBody(colCurrent, rowCurrent) = RealToStr(currentStyle.formatReals, value, entry.significantDigits);
                                     } else {
-                                        tableBody(colCurrent, rowCurrent) = EnergyPlus::format("{}", value);
+                                        tableBody(colCurrent, rowCurrent) = std::format("{}", value);
                                     }
                                 } else {
                                     tableBody(colCurrent, rowCurrent) = entry.charEntry;
@@ -18646,10 +18646,10 @@ std::string DateToString(int const codedDate) // word containing encoded month, 
     //   Convert the coded date format into a usable
     //   string
 
-    int Month;  // month in integer EnergyPlus::format(1-12)
-    int Day;    // day in integer EnergyPlus::format(1-31)
-    int Hour;   // hour in integer EnergyPlus::format(1-24)
-    int Minute; // minute in integer EnergyPlus::format(0:59)
+    int Month;  // month in integer std::format(1-12)
+    int Day;    // day in integer std::format(1-31)
+    int Hour;   // hour in integer std::format(1-24)
+    int Minute; // minute in integer std::format(0:59)
     static constexpr std::array<std::string_view, 12> Months{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
     if (codedDate == 0) {

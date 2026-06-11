@@ -45,6 +45,9 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+// C++ Headers
+#include <format>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 
@@ -1795,14 +1798,14 @@ namespace OutputReportPredefined {
         if (std::abs(tableEntryReal) < 1e8) { // change from 1e10 for more robust entry writing
             // something changed in FMT 7.x and "{:#12.{}F}" now outputs 13. So changing it to 11.{}F to maintain existing functionality. Likely
             // related to https://github.com/fmtlib/fmt/issues/1893
-            entry.charEntry = EnergyPlus::format("{:#11.{}F}", tableEntryReal, sigDigitCount);
+            entry.charEntry = std::format("{:#11.{}F}", tableEntryReal, sigDigitCount);
         } else {
             // Formatting in scientific notation, zero sigDigits makes zero sense.
             // **for something greater than 1E+08**, one sigDigits is very unhelpful (you're having an accuracy of 0.5E+07 at best)
             if (sigDigitCount < 2) {
                 sigDigitCount = 2;
             }
-            entry.charEntry = EnergyPlus::format("{:12.{}E}", tableEntryReal, sigDigitCount);
+            entry.charEntry = std::format("{:12.{}E}", tableEntryReal, sigDigitCount);
         }
 
         if (entry.charEntry.size() > 12) {
@@ -1863,7 +1866,7 @@ namespace OutputReportPredefined {
         auto &entry = table.entries(table.numEntries);
 
         // convert the integer to a string
-        entry.charEntry = EnergyPlus::format("{:12}", tableEntryInt);
+        entry.charEntry = std::format("{:12}", tableEntryInt);
         entry.objectName = objName;
         entry.indexColumn = columnIndex;
         entry.indexTable = column.indexSubTable;

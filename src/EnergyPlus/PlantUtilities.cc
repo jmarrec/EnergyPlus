@@ -395,8 +395,8 @@ void SetActuatedBranchFlowRate(EnergyPlusData &state,
             }
         } else {
             ShowFatalError(state,
-                           EnergyPlus::format("SetActuatedBranchFlowRate: Flowlock out of range, value={}",
-                                              plantLoc.side->FlowLock)); // DEBUG error...should never get here LCOV_EXCL_LINE
+                           std::format("SetActuatedBranchFlowRate: Flowlock out of range, value={}",
+                                       static_cast<int>(plantLoc.side->FlowLock))); // DEBUG error...should never get here LCOV_EXCL_LINE
         }
 
         Real64 const a_node_MasFlowRate(a_node.MassFlowRate);
@@ -1732,7 +1732,8 @@ void ScanPlantLoopsForObject(EnergyPlusData &state,
             }
             errFlag = true;
         } else {
-            ShowSevereError(state, EnergyPlus::format("ScanPlantLoopsForObject: Invalid CompType passed [{}], Name={}", CompType, CompName));
+            ShowSevereError(state,
+                            std::format("ScanPlantLoopsForObject: Invalid CompType passed [{}], Name={}", static_cast<int>(CompType), CompName));
             ShowContinueError(state, std::format("Valid CompTypes are in the range [0 - {}].", static_cast<int>(DataPlant::PlantEquipmentType::Num)));
             ShowFatalError(state, "Previous error causes program termination");
         }

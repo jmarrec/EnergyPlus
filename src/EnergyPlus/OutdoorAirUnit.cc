@@ -2203,7 +2203,7 @@ namespace OutdoorAirUnit {
             LoadMet = AirMassFlow * (PsyHFnTdbW(oaOutletNode.Temp, oaInletNode.HumRat) - PsyHFnTdbW(oaInletNode.Temp, oaInletNode.HumRat));
         } break;
         default:
-            ShowFatalError(state, EnergyPlus::format("Invalid Coil Type = {}", CoilTypeNum)); // validate
+            ShowFatalError(state, std::format("Invalid Coil Type = {}", static_cast<int>(CoilTypeNum))); // validate
             break;
         }
     }

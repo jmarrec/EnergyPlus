@@ -1488,7 +1488,6 @@ namespace Window {
                     tsolPhiFit[iPhi] = 0.0;
                     tvisPhiFit[iPhi] = 0.0;
 
-                    //<<<<<<< HEAD
                     for (int CoefNum = 0; CoefNum < maxPolyCoef; ++CoefNum) {
                         tsolPhiFit[iPhi] += thisConstruct.TransSolBeamCoef[CoefNum] * cosPhisLocal[iPhi];
                         tvisPhiFit[iPhi] += thisConstruct.TransVisBeamCoef[CoefNum] * cosPhisLocal[iPhi];
@@ -1501,7 +1500,6 @@ namespace Window {
                         //     cos_pow *= CosPhi;
                         //     tsolPhiFit(IPhi) += thisConstruct.TransSolBeamCoef(CoefNum) * cos_pow;
                         //     tvisPhiFit(IPhi) += thisConstruct.TransVisBeamCoef(CoefNum) * cos_pow;
-                        // >>>>>>> origin/develop
                     }
                 }
 #endif // GET_OUT

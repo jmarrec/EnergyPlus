@@ -1992,14 +1992,14 @@ namespace LowTempRadiantSystem {
                 if ((thisCFLRadSys.NomPowerUse > ZeroTol) && (MotorEffic > ZeroTol) && (thisCFLRadSys.WaterVolFlowMax != AutoSize)) {
                     TotalEffic = thisCFLRadSys.WaterVolFlowMax * thisCFLRadSys.NomPumpHead / thisCFLRadSys.NomPowerUse;
                     thisCFLRadSys.PumpEffic = TotalEffic / MotorEffic;
-                    constexpr std::string_view fmt = "Check input.  Calc Pump Efficiency={:.5f}% {}, for pump in radiant system {}";
+                    static constexpr char fmt[] = "Check input.  Calc Pump Efficiency={:.5f}% {}, for pump in radiant system {}";
                     Real64 pumpEfficiency = thisCFLRadSys.PumpEffic * 100.0;
                     if (thisCFLRadSys.PumpEffic < 0.50) {
-                        ShowWarningError(state, EnergyPlus::format(fmt, pumpEfficiency, "which is less than 50%", thisCFLRadSys.Name));
+                        ShowWarningError(state, std::format(fmt, pumpEfficiency, "which is less than 50%", thisCFLRadSys.Name));
                     } else if ((thisCFLRadSys.PumpEffic > 0.95) && (thisCFLRadSys.PumpEffic <= 1.0)) {
-                        ShowWarningError(state, EnergyPlus::format(fmt, pumpEfficiency, "is approaching 100%", thisCFLRadSys.Name));
+                        ShowWarningError(state, std::format(fmt, pumpEfficiency, "is approaching 100%", thisCFLRadSys.Name));
                     } else if (thisCFLRadSys.PumpEffic > 1.0) {
-                        ShowSevereError(state, EnergyPlus::format(fmt, pumpEfficiency, "which is bigger than 100%", thisCFLRadSys.Name));
+                        ShowSevereError(state, std::format(fmt, pumpEfficiency, "which is bigger than 100%", thisCFLRadSys.Name));
                         InitErrorsFound = true;
                     }
                 } else {
