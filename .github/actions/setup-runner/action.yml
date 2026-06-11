@@ -104,7 +104,7 @@ runs:
       # Setup ccache, common
       begin_group "Configure CCache"
       ccache --set-config=cache_dir=$CCACHE_DIR
-      ccache --set-config=max_size=500M
+      ccache --set-config=max_size=1G
       ccache --set-config=compression=true
       ccache --set-config=sloppiness=pch_defines,time_macros
       ccache -p
