@@ -2443,7 +2443,8 @@ namespace OutputProcessor {
         } break;
         default: {
             if (sql) {
-                sql->sqliteWriteMessage(format("Illegal reportingInterval passed to WriteTimeStampFormatData: {}", (int)reportingInterval));
+                sql->sqliteWriteMessage(
+                    std::format("Illegal reportingInterval passed to WriteTimeStampFormatData: {}", static_cast<int>(reportingInterval)));
             }
         } break;
         } // switch (reportFreq)

@@ -979,7 +979,7 @@ namespace FaultsManager {
                 // int CoilSysNum = Util::FindItemInList(faultsCoilSATFouling.CoilName,
                 //                                                 state.dataHVACDXSys->DXCoolingSystem);
                 // if (CoilSysNum <= 0) {
-                //    ShowSevereError(state, format("{}{} = \"{}\" invalid {} = \"{}{}\" not found.", //, cFaultCurrentObject, cAlphaArgs(1),
+                //    ShowSevereError(state, std::format("{}{} = \"{}\" invalid {} = \"{}{}\" not found.", //, cFaultCurrentObject, cAlphaArgs(1),
                 //    cAlphaFieldNames(5), //, cAlphaArgs(5))); state.dataFaultsMgr->ErrorsFound = true;
                 //} else {
                 //    // Link the coil system with the fault model

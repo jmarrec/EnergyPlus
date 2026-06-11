@@ -11739,8 +11739,8 @@ void WriteVeriSumTable(EnergyPlusData &state)
                                       std::format("differs ~{:.1f}% from user entered Wall class surfaces. Degree calculation based on ASHRAE "
                                                   "90.1 wall definitions.",
                                                   pdiff * 100.0));
-                    //      CALL ShowContinueError(state, format("Calculated based on degrees=[{}{}{}{}{}{}] m2, Calculated from user entered Wall
-                    //      class surfaces=[{}{}{}{}{}{}", //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS +
+                    //      CALL ShowContinueError(state, std::format("Calculated based on degrees=[{}{}{}{}{}{}] m2, Calculated from user entered
+                    //      Wall class surfaces=[{}{}{}{}{}{}", //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS +
                     //      wallAreaE + wallAreaW),3)))//, &, //, //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals,
                     //      SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied),3)))//', m2.'), ShowContinueError(state, "Check classes of surfaces
                     //      and tilts for discrepancies."));
@@ -18599,7 +18599,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
         return std::format("{:12.6E}", RealIn);
     }
-    return format(formDigitsA.at(nDigits), RealIn);
+    return std::vformat(formDigitsA.at(nDigits), std::make_format_args(RealIn));
 
     //  WRITE(FMT=, UNIT=stringOut) RealIn
     // check if it did not fit
