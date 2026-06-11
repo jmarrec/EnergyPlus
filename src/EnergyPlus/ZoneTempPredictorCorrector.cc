@@ -80,6 +80,7 @@
 #include <EnergyPlus/DuctLoss.hh>
 #include <EnergyPlus/FaultsManager.hh>
 #include <EnergyPlus/FileSystem.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
 #include <EnergyPlus/GlobalNames.hh>
@@ -2272,7 +2273,7 @@ void CalculateMonthlyRunningAverageDryBulb(EnergyPlusData &state, Array1D<Real64
     } else {
         ShowFatalError(state,
                        std::format("CalcThermalComfortAdaptive: Could not open file {} for input (read). (File does not exist)",
-                                   state.files.inputWeatherFilePath.filePath.string()));
+                                   state.files.inputWeatherFilePath.filePath));
     }
 }
 
@@ -6705,7 +6706,7 @@ void FillPredefinedTableOnThermostatSchedules(EnergyPlusData &state)
     };
     using ControlTypeInfoMemPtr = std::string ControlTypeInfo::*;
 
-    // How many people on the EnergyPlus team understand this code?
+    // Traverses a vector of ControlTypeInfo and joins the values of the specified member pointer with a comma, skipping empty values
     auto joinStrings = [](const std::vector<ControlTypeInfo> &infos, ControlTypeInfoMemPtr memPtr) -> std::string {
         std::vector<std::string> result;
         result.reserve(infos.size());
@@ -6716,7 +6717,7 @@ void FillPredefinedTableOnThermostatSchedules(EnergyPlusData &state)
             }
             result.emplace_back(std::move(val));
         }
-        return fmt::format("{}", fmt::join(result, ", "));
+        return std::format("{}", EnergyPlus::join(result, ", "));
     };
 
     for (int idx = 1; idx <= state.dataZoneCtrls->NumTempControlledZones; ++idx) {

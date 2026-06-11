@@ -2982,7 +2982,7 @@ void SolveAirLoopControllers(
                         ++state.dataSimAirServingZones->ErrCountSALC;
                         if (state.dataSimAirServingZones->ErrCountSALC < 15) {
                             state.dataSimAirServingZones->ErrEnvironmentName = state.dataEnvrn->EnvironmentName;
-                            const std::string CharErrOut = fmt::to_string(MaxIter);
+                            const std::string CharErrOut = std::to_string(MaxIter);
                             ShowWarningError(state,
                                              std::format("SolveAirLoopControllers: Maximum iterations ({}) exceeded for {}, {}, at {}, {} {}",
                                                          CharErrOut,
@@ -3210,7 +3210,7 @@ void SolveWaterCoilController(EnergyPlusData &state,
                     ++state.dataSimAirServingZones->ErrCountSWCC;
                     if (state.dataSimAirServingZones->ErrCountSWCC < 15) {
                         state.dataSimAirServingZones->ErrEnvironmentNameSolveWaterCoilController = state.dataEnvrn->EnvironmentName;
-                        const std::string CharErrOut = fmt::to_string(MaxIter);
+                        const std::string CharErrOut = std::to_string(MaxIter);
                         ShowWarningError(state,
                                          std::format("SolveAirLoopControllers: Maximum iterations ({}) exceeded for {}:{}, at {}, {} {}",
                                                      CharErrOut,

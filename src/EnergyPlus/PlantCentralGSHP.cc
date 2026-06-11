@@ -66,6 +66,7 @@
 #include <EnergyPlus/DataSizing.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/NodeInputManager.hh>
@@ -1421,7 +1422,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
                 ShowContinueError(state, "EIR as a function of PLR curve output at various part-load ratios shown below:");
                 ShowContinueError(state, "PLR   =  0.00   0.10   0.20   0.30   0.40   0.50   0.60   0.70   0.80   0.90   1.00");
 
-                ShowContinueError(state, fmt::format("Curve Output = {:7.2F}", fmt::join(CurveValArray, ",")));
+                ShowContinueError(state, std::format("Curve Output = {:7.2F}", EnergyPlus::join(CurveValArray, ",")));
 
                 CHErrorsFound = true;
             }
@@ -1486,8 +1487,7 @@ void GetChillerHeaterInput(EnergyPlusData &state)
                 ShowContinueError(state, "EIR as a function of PLR curve output at various part-load ratios shown below:");
                 ShowContinueError(state, "PLR          =    0.00   0.10   0.20   0.30   0.40   0.50   0.60   0.70   0.80   0.90   1.00");
 
-                std::string const curve_output = fmt::format("Curve Output = {:7.2F}", fmt::join(CurveValArray, ","));
-                ShowContinueError(state, curve_output);
+                ShowContinueError(state, std::format("Curve Output = {:7.2F}", EnergyPlus::join(CurveValArray, ",")));
 
                 CHErrorsFound = true;
             }

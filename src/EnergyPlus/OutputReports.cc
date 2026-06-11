@@ -1143,9 +1143,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                            << "," << std::format("{:.2f}", thisSurface.GrossArea) << "," << std::format("{:.2f}", thisSurface.NetAreaShadowCalc)
                            << "," << std::format("{:.2f}", thisSurface.Azimuth) << "," << std::format("{:.2f}", thisSurface.Tilt) << ","
                            << std::format("{:.2f}", thisSurface.Width) << "," << std::format("{:.2f}", thisSurface.Height) << ",";
-                *eiostream << ",,,,,,,,,," << fmt::to_string(thisSurface.Sides) << '\n';
+                *eiostream << ",,,,,,,,,," << std::to_string(thisSurface.Sides) << '\n';
             } else if (RptType == 1) {
-                *eiostream << fmt::to_string(thisSurface.Sides) << ",";
+                *eiostream << std::to_string(thisSurface.Sides) << ",";
             } else {
                 if (thisSurface.shadowSurfSched != nullptr) {
                     ScheduleName = thisSurface.shadowSurfSched->Name;
@@ -1160,7 +1160,7 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                            << "," << std::format("{:.2f}", thisSurface.GrossArea) << "," << std::format("{:.2f}", thisSurface.NetAreaShadowCalc)
                            << "," << std::format("{:.2f}", thisSurface.Azimuth) << "," << std::format("{:.2f}", thisSurface.Tilt) << ","
                            << std::format("{:.2f}", thisSurface.Width) << "," << std::format("{:.2f}", thisSurface.Height) << ",";
-                *eiostream << ",,,,,,,,,," << fmt::to_string(thisSurface.Sides) << ",";
+                *eiostream << ",,,,,,,,,," << std::to_string(thisSurface.Sides) << ",";
             }
             if (RptType == 10) {
                 continue;
@@ -1329,11 +1329,11 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                 if (RptType == 10) {
                     *eiostream << std::format("{:.2f}", thisSurface.ViewFactorGround) << "," << std::format("{:.2f}", thisSurface.ViewFactorSky)
                                << "," << std::format("{:.2f}", thisSurface.ViewFactorGroundIR) << ","
-                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << fmt::to_string(thisSurface.Sides) << '\n';
+                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << std::to_string(thisSurface.Sides) << '\n';
                 } else {
                     *eiostream << std::format("{:.2f}", thisSurface.ViewFactorGround) << "," << std::format("{:.2f}", thisSurface.ViewFactorSky)
                                << "," << std::format("{:.2f}", thisSurface.ViewFactorGroundIR) << ","
-                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << fmt::to_string(thisSurface.Sides) << ",";
+                               << std::format("{:.2f}", thisSurface.ViewFactorSkyIR) << "," << std::to_string(thisSurface.Sides) << ",";
                     for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                         if (vert != thisSurface.Sides) {
                             *eiostream << std::format("{:.2f}", thisSurface.Vertex(vert).x) << ","
@@ -1384,7 +1384,7 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
 
                 *eiostream << "HeatTransfer Surface," << thisSurface.Name << "," << cSurfaceClass(thisSurface.Class) << "," << BaseSurfName << ","
                            << AlgoName << ",";
-                *eiostream << fmt::to_string(thisSurface.Sides) << ",";
+                *eiostream << std::to_string(thisSurface.Sides) << ",";
                 for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                     if (vert != thisSurface.Sides) {
                         *eiostream << std::format("{:.2f}", thisSurface.Vertex(vert).x) << "," << std::format("{:.2f}", thisSurface.Vertex(vert).y)

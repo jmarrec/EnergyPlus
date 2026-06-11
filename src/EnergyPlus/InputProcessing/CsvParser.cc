@@ -50,7 +50,6 @@
 
 // Third Party Headers
 #include <fast_float/fast_float.h>
-#include <fmt/format.h>
 
 // EnergyPlus Headers
 #include <EnergyPlus/InputProcessing/CsvParser.hh>

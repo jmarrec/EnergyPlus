@@ -466,6 +466,7 @@ add_simulation_test(IDF_FILE PlantLoopChainDeadband.idf EPW_FILE USA_IL_Chicago-
 add_simulation_test(IDF_FILE PlantLoopChainDualDeadband.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopChainHeating.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_AirSource.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
+add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_AirSource_Parallel.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_AirSource_BufferTank.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_WaterSource.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_Fuel-Fired.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)

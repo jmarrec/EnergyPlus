@@ -1961,8 +1961,6 @@ TEST_F(EnergyPlusFixture, FillPredefinedTableOnThermostatSchedules_Test)
     auto &orp = *state->dataOutRptPredefined;
     auto &dzc = *state->dataZoneCtrls;
 
-    SetPredefinedTables(*state);
-
     dzc.NumTempControlledZones = 4;
     dzc.TempControlledZone.allocate(dzc.NumTempControlledZones);
 
@@ -2146,8 +2144,6 @@ TEST_F(EnergyPlusFixture, FillPredefinedTableOnThermostatSchedules_MultipleContr
 
     auto &orp = *state->dataOutRptPredefined;
     auto &dzc = *state->dataZoneCtrls;
-
-    SetPredefinedTables(*state);
 
     constexpr int NumControlTypes = 4;
     dzc.NumTempControlledZones = NumControlTypes;

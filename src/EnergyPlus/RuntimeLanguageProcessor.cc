@@ -1003,7 +1003,7 @@ void WriteTrace(EnergyPlusData &state, int const StackNum, int const Instruction
 
     NameString = state.dataRuntimeLang->ErlStack(StackNum).Name;
     LineNum = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).LineNum;
-    LineNumString = fmt::to_string(LineNum);
+    LineNumString = std::to_string(LineNum);
     LineString = state.dataRuntimeLang->ErlStack(StackNum).Line(LineNum);
     cValueString = ValueToString(ReturnValue);
 

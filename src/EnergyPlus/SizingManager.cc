@@ -289,7 +289,7 @@ void ManageSizing(EnergyPlusData &state)
                         ++state.dataSize->CurEnvirNumSimDay;
                     }
 
-                    state.dataGlobal->DayOfSimChr = fmt::to_string(state.dataGlobal->DayOfSim);
+                    state.dataGlobal->DayOfSimChr = std::to_string(state.dataGlobal->DayOfSim);
                     state.dataGlobal->BeginDayFlag = true;
                     state.dataGlobal->EndDayFlag = false;
 
@@ -485,7 +485,7 @@ void ManageSizing(EnergyPlusData &state)
                 if (!state.dataGlobal->WarmupFlag && state.dataGlobal->DayOfSim > 1) {
                     ++state.dataSize->CurEnvirNumSimDay;
                 }
-                state.dataGlobal->DayOfSimChr = fmt::to_string(state.dataGlobal->DayOfSim);
+                state.dataGlobal->DayOfSimChr = std::to_string(state.dataGlobal->DayOfSim);
                 state.dataGlobal->BeginDayFlag = true;
                 state.dataGlobal->EndDayFlag = false;
 

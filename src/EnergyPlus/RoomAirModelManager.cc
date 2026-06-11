@@ -1622,7 +1622,7 @@ namespace RoomAir {
                 ShowSevereError(state, std::format("GetRoomAirflowNetworkData: For {}: {}", cCurrentModuleObject, ipsc->cAlphaArgs(1)));
                 ShowContinueError(state,
                                   std::format("Extensible field set are not evenly divisible by 4. Number of data entries = {}",
-                                              fmt::to_string(NumAlphas + NumNumbers - 1)));
+                                              std::to_string(NumAlphas + NumNumbers - 1)));
                 ErrorsFound = true;
                 break;
             }
