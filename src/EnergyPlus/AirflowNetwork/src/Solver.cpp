@@ -6772,7 +6772,7 @@ namespace AirflowNetwork {
                             if (ErrCountVar == 0) {
                                 ++ErrCountVar;
                                 ShowWarningError(m_state, "Iteration limit exceeded pressure setpoint using an exhaust fan. Simulation continues.");
-                                ShowContinueErrorTimeStamp(m_state, std::format("Exhaust fan flow rate = {:.5G}", ExhaustFanMassFlowRate));
+                                ShowContinueErrorTimeStamp(m_state, std::format("Exhaust fan flow rate = {:.4f}", ExhaustFanMassFlowRate));
                             } else {
                                 ++ErrCountVar;
                                 ShowRecurringWarningErrorAtEnd(m_state,
@@ -6861,7 +6861,7 @@ namespace AirflowNetwork {
                             if (ErrCountVar == 0) {
                                 ++ErrCountVar;
                                 ShowWarningError(m_state, "Iteration limit exceeded pressure setpoint using relief air. Simulation continues.");
-                                ShowContinueErrorTimeStamp(m_state, std::format("Relief air flow rate = {:.5G}", ReliefMassFlowRate));
+                                ShowContinueErrorTimeStamp(m_state, std::format("Relief air flow rate = {:.4f}", ReliefMassFlowRate));
                             } else {
                                 ++ErrCountVar;
                                 ShowRecurringWarningErrorAtEnd(m_state,
@@ -9812,7 +9812,7 @@ namespace AirflowNetwork {
                                           "calculated based on the mass flow rate during HVAC operation.");
                         ShowContinueError(
                             m_state,
-                            std::format("The mass flow rate during HVAC operation = {:.3G} The mass flow rate during no HVAC operation = {:.3G}",
+                            std::format("The mass flow rate during HVAC operation = {:.2f} The mass flow rate during no HVAC operation = {:.2f}",
                                         m_state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).LoopSystemOnMassFlowrate,
                                         m_state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).LoopSystemOffMassFlowrate));
                         UpdateAirflowNetworkMyOneTimeFlag = false;
@@ -9851,7 +9851,7 @@ namespace AirflowNetwork {
                                                  AirflowNetworkLinkageData(i).Name + "'.");
                             ShowContinueError(
                                 m_state,
-                                std::format("The system node max mass flow rate = {:.4G} kg/s. The AFN node mass flow rate = {:.4G} kg.s.",
+                                std::format("The system node max mass flow rate = {:.3f} kg/s. The AFN node mass flow rate = {:.3f} kg.s.",
                                             NodeMass,
                                             AFNMass));
                             WriteFlag = true;
