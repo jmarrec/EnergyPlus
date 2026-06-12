@@ -59,7 +59,7 @@
 namespace EnergyPlus {
 TEST_F(EnergyPlusFixture, OutputFiles_Expected_Formatting_Tests)
 {
-    EXPECT_EQ(std::format("{:#11.{}F}", 123.456, 0), "        123.");
+    EXPECT_EQ(std::format("{:#12.{}F}", 123.456, 0), "        123.");
     EXPECT_EQ(std::format("{:#12.{}F}", 0.85505055394102414, 3), "       0.855");
     EXPECT_EQ(std::format("{:#12.{}F}", 18229.761511696095, 2), "    18229.76");
     EXPECT_EQ(std::format("{:12}", 4), "           4");
