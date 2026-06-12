@@ -1360,16 +1360,16 @@ namespace SimulationManager {
                             state.dataConvergeParams->MaxZoneTempDiff = fields.at("maxzonetempdiff").get<Real64>();
                             ShowWarningError(
                                 state,
-                                EnergyPlus::format("PerformancePrecisionTradeoffs using the Advanced Override Mode, MaxZoneTempDiff set to: {:.4R}",
-                                                   state.dataConvergeParams->MaxZoneTempDiff));
+                                std::format("PerformancePrecisionTradeoffs using the Advanced Override Mode, MaxZoneTempDiff set to: {:.4f}",
+                                            state.dataConvergeParams->MaxZoneTempDiff));
                             advancedModeUsed = true;
                         }
                         if (fields.find("maxalloweddeltemp") != fields.end()) { // not required field, has default value
                             state.dataHeatBal->MaxAllowedDelTemp = fields.at("maxalloweddeltemp").get<Real64>();
                             ShowWarningError(
                                 state,
-                                EnergyPlus::format("PerformancePrecisionTradeoffs using the Advanced Override Mode, MaxAllowedDelTemp set to: {:.4R}",
-                                                   state.dataHeatBal->MaxAllowedDelTemp));
+                                std::format("PerformancePrecisionTradeoffs using the Advanced Override Mode, MaxAllowedDelTemp set to: {:.4f}",
+                                            state.dataHeatBal->MaxAllowedDelTemp));
                             advancedModeUsed = true;
                         }
                         if (advancedModeUsed) {
@@ -1538,9 +1538,9 @@ namespace SimulationManager {
         } else {
             Alphas(7) = "No";
         }
-        Alphas(8) = EnergyPlus::format("{:.1R}", state.dataConvergeParams->MinTimeStepSys * 60.0);
-        Alphas(9) = EnergyPlus::format("{:.3R}", state.dataConvergeParams->MaxZoneTempDiff);
-        Alphas(10) = EnergyPlus::format("{:.4R}", state.dataHeatBal->MaxAllowedDelTemp);
+        Alphas(8) = std::format("{:.1f}", state.dataConvergeParams->MinTimeStepSys * 60.0);
+        Alphas(9) = std::format("{:.3f}", state.dataConvergeParams->MaxZoneTempDiff);
+        Alphas(10) = std::format("{:.4f}", state.dataHeatBal->MaxAllowedDelTemp);
         std::string pptHeader = "! <Performance Precision Tradeoffs>, Use Coil Direct Simulation, "
                                 "Zone Radiant Exchange Algorithm, Override Mode, Number of Timestep In Hour, "
                                 "Force Euler Method, Minimum Number of Warmup Days, Force Suppress All Begin Environment Resets, "
@@ -1556,7 +1556,7 @@ namespace SimulationManager {
               "{}\n",
               "! <Output Reporting Tolerances>, Tolerance for Time Heating Setpoint Not Met, Tolerance for Zone Cooling Setpoint Not Met Time");
         // Formats
-        static constexpr std::string_view Format_751(" Output Reporting Tolerances, {:.3R}, {:.3R}, \n");
+        static constexpr std::string_view Format_751(" Output Reporting Tolerances, {:.3f}, {:.3f}, \n");
 
         print(state.files.eio, Format_751, std::abs(deviationFromSetPtThresholdHtg), deviationFromSetPtThresholdClg);
 
@@ -1598,9 +1598,9 @@ namespace SimulationManager {
         Util::appendPerfLog(state, "Number of Timesteps per Hour", std::to_string(state.dataGlobal->TimeStepsInHour));
         Util::appendPerfLog(state, "Minimum Number of Warmup Days", std::to_string(state.dataHeatBal->MinNumberOfWarmupDays));
         Util::appendPerfLog(state, "SuppressAllBeginEnvironmentResets", bool_to_string(state.dataEnvrn->forceBeginEnvResetSuppress));
-        Util::appendPerfLog(state, "Minimum System Timestep", EnergyPlus::format("{:.1R}", state.dataConvergeParams->MinTimeStepSys * 60.0));
-        Util::appendPerfLog(state, "MaxZoneTempDiff", EnergyPlus::format("{:.2R}", state.dataConvergeParams->MaxZoneTempDiff));
-        Util::appendPerfLog(state, "MaxAllowedDelTemp", EnergyPlus::format("{:.4R}", state.dataHeatBal->MaxAllowedDelTemp));
+        Util::appendPerfLog(state, "Minimum System Timestep", std::format("{:.1f}", state.dataConvergeParams->MinTimeStepSys * 60.0));
+        Util::appendPerfLog(state, "MaxZoneTempDiff", std::format("{:.2f}", state.dataConvergeParams->MaxZoneTempDiff));
+        Util::appendPerfLog(state, "MaxAllowedDelTemp", std::format("{:.4f}", state.dataHeatBal->MaxAllowedDelTemp));
     }
 
     std::string bool_to_string(bool logical)
@@ -1923,7 +1923,7 @@ namespace SimulationManager {
             print(
                 state.files.eio, "{}\n", "! <ConductionFiniteDifference Numerical Parameters>, Starting Relaxation Factor, Final Relaxation Factor");
             print(state.files.eio,
-                  "ConductionFiniteDifference Numerical Parameters, {:.3R}, {:.3R}\n",
+                  "ConductionFiniteDifference Numerical Parameters, {:.3f}, {:.3f}\n",
                   state.dataHeatBal->CondFDRelaxFactorInput,
                   state.dataHeatBal->CondFDRelaxFactor);
         }

@@ -565,12 +565,12 @@ namespace Window {
                         // Add warning message for the glazing defined with full spectral data.
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
+                            std::format(
                                 "Window glazing material \"{}\" was defined with full spectral data and has been converted to average spectral data",
                                 matGlass->Name));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("due to its use with between-glass shades or blinds of the window construction \"{}\".",
-                                                             thisConstruct.Name));
+                        ShowContinueError(
+                            state,
+                            std::format("due to its use with between-glass shades or blinds of the window construction \"{}\".", thisConstruct.Name));
                         ShowContinueError(state, "All occurrences of this glazing material will be modeled as SpectralAverage.");
                         ShowContinueError(state,
                                           "If this material is also used in other window constructions  without between-glass shades or blinds,");
@@ -616,14 +616,13 @@ namespace Window {
                     numpt[iGlass] = numptDAT;
                     if (wm->BGFlag) {
                         // 5/16/2012 CR 8793. Add warning message for the glazing defined with full spectral data.
-                        ShowWarningError(
+                        ShowWarningError(state,
+                                         std::format("Window glazing material \"{}\" was defined with full spectral and angular data and has been "
+                                                     "converted to average spectral data",
+                                                     matGlass->Name));
+                        ShowContinueError(
                             state,
-                            EnergyPlus::format("Window glazing material \"{}\" was defined with full spectral and angular data and has been "
-                                               "converted to average spectral data",
-                                               matGlass->Name));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("due to its use with between-glass shades or blinds of the window construction \"{}\".",
-                                                             thisConstruct.Name));
+                            std::format("due to its use with between-glass shades or blinds of the window construction \"{}\".", thisConstruct.Name));
                         ShowContinueError(state, "All occurrences of this glazing material will be modeled as SpectralAverage.");
                         ShowContinueError(state,
                                           "If this material is also used in other window constructions  without between-glass shades or blinds,");
@@ -1766,9 +1765,9 @@ namespace Window {
                 ++DifOverrideCount;
                 if (state.dataGlobal->DisplayExtraWarnings) {
                     ShowWarningError(state,
-                                     EnergyPlus::format("W5InitGlassParameters: Window=\"{}\" has interior material with Solar Diffusing=Yes, but "
-                                                        "existing Window Shading Device sets Diffusing=No.",
-                                                        surf.Name));
+                                     std::format("W5InitGlassParameters: Window=\"{}\" has interior material with Solar Diffusing=Yes, but "
+                                                 "existing Window Shading Device sets Diffusing=No.",
+                                                 surf.Name));
                 }
             }
         } // for (SurfNum)
@@ -1777,13 +1776,12 @@ namespace Window {
             if (!state.dataGlobal->DisplayExtraWarnings) {
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
-                                       DifOverrideCount));
+                    std::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
+                                DifOverrideCount));
             } else {
-                ShowMessage(
-                    state,
-                    EnergyPlus::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
-                                       DifOverrideCount));
+                ShowMessage(state,
+                            std::format("W5InitGlassParameters: {} Windows had Solar Diffusing=Yes overridden by presence of Window Shading Device.",
+                                        DifOverrideCount));
             }
         }
     } // W5InitGlassParameters()
@@ -2369,9 +2367,9 @@ namespace Window {
                         if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                             // check to make sure the user hasn't messed up the shade control values
                             if (matShade->group == Material::Group::Blind) {
-                                ShowSevereError(state,
-                                                EnergyPlus::format("CalcWindowHeatBalance: ShadeFlag indicates Shade but Blind=\"{}\" is being used.",
-                                                                   matShade->Name));
+                                ShowSevereError(
+                                    state,
+                                    std::format("CalcWindowHeatBalance: ShadeFlag indicates Shade but Blind=\"{}\" is being used.", matShade->Name));
                                 ShowContinueError(state, "This is most likely a fault of the EMS values for shading control.");
                                 ShowFatalError(state, "Preceding condition terminates program.");
                             }
@@ -2396,10 +2394,9 @@ namespace Window {
                         if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                             // check to make sure the user hasn't messed up the shade control values
                             if (matShade->group == Material::Group::Shade || matShade->group == Material::Group::Screen) {
-                                ShowSevereError(
-                                    state,
-                                    EnergyPlus::format("CalcWindowHeatBalance: ShadeFlag indicates Blind but Shade/Screen=\"{}\" is being used.",
-                                                       matShade->Name));
+                                ShowSevereError(state,
+                                                std::format("CalcWindowHeatBalance: ShadeFlag indicates Blind but Shade/Screen=\"{}\" is being used.",
+                                                            matShade->Name));
                                 ShowContinueError(state, "This is most likely a fault of the EMS values for shading control.");
                                 ShowFatalError(state, "Preceding condition terminates program.");
                             }
@@ -3187,8 +3184,7 @@ namespace Window {
             }
 
         } else {
-            ShowFatalError(state,
-                           EnergyPlus::format("SolveForWindowTemperatures: Invalid number of Glass Layers={}, up to 4 allowed.", wm->ngllayer));
+            ShowFatalError(state, std::format("SolveForWindowTemperatures: Invalid number of Glass Layers={}, up to 4 allowed.", wm->ngllayer));
         }
     } // GetHeatBalanceEqCoefMatrix()
 
@@ -3604,24 +3600,23 @@ namespace Window {
             }
         } else {
             // No convergence after MaxIterations even with relaxed error tolerance
-            ShowSevereError(state,
-                            EnergyPlus::format("Convergence error in SolveForWindowTemperatures for window {}", s_surf->Surface(SurfNum).Name));
+            ShowSevereError(state, std::format("Convergence error in SolveForWindowTemperatures for window {}", s_surf->Surface(SurfNum).Name));
             ShowContinueErrorTimeStamp(state, "");
 
             if (state.dataGlobal->DisplayExtraWarnings) {
                 // report out temperatures
                 for (int i = 1; i <= wm->nglfacep; ++i) {
                     ShowContinueError(state,
-                                      EnergyPlus::format("Glazing face index = {} ; new temperature ={:.4R}C  ; previous temperature = {:.4R}C",
-                                                         i,
-                                                         wm->thetas[i - 1] - Constant::Kelvin,
-                                                         wm->thetasPrev[i - 1] - Constant::Kelvin));
+                                      std::format("Glazing face index = {} ; new temperature ={:.4f}C  ; previous temperature = {:.4f}C",
+                                                  i,
+                                                  wm->thetas[i - 1] - Constant::Kelvin,
+                                                  wm->thetasPrev[i - 1] - Constant::Kelvin));
                 }
             }
 
             ShowFatalError(state,
-                           EnergyPlus::format("Program halted because of convergence error in SolveForWindowTemperatures for window {}",
-                                              s_surf->Surface(SurfNum).Name));
+                           std::format("Program halted because of convergence error in SolveForWindowTemperatures for window {}",
+                                       s_surf->Surface(SurfNum).Name));
         }
     } // SolveForWindowTemperatures()
 
@@ -6524,9 +6519,9 @@ namespace Window {
         // No convergence after MaxIterations; and/or error tolerance
         if (errtemp >= 10 * errtemptol) {
             // Fatal error: didn't converge
-            ShowFatalError(state,
-                           EnergyPlus::format("Convergence error in WindowTempsForNominalCond for construction {}",
-                                              state.dataConstruction->Construct(ConstrNum).Name));
+            ShowFatalError(
+                state,
+                std::format("Convergence error in WindowTempsForNominalCond for construction {}", state.dataConstruction->Construct(ConstrNum).Name));
         }
     } // WindowTempsForNominalCond()
 
@@ -6761,7 +6756,7 @@ namespace Window {
                     WindowComplexManager::CalcComplexWindowThermal(
                         state, 0, i, TempVar, TempVar, TempVar, TempVar, DataBSDFWindow::Condition::Summer);
 
-                    static constexpr std::string_view Format_800(" WindowConstruction:Complex,{},{},{},{:.3R},{:.3R}\n");
+                    static constexpr std::string_view Format_800(" WindowConstruction:Complex,{},{},{},{:.3f},{:.3f}\n");
                     print(state.files.eio,
                           Format_800,
                           construct.Name,
@@ -6783,7 +6778,7 @@ namespace Window {
                         // Construct(ThisNum)%SummerSHGC = SHGCSummer
                         construct.VisTransNorm = 0.0; // TODO list
 
-                        static constexpr std::string_view Format_799(" Construction:WindowEquivalentLayer,{},{},{},{:.3R},{:.3R},{:.3R}\n");
+                        static constexpr std::string_view Format_799(" Construction:WindowEquivalentLayer,{},{},{},{:.3f},{:.3f},{:.3f}\n");
                         print(state.files.eio,
                               Format_799,
                               construct.Name,
@@ -6798,7 +6793,7 @@ namespace Window {
                         CalcNominalWindowCond(state, ThisNum, 1, NominalConductanceWinter, SHGCWinter, TransSolNorm, TransVisNorm, errFlag);
 
                         if (errFlag == 1) {
-                            ShowWarningError(state, EnergyPlus::format("Window construction {} has an interior or exterior blind", construct.Name));
+                            ShowWarningError(state, std::format("Window construction {} has an interior or exterior blind", construct.Name));
                             ShowContinueError(state, "but the corresponding construction without the blind cannot be found.");
                             ShowContinueError(state, "The ReportGlass entry for this construction will not be printed in eplusout.eio.");
                             continue;
@@ -6808,7 +6803,7 @@ namespace Window {
                         // nominal conductance and SHGC.
 
                         if (errFlag == 2) {
-                            ShowWarningError(state, EnergyPlus::format("Window construction {} has a between-glass shade or blind", construct.Name));
+                            ShowWarningError(state, std::format("Window construction {} has a between-glass shade or blind", construct.Name));
                             ShowContinueError(state, "The ReportGlass entry for this construction will not be printed in eplusout.eio.");
                             continue;
                         }
@@ -6822,7 +6817,7 @@ namespace Window {
                         construct.VisTransNorm = TransVisNorm;
                         construct.SolTransNorm = TransSolNorm;
 
-                        static constexpr std::string_view Format_700(" WindowConstruction,{},{},{},{},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R}\n");
+                        static constexpr std::string_view Format_700(" WindowConstruction,{},{},{},{},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n");
                         print(state.files.eio,
                               Format_700,
                               construct.Name,
@@ -6848,7 +6843,7 @@ namespace Window {
                         case Material::Group::Gas: {
                             auto const *matGas = dynamic_cast<Material::MaterialGasMix const *>(mat);
                             assert(matGas != nullptr);
-                            static constexpr std::string_view Format_702(" WindowMaterial:Gas,{},{},{:.3R}\n");
+                            static constexpr std::string_view Format_702(" WindowMaterial:Gas,{},{},{:.3f}\n");
                             print(state.files.eio, Format_702, matGas->Name, Material::gasTypeNames[(int)matGas->gases[0].type], matGas->Thickness);
                             //! fw CASE(WindowGasMixture)
                         } break;
@@ -6857,7 +6852,7 @@ namespace Window {
                             auto const *matShade = dynamic_cast<Material::MaterialShade const *>(mat);
                             assert(matShade != nullptr);
 
-                            static constexpr std::string_view Format_703(" WindowMaterial:Shade,{},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R}\n");
+                            static constexpr std::string_view Format_703(" WindowMaterial:Shade,{},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n");
                             print(state.files.eio,
                                   Format_703,
                                   matShade->Name,
@@ -6873,7 +6868,7 @@ namespace Window {
                             auto const *matBlind = dynamic_cast<Material::MaterialBlind const *>(mat);
 
                             static constexpr std::string_view Format_704(
-                                " WindowMaterial:Blind,{},{:.4R},{:.4R},{:.4R},{:.3R},{:.3R},{:.3R},{:.3R}\n");
+                                " WindowMaterial:Blind,{},{:.4f},{:.4f},{:.4f},{:.3f},{:.3f},{:.3f},{:.3f}\n");
                             print(state.files.eio,
                                   Format_704,
                                   matBlind->Name,
@@ -6892,7 +6887,7 @@ namespace Window {
                             auto const &btar = matScreen->btars[0][0]; // AR: Going with normal incidence here
 
                             static constexpr std::string_view Format_706 =
-                                " WindowMaterial:Screen,{},{:.5R},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R},{:.3R}\n";
+                                " WindowMaterial:Screen,{},{:.5f},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n";
 
                             // AR: assuming normal incidence
                             print(state.files.eio,
@@ -6922,17 +6917,17 @@ namespace Window {
                             if (matGlass->windowOpticalData == Window::OpticalDataModel::Spectral) {
                                 SpectralDataName = s_mat->SpectralData(matGlass->GlassSpectralDataPtr).Name;
                             } else if (matGlass->windowOpticalData == Window::OpticalDataModel::SpectralAndAngle) {
-                                SpectralDataName = EnergyPlus::format("{}, {}, {}",
-                                                                      matGlass->GlassSpecAngTransCurve->Name,
-                                                                      matGlass->GlassSpecAngFReflCurve->Name,
-                                                                      matGlass->GlassSpecAngBReflCurve->Name);
+                                SpectralDataName = std::format("{}, {}, {}",
+                                                               matGlass->GlassSpecAngTransCurve->Name,
+                                                               matGlass->GlassSpecAngFReflCurve->Name,
+                                                               matGlass->GlassSpecAngBReflCurve->Name);
                             } else {
                                 SpectralDataName = "";
                             }
 
                             static constexpr std::string_view Format_707(
-                                " WindowMaterial:Glazing,{},{},{},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{"
-                                ":.5R},{:.5R},{:.5R},{:.5R},{:.5R},{}\n");
+                                " WindowMaterial:Glazing,{},{},{},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},"
+                                "{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{}\n");
                             print(state.files.eio,
                                   Format_707,
                                   matGlass->Name,
@@ -6959,8 +6954,8 @@ namespace Window {
                             std::string OpticalDataType = "SpectralAverage";
                             SpectralDataName = "";
                             static constexpr std::string_view Format_708(
-                                " WindowMaterial:Glazing:EquivalentLayer,{},{},{},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R}"
-                                ",{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R}\n");
+                                " WindowMaterial:Glazing:EquivalentLayer,{},{},{},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f}"
+                                ",{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f}\n");
                             print(state.files.eio,
                                   Format_708,
                                   matEQL->Name,
@@ -6986,7 +6981,7 @@ namespace Window {
                             auto const *matEQL = dynamic_cast<Material::MaterialShadeEQL const *>(mat);
                             assert(matEQL != nullptr);
                             static constexpr std::string_view Format_709(
-                                " WindowMaterial:Shade:EquivalentLayer,{},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R}\n");
+                                " WindowMaterial:Shade:EquivalentLayer,{},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f}\n");
                             print(state.files.eio,
                                   Format_709,
                                   matEQL->Name,
@@ -7005,8 +7000,8 @@ namespace Window {
                             auto const *matEQL = dynamic_cast<Material::MaterialDrapeEQL const *>(mat);
                             assert(matEQL != nullptr);
                             static constexpr std::string_view Format_710(
-                                " WindowMaterial:Drape:EquivalentLayer,{},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R},"
-                                "{:.4R},{:.4R},{:.5R},{:.5R}\n");
+                                " WindowMaterial:Drape:EquivalentLayer,{},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},"
+                                "{:.4f},{:.4f},{:.5f},{:.5f}\n");
                             print(state.files.eio,
                                   Format_710,
                                   matEQL->Name,
@@ -7026,8 +7021,8 @@ namespace Window {
                             auto const *matEQL = dynamic_cast<Material::MaterialScreenEQL const *>(mat);
                             assert(matEQL != nullptr);
                             static constexpr std::string_view Format_711(
-                                " WindowMaterial:Screen:EquivalentLayer,{},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R},{:.4R}"
-                                ",{:.4R},{:.4R},{:.5R},{:.5R}\n");
+                                " WindowMaterial:Screen:EquivalentLayer,{},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f}"
+                                ",{:.4f},{:.4f},{:.5f},{:.5f}\n");
                             print(state.files.eio,
                                   Format_711,
                                   matEQL->Name,
@@ -7049,8 +7044,8 @@ namespace Window {
 
                             // Formats
                             static constexpr std::string_view Format_712(
-                                " WindowMaterial:Blind:EquivalentLayer,{},{},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:."
-                                "5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R},{:.5R}");
+                                " WindowMaterial:Blind:EquivalentLayer,{},{},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},"
+                                "{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f}");
                             print(state.files.eio,
                                   Format_712,
                                   matEQL->Name,
@@ -7074,7 +7069,7 @@ namespace Window {
                         case Material::Group::WindowGapEQL: {
                             auto const *matGas = dynamic_cast<Material::MaterialGasMix const *>(mat);
                             assert(matGas != nullptr);
-                            static constexpr std::string_view Format_713(" WindowMaterial:Gap:EquivalentLayer,{},{},{:.3R},{}\n");
+                            static constexpr std::string_view Format_713(" WindowMaterial:Gap:EquivalentLayer,{},{},{:.3f},{}\n");
                             print(state.files.eio,
                                   Format_713,
                                   matGas->Name,
@@ -7530,7 +7525,7 @@ namespace Window {
                                                         screen->btars[ip2][it2].BmTrans,
                                                         coeffs);
                         // bmTrans = screen->btars[ip][it].BmTrans;
-                        print(screenCsvFile, ",{:.6R}", bmTrans);
+                        print(screenCsvFile, ",{:.6f}", bmTrans);
                     }
                     print(screenCsvFile, "\n");
                 }
@@ -7563,7 +7558,7 @@ namespace Window {
                                                         coeffs);
 
                         // dfTrans = screen->btars[ip][it].DfTrans;
-                        print(screenCsvFile, ",{:.6R}", dfTrans);
+                        print(screenCsvFile, ",{:.6f}", dfTrans);
                     }
                     print(screenCsvFile, "\n");
                 }
@@ -8294,7 +8289,7 @@ namespace Window {
 
         // read custom spectrum data from Site:SolarAndVisibleSpectrum
         if (NumSiteSpectrum > 1) { // throw error
-            ShowSevereError(state, EnergyPlus::format("Only one {} object is allowed", cCurrentModuleObject));
+            ShowSevereError(state, std::format("Only one {} object is allowed", cCurrentModuleObject));
             ErrorsFound = true;
         }
 
@@ -8326,7 +8321,7 @@ namespace Window {
             cCurrentModuleObject = "Site:SpectrumData";
             NumSiteSpectrum = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
             if (NumSiteSpectrum == 0) { // throw error
-                ShowSevereError(state, EnergyPlus::format("No {} object is found", cCurrentModuleObject));
+                ShowSevereError(state, std::format("No {} object is found", cCurrentModuleObject));
                 ErrorsFound = true;
             }
 

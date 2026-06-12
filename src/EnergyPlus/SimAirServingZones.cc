@@ -451,13 +451,13 @@ void GetAirPathData(EnergyPlusData &state)
         primaryAirSystems.Name = Alphas(1);
         airLoopZoneInfo.AirLoopName = Alphas(1);
         if (NumAlphas < 9) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", insufficient information.", RoutineName, CurrentModuleObject, Alphas(1)));
+            ShowSevereError(state, std::format("{}{}=\"{}\", insufficient information.", RoutineName, CurrentModuleObject, Alphas(1)));
             ShowContinueError(state, "...Have supplied less than 9 alpha fields.");
             ErrorsFound = true;
             continue;
         }
         if (NumNumbers < 1) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", insufficient information.", RoutineName, CurrentModuleObject, Alphas(1)));
+            ShowSevereError(state, std::format("{}{}=\"{}\", insufficient information.", RoutineName, CurrentModuleObject, Alphas(1)));
             ShowContinueError(state, "...Have supplied less than 1 numeric field.");
             ErrorsFound = true;
             continue;
@@ -507,11 +507,11 @@ void GetAirPathData(EnergyPlusData &state)
             TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).FieldName = cAlphaFields(6);
             TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).NodeNameUsed = true;
         } else {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", duplicate node name.", RoutineName, CurrentModuleObject, Alphas(1)));
-            ShowContinueError(state, EnergyPlus::format("...used for {}=\"{}\"", cAlphaFields(6), Alphas(6)));
+            ShowSevereError(state, std::format("{}{}=\"{}\", duplicate node name.", RoutineName, CurrentModuleObject, Alphas(1)));
+            ShowContinueError(state, std::format("...used for {}=\"{}\"", cAlphaFields(6), Alphas(6)));
             ShowContinueError(
                 state,
-                EnergyPlus::format(
+                std::format(
                     "...first used in {}=\"{}\" for {}", CurrentModuleObject, TestUniqueNodes(test).AirLoopName, TestUniqueNodes(test).FieldName));
             ErrorsFound = true;
         }
@@ -524,13 +524,13 @@ void GetAirPathData(EnergyPlusData &state)
                 TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).FieldName = cAlphaFields(7);
                 TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).NodeNameUsed = true;
             } else {
-                ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", duplicate node name.", RoutineName, CurrentModuleObject, Alphas(1)));
-                ShowContinueError(state, EnergyPlus::format("...used for {}=\"{}\"", cAlphaFields(7), Alphas(7)));
+                ShowSevereError(state, std::format("{}{}=\"{}\", duplicate node name.", RoutineName, CurrentModuleObject, Alphas(1)));
+                ShowContinueError(state, std::format("...used for {}=\"{}\"", cAlphaFields(7), Alphas(7)));
                 ShowContinueError(state,
-                                  EnergyPlus::format("...first used in {}=\"{}\" for {}",
-                                                     CurrentModuleObject,
-                                                     TestUniqueNodes(test).AirLoopName,
-                                                     TestUniqueNodes(test).FieldName));
+                                  std::format("...first used in {}=\"{}\" for {}",
+                                              CurrentModuleObject,
+                                              TestUniqueNodes(test).AirLoopName,
+                                              TestUniqueNodes(test).FieldName));
                 ErrorsFound = true;
             }
         }
@@ -542,11 +542,11 @@ void GetAirPathData(EnergyPlusData &state)
             TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).FieldName = cAlphaFields(8);
             TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).NodeNameUsed = true;
         } else {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", duplicate node name/list.", RoutineName, CurrentModuleObject, Alphas(1)));
-            ShowContinueError(state, EnergyPlus::format("...used for {}=\"{}\"", cAlphaFields(8), Alphas(8)));
+            ShowSevereError(state, std::format("{}{}=\"{}\", duplicate node name/list.", RoutineName, CurrentModuleObject, Alphas(1)));
+            ShowContinueError(state, std::format("...used for {}=\"{}\"", cAlphaFields(8), Alphas(8)));
             ShowContinueError(
                 state,
-                EnergyPlus::format(
+                std::format(
                     "...first used in {}=\"{}\" for {}", CurrentModuleObject, TestUniqueNodes(test).AirLoopName, TestUniqueNodes(test).FieldName));
             ErrorsFound = true;
         }
@@ -558,11 +558,11 @@ void GetAirPathData(EnergyPlusData &state)
             TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).FieldName = cAlphaFields(9);
             TestUniqueNodes(state.dataSimAirServingZones->TestUniqueNodesNum).NodeNameUsed = true;
         } else {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", duplicate node name/list.", RoutineName, CurrentModuleObject, Alphas(1)));
-            ShowContinueError(state, EnergyPlus::format("...used for {}=\"{}\"", cAlphaFields(9), Alphas(9)));
+            ShowSevereError(state, std::format("{}{}=\"{}\", duplicate node name/list.", RoutineName, CurrentModuleObject, Alphas(1)));
+            ShowContinueError(state, std::format("...used for {}=\"{}\"", cAlphaFields(9), Alphas(9)));
             ShowContinueError(
                 state,
-                EnergyPlus::format(
+                std::format(
                     "...first used in {}=\"{}\" for {}", CurrentModuleObject, TestUniqueNodes(test).AirLoopName, TestUniqueNodes(test).FieldName));
             ErrorsFound = true;
         }
@@ -589,9 +589,9 @@ void GetAirPathData(EnergyPlusData &state)
             }
         }
         if ((test == 0) && (airLoopZoneInfo.NumReturnNodes > 0) && !lAlphaBlanks(7)) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid.", RoutineName, CurrentModuleObject, Alphas(1)));
-            ShowContinueError(
-                state, EnergyPlus::format("{} (Return Air Path or ZoneHVAC:EquipmentConnections) not valid = \"{}\".", cAlphaFields(7), Alphas(7)));
+            ShowSevereError(state, std::format("{}{}=\"{}\", invalid.", RoutineName, CurrentModuleObject, Alphas(1)));
+            ShowContinueError(state,
+                              std::format("{} (Return Air Path or ZoneHVAC:EquipmentConnections) not valid = \"{}\".", cAlphaFields(7), Alphas(7)));
             ErrorsFound = true;
         }
         // Get the supply nodes
@@ -614,8 +614,8 @@ void GetAirPathData(EnergyPlusData &state)
         }
         // Allow at most 3 supply nodes (for a 3 deck system)
         if (NumNodes > 3) {
-            ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", too many nodes.", RoutineName, CurrentModuleObject, primaryAirSystems.Name));
-            ShowContinueError(state, EnergyPlus::format("Only 1st 3 Nodes will be used from {}=\"{}\".", cAlphaFields(8), Alphas(8)));
+            ShowSevereError(state, std::format("{}{}=\"{}\", too many nodes.", RoutineName, CurrentModuleObject, primaryAirSystems.Name));
+            ShowContinueError(state, std::format("Only 1st 3 Nodes will be used from {}=\"{}\".", cAlphaFields(8), Alphas(8)));
             ErrorsFound = true;
         }
         if (NumNodes == 0) {
@@ -4124,11 +4124,11 @@ void SizeAirLoopBranches(EnergyPlusData &state, int const AirLoopNum, int const 
         }
         if (PrimaryAirSystems(AirLoopNum).DesignVolFlowRate < HVAC::SmallAirVolFlow) {
             ShowSevereError(state,
-                            EnergyPlus::format("SizeAirLoopBranches: AirLoopHVAC {} has air flow less than {:.4R} m3/s.",
-                                               PrimaryAirSystems(AirLoopNum).Name,
-                                               HVAC::SmallAirVolFlow));
-            ShowContinueError(
-                state, EnergyPlus::format("Primary air system volumetric flow rate = {:.4R} m3/s.", PrimaryAirSystems(AirLoopNum).DesignVolFlowRate));
+                            std::format("SizeAirLoopBranches: AirLoopHVAC {} has air flow less than {:.4f} m3/s.",
+                                        PrimaryAirSystems(AirLoopNum).Name,
+                                        HVAC::SmallAirVolFlow));
+            ShowContinueError(state,
+                              std::format("Primary air system volumetric flow rate = {:.4f} m3/s.", PrimaryAirSystems(AirLoopNum).DesignVolFlowRate));
             ShowContinueError(state, "Check flow rate inputs for components in this air loop and,");
             ShowContinueError(state, "if autosized, check Sizing:Zone and Sizing:System objects and related inputs.");
         }
