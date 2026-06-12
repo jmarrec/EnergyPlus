@@ -450,9 +450,9 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_DOASDXCoilTest)
     state->dataLoopNodes->NodeID(1) = "DX Cooling Coil Air Inlet Node";
     state->dataLoopNodes->NodeID(2) = "Heating Coil Air Inlet Node";
 
-    int const AirLoopNum = 0;
-    int const CoolingCoil = 0;
-    Real64 const OAUCoilOutTemp = 20.0;
+    int constexpr AirLoopNum = 0;
+    int constexpr CoolingCoil = 0;
+    Real64 constexpr OAUCoilOutTemp = 20.0;
     // cooling coil control node is the outlet node of the cooling coil, inlet of the heating coil, and the node that is used for setpoint control
     thisSys->CoolCoilOutletNodeNum = 2;
     thisSys->CoolCtrlNode = 2;
