@@ -3621,25 +3621,36 @@ namespace Weather {
 
             print(state.files.eio, "{}", DesDayDryBulbRangeTypeStrings[(int)desDayInput.dryBulbRangeType]);
 
-            static constexpr std::array<std::string_view, (int)DesDayHumIndType::Num> DesDayHumIndTypeStrings = {
-                "Wetbulb,{:.2f},{{C}},",
-                "Dewpoint,{:.2f},{{C}},",
-                "Enthalpy,{:.2f},{{J/kgDryAir}},",
-                "HumidityRatio,{:.4f},{{kgWater/kgDryAir}},",
-                "Schedule,<schedule values from 0.0 to 100.0>,{{percent}},",
-                "WetBulbProfileDefaultMultipliers,{:.2f},{{C}},",
-                "WetBulbProfileDifferenceSchedule,{:.2f},{{C}},",
-                "WetBulbProfileMultiplierSchedule,{:.2f},{{C}},"};
-
             // Hum Ind Type, Hum Ind Value at Max Temp, Hum Ind Units
-            if (desDayInput.HumIndType == DesDayHumIndType::RelHumSch) {
-                printRuntime(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType]);
-            } else if (desDayInput.HumIndType == DesDayHumIndType::WBProfDef) {
-                printRuntime(state.files.eio,
-                             DesDayHumIndTypeStrings[(int)desDayInput.HumIndType],
-                             state.dataWeather->DesDayInput(state.dataWeather->Envrn).HumIndValue);
-            } else {
-                printRuntime(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType], desDayInput.HumIndValue);
+            switch (desDayInput.HumIndType) {
+            case DesDayHumIndType::WetBulb:
+                print(state.files.eio, "Wetbulb,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::DewPoint:
+                print(state.files.eio, "Dewpoint,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::Enthalpy:
+                print(state.files.eio, "Enthalpy,{:.2f},{{J/kgDryAir}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::HumRatio:
+                print(state.files.eio, "HumidityRatio,{:.4f},{{kgWater/kgDryAir}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::RelHumSch:
+                print(state.files.eio, "Schedule,<schedule values from 0.0 to 100.0>,{{percent}},");
+                break;
+            case DesDayHumIndType::WBProfDef:
+                print(state.files.eio,
+                      "WetBulbProfileDefaultMultipliers,{:.2f},{{C}},",
+                      state.dataWeather->DesDayInput(state.dataWeather->Envrn).HumIndValue);
+                break;
+            case DesDayHumIndType::WBProfDif:
+                print(state.files.eio, "WetBulbProfileDifferenceSchedule,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::WBProfMul:
+                print(state.files.eio, "WetBulbProfileMultiplierSchedule,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            default:
+                break;
             }
 
             print(state.files.eio, "{:.0f},", desDayInput.PressBarom);
