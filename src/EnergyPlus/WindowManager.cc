@@ -6926,8 +6926,8 @@ namespace Window {
                             }
 
                             static constexpr std::string_view Format_707(
-                                " WindowMaterial:Glazing,{},{},{},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{"
-                                ":.5R},{:.5f},{:.5f},{:.5f},{:.5f},{}\n");
+                                " WindowMaterial:Glazing,{},{},{},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},"
+                                "{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{}\n");
                             print(state.files.eio,
                                   Format_707,
                                   matGlass->Name,
@@ -7044,8 +7044,8 @@ namespace Window {
 
                             // Formats
                             static constexpr std::string_view Format_712(
-                                " WindowMaterial:Blind:EquivalentLayer,{},{},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:."
-                                "5R},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f}");
+                                " WindowMaterial:Blind:EquivalentLayer,{},{},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},"
+                                "{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f},{:.5f}");
                             print(state.files.eio,
                                   Format_712,
                                   matEQL->Name,
