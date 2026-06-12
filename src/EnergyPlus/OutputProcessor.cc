@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <format>
 #include <memory>
@@ -2700,20 +2701,34 @@ namespace OutputProcessor {
         } else { // if ( ( reportingInterval == ReportDaily ) || ( reportingInterval == ReportMonthly ) || ( reportingInterval == ReportSim ) ) {
                  // // 2, 3, 4
             // Append the min and max strings with date information
-            char minValString[128], maxValString[128];
-            dtoa(MinVal, minValString);
-            dtoa(MaxVal, maxValString);
+            std::array<char, 128> minValString{}, maxValString{};
+            dtoa(MinVal, minValString.data());
+            dtoa(MaxVal, maxValString.data());
 
             std::string minDateString = produceDateString(MinValDate, freq);
             std::string maxDateString = produceDateString(MaxValDate, freq);
 
             if (state.files.mtr.good()) {
-                print(state.files.mtr, "{},{},{},{},{},{}\n", RptNum, NumberOut, minValString, minDateString, maxValString, maxDateString);
+                print(state.files.mtr,
+                      "{},{},{},{},{},{}\n",
+                      RptNum,
+                      NumberOut,
+                      minValString.data(),
+                      minDateString,
+                      maxValString.data(),
+                      maxDateString);
             }
 
             ++state.dataGlobal->StdMeterRecordCount;
             if (state.files.eso.good() && !RptFO) {
-                print(state.files.eso, "{},{},{},{},{},{}\n", RptNum, NumberOut, minValString, minDateString, maxValString, maxDateString);
+                print(state.files.eso,
+                      "{},{},{},{},{},{}\n",
+                      RptNum,
+                      NumberOut,
+                      minValString.data(),
+                      minDateString,
+                      maxValString.data(),
+                      maxDateString);
                 ++state.dataGlobal->StdOutputRecordCount;
             }
         }
@@ -2749,9 +2764,9 @@ namespace OutputProcessor {
         }
 
         if (state.files.eso.good()) {
-            char numericData[129];
-            dtoa(repValue, numericData);
-            print(state.files.eso, "{},{}\n", reportID, numericData);
+            std::array<char, 129> numericData{};
+            dtoa(repValue, numericData.data());
+            print(state.files.eso, "{},{}\n", reportID, numericData.data());
         }
     } // WriteNumericData()
 
@@ -2832,14 +2847,21 @@ namespace OutputProcessor {
             if ((freq == ReportFreq::EachCall) || (freq == ReportFreq::TimeStep) || (freq == ReportFreq::Hour)) { // -1, 0, 1
                 print(state.files.eso, "{},{}\n", ReportID, NumberOut);
             } else {
-                char minValString[128], maxValString[128];
-                dtoa(MinValue, minValString);
-                dtoa(MaxValue, maxValString);
+                std::array<char, 128> minValString{}, maxValString{};
+                dtoa(MinValue, minValString.data());
+                dtoa(MaxValue, maxValString.data());
 
                 std::string minDateString = produceDateString(minValueDate, freq);
                 std::string maxDateString = produceDateString(maxValueDate, freq);
 
-                print(state.files.eso, "{},{},{},{},{},{}\n", ReportID, NumberOut, minValString, minDateString, maxValString, maxDateString);
+                print(state.files.eso,
+                      "{},{},{},{},{},{}\n",
+                      ReportID,
+                      NumberOut,
+                      minValString.data(),
+                      minDateString,
+                      maxValString.data(),
+                      maxDateString);
             }
         }
     } // OutVar::WriteReportData()
