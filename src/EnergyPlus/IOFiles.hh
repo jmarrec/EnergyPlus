@@ -70,7 +70,8 @@ namespace EnergyPlus {
 struct EnergyPlusData;
 
 class InputOutputFile;
-template <typename... Args> void print(InputOutputFile &outputFile, std::string_view format_str, Args &&...args);
+template <typename... Args> void print(InputOutputFile &outputFile, std::format_string<Args...> format_str, Args &&...args);
+template <typename... Args> void printRuntime(InputOutputFile &outputFile, std::string_view format_str, Args &&...args);
 
 class InputFile
 {
@@ -178,7 +179,8 @@ public:
 private:
     std::unique_ptr<std::iostream> os;
     bool print_to_dev_null = false;
-    template <typename... Args> friend void print(InputOutputFile &outputFile, std::string_view format_str, Args &&...args);
+    template <typename... Args> friend void print(InputOutputFile &outputFile, std::format_string<Args...>, Args &&...args);
+    template <typename... Args> friend void printRuntime(InputOutputFile &outputFile, std::string_view format_str, Args &&...args);
     friend class IOFiles;
 };
 
@@ -382,8 +384,7 @@ public:
     }
 };
 
-// TODO: investigate if we can drop vformat (it accepts a runtime format string, unlike std::format which requires a compile-time constant)
-template <typename... Args> void print(InputOutputFile &outputFile, std::string_view format_str, Args &&...args)
+template <typename... Args> void print(InputOutputFile &outputFile, std::format_string<Args...> format_str, Args &&...args)
 {
     auto *outputStream = [&]() -> std::ostream * {
         if (outputFile.os) {
@@ -395,7 +396,27 @@ template <typename... Args> void print(InputOutputFile &outputFile, std::string_
         assert(outputFile.os);
         return nullptr;
     }();
-    *outputStream << std::vformat(format_str, std::make_format_args(args...));
+    *outputStream << std::format(format_str, std::forward<Args>(args)...);
+}
+
+// TODO: investigate if we can drop vformat (it accepts a runtime format string, unlike std::format which requires a compile-time constant)
+template <typename... Args> void printRuntime(InputOutputFile &outputFile, std::string_view format_str, Args &&...args)
+{
+    auto *outputStream = [&]() -> std::ostream * {
+        if (outputFile.os) {
+            return outputFile.os.get();
+        }
+        if (outputFile.defaultToStdOut) {
+            return &std::cout;
+        }
+        assert(outputFile.os);
+        return nullptr;
+    }();
+    try {
+        *outputStream << std::vformat(format_str, std::make_format_args(args...));
+    } catch (const std::format_error &e) {
+        throw std::format_error(std::string(e.what()) + " | format_str=\"" + std::string(format_str) + "\"");
+    }
 }
 
 } // namespace EnergyPlus

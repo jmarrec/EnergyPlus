@@ -2804,7 +2804,7 @@ namespace InternalHeatGains {
                 }
                 print(state.files.eio, "{},", (people.workEffSched != nullptr) ? people.workEffSched->Name : "");
 
-                print(state.files.eio, clothingTypeEIOStrings[(int)people.clothingType]);
+                print(state.files.eio, "{}", clothingTypeEIOStrings[(int)people.clothingType]);
 
                 if (people.clothingType == ClothingType::CalculationSchedule) {
                     print(state.files.eio, "{},", people.clothingMethodSched->Name);
