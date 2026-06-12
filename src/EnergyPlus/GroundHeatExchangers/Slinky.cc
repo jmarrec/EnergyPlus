@@ -151,8 +151,8 @@ GLHESlinky::GLHESlinky(EnergyPlusData &state, std::string const &objName, nlohma
         if (this->trenchDepth - this->coilDiameter < 0.0) {
             // Error: part of the coil is above ground
             ShowSevereError(state, EnergyPlus::format("{}=\"{}\", invalid value in field.", this->moduleName, this->name));
-            ShowContinueError(state, EnergyPlus::format("...{}=[{:.3R}].", "Trench Depth", this->trenchDepth));
-            ShowContinueError(state, EnergyPlus::format("...{}=[{:.3R}].", "Coil Depth", this->coilDepth));
+            ShowContinueError(state, EnergyPlus::format("...{}=[{:.3G}].", "Trench Depth", this->trenchDepth));
+            ShowContinueError(state, EnergyPlus::format("...{}=[{:.3G}].", "Coil Depth", this->coilDepth));
             ShowContinueError(state, "...Part of coil will be above ground.");
             errorsFound = true;
 
@@ -174,8 +174,8 @@ GLHESlinky::GLHESlinky(EnergyPlusData &state, std::string const &objName, nlohma
 
     if (this->pipe.thickness >= this->pipe.outDia / 2.0) {
         ShowSevereError(state, EnergyPlus::format("{}=\"{}\", invalid value in field.", this->moduleName, this->name));
-        ShowContinueError(state, EnergyPlus::format("...{}=[{:.3R}].", "Pipe Thickness", this->pipe.thickness));
-        ShowContinueError(state, EnergyPlus::format("...{}=[{:.3R}].", "Pipe Outer Diameter", this->pipe.outDia));
+        ShowContinueError(state, EnergyPlus::format("...{}=[{:.3G}].", "Pipe Thickness", this->pipe.thickness));
+        ShowContinueError(state, EnergyPlus::format("...{}=[{:.3G}].", "Pipe Outer Diameter", this->pipe.outDia));
         ShowContinueError(state, "...Radius will be <=0.");
         errorsFound = true;
     }
