@@ -12727,7 +12727,7 @@ namespace AirflowNetwork {
                             ShowContinueError(
                                 m_state,
                                 EnergyPlus::format(
-                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velosity at {:.1R} using PressureLoss",
+                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velocity at {:.1R} using PressureLoss",
                                     simulation_control.ductSizing.max_velocity,
                                     Velocity));
                             ShowContinueError(m_state, "..The Maximum Airflow Velocity is used to calculate Supply Trunk Diameter");
@@ -12850,7 +12850,7 @@ namespace AirflowNetwork {
                             ShowContinueError(
                                 m_state,
                                 EnergyPlus::format(
-                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velosity at {:.1R} using PressureLoss",
+                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velocity at {:.1R} using PressureLoss",
                                     simulation_control.ductSizing.max_velocity,
                                     Velocity));
                             ShowContinueError(m_state, "..The Maximum Airflow Velocity is used to calculate Supply Branch Diameter");
@@ -12978,7 +12978,7 @@ namespace AirflowNetwork {
                             ShowContinueError(
                                 m_state,
                                 EnergyPlus::format(
-                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velosity at {:.1R} using PressureLoss",
+                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velocity at {:.1R} using PressureLoss",
                                     simulation_control.ductSizing.max_velocity,
                                     Velocity));
                             ShowContinueError(m_state, "..The Maximum Airflow Velocity is used to calculate Return Trunk Diameter");
@@ -13102,7 +13102,7 @@ namespace AirflowNetwork {
                             ShowContinueError(
                                 m_state,
                                 EnergyPlus::format(
-                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velosity at {:.1R} using PressureLoss",
+                                    "The Maximum Airflow Velocity at {:.1R} is less than calculated velocity at {:.1R} using PressureLoss",
                                     simulation_control.ductSizing.max_velocity,
                                     Velocity));
                             ShowContinueError(m_state, "..The Maximum Airflow Velocity is used to calculate Return Branch Diameter");
