@@ -383,11 +383,6 @@ public:
 };
 
 // TODO: investigate if we can drop vformat (it accepts a runtime format string, unlike std::format which requires a compile-time constant)
-template <typename... Args> void print(std::ostream &os, std::string_view format_str, Args &&...args)
-{
-    os << std::vformat(format_str, std::make_format_args(args...));
-}
-
 template <typename... Args> void print(InputOutputFile &outputFile, std::string_view format_str, Args &&...args)
 {
     auto *outputStream = [&]() -> std::ostream * {
