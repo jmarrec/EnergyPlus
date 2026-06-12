@@ -154,23 +154,22 @@ namespace WaterToAirHeatPumpSimple {
         if (CompIndex == 0) {
             HPNum = Util::FindItemInList(CompName, state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP);
             if (HPNum == 0) {
-                ShowFatalError(state, EnergyPlus::format("WaterToAirHPSimple not found= {}", CompName));
+                ShowFatalError(state, std::format("WaterToAirHPSimple not found= {}", CompName));
             }
             CompIndex = HPNum;
         } else {
             HPNum = CompIndex;
             if (HPNum > state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs || HPNum < 1) {
-                ShowFatalError(
-                    state,
-                    EnergyPlus::format("SimWatertoAirHPSimple: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
-                                       HPNum,
-                                       state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs,
-                                       CompName));
+                ShowFatalError(state,
+                               std::format("SimWatertoAirHPSimple: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
+                                           HPNum,
+                                           state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs,
+                                           CompName));
             }
             if (!CompName.empty() && CompName != state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).Name) {
                 ShowFatalError(
                     state,
-                    EnergyPlus::format(
+                    std::format(
                         "SimWatertoAirHPSimple: Invalid CompIndex passed={}, WaterToAir HP name={}, stored WaterToAir HP Name for that index={}",
                         HPNum,
                         CompName,
@@ -267,7 +266,7 @@ namespace WaterToAirHeatPumpSimple {
 
                 // ErrorsFound will be set to True if problem was found, left untouched otherwise
                 GlobalNames::VerifyUniqueCoilName(
-                    state, CurrentModuleObject, simpleWAHP.Name, ErrorsFound, EnergyPlus::format("{} Name", CurrentModuleObject));
+                    state, CurrentModuleObject, simpleWAHP.Name, ErrorsFound, std::format("{} Name", CurrentModuleObject));
                 simpleWAHP.WAHPType = WatertoAirHP::Cooling;
                 simpleWAHP.WAHPPlantType = DataPlant::PlantEquipmentType::CoilWAHPCoolingEquationFit;
 
@@ -509,7 +508,7 @@ namespace WaterToAirHeatPumpSimple {
                 ErrorObjectHeader eoh{RoutineName, CurrentModuleObject, simpleWAHP.Name};
                 // ErrorsFound will be set to True if problem was found, left untouched otherwise
                 GlobalNames::VerifyUniqueCoilName(
-                    state, CurrentModuleObject, simpleWAHP.Name, ErrorsFound, EnergyPlus::format("{} Name", CurrentModuleObject));
+                    state, CurrentModuleObject, simpleWAHP.Name, ErrorsFound, std::format("{} Name", CurrentModuleObject));
                 simpleWAHP.WAHPType = WatertoAirHP::Heating;
                 simpleWAHP.WAHPPlantType = DataPlant::PlantEquipmentType::CoilWAHPHeatingEquationFit;
 
@@ -696,7 +695,7 @@ namespace WaterToAirHeatPumpSimple {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("{} Errors found getting input. Program terminates.", RoutineName));
+            ShowFatalError(state, std::format("{} Errors found getting input. Program terminates.", RoutineName));
         }
 
         for (int HPNumIdx = 1; HPNumIdx <= state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs; ++HPNumIdx) {
@@ -1127,10 +1126,9 @@ namespace WaterToAirHeatPumpSimple {
                     if (simpleWAHP.LowFlowFlag) {
                         ShowWarningError(
                             state,
-                            EnergyPlus::format(
-                                "{}: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil ({}) rated air flow rate.",
-                                RoutineName,
-                                simpleWAHP.Name));
+                            std::format("{}: Actual air mass flow rate is smaller than 25% of water-to-air heat pump coil ({}) rated air flow rate.",
+                                        RoutineName,
+                                        simpleWAHP.Name));
                         simpleWAHP.LowFlowFlag = false;
                     }
                 }
@@ -1335,8 +1333,7 @@ namespace WaterToAirHeatPumpSimple {
         RatedCapHeatUser = 0.0;
         RatedWaterVolFlowRateDes = 0.0;
         RatedWaterVolFlowRateUser = 0.0;
-        std::string CompType =
-            EnergyPlus::format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWAHP.WAHPType)]);
+        std::string CompType = std::format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWAHP.WAHPType)]);
 
         if (simpleWAHP.RatedAirVolFlowRate == DataSizing::AutoSize) {
             IsAutoSize = true;
@@ -1405,11 +1402,10 @@ namespace WaterToAirHeatPumpSimple {
                                     "SizeHVACWaterToAir: Potential issue with equipment sizing for coil {}:WATERTOAIRHEATPUMP:EQUATIONFIT \"{}\"",
                                     WatertoAirHPNamesUC[static_cast<int>(simpleWAHP.WAHPType)],
                                     simpleWAHP.Name));
+                            ShowContinueError(state,
+                                              std::format("User-Specified Rated Air Volume Flow Rate of {:.5f} [m3/s]", RatedAirVolFlowRateUser));
                             ShowContinueError(
-                                state, EnergyPlus::format("User-Specified Rated Air Volume Flow Rate of {:.5R} [m3/s]", RatedAirVolFlowRateUser));
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format("differs from Design Size Rated Air Volume Flow Rate of {:.5R} [m3/s]", RatedAirVolFlowRateDes));
+                                state, std::format("differs from Design Size Rated Air Volume Flow Rate of {:.5f} [m3/s]", RatedAirVolFlowRateDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -1984,15 +1980,14 @@ namespace WaterToAirHeatPumpSimple {
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(
                                     state,
-                                    std::format(
+                                    EnergyPlus::format(
                                         "SizeHVACWaterToAir: Potential issue with equipment sizing for coil {}:WATERTOAIRHEATPUMP:EQUATIONFIT {}",
                                         WatertoAirHPNamesUC[static_cast<int>(simpleWAHP.WAHPType)],
                                         simpleWAHP.Name));
+                                ShowContinueError(state,
+                                                  std::format("User-Specified Rated Total Cooling Capacity of {:.2f} [W]", RatedCapCoolTotalUser));
                                 ShowContinueError(
-                                    state, EnergyPlus::format("User-Specified Rated Total Cooling Capacity of {:.2R} [W]", RatedCapCoolTotalUser));
-                                ShowContinueError(
-                                    state,
-                                    EnergyPlus::format("differs from Design Size Rated Total Cooling Capacity of {:.2R} [W]", RatedCapCoolTotalDes));
+                                    state, std::format("differs from Design Size Rated Total Cooling Capacity of {:.2f} [W]", RatedCapCoolTotalDes));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -2084,15 +2079,15 @@ namespace WaterToAirHeatPumpSimple {
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(
                                     state,
-                                    std::format(
+                                    EnergyPlus::format(
                                         "SizeHVACWaterToAir: Potential issue with equipment sizing for coil {}:WATERTOAIRHEATPUMP:EQUATIONFIT {}",
                                         WatertoAirHPNamesUC[static_cast<int>(simpleWAHP.WAHPType)],
                                         simpleWAHP.Name));
-                                ShowContinueError(
-                                    state, EnergyPlus::format("User-Specified Rated Sensible Cooling Capacity of {:.2R} [W]", RatedCapCoolSensUser));
                                 ShowContinueError(state,
-                                                  EnergyPlus::format("differs from Design Size Rated Sensible Cooling Capacity of {:.2R} [W]",
-                                                                     RatedCapCoolSensDes));
+                                                  std::format("User-Specified Rated Sensible Cooling Capacity of {:.2f} [W]", RatedCapCoolSensUser));
+                                ShowContinueError(
+                                    state,
+                                    std::format("differs from Design Size Rated Sensible Cooling Capacity of {:.2f} [W]", RatedCapCoolSensDes));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -2557,14 +2552,13 @@ namespace WaterToAirHeatPumpSimple {
                     }
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(RatedCapHeatDes - RatedCapHeatUser) / RatedCapHeatUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                            ShowMessage(
-                                state,
-                                std::format("SizeHVACWaterToAir: Potential issue with equipment sizing for coil {}:WATERTOAIRHEATPUMP:EQUATIONFIT {}",
+                            ShowMessage(state,
+                                        EnergyPlus::format(
+                                            "SizeHVACWaterToAir: Potential issue with equipment sizing for coil {}:WATERTOAIRHEATPUMP:EQUATIONFIT {}",
                                             WatertoAirHPNamesUC[static_cast<int>(simpleWAHP.WAHPType)],
                                             simpleWAHP.Name));
-                            ShowContinueError(state, EnergyPlus::format("User-Specified Rated Heating Capacity of {:.2R} [W]", RatedCapHeatUser));
-                            ShowContinueError(state,
-                                              EnergyPlus::format("differs from Design Size Rated Heating Capacity of {:.2R} [W]", RatedCapHeatDes));
+                            ShowContinueError(state, std::format("User-Specified Rated Heating Capacity of {:.2f} [W]", RatedCapHeatUser));
+                            ShowContinueError(state, std::format("differs from Design Size Rated Heating Capacity of {:.2f} [W]", RatedCapHeatDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -2790,10 +2784,9 @@ namespace WaterToAirHeatPumpSimple {
                                         "SizeHVACWaterToAir: Potential issue with equipment sizing for coil {}:WATERTOAIRHEATPUMP:EQUATIONFIT {}",
                                         simpleWAHP.WAHPType,
                                         simpleWAHP.Name));
+                        ShowContinueError(state, std::format("User-Specified Rated Water Flow Rate of {:.5f} [m3/s]", RatedWaterVolFlowRateUser));
                         ShowContinueError(state,
-                                          EnergyPlus::format("User-Specified Rated Water Flow Rate of {:.5R} [m3/s]", RatedWaterVolFlowRateUser));
-                        ShowContinueError(
-                            state, EnergyPlus::format("differs from Design Size Rated Water Flow Rate of {:.5R} [m3/s]", RatedWaterVolFlowRateDes));
+                                          std::format("differs from Design Size Rated Water Flow Rate of {:.5f} [m3/s]", RatedWaterVolFlowRateDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }

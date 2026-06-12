@@ -1764,7 +1764,7 @@ namespace HeatBalanceManager {
                 DisplayString(state, "--Construction not found");
                 ErrorsFound = true;
                 ShowSevereError(state, std::format("No match on WINDOW5 data file for Construction={}, or error in data file.", ConstructAlphas(0)));
-                ShowContinueError(state, std::format("...Looking on file={}", window5DataFilePath.string())); // TODO: call getAbsolutePath maybe?
+                ShowContinueError(state, std::format("...Looking on file={}", window5DataFilePath)); // TODO: call getAbsolutePath maybe?
                 continue;
             }
 
@@ -3029,7 +3029,7 @@ namespace HeatBalanceManager {
                         print(state.files.eio, Format_732);
                         state.dataHeatBalMgr->FirstWarmupWrite = false;
                     }
-                    constexpr const char *Format_731{" Warmup Convergence Information - Detailed, {},{},{},{:.10R},{:.10R}\n"};
+                    constexpr const char *Format_731{" Warmup Convergence Information - Detailed, {},{},{},{:.10G},{:.10G}\n"};
                     print(state.files.eio,
                           Format_731,
                           state.dataHeatBal->Zone(ZoneNum).Name,
@@ -3277,7 +3277,7 @@ namespace HeatBalanceManager {
                 StdDevZoneLoad = std::sqrt(sum(state.dataHeatBalMgr->LoadZoneRptStdDev({1, state.dataHeatBalMgr->CountWarmupDayPoints})) /
                                            double(state.dataHeatBalMgr->CountWarmupDayPoints));
 
-                constexpr const char *Format_731(" Warmup Convergence Information,{},{},{:.10R},{:.10R},{},{},{:.10R},{:.10R},{},{}\n");
+                constexpr const char *Format_731(" Warmup Convergence Information,{},{},{:.10G},{:.10G},{},{},{:.10G},{:.10G},{},{}\n");
                 print(state.files.eio,
                       Format_731,
                       state.dataHeatBal->Zone(ZoneNum).Name,
@@ -3753,7 +3753,7 @@ namespace HeatBalanceManager {
                 ShowSevereError(state,
                                 std::format("SearchWindow5DataFile: For \"{}\" in {} file, appears to be a Unicode or binary file.",
                                             DesiredConstructionName,
-                                            DesiredFilePath.string()));
+                                            DesiredFilePath));
                 ShowContinueError(state, "...This file cannot be read by this program. Please save as PC or Unix file and try again");
                 ShowFatalError(state, "Program terminates due to previous condition.");
             }
@@ -3767,7 +3767,7 @@ namespace HeatBalanceManager {
         }
         ++FileLineCount;
         if (!has_prefixi(NextLine.data, "WINDOW5")) {
-            ShowSevereError(state, std::format("HeatBalanceManager: SearchWindow5DataFile: Error in Data File={}", DesiredFilePath.string()));
+            ShowSevereError(state, std::format("HeatBalanceManager: SearchWindow5DataFile: Error in Data File={}", DesiredFilePath));
             ShowFatalError(
                 state,
                 std::format("Error reading Window5 Data File: first word of window entry is \"{}\", should be Window5.", NextLine.data.substr(0, 7)));
