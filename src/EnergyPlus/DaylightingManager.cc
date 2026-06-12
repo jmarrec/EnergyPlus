@@ -9150,7 +9150,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
 
         auto openMapFile = [&](const fs::path &filePath) -> InputOutputFile & {
             auto &outputFile = *illumMap.mapFile;
-            outputFile.filePath = FileSystem::appendSuffixToPath(filePath, fmt::to_string(MapNum));
+            outputFile.filePath = FileSystem::appendSuffixToPath(filePath, std::to_string(MapNum));
             outputFile.ensure_open(state, "ReportIllumMap");
             return outputFile;
         };
@@ -9244,7 +9244,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
                 mapLine = std::format("({:.2f};{:.2f})=", illumMap.refPts(RefPt).absCoords.x, illumMap.refPts(RefPt).absCoords.y);
                 for (int R = RefPt; R <= RefPt + illumMap.Xnum - 1; ++R) {
                     int IllumOut = nint(illumMap.refPts(R).lumsHr[iLum_Illum]);
-                    std::string String = fmt::to_string(IllumOut);
+                    std::string String = std::to_string(IllumOut);
                     ;
                     if (!illumMap.refPts(R).inBounds) {
                         String = "*" + String;

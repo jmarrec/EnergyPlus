@@ -3002,7 +3002,6 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_ContFanCycCoil_Test)
     // get coil inputs
     VariableSpeedCoils::GetVarSpeedCoilInput(*state);
     // Setting predefined tables is needed though
-    OutputReportPredefined::SetPredefinedTables(*state);
     // Set up some environmental parameters
     state->dataEnvrn->OutDryBulbTemp = 5.0;
     state->dataEnvrn->OutHumRat = 0.0009;
@@ -6960,7 +6959,6 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_Coil_Defrost_Power_Fix_Test)
     state->dataVariableSpeedCoils->GetCoilsInputFlag = false;
 
     // Setting predefined tables is needed though
-    OutputReportPredefined::SetPredefinedTables(*state);
     // Set up some environmental parameters
     state->dataEnvrn->OutDryBulbTemp = -5.0;
     state->dataEnvrn->OutHumRat = 0.0009;
@@ -7247,7 +7245,6 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_ZeroRatedCoolingCapacity_Test)
     // get coil inputs
     VariableSpeedCoils::GetVarSpeedCoilInput(*state);
     // Setting predefined tables is needed though
-    OutputReportPredefined::SetPredefinedTables(*state);
     // Set up some environmental parameters
     state->dataEnvrn->OutDryBulbTemp = 5.0;
     state->dataEnvrn->OutHumRat = 0.0009;
