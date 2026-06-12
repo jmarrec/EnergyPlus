@@ -7612,7 +7612,7 @@ TEST_F(EnergyPlusFixture, AzimuthToCardinal)
         std::string cardinalDir = expectedAzimuthToCard.second;
 
         // Internal: Just to ensure that we gets the same one with round
-        EXPECT_EQ(format("{:.2R}", round(oriAzimuth * 100.0) / 100.0), format("{:.2R}", oriAzimuth));
+        EXPECT_EQ(std::format("{:.2f}", round(oriAzimuth * 100.0) / 100.0), std::format("{:.2f}", oriAzimuth));
 
         // Wall (odd entries)
 
@@ -7622,7 +7622,7 @@ TEST_F(EnergyPlusFixture, AzimuthToCardinal)
         // Check that the azimuth entry is the rounded version indeed
         EXPECT_EQ(
             OutputReportPredefined::RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchOpAzimuth, state->dataSurface->Surface(i).Name),
-            format("{:.2R}", expectedAzimuthToCard.first))
+            std::format("{:.2f}", expectedAzimuthToCard.first))
             << "Surface Name = " << state->dataSurface->Surface(i).Name;
         // Check that we do get the expected cardinal direction
         EXPECT_EQ(
@@ -7637,7 +7637,7 @@ TEST_F(EnergyPlusFixture, AzimuthToCardinal)
         // Check that the azimuth entry is the rounded version indeed
         EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(
                       *state, state->dataOutRptPredefined->pdchFenAzimuth, state->dataSurface->Surface(i + 1).Name),
-                  format("{:.2R}", expectedAzimuthToCard.first))
+                  std::format("{:.2f}", expectedAzimuthToCard.first))
             << "Surface Name = " << state->dataSurface->Surface(i + 1).Name;
         // Check that we do get the expected cardinal direction
         EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(
