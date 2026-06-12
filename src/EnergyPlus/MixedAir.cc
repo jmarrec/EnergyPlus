@@ -1781,10 +1781,10 @@ void GetOAControllerInputs(EnergyPlusData &state)
                   ventMech.Name,
                   (ventMech.availSched != nullptr) ? ventMech.availSched->Name : "");
 
-            print(state.files.eio, std::format("{},", yesNoNames[(int)ventMech.DCVFlag]));
+            print(state.files.eio, "{},", yesNoNames[(int)ventMech.DCVFlag]);
 
             if (ventMech.SystemOAMethod != DataSizing::SysOAMethod::Invalid) {
-                print(state.files.eio, printSysOAMethod[(int)ventMech.SystemOAMethod]);
+                print(state.files.eio, "{}", printSysOAMethod[(int)ventMech.SystemOAMethod]);
             } else {
                 print(state.files.eio, "Invalid/Unknown,");
             }
@@ -1793,7 +1793,7 @@ void GetOAControllerInputs(EnergyPlusData &state)
             print(state.files.eio, "{}", ventMech.NumofVentMechZones);
 
             for (int jZone = 1; jZone <= ventMech.NumofVentMechZones; ++jZone) {
-                auto &thisVentMechZone = ventMech.VentMechZone(jZone);
+                auto const &thisVentMechZone = ventMech.VentMechZone(jZone);
                 std::string const dsoaName = thisVentMechZone.ZoneDesignSpecOAObjIndex > 0
                                                  ? state.dataSize->OARequirements(thisVentMechZone.ZoneDesignSpecOAObjIndex).Name
                                                  : "";

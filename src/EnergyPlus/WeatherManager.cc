@@ -3633,13 +3633,13 @@ namespace Weather {
 
             // Hum Ind Type, Hum Ind Value at Max Temp, Hum Ind Units
             if (desDayInput.HumIndType == DesDayHumIndType::RelHumSch) {
-                print(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType]);
+                printRuntime(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType]);
             } else if (desDayInput.HumIndType == DesDayHumIndType::WBProfDef) {
-                print(state.files.eio,
-                      DesDayHumIndTypeStrings[(int)desDayInput.HumIndType],
-                      state.dataWeather->DesDayInput(state.dataWeather->Envrn).HumIndValue);
+                printRuntime(state.files.eio,
+                             DesDayHumIndTypeStrings[(int)desDayInput.HumIndType],
+                             state.dataWeather->DesDayInput(state.dataWeather->Envrn).HumIndValue);
             } else {
-                print(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType], desDayInput.HumIndValue);
+                printRuntime(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType], desDayInput.HumIndValue);
             }
 
             print(state.files.eio, "{:.0f},", desDayInput.PressBarom);
