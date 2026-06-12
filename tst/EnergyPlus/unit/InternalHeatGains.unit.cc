@@ -1635,14 +1635,14 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZoneBaseboardOutdoorTemperatureContr
                           "   **   ~~~   ** ...Capacity passed by parent object to size child component = 0.00 [W]",
                           "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for "
                           "ZoneBaseboard:OutdoorTemperatureControlled SECOND ZONE BBHEAT",
-                          "   **   ~~~   ** User-Specified Low Temperature [C] = -5.0",
-                          "   **   ~~~   ** differs from Design Size Low Temperature [C] = -17.3",
+                          "   **   ~~~   ** User-Specified Low Temperature [C] = -5.00",
+                          "   **   ~~~   ** differs from Design Size Low Temperature [C] = -17.30",
                           "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
                           "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
                           "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for "
                           "ZoneBaseboard:OutdoorTemperatureControlled SECOND ZONE BBHEAT",
-                          "   **   ~~~   ** User-Specified High Temperature [C] = 5.0",
-                          "   **   ~~~   ** differs from Design Size High Temperature [C] = 20.0",
+                          "   **   ~~~   ** User-Specified High Temperature [C] = 5.00",
+                          "   **   ~~~   ** differs from Design Size High Temperature [C] = 20.00",
                           "   **   ~~~   ** This may, or may not, indicate mismatched component sizes.",
                           "   **   ~~~   ** Verify that the value entered is intended and is consistent with other components.",
                           "   ************* SizeOaControlledBaseboard: Potential issue with equipment sizing for "

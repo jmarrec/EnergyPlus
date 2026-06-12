@@ -7070,8 +7070,8 @@ namespace InternalHeatGains {
                         if (std::abs(LowTemperatureDes - thisBBHeat.LowTemperature) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                             ShowMessage(state,
                                         EnergyPlus::format("{}: Potential issue with equipment sizing for {} {}", RoutineName, CompType, CompName));
-                            ShowContinueError(state, EnergyPlus::format("User-Specified {} = {:.1f}", SizingString, thisBBHeat.LowTemperature));
-                            ShowContinueError(state, EnergyPlus::format("differs from Design Size {} = {:.1f}", SizingString, LowTemperatureDes));
+                            ShowContinueError(state, EnergyPlus::format("User-Specified {} = {:.2f}", SizingString, thisBBHeat.LowTemperature));
+                            ShowContinueError(state, EnergyPlus::format("differs from Design Size {} = {:.2f}", SizingString, LowTemperatureDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -7104,8 +7104,8 @@ namespace InternalHeatGains {
                         if (std::abs(HighTemperatureDes - thisBBHeat.HighTemperature) > state.dataSize->AutoVsHardSizingDeltaTempThreshold) {
                             ShowMessage(state,
                                         EnergyPlus::format("{}: Potential issue with equipment sizing for {} {}", RoutineName, CompType, CompName));
-                            ShowContinueError(state, EnergyPlus::format("User-Specified {} = {:.1f}", SizingString, thisBBHeat.HighTemperature));
-                            ShowContinueError(state, EnergyPlus::format("differs from Design Size {} = {:.1f}", SizingString, HighTemperatureDes));
+                            ShowContinueError(state, EnergyPlus::format("User-Specified {} = {:.2f}", SizingString, thisBBHeat.HighTemperature));
+                            ShowContinueError(state, EnergyPlus::format("differs from Design Size {} = {:.2f}", SizingString, HighTemperatureDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
