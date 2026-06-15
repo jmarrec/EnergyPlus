@@ -4,11 +4,9 @@ Schedule Ruleset
 **Joe Robertson, National Laboratory of the Rockies**
 
  - May 1, 2026 - Initial Draft
+ - June 15, 2026 - Revised Draft
 
 ## Justification for New Feature ##
-
-For support of OpenStudio SDK <-> EnergyPlus Alignment.
-`OS:Schedule:Ruleset` is widely used; breaking API here would have too much impact.
 
 EnergyPlus currently requires users to decompose a yearly schedule into a hierarchy of objects: `Schedule:Day:*` → `Schedule:Week:*` → `Schedule:Year`.
 This is expressive but verbose and non-intuitive: a typical weekday/weekend/holiday schedule that a user might describe in a few sentences requires many objects and careful date-range bookkeeping.
