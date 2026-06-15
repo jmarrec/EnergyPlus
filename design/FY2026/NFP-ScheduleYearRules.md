@@ -53,7 +53,7 @@ The child(ren) `Schedule:Rule` object(s):
 - Requires an "order" be specified for determining rule index amongst other rules
 - Requires reference to a day schedule
 - Specifies which day(s) of the week for which the rule applies
-- Specifies the start month/day and end month/day (date range) or month/day (specific dates) for which the rule applies
+- Specifies the start month/day and end month/day (date ranges) for which the rule applies
 
 During input processing, EnergyPlus will resolve the parent rules object into the same internal `ScheduleDetailed` structure used by `Schedule:Year` and `Schedule:Compact`.
 No downstream code changes are required; the new objects are transparent to all schedule consumers.
@@ -102,8 +102,7 @@ No transition is required.
 Several new unit tests in `tst/EnergyPlus/unit/ScheduleManager.unit.cc` covering:
 
 - A parent rules object with two rules demonstrating priority (lower `Rule Priority Order` wins when date ranges overlap).
-- `DateRange` specification: correct day assignment across a date range, including wrap-around (e.g., Nov 1 – Jan 31).
-- `SpecificDates` specification: only the listed dates get the rule's day schedule.
+- Date range specification: correct day assignment across a date range, including wrap-around (e.g., Nov 1 – Jan 31).
 - Fallback to default day schedule when no rule matches.
 - Summer/winter/holiday design day overrides; fallback to default day schedule when not specified.
 - Validation errors: unknown `Day Schedule Name`, duplicate `Rule Order` values within a parent rules object (warning), missing Default Day Schedule.
@@ -116,7 +115,6 @@ Update `doc/input-output-reference/src/overview/group-schedules.tex` with new `S
 Key points to document:
 
 - The priority model: rules are evaluated in ascending `Rule Priority Order`; the first matching rule wins.
-- The `DateRange` vs `SpecificDates` date specification types and their respective fields.
 - The special-day schedule fields and their fallback behavior.
 - The relationship between `Schedule:Year:Rules`, `Schedule:Rule`, and `Schedule:Day:*` objects.
 
@@ -166,11 +164,11 @@ Schedule:Year:Rules,
 
 Schedule:Rule,
        \memo A Schedule:Rule defines one override rule for a Schedule:Year:Rules.
-       \memo Rules are evaluated in ascending Rule Order; the first matching rule wins.
-       \memo A rule matches a day if: (a) the day falls within the date specification,
+       \memo Rules are evaluated in ascending Rule Priority Order; the first matching rule wins.
+       \memo A rule matches a day if: (a) the day falls within the specified date ranges,
        \memo AND (b) the corresponding Apply <DayOfWeek> field is Yes.
-       \extensible:2 - repeat last two fields (Specific Month, Specific Day)
-       \min-fields 12
+       \extensible:4 - repeat last four fields (Start Month, Start Day, End Month, End Day)
+       \min-fields 11
   A1 , \field Name
        \type alpha
        \required-field
@@ -223,47 +221,27 @@ Schedule:Rule,
        \default No
        \key Yes
        \key No
-  A11, \field Date Specification Type
-       \type choice
-       \default DateRange
-       \key DateRange
-       \key SpecificDates
   N2 , \field Start Month
-       \note Used only when Date Specification Type = DateRange.
+       \begin-extensible
        \type integer
        \minimum 1
        \maximum 12
        \default 1
   N3 , \field Start Day
-       \note Used only when Date Specification Type = DateRange.
        \type integer
        \minimum 1
        \maximum 31
        \default 1
   N4 , \field End Month
-       \note Used only when Date Specification Type = DateRange.
        \type integer
        \minimum 1
        \maximum 12
        \default 12
-  N5 , \field End Day
-       \note Used only when Date Specification Type = DateRange.
+  N5 ; \field End Day
        \type integer
        \minimum 1
        \maximum 31
        \default 31
-  N6 , \field Specific Month
-       \note Used only when Date Specification Type = SpecificDates.
-       \note Repeat the Specific Month / Specific Day pair for each date.
-       \begin-extensible
-       \type integer
-       \minimum 1
-       \maximum 12
-  N7 ; \field Specific Day
-       \note Used only when Date Specification Type = SpecificDates.
-       \type integer
-       \minimum 1
-       \maximum 31
 ```
 
 Example IDF snippet:
@@ -291,7 +269,6 @@ Example IDF snippet:
     No,                                     !- Apply Thursday
     Yes,                                    !- Apply Friday
     No,                                     !- Apply Saturday
-    DateRange,                              !- Date Specification Type
     1,                                      !- Start Month
     1,                                      !- Start Day
     12,                                     !- End Month
