@@ -4841,6 +4841,146 @@ Schedule:Constant,
        \type real
        \default 0
 
+Schedule:Ruleset,
+       \memo A Schedule:Ruleset defines a yearly schedule using a default day profile and
+       \memo a prioritized list of override rules (Schedule:Rule objects). Rules are evaluated
+       \memo in ascending Rule Order; the first matching rule for a given day is used.
+       \memo If no rule matches, the Default Day Schedule is used.
+       \min-fields 3
+  A1,  \field Name
+       \type alpha
+       \required-field
+       \reference ScheduleNames
+       \reference ScheduleRulesetNames
+  A2,  \field Schedule Type Limits Name
+       \type object-list
+       \object-list ScheduleTypeLimitsNames
+  A3,  \field Default Day Schedule Name
+       \type object-list
+       \required-field
+       \object-list DayScheduleNames
+  A4,  \field Summer Design Day Schedule Name
+       \note If blank, the Default Day Schedule is used for Summer Design Days.
+       \type object-list
+       \object-list DayScheduleNames
+  A5,  \field Winter Design Day Schedule Name
+       \note If blank, the Default Day Schedule is used for Winter Design Days.
+       \type object-list
+       \object-list DayScheduleNames
+  A6,  \field Holiday Schedule Name
+       \note If blank, the Default Day Schedule is used for Holidays.
+       \type object-list
+       \object-list DayScheduleNames
+  A7,  \field Custom Day 1 Schedule Name
+       \note If blank, the Default Day Schedule is used for Custom Day 1.
+       \type object-list
+       \object-list DayScheduleNames
+  A8;  \field Custom Day 2 Schedule Name
+       \note If blank, the Default Day Schedule is used for Custom Day 2.
+       \type object-list
+       \object-list DayScheduleNames
+
+Schedule:Rule,
+       \memo A Schedule:Rule defines one override rule for a Schedule:Ruleset.
+       \memo Rules are evaluated in ascending Rule Order; the first matching rule wins.
+       \memo A rule matches a day if: (a) the day falls within the date specification,
+       \memo AND (b) the corresponding Apply <DayOfWeek> field is Yes.
+       \extensible:2 - repeat last two fields (Specific Month, Specific Day)
+       \min-fields 12
+  A1,  \field Name
+       \type alpha
+       \required-field
+       \reference ScheduleRuleNames
+  A2,  \field Schedule Ruleset Name
+       \type object-list
+       \required-field
+       \object-list ScheduleRulesetNames
+  N1,  \field Rule Order
+       \note Lower values have higher priority. Must be unique within a Schedule:Ruleset.
+       \type integer
+       \required-field
+       \minimum 0
+  A3,  \field Day Schedule Name
+       \type object-list
+       \required-field
+       \object-list DayScheduleNames
+  A4,  \field Apply Sunday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A5,  \field Apply Monday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A6,  \field Apply Tuesday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A7,  \field Apply Wednesday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A8,  \field Apply Thursday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A9,  \field Apply Friday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A10, \field Apply Saturday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A11, \field Date Specification Type
+       \type choice
+       \default DateRange
+       \key DateRange
+       \key SpecificDates
+  N2,  \field Start Month
+       \note Used only when Date Specification Type = DateRange.
+       \type integer
+       \minimum 1
+       \maximum 12
+       \default 1
+  N3,  \field Start Day
+       \note Used only when Date Specification Type = DateRange.
+       \type integer
+       \minimum 1
+       \maximum 31
+       \default 1
+  N4,  \field End Month
+       \note Used only when Date Specification Type = DateRange.
+       \type integer
+       \minimum 1
+       \maximum 12
+       \default 12
+  N5,  \field End Day
+       \note Used only when Date Specification Type = DateRange.
+       \type integer
+       \minimum 1
+       \maximum 31
+       \default 31
+  N6,  \field Specific Month 1
+       \note Used only when Date Specification Type = SpecificDates.
+       \note Repeat the Specific Month / Specific Day pair for each date.
+       \type integer
+       \begin-extensible
+       \minimum 1
+       \maximum 12
+  N7;  \field Specific Day 1
+       \note Used only when Date Specification Type = SpecificDates.
+       \type integer
+       \minimum 1
+       \maximum 31
+
 Schedule:File:Shading,
        \min-fields 1
        \memo A Schedule:File:Shading points to a CSV file that has 8760-8784
@@ -23145,34 +23285,41 @@ ZoneBaseboard:OutdoorTemperatureControlled,
        \object-list ScheduleNames
        \note units in Schedule should be fraction applied to capacity of the baseboard heat equipment, generally (0.0 - 1.0)
   N1 , \field Capacity at Low Temperature
-       \required-field
        \type real
        \units W
        \minimum> 0
+       \autosizable
+       \default autosize
   N2 , \field Low Temperature
-       \required-field
        \units C
        \type real
+       \autosizable
+       \default autosize
   N3 , \field Capacity at High Temperature
-       \required-field
        \type real
        \units W
        \minimum 0
+       \autosizable
+       \default autosize
   N4 , \field High Temperature
-       \required-field
        \units C
        \type real
+       \autosizable
+       \default autosize
   N5 , \field Fraction Radiant
        \type real
        \minimum 0.0
        \maximum 1.0
        \default 0
-  A4 ; \field End-Use Subcategory
+  A4 , \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
        \retaincase
        \default General
-
+  N6 ; \field Design Zone Heating Setpoint
+       \type real
+       \units C
+       \default 20.0
 
 SwimmingPool:Indoor,
        \memo Specifies an indoor swimming pools linked to a floor surface.
@@ -51482,15 +51629,16 @@ Fan:ZoneExhaust,
 FanPerformance:NightVentilation,
        \memo Specifies an alternate set of performance parameters for a fan. These alternate
        \memo parameters are used when a system manager (such as AvailabilityManager:NightVentilation)
-       \memo sets a specified flow rate. May be used with Fan:ConstantVolume, Fan:VariableVolume and
-       \memo Fan:ComponentModel. If the fan model senses that a fixed flow rate has been set, it
+       \memo sets a specified flow rate. May be used with Fan:ConstantVolume, Fan:VariableVolume,
+       \memo Fan:ZoneExhaust, and Fan:OnOff (not Fan:ComponentModel). Fan:SystemModel has its own
+       \memo night ventilation settings. If the fan model senses that a fixed flow rate has been set, it
        \memo will use these alternate performance parameters. It is assumed that the fan will
        \memo run at a fixed speed in the alternate mode.
   A1 , \field Fan Name
        \required-field
        \type object-list
-       \object-list FansCVandVAV
-       \object-list FansComponentModel
+       \object-list FansCVandOnOffandVAV
+       \object-list FansZoneExhaust
   N1 , \field Fan Total Efficiency
        \type real
        \required-field

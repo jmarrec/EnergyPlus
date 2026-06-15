@@ -104,6 +104,7 @@ add_simulation_test(IDF_FILE 5ZoneIceStorage_autosized.idf EPW_FILE USA_IL_Chica
 add_simulation_test(IDF_FILE 5ZoneNightVent1.idf EPW_FILE USA_CA_Fresno.Air.Terminal.723890_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneNightVent2.idf EPW_FILE USA_CA_Fresno.Air.Terminal.723890_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneNightVent3.idf EPW_FILE USA_CA_Fresno.Air.Terminal.723890_TMY3.epw)
+add_simulation_test(IDF_FILE 5ZoneNightVent4.idf EPW_FILE USA_CA_Fresno.Air.Terminal.723890_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneReturnFan.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneSteamBaseboard.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneSupRetPlenRAB.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
@@ -465,6 +466,7 @@ add_simulation_test(IDF_FILE PlantLoopChainDeadband.idf EPW_FILE USA_IL_Chicago-
 add_simulation_test(IDF_FILE PlantLoopChainDualDeadband.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopChainHeating.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_AirSource.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
+add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_AirSource_Parallel.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_AirSource_BufferTank.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_EIR_WaterSource.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE PlantLoopHeatPump_Fuel-Fired.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
@@ -786,6 +788,7 @@ add_simulation_test(IDF_FILE UnitarySystem_MultiSpeedDX_EconoStaging.idf EPW_FIL
 add_simulation_test(IDF_FILE UnitarySystem_VariableSpeedDX_SZVAV.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw ANNUAL_SIMULATION)
 add_simulation_test(IDF_FILE _ResidentialBase.idf EPW_FILE USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw ANNUAL_SIMULATION)
 add_simulation_test(IDF_FILE _ResidentialBaseboardHardSize.idf EPW_FILE USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw)
+add_simulation_test(IDF_FILE _ResidentialBaseScheduleRuleset.idf EPW_FILE USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw)
 
 
 # ASHRAE 90.1-2019 DOE commercial prototype models

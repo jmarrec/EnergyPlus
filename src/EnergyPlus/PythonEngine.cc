@@ -45,9 +45,6 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// C++ Headers
-#include <format>
-
 // Third Party Headers
 #if LINK_WITH_PYTHON
 #    ifdef _DEBUG
@@ -61,18 +58,29 @@
 #    else
 #        include <Python.h>
 #    endif
+#endif
 
-#    include <fmt/format.h>
-namespace fmt {
-template <> struct formatter<PyStatus>
+// C++ Headers
+#include <filesystem>
+#include <format>
+
+// EnergyPlus Headers
+#include <EnergyPlus/DataStringGlobals.hh>
+#include <EnergyPlus/FileSystem.hh>
+#include <EnergyPlus/PluginManager.hh>
+#include <EnergyPlus/PythonEngine.hh>
+#include <EnergyPlus/UtilityRoutines.hh>
+
+#if LINK_WITH_PYTHON
+template <> struct std::formatter<PyStatus>
 {
     // parse is inherited from formatter<string_view>.
-    constexpr auto parse(format_parse_context &ctx) -> format_parse_context::iterator
+    constexpr auto parse(std::format_parse_context &ctx) -> std::format_parse_context::iterator
     {
         return ctx.begin();
     }
 
-    auto format(const PyStatus &status, format_context &ctx) const -> format_context::iterator
+    template <typename FormatContext> auto format(const PyStatus &status, FormatContext &ctx) const
     {
         if (PyStatus_Exception(status) == 0) {
             return ctx.out();
@@ -92,15 +100,7 @@ template <> struct formatter<PyStatus>
         return ctx.out();
     }
 };
-} // namespace fmt
-
 #endif
-
-// EnergyPlus Headers
-#include <EnergyPlus/DataStringGlobals.hh>
-#include <EnergyPlus/PluginManager.hh>
-#include <EnergyPlus/PythonEngine.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
 
 namespace EnergyPlus {
 
@@ -167,7 +167,7 @@ namespace Python {
                     if (!traceback_line.empty() && traceback_line[traceback_line.length() - 1] == '\n') {
                         traceback_line.erase(traceback_line.length() - 1);
                     }
-                    EnergyPlus::ShowContinueError(state, EnergyPlus::format(" >>> {}", traceback_line));
+                    EnergyPlus::ShowContinueError(state, std::format(" >>> {}", traceback_line));
                 }
                 // PyList_GetItem returns a borrowed reference, do not decrement
             }
@@ -198,8 +198,7 @@ namespace Python {
             unicodeIncludePath = PyUnicode_FromString(s.c_str()); // New reference
         }
         if (unicodeIncludePath == nullptr) {
-            EnergyPlus::ShowFatalError(
-                state, EnergyPlus::format("ERROR converting the path \"{}\" for addition to the sys.path in Python", includePath.generic_string()));
+            EnergyPlus::ShowFatalError(state, std::format("ERROR converting the path \"{:g}\" for addition to the sys.path in Python", includePath));
         }
 
         PyObject *sysPath = PySys_GetObject("path"); // Borrowed reference
@@ -210,12 +209,11 @@ namespace Python {
             if (PyErr_Occurred() != nullptr) {
                 reportPythonError(state);
             }
-            EnergyPlus::ShowFatalError(state, EnergyPlus::format("ERROR adding \"{}\" to the sys.path in Python", includePath.generic_string()));
+            EnergyPlus::ShowFatalError(state, std::format("ERROR adding \"{:g}\" to the sys.path in Python", includePath));
         }
 
         if (userDefinedPath) {
-            EnergyPlus::ShowMessage(state,
-                                    EnergyPlus::format("Successfully added path \"{}\" to the sys.path in Python", includePath.generic_string()));
+            EnergyPlus::ShowMessage(state, std::format("Successfully added path \"{:g}\" to the sys.path in Python", includePath));
         }
 
         // PyRun_SimpleString)("print(' EPS : ' + str(sys.path))");
@@ -234,7 +232,7 @@ namespace Python {
         preConfig.utf8_mode = 1;
         status = Py_PreInitialize(&preConfig);
         if (PyStatus_Exception(status) != 0) {
-            ShowFatalError(state, EnergyPlus::format("Could not pre-initialize Python to speak UTF-8... {}", status));
+            ShowFatalError(state, std::format("Could not pre-initialize Python to speak UTF-8... {}", status));
         }
 
         PyConfig config;
@@ -243,12 +241,12 @@ namespace Python {
 
         status = PyConfig_SetBytesString(&config, &config.program_name, PluginManagement::programName);
         if (PyStatus_Exception(status) != 0) {
-            ShowFatalError(state, EnergyPlus::format("Could not initialize program_name on PyConfig... {}", status));
+            ShowFatalError(state, std::format("Could not initialize program_name on PyConfig... {}", status));
         }
 
         status = PyConfig_Read(&config);
         if (PyStatus_Exception(status) != 0) {
-            ShowFatalError(state, EnergyPlus::format("Could not read back the PyConfig... {}", status));
+            ShowFatalError(state, std::format("Could not read back the PyConfig... {}", status));
         }
 
         if constexpr (std::is_same_v<typename fs::path::value_type, wchar_t>) {
@@ -258,20 +256,16 @@ namespace Python {
 
             status = PyConfig_SetString(&config, &config.home, wcharPath);
             if (PyStatus_Exception(status) != 0) {
-                ShowFatalError(state,
-                               EnergyPlus::format("Could not set home to {} on PyConfig... {}", pathToPythonPackages.generic_string(), status));
+                ShowFatalError(state, std::format("Could not set home to {:g} on PyConfig... {}", pathToPythonPackages, status));
             }
             status = PyConfig_SetString(&config, &config.base_prefix, wcharPath);
             if (PyStatus_Exception(status) != 0) {
-                ShowFatalError(
-                    state, EnergyPlus::format("Could not set base_prefix to {} on PyConfig... {}", pathToPythonPackages.generic_string(), status));
+                ShowFatalError(state, std::format("Could not set base_prefix to {:g} on PyConfig... {}", pathToPythonPackages, status));
             }
             config.module_search_paths_set = 1;
             status = PyWideStringList_Append(&config.module_search_paths, wcharPath);
             if (PyStatus_Exception(status) != 0) {
-                ShowFatalError(
-                    state,
-                    EnergyPlus::format("Could not add {} to module_search_paths on PyConfig... {}", pathToPythonPackages.generic_string(), status));
+                ShowFatalError(state, std::format("Could not add {:g} to module_search_paths on PyConfig... {}", pathToPythonPackages, status));
             }
 
         } else {
@@ -282,20 +276,16 @@ namespace Python {
 
             status = PyConfig_SetString(&config, &config.home, wcharPath);
             if (PyStatus_Exception(status) != 0) {
-                ShowFatalError(state,
-                               EnergyPlus::format("Could not set home to {} on PyConfig... {}", pathToPythonPackages.generic_string(), status));
+                ShowFatalError(state, std::format("Could not set home to {:g} on PyConfig... {}", pathToPythonPackages, status));
             }
             status = PyConfig_SetString(&config, &config.base_prefix, wcharPath);
             if (PyStatus_Exception(status) != 0) {
-                ShowFatalError(
-                    state, EnergyPlus::format("Could not set base_prefix to {} on PyConfig... {}", pathToPythonPackages.generic_string(), status));
+                ShowFatalError(state, std::format("Could not set base_prefix to {:g} on PyConfig... {}", pathToPythonPackages, status));
             }
             config.module_search_paths_set = 1;
             status = PyWideStringList_Append(&config.module_search_paths, wcharPath);
             if (PyStatus_Exception(status) != 0) {
-                ShowFatalError(
-                    state,
-                    EnergyPlus::format("Could not add {} to module_search_paths on PyConfig... {}", pathToPythonPackages.generic_string(), status));
+                ShowFatalError(state, std::format("Could not add {:g} to module_search_paths on PyConfig... {}", pathToPythonPackages, status));
             }
 
             PyMem_RawFree(wcharPath);
@@ -381,7 +371,7 @@ sys.argv.append("energyplus")
         fs::path const pathToPythonPackages = programDir / "python_lib";
         std::string sPathToPythonPackages = std::string(pathToPythonPackages.string());
         std::replace(sPathToPythonPackages.begin(), sPathToPythonPackages.end(), '\\', '/');
-        cmd += EnergyPlus::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
+        cmd += std::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
         return cmd;
     }
 
@@ -392,13 +382,13 @@ sys.argv.clear()
 sys.argv.append("energyplus")
 )python";
         for (const auto &arg : python_fwd_args) {
-            cmd += EnergyPlus::format("sys.argv.append(\"{}\")\n", arg);
+            cmd += std::format("sys.argv.append(\"{}\")\n", arg);
         }
         fs::path programDir = FileSystem::getParentDirectoryPath(FileSystem::getAbsolutePath(FileSystem::getProgramPath()));
         fs::path const pathToPythonPackages = programDir / "python_lib";
         std::string sPathToPythonPackages = std::string(pathToPythonPackages.string());
         std::replace(sPathToPythonPackages.begin(), sPathToPythonPackages.end(), '\\', '/');
-        cmd += EnergyPlus::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
+        cmd += std::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
         std::string tclConfigDir;
         std::string tkConfigDir;
         for (auto &p : std::filesystem::directory_iterator(pathToPythonPackages)) {
@@ -416,8 +406,8 @@ sys.argv.append("energyplus")
             }
         }
         cmd += "from os import environ\n";
-        cmd += EnergyPlus::format("environ[\'TCL_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tclConfigDir);
-        cmd += EnergyPlus::format("environ[\'TK_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tkConfigDir);
+        cmd += std::format("environ[\'TCL_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tclConfigDir);
+        cmd += std::format("environ[\'TK_LIBRARY\'] = \"{}/{}\"\n", sPathToPythonPackages, tkConfigDir);
         return cmd;
     }
 

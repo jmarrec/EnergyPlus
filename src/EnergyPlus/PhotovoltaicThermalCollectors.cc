@@ -378,8 +378,8 @@ namespace PhotovoltaicThermalCollectors {
                         state, std::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                     ShowContinueError(state, "Surface used for solar collector faces down");
                     ShowContinueError(state,
-                                      EnergyPlus::format("Surface tilt angle (degrees from ground outward normal) = {:.2R}",
-                                                         state.dataSurface->Surface(thisPVT.SurfNum).Tilt));
+                                      std::format("Surface tilt angle (degrees from ground outward normal) = {:.2f}",
+                                                  state.dataSurface->Surface(thisPVT.SurfNum).Tilt));
                 }
             } // check surface
 
@@ -854,9 +854,8 @@ namespace PhotovoltaicThermalCollectors {
                         if ((std::abs(DesignVolFlowRateDes - DesignVolFlowRateUser) / DesignVolFlowRateUser) >
                             state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(state, std::format("SizeSolarCollector: Potential issue with equipment sizing for {}", this->Name));
-                            ShowContinueError(state, EnergyPlus::format("User-Specified Design Flow Rate of {:.5R} [W]", DesignVolFlowRateUser));
-                            ShowContinueError(state,
-                                              EnergyPlus::format("differs from Design Size Design Flow Rate of {:.5R} [W]", DesignVolFlowRateDes));
+                            ShowContinueError(state, std::format("User-Specified Design Flow Rate of {:.5f} [W]", DesignVolFlowRateUser));
+                            ShowContinueError(state, std::format("differs from Design Size Design Flow Rate of {:.5f} [W]", DesignVolFlowRateDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -924,10 +923,9 @@ namespace PhotovoltaicThermalCollectors {
                                 if ((std::abs(DesignVolFlowRateDes - DesignVolFlowRateUser) / DesignVolFlowRateUser) >
                                     state.dataSize->AutoVsHardSizingThreshold) {
                                     ShowMessage(state, std::format("SizeSolarCollector: Potential issue with equipment sizing for {}", this->Name));
+                                    ShowContinueError(state, std::format("User-Specified Design Flow Rate of {:.5f} [W]", DesignVolFlowRateUser));
                                     ShowContinueError(state,
-                                                      EnergyPlus::format("User-Specified Design Flow Rate of {:.5R} [W]", DesignVolFlowRateUser));
-                                    ShowContinueError(
-                                        state, EnergyPlus::format("differs from Design Size Design Flow Rate of {:.5R} [W]", DesignVolFlowRateDes));
+                                                      std::format("differs from Design Size Design Flow Rate of {:.5f} [W]", DesignVolFlowRateDes));
                                     ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                     ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                                 }

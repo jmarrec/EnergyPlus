@@ -118,6 +118,7 @@ namespace Sched {
     {
         Invalid = -1,
         Year,
+        Ruleset,
         Compact,
         File,
         Constant,
@@ -246,6 +247,36 @@ namespace Sched {
         void setMinMaxVals(EnergyPlusData &state);
     };
 
+    struct RuleSchedule : public ScheduleBase
+    {
+        // Members
+        std::string scheduleRulesetName;
+        int ruleOrder;
+        DaySchedule * daySched = nullptr;
+        bool applySunday;
+        bool applyMonday;
+        bool applyTuesday;
+        bool applyWednesday;
+        bool applyThursday;
+        bool applyFriday;
+        bool applySaturday;
+        std::string dateSpecificationType;
+        int startMonth;
+        int startDay;
+        int endMonth;
+        int endDay;
+        std::vector<int> specificDates;
+
+        RuleSchedule() = default;
+        virtual ~RuleSchedule() = default;
+        void can_instantiate()
+        {
+            assert(false);
+        } // makes class concrete, but don't call this
+
+        void setMinMaxVals(EnergyPlusData &state);
+    };
+
     struct Schedule : public DayOrYearSchedule
     {
         SchedType type = SchedType::Invalid;
@@ -365,6 +396,7 @@ namespace Sched {
     ScheduleConstant *AddScheduleConstant(EnergyPlusData &state, std::string const &name, Real64 value = 0.0);
     DaySchedule *AddDaySchedule(EnergyPlusData &state, std::string const &name);
     WeekSchedule *AddWeekSchedule(EnergyPlusData &state, std::string const &name);
+    RuleSchedule *AddRuleSchedule(EnergyPlusData &state, std::string const &name);
 
     void ProcessScheduleInput(EnergyPlusData &state);
 
@@ -389,6 +421,9 @@ namespace Sched {
 
     int GetWeekScheduleNum(EnergyPlusData &state, std::string const &name);
     WeekSchedule *GetWeekSchedule(EnergyPlusData &state, std::string const &name);
+
+    //int GetRuleScheduleNum(EnergyPlusData &state, std::string const &name);
+    RuleSchedule *GetPriorityRuleSchedule(EnergyPlusData &state, std::string const &scheduleRulesetName, int const day);
 
     int GetScheduleNum(EnergyPlusData &state, std::string const &name);
     Schedule *GetSchedule(EnergyPlusData &state, std::string const &name);
@@ -505,11 +540,13 @@ struct ScheduleManagerData : BaseGlobalStruct
     std::vector<Sched::Schedule *> schedules;         // Year schedule
     std::vector<Sched::DaySchedule *> daySchedules;
     std::vector<Sched::WeekSchedule *> weekSchedules;
+    std::vector<Sched::RuleSchedule *> ruleSchedules;
 
     std::map<std::string, int> scheduleTypeMap;
     std::map<std::string, int> scheduleMap;
     std::map<std::string, int> dayScheduleMap;
     std::map<std::string, int> weekScheduleMap;
+    std::map<std::string, int> ruleScheduleMap;
 
     void init_constant_state(EnergyPlusData &state) override
     {
@@ -553,6 +590,12 @@ struct ScheduleManagerData : BaseGlobalStruct
         }
         weekSchedules.clear();
         weekScheduleMap.clear();
+
+        for (auto &ruleSchedule : ruleSchedules) {
+            delete ruleSchedule;
+        }
+        ruleSchedules.clear();
+        ruleScheduleMap.clear();
     }
 };
 
