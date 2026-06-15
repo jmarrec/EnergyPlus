@@ -10,6 +10,12 @@ Schedule Ruleset
 
 EnergyPlus currently requires users to decompose a yearly schedule into a hierarchy of objects: `Schedule:Day:*` → `Schedule:Week:*` → `Schedule:Year`.
 This is expressive but verbose: a typical weekday/weekend/holiday schedule that a user might describe in a few sentences requires many objects and careful date-range bookkeeping.
+The existing schedule types are:
+- `Schedule:Year`
+- `Schedule:Compact`
+- `Schedule:Constant`
+- `Schedule:File`
+- `Schedule:File:Shading`
 
 The OpenStudio SDK has long offered `OS:Schedule:Ruleset` as a higher-level, rule-based abstraction: the user defines a default day schedule and a prioritized list of override rules, each specifying which days of the week and which date range (or specific dates) the rule applies to.
 Special design day schedules (summer, winter, holiday, custom) are also first-class fields.
