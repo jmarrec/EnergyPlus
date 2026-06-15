@@ -602,10 +602,10 @@ namespace StandardRatings {
                     General::SolveRoot(state, Acc, IterMax, SolFla, CondenserOutletTemp, f, CondenserOutletTemp0, CondenserOutletTemp1);
                     if (SolFla == -1) {
                         ShowWarningError(state, "Iteration limit exceeded in calculating Reform Chiller IPLV");
-                        ShowContinueError(state, EnergyPlus::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
+                        ShowContinueError(state, std::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
                     } else if (SolFla == -2) {
                         ShowWarningError(state, "Bad starting values for calculating Reform Chiller IPLV");
-                        ShowContinueError(state, EnergyPlus::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
+                        ShowContinueError(state, std::format("Reformulated Chiller IPLV calculation failed for {}", ChillerName));
                     }
 
                     if (RedCapNum == 0) {
@@ -675,42 +675,41 @@ namespace StandardRatings {
                 } else {
                     {
                         if (ChillerType == DataPlant::PlantEquipmentType::Chiller_ElectricEIR) {
-                            ShowWarningError(state,
-                                             EnergyPlus::format("Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.",
-                                                                ChillerName));
+                            ShowWarningError(
+                                state,
+                                std::format("Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.", ChillerName));
                         } else if (ChillerType == DataPlant::PlantEquipmentType::Chiller_ElectricReformEIR) {
 
                             ShowWarningError(
                                 state,
-                                EnergyPlus::format("Chiller:Electric:ReformulatedEIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.",
-                                                   ChillerName));
+                                std::format("Chiller:Electric:ReformulatedEIR = {}:  Integrated Part Load Value (IPLV) cannot be calculated.",
+                                            ChillerName));
                         }
                     }
                     if (RefCap <= 0.0) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(
-                                " Check the chiller autosized or user specified capacity. Autosized or specified chiller capacity = {:.2R}", RefCap));
+                            std::format(" Check the chiller autosized or user specified capacity. Autosized or specified chiller capacity = {:.2f}",
+                                        RefCap));
                     }
                     if (RefCOP <= 0.0) {
-                        ShowContinueError(state,
-                                          EnergyPlus::format(" Check the chiller reference or rated COP specified. Specified COP = {:.2R}", RefCOP));
+                        ShowContinueError(state, std::format(" Check the chiller reference or rated COP specified. Specified COP = {:.2f}", RefCOP));
                     }
                     if (ChillerCapFT <= 0.0) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
-                                               Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                               GetCurveName(state, CapFTempCurveIndex)));
-                        ShowContinueError(state, EnergyPlus::format(" ..ChillerCapFT value at standard test condition = {:.2R}", ChillerCapFT));
+                            std::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, CapFTempCurveIndex)));
+                        ShowContinueError(state, std::format(" ..ChillerCapFT value at standard test condition = {:.2f}", ChillerCapFT));
                     }
                     if (ChillerEIRFT <= 0.0) {
                         ShowContinueError(
                             state,
-                            EnergyPlus::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
-                                               Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                               GetCurveName(state, EIRFTempCurveIndex)));
-                        ShowContinueError(state, EnergyPlus::format(" ..ChillerEIRFT value at standard test condition = {:.2R}", ChillerEIRFT));
+                            std::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}.",
+                                        Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                        GetCurveName(state, EIRFTempCurveIndex)));
+                        ShowContinueError(state, std::format(" ..ChillerEIRFT value at standard test condition = {:.2f}", ChillerEIRFT));
                     }
                     IPLV = 0.0;
                     break;
@@ -758,7 +757,7 @@ namespace StandardRatings {
         }
 
         {
-            static constexpr std::string_view Format_991(" Chiller Standard Rating Information, {}, {}, {:.2R}, {:.2R}\n");
+            static constexpr std::string_view Format_991(" Chiller Standard Rating Information, {}, {}, {:.2f}, {:.2f}\n");
             if (ChillerType == DataPlant::PlantEquipmentType::Chiller_ElectricEIR) {
 
                 print(state.files.eio, Format_991, "Chiller:Electric:EIR", ChillerName, IPLVValueSI, IPLVValueIP);
@@ -860,30 +859,27 @@ namespace StandardRatings {
 
                     ShowWarningError(
                         state,
-                        EnergyPlus::format(
-                            "Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) calculated is not at the AHRI test condition.",
-                            ChillerName));
+                        std::format("Chiller:Electric:EIR = {}:  Integrated Part Load Value (IPLV) calculated is not at the AHRI test condition.",
+                                    ChillerName));
                 } else if (ChillerType == DataPlant::PlantEquipmentType::Chiller_ElectricReformEIR) {
 
                     ShowWarningError(
                         state,
-                        EnergyPlus::format(
+                        std::format(
                             "Chiller:Electric:ReformulatedEIR = {}:  Integrated Part Load Value (IPLV) calculated is not at the AHRI test condition.",
                             ChillerName));
                 }
                 if (CapCurveIPLVLimitsExceeded) {
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                           Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                           GetCurveName(state, CapFTempCurveIndex)));
+                    ShowContinueError(state,
+                                      std::format(" Check limits in Cooling Capacity Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                                  Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                                  GetCurveName(state, CapFTempCurveIndex)));
                 }
                 if (EIRCurveIPLVLimitsExceeded) {
-                    ShowContinueError(
-                        state,
-                        EnergyPlus::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
-                                           Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                           GetCurveName(state, EIRFTempCurveIndex)));
+                    ShowContinueError(state,
+                                      std::format(" Check limits in EIR Function of Temperature Curve, Curve Type = {}, Curve Name = {}",
+                                                  Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                                  GetCurveName(state, EIRFTempCurveIndex)));
                 }
             }
         }
@@ -2122,65 +2118,62 @@ namespace StandardRatings {
         if (TotCapTempModFacRated < 0.0 || CapTempModFacH2Test < 0.0 || CapTempModFacH3Test < 0.0 || EIRTempModFacRated < 0.0 ||
             EIRTempModFacH2Test < 0.0 || EIRTempModFacH3Test < 0.0) {
             if (TotCapTempModFacRated < 0.0) {
-                ShowSevereError(state,
-                                EnergyPlus::format(
-                                    " Invalid Total Heating Capacity Function of Temperature Curve value = {:.2R}, Curve Type = {}, Curve Name = {}",
-                                    TotCapTempModFacRated,
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                ShowSevereError(
+                    state,
+                    std::format(" Invalid Total Heating Capacity Function of Temperature Curve value = {:.2f}, Curve Type = {}, Curve Name = {}",
+                                TotCapTempModFacRated,
+                                Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                GetCurveName(state, CapFTempCurveIndex)));
                 ShowContinueError(state,
                                   " ...Net heating capacity at high temperature is set to zero. The curve value must be > 0. Check the curve.");
                 NetHeatingCapRated = 0.0;
                 NetHeatingCapRated_2023 = 0.0;
             }
             if (CapTempModFacH3Test < 0.0) {
-                ShowSevereError(state,
-                                EnergyPlus::format(
-                                    " Invalid Total Heating Capacity Function of Temperature Curve value = {:.2R}, Curve Type = {}, Curve Name = {}",
-                                    CapTempModFacH3Test,
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                ShowSevereError(
+                    state,
+                    std::format(" Invalid Total Heating Capacity Function of Temperature Curve value = {:.2f}, Curve Type = {}, Curve Name = {}",
+                                CapTempModFacH3Test,
+                                Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                GetCurveName(state, CapFTempCurveIndex)));
                 ShowContinueError(state, " ...Net heating capacity at low temperature is set to zero. The curve value must be > 0. Check the curve.");
                 NetHeatingCapH3Test = 0.0;
                 NetHeatingCapH3Test_2023 = 0.0;
             }
             if (CapTempModFacH2Test < 0.0) {
-                ShowSevereError(state,
-                                EnergyPlus::format(
-                                    " Invalid Total Heating Capacity Function of Temperature Curve value = {:.2R}, Curve Type = {}, Curve Name = {}",
-                                    CapTempModFacH2Test,
-                                    Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
-                                    GetCurveName(state, CapFTempCurveIndex)));
+                ShowSevereError(
+                    state,
+                    std::format(" Invalid Total Heating Capacity Function of Temperature Curve value = {:.2f}, Curve Type = {}, Curve Name = {}",
+                                CapTempModFacH2Test,
+                                Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(CapFTempCurveIndex)->curveType)],
+                                GetCurveName(state, CapFTempCurveIndex)));
                 ShowContinueError(state, " ...HSPF calculation is incorrect. The curve value must be > 0. Check the curve.");
                 NetHeatingCapH3Test = 0.0;
                 NetHeatingCapH3Test_2023 = 0.0;
             }
             // check EIR curve values
             if (EIRTempModFacRated < 0.0) {
-                ShowSevereError(
-                    state,
-                    EnergyPlus::format(" Invalid EIR Function of Temperature Curve value = {:.2R}, Curve Type = {}, Curve Name = {}",
-                                       EIRTempModFacRated,
-                                       Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                       GetCurveName(state, EIRFTempCurveIndex)));
+                ShowSevereError(state,
+                                std::format(" Invalid EIR Function of Temperature Curve value = {:.2f}, Curve Type = {}, Curve Name = {}",
+                                            EIRTempModFacRated,
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFTempCurveIndex)));
                 ShowContinueError(state, " ...HSPF calculation is incorrect. The curve value must be > 0. Check the curve.");
             }
             if (EIRTempModFacH2Test < 0.0) {
-                ShowSevereError(
-                    state,
-                    EnergyPlus::format(" Invalid EIR Function of Temperature Curve value = {:.2R}, Curve Type = {}, Curve Name = {}",
-                                       EIRTempModFacH2Test,
-                                       Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                       GetCurveName(state, EIRFTempCurveIndex)));
+                ShowSevereError(state,
+                                std::format(" Invalid EIR Function of Temperature Curve value = {:.2f}, Curve Type = {}, Curve Name = {}",
+                                            EIRTempModFacH2Test,
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFTempCurveIndex)));
                 ShowContinueError(state, " ...HSPF calculation is incorrect. The curve value must be > 0. Check the curve.");
             }
             if (EIRTempModFacH3Test < 0.0) {
-                ShowSevereError(
-                    state,
-                    EnergyPlus::format(" Invalid EIR Function of Temperature Curve value = {:.2R}, Curve Type = {}, Curve Name = {}",
-                                       EIRTempModFacH3Test,
-                                       Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
-                                       GetCurveName(state, EIRFTempCurveIndex)));
+                ShowSevereError(state,
+                                std::format(" Invalid EIR Function of Temperature Curve value = {:.2f}, Curve Type = {}, Curve Name = {}",
+                                            EIRTempModFacH3Test,
+                                            Curve::objectNames[static_cast<int>(state.dataCurveManager->curves(EIRFTempCurveIndex)->curveType)],
+                                            GetCurveName(state, EIRFTempCurveIndex)));
                 ShowContinueError(state, " ...HSPF calculation is incorrect. The curve value must be > 0. Check the curve.");
             }
             ShowContinueError(state, " ...HSPF value has been reset to 0.0 and simulation is continuing.");
@@ -3777,12 +3770,11 @@ namespace StandardRatings {
             }
 
         } else {
-            ShowSevereError(
-                state,
-                EnergyPlus::format("Standard Ratings: {} {} has esither zero rated total cooling capacity or zero rated air volume flow rate. "
-                                   "Standard ratings cannot be calculated.",
-                                   HVAC::coilTypeNames[(int)coilType],
-                                   DXCoilName));
+            ShowSevereError(state,
+                            std::format("Standard Ratings: {} {} has esither zero rated total cooling capacity or zero rated air volume flow rate. "
+                                        "Standard ratings cannot be calculated.",
+                                        HVAC::coilTypeNames[(int)coilType],
+                                        DXCoilName));
         }
         return StandarRatingResults;
     }
@@ -3885,11 +3877,10 @@ namespace StandardRatings {
                 }
             }
         } else {
-            ShowSevereError(
-                state,
-                EnergyPlus::format("Standard Ratings: {} {} has zero rated total cooling capacity. Capacity and Power cannot be calculated.",
-                                   HVAC::coilTypeNames[(int)coilType],
-                                   DXCoilName));
+            ShowSevereError(state,
+                            std::format("Standard Ratings: {} {} has zero rated total cooling capacity. Capacity and Power cannot be calculated.",
+                                        HVAC::coilTypeNames[(int)coilType],
+                                        DXCoilName));
         }
     }
 
@@ -5662,9 +5653,9 @@ namespace StandardRatings {
 
         } else {
             ShowSevereError(state,
-                            EnergyPlus::format("Standard Ratings: Coil:Cooling:DX {}"
-                                               " has zero rated total cooling capacity. Standard ratings cannot be calculated.",
-                                               DXCoilName)); // TODO: Use dynamic COIL TYPE and COIL INSTANCE name later);
+                            std::format("Standard Ratings: Coil:Cooling:DX {}"
+                                        " has zero rated total cooling capacity. Standard ratings cannot be calculated.",
+                                        DXCoilName)); // TODO: Use dynamic COIL TYPE and COIL INSTANCE name later);
         }
 
         // From SEER2 implementation
@@ -6775,7 +6766,7 @@ namespace StandardRatings {
                 }
 
                 static constexpr std::string_view Format_991(
-                    " DX Cooling Coil Standard Rating Information, {}, {}, {:.1R}, {:.2R}, {:.2R}, {:.2R}, {:.2R}, {:.1R}\n");
+                    " DX Cooling Coil Standard Rating Information, {}, {}, {:.1f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.1f}\n");
                 print(state.files.eio,
                       Format_991,
                       HVAC::coilTypeNames[(int)coilType],
@@ -6831,7 +6822,7 @@ namespace StandardRatings {
                 }
 
                 static constexpr std::string_view Format_991_(
-                    " DX Cooling Coil AHRI 2023 Standard Rating Information, {}, {}, {:.1R}, {:.2R}, {:.2R}, {:.2R}, {:.2R}, {:.1R}\n");
+                    " DX Cooling Coil AHRI 2023 Standard Rating Information, {}, {}, {:.1f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.1f}\n");
                 print(state.files.eio,
                       Format_991_,
                       HVAC::coilTypeNames[(int)coilType],
@@ -6888,7 +6879,7 @@ namespace StandardRatings {
                     state.dataHVACGlobal->StandardRatingsMyHeatOneTimeFlag = false;
                 }
 
-                static constexpr std::string_view Format_993(" DX Heating Coil Standard Rating Information, {}, {}, {:.1R}, {:.1R}, {:.2R}, {}\n");
+                static constexpr std::string_view Format_993(" DX Heating Coil Standard Rating Information, {}, {}, {:.1f}, {:.1f}, {:.2f}, {}\n");
                 print(state.files.eio,
                       Format_993,
                       HVAC::coilTypeNames[(int)coilType],
@@ -6918,7 +6909,7 @@ namespace StandardRatings {
                 }
 
                 static constexpr std::string_view Format_993_(
-                    " DX Heating Coil AHRI 2023 Standard Rating Information, {}, {}, {:.1R}, {:.1R}, {:.2R}, {}\n");
+                    " DX Heating Coil AHRI 2023 Standard Rating Information, {}, {}, {:.1f}, {:.1f}, {:.2f}, {}\n");
                 print(state.files.eio,
                       Format_993_,
                       HVAC::coilTypeNames[(int)coilType],
@@ -6955,7 +6946,7 @@ namespace StandardRatings {
                 }
 
                 static constexpr std::string_view Format_995(
-                    " DX Cooling Coil Standard Rating Information, {}, {}, {:.1R}, {:.2R}, {:.2R}, {:.2R}, {:.2R}, {}\n");
+                    " DX Cooling Coil Standard Rating Information, {}, {}, {:.1f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {}\n");
                 print(state.files.eio,
                       Format_995,
                       HVAC::coilTypeNames[(int)coilType],
@@ -7009,7 +7000,7 @@ namespace StandardRatings {
                 }
 
                 static constexpr std::string_view Format_995_(
-                    " DX Cooling Coil AHRI 2023 Standard Rating Information, {}, {}, {:.1R}, {:.2R}, {:.2R}, {:.2R}, {:.2R}, {:.1R}\n");
+                    " DX Cooling Coil AHRI 2023 Standard Rating Information, {}, {}, {:.1f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.1f}\n");
                 print(state.files.eio,
                       Format_995_,
                       HVAC::coilTypeNames[(int)coilType],
@@ -7104,11 +7095,11 @@ namespace StandardRatings {
             }
             for (int ClassNum = 1; ClassNum <= 4; ++ClassNum) {
                 int Num = (ClassNum - 1) * 4;
-                std::string ClassName = EnergyPlus::format("Class {}", ClassNum);
-                std::string CompNameNew = EnergyPlus::format("{}({})", CompName, ClassName);
+                std::string ClassName = std::format("Class {}", ClassNum);
+                std::string CompNameNew = std::format("{}({})", CompName, ClassName);
                 static constexpr std::string_view Format_102(
-                    " DX Cooling Coil ASHRAE 127 Standard Ratings Information, {}, {}, {}, {:.1R}, {:.1R}, {:.1R}, "
-                    "{:.1R}, {:.1R}, {:.1R}, {:.1R}, {:.1R}\n");
+                    " DX Cooling Coil ASHRAE 127 Standard Ratings Information, {}, {}, {}, {:.1f}, {:.1f}, {:.1f}, "
+                    "{:.1f}, {:.1f}, {:.1f}, {:.1f}, {:.1f}\n");
                 print(state.files.eio,
                       Format_102,
                       HVAC::coilTypeNames[(int)coilType],
@@ -7123,10 +7114,10 @@ namespace StandardRatings {
                       NetCoolingCapRated(Num + 4),
                       TotElectricPowerRated(Num + 4));
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchDXCoolCoilType2, CompNameNew, HVAC::coilTypeNames[(int)coilType]);
-                // Note: If you call format("{:.1R}", NetCoolingCapRated(Num + 1)),
+                // Note: If you call format("{:.1f}", NetCoolingCapRated(Num + 1)),
                 // Then it's not the OutputReportPredefined::PreDefTableEntry prototype with Real64 that is called.
                 // As a result, the entry isn't marked as being Real (origEntryIsReal) and unit conversion does not occur
-                // Bad: PreDefTableEntry(state, pdchDXCoolCoilNetCapSIA, CompNameNew, format("{:.1R}", NetCoolingCapRated(Num + 1)));
+                // Bad: PreDefTableEntry(state, pdchDXCoolCoilNetCapSIA, CompNameNew, format("{:.1f}", NetCoolingCapRated(Num + 1)));
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchDXCoolCoilNetCapSIA, CompNameNew, NetCoolingCapRated(Num + 1), 1);
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchDXCoolCoilNetCapSIB, CompNameNew, NetCoolingCapRated(Num + 2), 1);
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchDXCoolCoilNetCapSIC, CompNameNew, NetCoolingCapRated(Num + 3), 1);
@@ -7303,16 +7294,15 @@ namespace StandardRatings {
 
                 ShowWarningError(
                     state,
-                    EnergyPlus::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
-                                       HVAC::coilTypeNames[(int)coilType],
-                                       DXCoilName));
+                    std::format("The Standard Ratings is calculated for {} = {} but not at the AHRI test condition due to curve out of bound.",
+                                HVAC::coilTypeNames[(int)coilType],
+                                DXCoilName));
                 ShowContinueError(state,
                                   " Review the Standard Ratings calculations in the Engineering Reference for this coil type. Also, use "
                                   "Output:Diagnostics, DisplayExtraWarnings for further guidance.");
 
                 if (state.dataGlobal->DisplayExtraWarnings) {
-                    ShowContinueError(state,
-                                      EnergyPlus::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
+                    ShowContinueError(state, std::format("{}The max and/or min limits specified in the corresponding curve objects", RoutineName));
                     ShowContinueError(state,
                                       " do not include the AHRI test conditions required to calculate one or more of the Standard Rating values.");
                 }

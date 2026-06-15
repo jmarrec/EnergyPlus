@@ -68,7 +68,6 @@ namespace fs = std::experimental::filesystem;
 // #include <fmt/format.h>
 #include <fmt/os.h>
 #include <fmt/ostream.h>
-#include <fmt/ranges.h>
 #include <nlohmann/json.hpp>
 
 // EnergyPlus Headers
@@ -237,7 +236,7 @@ namespace FileSystem {
             auto close_file = [](FILE *f) { fclose(f); };
             auto holder = std::unique_ptr<FILE, decltype(close_file)>(fopen(path, "wb"), close_file);
             if (!holder) {
-                throw FatalError(fmt::format("Could not open file: {}", static_cast<std::string>(path)));
+                throw FatalError(std::format("Could not open file: {}", filePath.string()));
             }
 
             auto f = holder.get();
@@ -316,34 +315,39 @@ namespace FileSystem {
 } // namespace FileSystem
 } // namespace EnergyPlus
 
-// Add a custom formatter for fmt
-template <> struct fmt::formatter<fs::path>
+#if __cpp_lib_format_path >= 202403L
+#    error                                                                                                                                           \
+        "std::formatter specialization for std::filesystem::path is available in the STL, so the custom specialization in FileSystem.hh should be removed"
+#endif
+template <> struct std::formatter<fs::path>
 {
-    // Presentation format: 's' - string, 'g' - generic_string.
-    char presentation = 's';
+    bool generic_string = false;
 
-    // Parses format specifications of the form ['s' | 'g'].
-    constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin())
+    // parse is inherited from formatter<string_view>.
+    constexpr auto parse(std::format_parse_context &ctx) -> std::format_parse_context::iterator
     {
         // Parse the presentation format and store it in the formatter:
-        auto it = ctx.begin(), end = ctx.end();
+        auto it = ctx.begin();
+        auto end = ctx.end();
         if (it != end && (*it == 's' || *it == 'g')) {
-            presentation = *it++;
+            generic_string = (*it++) == 'g';
         }
 
         // Check if reached the end of the range:
         if (it != end && *it != '}') {
-            throw format_error("invalid format");
+            throw std::format_error("invalid format");
         };
 
         // Return an iterator past the end of the parsed range:
         return it;
     }
 
-    template <typename FormatContext> auto format(const fs::path &p, FormatContext &ctx) -> decltype(ctx.out())
+    // For older clang/apple-clang, use a templated FormatContext and no trailing return
+    // https://github.com/llvm/llvm-project/issues/66466#issuecomment-1720807809
+    // auto format(const fs::path &p, std::format_context &ctx) const -> std::format_context::iterator
+    template <typename FormatContext> auto format(const fs::path &p, FormatContext &ctx) const
     {
-        return fmt::format_to(
-            ctx.out(), "{}", presentation == 'g' ? EnergyPlus::FileSystem::toGenericString(p) : EnergyPlus::FileSystem::toString(p));
+        return std::format_to(ctx.out(), "{}", generic_string ? EnergyPlus::FileSystem::toGenericString(p) : EnergyPlus::FileSystem::toString(p));
     }
 };
 
