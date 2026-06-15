@@ -48,7 +48,7 @@ The parent `Schedule:Year:Rules` object:
 - Requires references to schedule type limits and a default day schedule
 - Optionally references summer, winter, holiday, custom 1, and custom 2 design day schedules
 
-The child(ren) `Schedule:Rule` object(s):
+The child(ren) `Schedule:Week:Rule` object(s):
 - Requires reference to the parent `Schedule:Year:Rules` object
 - Requires an "order" be specified for determining rule index amongst other rules
 - Requires reference to a day schedule
@@ -62,10 +62,10 @@ No downstream code changes are required; the new objects are transparent to all 
 
 For the most part, follows the logic and implementation in OS.
 
-Add new `Schedule:Year:Rules` and `Schedule:Rule` objects to the IDD.
+Add new `Schedule:Year:Rules` and `Schedule:Week:Rule` objects to the IDD.
 
 Make updates and additions to ScheduleManager.hh and ScheduleManager.cc:
-- Get all `Schedule:Rule` objects up front; move field values into structs
+- Get all `Schedule:Week:Rule` objects up front; move field values into structs
 - Loop through each `Schedule:Year:Rules` object
   - Call `AddScheduleDetailed` for creating a new detailed schedule
   - For every day of the year:
@@ -74,7 +74,7 @@ Make updates and additions to ScheduleManager.hh and ScheduleManager.cc:
     - Update the (12) day schedules according to the parent rule's special day schedules and rule's properties
     - Assign the week schedule to the week schedule's array for the year
 
-It is not required that a day has a rule defined for it (i.e., a `Schedule:Year:Rules` may have no attached `Schedule:Rule` objects).
+It is not required that a day has a rule defined for it (i.e., a `Schedule:Year:Rules` may have no attached `Schedule:Week:Rule` objects).
 In this case, either:
 - The day is Feb 29 and is just made equal to Feb 28, or
 - The day falls back to the default day schedule as defined by the parent rules object.
@@ -89,7 +89,7 @@ Allow `Schedule:Year:Rules` objects to be actuated by adding the following at th
   }
 ```
 
-Downstream `GetSchedule` will find the detailed schedules created from `Schedule:Year:Rules` and `Schedule:Rule`.
+Downstream `GetSchedule` will find the detailed schedules created from `Schedule:Year:Rules` and `Schedule:Week:Rule`.
 
 No new data structures are needed in `ScheduleManager.hh`.
 The resolution is purely a parse-time operation that flattens the parent rules into the existing `ScheduleDetailed.weekScheds[367]` array.
@@ -107,16 +107,16 @@ Several new unit tests in `tst/EnergyPlus/unit/ScheduleManager.unit.cc` covering
 - Summer/winter/holiday design day overrides; fallback to default day schedule when not specified.
 - Validation errors: unknown `Day Schedule Name`, duplicate `Rule Order` values within a parent rules object (warning), missing Default Day Schedule.
 
-A new test file `_ResidentialBaseScheduleRuleset.idf`, where all `Schedule:Year` / `Schedule:Week:Daily` objects are replaced with equivalent `Schedule:Year:Rules` / `Schedule:Rule` objects.
+A new test file `_ResidentialBaseScheduleRuleset.idf`, where all `Schedule:Year` / `Schedule:Week:Daily` objects are replaced with equivalent `Schedule:Year:Rules` / `Schedule:Week:Rule` objects.
 
 ## Input Output Reference Documentation ##
 
-Update `doc/input-output-reference/src/overview/group-schedules.tex` with new `Schedule:Year:Rules` and `Schedule:Rule` subsections placed directly following `Schedule:Year` and `Schedule:Compact`.
+Update `doc/input-output-reference/src/overview/group-schedules.tex` with new `Schedule:Year:Rules` and `Schedule:Week:Rule` subsections placed directly following `Schedule:Year` and `Schedule:Compact`.
 Key points to document:
 
 - The priority model: rules are evaluated in ascending `Rule Priority Order`; the first matching rule wins.
 - The special-day schedule fields and their fallback behavior.
-- The relationship between `Schedule:Year:Rules`, `Schedule:Rule`, and `Schedule:Day:*` objects.
+- The relationship between `Schedule:Year:Rules`, `Schedule:Week:Rule`, and `Schedule:Day:*` objects.
 
 ## Input Description ##
 
@@ -125,7 +125,7 @@ IDD:
 ```
 Schedule:Year:Rules,
        \memo A Schedule:Year:Rules defines a yearly schedule using a default day profile and
-       \memo a prioritized list of override rules (Schedule:Rule objects). Rules are evaluated
+       \memo a prioritized list of override rules (Schedule:Week:Rule objects). Rules are evaluated
        \memo in ascending Rule Order; the first matching rule for a given day is used.
        \memo If no rule matches, the Default Day Schedule is used.
        \min-fields 3
@@ -162,8 +162,8 @@ Schedule:Year:Rules,
        \type object-list
        \object-list DayScheduleNames
 
-Schedule:Rule,
-       \memo A Schedule:Rule defines one override rule for a Schedule:Year:Rules.
+Schedule:Week:Rule,
+       \memo A Schedule:Week:Rule defines one override rule for a Schedule:Year:Rules.
        \memo Rules are evaluated in ascending Rule Priority Order; the first matching rule wins.
        \memo A rule matches a day if: (a) the day falls within the specified date ranges,
        \memo AND (b) the corresponding Apply <DayOfWeek> field is Yes.
@@ -257,8 +257,8 @@ Example IDF snippet:
     occupants schedule default day,         !- Custom Day 1 Schedule Name
     occupants schedule default day;         !- Custom Day 2 Schedule Name
 
-  Schedule:Rule,
-    occupants schedule rule,                !- Name
+  Schedule:Week:Rule,
+    occupants schedule week rule,           !- Name
     occupants schedule year rules,          !- Schedule Year Rules Name
     0,                                      !- Rule Order
     occupants schedule day,                 !- Day Schedule Name
@@ -287,7 +287,7 @@ The rule-resolution algorithm is a straightforward date and day-of-week lookup w
 
 ## Example File and Transition Changes ##
 
-A new example file `_ResidentialBaseScheduleRuleset.idf` will be added, replacing all `Schedule:Year` / `Schedule:Week:Daily` objects with equivalent `Schedule:Year:Rules` / `Schedule:Rule` objects to demonstrate parity.
+A new example file `_ResidentialBaseScheduleRuleset.idf` will be added, replacing all `Schedule:Year` / `Schedule:Week:Daily` objects with equivalent `Schedule:Year:Rules` / `Schedule:Week:Rule` objects to demonstrate parity.
 
 No transition rules are required; this is a purely additive feature.
 
