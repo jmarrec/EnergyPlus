@@ -53,18 +53,37 @@
 #include <format>
 #include <ranges>
 #include <string>
-
-#if __cplusplus >= 202302L
-#    error "std::formattable is defined, remove C++ 20 implementation"
+#if __has_include(<print>)
+#    include <print>
 #endif
 
+#if 0
+#    define DO_PRAGMA_FORMATTERS(x) _Pragma(#x)
+#    define DEBUG_PRAGMA(msg) DO_PRAGMA_FORMATTERS(message(#msg))
+#else
+#    define DEBUG_PRAGMA(msg)
+#endif
+
+// ===============================  EnergyPlus::formattable  =================================
+namespace EnergyPlus {
+#if __cplusplus >= 202302L
+// #error "std::formattable is defined, remove C++ 20 implementation"
+DEBUG_PRAGMA("Using std::formattable")
+using std::formattable;
+#else
 template <typename T, typename CharT = char>
 concept formattable =
     requires(std::remove_reference_t<T> &v, std::basic_format_context<std::back_insert_iterator<std::basic_string<CharT>>, CharT> ctx) {
         std::formatter<std::remove_reference_t<T>, CharT>{}.format(v, ctx);
         std::formatter<std::remove_reference_t<T>, CharT>{}.parse(std::declval<std::basic_format_parse_context<CharT> &>());
     };
+#endif
+} // namespace EnergyPlus
 
+// ===============================  formatting ranges  =================================
+#if __cpp_lib_format_ranges >= 202207L
+DEBUG_PRAGMA("Formatting ranges is built-in")
+#else
 template <typename T>
 concept set_like = std::ranges::range<T> && requires { typename T::key_type; };
 
@@ -72,10 +91,12 @@ template <typename T>
 concept formattable_range =
     // A range
     std::ranges::range<T>
-    // A range of formattable elements. It'd be a nicer error message to include it, but that prevents using it for a range of range
-    // eg : std::vector<std::vector<int>>.
-    // && std::formattable<std::ranges::range_value_t<T>, char>
-    // But we exclude the ones that are already formattable as a whole, like std::string and std::string_view, char*.
+    // A range of formattable elements. It'd be a nicer error message to include
+    // it, but that prevents using it for a range of range eg :
+    // std::vector<std::vector<int>>.
+    // && EnergyPlus::formattable<std::ranges::range_value_t<T>, char>
+    // But we exclude the ones that are already formattable as a whole, like
+    // std::string and std::string_view, char*.
     && !std::is_same_v<T, std::string> && !std::is_same_v<T, std::string_view> && !std::is_same_v<std::ranges::range_value_t<T>, char>;
 
 template <formattable_range Container> struct std::formatter<Container>
@@ -113,12 +134,17 @@ template <formattable_range Container> struct std::formatter<Container>
         return it;
     }
 };
-
-#ifdef __cpp_lib_print
-#    error "std::print is defined, remove C++ 20 implementation"
 #endif
 
-namespace std {
+// ===============================  EnergyPlus::print  =================================
+namespace EnergyPlus {
+#ifdef __cpp_lib_print
+
+DEBUG_PRAGMA("__cpp_lib_print is defined, using std::print")
+using std::print;
+
+#else
+
 template <class... Args> void print(FILE *stream, std::format_string<Args...> fmt, Args &&...args)
 {
     std::string formatted = std::format(fmt, std::forward<Args>(args)...);
@@ -130,8 +156,10 @@ template <class... Args> void print(std::format_string<Args...> fmt, Args &&...a
 {
     print(stdout, fmt, std::forward<Args>(args)...);
 }
-} // namespace std
+#endif
+} // namespace EnergyPlus
 
+// ===============================  EnergyPlus::join  =================================
 namespace detail {
 template <typename R> struct format_join_view
 {
@@ -165,6 +193,8 @@ template <typename R> struct std::formatter<::detail::format_join_view<R>>
 };
 
 namespace EnergyPlus {
+
+// Usage: std::format("{:.4f}", EnergyPlus::join(range, "|"))
 template <typename R> auto join(const R &r, std::string_view sep)
 {
     return ::detail::format_join_view<R>{r, sep};

@@ -96,7 +96,7 @@ void displayMessage(std::string_view msg)
 
 template <typename... Args> void displayMessage(std::format_string<Args...> str_format, Args &&...args)
 {
-    std::print(stdout, str_format, std::forward<Args>(args)...);
+    EnergyPlus::print(stdout, str_format, std::forward<Args>(args)...);
     std::fwrite("\n", 1, 1, stdout);
 }
 

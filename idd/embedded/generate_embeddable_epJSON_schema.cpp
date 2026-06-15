@@ -100,15 +100,15 @@ static constexpr auto footer = R"cpp(
 
 int main(int argc, char const* argv[]) {
   if (argc != 3) {
-    std::print(stderr, "usage: ./generate_embeddable_schema path/to/Energy+.schema.epJSON path/to/EmbeddedEpJSONSchema.cc\n");
+    EnergyPlus::print(stderr, "usage: ./generate_embeddable_schema path/to/Energy+.schema.epJSON path/to/EmbeddedEpJSONSchema.cc\n");
     return 1;
   }
 
-  std::print(stderr, "Generating the **embedded** epJSON schema\n");
+  EnergyPlus::print(stderr, "Generating the **embedded** epJSON schema\n");
 
   std::ifstream schema_stream(argv[1], std::ifstream::in);
   if (!schema_stream.is_open()) {
-    std::print("schema file path {} not found\n", argv[1]);
+    EnergyPlus::print("schema file path {} not found\n", argv[1]);
     return 1;
   }
   auto const input_json = json::parse(schema_stream);
@@ -117,28 +117,28 @@ int main(int argc, char const* argv[]) {
   const fs::path outFilePath(argv[2]);
   const auto outFileDir = outFilePath.parent_path();
   if (!fs::is_directory(outFileDir)) {
-    std::print(stderr, "Output Directory does not exist: {}\n", outFileDir.generic_string());
+    EnergyPlus::print(stderr, "Output Directory does not exist: {}\n", outFileDir.generic_string());
     fs::create_directory(outFileDir);
   }
 
   std::FILE* outfile = std::fopen(argv[2], "w");
   if (outfile == nullptr) {
-    std::print(stderr, "Could not open output file: {}\n", argv[2]);
+    EnergyPlus::print(stderr, "Could not open output file: {}\n", argv[2]);
     return 1;
   }
 
-  std::print(outfile, "{}", header);
+  EnergyPlus::print(outfile, "{}", header);
 
-  std::print(outfile, "    static constexpr std::array< std::uint8_t, {} > embeddedSchema = {{{{\n", v_cbor.size());
+  EnergyPlus::print(outfile, "    static constexpr std::array< std::uint8_t, {} > embeddedSchema = {{{{\n", v_cbor.size());
 
   for (size_t i = 0; i < v_cbor.size(); ++i) {
-    std::print(outfile, "{:#04x},", v_cbor[i]);  // Format the std::uint8_t as hex
+    EnergyPlus::print(outfile, "{:#04x},", v_cbor[i]);  // Format the std::uint8_t as hex
     if (i % 40 == 0 && i != 0) {
-      std::print(outfile, "\n");
+      EnergyPlus::print(outfile, "\n");
     }
   }
-  std::print(outfile, "}}}};\n");
-  std::print(outfile, "{}", footer);
+  EnergyPlus::print(outfile, "}}}};\n");
+  EnergyPlus::print(outfile, "{}", footer);
 
   std::fclose(outfile);
 
