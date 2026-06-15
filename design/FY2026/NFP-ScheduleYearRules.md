@@ -19,7 +19,7 @@ The existing schedule types are:
 
 The OpenStudio SDK has long offered `OS:Schedule:Ruleset` as a higher-level, rule-based abstraction: the user defines a default day schedule and a prioritized list of override rules, each specifying which days of the week and which date range (or specific dates) the rule applies to.
 Special design day schedules (summer, winter, holiday, custom) are also first-class fields.
-This model is far closer to how schedules are actually specified in building standards, energy codes, and operator manuals.
+This model is perhaps closer to how schedules are actually specified in building standards, energy codes, and operator manuals.
 
 Today, the OpenStudio ForwardTranslator expands `OS:Schedule:Ruleset` into the `Schedule:Year` + `Schedule:Week:Daily` + `Schedule:Day:Interval` hierarchy before writing an IDF.
 Adding `Schedule:Year:Rules` natively to EnergyPlus would allow users who author IDF/epJSON files directly to use this intuitive representation, and would eventually allow the OpenStudio ForwardTranslator to emit the compact ruleset form instead of the expanded one.
