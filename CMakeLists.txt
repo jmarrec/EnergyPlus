@@ -29,14 +29,15 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # Project-wide default C++ language level (individual third-party targets may lower/raise as needed)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20 CACHE STRING "C++ standard to build EnergyPlus with (Official: 20)")
+set_property(CACHE CMAKE_CXX_STANDARD PROPERTY STRINGS 20 23 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_20)
+target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 
 option(ENABLE_PCH "Enable Precompiled Headers" ON)
 # List of headers to precompile: each project will build its own PCH, which is a good idea if any #define's change
