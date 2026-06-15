@@ -101,7 +101,7 @@ No transition is required.
 
 Several new unit tests in `tst/EnergyPlus/unit/ScheduleManager.unit.cc` covering:
 
-- A parent rules object with two rules demonstrating priority (lower `Rule Order` wins when date ranges overlap).
+- A parent rules object with two rules demonstrating priority (lower `Rule Priority Order` wins when date ranges overlap).
 - `DateRange` specification: correct day assignment across a date range, including wrap-around (e.g., Nov 1 – Jan 31).
 - `SpecificDates` specification: only the listed dates get the rule's day schedule.
 - Fallback to default day schedule when no rule matches.
@@ -115,7 +115,7 @@ A new test file `_ResidentialBaseScheduleRuleset.idf`, where all `Schedule:Year`
 Update `doc/input-output-reference/src/overview/group-schedules.tex` with new `Schedule:Year:Rules` and `Schedule:Rule` subsections placed directly following `Schedule:Year` and `Schedule:Compact`.
 Key points to document:
 
-- The priority model: rules are evaluated in ascending `Rule Order`; the first matching rule wins.
+- The priority model: rules are evaluated in ascending `Rule Priority Order`; the first matching rule wins.
 - The `DateRange` vs `SpecificDates` date specification types and their respective fields.
 - The special-day schedule fields and their fallback behavior.
 - The relationship between `Schedule:Year:Rules`, `Schedule:Rule`, and `Schedule:Day:*` objects.
@@ -179,7 +179,7 @@ Schedule:Rule,
        \required-field
        \type object-list
        \object-list ScheduleYearRulesNames
-  N1 , \field Rule Order
+  N1 , \field Rule Priority Order
        \note Lower values have higher priority. Must be unique within a Schedule:Year:Rules.
        \type integer
        \required-field
