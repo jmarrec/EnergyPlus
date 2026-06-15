@@ -87,15 +87,15 @@ TEST(Formatters, Formatters_Ranges_Numeric)
     {
         std::vector<double> vec{1.1, 2.2, 3.3};
         EXPECT_EQ("[1.1, 2.2, 3.3]", std::format("{}", vec));
-        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{:.2f}", vec));
-        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{:.3f}", vec));
+        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{::.2f}", vec));
+        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{::.3f}", vec));
     }
 
     {
         std::array<double, 3> vec{1.1, 2.2, 3.3};
         EXPECT_EQ("[1.1, 2.2, 3.3]", std::format("{}", vec));
-        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{:.2f}", vec));
-        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{:.3f}", vec));
+        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{::.2f}", vec));
+        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{::.3f}", vec));
     }
 
     {
@@ -105,8 +105,8 @@ TEST(Formatters, Formatters_Ranges_Numeric)
         vec(2) = 2.2;
         vec(3) = 3.3;
         EXPECT_EQ("[1.1, 2.2, 3.3]", std::format("{}", vec));
-        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{:.2f}", vec));
-        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{:.3f}", vec));
+        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{::.2f}", vec));
+        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{::.3f}", vec));
     }
 
     {
@@ -115,8 +115,8 @@ TEST(Formatters, Formatters_Ranges_Numeric)
         vec(2) = 2.2;
         vec(3) = 3.3;
         EXPECT_EQ("[1.1, 2.2, 3.3]", std::format("{}", vec));
-        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{:.2f}", vec));
-        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{:.3f}", vec));
+        EXPECT_EQ("[1.10, 2.20, 3.30]", std::format("{::.2f}", vec));
+        EXPECT_EQ("[1.100, 2.200, 3.300]", std::format("{::.3f}", vec));
     }
 
     {

@@ -53,7 +53,7 @@
 #include <format>
 #include <ranges>
 #include <string>
-#if __has_include(<print>)
+#ifdef __cpp_lib_print
 #    include <print>
 #endif
 
@@ -103,9 +103,22 @@ template <formattable_range Container> struct std::formatter<Container>
 {
     using T = std::ranges::range_value_t<Container>;
     std::formatter<T> element_formatter;
+    bool no_brackets = false;
 
     constexpr auto parse(std::format_parse_context &ctx) -> std::format_parse_context::iterator
     {
+        auto it = ctx.begin();
+        // Accept the standard range-format-spec's 'n' range-type, which suppresses the
+        // surrounding brackets, eg "{:n:.2f}" for a range of double.
+        if (it != ctx.end() && *it == 'n') {
+            no_brackets = true;
+            ctx.advance_to(++it);
+        }
+        // Accept the optional ':' that separates the range-spec from the underlying
+        // element-spec, eg "{::.2f}" or "{:n:.2f}" for a range of double.
+        if (it != ctx.end() && *it == ':') {
+            ctx.advance_to(++it);
+        }
         return element_formatter.parse(ctx);
     }
 
@@ -116,7 +129,9 @@ template <formattable_range Container> struct std::formatter<Container>
         constexpr bool quoted = std::is_same_v<T, std::string> || std::is_same_v<T, std::string_view>;
 
         auto it = ctx.out();
-        *it++ = open;
+        if (!no_brackets) {
+            *it++ = open;
+        }
         for (bool first = true; const auto &elem : v) {
             if (!first) {
                 it = std::format_to(it, ", ");
@@ -130,7 +145,9 @@ template <formattable_range Container> struct std::formatter<Container>
                 it = element_formatter.format(elem, ctx);
             }
         }
-        *it++ = close;
+        if (!no_brackets) {
+            *it++ = close;
+        }
         return it;
     }
 };
