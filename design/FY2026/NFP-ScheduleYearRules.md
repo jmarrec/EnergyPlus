@@ -107,8 +107,6 @@ Several new unit tests in `tst/EnergyPlus/unit/ScheduleManager.unit.cc` covering
 - Summer/winter/holiday design day overrides; fallback to default day schedule when not specified.
 - Validation errors: unknown `Day Schedule Name`, duplicate `Rule Order` values within a parent rules object (warning), missing Default Day Schedule.
 
-A new test file `_ResidentialBaseScheduleRuleset.idf`, where all `Schedule:Year` / `Schedule:Week:Daily` objects are replaced with equivalent `Schedule:Year:Rules` / `Schedule:Week:Rule` objects.
-
 ## Input Output Reference Documentation ##
 
 Update `doc/input-output-reference/src/overview/group-schedules.tex` with new `Schedule:Year:Rules` and `Schedule:Week:Rule` subsections placed directly following `Schedule:Year` and `Schedule:Compact`.
@@ -287,7 +285,7 @@ The rule-resolution algorithm is a straightforward date and day-of-week lookup w
 
 ## Example File and Transition Changes ##
 
-A new example file `_ResidentialBaseScheduleRuleset.idf` will be added, replacing all `Schedule:Year` / `Schedule:Week:Daily` objects with equivalent `Schedule:Year:Rules` / `Schedule:Week:Rule` objects to demonstrate parity.
+No new example files are added; feature is purely additive so there is no need to demonstrate parity on an ongoing basis.
 
 No transition rules are required; this is a purely additive feature.
 
