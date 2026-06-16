@@ -60,6 +60,7 @@
 #include <EnergyPlus/GroundHeatExchangers/State.hh>
 #include <EnergyPlus/GroundHeatExchangers/Vertical.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
+#include <EnergyPlus/OutputReportPredefined.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/WeatherManager.hh>
@@ -394,6 +395,18 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
     if (errorsFound) {
         ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", moduleName));
     }
+
+    OutputReportPredefined::PreDefTableEntry(state,
+                                             state.dataOutRptPredefined->pdchGLHEType,
+                                             this->name,
+                                             DataPlant::PlantEquipTypeNames[static_cast<int>(DataPlant::PlantEquipmentType::GrndHtExchgSystem)]);
+    OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHETubeLength, this->name, this->totalTubeLength);
+    OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEVolFlow, this->name, this->designFlow, 6);
+    OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEbhDepth, this->name, this->myRespFactors->props->bhTopDepth);
+    OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEbhDiam, this->name, this->myRespFactors->props->bhDiameter);
+    OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEbhLeng, this->name, this->myRespFactors->props->bhLength);
+    OutputReportPredefined::PreDefTableEntry(
+        state, state.dataOutRptPredefined->pdchGLHENumHolesTrenches, this->name, static_cast<Real64>(this->myRespFactors->numBoreholes));
 }
 
 void GLHEVert::simulate(EnergyPlusData &state,
