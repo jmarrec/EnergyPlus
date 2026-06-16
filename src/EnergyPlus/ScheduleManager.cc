@@ -307,24 +307,19 @@ namespace Sched {
         return weekSched;
     } // AddWeekSchedule()
 
-    RuleSchedule *AddRuleSchedule(EnergyPlusData &state, std::string const &name)
+    WeekRuleSchedule *AddWeekRuleSchedule(EnergyPlusData &state, std::string const &name)
     {
         auto const &s_sched = state.dataSched;
 
-        auto *ruleSched = new RuleSchedule;
-        ruleSched->Name = name;
+        auto *weekRuleSched = new WeekRuleSchedule;
+        weekRuleSched->Name = name;
 
-        // Fill the dayScheds with the Missing Day Schedule (Always Off)
-        for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
-            // ruleSched->dayScheds[iDayType] = s_sched->daySchedules[SchedNum_AlwaysOff];
-        }
+        weekRuleSched->Num = (int)s_sched->weekRuleSchedules.size();
+        s_sched->weekRuleSchedules.push_back(weekRuleSched);
+        s_sched->weekRuleScheduleMap.insert_or_assign(Util::makeUPPER(weekRuleSched->Name), weekRuleSched->Num);
 
-        ruleSched->Num = (int)s_sched->ruleSchedules.size();
-        s_sched->ruleSchedules.push_back(ruleSched);
-        s_sched->ruleScheduleMap.insert_or_assign(Util::makeUPPER(ruleSched->Name), ruleSched->Num);
-
-        return ruleSched;
-    } // AddRuleSchedule()
+        return weekRuleSched;
+    } // AddWeekRuleSchedule()
 
     void InitConstantScheduleData(EnergyPlusData &state)
     {
@@ -481,16 +476,16 @@ namespace Sched {
             MaxNums = max(MaxNums, NumNumbers);
             MaxAlps = max(MaxAlps, NumAlphas);
         }
-        CurrentModuleObject = "Schedule:Ruleset";
-        int NumRulesetSchedules = s_ip->getNumObjectsFound(state, CurrentModuleObject);
-        if (NumRulesetSchedules > 0) {
+        CurrentModuleObject = "Schedule:Year:Rules";
+        int NumYearRulesSchedules = s_ip->getNumObjectsFound(state, CurrentModuleObject);
+        if (NumYearRulesSchedules > 0) {
             s_ip->getObjectDefMaxArgs(state, CurrentModuleObject, Count, NumAlphas, NumNumbers);
             MaxNums = max(MaxNums, NumNumbers);
             MaxAlps = max(MaxAlps, NumAlphas);
         }
-        CurrentModuleObject = "Schedule:Rule";
-        int NumRuleSchedules = s_ip->getNumObjectsFound(state, CurrentModuleObject);
-        if (NumRuleSchedules > 0) {
+        CurrentModuleObject = "Schedule:Week:Rule";
+        int NumWeekRuleSchedules = s_ip->getNumObjectsFound(state, CurrentModuleObject);
+        if (NumWeekRuleSchedules > 0) {
             s_ip->getObjectDefMaxArgs(state, CurrentModuleObject, Count, NumAlphas, NumNumbers);
             MaxNums = max(MaxNums, NumNumbers);
             MaxAlps = max(MaxAlps, NumAlphas);
@@ -1106,8 +1101,8 @@ namespace Sched {
 
         //!! Get Rule Schedules
 
-        CurrentModuleObject = "Schedule:Rule";
-        for (int Loop = 1; Loop <= NumRuleSchedules; ++Loop) {
+        CurrentModuleObject = "Schedule:Week:Rule";
+        for (int Loop = 1; Loop <= NumWeekRuleSchedules; ++Loop) {
             s_ip->getObjectItem(state,
                                 CurrentModuleObject,
                                 Loop,
@@ -1129,77 +1124,59 @@ namespace Sched {
                 continue;
             }
 
-            auto *ruleSched = AddRuleSchedule(state, Alphas(1));
-            ruleSched->scheduleRulesetName = Alphas(2);
-            ruleSched->ruleOrder = Numbers(1);
+            auto *weekRuleSched = AddWeekRuleSchedule(state, Alphas(1));
+            weekRuleSched->scheduleYearRulesName = Alphas(2);
+            weekRuleSched->rulePriorityOrder = Numbers(1);
             auto *daySched = GetDaySchedule(state, Alphas(3));
             if (daySched == nullptr) {
                 ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(3), Alphas(3));
                 ErrorsFound = true;
             } else {
-                ruleSched->daySched = daySched;
+                weekRuleSched->daySched = daySched;
             }
-            ruleSched->applySunday = false;
+            weekRuleSched->applySunday = false;
             if ((Alphas(4)) == "YES") {
-                ruleSched->applySunday = true;
+                weekRuleSched->applySunday = true;
             }
-            ruleSched->applyMonday = false;
+            weekRuleSched->applyMonday = false;
             if ((Alphas(5)) == "YES") {
-                ruleSched->applyMonday = true;
+                weekRuleSched->applyMonday = true;
             }
-            ruleSched->applyTuesday = false;
+            weekRuleSched->applyTuesday = false;
             if ((Alphas(6)) == "YES") {
-                ruleSched->applyTuesday = true;
+                weekRuleSched->applyTuesday = true;
             }
-            ruleSched->applyWednesday = false;
+            weekRuleSched->applyWednesday = false;
             if ((Alphas(7)) == "YES") {
-                ruleSched->applyWednesday = true;
+                weekRuleSched->applyWednesday = true;
             }
-            ruleSched->applyThursday = false;
+            weekRuleSched->applyThursday = false;
             if ((Alphas(8)) == "YES") {
-                ruleSched->applyThursday = true;
+                weekRuleSched->applyThursday = true;
             }
-            ruleSched->applyFriday = false;
+            weekRuleSched->applyFriday = false;
             if ((Alphas(9)) == "YES") {
-                ruleSched->applyFriday = true;
+                weekRuleSched->applyFriday = true;
             }
-            ruleSched->applySaturday = false;
+            weekRuleSched->applySaturday = false;
             if ((Alphas(10)) == "YES") {
-                ruleSched->applySaturday = true;
+                weekRuleSched->applySaturday = true;
             }
 
-            ruleSched->dateSpecificationType = "DATERANGE";
-            if (!lAlphaBlanks(11)) {
-                ruleSched->dateSpecificationType = Alphas(11);
-            }
-            if (ruleSched->dateSpecificationType == "DATERANGE") {
-                ruleSched->startMonth = 1;
-                if (!lNumericBlanks(2)) {
-                    ruleSched->startMonth = Numbers(2);
-                }
-                ruleSched->startDay = 1;
-                if (!lNumericBlanks(3)) {
-                    ruleSched->startDay = Numbers(3);
-                }
-                ruleSched->endMonth = 12;
-                if (!lNumericBlanks(4)) {
-                    ruleSched->endMonth = Numbers(4);
-                }
-                ruleSched->endDay = 31;
-                if (!lNumericBlanks(5)) {
-                    ruleSched->endDay = Numbers(5);
-                }
-            } else if (ruleSched->dateSpecificationType == "SPECIFICDATES") {
-                if (NumNumbers < 7) { // needs to be at least 7 for a single required specific month/day
-                    ShowSevereCustomAudit(state, eoh, "has no specific dates specified");
-                    ErrorsFound = true;
-                    break;
-                }
-                for (int idx = 6; idx <= NumNumbers; idx += 2) {
-                    int specMonth = int(Numbers(idx));
-                    int specDay = int(Numbers(idx + 1));
-                    int specDate = General::OrdinalDay(specMonth, specDay, 1);
-                    ruleSched->specificDates.push_back(specDate);
+            for (int idx = 2; idx <= NumNumbers; idx += 4) {
+                int startMonth = int(Numbers(idx));
+                int startDay = int(Numbers(idx + 1));
+                int endMonth = int(Numbers(idx + 2));
+                int endDay = int(Numbers(idx + 3));
+                int startPointer = General::OrdinalDay(startMonth, startDay, 1);
+                int endPointer = General::OrdinalDay(endMonth, endDay, 1);
+                int firstDay = General::OrdinalDay(1, 1, 1);
+                int lastDay = General::OrdinalDay(12, 31, 1);
+                for (int day = firstDay; day <= lastDay; ++day) {
+                    if (((startPointer <= day) && (day <= endPointer)) ||
+                        ((endPointer < startPointer) && ((startPointer <= day) || (day <= endPointer)))) {
+                        weekRuleSched->specificDays.push_back(day);
+                    }
                 }
             }
         }
@@ -1371,10 +1348,10 @@ namespace Sched {
             }
         }
 
-        //!! Get Ruleset Schedules
+        //!! Get Year Rules Schedules
 
-        CurrentModuleObject = "Schedule:Ruleset";
-        for (int Loop = 1; Loop <= NumRulesetSchedules; ++Loop) {
+        CurrentModuleObject = "Schedule:Year:Rules";
+        for (int Loop = 1; Loop <= NumYearRulesSchedules; ++Loop) {
             s_ip->getObjectItem(state,
                                 CurrentModuleObject,
                                 Loop,
@@ -1397,24 +1374,24 @@ namespace Sched {
             }
 
             // Validate rule orders, checking for duplicates
-            std::vector<Sched::RuleSchedule *> ruleSchedules;
-            for (Sched::RuleSchedule *ruleSchedule : s_sched->ruleSchedules) {
-                if (ruleSchedule->scheduleRulesetName == Alphas(1)) {
-                    ruleSchedules.push_back(ruleSchedule);
+            std::vector<Sched::WeekRuleSchedule *> weekRuleSchedules;
+            for (Sched::WeekRuleSchedule *weekRuleSchedule : s_sched->weekRuleSchedules) {
+                if (weekRuleSchedule->scheduleYearRulesName == Alphas(1)) {
+                    weekRuleSchedules.push_back(weekRuleSchedule);
                 }
             }
-            for (std::size_t i = 0; i < ruleSchedules.size(); ++i) {
-                for (std::size_t j = i + 1; j < ruleSchedules.size(); ++j) {
-                    if (ruleSchedules[i]->ruleOrder == ruleSchedules[j]->ruleOrder) {
+            for (std::size_t i = 0; i < weekRuleSchedules.size(); ++i) {
+                for (std::size_t j = i + 1; j < weekRuleSchedules.size(); ++j) {
+                    if (weekRuleSchedules[i]->rulePriorityOrder == weekRuleSchedules[j]->rulePriorityOrder) {
                         ShowWarningMessage(
                             state,
-                            std::format("{}: {} has rules with duplicate rule order ({})", routineName, Alphas(1), ruleSchedules[i]->ruleOrder));
+                            std::format("{}: {} has week rules with duplicate rule priority order ({})", routineName, Alphas(1), weekRuleSchedules[i]->rulePriorityOrder));
                     }
                 }
             }
 
             auto *sched = AddScheduleDetailed(state, Alphas(1));
-            sched->type = SchedType::Ruleset;
+            sched->type = SchedType::YearRules;
 
             // Validate ScheduleType
             if (lAlphaBlanks(2)) {
@@ -1479,38 +1456,38 @@ namespace Sched {
             int startPointer = General::OrdinalDay(1, 1, 1);
             int endPointer = General::OrdinalDay(12, 31, 1);
             for (int day = startPointer; day <= endPointer; ++day) {
-                auto *ruleSched = GetPriorityRuleSchedule(state, Alphas(1), day);
-                if (ruleSched != nullptr) {
+                auto *weekRuleSched = GetPriorityWeekRuleSchedule(state, Alphas(1), day);
+                if (weekRuleSched != nullptr) {
                     Sched::WeekSchedule *weekSched;
-                    weekSched = GetWeekSchedule(state, ruleSched->Name);
+                    weekSched = GetWeekSchedule(state, weekRuleSched->Name);
                     if (weekSched == nullptr) {
-                        weekSched = AddWeekSchedule(state, ruleSched->Name);
+                        weekSched = AddWeekSchedule(state, weekRuleSched->Name);
                         weekSched->isUsed = true;
 
                         for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
                             weekSched->dayScheds[iDayType] = defaultDaySched;
                         }
 
-                        if (ruleSched->applySunday) {
-                            weekSched->dayScheds[(int)Sched::DayType::Sunday] = ruleSched->daySched;
+                        if (weekRuleSched->applySunday) {
+                            weekSched->dayScheds[(int)Sched::DayType::Sunday] = weekRuleSched->daySched;
                         }
-                        if (ruleSched->applyMonday) {
-                            weekSched->dayScheds[(int)Sched::DayType::Monday] = ruleSched->daySched;
+                        if (weekRuleSched->applyMonday) {
+                            weekSched->dayScheds[(int)Sched::DayType::Monday] = weekRuleSched->daySched;
                         }
-                        if (ruleSched->applyTuesday) {
-                            weekSched->dayScheds[(int)Sched::DayType::Tuesday] = ruleSched->daySched;
+                        if (weekRuleSched->applyTuesday) {
+                            weekSched->dayScheds[(int)Sched::DayType::Tuesday] = weekRuleSched->daySched;
                         }
-                        if (ruleSched->applyWednesday) {
-                            weekSched->dayScheds[(int)Sched::DayType::Wednesday] = ruleSched->daySched;
+                        if (weekRuleSched->applyWednesday) {
+                            weekSched->dayScheds[(int)Sched::DayType::Wednesday] = weekRuleSched->daySched;
                         }
-                        if (ruleSched->applyThursday) {
-                            weekSched->dayScheds[(int)Sched::DayType::Thursday] = ruleSched->daySched;
+                        if (weekRuleSched->applyThursday) {
+                            weekSched->dayScheds[(int)Sched::DayType::Thursday] = weekRuleSched->daySched;
                         }
-                        if (ruleSched->applyFriday) {
-                            weekSched->dayScheds[(int)Sched::DayType::Friday] = ruleSched->daySched;
+                        if (weekRuleSched->applyFriday) {
+                            weekSched->dayScheds[(int)Sched::DayType::Friday] = weekRuleSched->daySched;
                         }
-                        if (ruleSched->applySaturday) {
-                            weekSched->dayScheds[(int)Sched::DayType::Saturday] = ruleSched->daySched;
+                        if (weekRuleSched->applySaturday) {
+                            weekSched->dayScheds[(int)Sched::DayType::Saturday] = weekRuleSched->daySched;
                         }
 
                         weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay] = summerDesignDaySchedule;
@@ -1554,7 +1531,7 @@ namespace Sched {
             }
 
             if (s_glob->AnyEnergyManagementSystemInModel) { // setup constant schedules as actuators
-                SetupEMSActuator(state, "Schedule:Ruleset", sched->Name, "Schedule Value", "[ ]", sched->EMSActuatedOn, sched->EMSVal);
+                SetupEMSActuator(state, "Schedule:Year:Rules", sched->Name, "Schedule Value", "[ ]", sched->EMSActuatedOn, sched->EMSVal);
             }
         }
 
@@ -2941,49 +2918,37 @@ namespace Sched {
         return (weekSched == nullptr) ? -1 : weekSched->Num;
     }
 
-    Sched::RuleSchedule *GetPriorityRuleSchedule(EnergyPlusData &state, std::string const &scheduleRulesetName, int const day)
+    Sched::WeekRuleSchedule *GetPriorityWeekRuleSchedule(EnergyPlusData &state, std::string const &scheduleYearRulesName, int const day)
     {
         auto const &s_sched = state.dataSched;
 
-        int ruleOrder = 99999;
-        std::vector<Sched::RuleSchedule *> ruleSchedules;
-        for (Sched::RuleSchedule *ruleSchedule : s_sched->ruleSchedules) {
-            if (ruleSchedule->scheduleRulesetName == scheduleRulesetName) {
-                if (ruleSchedule->dateSpecificationType == "DATERANGE") {
-                    int startPointer = General::OrdinalDay(ruleSchedule->startMonth, ruleSchedule->startDay, 1);
-                    int endPointer = General::OrdinalDay(ruleSchedule->endMonth, ruleSchedule->endDay, 1);
-                    if (((startPointer <= day) && (day <= endPointer)) ||
-                        ((endPointer < startPointer) && ((startPointer <= day) || (day <= endPointer)))) {
-                        if (ruleSchedule->ruleOrder < ruleOrder) {
-                            ruleSchedules.push_back(ruleSchedule);
-                            ruleOrder = ruleSchedule->ruleOrder;
-                        }
-                    }
-                } else if (ruleSchedule->dateSpecificationType == "SPECIFICDATES") {
-                    std::vector<int> specificDates = ruleSchedule->specificDates;
-                    if (std::find(std::begin(specificDates), std::end(specificDates), day) != std::end(specificDates)) {
-                        if (ruleSchedule->ruleOrder < ruleOrder) {
-                            ruleSchedules.push_back(ruleSchedule);
-                            ruleOrder = ruleSchedule->ruleOrder;
-                        }
+        int rulePriorityOrder = 99999;
+        std::vector<Sched::WeekRuleSchedule *> weekRuleSchedules;
+        for (Sched::WeekRuleSchedule *weekRuleSchedule : s_sched->weekRuleSchedules) {
+            if (weekRuleSchedule->scheduleYearRulesName == scheduleYearRulesName) {
+                std::vector<int> specificDays = weekRuleSchedule->specificDays;
+                if (std::find(std::begin(specificDays), std::end(specificDays), day) != std::end(specificDays)) {
+                    if (weekRuleSchedule->rulePriorityOrder < rulePriorityOrder) {
+                        weekRuleSchedules.push_back(weekRuleSchedule);
+                        rulePriorityOrder = weekRuleSchedule->rulePriorityOrder;
                     }
                 }
             }
         }
 
-        if (ruleSchedules.size() == 0) { // handle Feb 29 later
+        if (weekRuleSchedules.size() == 0) { // handle Feb 29 later
             return nullptr;
         }
 
-        Sched::RuleSchedule *ruleSched = ruleSchedules.back();
-        if (!ruleSched->isUsed) {
-            ruleSched->isUsed = true;
-            auto *daySched = ruleSched->daySched;
+        Sched::WeekRuleSchedule *weekRuleSched = weekRuleSchedules.back();
+        if (!weekRuleSched->isUsed) {
+            weekRuleSched->isUsed = true;
+            auto *daySched = weekRuleSched->daySched;
             daySched->isUsed = true;
         }
 
-        return ruleSched;
-    } // GetPriorityRuleSchedule()
+        return weekRuleSched;
+    } // GetPriorityWeekRuleSchedule()
 
     Sched::DaySchedule *GetDaySchedule(EnergyPlusData &state, std::string const &name)
     {
@@ -3644,7 +3609,7 @@ namespace Sched {
         this->isMinMaxSet = true;
     } // ScheduleWeek::setMinMaxVals()
 
-    void RuleSchedule::setMinMaxVals(EnergyPlusData &state)
+    void WeekRuleSchedule::setMinMaxVals(EnergyPlusData &state)
     {
         assert(!this->isMinMaxSet);
 
@@ -3660,7 +3625,7 @@ namespace Sched {
         this->maxVal = daySched->maxVal;
 
         this->isMinMaxSet = true;
-    } // RuleSchedule::setMinMaxVals()
+    } // WeekRuleSchedule::setMinMaxVals()
 
     void ScheduleDetailed::setMinMaxVals(EnergyPlusData &state)
     {

@@ -274,7 +274,7 @@ The yearly schedule is used to cover the entire year using references to week sc
 
 \paragraph{Field: Name}\label{field-name-5-021}
 
-This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, \hyperref[scheduleruleset]{Schedule:Ruleset}, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
+This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, \hyperref[scheduleyearsrule]{Schedule:Year:Rules}, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
 
 \paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-3}
 
@@ -336,7 +336,7 @@ This object is an unusual object for description. For the data the number of fie
 
 \paragraph{Field: Name}\label{field-name-6-019}
 
-This field should contain a unique (between \hyperref[scheduleyear]{Schedule:Year}, Schedule:Compact, \hyperref[scheduleruleset]{Schedule:Ruleset}, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
+This field should contain a unique (between \hyperref[scheduleyear]{Schedule:Year}, Schedule:Compact, \hyperref[scheduleyearrules]{Schedule:Year:Rules}, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
 
 \paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-4}
 
@@ -416,54 +416,54 @@ Schedule:Compact,
   Until: 24:00, 0.0;
 \end{lstlisting}
 
-\subsection{Schedule:Ruleset}\label{scheduleruleset}
+\subsection{Schedule:Year:Rules}\label{scheduleyearrules}
 
-A Schedule:Ruleset defines a yearly schedule using a default day profile and a prioritized list of override rules (\hyperref[schedulerule]{Schedule:Rule} objects).
-Rules are evaluated in ascending Rule Order; the first matching rule for a given day is used.
+A Schedule:Year:Rules defines a yearly schedule using a default day profile and a prioritized list of override rules (\hyperref[scheduleweekrule]{Schedule:Week:Rule} objects).
+Rules are evaluated in ascending Rule Priority Order; the first matching rule for a given day is used.
 If no rule matches, the Default Day Schedule is used.
 
-\subsubsection{Inputs}\label{inputs-scheduleruleset}
+\subsubsection{Inputs}\label{inputs-scheduleyearrules}
 
-\paragraph{Field: Name}\label{field-name-scheduleruleset}
+\paragraph{Field: Name}\label{field-name-scheduleyearrules}
 
-This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, Schedule:Ruleset, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule.
+This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, Schedule:Year:Rules, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule.
 It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
-It is also referenced by optional \hyperref[schedulerule]{Schedule:Rule} objects.
+It is also referenced by optional \hyperref[scheduleweekrule]{Schedule:Week:Rule} objects.
 
-\paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-scheduleruleset}
+\paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-scheduleyearrules}
 
 This field contains a reference to the Schedule Type Limits object.
 If found in a list of Schedule Type Limits (see ScheduleTypeLimits object above), then the restrictions from the referenced object will be used to validate the hourly field values (below).
 
-\paragraph{Field: Default Day Schedule Name}\label{field-default-day-schedule-name-schedulerulset}
+\paragraph{Field: Default Day Schedule Name}\label{field-default-day-schedule-name-scheduleyearrules}
 
 This field is the name of the default day schedule (ref. Schedule:Day:Hourly, Schedule:Day:Interval, Schedule:Day:List objects) that is to be used for days when no schedule rule applies.
 
-\paragraph{Field: Summer Design Day Schedule Name}\label{field-summer-design-day-schedule-name-schedulerulset}
+\paragraph{Field: Summer Design Day Schedule Name}\label{field-summer-design-day-schedule-name-scheduleyearrules}
 
 This field is the name of the summer design day schedule.
 
-\paragraph{Field: Winter Design Day Schedule Name}\label{field-winter-design-day-schedule-name-schedulerulset}
+\paragraph{Field: Winter Design Day Schedule Name}\label{field-winter-design-day-schedule-name-scheduleyearrules}
 
 This field is the name of the winter design day schedule.
 
-\paragraph{Field: Holiday Schedule Name}\label{field-holiday-schedule-name-schedulerulset}
+\paragraph{Field: Holiday Schedule Name}\label{field-holiday-schedule-name-scheduleyearrules}
 
 This field is the name of the holiday schedule.
 
-\paragraph{Field: Custom Day 1 Schedule Name}\label{field-custom-day-1-schedule-name-schedulerulset}
+\paragraph{Field: Custom Day 1 Schedule Name}\label{field-custom-day-1-schedule-name-scheduleyearrules}
 
 This field is the name of the custom day 1 schedule.
 
-\paragraph{Field: Custom Day 2 Schedule Name}\label{field-custom-day-2-schedule-name-schedulerulset}
+\paragraph{Field: Custom Day 2 Schedule Name}\label{field-custom-day-2-schedule-name-scheduleyearrules}
 
 This field is the name of the custom day 2 schedule.
 
 An example of IDF input:
 
 \begin{lstlisting}
-Schedule:Ruleset,
-  occupants schedule ruleset,             !- Name
+Schedule:Year:Rules,
+  occupants schedule year rules,          !- Name
   Fractional,                             !- Schedule Type Limits Name
   occupants schedule default day,         !- Default Day Schedule Name
   occupants schedule default day,         !- Summer Design Day Schedule Name
@@ -473,118 +473,98 @@ Schedule:Ruleset,
   occupants schedule default day;         !- Custom Day 2 Schedule Name
 \end{lstlisting}
 
-\subsection{Schedule:Rule}\label{schedulerule}
+\subsection{Schedule:Week:Rule}\label{scheduleweekrule}
 
-A Schedule:Rule defines one override rule for a \hyperref[scheduleruleset]{Schedule:Ruleset}.
-Rules are evaluated in ascending Rule Order; the first matching rule wins.
-A rule matches a day if: (a) the day falls within the date specification, AND (b) the corresponding Apply <DayOfWeek> field is Yes.
+A Schedule:Week:Rule defines one override rule for a \hyperref[scheduleyearrules]{Schedule:Year:Rules}.
+Rules are evaluated in ascending Rule Priority Order; the first matching rule wins.
+A rule matches a day if: (a) the day falls within the specified date ranges, AND (b) the corresponding Apply <DayOfWeek> field is Yes.
 
-\subsubsection{Inputs}\label{inputs-schedulerule}
+\subsubsection{Inputs}\label{inputs-scheduleweekrule}
 
-\paragraph{Field: Name}\label{field-name-schedulerule}
+\paragraph{Field: Name}\label{field-name-scheduleweekrule}
 
 This field should contain a unique (within all RuleSchedules) designation for this schedule.
 
-\paragraph{Field: Schedule Ruleset Name}\label{field-schedule-ruleset-name-schedulerule}
+\paragraph{Field: Schedule Year Rules Name}\label{field-schedule-year-rules-name-scheduleweekrule}
 
-This field should reference the appropriate parent \hyperref[scheduleruleset]{Schedule:Ruleset} to define the appropriate schedule values.
+This field should reference the appropriate parent \hyperref[scheduleyearrules]{Schedule:Year:Rules} to define the appropriate schedule values.
 
-\paragraph{Field: Rule Order}\label{field-rule-order-schedulerule}
+\paragraph{Field: Rule Priority Order}\label{field-rule-priority-order-scheduleweekrule}
 
 This numeric field determines the ``priority'' for this rule amongst other rules (0 = highest priority).
-For a given ruleset, schedule rules may overlap in terms of their applicable dates; in this case, the rule with the least rule order value is given priority.
+For a given schedule year rules object, schedule rules may overlap in terms of their applicable dates; in this case, the rule with the least rule order value is given priority.
 
-\paragraph{Field: Day Schedule Name}\label{field-day-schedule-name-schedulerule}
+\paragraph{Field: Day Schedule Name}\label{field-day-schedule-name-scheduleweekrule}
 
 This field is the name of the day schedule (ref. Schedule:Day:Hourly, Schedule:Day:Interval, Schedule:Day:List objects) that is to be used for days when this rule applies.
 
-\paragraph{Field: Apply Sunday}\label{field-apply-sunday-schedulerule}
+\paragraph{Field: Apply Sunday}\label{field-apply-sunday-scheduleweekrule}
 
 This field determines whether the day schedule is used for each Sunday in which the rule applies.
 Default: No.
 
-\paragraph{Field: Apply Monday}\label{field-apply-monday-schedulerule}
+\paragraph{Field: Apply Monday}\label{field-apply-monday-scheduleweekrule}
 
 This field determines whether the day schedule is used for each Monday in which the rule applies.
 Default: No.
 
-\paragraph{Field: Apply Tuesday}\label{field-apply-tuesday-schedulerule}
+\paragraph{Field: Apply Tuesday}\label{field-apply-tuesday-scheduleweekrule}
 
 This field determines whether the day schedule is used for each Tuesday in which the rule applies.
 Default: No.
 
-\paragraph{Field: Apply Wednesday}\label{field-apply-wednesday-schedulerule}
+\paragraph{Field: Apply Wednesday}\label{field-apply-wednesday-scheduleweekrule}
 
 This field determines whether the day schedule is used for each Wednesday in which the rule applies.
 Default: No.
 
-\paragraph{Field: Apply Thursday}\label{field-apply-thursday-schedulerule}
+\paragraph{Field: Apply Thursday}\label{field-apply-thursday-scheduleweekrule}
 
 This field determines whether the day schedule is used for each Thursday in which the rule applies.
 Default: No.
 
-\paragraph{Field: Apply Friday}\label{field-apply-friday-schedulerule}
+\paragraph{Field: Apply Friday}\label{field-apply-friday-scheduleweekrule}
 
 This field determines whether the day schedule is used for each Friday in which the rule applies.
 Default: No.
 
-\paragraph{Field: Apply Saturday}\label{field-apply-saturday-schedulerule}
+\paragraph{Field: Apply Saturday}\label{field-apply-saturday-scheduleweekrule}
 
 This field determines whether the day schedule is used for each Saturday in which the rule applies.
 Default: No.
 
-\paragraph{Field: Date Specification Type}\label{field-date-specification-type-schedulerule}
+\paragraph{Field Set: Start/End Month/Day}
 
-This field determines how applicable days are specified for this rule.
-Choices are: DateRange, SpecificDates.
-When DateRange is chosen, start/end month/day fields are used.
-When SpecificDates is chosen, extensible specific month/day fields are used.
-Default: DateRange.
+This object is extensible, so sets of the next four numeric fields can be added to the end of this object.
+These fields specify applicable days for this rule.
 
-\paragraph{Field: Start Month}\label{field-start-month-schedulerule}
+\paragraph{Field: Start Month \#}\label{field-start-month-scheduleweekrule}
 
 This numeric field contains the starting month number (1 = January, 2 = February, etc.) for which the rule applies.
-Start month is used only when Date Specification Type = DateRange.
 Default: 1.
 
-\paragraph{Field: Start Day}\label{field-date-start-day-schedulerule}
+\paragraph{Field: Start Day \#}\label{field-date-start-day-scheduleweekrule}
 
 This numeric field contains the starting day of the starting month (must be valid for month) for which the rule applies.
-Start day is used only when Date Specification Type = DateRange.
 Default: 1.
 
-\paragraph{Field: End Month}\label{field-end-month-schedulerule}
+\paragraph{Field: End Month \#}\label{field-end-month-scheduleweekrule}
 
 This numeric field contains the ending month number (11 = November, 12 = December, etc.) for which the rule applies.
-End month is used only when Date Specification Type = DateRange.
 Default: 12.
 
-\paragraph{Field: End Day}\label{field-end-day-schedulerule}
+\paragraph{Field: End Day \#}\label{field-end-day-scheduleweekrule}
 
 This numeric field contains the ending day of the ending month (must be valid for month) for which the rule applies.
-End day is used only when Date Specification Type = DateRange.
 Default: 31.
-
-\paragraph{Field Set: Specific Month/Day}
-
-This object is extensible, so sets of the next two numeric fields can be added to the end of this object.
-Specific months and days are used only when Date Specification Type = SpecificDates.
-
-\paragraph{Field: Specific Month \#}\label{field-specific-month-schedulerule}
-
-This numeric field contains the specific month for which the rule applies.
-
-\paragraph{Field: Specific Day \#}\label{field-specific-day-schedulerule}
-
-This numeric field contains the specific day of the specific month (must be valid for month) for which the rule applies.
 
 An example of IDF input:
 
 \begin{lstlisting}
-Schedule:Rule,
-  occupants schedule rule,                !- Name
-  occupants schedule ruleset,             !- Schedule Ruleset Name
-  0,                                      !- Rule Order
+Schedule:Week:Rule,
+  occupants schedule week rule,           !- Name
+  occupants schedule year rules,          !- Schedule Year Rules Name
+  0,                                      !- Rule Priority Order
   occupants schedule day,                 !- Day Schedule Name
   No,                                     !- Apply Sunday
   Yes,                                    !- Apply Monday
@@ -593,7 +573,6 @@ Schedule:Rule,
   No,                                     !- Apply Thursday
   Yes,                                    !- Apply Friday
   No,                                     !- Apply Saturday
-  DateRange,                              !- Date Specification Type
   1,                                      !- Start Month
   1,                                      !- Start Day
   12,                                     !- End Month
@@ -648,7 +627,7 @@ Two optional fields: \textbf{Interpolate to Timestep} and \textbf{Minutes per It
 
 \paragraph{Field: Name}\label{field-name-8-018}
 
-This field should contain a unique (between \hyperref[scheduleyear]{Schedule:Year}, \hyperref[schedulecompact]{Schedule:Compact}, \hyperref[scheduleruleset]{Schedule:Ruleset}, and Schedule:File) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration, \hyperref[fuelfactors]{FuelFactors}) to define the appropriate schedule values.
+This field should contain a unique (between \hyperref[scheduleyear]{Schedule:Year}, \hyperref[schedulecompact]{Schedule:Compact}, \hyperref[scheduleyearrules]{Schedule:Year:Rules}, and Schedule:File) designation for the schedule. It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration, \hyperref[fuelfactors]{FuelFactors}) to define the appropriate schedule values.
 
 \paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-6}
 

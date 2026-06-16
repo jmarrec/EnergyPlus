@@ -2177,9 +2177,9 @@ TEST_F(EnergyPlusFixture, ScheduleCompact_MissingValues)
     compare_err_stream(expected_error);
 }
 
-TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
+TEST_F(EnergyPlusFixture, ScheduleYearRules_RulePriorityOrder)
 {
-    // Test that rule priority is arranged greater rule order means less priority
+    // Test that Rule Priority Order is arranged greater rule order means less priority
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,                 !- Name",
@@ -2201,15 +2201,15 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
         "  24:00,                      !- Time 1",
         "  1.0;                        !- Value Until Time 1",
         " ",
-        "Schedule:Ruleset,",
-        "  always on ruleset,          !- Name",
+        "Schedule:Year:Rules,",
+        "  always on year rules,       !- Name",
         "  Fractional,                 !- Schedule Type Limits Name",
         "  always off;                 !- Default Day Schedule Name",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan1-Dec31 1, !- Name",
-        "  always on ruleset,          !- Schedule Ruleset Name",
-        "  0,                          !- Rule Order",
+        "  always on year rules,       !- Schedule Year Rules Name",
+        "  0,                          !- Rule Priority Order",
         "  always on,                  !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2218,16 +2218,15 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  DateRange,                  !- Date Specification Type",
         "  1,                          !- Start Month",
         "  1,                          !- Start Day",
         "  12,                         !- End Month",
         "  31;                         !- End Day",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan1-Jan31 1, !- Name",
-        "  always on ruleset,          !- Schedule Ruleset Name",
-        "  1,                          !- Rule Order",
+        "  always on year rules,       !- Schedule Year Rules Name",
+        "  1,                          !- Rule Priority Order",
         "  always off,                 !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2236,21 +2235,20 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  DateRange,                  !- Date Specification Type",
         "  1,                          !- Start Month",
         "  1,                          !- Start Day",
         "  1,                          !- End Month",
         "  31;                         !- End Day",
         " ",
-        "Schedule:Ruleset,",
-        "  mostly on ruleset,          !- Name",
+        "Schedule:Year:Rules,",
+        "  mostly on year rules,       !- Name",
         "  Fractional,                 !- Schedule Type Limits Name",
         "  always off;                 !- Default Day Schedule Name",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan1-Dec31 2, !- Name",
-        "  mostly on ruleset,          !- Schedule Ruleset Name",
-        "  1,                          !- Rule Order",
+        "  mostly on year rules,       !- Schedule Year Rules Name",
+        "  1,                          !- Rule Priority Order",
         "  always on,                  !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2259,16 +2257,15 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  DateRange,                  !- Date Specification Type",
         "  1,                          !- Start Month",
         "  1,                          !- Start Day",
         "  12,                         !- End Month",
         "  31;                         !- End Day",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan1-Jan31 2, !- Name",
-        "  mostly on ruleset,          !- Schedule Ruleset Name",
-        "  0,                          !- Rule Order",
+        "  mostly on year rules,       !- Schedule Year Rules Name",
+        "  0,                          !- Rule Priority Order",
         "  always off,                 !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2277,7 +2274,6 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  DateRange,                  !- Date Specification Type",
         "  1,                          !- Start Month",
         "  1,                          !- Start Day",
         "  1,                          !- End Month",
@@ -2294,16 +2290,16 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_RuleOrder)
 
     state->init_state(*state);
 
-    auto *alwaysOnRuleset = Sched::GetSchedule(*state, "ALWAYS ON RULESET");
-    EXPECT_EQ(8760., alwaysOnRuleset->getAnnualHoursFullLoad(*state, 1, false));
+    auto *alwaysOnYearRules = Sched::GetSchedule(*state, "ALWAYS ON YEAR RULES");
+    EXPECT_EQ(8760., alwaysOnYearRules->getAnnualHoursFullLoad(*state, 1, false));
 
-    auto *mostlyOnRuleset = Sched::GetSchedule(*state, "MOSTLY ON RULESET");
-    EXPECT_EQ(8760. - 31.0 * 24.0, mostlyOnRuleset->getAnnualHoursFullLoad(*state, 1, false));
+    auto *mostlyOnYearRules = Sched::GetSchedule(*state, "MOSTLY ON YEAR RULES");
+    EXPECT_EQ(8760. - 31.0 * 24.0, mostlyOnYearRules->getAnnualHoursFullLoad(*state, 1, false));
 }
 
-TEST_F(EnergyPlusFixture, ScheduleRuleset_NoRules)
+TEST_F(EnergyPlusFixture, ScheduleYearRules_NoRules)
 {
-    // Test that ruleset is allowed to have no rules
+    // Test that schedule year rules object is allowed to have no rules
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
@@ -2318,8 +2314,8 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_NoRules)
         "  24:00,                   !- Time 1",
         "  0.5;                     !- Value Until Time 1",
         " ",
-        "Schedule:Ruleset,",
-        "  half on ruleset,         !- Name",
+        "Schedule:Year:Rules,",
+        "  half on year rules,      !- Name",
         "  Fractional,              !- Schedule Type Limits Name",
         "  half on;                 !- Default Day Schedule Name",
         " ",
@@ -2334,11 +2330,11 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_NoRules)
 
     state->init_state(*state);
 
-    auto *alwaysOnRuleset = Sched::GetSchedule(*state, "HALF ON RULESET");
-    EXPECT_EQ(8760. / 2., alwaysOnRuleset->getAnnualHoursFullLoad(*state, 1, false));
+    auto *alwaysOnYearRules = Sched::GetSchedule(*state, "HALF ON YEAR RULES");
+    EXPECT_EQ(8760. / 2., alwaysOnYearRules->getAnnualHoursFullLoad(*state, 1, false));
 }
 
-TEST_F(EnergyPlusFixture, ScheduleRuleset_DefaultDaySchedule)
+TEST_F(EnergyPlusFixture, ScheduleYearRules_DefaultDaySchedule)
 {
     // Test fallback to default day schedule when no rule matches
     std::string const idf_objects = delimited_string({
@@ -2355,8 +2351,8 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DefaultDaySchedule)
         "  24:00,                   !- Time 1",
         "  0.6;                     !- Value Until Time 1",
         " ",
-        "Schedule:Ruleset,",
-        "  schedule ruleset,        !- Name",
+        "Schedule:Year:Rules,",
+        "  schedule year rules,     !- Name",
         "  Fractional,              !- Schedule Type Limits Name",
         "  default day;             !- Default Day Schedule Name",
         " ",
@@ -2367,10 +2363,10 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DefaultDaySchedule)
         "  24:00,                   !- Time 1",
         "  0.7;                     !- Value Until Time 1",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan2-Dec31,!- Name",
-        "  schedule ruleset,        !- Schedule Ruleset Name",
-        "  0,                       !- Rule Order",
+        "  schedule year rules,     !- Schedule Year Rules Name",
+        "  0,                       !- Rule Priority Order",
         "  day schedule,            !- Day Schedule Name",
         "  Yes,                     !- Apply Sunday",
         "  Yes,                     !- Apply Monday",
@@ -2379,7 +2375,6 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DefaultDaySchedule)
         "  Yes,                     !- Apply Thursday",
         "  Yes,                     !- Apply Friday",
         "  Yes,                     !- Apply Saturday",
-        "  DateRange,               !- Date Specification Type",
         "  1,                       !- Start Month",
         "  2,                       !- Start Day",
         "  12,                      !- End Month",
@@ -2396,7 +2391,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DefaultDaySchedule)
 
     state->init_state(*state);
 
-    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE RULESET"));
+    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE YEAR RULES"));
     EXPECT_NE(sch, nullptr);
     EXPECT_EQ(367, sch->weekScheds.size());
     EXPECT_EQ(sch->weekScheds.front(), nullptr);
@@ -2426,9 +2421,9 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DefaultDaySchedule)
     }
 }
 
-TEST_F(EnergyPlusFixture, ScheduleRuleset_DesignDayOverrides)
+TEST_F(EnergyPlusFixture, ScheduleYearRules_DesignDayOverrides)
 {
-    // Test fallback to default day schedule when design day no specified
+    // Test fallback to default day schedule when design day not specified
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
@@ -2450,8 +2445,8 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DesignDayOverrides)
         "  24:00,                   !- Time 1",
         "  0.8;                     !- Value Until Time 1",
         " ",
-        "Schedule:Ruleset,",
-        "  schedule ruleset,        !- Name",
+        "Schedule:Year:Rules,",
+        "  schedule year rules,     !- Name",
         "  Fractional,              !- Schedule Type Limits Name",
         "  default day,             !- Default Day Schedule Name",
         "  ,                        !- Summer Design Day Schedule Name",
@@ -2468,7 +2463,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DesignDayOverrides)
 
     state->init_state(*state);
 
-    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE RULESET"));
+    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE YEAR RULES"));
     EXPECT_NE(sch, nullptr);
     EXPECT_EQ(367, sch->weekScheds.size());
     EXPECT_EQ(sch->weekScheds.front(), nullptr);
@@ -2491,7 +2486,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DesignDayOverrides)
     }
 }
 
-TEST_F(EnergyPlusFixture, ScheduleRuleset_Validation)
+TEST_F(EnergyPlusFixture, ScheduleYearRules_Validation)
 {
     // Test unknown day schedule names and duplicate rule order (warning)
     std::string const idf_objects = delimited_string({
@@ -2508,15 +2503,15 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_Validation)
         "  24:00,                    !- Time 1",
         "  1.0;                      !- Value Until Time 1",
         " ",
-        "Schedule:Ruleset,",
-        "  schedule ruleset,         !- Name",
+        "Schedule:Year:Rules,",
+        "  schedule year rules,      !- Name",
         "  Fractional,               !- Schedule Type Limits Name",
         "  default day;              !- Default Day Schedule Name",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan2-Dec31, !- Name",
-        "  schedule ruleset,         !- Schedule Ruleset Name",
-        "  1,                        !- Rule Order",
+        "  schedule year rules,      !- Schedule Year Rules Name",
+        "  1,                        !- Rule Priority Order",
         "  day schedule,             !- Day Schedule Name",
         "  Yes,                      !- Apply Sunday",
         "  Yes,                      !- Apply Monday",
@@ -2525,15 +2520,14 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_Validation)
         "  Yes,                      !- Apply Thursday",
         "  Yes,                      !- Apply Friday",
         "  Yes,                      !- Apply Saturday",
-        "  DateRange,                !- Date Specification Type",
         "  1,                        !- Start Month",
         "  2,                        !- Start Day",
         "  12,                       !- End Month",
         "  31;                       !- End Day",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jul1-Dec31, !- Name",
-        "  schedule ruleset,         !- Schedule Ruleset Name",
+        "  schedule year rules,      !- Schedule Year Rules Name",
         "  1,                        !- Rule Order",
         "  dayschedule,              !- Day Schedule Name",
         "  Yes,                      !- Apply Sunday",
@@ -2543,7 +2537,6 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_Validation)
         "  Yes,                      !- Apply Thursday",
         "  Yes,                      !- Apply Friday",
         "  Yes,                      !- Apply Saturday",
-        "  DateRange,                !- Date Specification Type",
         "  7,                        !- Start Month",
         "  1,                        !- Start Day",
         "  12,                       !- End Month",
@@ -2561,21 +2554,21 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_Validation)
     ASSERT_THROW(state->init_state(*state), EnergyPlus::FatalError); // read schedules
 
     const std::string expected_error = delimited_string({
-        "   ** Severe  ** ProcessScheduleInput: Schedule:Rule = SCHEDULE RULE JUL1-DEC31",
+        "   ** Severe  ** ProcessScheduleInput: Schedule:Week:Rule = SCHEDULE RULE JUL1-DEC31",
         "   **   ~~~   ** Day Schedule Name = DAYSCHEDULE, item not found.",
-        "   ** Warning ** ProcessScheduleInput: SCHEDULE RULESET has rules with duplicate rule order (1)",
-        "   ** Severe  ** ProcessScheduleInput: Schedule:Ruleset = SCHEDULE RULESET",
+        "   ** Warning ** ProcessScheduleInput: SCHEDULE YEAR RULES has week rules with duplicate rule priority order (1)",
+        "   ** Severe  ** ProcessScheduleInput: Schedule:Year:Rules = SCHEDULE YEAR RULES",
         "   **   ~~~   ** Default Day Schedule Name = DEFAULT DAY, item not found.",
         "   **  Fatal  ** ProcessScheduleInput: Preceding Errors cause termination.",
         "   ...Summary of Errors that led to program termination:",
         "   ..... Reference severe error count=2",
-        "   ..... Last severe error=ProcessScheduleInput: Schedule:Ruleset = SCHEDULE RULESET",
+        "   ..... Last severe error=ProcessScheduleInput: Schedule:Year:Rules = SCHEDULE YEAR RULES",
     });
 
     compare_err_stream(expected_error);
 }
 
-TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
+TEST_F(EnergyPlusFixture, ScheduleYearRules_SpecificDates)
 {
     // Test specific dates specification
     std::string const idf_objects = delimited_string({
@@ -2606,15 +2599,15 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
         "  24:00,                      !- Time 1",
         "  0.6;                        !- Value Until Time 1",
         " ",
-        "Schedule:Ruleset,",
-        "  schedule ruleset,           !- Name",
+        "Schedule:Year:Rules,",
+        "  schedule year rules,        !- Name",
         "  Fractional,                 !- Schedule Type Limits Name",
         "  always off;                 !- Default Day Schedule Name",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Oct19 Apr2 Feb29, !- Name",
-        "  schedule ruleset,           !- Schedule Ruleset Name",
-        "  0,                          !- Rule Order",
+        "  schedule year rules,        !- Schedule Year Rules Name",
+        "  0,                          !- Rule Priority Order",
         "  specific dates rule,        !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2623,22 +2616,23 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  SpecificDates,              !- Date Specification Type",
-        "  ,                           !- Start Month",
-        "  ,                           !- Start Day",
-        "  ,                           !- End Month",
-        "  ,                           !- End Day",
-        "  10,                         !- Specific Month 1",
-        "  19,                         !- Specific Day 1",
-        "  4,                          !- Specific Month 2",
-        "  2,                          !- Specific Day 2",
-        "  2,                          !- Specific Month 3",
-        "  29;                         !- Specific Day 3",
+        "  10,                         !- Start Month 1",
+        "  19,                         !- Start Day 1",
+        "  10,                         !- End Month 1",
+        "  19,                         !- End Day 1",
+        "  4,                          !- Start Month 2",
+        "  2,                          !- Start Day 2",
+        "  4,                          !- End Month 2",
+        "  2,                          !- End Day 2",
+        "  2,                          !- Start Month 3",
+        "  29,                         !- Start Day 3",
+        "  2,                          !- End Month 3",
+        "  29;                         !- End Day 3",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan1-Dec31,   !- Name",
-        "  schedule ruleset,           !- Schedule Ruleset Name",
-        "  1,                          !- Rule Order",
+        "  schedule year rules,        !- Schedule Year Rules Name",
+        "  1,                          !- Rule Priority Order",
         "  date range rule,            !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2647,7 +2641,6 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  DateRange,                  !- Date Specification Type",
         "  1,                          !- Start Month",
         "  1,                          !- Start Day",
         "  12,                         !- End Month",
@@ -2664,7 +2657,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
 
     state->init_state(*state);
 
-    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE RULESET"));
+    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE YEAR RULES"));
     EXPECT_NE(sch, nullptr);
     EXPECT_EQ(367, sch->weekScheds.size());
     EXPECT_EQ(sch->weekScheds.front(), nullptr);
@@ -2724,9 +2717,9 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_SpecificDates)
     }
 }
 
-TEST_F(EnergyPlusFixture, ScheduleRuleset_DateRangeWrapAround)
+TEST_F(EnergyPlusFixture, ScheduleYearRules_DateRangeWrapAround)
 {
-    // Test date range specification with wrap-around
+    // Test date ranges with wrap-around
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,                 !- Name",
@@ -2755,15 +2748,15 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DateRangeWrapAround)
         "  24:00,                      !- Time 1",
         "  0.3;                        !- Value Until Time 1",
         " ",
-        "Schedule:Ruleset,",
-        "  schedule ruleset,           !- Name",
+        "Schedule:Year:Rules,",
+        "  schedule year rules,        !- Name",
         "  Fractional,                 !- Schedule Type Limits Name",
         "  always off;                 !- Default Day Schedule Name",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Jan1-Dec31,   !- Name",
-        "  schedule ruleset,           !- Schedule Ruleset Name",
-        "  1,                          !- Rule Order",
+        "  schedule year rules,        !- Schedule Year Rules Name",
+        "  1,                          !- Rule Priority Order",
         "  date range rule,            !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2772,16 +2765,15 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DateRangeWrapAround)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  DateRange,                  !- Date Specification Type",
         "  1,                          !- Start Month",
         "  1,                          !- Start Day",
         "  12,                         !- End Month",
         "  31;                         !- End Day",
         " ",
-        "Schedule:Rule,",
+        "Schedule:Week:Rule,",
         "  schedule rule Nov1-Jan31,   !- Name",
-        "  schedule ruleset,           !- Schedule Ruleset Name",
-        "  0,                          !- Rule Order",
+        "  schedule year rules,        !- Schedule Year Rules Name",
+        "  0,                          !- Rule Priority Order",
         "  date range wraparound rule, !- Day Schedule Name",
         "  Yes,                        !- Apply Sunday",
         "  Yes,                        !- Apply Monday",
@@ -2790,7 +2782,6 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DateRangeWrapAround)
         "  Yes,                        !- Apply Thursday",
         "  Yes,                        !- Apply Friday",
         "  Yes,                        !- Apply Saturday",
-        "  DateRange,                  !- Date Specification Type",
         "  11,                         !- Start Month",
         "  1,                          !- Start Day",
         "  1,                          !- End Month",
@@ -2807,7 +2798,7 @@ TEST_F(EnergyPlusFixture, ScheduleRuleset_DateRangeWrapAround)
 
     state->init_state(*state);
 
-    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE RULESET"));
+    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE YEAR RULES"));
     EXPECT_NE(sch, nullptr);
     EXPECT_EQ(367, sch->weekScheds.size());
     EXPECT_EQ(sch->weekScheds.front(), nullptr);

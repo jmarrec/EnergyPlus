@@ -4841,17 +4841,17 @@ Schedule:Constant,
        \type real
        \default 0
 
-Schedule:Ruleset,
-       \memo A Schedule:Ruleset defines a yearly schedule using a default day profile and
-       \memo a prioritized list of override rules (Schedule:Rule objects). Rules are evaluated
-       \memo in ascending Rule Order; the first matching rule for a given day is used.
+Schedule:Year:Rules,
+       \memo A Schedule:Year:Rules defines a yearly schedule using a default day profile and
+       \memo a prioritized list of override rules (Schedule:Week:Rule objects). Rules are evaluated
+       \memo in ascending Rule Priority Order; the first matching rule for a given day is used.
        \memo If no rule matches, the Default Day Schedule is used.
        \min-fields 3
   A1,  \field Name
        \type alpha
        \required-field
        \reference ScheduleNames
-       \reference ScheduleRulesetNames
+       \reference ScheduleYearRulesNames
   A2,  \field Schedule Type Limits Name
        \type object-list
        \object-list ScheduleTypeLimitsNames
@@ -4880,23 +4880,23 @@ Schedule:Ruleset,
        \type object-list
        \object-list DayScheduleNames
 
-Schedule:Rule,
-       \memo A Schedule:Rule defines one override rule for a Schedule:Ruleset.
-       \memo Rules are evaluated in ascending Rule Order; the first matching rule wins.
-       \memo A rule matches a day if: (a) the day falls within the date specification,
+Schedule:Week:Rule,
+       \memo A Schedule:Week:Rule defines one override rule for a Schedule:Year:Rules.
+       \memo Rules are evaluated in ascending Rule Priority Order; the first matching rule wins.
+       \memo A rule matches a day if: (a) the day falls within the specified date ranges,
        \memo AND (b) the corresponding Apply <DayOfWeek> field is Yes.
-       \extensible:2 - repeat last two fields (Specific Month, Specific Day)
-       \min-fields 12
+       \extensible:4 - repeat last two fields (Start Month, Start Day, End Month, End Day)
+       \min-fields 11
   A1,  \field Name
        \type alpha
        \required-field
-       \reference ScheduleRuleNames
-  A2,  \field Schedule Ruleset Name
+       \reference ScheduleWeekRuleNames
+  A2,  \field Schedule Year Rules Name
        \type object-list
        \required-field
-       \object-list ScheduleRulesetNames
-  N1,  \field Rule Order
-       \note Lower values have higher priority. Must be unique within a Schedule:Ruleset.
+       \object-list ScheduleYearRulesNames
+  N1,  \field Rule Priority Order
+       \note Lower values have higher priority. Must be unique within a Schedule:Year:Rules.
        \type integer
        \required-field
        \minimum 0
@@ -4939,47 +4939,27 @@ Schedule:Rule,
        \default No
        \key Yes
        \key No
-  A11, \field Date Specification Type
-       \type choice
-       \default DateRange
-       \key DateRange
-       \key SpecificDates
-  N2,  \field Start Month
-       \note Used only when Date Specification Type = DateRange.
+  N2 , \field Start Month 1
+       \begin-extensible
        \type integer
        \minimum 1
        \maximum 12
        \default 1
-  N3,  \field Start Day
-       \note Used only when Date Specification Type = DateRange.
+  N3 , \field Start Day 1
        \type integer
        \minimum 1
        \maximum 31
        \default 1
-  N4,  \field End Month
-       \note Used only when Date Specification Type = DateRange.
+  N4 , \field End Month 1
        \type integer
        \minimum 1
        \maximum 12
        \default 12
-  N5,  \field End Day
-       \note Used only when Date Specification Type = DateRange.
+  N5 ; \field End Day 1
        \type integer
        \minimum 1
        \maximum 31
        \default 31
-  N6,  \field Specific Month 1
-       \note Used only when Date Specification Type = SpecificDates.
-       \note Repeat the Specific Month / Specific Day pair for each date.
-       \type integer
-       \begin-extensible
-       \minimum 1
-       \maximum 12
-  N7;  \field Specific Day 1
-       \note Used only when Date Specification Type = SpecificDates.
-       \type integer
-       \minimum 1
-       \maximum 31
 
 Schedule:File:Shading,
        \min-fields 1

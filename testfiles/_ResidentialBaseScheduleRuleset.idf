@@ -3113,14 +3113,14 @@
     For: AllDays,            !- <none>
     Until: 24:00,10.1122222222222; !- <none>
 
-!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:RULESET ===========
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:YEAR:RULES ===========
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     trans schedule winter=0.85 summer=0.7,      !- Name
     Fractional,                                 !- Schedule Type Limits Name
     trans schedule winter=0.85 summer=0.7 default day;        !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     trans schedule winter=0.85 summer=0.7 rule,        !- Name
     trans schedule winter=0.85 summer=0.7,      !- Schedule Ruleset Name
     2,                                          !- Rule Order
@@ -3132,13 +3132,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     4,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     trans schedule winter=0.85 summer=0.7 rule 1,        !- Name
     trans schedule winter=0.85 summer=0.7,      !- Schedule Ruleset Name
     1,                                          !- Rule Order
@@ -3150,13 +3149,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     5,                                          !- Start Month
     1,                                          !- Start Day
     10,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     trans schedule winter=0.85 summer=0.7 rule 2,        !- Name
     trans schedule winter=0.85 summer=0.7,      !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3168,18 +3166,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     11,                                         !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     clothes dryer schedule,                     !- Name
     Fractional,                                 !- Schedule Type Limits Name
     clothes dryer schedule default day;         !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     clothes dryer schedule rule,                !- Name
     clothes dryer schedule,                     !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3191,18 +3188,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     clothes washer schedule,                    !- Name
     Fractional,                                 !- Schedule Type Limits Name
     clothes washer schedule default day;        !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     clothes washer schedule rule,               !- Name
     clothes washer schedule,                    !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3214,18 +3210,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     cooking range schedule,                     !- Name
     Fractional,                                 !- Schedule Type Limits Name
     cooking range schedule default day;         !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     cooking range schedule rule,                !- Name
     cooking range schedule,                     !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3237,18 +3232,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     dishwasher schedule,                        !- Name
     Fractional,                                 !- Schedule Type Limits Name
     dishwasher schedule default day;            !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     dishwasher schedule rule,                   !- Name
     dishwasher schedule,                        !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3260,18 +3254,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     misc plug loads schedule,                   !- Name
     Fractional,                                 !- Schedule Type Limits Name
     misc plug loads schedule default day;       !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     misc plug loads schedule rule,              !- Name
     misc plug loads schedule,                   !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3283,18 +3276,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     misc tv schedule,                           !- Name
     Fractional,                                 !- Schedule Type Limits Name
     misc tv schedule default day;               !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     misc tv schedule rule,                      !- Name
     misc tv schedule,                           !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3306,18 +3298,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     general water use schedule,                 !- Name
     Fractional,                                 !- Schedule Type Limits Name
     general water use schedule default day;     !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     general water use schedule rule,            !- Name
     general water use schedule,                 !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3329,18 +3320,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     heating setpoint,                           !- Name
     Temperature,                                !- Schedule Type Limits Name
     heating setpoint default day;               !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     heating setpoint rule,                      !- Name
     heating setpoint,                           !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3352,18 +3342,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     cooling setpoint,                           !- Name
     Temperature,                                !- Schedule Type Limits Name
     cooling setpoint default day;               !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     cooling setpoint rule,                      !- Name
     cooling setpoint,                           !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3375,18 +3364,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     clothes dryer exhaust 0 schedule,           !- Name
     Fractional,                                 !- Schedule Type Limits Name
     clothes dryer exhaust 0 schedule default day;               !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     clothes dryer exhaust 0 schedule rule,      !- Name
     clothes dryer exhaust 0 schedule,           !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3398,18 +3386,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     dhw fixtures schedule,                      !- Name
     Fractional,                                 !- Schedule Type Limits Name
     dhw fixtures schedule default day;          !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     dhw fixtures schedule rule,                 !- Name
     dhw fixtures schedule,                      !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3421,18 +3408,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     cooling season schedule,                    !- Name
     Fractional,                                 !- Schedule Type Limits Name
     cooling season schedule default day;        !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     cooling season schedule allday rule,        !- Name
     cooling season schedule,                    !- Schedule Ruleset Name
     3,                                          !- Rule Order
@@ -3444,13 +3430,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     4,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     cooling season schedule allday rule 1,      !- Name
     cooling season schedule,                    !- Schedule Ruleset Name
     2,                                          !- Rule Order
@@ -3462,33 +3447,20 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    SpecificDates,                              !- Date Specification Type
-    ,                                           !- Start Month
-    ,                                           !- Start Day
-    ,                                           !- End Month
-    ,                                           !- End Day
-    5,                                          !- Specific Month 1
-    1,                                          !- Specific Day 1
-    5,                                          !- Specific Month 2
-    2,                                          !- Specific Day 2
-    5,                                          !- Specific Month 3
-    3,                                          !- Specific Day 3
-    5,                                          !- Specific Month 4
-    4,                                          !- Specific Day 4
-    5,                                          !- Specific Month 5
-    5,                                          !- Specific Day 5
-    5,                                          !- Specific Month 6
-    6,                                          !- Specific Day 6
-    5,                                          !- Specific Month 7
-    7,                                          !- Specific Day 7
-    5,                                          !- Specific Month 8
-    8,                                          !- Specific Day 8
-    5,                                          !- Specific Month 9
-    9,                                          !- Specific Day 9
-    5,                                          !- Specific Month 10
-    10;                                         !- Specific Day 10
+    5,                                          !- Start Month 1
+    1,                                          !- Start Day 1
+    5,                                          !- End Month 1
+    3,                                          !- End Day 1
+    5,                                          !- Start Month 2
+    4,                                          !- Start Day 2
+    5,                                          !- End Month 2
+    6,                                          !- End Day 2
+    5,                                          !- Start Month 3
+    7,                                          !- Start Day 3
+    5,                                          !- End Month 3
+    10;                                         !- End Day 3
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     cooling season schedule allday rule 2,      !- Name
     cooling season schedule,                    !- Schedule Ruleset Name
     1,                                          !- Rule Order
@@ -3500,13 +3472,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     5,                                          !- Start Month
     11,                                         !- Start Day
     10,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     cooling season schedule allday rule 3,      !- Name
     cooling season schedule,                    !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3518,18 +3489,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     11,                                         !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     natural vent schedule,                      !- Name
     OnOff,                                      !- Schedule Type Limits Name
     natural vent schedule default day;          !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     natural vent schedule rule,                 !- Name
     natural vent schedule,                      !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3541,23 +3511,22 @@
     No,                                         !- Apply Thursday
     Yes,                                        !- Apply Friday
     No,                                         !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     fridge schedule,                            !- Name
     Fractional,                                 !- Schedule Type Limits Name
     fridge schedule default day;                !- Default Day Schedule Name
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     interior lighting schedule,                 !- Name
     Fractional,                                 !- Schedule Type Limits Name
     interior lighting schedule default day;     !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule,     !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     11,                                         !- Rule Order
@@ -3569,13 +3538,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     1,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 1,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     10,                                         !- Rule Order
@@ -3587,13 +3555,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     2,                                          !- Start Month
     1,                                          !- Start Day
     2,                                          !- End Month
     28;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 2,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     9,                                          !- Rule Order
@@ -3605,13 +3572,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     3,                                          !- Start Month
     1,                                          !- Start Day
     3,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 3,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     8,                                          !- Rule Order
@@ -3623,13 +3589,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     4,                                          !- Start Month
     1,                                          !- Start Day
     4,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 4,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     7,                                          !- Rule Order
@@ -3641,13 +3606,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     5,                                          !- Start Month
     1,                                          !- Start Day
     5,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 5,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     6,                                          !- Rule Order
@@ -3659,13 +3623,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     6,                                          !- Start Month
     1,                                          !- Start Day
     6,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 6,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     5,                                          !- Rule Order
@@ -3677,13 +3640,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     7,                                          !- Start Month
     1,                                          !- Start Day
     7,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 7,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     4,                                          !- Rule Order
@@ -3695,13 +3657,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     8,                                          !- Start Month
     1,                                          !- Start Day
     8,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 8,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     3,                                          !- Rule Order
@@ -3713,13 +3674,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     9,                                          !- Start Month
     1,                                          !- Start Day
     9,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 9,   !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     2,                                          !- Rule Order
@@ -3731,13 +3691,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     10,                                         !- Start Month
     1,                                          !- Start Day
     10,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 10,  !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     1,                                          !- Rule Order
@@ -3749,13 +3708,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     11,                                         !- Start Month
     1,                                          !- Start Day
     11,                                         !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     interior lighting schedule allday rule 11,  !- Name
     interior lighting schedule,                 !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3767,18 +3725,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     12,                                         !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     exterior lighting schedule,                 !- Name
     Fractional,                                 !- Schedule Type Limits Name
     exterior lighting schedule default day;     !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule,     !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     11,                                         !- Rule Order
@@ -3790,13 +3747,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     1,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 1,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     10,                                         !- Rule Order
@@ -3808,13 +3764,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     2,                                          !- Start Month
     1,                                          !- Start Day
     2,                                          !- End Month
     28;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 2,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     9,                                          !- Rule Order
@@ -3826,13 +3781,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     3,                                          !- Start Month
     1,                                          !- Start Day
     3,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 3,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     8,                                          !- Rule Order
@@ -3844,13 +3798,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     4,                                          !- Start Month
     1,                                          !- Start Day
     4,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 4,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     7,                                          !- Rule Order
@@ -3862,13 +3815,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     5,                                          !- Start Month
     1,                                          !- Start Day
     5,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 5,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     6,                                          !- Rule Order
@@ -3880,13 +3832,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     6,                                          !- Start Month
     1,                                          !- Start Day
     6,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 6,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     5,                                          !- Rule Order
@@ -3898,13 +3849,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     7,                                          !- Start Month
     1,                                          !- Start Day
     7,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 7,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     4,                                          !- Rule Order
@@ -3916,13 +3866,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     8,                                          !- Start Month
     1,                                          !- Start Day
     8,                                          !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 8,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     3,                                          !- Rule Order
@@ -3934,13 +3883,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     9,                                          !- Start Month
     1,                                          !- Start Day
     9,                                          !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 9,   !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     2,                                          !- Rule Order
@@ -3952,13 +3900,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     10,                                         !- Start Month
     1,                                          !- Start Day
     10,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 10,  !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     1,                                          !- Rule Order
@@ -3970,13 +3917,12 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     11,                                         !- Start Month
     1,                                          !- Start Day
     11,                                         !- End Month
     30;                                         !- End Day
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     exterior lighting schedule allday rule 11,  !- Name
     exterior lighting schedule,                 !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -3988,18 +3934,17 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     12,                                         !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
     31;                                         !- End Day
 
-  Schedule:Ruleset,
+  Schedule:Year:Rules,
     occupants schedule,                         !- Name
     Fractional,                                 !- Schedule Type Limits Name
     occupants schedule default day;             !- Default Day Schedule Name
 
-  Schedule:Rule,
+  Schedule:Week:Rule,
     occupants schedule Week Rule - Jan1-Dec31,  !- Name
     occupants schedule,                         !- Schedule Ruleset Name
     0,                                          !- Rule Order
@@ -4011,7 +3956,6 @@
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
     Yes,                                        !- Apply Saturday
-    DateRange,                                  !- Date Specification Type
     1,                                          !- Start Month
     1,                                          !- Start Day
     12,                                         !- End Month
@@ -6742,7 +6686,7 @@
   EnergyManagementSystem:Actuator,
     fridge_schedule_act,     !- Name
     fridge schedule,         !- Actuated Component Unique Name
-    Schedule:Ruleset,        !- Actuated Component Type
+    Schedule:Year:Rules,        !- Actuated Component Type
     Schedule Value;          !- Actuated Component Control Type
 
   EnergyManagementSystem:Actuator,
