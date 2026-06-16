@@ -145,9 +145,6 @@ jobs:
         # The MACOSX_DEPLOYMENT_TARGET environment variable sets the default value for the CMAKE_OSX_DEPLOYMENT_TARGET variable.
         # We use cmake commands to build some subprojects, so setting it globally
         echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
-        echo "Installing gcc@13 for gfortran support of -static-libquadmath"
-        brew reinstall gcc@13
-        which gfortran-13 || echo "FC=$(brew --prefix gcc@13)/bin/gfortran-13" >> $GITHUB_ENV
         brew install ninja tcl-tk
 
     - name: Install required LaTeX packages by building the Test document
