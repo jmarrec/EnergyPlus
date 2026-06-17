@@ -546,8 +546,10 @@ void CalcMoistureBalanceEMPD(EnergyPlusData &state,
             PsyRhovFnTdbWPb(TempZone, state.dataZoneTempPredictorCorrector->zoneHeatBalance(surface.Zone).airHumRat, state.dataEnvrn->OutBaroPress);
         return;
     } else if (mat == nullptr) {
-        // We can be here for a material/construction w/out EMPD since it's only
-        // required EMPD exists for at least one material/construction in the zone.
+        // Surface/construction without EMPD properties: treat as no moisture buffering for this surface.
+        rv_surface = rho_vapor_air_in;
+        rv_surf_layer = rv_surface;
+        rv_deep_layer = rv_surface;
         return;
     }
 
