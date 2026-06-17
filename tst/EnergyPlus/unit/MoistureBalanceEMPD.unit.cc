@@ -472,6 +472,7 @@ TEST_F(EnergyPlusFixture, CheckEMPDNoSegFault)
 {
     // Regression test for #10777: CalcMoistureBalanceEMPD should not segfault when an EMPD surface's
     // inside-layer material lacks EMPD properties (dynamic_cast returns nullptr), so the routine bails out cleanly.
+    std::string const idf_objects =
         delimited_string({"  Material,",
                           "    1/2IN Gypsum,            !- Name",
                           "    Smooth,                  !- Roughness",
