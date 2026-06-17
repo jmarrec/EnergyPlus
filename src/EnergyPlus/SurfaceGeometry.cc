@@ -12781,12 +12781,12 @@ namespace SurfaceGeometry {
         Real64 ThisReveal;
         Real64 ThisWidth;
         Real64 ThisHeight;
-        Real64 FrWidth;      // Frame width for exterior windows (m)
-        Real64 FrArea;       // Frame area for exterior windows(m2)
-        Real64 DivWidth;     // Divider width for exterior windows (m)
-        Real64 DivArea;      // Divider area for exterior windows (m2)
-        Real64 DivFrac;      // Fraction of divider area without overlaps
-        bool ErrorInSurface; // false/true, depending on pass through routine
+        Real64 FrWidth = 0.0;  // Frame width for exterior windows (m)
+        Real64 FrArea = 0.0;   // Frame area for exterior windows(m2)
+        Real64 DivWidth = 0.0; // Divider width for exterior windows (m)
+        Real64 DivArea = 0.0;  // Divider area for exterior windows (m2)
+        Real64 DivFrac = 0.0;  // Fraction of divider area without overlaps
+        bool ErrorInSurface;   // false/true, depending on pass through routine
         bool HeatTransSurf;
         Real64 OutOfLine;
 
