@@ -312,15 +312,14 @@ namespace VentilatedSlab {
                 if (lAlphaBlanks(3)) {
                     ShowSevereError(
                         state,
-                        EnergyPlus::format(
-                            R"({}="{}" invalid {} is required but input is blank.)", CurrentModuleObject, ventSlab.Name, cAlphaFields(3)));
+                        std::format(R"({}="{}" invalid {} is required but input is blank.)", CurrentModuleObject, ventSlab.Name, cAlphaFields(3)));
                 } else {
                     ShowSevereError(state,
-                                    EnergyPlus::format(R"({}="{}" invalid {}="{}" not found.)",
-                                                       CurrentModuleObject,
-                                                       ventSlab.Name,
-                                                       cAlphaFields(3),
-                                                       state.dataIPShortCut->cAlphaArgs(3)));
+                                    std::format(R"({}="{}" invalid {}="{}" not found.)",
+                                                CurrentModuleObject,
+                                                ventSlab.Name,
+                                                cAlphaFields(3),
+                                                state.dataIPShortCut->cAlphaArgs(3)));
                 }
                 ErrorsFound = true;
             }
@@ -371,11 +370,11 @@ namespace VentilatedSlab {
                 // Error checking for single surfaces
                 if (ventSlab.SurfacePtr(1) == 0) {
                     ShowSevereError(state,
-                                    EnergyPlus::format(R"({}="{}" invalid {}="{}" not found.)",
-                                                       CurrentModuleObject,
-                                                       ventSlab.Name,
-                                                       cAlphaFields(4),
-                                                       state.dataIPShortCut->cAlphaArgs(4)));
+                                    std::format(R"({}="{}" invalid {}="{}" not found.)",
+                                                CurrentModuleObject,
+                                                ventSlab.Name,
+                                                cAlphaFields(4),
+                                                state.dataIPShortCut->cAlphaArgs(4)));
                     ErrorsFound = true;
                 } else if (state.dataSurface->SurfIsRadSurfOrVentSlabOrPool(ventSlab.SurfacePtr(1))) {
                     ShowSevereError(state, std::format("{}=\"{}\", invalid Surface", CurrentModuleObject, ventSlab.Name));
@@ -508,7 +507,7 @@ namespace VentilatedSlab {
             default: {
                 ShowSevereError(
                     state,
-                    EnergyPlus::format(
+                    std::format(
                         R"({}="{}" invalid {}="{}".)", CurrentModuleObject, ventSlab.Name, cAlphaFields(5), state.dataIPShortCut->cAlphaArgs(5)));
             } break;
             } // switch (outsideAirControlType)
