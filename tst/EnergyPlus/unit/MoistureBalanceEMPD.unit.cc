@@ -470,9 +470,8 @@ TEST_F(EnergyPlusFixture, CheckEMPDWarningMissingOnInsideLayer)
 
 TEST_F(EnergyPlusFixture, CheckEMPDNoSegFault)
 {
-    // Test for #10777: if there's at least one construction with EMPD in the zone,
-    // then there is no seg fault for the other materials without EMPD properties.
-    std::string const idf_objects =
+    // Regression test for #10777: CalcMoistureBalanceEMPD should not segfault when an EMPD surface's
+    // inside-layer material lacks EMPD properties (dynamic_cast returns nullptr), so the routine bails out cleanly.
         delimited_string({"  Material,",
                           "    1/2IN Gypsum,            !- Name",
                           "    Smooth,                  !- Roughness",
