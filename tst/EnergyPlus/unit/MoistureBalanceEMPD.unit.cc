@@ -463,13 +463,15 @@ TEST_F(EnergyPlusFixture, CheckEMPDWarningMissingOnInsideLayer)
     state->dataGlobal->DisplayExtraWarnings = true;
     MoistureBalanceEMPDManager::InitMoistureBalanceEMPD(*state);
 
-    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
-        "   ************* GetMoistureBalanceEMPDInput: EMPD properties are not assigned to the inside layer in Surface=Surface 26",
-        "   **   ~~~   ** with Construction=000_Interior Wall"})));
+    EXPECT_TRUE(compare_err_stream_substring(
+        delimited_string({"   ************* GetMoistureBalanceEMPDInput: EMPD properties are not assigned to the inside layer in Surface=Surface 26",
+                          "   **   ~~~   ** with Construction=000_Interior Wall"})));
 }
 
-TEST_F(EnergyPlusFixture, CheckEMPDSegFault)
+TEST_F(EnergyPlusFixture, CheckEMPDNoSegFault)
 {
+    // Test for #10777: if there's at least one construction with EMPD in the zone,
+    // then there is no seg fault for the other materials without EMPD properties.
     std::string const idf_objects =
         delimited_string({"  Material,",
                           "    1/2IN Gypsum,            !- Name",
@@ -555,7 +557,7 @@ TEST_F(EnergyPlusFixture, CheckEMPDSegFault)
     Real64 Taver = state->dataHeatBalSurf->SurfTempIn(surfNum);
     MoistureBalanceEMPDManager::CalcMoistureBalanceEMPD(*state, 1, Taver, Taver, Tsat);
 
-    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
-        "   ************* GetMoistureBalanceEMPDInput: EMPD properties are not assigned to the inside layer of Surfaces",
-        "   **   ~~~   ** ...use Output:Diagnostics,DisplayExtraWarnings; to show more details on individual surfaces."})));
+    EXPECT_TRUE(compare_err_stream_substring(
+        delimited_string({"   ************* GetMoistureBalanceEMPDInput: EMPD properties are not assigned to the inside layer of Surfaces",
+                          "   **   ~~~   ** ...use Output:Diagnostics,DisplayExtraWarnings; to show more details on individual surfaces."})));
 }
