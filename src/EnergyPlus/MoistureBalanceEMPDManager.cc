@@ -262,12 +262,12 @@ void GetMoistureBalanceEMPDInput(EnergyPlusData &state)
         } else {
             ++state.dataMoistureBalEMPD->ErrCount;
             if (state.dataMoistureBalEMPD->ErrCount == 1 && !state.dataGlobal->DisplayExtraWarnings) {
-                ShowMessage(state, "GetMoistureBalanceEMPDInput: EMPD properties are not assigned to the inside layer of Surfaces");
+                ShowMessage(state, std::format("{}: EMPD properties are not assigned to the inside layer of Surfaces", routineName));
                 ShowContinueError(state, "...use Output:Diagnostics,DisplayExtraWarnings; to show more details on individual surfaces.");
             }
             if (state.dataGlobal->DisplayExtraWarnings) {
                 ShowMessage(
-                    state, std::format("GetMoistureBalanceEMPDInput: EMPD properties are not assigned to the inside layer in Surface={}", surf.Name));
+                    state, std::format("{}: EMPD properties are not assigned to the inside layer in Surface={}", routineName, surf.Name));
                 ShowContinueError(state, std::format("with Construction={}", constr.Name));
             }
         }
@@ -541,10 +541,15 @@ void CalcMoistureBalanceEMPD(EnergyPlusData &state,
 
     auto const &constr = state.dataConstruction->Construct(surface.Construction);
     auto const *mat = dynamic_cast<MaterialEMPD const *>(s_mat->materials(constr.LayerPoint(constr.TotLayers)));
-    assert(mat != nullptr);
-    if (mat->mu <= 0.0) {
+    //assert(mat != nullptr);
+
+    if ((mat != nullptr) && mat->mu <= 0.0) {
         rv_surface =
             PsyRhovFnTdbWPb(TempZone, state.dataZoneTempPredictorCorrector->zoneHeatBalance(surface.Zone).airHumRat, state.dataEnvrn->OutBaroPress);
+        return;
+    } else if (mat == nullptr) {
+        // We can be here for a material/construction w/out EMPD since it's only
+        // required EMPD exists for at least one material/construction in the zone.
         return;
     }
 
