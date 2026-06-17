@@ -1328,6 +1328,12 @@ namespace HybridEvapCoolingModel {
                                 CandidateSetting.Unscaled_Supply_Air_Mass_Flow_Rate = UnscaledMsa;
                                 CandidateSetting.ScaledSupply_Air_Mass_Flow_Rate = ScaledMsa;
 
+                                if (!CoolingRequested && !HeatingRequested && !DehumidificationRequested && !HumidificationRequested) {
+                                    // If no load is requested but ventilation is required, set the supply air temp to the outside air temp
+                                    // add fan heat if not included in lookup tables for supply air stream
+                                    Tsa = StepIns.Tosa + FanHeatTemp;
+                                }
+
                                 CandidateSetting.ScaledSupply_Air_Ventilation_Volume =
                                     CandidateSetting.ScaledSupply_Air_Mass_Flow_Rate / state.dataEnvrn->StdRhoAir;
                                 CandidateSetting.oMode = Mode;
