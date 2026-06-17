@@ -1566,6 +1566,11 @@ namespace HybridEvapCoolingModel {
                 CurrentOperatingSettings[0] = OptimalSetting;
                 PrimaryMode = OptimalSetting.Mode;
                 PrimaryModeRuntimeFraction = OptimalSetting.Runtime_Fraction;
+                oStandBy.Runtime_Fraction = (1 - PrimaryModeRuntimeFraction);
+                if (oStandBy.Runtime_Fraction < 0) {
+                    oStandBy.Runtime_Fraction = 0;
+                }
+                CurrentOperatingSettings[1] = oStandBy;
             }
             // if we didn't even partially meet the load make sure the operational settings are just the standby mode.
             else {
