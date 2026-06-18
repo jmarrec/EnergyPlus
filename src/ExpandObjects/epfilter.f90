@@ -195,6 +195,7 @@ INTEGER,PARAMETER :: IniFH  = 5 !Energy+.INI file handle
 
 LOGICAL :: isChillerWithWaterCooled = .FALSE.
 LOGICAL :: errorCondition = .FALSE.
+LOGICAL :: hadSevereError = .FALSE. !TRUE if any non-Warning message was issued; drives the process exit code
 LOGICAL :: foundCompactObject = .FALSE.
 LOGICAL :: iddCanBeRead =.FALSE.
 
@@ -2036,11 +2037,18 @@ END IF
 IF (errorCondition) THEN
   CLOSE(ErrFH)
   CALL CPU_TIME(endTime)
-  PRINT "(A,F10.3)", "ExpandObjects Finished with Error(s). Time:", endTime - startTime
+  IF (hadSevereError) THEN
+    PRINT "(A,F10.3)", "ExpandObjects Finished with Error(s). Time:", endTime - startTime
+  ELSE
+    PRINT "(A,F10.3)", "ExpandObjects Finished with Warning(s). Time:", endTime - startTime
+  END IF
 ELSE
   CLOSE(ErrFH,STATUS='DELETE')  !get rid of error file if no errors found
   CALL CPU_TIME(endTime)
   PRINT "(A,F10.3)", "ExpandObjects Finished. Time:", endTime - startTime
+END IF
+IF (hadSevereError) THEN
+  CALL EXIT(1)
 END IF
 
 CONTAINS
@@ -4567,8 +4575,12 @@ WRITE(UNIT=OutFH, FMT="(A)") '! ' // TRIM(ErrorString)
 WRITE(UNIT=ErrFH, FMT="(A)") 'ExpandObjects: ' // TRIM(ErrorString)
 IF (PRESENT (warningOrError)) THEN
   CALL AddToErrMsg(ErrorString,warningOrError)
+  IF (warningOrError .NE. msgWarning) THEN
+    hadSevereError = .TRUE.
+  END IF
 ELSE
   CALL AddToErrMsg(ErrorString)
+  hadSevereError = .TRUE.
 END IF
 errorCondition = .TRUE.
 END SUBROUTINE
