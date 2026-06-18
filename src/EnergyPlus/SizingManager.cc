@@ -4497,7 +4497,7 @@ std::string TimeIndexToHrMinString(EnergyPlusData const &state, int timeIndex)
     int tMinOfDay = timeIndex * state.dataGlobal->MinutesInTimeStep;
     int tHr = int(tMinOfDay / 60.);
     int tMin = tMinOfDay - tHr * 60;
-    return EnergyPlus::format(PeakHrMinFmt, tHr, tMin);
+    return std::format(PeakHrMinFmt, tHr, tMin);
 }
 
 void GetZoneHVACSizing(EnergyPlusData &state)

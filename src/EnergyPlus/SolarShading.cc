@@ -407,9 +407,9 @@ void checkShadingSurfaceSchedules(EnergyPlusData &state)
         } else if (!thisSurface.MirroredSurf) {
             // Warning moved here from shading surface input processing (skip warning for mirrored surfaces)
             ShowWarningError(state,
-                             EnergyPlus::format(R"(Shading Surface="{}", Transmittance Schedule Name="{}", is always transparent.)",
-                                                thisSurface.Name,
-                                                thisSurface.shadowSurfSched->Name));
+                             std::format(R"(Shading Surface="{}", Transmittance Schedule Name="{}", is always transparent.)",
+                                         thisSurface.Name,
+                                         thisSurface.shadowSurfSched->Name));
             ShowContinueError(state, "This shading surface will be ignored.");
         }
     }

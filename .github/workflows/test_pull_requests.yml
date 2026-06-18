@@ -207,6 +207,15 @@ jobs:
       shell: bash
       run: echo "::remove-matcher owner=gcc-problem-matcher::"
 
+    - name: Upload CCache debug logs
+      if: always() && env.CCACHE_DEBUG == '1'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ccache-debug-${{ matrix.os }}
+        path: .ccache-debug
+        include-hidden-files: true
+        retention-days: 7
+
     - name: Save CCache cache
       if: always() && steps.cacheccache-restore.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5

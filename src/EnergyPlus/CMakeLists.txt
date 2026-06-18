@@ -757,7 +757,7 @@ if(LINK_WITH_PYTHON)
 endif()
 
 add_library(energyplusparser STATIC ${INPUTPARSING_SRC})
-target_link_libraries(energyplusparser PUBLIC embedded_epjson_source nlohmann_json re2 fmt::fmt ${CMAKE_DL_LIBS})
+target_link_libraries(energyplusparser PUBLIC embedded_epjson_source nlohmann_json re2 ${CMAKE_DL_LIBS})
 target_link_libraries(energyplusparser PRIVATE project_options project_fp_options project_warnings)
 if(WIN32)
   target_link_libraries(energyplusparser PUBLIC Shlwapi)
@@ -782,7 +782,6 @@ endif()
 target_link_libraries(
   energypluslib
   PUBLIC embedded_epjson_source
-         fmt::fmt
          nlohmann_json
          objexx
          sqlite

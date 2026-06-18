@@ -682,14 +682,13 @@ namespace Sched {
                         isJSON = false;
                     }
                     if (!isCSV && !isJSON) {
-                        ShowSevereError(
-                            state,
-                            EnergyPlus::format(R"({}: {}="{}", {}="{}" has an unknown file extension and cannot be read by this program.)",
-                                               routineName,
-                                               CurrentModuleObject,
-                                               Alphas(1),
-                                               cAlphaFields(3),
-                                               Alphas(3)));
+                        ShowSevereError(state,
+                                        std::format(R"({}: {}="{}", {}="{}" has an unknown file extension and cannot be read by this program.)",
+                                                    routineName,
+                                                    CurrentModuleObject,
+                                                    Alphas(1),
+                                                    cAlphaFields(3),
+                                                    Alphas(3)));
                         ShowFatalError(state, "Program terminates due to previous condition.");
                     }
                 }
@@ -3353,9 +3352,7 @@ namespace Sched {
         }
 
         if (nonIntegral) {
-            std::string hHour; // these haven't been initialized?
-            std::string mMinute;
-            ShowContinueError(state, EnergyPlus::format("Until value to be used will be: {:2.2F}:{:2.2F}", hHour, mMinute));
+            ShowContinueError(state, std::format("Until value to be used will be: {:02}:{:02}", RetHH, RetMM));
         }
         if (interpolation == Interpolation::No) {
             if (!isMinuteMultipleOfTimestep(RetMM, s_glob->MinutesInTimeStep)) {
