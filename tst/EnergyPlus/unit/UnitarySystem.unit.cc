@@ -7743,7 +7743,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
             continue; // not allowed for cooling air flow
         }
 
-        thisSys.Name = format("UnitarySystem:CoolingOnly #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingOnly #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;
         thisSys.m_MaxCoolAirVolFlow = DataSizing::AutoSize;
@@ -7810,7 +7810,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
             continue; // not allowed for heating air flow
         }
 
-        thisSys.Name = format("UnitarySystem:HeatingOnly #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:HeatingOnly #{}", iSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iSizingType);
         thisSys.m_DesignHeatingCapacity = DataSizing::AutoSize;
         thisSys.m_MaxCoolAirVolFlow = DataSizing::AutoSize;
@@ -7889,7 +7889,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
         if (iSizingType == DataSizing::FlowPerHeatingCapacity) {
             iCoolingSizingType = DataSizing::FlowPerCoolingCapacity;
         }
-        thisSys.Name = format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iCoolingSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iHeatingSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;
@@ -7956,7 +7956,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
         if (iSizingType == DataSizing::FlowPerHeatingCapacity) {
             iCoolingSizingType = DataSizing::FlowPerCoolingCapacity;
         }
-        thisSys.Name = format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iCoolingSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iHeatingSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;
@@ -8019,7 +8019,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
         if (iSizingType == DataSizing::FlowPerHeatingCapacity) {
             iCoolingSizingType = DataSizing::FlowPerCoolingCapacity;
         }
-        thisSys.Name = format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iCoolingSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iHeatingSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;
@@ -8084,7 +8084,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
         if (iSizingType == DataSizing::FlowPerHeatingCapacity) {
             iCoolingSizingType = DataSizing::FlowPerCoolingCapacity;
         }
-        thisSys.Name = format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iCoolingSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iHeatingSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;
@@ -8147,7 +8147,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
         if (iSizingType == DataSizing::FlowPerHeatingCapacity) {
             iCoolingSizingType = DataSizing::FlowPerCoolingCapacity;
         }
-        thisSys.Name = format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iCoolingSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iHeatingSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;
@@ -8212,7 +8212,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
         if (iSizingType == DataSizing::FlowPerHeatingCapacity) {
             iCoolingSizingType = DataSizing::FlowPerCoolingCapacity;
         }
-        thisSys.Name = format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iCoolingSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iHeatingSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;
@@ -8275,7 +8275,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_ConfirmUnitarySystemSizingTest)
         if (iSizingType == DataSizing::FlowPerHeatingCapacity) {
             iCoolingSizingType = DataSizing::FlowPerCoolingCapacity;
         }
-        thisSys.Name = format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
+        thisSys.Name = std::format("UnitarySystem:CoolingAndHeating #{}", iSizingType);
         thisSys.m_CoolingSAFMethod = SizingTypes(iCoolingSizingType);
         thisSys.m_HeatingSAFMethod = SizingTypes(iHeatingSizingType);
         thisSys.m_DesignCoolingCapacity = DataSizing::AutoSize;

@@ -29,14 +29,19 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # Project-wide default C++ language level (individual third-party targets may lower/raise as needed)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20 CACHE STRING "C++ standard to build EnergyPlus with (Official: 20)")
+set_property(CACHE CMAKE_CXX_STANDARD PROPERTY STRINGS 20 23 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# We don't use C++20 modules: disable CMake's dependency scanning to avoid a separate
+# "Scanning ... for CXX dependencies" step (and compiler invocation) for every TU
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_20)
+target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 
 option(ENABLE_PCH "Enable Precompiled Headers" ON)
 # List of headers to precompile: each project will build its own PCH, which is a good idea if any #define's change
@@ -52,6 +57,14 @@ set(EP_TEST_CXX_PCH_HEADERS
     ${EP_CXX_PCH_HEADERS}
     "$<$<COMPILE_LANGUAGE:CXX>:<gtest/gtest.h>>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/tst/EnergyPlus/unit/Fixtures/EnergyPlusFixture.hh>")
+
+if(ENABLE_PCH AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  # Without this, Clang embeds a timestamp in the generated .pch, so its content hash differs
+  # on every build even when sources/headers are unchanged. ccache hashes that .pch content for
+  # both the direct-mode manifest and the preprocessor-mode result key, so every TU using
+  # -include-pch becomes a guaranteed cache miss. See ccache manual, "Precompiled Headers".
+  target_compile_options(project_options INTERFACE "$<$<COMPILE_LANGUAGE:CXX>:SHELL:-Xclang -fno-pch-timestamp>")
+endif()
 
 option(ENABLE_UNITY "Enable Unity Build" OFF)
 

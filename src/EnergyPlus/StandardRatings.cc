@@ -7117,7 +7117,7 @@ namespace StandardRatings {
                 // Note: If you call format("{:.1f}", NetCoolingCapRated(Num + 1)),
                 // Then it's not the OutputReportPredefined::PreDefTableEntry prototype with Real64 that is called.
                 // As a result, the entry isn't marked as being Real (origEntryIsReal) and unit conversion does not occur
-                // Bad: PreDefTableEntry(state, pdchDXCoolCoilNetCapSIA, CompNameNew, format("{:.1f}", NetCoolingCapRated(Num + 1)));
+                // Bad: PreDefTableEntry(state, pdchDXCoolCoilNetCapSIA, CompNameNew, std::format("{:.1f}", NetCoolingCapRated(Num + 1)));
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchDXCoolCoilNetCapSIA, CompNameNew, NetCoolingCapRated(Num + 1), 1);
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchDXCoolCoilNetCapSIB, CompNameNew, NetCoolingCapRated(Num + 2), 1);
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchDXCoolCoilNetCapSIC, CompNameNew, NetCoolingCapRated(Num + 3), 1);

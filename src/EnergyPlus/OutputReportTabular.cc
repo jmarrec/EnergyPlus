@@ -11739,8 +11739,8 @@ void WriteVeriSumTable(EnergyPlusData &state)
                                       std::format("differs ~{:.1f}% from user entered Wall class surfaces. Degree calculation based on ASHRAE "
                                                   "90.1 wall definitions.",
                                                   pdiff * 100.0));
-                    //      CALL ShowContinueError(state, format("Calculated based on degrees=[{}{}{}{}{}{}] m2, Calculated from user entered Wall
-                    //      class surfaces=[{}{}{}{}{}{}", //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS +
+                    //      CALL ShowContinueError(state, std::format("Calculated based on degrees=[{}{}{}{}{}{}] m2, Calculated from user entered
+                    //      Wall class surfaces=[{}{}{}{}{}{}", //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS +
                     //      wallAreaE + wallAreaW),3)))//, &, //, //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals,
                     //      SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied),3)))//', m2.'), ShowContinueError(state, "Check classes of surfaces
                     //      and tilts for discrepancies."));
@@ -18574,7 +18574,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
     //   Abstract away the internal write concept
 
     static constexpr std::array<const char *, 10> formDigitsA{
-        "{:#11.0F}", "{:12.1F}", "{:12.2F}", "{:12.3F}", "{:12.4F}", "{:12.5F}", "{:12.6F}", "{:12.7F}", "{:12.8F}", "{:12.9F}"};
+        "{:#12.0F}", "{:12.1F}", "{:12.2F}", "{:12.3F}", "{:12.4F}", "{:12.5F}", "{:12.6F}", "{:12.7F}", "{:12.8F}", "{:12.9F}"};
 
     static constexpr std::array<Real64, 10> maxvalDigitsA(
         {9999999999.0, 999999999.0, 99999999.0, 9999999.0, 999999.0, 99999.0, 9999.0, 999.0, 99.0, 9.0});
@@ -18599,7 +18599,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
         return std::format("{:12.6E}", RealIn);
     }
-    return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
+    return std::vformat(formDigitsA.at(nDigits), std::make_format_args(RealIn));
 
     //  WRITE(FMT=, UNIT=stringOut) RealIn
     // check if it did not fit

@@ -7580,11 +7580,11 @@ TEST_F(EnergyPlusFixture, AzimuthToCardinal)
         if (i % 2 == 1) {
             // It's a wall
             state->dataSurface->Surface(i).Class = DataSurfaces::SurfaceClass::Wall;
-            state->dataSurface->Surface(i).Name = format("ExtWall_{}_{}", i, entryIndex);
+            state->dataSurface->Surface(i).Name = std::format("ExtWall_{}_{}", i, entryIndex);
         } else {
             // It's a window
             state->dataSurface->Surface(i).Class = DataSurfaces::SurfaceClass::Window;
-            state->dataSurface->Surface(i).Name = format("ExtWindow_{}_{}", i, entryIndex);
+            state->dataSurface->Surface(i).Name = std::format("ExtWindow_{}_{}", i, entryIndex);
             // Window references the previous wall
             state->dataSurface->Surface(i).BaseSurf = i - 1;
         }
@@ -7678,12 +7678,12 @@ TEST_F(EnergyPlusFixture, InteriorSurfaceEnvelopeSummaryReport)
         state->dataSurface->Surface(i).Construction = 1;
         // odd number - wall, even number - door
         if (i % 2 == 1) {
-            state->dataSurface->Surface(i).Name = "Interzonal_Wall_" + fmt::to_string((i + 1) / 2);
+            state->dataSurface->Surface(i).Name = "Interzonal_Wall_" + std::to_string((i + 1) / 2);
             state->dataSurface->Surface(i).GrossArea = 200.;
             state->dataSurface->Surface(i).Class = DataSurfaces::SurfaceClass::Wall;
             state->dataSurface->AllSurfaceListReportOrder.push_back(i);
         } else {
-            state->dataSurface->Surface(i).Name = "Interzonal_Door_" + fmt::to_string((i + 1) / 2);
+            state->dataSurface->Surface(i).Name = "Interzonal_Door_" + std::to_string((i + 1) / 2);
             state->dataSurface->Surface(i).BaseSurfName = state->dataSurface->Surface(i - 1).Name;
             state->dataSurface->Surface(i).BaseSurf = i - 1;
             state->dataSurface->Surface(i).GrossArea = 50.;
@@ -10819,7 +10819,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_RetrieveEntryFromTableBody)
     tableBody.allocate(columnCount, rowCount);
     for (int col_i = 1; col_i <= columnCount; col_i++) {
         for (int row_i = 1; row_i <= rowCount; row_i++) {
-            tableBody(col_i, row_i) = fmt::format("{}-{}", col_i, row_i);
+            tableBody(col_i, row_i) = std::format("{}-{}", col_i, row_i);
         }
     }
     EXPECT_EQ(RetrieveEntryFromTableBody(tableBody, 1, 1), "1-1");
@@ -11047,9 +11047,9 @@ TEST_F(SQLiteFixture, StatFile_TMYx)
           AND TableName = "Weather Statistics File"
           AND RowName = "{}";
     )sqlite";
-    EXPECT_EQ(807.0, execAndReturnFirstDouble(fmt::format(queryStr, "Annual Total Precipitation")));
-    EXPECT_EQ(7.0, execAndReturnFirstDouble(fmt::format(queryStr, "Max Hourly Precipitation")));
-    auto result = queryResult(fmt::format(queryStr, "Max Hourly Precipitation Occurs in"), "TabularDataWithStrings");
+    EXPECT_EQ(807.0, execAndReturnFirstDouble(std::format(queryStr, "Annual Total Precipitation")));
+    EXPECT_EQ(7.0, execAndReturnFirstDouble(std::format(queryStr, "Max Hourly Precipitation")));
+    auto result = queryResult(std::format(queryStr, "Max Hourly Precipitation Occurs in"), "TabularDataWithStrings");
     ASSERT_EQ(1, result.size());
     ASSERT_FALSE(result[0].empty());
     EXPECT_EQ("Mar", result[0][0]);
@@ -14841,12 +14841,12 @@ TEST_F(EnergyPlusFixture, ExteriorFenestrationShadedStateTest)
         }
         // odd number - wall, even number - window
         if (i % 2 == 1) {
-            dSurf->Surface(i).Name = "Exterior_Wall_" + fmt::to_string((i + 1) / 2);
+            dSurf->Surface(i).Name = "Exterior_Wall_" + std::to_string((i + 1) / 2);
             dSurf->Surface(i).GrossArea = 200.;
             dSurf->Surface(i).Class = DataSurfaces::SurfaceClass::Wall;
             dSurf->AllSurfaceListReportOrder.push_back(i);
         } else {
-            dSurf->Surface(i).Name = "Window_" + fmt::to_string((i + 1) / 2);
+            dSurf->Surface(i).Name = "Window_" + std::to_string((i + 1) / 2);
             dSurf->Surface(i).BaseSurfName = dSurf->Surface(i - 1).Name;
             dSurf->Surface(i).BaseSurf = i - 1;
             dSurf->Surface(i).GrossArea = 50.;
