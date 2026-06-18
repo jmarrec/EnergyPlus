@@ -292,21 +292,8 @@ void InputProcessor::processInput(EnergyPlusData &state)
     bool versionMatch = checkVersionMatch(state);
     bool unsupportedFound = checkForUnsupportedObjects(state);
 
-    if (!is_valid || hasErrors || unsupportedFound) {
-        ShowFatalError(state, "Errors occurred on processing input file. Preceding condition(s) cause termination.");
-    }
-
-    if (state.dataGlobal->isEpJSON && (state.dataGlobal->outputEpJSONConversion || state.dataGlobal->outputEpJSONConversionOnly)) {
-        if (versionMatch) {
-            std::string const encoded = idf_parser->encode(epJSON, schema());
-            fs::path convertedEpJSON = FileSystem::makeNativePath(
-                FileSystem::replaceFileExtension(state.dataStrGlobals->outDirPath / state.dataStrGlobals->inputFilePathNameOnly, ".idf"));
-            FileSystem::writeFile<FileSystem::FileTypes::IDF>(convertedEpJSON, encoded);
-        } else {
-            ShowWarningError(state, "Skipping conversion of epJSON to IDF due to mismatched Version.");
-        }
-    }
-
+    // Set up the object/field lookup maps before checking for preprocessor messages below, since
+    // preProcessorCheck() needs getObjectItem() to be functional.
     initializeMaps();
 
     int MaxArgs = 0;
@@ -320,6 +307,27 @@ void InputProcessor::processInput(EnergyPlusData &state)
     state.dataIPShortCut->cNumericFieldNames.allocate(MaxNumeric);
     state.dataIPShortCut->rNumericArgs.dimension(MaxNumeric, 0.0);
     state.dataIPShortCut->lNumericFieldBlanks.dimension(MaxNumeric, false);
+
+    // Check for Output:PreprocessorMessage objects here, before the fatal abort below, so that a
+    // preprocessor's actual root-cause message (e.g. from ExpandObjects) is shown to the user even
+    // when the preprocessor's malformed output also triggers epJSON schema validation errors.
+    bool PreP_Fatal = false;
+    preProcessorCheck(state, PreP_Fatal);
+
+    if (!is_valid || hasErrors || unsupportedFound || PreP_Fatal) {
+        ShowFatalError(state, "Errors occurred on processing input file. Preceding condition(s) cause termination.");
+    }
+
+    if (state.dataGlobal->isEpJSON && (state.dataGlobal->outputEpJSONConversion || state.dataGlobal->outputEpJSONConversionOnly)) {
+        if (versionMatch) {
+            std::string const encoded = idf_parser->encode(epJSON, schema());
+            fs::path convertedEpJSON = FileSystem::makeNativePath(
+                FileSystem::replaceFileExtension(state.dataStrGlobals->outDirPath / state.dataStrGlobals->inputFilePathNameOnly, ".idf"));
+            FileSystem::writeFile<FileSystem::FileTypes::IDF>(convertedEpJSON, encoded);
+        } else {
+            ShowWarningError(state, "Skipping conversion of epJSON to IDF due to mismatched Version.");
+        }
+    }
 
     reportIDFRecordsStats(state);
 }
