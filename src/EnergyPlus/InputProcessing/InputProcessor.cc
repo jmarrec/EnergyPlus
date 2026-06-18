@@ -311,8 +311,7 @@ void InputProcessor::processInput(EnergyPlusData &state)
     // Check for Output:PreprocessorMessage objects here, before the fatal abort below, so that a
     // preprocessor's actual root-cause message (e.g. from ExpandObjects) is shown to the user even
     // when the preprocessor's malformed output also triggers epJSON schema validation errors.
-    bool PreP_Fatal = false;
-    preProcessorCheck(state, PreP_Fatal);
+    bool const PreP_Fatal = preProcessorCheck(state);
 
     if (!is_valid || hasErrors || unsupportedFound || PreP_Fatal) {
         ShowFatalError(state, "Errors occurred on processing input file. Preceding condition(s) cause termination.");
@@ -1743,8 +1742,9 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
     }
 }
 
-void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) // True if a preprocessor flags a fatal error
+bool InputProcessor::preProcessorCheck(EnergyPlusData &state) // Returns true if a preprocessor flags a fatal error
 {
+    bool PreP_Fatal = false;
 
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Linda Lawrie
@@ -1858,6 +1858,7 @@ void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) 
             }
         }
     }
+    return PreP_Fatal;
 }
 
 void InputProcessor::preScanReportingVariables(EnergyPlusData &state)
