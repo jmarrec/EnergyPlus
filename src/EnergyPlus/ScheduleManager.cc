@@ -1511,9 +1511,9 @@ namespace Sched {
             for (int iDay = 1; iDay <= 366; ++iDay) {
                 if (daysInYear[iDay] == 0) {
                     Sched::WeekSchedule *weekSched;
-                    weekSched = GetWeekSchedule(state, EnergyPlus::format("{}_{}", Alphas(1), Alphas(3)));
+                    weekSched = GetWeekSchedule(state, std::format("{}_{}", Alphas(1), Alphas(3)));
                     if (weekSched == nullptr) {
-                        weekSched = AddWeekSchedule(state, EnergyPlus::format("{}_{}", Alphas(1), Alphas(3)));
+                        weekSched = AddWeekSchedule(state, std::format("{}_{}", Alphas(1), Alphas(3)));
                         weekSched->isUsed = true;
 
                         for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
