@@ -2965,7 +2965,7 @@ void storeIterationResults(EnergyPlusData &state,
             dynFormat += "===";
         }
     }
-    print(files.TarcogIterationsFile, dynFormat);
+    print(files.TarcogIterationsFile, "{}", dynFormat);
     print(files.TarcogIterationsFile, "\n");
 
     // write Ebb and Ebf
@@ -2990,7 +2990,7 @@ void storeIterationResults(EnergyPlusData &state,
             dynFormat += "===";
         }
     }
-    print(files.TarcogIterationsFile, dynFormat);
+    print(files.TarcogIterationsFile, "{}", dynFormat);
     print(files.TarcogIterationsFile, "\n");
     // write Rb and Rf
     print(files.TarcogIterationsFile, "{:16.8F}   {:16.8F}", Rf(1), Rb(1));
@@ -3010,7 +3010,7 @@ void storeIterationResults(EnergyPlusData &state,
             dynFormat += "==";
         }
     }
-    print(files.TarcogIterationsFile, dynFormat);
+    print(files.TarcogIterationsFile, "{}", dynFormat);
     print(files.TarcogIterationsFile, "\n");
 
     // write temperatures
@@ -3033,7 +3033,7 @@ void storeIterationResults(EnergyPlusData &state,
                 dynFormat += "theta(" + a + ')';
             }
         }
-        print(files.IterationCSVFile, dynFormat);
+        print(files.IterationCSVFile, "{}", dynFormat);
         print(files.IterationCSVFile, "\n");
     }
     print(files.IterationCSVFile, "{:16.8F}   \n", theta(1) - Constant::Kelvin);

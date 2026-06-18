@@ -3043,7 +3043,7 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
                   surfIntConv.zonePerimLength,
                   surfIntConv.zoneHorizHydrDiam,
                   surfIntConv.windowWallRatio,
-                  surfIntConv.windowLocation,
+                  static_cast<int>(surfIntConv.windowLocation),
                   surfIntConv.getsRadiantHeat ? "Yes" : "No",
                   surfIntConv.hasActiveInIt ? "Yes" : "No");
 

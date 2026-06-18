@@ -5839,8 +5839,8 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                         if (!AirNodeFound && vrfTU.ZoneNum > 0) {
                                             ShowSevereError(state, std::format("Input errors for {}:{}", cCurrentModuleObject, thisObjectName));
                                             ShowContinueError(state, "Did not find Air node (Zone with Thermostat or Thermal Comfort Thermostat).");
-                                            // ShowContinueError(state, format("specified Controlling Zone or Thermostat Location name = {}{}", //,
-                                            // loc_controlZoneName));
+                                            // ShowContinueError(state, std::format("specified Controlling Zone or Thermostat Location name = {}{}",
+                                            // //, loc_controlZoneName));
                                             errorsFound = true;
                                         }
                                     } else if (AirLoopFound) { // control zone name not entered in TU object input

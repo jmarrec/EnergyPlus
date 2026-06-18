@@ -1616,7 +1616,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 if (Item1 == 1) { // Item check prevents this error from printing multiple times
                     if (lAlphaFieldBlanks(6)) {
                         if (lNumericFieldBlanks(11)) {
-                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(11), format("The default value will be used ({:.2f})",
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(11), std::format("The default value will be used ({:.2f})",
                             // -VentilTempLimit));
                         }
                     } else if (thisVentilation.minIndoorTempSched == nullptr) {
@@ -1657,7 +1657,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 if (Item1 == 1) { // Item check prevents this error from printing multiple times
                     if (lAlphaFieldBlanks(7)) {
                         if (lNumericFieldBlanks(12)) {
-                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(12), format("The default value will be used ({:.2f})",
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(12), std::format("The default value will be used ({:.2f})",
                             // VentilTempLimit));
                         }
                     } else if (thisVentilation.maxIndoorTempSched == nullptr) {
@@ -1689,7 +1689,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 if (Item1 == 1) { // Item check prevents this error from printing multiple times
                     if (lAlphaFieldBlanks(8)) {
                         if (lNumericFieldBlanks(13)) {
-                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(13), format("The default value will be used ({:.2f})",
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(13), std::format("The default value will be used ({:.2f})",
                             // VentilTempLimit));
                         }
                     } else if (thisVentilation.deltaTempSched == nullptr) {
@@ -1729,7 +1729,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 if (Item1 == 1) { // Item check prevents this error from printing multiple times
                     if (lAlphaFieldBlanks(9)) {
                         if (lNumericFieldBlanks(14)) {
-                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(14), format("The default value will be used ({:.2f})",
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(14), std::format("The default value will be used ({:.2f})",
                             // VentilTempLimit));
                         }
                     } else if (thisVentilation.minOutdoorTempSched == nullptr) {
@@ -1772,7 +1772,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 if (Item1 == 1) { // Item check prevents this error from printing multiple times
                     if (lAlphaFieldBlanks(10)) {
                         if (lNumericFieldBlanks(15)) {
-                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(15), format("The default value will be used ({:.2f})",
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(15), std::format("The default value will be used ({:.2f})",
                             // VentilTempLimit));
                         }
                     } else if (thisVentilation.maxOutdoorTempSched == nullptr) {
@@ -2067,7 +2067,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
                 if (lAlphaFieldBlanks(4)) {
                     if (lNumericFieldBlanks(6)) {
-                        // ShowWarningEmptyField(state, eoh, cAlphaFieldNames(12), format("The default value will be used ({:.2f})",
+                        // ShowWarningEmptyField(state, eoh, cAlphaFieldNames(12), std::format("The default value will be used ({:.2f})",
                         // VentilTempLimit));
                     }
                 } else if (thisVentilation.minIndoorTempSched == nullptr) {
@@ -2105,7 +2105,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
                 if (lAlphaFieldBlanks(5)) {
                     if (lNumericFieldBlanks(7)) {
-                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(7), format("The default value will be used ({:.2f})",
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(7), std::format("The default value will be used ({:.2f})",
                         // VentilTempLimit));
                     }
                 } else if (thisVentilation.maxIndoorTempSched == nullptr) {
@@ -2137,7 +2137,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
                 if (lAlphaFieldBlanks(6)) {
                     if (lNumericFieldBlanks(8)) {
-                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(8), format("The default value will be used ({:.2f})",
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(8), std::format("The default value will be used ({:.2f})",
                         // VentilTempLimit));
                     }
                 } else if (thisVentilation.deltaTempSched == nullptr) {
@@ -2174,7 +2174,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
                 if (lAlphaFieldBlanks(7)) {
                     if (lNumericFieldBlanks(9)) {
-                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(9), format("The default value will be used ({:.2f})",
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(9), std::format("The default value will be used ({:.2f})",
                         // VentilTempLimit));
                     }
                 } else if (thisVentilation.minOutdoorTempSched == nullptr) {
@@ -2213,7 +2213,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
                 if (lAlphaFieldBlanks(8)) {
                     if (lNumericFieldBlanks(10)) {
-                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(10), format("The default value will be used ({:.2f})",
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(10), std::format("The default value will be used ({:.2f})",
                         // VentilTempLimit));
                     }
                 } else if (thisVentilation.maxOutdoorTempSched == nullptr) {
