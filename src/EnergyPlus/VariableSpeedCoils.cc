@@ -4142,12 +4142,12 @@ namespace VariableSpeedCoils {
                                                              "state would yield negative coil capacity sizing.",
                                                              varSpeedCoil.Name));
                             }
-                            ShowContinueError(state, EnergyPlus::format("The air properties are: T_mix = {:.4R}", MixTemp));
-                            ShowContinueError(state, EnergyPlus::format("                        T_supply = {:.4R}", SupTemp));
-                            ShowContinueError(state, EnergyPlus::format("                        H_mix = {:.4R}", MixEnth));
-                            ShowContinueError(state, EnergyPlus::format("                        H_supply = {:.4R}", SupEnth));
-                            ShowContinueError(state, EnergyPlus::format("                        W_mix = {:.4R}", MixHumRat));
-                            ShowContinueError(state, EnergyPlus::format("                        W_supply = {:.4R}", SupHumRat));
+                            ShowContinueError(state, std::format("The air properties are: T_mix = {:.4f}", MixTemp));
+                            ShowContinueError(state, std::format("                        T_supply = {:.4f}", SupTemp));
+                            ShowContinueError(state, std::format("                        H_mix = {:.4f}", MixEnth));
+                            ShowContinueError(state, std::format("                        H_supply = {:.4f}", SupEnth));
+                            ShowContinueError(state, std::format("                        W_mix = {:.4f}", MixHumRat));
+                            ShowContinueError(state, std::format("                        W_supply = {:.4f}", SupHumRat));
                             ShowContinueError(state, "Cooling capacity is set to zero during sizing; simulation continues.");
                         }
                         if (state.dataSize->UnitarySysEqSizing(state.dataSize->CurSysNum).CoolingCapacity &&
