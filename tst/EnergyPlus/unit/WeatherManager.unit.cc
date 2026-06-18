@@ -615,7 +615,7 @@ TEST_F(EnergyPlusFixture, WaterMainsOutputReports_CorrelationFromWeatherFileTest
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-    compare_eio_stream_substring("", true);
+    compare_err_stream("", true);
     bool foundErrors(false);
     Weather::GetWaterMainsTemperatures(*state, foundErrors);
     EXPECT_FALSE(foundErrors); // expect no errors
