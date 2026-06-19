@@ -288,6 +288,7 @@ set(SRC
     FluidCoolers.hh
     FluidProperties.cc
     FluidProperties.hh
+    Formatters.hh
     FromChars.hh
     FuelCellElectricGenerator.cc
     FuelCellElectricGenerator.hh
@@ -548,6 +549,7 @@ set(SRC
     PurchasedAirManager.hh
     PythonEngine.cc
     PythonEngine.hh
+    PythonHelpers.hh
     RefrigeratedCase.cc
     RefrigeratedCase.hh
     ReportCoilSelection.cc
