@@ -777,6 +777,14 @@ endif()
 # statically to create the DLL and also the unit tests
 add_library(energypluslib STATIC ${SRC})
 
+# Debug Python Config
+option(DEBUG_PYTHON_CONFIG "Debug Python PyPreConfig and PyConfig initialization" OFF)
+mark_as_advanced(DEBUG_PYTHON_CONFIG)
+if(DEBUG_PYTHON_CONFIG)
+  # Linking PUBLIC so it reaches energyplusapi too
+  target_compile_definitions(energypluslib PUBLIC DEBUG_PYTHON_CONFIG=1)
+endif()
+
 if(ENABLE_UNITY)
   set_target_properties(energypluslib PROPERTIES UNITY_BUILD ON)
 endif()
