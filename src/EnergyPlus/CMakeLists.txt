@@ -549,6 +549,7 @@ set(SRC
     PurchasedAirManager.hh
     PythonEngine.cc
     PythonEngine.hh
+    PythonHelpers.cc
     PythonHelpers.hh
     RefrigeratedCase.cc
     RefrigeratedCase.hh

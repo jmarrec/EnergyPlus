@@ -193,4 +193,17 @@ template <> struct std::formatter<PyConfig>
 };
 #endif // DEBUG_PYTHON_CONFIG
 
+namespace EnergyPlus {
+
+namespace PythonHelpers {
+
+    void initPython(EnergyPlus::EnergyPlusData &state, fs::path const &programDir);
+
+    void reportPythonError(EnergyPlus::EnergyPlusData &state);
+
+    void addToPythonPath(EnergyPlusData &state, const fs::path &includePath, bool userDefinedPath);
+
+} // namespace PythonHelpers
+} // namespace EnergyPlus
+
 #endif // EPLUS_PYTHON_HELPERS_HH
