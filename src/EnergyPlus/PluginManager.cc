@@ -78,34 +78,7 @@
 #include <EnergyPlus/UtilityRoutines.hh>
 
 #if LINK_WITH_PYTHON
-template <> struct std::formatter<PyStatus>
-{
-    // parse is inherited from formatter<string_view>.
-    constexpr auto parse(std::format_parse_context &ctx) -> std::format_parse_context::iterator
-    {
-        return ctx.begin();
-    }
-
-    template <typename FormatContext> auto format(const PyStatus &status, FormatContext &ctx) const
-    {
-        if (PyStatus_Exception(status) == 0) {
-            return ctx.out();
-        }
-        if (PyStatus_IsExit(status) != 0) {
-            return std::format_to(ctx.out(), "Exited with code {}", status.exitcode);
-        }
-        if (PyStatus_IsError(status) != 0) {
-            auto it = ctx.out();
-            it = std::format_to(it, "Fatal Python error: ");
-            if (status.func != nullptr) {
-                it = std::format_to(it, "{}: ", status.func);
-            }
-            it = std::format_to(it, "{}", status.err_msg);
-            return it;
-        }
-        return ctx.out();
-    }
-};
+#    include <EnergyPlus/PythonHelpers.hh>
 #endif
 
 namespace EnergyPlus::PluginManagement {
