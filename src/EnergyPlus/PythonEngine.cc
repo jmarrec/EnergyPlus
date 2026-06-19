@@ -67,6 +67,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/DataStringGlobals.hh>
 #include <EnergyPlus/FileSystem.hh>
+#include <EnergyPlus/Formatters.hh>
 #include <EnergyPlus/PluginManager.hh>
 #include <EnergyPlus/PythonEngine.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
@@ -201,8 +202,14 @@ namespace Python {
         // This is the other related line that caused Decent CI to start having trouble.  I'm putting it back to
         // PyPreConfig_InitPythonConfig, even though I think it should be isolated.  Will deal with this after IO freeze.
         PyPreConfig_InitPythonConfig(&preConfig);
+#    if DEBUG_PYTHON_CONFIG
+        EnergyPlus::print("PyPreConfig initialized:\n{}\n", preConfig);
+#    endif
         // PyPreConfig_InitIsolatedConfig(&preConfig);
         preConfig.utf8_mode = 1;
+#    if DEBUG_PYTHON_CONFIG
+        EnergyPlus::print("Final PyPreConfig:\n{}\n", preConfig);
+#    endif
         status = Py_PreInitialize(&preConfig);
         if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, std::format("Could not pre-initialize Python to speak UTF-8... {}", status));
@@ -210,6 +217,10 @@ namespace Python {
 
         PyConfig config;
         PyConfig_InitIsolatedConfig(&config);
+
+#    if DEBUG_PYTHON_CONFIG
+        EnergyPlus::print("Isolated config initialized:\n{}\n", config);
+#    endif
         config.isolated = 1;
 
         status = PyConfig_SetBytesString(&config, &config.program_name, PluginManagement::programName);
@@ -264,6 +275,9 @@ namespace Python {
             PyMem_RawFree(wcharPath);
         }
 
+#    if DEBUG_PYTHON_CONFIG
+        EnergyPlus::print("Final PyConfig:\n{}\n", config);
+#    endif
         // This was Py_InitializeFromConfig(&config), but was giving a seg fault when running inside
         // another Python instance, for example as part of an API run.  Per the example here:
         // https://docs.python.org/3/c-api/init_config.html#preinitialize-python-with-pypreconfig
