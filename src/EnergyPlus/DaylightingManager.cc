@@ -1153,7 +1153,7 @@ void CalcDayltgCoeffsMapPoints(EnergyPlusData &state, int const mapNum)
     int WinEl;             // window elements counter
 
     Vector3<Real64> W2;
-    Vector3<Real64> W3;
+    Vector3<Real64> W3 = {0.0, 0.0, 0.0};
     Vector3<Real64> W21;
     Vector3<Real64> W23;
     Vector3<Real64> RREF2;
@@ -5227,8 +5227,6 @@ void DayltgGlareWithIntWins(EnergyPlusData &state,
     // REFERENCES:
     // Based on subroutine DayltgGlare.
 
-    Real64 GTOT = 0.0; // Glare constant(?) // TODO: does this need to be reset for every refPt?
-
     // Calculate background luminance including effect of inter-reflected illuminance from light
     // entering zone through its interior windows
     auto &dl = state.dataDayltg;
@@ -5237,6 +5235,7 @@ void DayltgGlareWithIntWins(EnergyPlusData &state,
     int RefPoints = thisDayltgCtrl.TotalDaylRefPoints; // Number of daylighting reference points in zone
     for (int IL = 1; IL <= RefPoints; ++IL) {
         auto &refPt = thisDayltgCtrl.refPts(IL);
+        Real64 GTOT = 0.0; // Glare constant
 
         Real64 BackgroundLum = refPt.lums[iLum_Back] + thisEnclDaylight.InterReflIllFrIntWins * thisEnclDaylight.aveVisDiffReflect / Constant::Pi;
         BackgroundLum = max(refPt.illumSetPoint * thisEnclDaylight.aveVisDiffReflect / Constant::Pi, BackgroundLum);

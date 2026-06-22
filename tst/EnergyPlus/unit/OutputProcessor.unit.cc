@@ -3267,7 +3267,7 @@ namespace OutputProcessor {
                                 light_consumption,
                                 TimeStepType::Zone,
                                 StoreType::Sum,
-                                format("SPACE {} LIGHTS", i),
+                                std::format("SPACE {} LIGHTS", i),
                                 Constant::eResource::Electricity,
                                 Group::Building,
                                 EndUseCat::InteriorLights,
@@ -5414,7 +5414,7 @@ namespace OutputProcessor {
                                 light_consumption,
                                 TimeStepType::Zone,
                                 StoreType::Sum,
-                                fmt::format("LIGHTS {}", i + 1),
+                                std::format("LIGHTS {}", i + 1),
                                 Constant::eResource::Electricity,
                                 Group::Building,
                                 EndUseCat::InteriorLights,
@@ -5440,7 +5440,7 @@ namespace OutputProcessor {
                  ++state->dataEnvrn->DayOfMonth) {
 
                 ++state->dataGlobal->DayOfSim;
-                state->dataGlobal->DayOfSimChr = fmt::to_string(state->dataGlobal->DayOfSim);
+                state->dataGlobal->DayOfSimChr = std::to_string(state->dataGlobal->DayOfSim);
 
                 ++state->dataEnvrn->DayOfWeek;
                 if (state->dataEnvrn->DayOfWeek > 7) {
@@ -5467,7 +5467,7 @@ namespace OutputProcessor {
                         records_written += numOutputVariables;
                         if (records_written > (INT_MAX_AS_SIZE_T - numOutputVariables)) {
                             EXPECT_EQ("2005-12-22 02:45",
-                                      fmt::format("{:04d}-{:02d}-{:02d} {:02d}:{:02d}",
+                                      std::format("{:04d}-{:02d}-{:02d} {:02d}:{:02d}",
                                                   state->dataGlobal->CalendarYear,
                                                   state->dataEnvrn->Month,
                                                   state->dataEnvrn->DayOfMonth,

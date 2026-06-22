@@ -1068,9 +1068,9 @@ namespace UnitarySystems {
                 if (this->m_FaultyCoilSATFlag) {
                     if (this->m_ControlType != UnitarySysCtrlType::Setpoint) {
                         ShowWarningError(state,
-                                         EnergyPlus::format("{}: {}",
-                                                            state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).type,
-                                                            state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).Name));
+                                         std::format("{}: {}",
+                                                     static_cast<int>(state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).type),
+                                                     state.dataFaultsMgr->FaultsCoilSATSensor(this->m_FaultyCoilSATIndex).Name));
                         ShowContinueError(state, std::format("For : {}: {}", this->UnitType, this->Name));
                         ShowContinueError(state,
                                           "The specified unitary system is not controlled on leaving air temperature. The coil SAT sensor "
@@ -1388,6 +1388,44 @@ namespace UnitarySystems {
                 }
             }
         }
+        // Check that control nodes match coil outlet nodes for proper control of unit.
+        if (this->m_ControlType == UnitarySysCtrlType::Setpoint) {
+            if (CoilType == CoolingCoil && this->CoolCtrlNode != this->CoolCoilOutletNodeNum) {
+                ShowWarningError(state, std::format("Occurs in {} = {}", this->UnitType, this->Name));
+                ShowContinueError(state, "Cooling coil control/sensor node is not the same as the cooling coil outlet node.");
+                ShowContinueError(state,
+                                  std::format("Coil control/sensor node name = {}, coil outlet node name = {}",
+                                              state.dataLoopNodes->NodeID(this->CoolCtrlNode),
+                                              state.dataLoopNodes->NodeID(this->CoolCoilOutletNodeNum)));
+                ShowContinueError(state,
+                                  "This may result in poor performance when other components exist between the coil's control and outlet nodes.");
+                ShowContinueError(state, "Consider revising inputs to place the control/sensor node at the cooling coil outlet node.");
+            }
+            if (CoilType == HeatingCoil && this->HeatCtrlNode != this->HeatCoilOutletNodeNum) {
+                ShowWarningError(state, std::format("Occurs in {} = {}", this->UnitType, this->Name));
+                ShowContinueError(state, "Heating coil control/sensor node is not the same as the heating coil outlet node.");
+                ShowContinueError(state,
+                                  std::format("Coil control/sensor node name = {}, coil outlet node name = {}",
+                                              state.dataLoopNodes->NodeID(this->HeatCtrlNode),
+                                              state.dataLoopNodes->NodeID(this->HeatCoilOutletNodeNum)));
+                ShowContinueError(state,
+                                  "This may result in poor performance when other components exist between the coil's control and outlet nodes.");
+                ShowContinueError(state, "Consider revising inputs to place the control/sensor node at the heating coil outlet node.");
+            }
+            if (CoilType == SuppHeatCoil && this->SuppCtrlNode != this->SuppCoilOutletNodeNum) {
+                ShowWarningError(state, std::format("Occurs in {} = {}", this->UnitType, this->Name));
+                ShowContinueError(state,
+                                  "Supplemental heating coil control/sensor node is not the same as the supplemental heating coil outlet node.");
+                ShowContinueError(state,
+                                  std::format("Coil control/sensor node name = {}, coil outlet node name = {}",
+                                              state.dataLoopNodes->NodeID(this->SuppCtrlNode),
+                                              state.dataLoopNodes->NodeID(this->SuppCoilOutletNodeNum)));
+                ShowContinueError(state,
+                                  "This may result in poor performance when other components exist between the coil's control and outlet nodes.");
+                ShowContinueError(state, "Consider revising inputs to place the control/sensor node at the supplemental heating coil outlet node.");
+            }
+        }
+
         return SetPointErrorFlag; // these later errors will also cause a fatal error
     }
 
@@ -4304,7 +4342,7 @@ namespace UnitarySystems {
             if (!AirNodeFound && !ZoneEquipmentFound) {
                 ShowSevereError(state, std::format("{} = {}", cCurrentModuleObject, thisObjectName));
                 ShowContinueError(state, "Did not find air node (zone with thermostat).");
-                // ShowContinueError(state, format("specified {} = {}", cAlphaFields(iControlZoneAlphaNum), Alphas(iControlZoneAlphaNum)));
+                // ShowContinueError(state, std::format("specified {} = {}", cAlphaFields(iControlZoneAlphaNum), Alphas(iControlZoneAlphaNum)));
                 ShowContinueError(state,
                                   "Both a ZoneHVAC:EquipmentConnections object and a ZoneControl:Thermostat object must be specified for this zone.");
             }
@@ -4410,7 +4448,7 @@ namespace UnitarySystems {
             }
         } else if ((this->m_fanOpModeSched = Sched::GetSchedule(state, input_data.supply_air_fan_operating_mode_schedule_name)) == nullptr) {
             ShowSevereItemNotFound(state, eoh, "Fan Operating Mode Schedule Name", input_data.supply_air_fan_operating_mode_schedule_name);
-            // ShowContinueError(state, format("Illegal {} = {}", cAlphaFields(iFanSchedAlphaNum), Alphas(iFanSchedAlphaNum)));
+            // ShowContinueError(state, std::format("Illegal {} = {}", cAlphaFields(iFanSchedAlphaNum), Alphas(iFanSchedAlphaNum)));
             errorsFound = true;
         } else if ((this->m_ControlType == UnitarySysCtrlType::Setpoint || this->m_FanType == HVAC::FanType::Constant) &&
                    !this->m_fanOpModeSched->checkMinMaxVals(state, Clusive::Ex, 0.0, Clusive::In, 1.0)) {

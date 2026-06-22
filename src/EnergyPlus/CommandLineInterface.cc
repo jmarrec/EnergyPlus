@@ -217,20 +217,20 @@ Built on Platform: {}
         bool debugCLI = std::any_of(args.begin(), args.end(), [](const auto &arg) { return arg == "--debug-cli"; });
         if (debugCLI) {
             {
-                std::print("ProcessArgs: received args\n");
+                EnergyPlus::print("ProcessArgs: received args\n");
                 int na = 0;
                 for (const auto &a : args) {
-                    std::print("* {}: '{}'\n", na++, a);
+                    EnergyPlus::print("* {}: '{}'\n", na++, a);
                 }
             }
             {
-                std::print("\nAfter massaging/expanding of args\n");
+                EnergyPlus::print("\nAfter massaging/expanding of args\n");
                 int na = 0;
                 for (const auto &a : arguments) {
-                    std::print("* {}: '{}'\n", na++, a);
+                    EnergyPlus::print("* {}: '{}'\n", na++, a);
                 }
             }
-            std::print("\n");
+            EnergyPlus::print("\n");
         }
         // bool debugCLI = false;
         app.add_flag("--debug-cli", debugCLI, "Print the result of the CLI assignments to the console and exit")->group(""); // Empty group to hide it
@@ -358,8 +358,8 @@ run_manager_from_cli()
         }
 
         if (debugCLI) {
-            std::print(stderr,
-                       R"debug(
+            EnergyPlus::print(stderr,
+                              R"debug(
 state.dataGlobal->AnnualSimulation = {},
 state.dataGlobal->DDOnlySimulation = {},
 state.dataStrGlobals->outDirPath = '{:g}',
@@ -378,22 +378,22 @@ state.dataGlobal->numThread={},
 state.files.inputWeatherFilePath.filePath='{:g}',
 state.dataStrGlobals->inputFilePath='{:g}',
 )debug",
-                       state.dataGlobal->AnnualSimulation,
-                       state.dataGlobal->DDOnlySimulation,
-                       state.dataStrGlobals->outDirPath,
-                       state.dataStrGlobals->inputIddFilePath,
+                              state.dataGlobal->AnnualSimulation,
+                              state.dataGlobal->DDOnlySimulation,
+                              state.dataStrGlobals->outDirPath,
+                              state.dataStrGlobals->inputIddFilePath,
 
-                       runEPMacro,
-                       prefixOutName,
-                       state.dataGlobal->runReadVars,
-                       state.dataGlobal->outputEpJSONConversion,
-                       state.dataGlobal->outputEpJSONConversionOnly,
-                       suffixType,
-                       state.dataGlobal->numThread,
-                       state.files.inputWeatherFilePath.filePath,
-                       state.dataStrGlobals->inputFilePath);
+                              runEPMacro,
+                              prefixOutName,
+                              state.dataGlobal->runReadVars,
+                              state.dataGlobal->outputEpJSONConversion,
+                              state.dataGlobal->outputEpJSONConversionOnly,
+                              suffixType,
+                              state.dataGlobal->numThread,
+                              state.files.inputWeatherFilePath.filePath,
+                              state.dataStrGlobals->inputFilePath);
 
-            std::print(stderr, "--debug-cli passed: exiting early\n");
+            EnergyPlus::print(stderr, "--debug-cli passed: exiting early\n");
 
             exit(0);
         }
@@ -753,7 +753,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 FileSystem::linkFile(state.dataStrGlobals->inputIddFilePath, "Energy+.idd");
             }
 
-            FileSystem::systemCall(expandObjectsCommand);
+            int const expandObjectsExitCode = FileSystem::systemCall(expandObjectsCommand);
             if (!inputFilePathdIn) {
                 FileSystem::removeFile("in.idf");
             }
@@ -765,6 +765,15 @@ state.dataStrGlobals->inputFilePath='{:g}',
             if (FileSystem::fileExists("expanded.idf")) {
                 FileSystem::moveFile("expanded.idf", outputExpidfFilePath);
                 state.dataStrGlobals->inputFilePath = outputExpidfFilePath;
+            }
+
+            if (expandObjectsExitCode != 0) {
+                DisplayString(state, "ERROR: ExpandObjects failed to expand the HVACTemplate:* or GroundHeatTransfer:* objects in this input file.");
+                DisplayString(state, std::format("See {} for details.", FileSystem::getAbsolutePath(outputExperrFilePath)));
+                if (eplusRunningViaAPI) {
+                    return static_cast<int>(ReturnCodes::Failure);
+                }
+                exit(EXIT_FAILURE);
             }
         }
 

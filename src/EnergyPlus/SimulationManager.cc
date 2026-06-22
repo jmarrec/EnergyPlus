@@ -2164,7 +2164,7 @@ namespace SimulationManager {
                   Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).ObjectName,
                   Node::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
-                  state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream);
+                  static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream));
             // Build ParentNodeLists
             if ((state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == Node::ConnectionType::Inlet) ||
                 (state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType == Node::ConnectionType::Outlet)) {
@@ -2230,7 +2230,7 @@ namespace SimulationManager {
                   Node::ConnectionObjectTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ObjectType)],
                   state.dataBranchNodeConnections->NodeConnections(Loop).ObjectName,
                   Node::ConnectionTypeNames[static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).ConnectionType)],
-                  state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream);
+                  static_cast<int>(state.dataBranchNodeConnections->NodeConnections(Loop).FluidStream));
         }
 
         int NumNonConnected = 0;
@@ -2839,12 +2839,9 @@ namespace SimulationManager {
         // using SQLiteProcedures::CreateSQLiteDatabase;
         state.dataGlobal->DoingInputProcessing = false;
 
-        state.dataInputProcessing->inputProcessor->preProcessorCheck(
-            state, state.dataSimulationManager->PreP_Fatal); // Check Preprocessor objects for warning, severe, etc errors.
-
-        if (state.dataSimulationManager->PreP_Fatal) {
-            ShowFatalError(state, "Preprocessor condition(s) cause termination.");
-        }
+        // Preprocessor objects (Output:PreprocessorMessage) are now checked in InputProcessor::processInput(),
+        // before epJSON schema validation can abort the run, so that a Fatal preprocessor message is not hidden
+        // behind unrelated schema errors caused by the preprocessor's malformed output.
 
         state.dataInputProcessing->inputProcessor->preScanReportingVariables(state);
     }

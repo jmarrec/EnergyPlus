@@ -950,8 +950,8 @@ namespace Weather {
 
                         if (!OkRun) {
                             if (!envCurr.ActualWeather) {
-                                StDate = EnergyPlus::format(DateFormat, envCurr.StartMonth, envCurr.StartDay);
-                                EnDate = EnergyPlus::format(DateFormat, envCurr.EndMonth, envCurr.EndDay);
+                                StDate = std::format(DateFormat, envCurr.StartMonth, envCurr.StartDay);
+                                EnDate = std::format(DateFormat, envCurr.EndMonth, envCurr.EndDay);
                                 ShowSevereError(
                                     state,
                                     std::format("{}Runperiod [mm/dd] (Start={},End={}) requested not within Data Period(s) from Weather File",
@@ -959,8 +959,8 @@ namespace Weather {
                                                 StDate,
                                                 EnDate));
                             } else {
-                                StDate = EnergyPlus::format(DateFormatWithYear, envCurr.StartMonth, envCurr.StartDay, envCurr.StartYear);
-                                EnDate = EnergyPlus::format(DateFormatWithYear, envCurr.EndMonth, envCurr.EndDay, envCurr.EndYear);
+                                StDate = std::format(DateFormatWithYear, envCurr.StartMonth, envCurr.StartDay, envCurr.StartYear);
+                                EnDate = std::format(DateFormatWithYear, envCurr.EndMonth, envCurr.EndDay, envCurr.EndYear);
                                 ShowSevereError(
                                     state,
                                     std::format("{}Runperiod [mm/dd/yyyy] (Start={},End={}) requested not within Data Period(s) from Weather File",
@@ -970,8 +970,8 @@ namespace Weather {
                             }
 
                             auto const &dataPeriod1 = state.dataWeather->DataPeriods(1);
-                            StDate = EnergyPlus::format(DateFormat, dataPeriod1.StMon, dataPeriod1.StDay);
-                            EnDate = EnergyPlus::format(DateFormat, dataPeriod1.EnMon, dataPeriod1.EnDay);
+                            StDate = std::format(DateFormat, dataPeriod1.StMon, dataPeriod1.StDay);
+                            EnDate = std::format(DateFormat, dataPeriod1.EnMon, dataPeriod1.EnDay);
                             if (dataPeriod1.StYear > 0) {
                                 StDate += std::format("/{}", dataPeriod1.StYear);
                             } else {
@@ -996,8 +996,8 @@ namespace Weather {
                         }
 
                         // Following builds Environment start/end for ASHRAE 55 warnings
-                        StDate = EnergyPlus::format(DateFormat, envCurr.StartMonth, envCurr.StartDay);
-                        EnDate = EnergyPlus::format(DateFormat, envCurr.EndMonth, envCurr.EndDay);
+                        StDate = std::format(DateFormat, envCurr.StartMonth, envCurr.StartDay);
+                        EnDate = std::format(DateFormat, envCurr.EndMonth, envCurr.EndDay);
                         if (envCurr.KindOfEnvrn == Constant::KindOfSim::RunPeriodWeather) {
                             StDate += std::format("/{}", envCurr.StartYear);
                             EnDate += std::format("/{}", envCurr.EndYear);
@@ -1137,8 +1137,8 @@ namespace Weather {
                                 Source = "InputFile";
                             }
                             if (state.dataWeather->DaylightSavingIsActive && state.dataReportFlag->DoWeatherInitReporting) {
-                                StDate = EnergyPlus::format(DateFormat, DSTActStMon, DSTActStDay);
-                                EnDate = EnergyPlus::format(DateFormat, DSTActEnMon, DSTActEnDay);
+                                StDate = std::format(DateFormat, DSTActStMon, DSTActStDay);
+                                EnDate = std::format(DateFormat, DSTActEnMon, DSTActEnDay);
                                 print(state.files.eio, EnvDSTYFormat, Source, StDate, EnDate);
                             } else if (state.dataGlobal->DoOutputReporting) {
                                 print(state.files.eio, EnvDSTNFormat, Source);
@@ -1147,7 +1147,7 @@ namespace Weather {
                                 auto &specialDay = state.dataWeather->SpecialDays(k);
                                 static constexpr std::string_view EnvSpDyFormat("Environment:Special Days,{},{},{},{},{:3}\n");
                                 if (specialDay.WthrFile && state.dataWeather->UseSpecialDays && state.dataReportFlag->DoWeatherInitReporting) {
-                                    StDate = EnergyPlus::format(DateFormat, specialDay.ActStMon, specialDay.ActStDay);
+                                    StDate = std::format(DateFormat, specialDay.ActStMon, specialDay.ActStDay);
                                     print(state.files.eio,
                                           EnvSpDyFormat,
                                           specialDay.Name,
@@ -1157,7 +1157,7 @@ namespace Weather {
                                           specialDay.Duration);
                                 }
                                 if (!specialDay.WthrFile && state.dataReportFlag->DoWeatherInitReporting) {
-                                    StDate = EnergyPlus::format(DateFormat, specialDay.ActStMon, specialDay.ActStDay);
+                                    StDate = std::format(DateFormat, specialDay.ActStMon, specialDay.ActStDay);
                                     print(state.files.eio,
                                           EnvSpDyFormat,
                                           specialDay.Name,
@@ -1173,7 +1173,7 @@ namespace Weather {
                                state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeDesignDay) { // Design Day
                         auto const &desDayInput = state.dataWeather->DesDayInput(envCurr.DesignDayNum);
                         state.dataEnvrn->RunPeriodEnvironment = false;
-                        StDate = EnergyPlus::format(DateFormat, desDayInput.Month, desDayInput.DayOfMonth);
+                        StDate = std::format(DateFormat, desDayInput.Month, desDayInput.DayOfMonth);
                         EnDate = StDate;
                         if (state.dataReportFlag->DoWeatherInitReporting) {
                             print(state.files.eio,
@@ -3545,7 +3545,7 @@ namespace Weather {
         designDay.DayOfMonth = desDayInput.DayOfMonth;
         designDay.DayOfYear = General::OrdinalDay(designDay.Month, designDay.DayOfMonth, 0);
         static constexpr std::string_view MnDyFmt("{:02}/{:02}");
-        state.dataEnvrn->CurMnDy = EnergyPlus::format(MnDyFmt, desDayInput.Month, desDayInput.DayOfMonth);
+        state.dataEnvrn->CurMnDy = std::format(MnDyFmt, desDayInput.Month, desDayInput.DayOfMonth);
         // EnvironmentName = DesDayInput( EnvrnNum ).Title;
         state.dataEnvrn->RunPeriodEnvironment = false;
         // Following builds Environment start/end for ASHRAE 55 warnings
@@ -3621,25 +3621,36 @@ namespace Weather {
 
             print(state.files.eio, "{}", DesDayDryBulbRangeTypeStrings[(int)desDayInput.dryBulbRangeType]);
 
-            static constexpr std::array<std::string_view, (int)DesDayHumIndType::Num> DesDayHumIndTypeStrings = {
-                "Wetbulb,{:.2f},{{C}},",
-                "Dewpoint,{:.2f},{{C}},",
-                "Enthalpy,{:.2f},{{J/kgDryAir}},",
-                "HumidityRatio,{:.4f},{{kgWater/kgDryAir}},",
-                "Schedule,<schedule values from 0.0 to 100.0>,{{percent}},",
-                "WetBulbProfileDefaultMultipliers,{:.2f},{{C}},",
-                "WetBulbProfileDifferenceSchedule,{:.2f},{{C}},",
-                "WetBulbProfileMultiplierSchedule,{:.2f},{{C}},"};
-
             // Hum Ind Type, Hum Ind Value at Max Temp, Hum Ind Units
-            if (desDayInput.HumIndType == DesDayHumIndType::RelHumSch) {
-                print(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType]);
-            } else if (desDayInput.HumIndType == DesDayHumIndType::WBProfDef) {
+            switch (desDayInput.HumIndType) {
+            case DesDayHumIndType::WetBulb:
+                print(state.files.eio, "Wetbulb,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::DewPoint:
+                print(state.files.eio, "Dewpoint,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::Enthalpy:
+                print(state.files.eio, "Enthalpy,{:.2f},{{J/kgDryAir}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::HumRatio:
+                print(state.files.eio, "HumidityRatio,{:.4f},{{kgWater/kgDryAir}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::RelHumSch:
+                print(state.files.eio, "Schedule,<schedule values from 0.0 to 100.0>,{{percent}},");
+                break;
+            case DesDayHumIndType::WBProfDef:
                 print(state.files.eio,
-                      DesDayHumIndTypeStrings[(int)desDayInput.HumIndType],
+                      "WetBulbProfileDefaultMultipliers,{:.2f},{{C}},",
                       state.dataWeather->DesDayInput(state.dataWeather->Envrn).HumIndValue);
-            } else {
-                print(state.files.eio, DesDayHumIndTypeStrings[(int)desDayInput.HumIndType], desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::WBProfDif:
+                print(state.files.eio, "WetBulbProfileDifferenceSchedule,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            case DesDayHumIndType::WBProfMul:
+                print(state.files.eio, "WetBulbProfileMultiplierSchedule,{:.2f},{{C}},", desDayInput.HumIndValue);
+                break;
+            default:
+                break;
             }
 
             print(state.files.eio, "{:.0f},", desDayInput.PressBarom);
@@ -8255,7 +8266,7 @@ namespace Weather {
                     ShowWarningError(state, std::string{MissString});
                     MissedHeader = true;
                 }
-                ShowMessage(state, EnergyPlus::format(msFmt, "\"" + description + "\"", value));
+                ShowMessage(state, std::format(msFmt, "\"" + description + "\"", value));
             }
         };
 
@@ -8272,7 +8283,7 @@ namespace Weather {
         missedHeaderCheck(state.dataWeather->wvarsMissedCounts.SnowDepth, "Snow Depth");
         if (state.dataWeather->wvarsMissedCounts.WeathCodes > 0) {
             ShowWarningError(state, std::string{InvString});
-            ShowMessage(state, EnergyPlus::format(ivFmt, "\"Weather Codes\" (not equal 9 digits)", state.dataWeather->wvarsMissedCounts.WeathCodes));
+            ShowMessage(state, std::format(ivFmt, "\"Weather Codes\" (not equal 9 digits)", state.dataWeather->wvarsMissedCounts.WeathCodes));
         }
         missedHeaderCheck(state.dataWeather->wvarsMissedCounts.LiquidPrecip, "Liquid Precipitation Depth");
 
@@ -8284,7 +8295,7 @@ namespace Weather {
                         ShowWarningError(state, std::string{RangeString});
                         OutOfRangeHeader = true;
                     }
-                    ShowMessage(state, EnergyPlus::format(rgFmt, description, rangeLow, rangeHigh, value));
+                    ShowMessage(state, std::format(rgFmt, description, rangeLow, rangeHigh, value));
                     if (!extraMsg.empty()) {
                         ShowMessage(state, std::string{extraMsg});
                     }
