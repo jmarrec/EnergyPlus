@@ -200,7 +200,7 @@ GLHESlinky::GLHESlinky(EnergyPlusData &state, std::string const &objName, nlohma
                                              DataPlant::PlantEquipTypeNames[static_cast<int>(DataPlant::PlantEquipmentType::GrndHtExchgSlinky)]);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHETubeLength, objName, this->totalTubeLength);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEVolFlow, objName, this->designFlow, 6);
-    OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEbhDepth, objName, this->coilDepth);
+    OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEbhDepth, objName, this->trenchDepth);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEbhDiam, objName, this->coilDiameter);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchGLHEbhLeng, objName, this->trenchLength);
     OutputReportPredefined::PreDefTableEntry(
