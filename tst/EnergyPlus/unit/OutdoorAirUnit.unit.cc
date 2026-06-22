@@ -360,7 +360,19 @@ TEST_F(EnergyPlusFixture, OutdoorAirUnit_AutoSize)
     EXPECT_DOUBLE_EQ(SAFanPower, 75.0);
     EXPECT_DOUBLE_EQ(EAFanPower, 75.0);
     EXPECT_DOUBLE_EQ(SAFanPower + EAFanPower, state->dataOutdoorAirUnit->OutAirUnit(OAUnitNum).ElecFanRate);
-    EXPECT_TRUE(compare_err_stream("", true));
+    std::string const sizing_error_string = delimited_string({
+        "   ** Warning ** SizeDXCoil Coil:Cooling:DX:SingleSpeed ACDXCOIL 1",
+        "   **   ~~~   ** ...Gross Rated Total Cooling Capacity [W] will be limited by the maximum rated volume flow per rated total capacity ratio.",
+        "   **   ~~~   ** ...DX coil volume flow rate [m3/s] = 0.500000",
+        "   **   ~~~   ** ...Requested capacity [W] = 75.000",
+        "   **   ~~~   ** ...Requested flow/capacity ratio [m3/s/W] = 0.00666667",
+        "   **   ~~~   ** ...Maximum flow/capacity ratio [m3/s/W] = 6.04100E-05",
+        "   **   ~~~   ** ...Adjusted capacity [W] = 8276.775",
+        "   ** Warning ** SizeHeatingCoil: : Potential issue with equipment sizing for Coil:Heating:Electric ZONE1OAUHEATINGCOIL",
+        "   **   ~~~   ** ...Rated Total Heating Capacity = 0.00 [W]",
+        "   **   ~~~   ** ...Capacity used to size child component set to 0 [W]",
+    });
+    EXPECT_TRUE(compare_err_stream(sizing_error_string, true));
 
     // #6173
     state->dataOutdoorAirUnit->OutAirUnit(OAUnitNum).ExtAirMassFlow = 0.0;
