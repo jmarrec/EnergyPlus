@@ -493,6 +493,7 @@ This field should reference the appropriate parent \hyperref[scheduleyearrules]{
 
 This numeric field determines the ``priority'' for this rule amongst other rules (0 = highest priority).
 For a given schedule year rules object, schedule rules may overlap in terms of their applicable dates; in this case, the rule with the least rule order value is given priority.
+Within a Schedule:Year:Rules, all rule priority order values must be unique.
 
 \paragraph{Field: Day Schedule Name}\label{field-day-schedule-name-scheduleweekrule}
 
@@ -562,9 +563,26 @@ An example of IDF input:
 
 \begin{lstlisting}
 Schedule:Week:Rule,
-  occupants schedule week rule,           !- Name
+  occupants schedule week rule1,          !- Name
   occupants schedule year rules,          !- Schedule Year Rules Name
   0,                                      !- Rule Priority Order
+  occupants schedule day,                 !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  No,                                     !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  No,                                     !- Apply Saturday
+  7,                                      !- Start Month
+  1,                                      !- Start Day
+  7,                                      !- End Month
+  31;                                     !- End Day
+
+Schedule:Week:Rule,
+  occupants schedule week rule2,          !- Name
+  occupants schedule year rules,          !- Schedule Year Rules Name
+  1,                                      !- Rule Priority Order
   occupants schedule day,                 !- Day Schedule Name
   No,                                     !- Apply Sunday
   Yes,                                    !- Apply Monday
