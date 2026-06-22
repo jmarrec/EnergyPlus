@@ -2529,7 +2529,7 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_Validation)
         "Schedule:Week:Rule,",
         "  schedule rule Jul1-Dec31, !- Name",
         "  schedule year rules,      !- Schedule Year Rules Name",
-        "  1,                        !- Rule Order",
+        "  1,                        !- Rule Priority Order",
         "  dayschedule,              !- Day Schedule Name",
         "  Yes,                      !- Apply Sunday",
         "  Yes,                      !- Apply Monday",
@@ -2557,7 +2557,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_Validation)
     const std::string expected_error = delimited_string({
         "   ** Severe  ** ProcessScheduleInput: Schedule:Week:Rule = SCHEDULE RULE JUL1-DEC31",
         "   **   ~~~   ** Day Schedule Name = DAYSCHEDULE, item not found.",
-        "   ** Warning ** ProcessScheduleInput: SCHEDULE YEAR RULES has week rules with duplicate rule priority order (1)",
+        "   ** Severe  ** ProcessScheduleInput: SCHEDULE YEAR RULES has week rules with duplicate Rule Priority Order = 1",
+        "   **   ~~~   ** Priority must be unique within a Schedule:Year:Rules",
         "   ** Severe  ** ProcessScheduleInput: Schedule:Year:Rules = SCHEDULE YEAR RULES",
         "   **   ~~~   ** Default Day Schedule Name = DEFAULT DAY, item not found.",
         "   **  Fatal  ** ProcessScheduleInput: Preceding Errors cause termination.",
