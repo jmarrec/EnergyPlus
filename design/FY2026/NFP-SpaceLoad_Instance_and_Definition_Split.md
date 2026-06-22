@@ -14,41 +14,43 @@ OpenStudio has long used an Instance/Definition split for internal gains objects
 By introducing the same Instance/Definition pattern in EnergyPlus, we achieve three concrete benefits:
 
 1. **Alignment of EnergyPlus and OpenStudio** — the EnergyPlus IDD and the OpenStudio Model API now share the same conceptual shape, reducing the translation surface and the associated maintenance burden. Allowing usage of OpenStudio directly on an IDF will provide the ability to work on **any** IDF, including fully unsupported objects (objects not wrapped in OpenStudio model/ namespace) and objects which don't have ReverseTranslator rules (the ReverseTranslator IDF -> OSM is lacking in terms of HVAC especially).
-2. **DRY input data** — a single `ElectricEquipment:Definition` describing, say, a standard office workstation can be referenced by any number of `ElectricEquipment` instances across the building, each with its own zone/space assignment and schedule, without repeating the physical characteristics.
+2. **DRY input data** — a single `ElectricEquipment:Definition` describing, say, a standard office workstation can be referenced by any number of `ElectricEquipment:Instance` instances across the building, each with its own zone/space assignment and schedule, without repeating the physical characteristics.
 3. **Cleaner IDD semantics** — the split makes explicit which properties are intrinsic to the load type (the definition) and which are extrinsic, installation-specific concerns (the instance).
 
 
 ## E-mail and Conference Call Conclusions ##
 
-N/A
+- 2026-06-10: As discussed at the 6/10 Technicalities meeting, the team favored keeping the existing objects as-is, and make this NFP backwards compatible.
+    - The existing space loads shall remain the same and the NFP will add new instance and definition objects.
+    - For example, People will remain exactly as is. We will add `People:Instance` and `People:Definition`. There will be no transition rules.
 
 
 ## Overview ##
 
-Every internal gains object type is split into two complementary objects:
+Every existing internal gains object type is mapped to new objects split into two complementary objects:
 
-| Instance                           | Definition                                    |
-|------------------------------------|-----------------------------------------------|
-| `People`                           | `People:Definition`                           |
-| `Lights`                           | `Lights:Definition`                           |
-| `ElectricEquipment`                | `ElectricEquipment:Definition`                |
-| `GasEquipment`                     | `GasEquipment:Definition`                     |
-| `HotWaterEquipment`                | `HotWaterEquipment:Definition`                |
-| `SteamEquipment`                   | `SteamEquipment:Definition`                   |
-| `OtherEquipment`                   | `OtherEquipment:Definition`                   |
-| `ElectricEquipment:ITE:AirCooled`  | `ElectricEquipment:ITE:AirCooled:Definition`  |
+| Instance                                    | Definition                                    |
+|---------------------------------------------|-----------------------------------------------|
+| `People:Instance`                           | `People:Definition`                           |
+| `Lights:Instance`                           | `Lights:Definition`                           |
+| `ElectricEquipment:Instance`                | `ElectricEquipment:Definition`                |
+| `GasEquipment:Instance`                     | `GasEquipment:Definition`                     |
+| `HotWaterEquipment:Instance`                | `HotWaterEquipment:Definition`                |
+| `SteamEquipment:Instance`                   | `SteamEquipment:Definition`                   |
+| `OtherEquipment:Instance`                   | `OtherEquipment:Definition`                   |
+| `ElectricEquipment:ITE:AirCooled:Instance`  | `ElectricEquipment:ITE:AirCooled:Definition`  |
 
 The **Definition** object holds all physical characteristics that are intrinsic to the load type: the design level calculation method and its associated values (equipment level, watts per floor area, watts per person, etc.), heat gain fractions (radiant, latent, lost, return air, ...), and any other type-specific properties such as CO₂ generation rate, fuel type, thermal comfort model selections, and ITE-specific parameters. Because a definition carries no zone or space reference, it can be shared freely across the model.
 
-The **Instance** object holds at least three things: a reference to a Definition by name, a zone/space/zonelist/spacelist assignment, and an operating schedule.
+The **Instance** object holds at least three things: a reference to a `Definition` by name, a zone/space/zonelist/spacelist assignment, and an operating schedule.
 It also carries the end-use subcategory and any other fields that are specific to a particular installation (e.g., `Return Air Heat Gain Node Name` and `Exhaust Air Heat Gain Node Name` for `Lights`, which are zone-topology-specific).
-In addition, a `Multiplier` field (default 1) is added: this value multiplies the Definition value. This allows greater flexibility to define a single definition but handle different physical installations: for example a single Definition representing one object (a Workstation, or a light bulb) can be defined with an absolute Watts value, and the Instance object has the count of these objects.
+In addition, a `Multiplier` field (default 1) is added: this value multiplies the `Definition` value. This allows greater flexibility to define a single definition but handle different physical installations: for example a single Definition representing one object (a Workstation, or a light bulb) can be defined with an absolute Watts value, and the Instance object has the count of these objects.
 
 ## Approach ##
 
 ### IDD changes
 
-For each existing internal gains object type, a new `<ObjectType>:Definition` IDD object is introduced, and the corresponding `<ObjectType>` instance object is slimmed down to reference it.
+For each existing internal gains object type, which will be left untouched, a new `<ObjectType>:Instance` and new `<ObjectType>:Definition` IDD objects are introduced.
 
 **Instance object** retains / gains:
 - `Name`
@@ -76,7 +78,7 @@ ElectricEquipment:Definition,
   0.5,                    !- Fraction Radiant
   0.0;                    !- Fraction Lost
 
-ElectricEquipment,
+ElectricEquipment:Instance,
   Zone1 Workstation,      !- Name
   Workstation Def,        !- Electric Equipment Definition Name
   Zone 1,                 !- Zone or ZoneList or Space or SpaceList Name
@@ -88,7 +90,7 @@ ElectricEquipment,
 Another example with a Lights object:
 
 ```
-Lights,
+Lights:Instance,
   Space 1 Lights,                         !- Name
   60 W Incandescent Bulb,                 !- Lights Definition Name
   Space 1,                                !- Zone or ZoneList or Space or SpaceList Name
@@ -119,26 +121,26 @@ Below is the proposed IDD for each object
 
 | Field Name                                           | New Location      |
 |------------------------------------------------------|-------------------|
-| Name                                                 | People            |
-| Zone or ZoneList or Space or SpaceList Name          | People            |
-| Number of People Schedule Name                       | People            |
-| Multiplier                                           | People            |
+| Name                                                 | People:Instance   |
+| Zone or ZoneList or Space or SpaceList Name          | People:Instance   |
+| Number of People Schedule Name                       | People:Instance   |
+| Multiplier                                           | People:Instance   |
 | Number of People Calculation Method                  | People:Definition |
 | Number of People                                     | People:Definition |
 | People per Floor Area                                | People:Definition |
 | Floor Area per Person                                | People:Definition |
 | Fraction Radiant                                     | People:Definition |
 | Sensible Heat Fraction                               | People:Definition |
-| Activity Level Schedule Name                         | People            |
+| Activity Level Schedule Name                         | People:Instance   |
 | Carbon Dioxide Generation Rate                       | People:Definition |
 | Enable ASHRAE 55 Comfort Warnings                    | People:Definition |
 | Mean Radiant Temperature Calculation Type            | People:Definition |
-| Surface Name/Angle Factor List Name                  | People            |
-| Work Efficiency Schedule Name                        | People            |
-| Clothing Insulation Calculation Method               | People            |
-| Clothing Insulation Calculation Method Schedule Name | People            |
-| Clothing Insulation Schedule Name                    | People            |
-| Air Velocity Schedule Name                           | People            |
+| Surface Name/Angle Factor List Name                  | People:Instance   |
+| Work Efficiency Schedule Name                        | People:Instance   |
+| Clothing Insulation Calculation Method               | People:Instance   |
+| Clothing Insulation Calculation Method Schedule Name | People:Instance   |
+| Clothing Insulation Schedule Name                    | People:Instance   |
+| Air Velocity Schedule Name                           | People:Instance   |
 | Thermal Comfort Model 1 Type                         | People:Definition |
 | Thermal Comfort Model 2 Type                         | People:Definition |
 | Thermal Comfort Model 3 Type                         | People:Definition |
@@ -146,12 +148,12 @@ Below is the proposed IDD for each object
 | Thermal Comfort Model 5 Type                         | People:Definition |
 | Thermal Comfort Model 6 Type                         | People:Definition |
 | Thermal Comfort Model 7 Type                         | People:Definition |
-| Ankle Level Air Velocity Schedule Name               | People            |
-| Cold Stress Temperature Threshold                    | People            |
-| Heat Stress Temperature Threshold                    | People            |
+| Ankle Level Air Velocity Schedule Name               | People:Instance   |
+| Cold Stress Temperature Threshold                    | People:Instance   |
+| Heat Stress Temperature Threshold                    | People:Instance   |
 
 ```
-People,
+People:Instance,
        \memo Sets internal gains and contaminant rates for occupants in the zone.
        \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
        \memo then this definition applies to all applicable spaces, and each instance will
@@ -377,9 +379,9 @@ People:Definition,
 
 | Field Name                                                       | New Location      |
 |------------------------------------------------------------------|-------------------|
-| Name                                                             | Lights            |
-| Zone or ZoneList or Space or SpaceList Name                      | Lights            |
-| Schedule Name                                                    | Lights            |
+| Name                                                             | Lights:Instance   |
+| Zone or ZoneList or Space or SpaceList Name                      | Lights:Instance   |
+| Schedule Name                                                    | Lights:Instance   |
 | Design Level Calculation Method                                  | Lights:Definition |
 | Lighting Level                                                   | Lights:Definition |
 | Watts per Floor Area                                             | Lights:Definition |
@@ -387,17 +389,17 @@ People:Definition,
 | Return Air Fraction                                              | Lights:Definition |
 | Fraction Radiant                                                 | Lights:Definition |
 | Fraction Visible                                                 | Lights:Definition |
-| Fraction Replaceable                                             | Lights            |
-| Multiplier                                                       | Lights            |
-| End-Use Subcategory                                              | Lights            |
+| Fraction Replaceable                                             | Lights:Instance   |
+| Multiplier                                                       | Lights:Instance   |
+| End-Use Subcategory                                              | Lights:Instance   |
 | Return Air Fraction Calculated from Plenum Temperature           | Lights:Definition |
 | Return Air Fraction Function of Plenum Temperature Coefficient 1 | Lights:Definition |
 | Return Air Fraction Function of Plenum Temperature Coefficient 2 | Lights:Definition |
-| Return Air Heat Gain Node Name                                   | Lights            |
-| Exhaust Air Heat Gain Node Name                                  | Lights            |
+| Return Air Heat Gain Node Name                                   | Lights:Instance   |
+| Exhaust Air Heat Gain Node Name                                  | Lights:Instance   |
 
 ```
-Lights,
+Lights:Instance,
        \memo Sets internal gains for lights in the zone.
        \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
        \memo then this definition applies to all applicable spaces, and each instance will
@@ -526,10 +528,10 @@ Lights:Definition,
 
 | Field Name                                  | New Location                 |
 |---------------------------------------------|------------------------------|
-| Name                                        | ElectricEquipment            |
-| Zone or ZoneList or Space or SpaceList Name | ElectricEquipment            |
-| Schedule Name                               | ElectricEquipment            |
-| Multiplier                                  | ElectricEquipment            |
+| Name                                        | ElectricEquipment:Instance   |
+| Zone or ZoneList or Space or SpaceList Name | ElectricEquipment:Instance   |
+| Schedule Name                               | ElectricEquipment:Instance   |
+| Multiplier                                  | ElectricEquipment:Instance   |
 | Design Level Calculation Method             | ElectricEquipment:Definition |
 | Design Level                                | ElectricEquipment:Definition |
 | Watts per Floor Area                        | ElectricEquipment:Definition |
@@ -537,10 +539,10 @@ Lights:Definition,
 | Fraction Latent                             | ElectricEquipment:Definition |
 | Fraction Radiant                            | ElectricEquipment:Definition |
 | Fraction Lost                               | ElectricEquipment:Definition |
-| End-Use Subcategory                         | ElectricEquipment            |
+| End-Use Subcategory                         | ElectricEquipment:Instance   |
 
 ```
-ElectricEquipment,
+ElectricEquipment:Instance,
        \memo Sets internal gains for electric equipment in the zone.
        \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
        \memo then this definition applies to all applicable spaces, and each instance will
@@ -633,10 +635,10 @@ ElectricEquipment:Definition,
 
 | Field Name                                  | New Location            |
 |---------------------------------------------|-------------------------|
-| Name                                        | GasEquipment            |
-| Zone or ZoneList or Space or SpaceList Name | GasEquipment            |
-| Schedule Name                               | GasEquipment            |
-| Multiplier                                  | GasEquipment            |
+| Name                                        | GasEquipment:Instance   |
+| Zone or ZoneList or Space or SpaceList Name | GasEquipment:Instance   |
+| Schedule Name                               | GasEquipment:Instance   |
+| Multiplier                                  | GasEquipment:Instance   |
 | Design Level Calculation Method             | GasEquipment:Definition |
 | Design Level                                | GasEquipment:Definition |
 | Power per Floor Area                        | GasEquipment:Definition |
@@ -645,10 +647,10 @@ ElectricEquipment:Definition,
 | Fraction Radiant                            | GasEquipment:Definition |
 | Fraction Lost                               | GasEquipment:Definition |
 | Carbon Dioxide Generation Rate              | GasEquipment:Definition |
-| End-Use Subcategory                         | GasEquipment            |
+| End-Use Subcategory                         | GasEquipment:Instance   |
 
 ```
-GasEquipment,
+GasEquipment:Instance,
        \memo Sets internal gains and contaminant rates for gas equipment in the zone.
        \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
        \memo then this definition applies to all applicable spaces, and each instance will
@@ -755,10 +757,10 @@ GasEquipment:Definition,
 
 | Field Name                                  | New Location                 |
 |---------------------------------------------|------------------------------|
-| Name                                        | HotWaterEquipment            |
-| Zone or ZoneList or Space or SpaceList Name | HotWaterEquipment            |
-| Schedule Name                               | HotWaterEquipment            |
-| Multiplier                                  | HotWaterEquipment            |
+| Name                                        | HotWaterEquipment:Instance   |
+| Zone or ZoneList or Space or SpaceList Name | HotWaterEquipment:Instance   |
+| Schedule Name                               | HotWaterEquipment:Instance   |
+| Multiplier                                  | HotWaterEquipment:Instance   |
 | Design Level Calculation Method             | HotWaterEquipment:Definition |
 | Design Level                                | HotWaterEquipment:Definition |
 | Power per Floor Area                        | HotWaterEquipment:Definition |
@@ -766,10 +768,10 @@ GasEquipment:Definition,
 | Fraction Latent                             | HotWaterEquipment:Definition |
 | Fraction Radiant                            | HotWaterEquipment:Definition |
 | Fraction Lost                               | HotWaterEquipment:Definition |
-| End-Use Subcategory                         | HotWaterEquipment            |
+| End-Use Subcategory                         | HotWaterEquipment:Instance   |
 
 ```
-HotWaterEquipment,
+HotWaterEquipment:Instance,
        \memo Sets internal gains for hot water equipment in the zone.
        \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
        \memo then this definition applies to all applicable spaces, and each instance will
@@ -864,10 +866,10 @@ HotWaterEquipment:Definition,
 
 | Field Name                                  | New Location              |
 |---------------------------------------------|---------------------------|
-| Name                                        | SteamEquipment            |
-| Zone or ZoneList or Space or SpaceList Name | SteamEquipment            |
-| Schedule Name                               | SteamEquipment            |
-| Multiplier                                  | SteamEquipment            |
+| Name                                        | SteamEquipment:Instance   |
+| Zone or ZoneList or Space or SpaceList Name | SteamEquipment:Instance   |
+| Schedule Name                               | SteamEquipment:Instance   |
+| Multiplier                                  | SteamEquipment:Instance   |
 | Design Level Calculation Method             | SteamEquipment:Definition |
 | Design Level                                | SteamEquipment:Definition |
 | Power per Floor Area                        | SteamEquipment:Definition |
@@ -875,10 +877,10 @@ HotWaterEquipment:Definition,
 | Fraction Latent                             | SteamEquipment:Definition |
 | Fraction Radiant                            | SteamEquipment:Definition |
 | Fraction Lost                               | SteamEquipment:Definition |
-| End-Use Subcategory                         | SteamEquipment            |
+| End-Use Subcategory                         | SteamEquipment:Instance   |
 
 ```
-SteamEquipment,
+SteamEquipment:Instance,
        \memo Sets internal gains for steam equipment in the zone.
        \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
        \memo then this definition applies to all applicable spaces, and each instance will
@@ -973,11 +975,11 @@ SteamEquipment:Definition,
 
 | Field Name                                  | New Location              |
 |---------------------------------------------|---------------------------|
-| Name                                        | OtherEquipment            |
-| Fuel Type                                   | OtherEquipment            |
-| Zone or ZoneList or Space or SpaceList Name | OtherEquipment            |
-| Schedule Name                               | OtherEquipment            |
-| Multiplier                                  | OtherEquipment            |
+| Name                                        | OtherEquipment:Instance   |
+| Fuel Type                                   | OtherEquipment:Instance   |
+| Zone or ZoneList or Space or SpaceList Name | OtherEquipment:Instance   |
+| Schedule Name                               | OtherEquipment:Instance   |
+| Multiplier                                  | OtherEquipment:Instance   |
 | Design Level Calculation Method             | OtherEquipment:Definition |
 | Design Level                                | OtherEquipment:Definition |
 | Power per Floor Area                        | OtherEquipment:Definition |
@@ -986,10 +988,10 @@ SteamEquipment:Definition,
 | Fraction Radiant                            | OtherEquipment:Definition |
 | Fraction Lost                               | OtherEquipment:Definition |
 | Carbon Dioxide Generation Rate              | OtherEquipment:Definition |
-| End-Use Subcategory                         | OtherEquipment            |
+| End-Use Subcategory                         | OtherEquipment:Instance   |
 
 ```
-OtherEquipment,
+OtherEquipment:Instance,
        \memo Sets internal gains or losses for "other" equipment in the zone.
        \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
        \memo then this definition applies to all applicable spaces, and each instance will
@@ -1108,15 +1110,15 @@ OtherEquipment:Definition,
 
 | Field Name                                                              | New Location                               |
 |-------------------------------------------------------------------------|--------------------------------------------|
-| Name                                                                    | ElectricEquipment:ITE:AirCooled            |
-| Zone or Space Name                                                      | ElectricEquipment:ITE:AirCooled            |
+| Name                                                                    | ElectricEquipment:ITE:AirCooled:Instance   |
+| Zone or Space Name                                                      | ElectricEquipment:ITE:AirCooled:Instance   |
 | Air Flow Calculation Method                                             | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Power Input Calculation Method                                   | ElectricEquipment:ITE:AirCooled:Definition |
 | Watts per Unit                                                          | ElectricEquipment:ITE:AirCooled:Definition |
-| Multiplier                                                              | ElectricEquipment:ITE:AirCooled            |
+| Multiplier                                                              | ElectricEquipment:ITE:AirCooled:Instance   |
 | Watts per Floor Area                                                    | ElectricEquipment:ITE:AirCooled:Definition |
-| Design Power Input Schedule Name                                        | ElectricEquipment:ITE:AirCooled            |
-| CPU Loading Schedule Name                                               | ElectricEquipment:ITE:AirCooled            |
+| Design Power Input Schedule Name                                        | ElectricEquipment:ITE:AirCooled:Instance   |
+| CPU Loading Schedule Name                                               | ElectricEquipment:ITE:AirCooled:Instance   |
 | CPU Power Input Function of Loading and Air Temperature Curve Name      | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Fan Power Input Fraction                                         | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Fan Air Flow Rate per Power Input                                | ElectricEquipment:ITE:AirCooled:Definition |
@@ -1125,17 +1127,17 @@ OtherEquipment:Definition,
 | Design Entering Air Temperature                                         | ElectricEquipment:ITE:AirCooled:Definition |
 | Environmental Class                                                     | ElectricEquipment:ITE:AirCooled:Definition |
 | Air Inlet Connection Type                                               | ElectricEquipment:ITE:AirCooled:Definition |
-| Air Inlet Room Air Model Node Name                                      | ElectricEquipment:ITE:AirCooled            |
-| Air Outlet Room Air Model Node Name                                     | ElectricEquipment:ITE:AirCooled            |
-| Supply Air Node Name                                                    | ElectricEquipment:ITE:AirCooled            |
+| Air Inlet Room Air Model Node Name                                      | ElectricEquipment:ITE:AirCooled:Instance   |
+| Air Outlet Room Air Model Node Name                                     | ElectricEquipment:ITE:AirCooled:Instance   |
+| Supply Air Node Name                                                    | ElectricEquipment:ITE:AirCooled:Instance   |
 | Design Recirculation Fraction                                           | ElectricEquipment:ITE:AirCooled:Definition |
 | Recirculation Function of Loading and Supply Temperature Curve Name     | ElectricEquipment:ITE:AirCooled:Definition |
 | Design Electric Power Supply Efficiency                                 | ElectricEquipment:ITE:AirCooled:Definition |
 | Electric Power Supply Efficiency Function of Part Load Ratio Curve Name | ElectricEquipment:ITE:AirCooled:Definition |
 | Fraction of Electric Power Supply Losses to Zone                        | ElectricEquipment:ITE:AirCooled:Definition |
-| CPU End-Use Subcategory                                                 | ElectricEquipment:ITE:AirCooled            |
-| Fan End-Use Subcategory                                                 | ElectricEquipment:ITE:AirCooled            |
-| Electric Power Supply End-Use Subcategory                               | ElectricEquipment:ITE:AirCooled            |
+| CPU End-Use Subcategory                                                 | ElectricEquipment:ITE:AirCooled:Instance   |
+| Fan End-Use Subcategory                                                 | ElectricEquipment:ITE:AirCooled:Instance   |
+| Electric Power Supply End-Use Subcategory                               | ElectricEquipment:ITE:AirCooled:Instance   |
 | Supply Temperature Difference                                           | ElectricEquipment:ITE:AirCooled:Definition |
 | Supply Temperature Difference Schedule                                  | ElectricEquipment:ITE:AirCooled:Definition |
 | Return Temperature Difference                                           | ElectricEquipment:ITE:AirCooled:Definition |
@@ -1146,7 +1148,7 @@ Note: this object already has a sort of "Multiplier" field in the sense that it 
 Similarly, Design Power Input Calculation Method choices are changed: key "Watts/Unit" is renamed to "EquipmentLevel" to match the other objects terminology.
 
 ```
-ElectricEquipment:ITE:AirCooled,
+ElectricEquipment:ITE:AirCooled:Instance,
        \memo This object describes air-cooled electric information technology equipment (ITE) which has
        \memo variable power consumption as a function of loading and temperature.
        \memo If a Zone comprised of more than one Space is specified
@@ -1384,7 +1386,6 @@ ElectricEquipment:ITE:AirCooled:Definition,
 ```
 
 
-
 ### C++ changes (`InternalHeatGains.cc`)
 
 A helper `GetSpaceLoadDefinition` function is introduced. It reads all objects of a given Definition type from the IDD and returns a vector of `ZoneEquipDefinitionData` structs containing the pre-parsed physical fields.
@@ -1397,32 +1398,25 @@ The `ZoneEquipDefinitionData` and similar structs are Plain Old Data (POD) struc
 
 ### Backward compatibility / Transition
 
-A Transition rule (V26.2.0) is provided for each object type. The rule:
-1. Creates a new `<ObjectType>:Definition` object, naming it after the original object, and copies the physical fields into it.
-2. Rewrites the original `<ObjectType>` object to remove the physical fields and add the `Definition Name` reference pointing to the newly created definition.
-3. Maps the existing `ElectricEquipment:ITE:AirCooled` `Number of Units` value to `Multiplier`; other object types use the `Multiplier` default of 1 unless the transition output style requires writing the field explicitly.
-
-Existing IDF files therefore continue to work after transition without any manual edits. Each original object becomes a 1-to-1 instance/definition pair; users can then consolidate definitions manually when multiple instances share the same physical characteristics.
-
+No transition rules are needed. The existing internal load objects are left untouched.
+No existing testfiles IDFs nor unit tests need to be updated.
 
 ## Testing/Validation/Data Sources ##
 
-- All existing EnergyPlus test files (`.idf`, `.epJSON`, `.imf`) are updated via the Transition rules and re-validated.
-- Unit tests in `InternalHeatGains` are updated to use the new two-object form.
-- Python pytest tests cover the Transition CLIs for each object type, verifying that pre-transition files produce outputs identical to post-transition files.
-- The existing regression test suite is used as the primary validation criterion; no regression is expected since the simulation data structures are unchanged.
+C++ unit tests are added to ensure that the pairing process works as intended.
+A new IDF file is added as a regression case.
 
 
 ## Input Output Reference Documentation ##
 
 A new subsection, **SpaceLoad Instance and Definition Objects**, is added to the *Group -- Internal Gains* section of the Input Output Reference, placed immediately after *Specifying Applicable Zone(s) or Space(s)*. It describes the pairing pattern, distinguishes what belongs in each object, and gives a short example showing a shared definition referenced by multiple instances.
 
-Each individual object section (`People`, `Lights`, `ElectricEquipment`, ...) gains a new field description for the `<ObjectType> Definition Name` field, and the physical fields are moved to the corresponding `<ObjectType>:Definition` subsection.
+A new entry is added to document each new object pair added (`People:Instance`, `People:Definition`, `Lights:Instance`, `Lights:Definition`, etc)
 
 
 ## Input Description ##
 
-The changes to the IDD are described under **Approach** above. No new fields are added to any existing field; fields are only moved between the instance and the new definition object. The `End-Use Subcategory` field, previously the last field of the instance objects, is retained on the instance.
+The changes to the IDD are described under **Approach** above. The existing objects are left untouched.
 
 The `<ObjectType>:Definition` objects are:
 - **required** — if an instance references a definition that does not exist, a severe error is raised.
@@ -1442,8 +1436,10 @@ No changes to the Engineering Reference are required. The split is purely an inp
 
 ## Example File and Transition Changes ##
 
-- All existing test files are updated by the Transition rules.
-- Transition: `CreateNewIDFUsingRulesV26_2_0` implements the rules for all eight object types.
+No existing testfiles IDFs nor unit tests need to be updated.
+
+A new IDF test file is added to demonstrate the usage of the new Instance and Definition objects.
+
 
 ## References ##
 
