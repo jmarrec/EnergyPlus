@@ -49,6 +49,7 @@
 #include <EnergyPlus/DataSystemVariables.hh>
 #include <EnergyPlus/GroundHeatExchangers/Base.hh>
 #include <EnergyPlus/GroundHeatExchangers/State.hh>
+#include <EnergyPlus/OutputReportPredefined.hh>
 #include <EnergyPlus/Plant/PlantManager.hh>
 #include <gtest/gtest.h>
 
@@ -631,6 +632,11 @@ TEST_F(EnergyPlusFixture, GroundHeatExchangerTest_System_Given_Response_Factors_
     EXPECT_EQ(0, thisGLHE.myRespFactors->maxSimYears);
     EXPECT_EQ(400, thisGLHE.totalTubeLength);
     EXPECT_EQ(thisGLHE.soil.k / thisGLHE.soil.rhoCp, thisGLHE.soil.diffusivity);
+
+    auto &orp = *state->dataOutRptPredefined;
+    std::string const GLHEName = thisGLHE.name;
+    // Type
+    EXPECT_EQ("Chiller:Electric:EIR", OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerType, GLHEName));
 }
 
 TEST_F(EnergyPlusFixture, GroundHeatExchangerTest_System_Given_Array_IDF_Check)
