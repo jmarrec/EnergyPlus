@@ -48874,6 +48874,7 @@ AirTerminal:SingleDuct:SeriesPIU:Reheat,
        \type choice
        \key Staged
        \key Modulated
+       \note Only used if Fan Control Type is VariableSpeed
   N8,  \field Design Heating Discharge Air Temperature
        \type real
        \units C
