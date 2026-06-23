@@ -45,14 +45,16 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#if LINK_WITH_PYTHON
+
 // C++ Headers
-#include <format>
+#    include <format>
 
 // EnergyPlus Headers
-#include <EnergyPlus/Data/EnergyPlusData.hh>
-#include <EnergyPlus/FileSystem.hh>
-#include <EnergyPlus/PythonHelpers.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
+#    include <EnergyPlus/Data/EnergyPlusData.hh>
+#    include <EnergyPlus/FileSystem.hh>
+#    include <EnergyPlus/PythonHelpers.hh>
+#    include <EnergyPlus/UtilityRoutines.hh>
 
 namespace EnergyPlus {
 
@@ -112,15 +114,15 @@ namespace PythonHelpers {
         PyPreConfig_InitPythonConfig(&preConfig);
         // PyPreConfig_InitIsolatedConfig sets configure_locale=0 which likely caused Decent CI failures
         // https://github.com/python/cpython/blob/v3.12.2/Python/preconfig.c#L310-L345
-#if DEBUG_PYTHON_CONFIG
+#    if DEBUG_PYTHON_CONFIG
         EnergyPlus::print("PyPreConfig initialized:\n{}\n", preConfig);
-#endif
+#    endif
         preConfig.utf8_mode = 1;
         // disable use_environment so VIRTUAL_ENV/PYTHONPATH don't leak the user's venv into EnergyPlus's embedded Python
         // preConfig.use_environment = 0;
-#if DEBUG_PYTHON_CONFIG
+#    if DEBUG_PYTHON_CONFIG
         EnergyPlus::print("Final PyPreConfig:\n{}\n", preConfig);
-#endif
+#    endif
         status = Py_PreInitialize(&preConfig);
         if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, std::format("Could not pre-initialize Python to speak UTF-8... {}", status));
@@ -129,9 +131,9 @@ namespace PythonHelpers {
         PyConfig config;
         PyConfig_InitIsolatedConfig(&config);
 
-#if DEBUG_PYTHON_CONFIG
+#    if DEBUG_PYTHON_CONFIG
         EnergyPlus::print("Isolated config initialized:\n{}\n", config);
-#endif
+#    endif
         config.isolated = 1;
 
         PyWcharPath wcharProgramPath(FileSystem::getAbsolutePath(FileSystem::getProgramPath()));
@@ -193,9 +195,9 @@ namespace PythonHelpers {
             }
         }
 
-#if DEBUG_PYTHON_CONFIG
+#    if DEBUG_PYTHON_CONFIG
         EnergyPlus::print("Final PyConfig:\n{}\n", config);
-#endif
+#    endif
         Py_InitializeFromConfig(&config);
         PyConfig_Clear(&config);
     }
@@ -313,3 +315,5 @@ namespace PythonHelpers {
 
 } // namespace PythonHelpers
 } // namespace EnergyPlus
+
+#endif // LINK_WITH_PYTHON
