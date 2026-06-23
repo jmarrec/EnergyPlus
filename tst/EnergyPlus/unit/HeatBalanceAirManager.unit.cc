@@ -1121,7 +1121,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_MixingCapacitanceWarning_Test)
             "   ** Warning ** GetSimpleAirModelInputs: Mixing and/or CrossMixing into Zone=\"SMALL ZONE\" is large relative "
             "to the zone's air volume and the simulation timestep.",
             "   **   ~~~   ** ...The combined Mixing/CrossMixing flow into this zone corresponds to 3600.0 air changes per "
-            "hour, which exceeds the Number of Timesteps in Hour (4).",
+            "hour, more than 5x the Number of Timesteps in Hour (4).",
             "   **   ~~~   ** ...Inter-zone mixing is calculated using the connected zone's "
             "temperature/humidity/contaminant level from the previous timestep",
             "   **   ~~~   ** ...so a flow rate this large relative to the zone volume and timestep can introduce a "
