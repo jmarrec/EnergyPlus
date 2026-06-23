@@ -46,6 +46,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
+#include <array>
 #include <format>
 #include <string>
 
@@ -4123,9 +4125,51 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         } // ZoneNumA
     } //(TotRefDoorMixing .GT. 0)
 
+    // Valid values for the Number of Timesteps in Hour (see "Timestep" object); used below to recommend a value.
+    static constexpr std::array<int, 12> ValidTimeStepsInHour = {1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60};
+
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         state.dataHeatBal->Zone(ZoneNum).NominalInfilVent = TotInfilVentFlow(ZoneNum);
         state.dataHeatBal->Zone(ZoneNum).NominalMixing = TotMixingFlow(ZoneNum);
+
+        // Check that the mixing flow into this zone is not so large, relative to the zone's own air volume, that the explicit
+        // (lagged) treatment of interzone mixing in the zone air heat/moisture/contaminant balance loses accuracy.  The zone's
+        // own "capacitance" term in that balance is proportional to Volume/TimeStepZoneSec; once the mixing flow exceeds that,
+        // the zone's air is effectively replaced by more than one air change from mixing within a single timestep, and the
+        // mixing source concentration/temperature used is a full timestep old.
+        if (TotMixingFlow(ZoneNum) > 0.0 && state.dataHeatBal->Zone(ZoneNum).Volume > 0.0) {
+            Real64 const MixingACH = TotMixingFlow(ZoneNum) * Constant::rSecsInHour / state.dataHeatBal->Zone(ZoneNum).Volume;
+            if (MixingACH > double(state.dataGlobal->TimeStepsInHour)) {
+                ShowWarningError(state,
+                                 std::format("{}Mixing and/or CrossMixing into Zone=\"{}\" is large relative to the zone's air volume "
+                                             "and the simulation timestep.",
+                                             RoutineName,
+                                             state.dataHeatBal->Zone(ZoneNum).Name));
+                ShowContinueError(state,
+                                  std::format("...The combined Mixing/CrossMixing flow into this zone corresponds to {:.1f} air changes per hour, "
+                                              "which exceeds the Number of Timesteps in Hour ({}).",
+                                              MixingACH,
+                                              state.dataGlobal->TimeStepsInHour));
+                ShowContinueError(state,
+                                  "...Inter-zone mixing is calculated using the connected zone's temperature/humidity/contaminant level "
+                                  "from the previous timestep");
+                ShowContinueError(state,
+                                  "...so a flow rate this large relative to the zone volume and timestep can introduce a lagged-coupling error "
+                                  "(e.g., apparent over-dilution of contaminants).");
+                auto const recommendedIt =
+                    std::find_if(ValidTimeStepsInHour.begin(), ValidTimeStepsInHour.end(), [MixingACH](int n) { return double(n) >= MixingACH; });
+                if (recommendedIt != ValidTimeStepsInHour.end()) {
+                    ShowContinueError(state,
+                                      std::format("...Consider increasing the Number of Timesteps in Hour to at least {} for this zone, or reducing "
+                                                  "the Mixing/CrossMixing flow rate relative to the zone volume.",
+                                                  *recommendedIt));
+                } else {
+                    ShowContinueError(state,
+                                      "...Even the EnergyPlus maximum of 60 Timesteps in Hour would not eliminate this lag; consider "
+                                      "reducing the Mixing/CrossMixing flow rate relative to the zone volume instead.");
+                }
+            }
+        }
     }
 
     if (state.dataHeatBal->ZoneAirMassFlow.EnforceZoneMassBalance) {

@@ -201,8 +201,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
                 "surface_type": "Floor",
                 "construction_name": "ext-slab",
                 "number_of_vertices": 4,
-                "outside_boundary_condition": "adiabatic",
-                "sun_exposure": "nosun",
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
                 "vertices": [
                     {
                         "vertex_x_coordinate": 45.3375,
@@ -232,8 +232,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
                 "surface_type": "Floor",
                 "construction_name": "ext-slab",
                 "number_of_vertices": 4,
-                "outside_boundary_condition": "adiabatic",
-                "sun_exposure": "nosun",
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
                 "vertices": [
                     {
                         "vertex_x_coordinate": 45.3375,
@@ -262,8 +262,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
                 "surface_type": "Floor",
                 "construction_name": "ext-slab",
                 "number_of_vertices": 4,
-                "outside_boundary_condition": "adiabatic",
-                "sun_exposure": "nosun",
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
                 "vertices": [
                     {
                         "vertex_x_coordinate": 45.3375,
@@ -667,8 +667,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
                 "surface_type": "Floor",
                 "construction_name": "ext-slab",
                 "number_of_vertices": 4,
-                "outside_boundary_condition": "adiabatic",
-                "sun_exposure": "nosun",
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
                 "vertices": [
                     {
                         "vertex_x_coordinate": 45.3375,
@@ -698,8 +698,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
                 "surface_type": "Floor",
                 "construction_name": "ext-slab",
                 "number_of_vertices": 4,
-                "outside_boundary_condition": "adiabatic",
-                "sun_exposure": "nosun",
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
                 "vertices": [
                     {
                         "vertex_x_coordinate": 45.3375,
@@ -728,8 +728,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
                 "surface_type": "Floor",
                 "construction_name": "ext-slab",
                 "number_of_vertices": 4,
-                "outside_boundary_condition": "adiabatic",
-                "sun_exposure": "nosun",
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
                 "vertices": [
                     {
                         "vertex_x_coordinate": 45.3375,
@@ -1022,6 +1022,114 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_InitSimpleMixingConvectiveHeatGa
     HeatBalanceAirManager::InitSimpleMixingConvectiveHeatGains(*state);
     EXPECT_NEAR(expectedResult1, state->dataHeatBal->MassConservation(1).ZoneMixingReceivingFr(1), allowedTolerance);
     EXPECT_NEAR(expectedResult2, state->dataHeatBal->MassConservation(1).ZoneMixingReceivingFr(2), allowedTolerance);
+}
+
+TEST_F(EnergyPlusFixture, HeatBalanceAirManager_MixingCapacitanceWarning_Test)
+{
+    // GitHub issue 10761: ZoneMixing into a small zone at a flow rate that is large relative to the
+    // zone's own volume and the simulation timestep should trigger a warning about the explicit
+    // (lagged) interzone coupling losing accuracy, rather than silently producing an apparently
+    // over-diluted result.
+
+    nlohmann::json epJSON = R"(
+    {
+        "Zone": {
+            "Main Zone" : {
+                "volume": 150.0
+            },
+            "Small Zone" : {
+                "volume": 3.0
+            }
+        },
+        "Construction": {
+            "ext-slab": {
+                "outside_layer": "HW CONCRETE"
+            }
+        },
+        "Material": {
+            "HW CONCRETE": {
+                "conductivity": 1.311,
+                "density": 2240.0,
+                "roughness": "Rough",
+                "solar_absorptance": 0.7,
+                "specific_heat": 836.8,
+                "thermal_absorptance": 0.9,
+                "thickness": 0.1016,
+                "visible_absorptance": 0.7
+            }
+        },
+        "BuildingSurface:Detailed": {
+            "Dummy Main Zone Floor": {
+                "zone_name": "Main Zone",
+                "surface_type": "Floor",
+                "construction_name": "ext-slab",
+                "number_of_vertices": 4,
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
+                "vertices": [
+                    {"vertex_x_coordinate": 45.3375, "vertex_y_coordinate": 28.7006, "vertex_z_coordinate": 0.0},
+                    {"vertex_x_coordinate": 45.3375, "vertex_y_coordinate": 4.5732, "vertex_z_coordinate": 0.0},
+                    {"vertex_x_coordinate": 4.5732, "vertex_y_coordinate": 4.5732, "vertex_z_coordinate": 0.0},
+                    {"vertex_x_coordinate": 4.5732, "vertex_y_coordinate": 28.7006, "vertex_z_coordinate": 0.0}
+                ]
+            },
+            "Dummy Small Zone Floor": {
+                "zone_name": "Small Zone",
+                "surface_type": "Floor",
+                "construction_name": "ext-slab",
+                "number_of_vertices": 4,
+                "outside_boundary_condition": "Adiabatic",
+                "sun_exposure": "NoSun",
+                "vertices": [
+                    {"vertex_x_coordinate": 45.3375, "vertex_y_coordinate": 28.7006, "vertex_z_coordinate": 0.0},
+                    {"vertex_x_coordinate": 45.3375, "vertex_y_coordinate": 4.5732, "vertex_z_coordinate": 0.0},
+                    {"vertex_x_coordinate": 4.5732, "vertex_y_coordinate": 4.5732, "vertex_z_coordinate": 0.0},
+                    {"vertex_x_coordinate": 4.5732, "vertex_y_coordinate": 28.7006, "vertex_z_coordinate": 0.0}
+                ]
+            }
+        },
+        "ZoneMixing": {
+            "SmallZoneMixing": {
+                "design_flow_rate_calculation_method": "Flow/Zone",
+                "design_flow_rate": 3.0,
+                "zone_or_space_name": "Small Zone",
+                "source_zone_or_space_name": "Main Zone"
+            }
+        }
+    }
+    )"_json;
+
+    state->dataGlobal->isEpJSON = true;
+    ASSERT_TRUE(process_json(epJSON));
+    state->init_state(*state);
+
+    HeatBalanceManager::GetHeatBalanceInput(*state);
+    // Not the focus of this test -- clear out the "** Warning ** CalculateZoneVolume: 2 zones are not fully enclosed. For more details use:
+    // Output:Diagnostics,DisplayExtrawarnings;"
+    has_err_output(true);
+
+    state->dataHeatBalFanSys->ZoneReOrder.allocate(state->dataGlobal->NumOfZones);
+    bool ErrorsFound = false;
+    HeatBalanceAirManager::GetSimpleAirModelInputs(*state, ErrorsFound);
+    EXPECT_FALSE(ErrorsFound);
+
+    // No Timestep object was entered, so Number of TimeSteps in Hour defaults to 4 (already consumed above).
+    // ZoneMixing flow of 3.0 m3/s into the 3.0 m3 "Small Zone" is 3600 air changes per hour, far beyond
+    // what even the maximum of 60 Timesteps in Hour could resolve.
+    compare_err_stream_substring( //
+        delimited_string({
+            "   ** Warning ** GetSimpleAirModelInputs: Mixing and/or CrossMixing into Zone=\"SMALL ZONE\" is large relative "
+            "to the zone's air volume and the simulation timestep.",
+            "   **   ~~~   ** ...The combined Mixing/CrossMixing flow into this zone corresponds to 3600.0 air changes per "
+            "hour, which exceeds the Number of Timesteps in Hour (4).",
+            "   **   ~~~   ** ...Inter-zone mixing is calculated using the connected zone's "
+            "temperature/humidity/contaminant level from the previous timestep",
+            "   **   ~~~   ** ...so a flow rate this large relative to the zone volume and timestep can introduce a "
+            "lagged-coupling error (e.g., apparent over-dilution of contaminants).",
+            "   **   ~~~   ** ...Even the EnergyPlus maximum of 60 Timesteps in Hour would not eliminate this lag; consider "
+            "reducing the Mixing/CrossMixing flow rate relative to the zone volume instead.",
+        }),
+        true);
 }
 
 } // namespace EnergyPlus
