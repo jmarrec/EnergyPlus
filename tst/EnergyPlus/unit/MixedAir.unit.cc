@@ -1718,6 +1718,12 @@ TEST_F(EnergyPlusFixture, MixedAir_HumidifierOnOASystemTest)
     GetOutsideAirSysInputs(*state);
     EXPECT_EQ(1, state->dataAirLoop->NumOASystems);
     EXPECT_EQ("DOAS OA SYSTEM", state->dataAirLoop->OutsideAirSys(OASysNum).Name);
+    EXPECT_EQ(state->dataAirLoop->OutsideAirSys(OASysNum).OutletNodeNum(1), state->dataAirLoop->OutsideAirSys(OASysNum).InletNodeNum(2));
+    EXPECT_EQ(2, state->dataAirLoop->OutsideAirSys(OASysNum).OutletNodeNum(1));
+    EXPECT_EQ(2, state->dataAirLoop->OutsideAirSys(OASysNum).InletNodeNum(2));
+    EXPECT_EQ("DOAS OUTDOOR AIR INLET", state->dataLoopNodes->NodeID(state->dataAirLoop->OutsideAirSys(OASysNum).InletNodeNum(1)));
+    EXPECT_EQ("DOAS HUMIDIFIER AIR OUTLET", state->dataLoopNodes->NodeID(state->dataAirLoop->OutsideAirSys(OASysNum).InletNodeNum(2)));
+    EXPECT_EQ("DOAS MIXED AIR OUTLET", state->dataLoopNodes->NodeID(state->dataAirLoop->OutsideAirSys(OASysNum).OutletNodeNum(2)));
 
     // setup OA system and initialize nodes
     ManageOutsideAirSystem(*state, state->dataAirLoop->OutsideAirSys(OASysNum).Name, true, AirloopNum, OASysNum);
