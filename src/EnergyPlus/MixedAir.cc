@@ -1025,13 +1025,31 @@ void GetOutsideAirSysInputs(EnergyPlusData &state)
                                         "UNDEFINED");
                 }
                 GetOACompNodeNumbers(state, OASysNum);
+                int companionCoilAirInletNodeNum = 0;
+                bool transpiredCollectorOutletNodeNumFound = false;
                 // check OA equipment list ordering for proper sequence of components
                 for (int CompNum = 1; CompNum < OASys.NumComponents; ++CompNum) {
-                    // check oulet node is same as next components inlet node
+                    // check outlet node is same as next components inlet node
+                    if (OASys.ComponentType(CompNum) == "COILSYSTEM:COOLING:WATER" && CompNum < OASys.NumComponents) {
+                        if (OASys.compPointer[CompNum] != nullptr) {
+                            int const equipIndex = OASys.compPointer[CompNum]->getEquipIndex();
+                            companionCoilAirInletNodeNum = state.dataUnitarySystems->unitarySys[equipIndex].m_HRcoolCoilAirInNode;
+                        }
+                    }
+                    if (OASys.ComponentType(CompNum) == "SOLARCOLLECTOR:UNGLAZEDTRANSPIRED") {
+                        int const WhichUTSC = Util::FindItemInList(OASys.ComponentName(CompNum), state.dataTranspiredCollector->UTSC);
+                        if (WhichUTSC != 0) {
+                            int nodeNum = OASys.InletNodeNum(CompNum + 1);
+                            transpiredCollectorOutletNodeNumFound = std::any_of(state.dataTranspiredCollector->UTSC(WhichUTSC).OutletNode.begin(),
+                                                                                state.dataTranspiredCollector->UTSC(WhichUTSC).OutletNode.end(),
+                                                                                [nodeNum](auto const &utsc) { return utsc == nodeNum; });
+                        }
+                    }
                     // if last component is a fan (exhaust or relief fan) then that doesn't count since those node names will not match
-                    if (OASys.OutletNodeNum(CompNum) != OASys.InletNodeNum(CompNum + 1) &&
+                    if (OASys.OutletNodeNum(CompNum) != OASys.InletNodeNum(CompNum + 1) && !transpiredCollectorOutletNodeNumFound &&
                         !(CompNum + 1 == OASys.NumComponents &&
-                          OASys.ComponentType(CompNum + 1).find("FAN:") != OASys.ComponentType(CompNum + 1).npos)) {
+                          (OASys.ComponentType(CompNum + 1).find("FAN:") != OASys.ComponentType(CompNum + 1).npos ||
+                           OASys.InletNodeNum(CompNum + 1) == companionCoilAirInletNodeNum))) {
                         ShowSevereError(
                             state,
                             std::format("AirLoopHVAC:OutdoorAirSystem:EquipmentList = \"{}\" invalid component order.", OASys.ComponentListName));
@@ -5606,6 +5624,7 @@ void GetOACompNodeNumbers(EnergyPlusData &state, int OASysNum)
             thisOutsideAirSys.OutletNodeNum(CompNum) = HVACHXAssistedCoolingCoil::GetCoilOutletNode(state, CompType, CompName, OutletNodeErrFlag);
             break;
 
+        case MixedAir::ValidEquipListType::CoilSystemCoolingWater:
         case MixedAir::ValidEquipListType::CoilSystemCoolingDX:
         case MixedAir::ValidEquipListType::AirLoopHVACUnitarySystem:
             if (thisOutsideAirSys.compPointer[CompNum] == nullptr) {
