@@ -11,7 +11,8 @@ In EnergyPlus, there is a built-in assumption for opaque building materials that
 
 ## E-mail and Conference Call Conclusions ##
 
-None to date, this is the first draft of this NFP.
+**EnergyPlus Technicalities Call, June 24, 2026**: Given that this was a new NFP and was posted the day before the Technicalities Call, there were not a lot of comments on this proposal.  One comment from Scott Horowitz was to make sure that the ability to specify both exterior and interior face absorptivities in EMS is addressed.  EMS was not mentioned in the original draft proposal.  To address this concern, a section on EMS has been added below in Approach 1.  The only opinions expressed regarding which approach to take were in support of Approach 1, though admittedly this was a small sample and there was not full attendance for the call.
+
 
 ## Overview ##
 
@@ -29,12 +30,15 @@ Beyond this, there are two other places where absorptance handling must be resol
 
 There is also the possibility that the absorptance values can be variable as outlined in the MaterialProperty:VariableAbsorptance input syntax.  This overrides the values defined in the standard material definition and also assumes the same value for both interior and exterior.  This would need to be upgraded as well so that it was possible to define different approaches for both the interior and exterior side.
 
+In addition, EMS currently supports the alteration of the three absorptances.  Thus, it would be useful to make modifications to the EMS code to allow the control of both the interior and exterior face absorptances as well.  The existing EMS variables will need to be renamed and three new variables will need to be added to the list of controllable quantities in EnergyPlus.  In addition, there will likely be some minor documentation enhancements to note the ability to specify absorptances at both faces.
+
 Both of the phases of this approach would require careful testing as well as a look at the documentation to make sure it was clear that there is no longer an assumption that the absorptances are the same on both sides of a material.
 
-This approach would be handled as two phases:
+This approach would be handled as three phases:
 
 1. Expansion of Material and Material:NoMass Defintions
 2. Expansion of Variable Absorptance to Account for Interior and Exterior Differences
+3. Expansion of Interior and Exterior Differences to EMS
 
 These two phases could potentially be handled concurrently since they deal with different sections of the code.
 
@@ -127,6 +131,12 @@ For the interior face of the material, the control signal can be one of the foll
 The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance at the interior side or face.
 1.9.11.1.12 Field: Solar Absorptance Schedule Name Interior Face
 The name of a Schedule object that overwrites the material solar absorptance at the interior side or face. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
+
+### Approach 1, Phase 3: Modification of Text in EMS Application Guide
+
+Currently, there is a section entitled "Material Surface Properties".  This paragraph will be replaced with the following:
+
+Six actuators are available for controlling the surface properties material related to absorptance. Material layers used in a Construction object can have different thermal, solar, and visible absorptances at the exterior and interior side of the layer. The material at the outside of the construction defines the absorptances at the exterior using the exterior values of these parameters for this material. The material at the inside of the construction defines the absorptances at the interior using the interior values of these parameters. The absorptances determine how much radiation in the thermal, solar, and visible spectrum are absorbed at the surface and thus impact the heat balance of the surface. Actuators called “Material” are available with the control types: “Surface Property Solar Absorptance Exterior Face,” “Surface Property Thermal Absorptance Exterior Face,” “Surface Property Visible Absorptance Exterior Face,”“Surface Property Solar Absorptance Interior Face,” “Surface Property Thermal Absorptance Interior Face,” and “Surface Property Visible Absorptance Interior Face,”   These are dimensionless parameters between 0.0 and 1.0.  These actuators are useful for modeling switchable coatings such as thermochromic paints. Note that for a single-layer construction, both the inside and outside properties will be overwritten. Properties at both faces can also be modified using the “MaterialProperty:VariableAbsorptance” input object (see InputOutputReference).
 
 ### Approach 2: This would require the addition of a Construction:WithAbsorptances.  The syntax for this object would change from the current:
 
