@@ -13490,6 +13490,12 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
     this->TotHiStageCompCoolingEnergy = this->TotHiStageCompCapacity * localTimeStepSec;
 }
 
+Real64 CalcTransMTActualEnthalpyChange(Real64 const hCompInHP, Real64 const hGasCoolerOut, Real64 const delHSubcoolerDis)
+{
+    // Use post-subcooler discharge enthalpy at gas-cooler outlet
+    return hCompInHP - (hGasCoolerOut + delHSubcoolerDis);
+}
+
 void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
 {
 
@@ -13717,7 +13723,6 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
     // Iterate to find the quality of the refrigerant entering the receiver.
     Xu = 1.0; // upper bound on quality
     Xl = 0.0; // lower bound on quality
-
     if ((GasCooler(this->GasCoolerNum(1)).HGasCoolerOut + this->DelHSubcoolerDis) > this->HSatLiqReceiver) {
         for (Iter = 1; Iter <= 15; ++Iter) { // Maximum of 15 iterations to find receiver quality
             QualityReceiver = (Xu + Xl) / 2.0;
@@ -13793,7 +13798,7 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
     //  to constitute the "load".  The actual and rated conditions at the exit of the gas cooler and the inlet of the
     //  HP compressors are used for capacity correction calculations.
     DensityActualMT = this->refrig->getSupHeatDensity(state, this->TCompInHP, PSuctionMT, RoutineName);
-    TotalEnthalpyChangeActualMT = this->HCompInHP - (GasCooler(this->GasCoolerNum(1)).HGasCoolerOut + this->DelHSubcoolerDis);
+    TotalEnthalpyChangeActualMT = CalcTransMTActualEnthalpyChange(this->HCompInHP, GasCooler(this->GasCoolerNum(1)).HGasCoolerOut, this->DelHSubcoolerDis);
 
     // Dispatch HP compressors
     // Before dispatching HP compressors, zero sum of compressor outputs and zero each compressor
