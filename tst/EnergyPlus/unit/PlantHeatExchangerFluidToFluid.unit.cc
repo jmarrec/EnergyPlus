@@ -1168,7 +1168,6 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileHi)
     EXPECT_NEAR(state->dataLoopNodes->Node(4).Temp, 20.0, 0.01);
 
     // check HX sizing
-    static constexpr std::string_view RoutineName("SizeFluidHeatExchanger");
     auto &fluidHX1 = state->dataPlantHXFluidToFluid->FluidHX(1);
     Real64 avgSupSPt1 = state->dataLoopNodes->Node(fluidHX1.SupplySideLoop.loop->TempSetPointNodeNum).TempSetPoint;
     Real64 avgDemSPtHiLo1 = (state->dataLoopNodes->Node(fluidHX1.DemandSideLoop.loop->TempSetPointNodeNum).TempSetPointHi +
