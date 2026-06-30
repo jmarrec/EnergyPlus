@@ -2795,10 +2795,8 @@ TEST_F(EnergyPlusFixture, TranscriticalSystem_CapacityCorrectionUsesPostSubcoole
     constexpr Real64 caseEnthalpyChangeRatedMT = 120000.0;
     constexpr Real64 massCorrectionMT = 0.92;
 
-    const Real64 totalHDeltaWithSubcooler =
-        RefrigeratedCase::CalcTransMTActualEnthalpyChange(hCompInHP, hGasCoolerOut, delHSubcoolerDis);
-    const Real64 totalHDeltaNoSubcooler =
-        RefrigeratedCase::CalcTransMTActualEnthalpyChange(hCompInHP, hGasCoolerOut, 0.0);
+    const Real64 totalHDeltaWithSubcooler = RefrigeratedCase::CalcTransMTActualEnthalpyChange(hCompInHP, hGasCoolerOut, delHSubcoolerDis);
+    const Real64 totalHDeltaNoSubcooler = RefrigeratedCase::CalcTransMTActualEnthalpyChange(hCompInHP, hGasCoolerOut, 0.0);
 
     EXPECT_NEAR(totalHDeltaWithSubcooler, 145000.0, 1e-9);
     EXPECT_NEAR(totalHDeltaNoSubcooler, 160000.0, 1e-9);

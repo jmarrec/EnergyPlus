@@ -13798,7 +13798,8 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
     //  to constitute the "load".  The actual and rated conditions at the exit of the gas cooler and the inlet of the
     //  HP compressors are used for capacity correction calculations.
     DensityActualMT = this->refrig->getSupHeatDensity(state, this->TCompInHP, PSuctionMT, RoutineName);
-    TotalEnthalpyChangeActualMT = CalcTransMTActualEnthalpyChange(this->HCompInHP, GasCooler(this->GasCoolerNum(1)).HGasCoolerOut, this->DelHSubcoolerDis);
+    TotalEnthalpyChangeActualMT =
+        CalcTransMTActualEnthalpyChange(this->HCompInHP, GasCooler(this->GasCoolerNum(1)).HGasCoolerOut, this->DelHSubcoolerDis);
 
     // Dispatch HP compressors
     // Before dispatching HP compressors, zero sum of compressor outputs and zero each compressor
