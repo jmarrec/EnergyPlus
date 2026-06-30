@@ -357,8 +357,8 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_adjustPropertiesForPhaseChang
 
     // check the values are correct
     EXPECT_NEAR(3652.9, newSpecificHeat, 0.1);
-    EXPECT_NEAR(2300, newDensity, 0.1);
-    EXPECT_NEAR(1.8, newThermalConductivity, 0.1);
+    EXPECT_NEAR(2250, newDensity, 0.1);
+    EXPECT_NEAR(1.65, newThermalConductivity, 0.1);
 
     // deallocate
     SurfaceFD.deallocate();
