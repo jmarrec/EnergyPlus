@@ -1170,8 +1170,6 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileHi)
     // check HX sizing
     static constexpr std::string_view RoutineName("SizeFluidHeatExchanger");
     auto &fluidHX1 = state->dataPlantHXFluidToFluid->FluidHX(1);
-    Real64 Cp = fluidHX1.SupplySideLoop.loop->glycol->getSpecificHeat(*state, Constant::InitConvTemp, RoutineName);
-    Real64 rho = fluidHX1.SupplySideLoop.loop->glycol->getDensity(*state, Constant::InitConvTemp, RoutineName);
     Real64 avgSupSPt1 = state->dataLoopNodes->Node(fluidHX1.SupplySideLoop.loop->TempSetPointNodeNum).TempSetPoint;
     Real64 avgDemSPtHiLo1 = (state->dataLoopNodes->Node(fluidHX1.DemandSideLoop.loop->TempSetPointNodeNum).TempSetPointHi +
                              state->dataLoopNodes->Node(fluidHX1.DemandSideLoop.loop->TempSetPointNodeNum).TempSetPointLo) /
