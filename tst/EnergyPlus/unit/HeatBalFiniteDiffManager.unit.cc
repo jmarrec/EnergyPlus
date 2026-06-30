@@ -343,10 +343,12 @@ TEST_F(EnergyPlusFixture, HeatBalFiniteDiffManager_adjustPropertiesForPhaseChang
     mat->Num = s_mat->materials.isize();
     s_mat->materialMap.insert_or_assign(mat->Name, mat->Num);
 
-    bool ErrorsFound;
+    bool ErrorsFound = false;
     Material::GetHysteresisData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
 
     auto *matPC = dynamic_cast<Material::MaterialPhaseChange *>(s_mat->materials(Material::GetMaterialNum(*state, "PCMNAME")));
+    ASSERT_NE(matPC, nullptr);
 
     // create local variables to calculate and call the new worker function
     Real64 newSpecificHeat, newDensity, newThermalConductivity;
