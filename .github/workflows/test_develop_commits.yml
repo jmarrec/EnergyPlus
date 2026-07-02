@@ -70,9 +70,6 @@ jobs:
     - name: Install Dependencies for Mac
       if: ${{ runner.os == 'macOS' }}
       run: |
-        brew update
-        brew install gcc@13
-        echo "FC=$(brew --prefix gcc@13)/bin/gfortran-13" >> $GITHUB_ENV
         echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
 
     - name: Install Dependencies for Linux
@@ -85,7 +82,7 @@ jobs:
           echo "FC=gfortran-13" >> $GITHUB_ENV
         fi
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Create Build Directory
       run: cmake -E make_directory ./build/

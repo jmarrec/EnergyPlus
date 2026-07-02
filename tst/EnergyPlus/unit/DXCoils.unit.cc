@@ -76,7 +76,6 @@
 #include <EnergyPlus/ReportCoilSelection.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/VariableSpeedCoils.hh>
-#include <EnergyPlus/WaterManager.hh>
 
 using namespace EnergyPlus;
 using namespace DXCoils;
@@ -88,6 +87,17 @@ using namespace OutputReportPredefined;
 using namespace DataEnvironment;
 
 namespace EnergyPlus {
+
+void clearDXCoolingCoilStandardRatingTables(EnergyPlusData &state)
+{
+    auto &orp = *state.dataOutRptPredefined;
+    for (int subTableIndex : {orp.pdstDXCoolCoil, orp.pdstDXCoolCoil_2023}) {
+        auto &subTable = orp.subTable(subTableIndex);
+        subTable.entries.deallocate();
+        subTable.numEntries = 0;
+        subTable.sizeEntries = 0;
+    }
+}
 
 void createFlatCurves(EnergyPlusData *state)
 {
@@ -265,7 +275,6 @@ TEST_F(EnergyPlusFixture, DXCoils_Test1)
     state->dataDXCoils->DXCoil(DXCoilNum).RegionNum = 4;
     state->dataDXCoils->DXCoil(DXCoilNum).MinOATCompressor = -17.78;
 
-    SetPredefinedTables(*state);
     SizeDXCoil(*state, 2);
     EXPECT_DOUBLE_EQ(5000.0, state->dataDXCoils->DXCoil(2).DefrostCapacity);
 
@@ -410,7 +419,6 @@ TEST_F(EnergyPlusFixture, DXCoils_Test2)
     curve3->inputLimits[1].min = -100.0;
     curve3->inputLimits[1].max = 100.0;
 
-    SetPredefinedTables(*state);
     SizeDXCoil(*state, 2);
     EXPECT_DOUBLE_EQ(0.0, state->dataDXCoils->DXCoil(2).RatedTotCap(1));
 
@@ -1239,8 +1247,6 @@ TEST_F(EnergyPlusFixture, DXCoilEvapCondPumpSizingTest)
 
     ASSERT_EQ(1, state->dataDXCoils->NumDXCoils);
     EXPECT_EQ(DataSizing::AutoSize, state->dataDXCoils->DXCoil(1).EvapCondPumpElecNomPower(1));
-
-    SetPredefinedTables(*state);
 
     SizeDXCoil(*state, 1);
     EXPECT_EQ(25000.0, state->dataDXCoils->DXCoil(1).RatedTotCap(1));
@@ -2694,7 +2700,6 @@ TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
     state->init_state(*state);
 
     GetDXCoils(*state);
-    SetPredefinedTables(*state);
     state->dataSize->CurZoneEqNum = 1;
 
     // Need this to prevent crash in Sizers
@@ -3658,7 +3663,6 @@ TEST_F(SQLiteFixture, DXCoils_TestComponentSizingOutput_TwoSpeed)
     // OutputReportTabular::displayEioSummary = true;
 
     // Setting predefined tables is needed though
-    OutputReportPredefined::SetPredefinedTables(*state);
 
     // SizeDXCoil is the one doing the sizing AND the reporting
     DXCoils::SizeDXCoil(*state, 1);
@@ -3887,7 +3891,6 @@ TEST_F(SQLiteFixture, DXCoils_TestComponentSizingOutput_SingleSpeed)
     // OutputReportTabular::displayEioSummary = true;
 
     // Setting predefined tables is needed though
-    OutputReportPredefined::SetPredefinedTables(*state);
 
     // SizeDXCoil is the one doing the sizing AND the reporting
     DXCoils::SizeDXCoil(*state, 1);
@@ -4339,7 +4342,6 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedHeatingCoilSizingOutput)
 
     // get input
     GetDXCoils(*state);
-    SetPredefinedTables(*state);
     // check multi-speed DX cooling coil
     EXPECT_EQ("ASHP CLG COIL", state->dataDXCoils->DXCoil(1).Name);
     EXPECT_ENUM_EQ(HVAC::CoilType::CoolingDXMultiSpeed, state->dataDXCoils->DXCoil(1).coilType);
@@ -4558,8 +4560,7 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoolingCoilTabularReporting)
 
     // get input
     GetDXCoils(*state);
-    // Setup the predefined tables
-    EnergyPlus::OutputReportPredefined::SetPredefinedTables(*state);
+
     // check multi-speed DX cooling coil
     EXPECT_EQ("ASHP CLG COIL", state->dataDXCoils->DXCoil(1).Name);
     EXPECT_ENUM_EQ(HVAC::CoilType::CoolingDXMultiSpeed, state->dataDXCoils->DXCoil(1).coilType);
@@ -4979,7 +4980,6 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoilsAutoSizingOutput)
 
     // get input
     GetDXCoils(*state);
-    SetPredefinedTables(*state);
     // check multi-speed DX cooling coil
     EXPECT_EQ("ASHP CLG COIL", state->dataDXCoils->DXCoil(1).Name);
     EXPECT_ENUM_EQ(HVAC::CoilType::CoolingDXMultiSpeed, state->dataDXCoils->DXCoil(1).coilType);
@@ -5021,10 +5021,10 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoilsAutoSizingOutput)
     EXPECT_NEAR(16365.95, state->dataDXCoils->DXCoil(1).MSRatedTotCap(1), 0.01);
     // Check EIO reporting
     std::string clg_coil_eio_output = R"EIO(! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value
- Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 1.75000
- Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.875000
+ Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 1.75
+ Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.875
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Gross Rated Total Cooling Capacity [W], 32731.9
- Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Gross Rated Total Cooling Capacity [W], 16366.0
+ Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Gross Rated Total Cooling Capacity [W], 16366
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Rated Sensible Heat Ratio, 0.803695
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Sensible Heat Ratio, 0.803695
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Evaporative Condenser Air Flow Rate [m3/s], 1.86572
@@ -5052,11 +5052,11 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoilsAutoSizingOutput)
     EXPECT_NEAR(16365.95, state->dataDXCoils->DXCoil(2).MSRatedTotCap(1), 0.01);
     // Check EIO reporting
     const std::string htg_coil_eio_output =
-        R"EIO( Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 1.75000
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.875000
+        R"EIO( Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 1.75
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.875
  Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Gross Rated Heating Capacity [W], 32731.9
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Gross Rated Heating Capacity [W], 16366.0
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0.00000
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Gross Rated Heating Capacity [W], 16366
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0
 ! <DX Heating Coil Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF {Btu/W-h}, Region Number
  DX Heating Coil Standard Rating Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, 34415.4, 20666.4, 6.56, 4
 ! <DX Heating Coil AHRI 2023 Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF2 {Btu/W-h}, Region Number
@@ -5266,7 +5266,6 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoolingCoilPartialAutoSizeOutput)
 
     // get input
     GetDXCoils(*state);
-    SetPredefinedTables(*state);
     // check multi-speed DX cooling coil
     EXPECT_EQ("ASHP CLG COIL", state->dataDXCoils->DXCoil(1).Name);
     EXPECT_ENUM_EQ(HVAC::CoilType::CoolingDXMultiSpeed, state->dataDXCoils->DXCoil(1).coilType);
@@ -5928,7 +5927,6 @@ TEST_F(EnergyPlusFixture, TwoSpeedDXCoilStandardRatingsTest)
     OutletNode.MassFlowRateMax = 1.0;
     OutletNode.MassFlowRateMaxAvail = 1.0;
     OutletNode.MassFlowRateMinAvail = 0.0;
-    OutputReportPredefined::SetPredefinedTables(*state);
     // test 1: using internal static and fan pressure rise
     CalcTwoSpeedDXCoilStandardRating(*state, dXCoilIndex);
     EXPECT_EQ(coolcoilTwoSpeed.Name, "CCOOLING DX TWO SPEED");
@@ -5942,7 +5940,7 @@ TEST_F(EnergyPlusFixture, TwoSpeedDXCoilStandardRatingsTest)
     // EXPECT_EQ("N/A", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
     // test 2: using default fan power per evap air flow rate, 365 W/1000 scfm or 773.3 W/(m3/s)
     coolcoilTwoSpeed.RateWithInternalStaticAndFanObject = false;
-    OutputReportPredefined::SetPredefinedTables(*state);
+    clearDXCoolingCoilStandardRatingTables(*state);
     CalcTwoSpeedDXCoilStandardRating(*state, dXCoilIndex);
     EXPECT_EQ("8.72", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilEERIP, coolcoilTwoSpeed.Name));
     EXPECT_EQ("9.8", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
@@ -6172,7 +6170,6 @@ TEST_F(EnergyPlusFixture, TwoSpeedDXCoilStandardRatings_Curve_Fix_Test)
     OutletNode.MassFlowRateMax = 1.0;
     OutletNode.MassFlowRateMaxAvail = 1.0;
     OutletNode.MassFlowRateMinAvail = 0.0;
-    OutputReportPredefined::SetPredefinedTables(*state);
 
     // test 1: using internal static and fan pressure rise
 
@@ -6191,7 +6188,7 @@ TEST_F(EnergyPlusFixture, TwoSpeedDXCoilStandardRatings_Curve_Fix_Test)
     // test 2: using default fan power per evap air flow rate, 365 W/1000 scfm or 773.3 W/(m3/s)
 
     coolcoilTwoSpeed.RateWithInternalStaticAndFanObject = false;
-    OutputReportPredefined::SetPredefinedTables(*state);
+    clearDXCoolingCoilStandardRatingTables(*state);
     CalcTwoSpeedDXCoilStandardRating(*state, dXCoilIndex);
     EXPECT_EQ("8.72", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilEERIP, coolcoilTwoSpeed.Name));
     EXPECT_EQ("9.8", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
@@ -7462,7 +7459,6 @@ TEST_F(EnergyPlusFixture, MultiSpeedDXHeatingCoilsHSPF2Test)
 
     // get input
     GetDXCoils(*state);
-    SetPredefinedTables(*state);
     state->dataEnvrn->StdBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.2;
 
@@ -7513,11 +7509,11 @@ TEST_F(EnergyPlusFixture, MultiSpeedDXHeatingCoilsHSPF2Test)
 
     // Check EIO reporting
     const std::string htg_coil_eio_output = R"EIO(! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 0.580000
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.290000
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 0.58
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.29
  Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Gross Rated Heating Capacity [W], 14402.8
  Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Gross Rated Heating Capacity [W], 7201.39
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0.00000
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0
 ! <DX Heating Coil Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF {Btu/W-h}, Region Number
  DX Heating Coil Standard Rating Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, 14996.6, 8946.7, 8.12, 4
 ! <DX Heating Coil AHRI 2023 Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF2 {Btu/W-h}, Region Number
@@ -7722,7 +7718,6 @@ TEST_F(EnergyPlusFixture, MultiSpeedDXHeatingCoilsHSPF2Test1)
 
     // get input
     GetDXCoils(*state);
-    SetPredefinedTables(*state);
     state->dataEnvrn->StdBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.2;
 
@@ -7775,11 +7770,11 @@ TEST_F(EnergyPlusFixture, MultiSpeedDXHeatingCoilsHSPF2Test1)
 
     // Check EIO reporting
     const std::string htg_coil_eio_output = R"EIO(! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 0.580000
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.290000
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 0.58
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.29
  Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Gross Rated Heating Capacity [W], 14402.8
  Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Gross Rated Heating Capacity [W], 7201.39
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0.00000
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0
 ! <DX Heating Coil Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF {Btu/W-h}, Region Number
  DX Heating Coil Standard Rating Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, 14996.6, 8946.7, 8.12, 4
 ! <DX Heating Coil AHRI 2023 Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF2 {Btu/W-h}, Region Number
@@ -7984,7 +7979,6 @@ TEST_F(EnergyPlusFixture, MultiSpeedDXHeatingCoilsHSPF2Test2)
 
     // get input
     GetDXCoils(*state);
-    SetPredefinedTables(*state);
     state->dataEnvrn->StdBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.2;
 
@@ -8037,11 +8031,11 @@ TEST_F(EnergyPlusFixture, MultiSpeedDXHeatingCoilsHSPF2Test2)
 
     // Check EIO reporting
     const std::string htg_coil_eio_output = R"EIO(! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 0.580000
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.290000
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Rated Air Flow Rate [m3/s], 0.58
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.29
  Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 2 Gross Rated Heating Capacity [W], 14402.8
  Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Speed 1 Gross Rated Heating Capacity [W], 7201.39
- Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0.00000
+ Component Sizing Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, Design Size Resistive Defrost Heater Capacity, 0
 ! <DX Heating Coil Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF {Btu/W-h}, Region Number
  DX Heating Coil Standard Rating Information, Coil:Heating:DX:MultiSpeed, ASHP HTG COIL, 14996.6, 8946.7, 8.57, 4
 ! <DX Heating Coil AHRI 2023 Standard Rating Information>, Component Type, Component Name, High Temperature Heating (net) Rating Capacity {W}, Low Temperature Heating (net) Rating Capacity {W}, HSPF2 {Btu/W-h}, Region Number

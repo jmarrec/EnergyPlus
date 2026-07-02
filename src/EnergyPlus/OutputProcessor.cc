@@ -47,6 +47,7 @@
 
 // C++ Headers
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <format>
 #include <memory>
@@ -204,7 +205,7 @@ namespace OutputProcessor {
 
         Constant::EndUse endUse = endUseCat2endUse[(int)endUseCat];
         if (endUse == Constant::EndUse::Invalid) {
-            ShowSevereError(state, EnergyPlus::format("Nonexistent end use passed to addEndUseSpaceType={}", endUseCatNames[(int)endUseCat]));
+            ShowSevereError(state, std::format("Nonexistent end use passed to addEndUseSpaceType={}", endUseCatNames[(int)endUseCat]));
             return;
         }
 
@@ -232,7 +233,7 @@ namespace OutputProcessor {
         Constant::EndUse endUse = endUseCat2endUse[(int)sovEndUseCat];
 
         if (endUse == Constant::EndUse::Invalid) {
-            ShowSevereError(state, EnergyPlus::format("Nonexistent end use passed to addEndUseSpaceType={}", endUseCatNames[(int)sovEndUseCat]));
+            ShowSevereError(state, std::format("Nonexistent end use passed to addEndUseSpaceType={}", endUseCatNames[(int)sovEndUseCat]));
             return;
         }
 
@@ -276,7 +277,7 @@ namespace OutputProcessor {
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         // ValidateTimeStepType will throw a Fatal if not valid
         if (state.dataOutputProcessor->TimeValue[(int)timeStep].TimeStep != nullptr) {
-            ShowFatalError(state, EnergyPlus::format("SetupTimePointers was already called for {}", timeStepTypeNames[(int)timeStep]));
+            ShowFatalError(state, std::format("SetupTimePointers was already called for {}", timeStepTypeNames[(int)timeStep]));
         }
         state.dataOutputProcessor->TimeValue[(int)timeStep].TimeStep = &TimeStep;
     }
@@ -410,9 +411,9 @@ namespace OutputProcessor {
         for (unsigned Loop = 0; Loop < FreqValues.size(); ++Loop) {
             if (FreqStringTrim == PossibleFreqs[Loop]) {
                 if (FreqStringUpper != ExactFreqStringsUC[Loop]) {
-                    ShowWarningError(
-                        state, EnergyPlus::format("DetermineFrequency: Entered frequency=\"{}\" is not an exact match to key strings.", FreqString));
-                    ShowContinueError(state, EnergyPlus::format("Frequency={} will be used.", ExactFreqStrings[Loop]));
+                    ShowWarningError(state,
+                                     std::format("DetermineFrequency: Entered frequency=\"{}\" is not an exact match to key strings.", FreqString));
+                    ShowContinueError(state, std::format("Frequency={} will be used.", ExactFreqStrings[Loop]));
                 }
                 freq = std::max(FreqValues[Loop], state.dataOutputProcessor->minimumReportFreq);
                 break;
@@ -543,7 +544,7 @@ namespace OutputProcessor {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, EnergyPlus::format("GetReportVariableInput:{}: errors in input.", cCurrentModuleObject));
+            ShowFatalError(state, std::format("GetReportVariableInput:{}: errors in input.", cCurrentModuleObject));
         }
     }
 
@@ -574,12 +575,12 @@ namespace OutputProcessor {
 
         switch (freq) {
         case ReportFreq::Day:
-            return EnergyPlus::format("{:2},{:2}", Hour, Minute);
+            return std::format("{:2},{:2}", Hour, Minute);
         case ReportFreq::Month:
-            return EnergyPlus::format("{:2},{:2},{:2}", Day, Hour, Minute);
+            return std::format("{:2},{:2},{:2}", Day, Hour, Minute);
         case ReportFreq::Year:
         case ReportFreq::Simulation:
-            return EnergyPlus::format("{:2},{:2},{:2},{:2}", Mon, Day, Hour, Minute);
+            return std::format("{:2},{:2},{:2},{:2}", Mon, Day, Hour, Minute);
         default:
             return std::string();
         }
@@ -759,22 +760,21 @@ namespace OutputProcessor {
                 // A custom meter cannot reference another custom meter
                 if (std::find(customMeterNames.begin(), customMeterNames.end(), meterOrVarNameUC) != customMeterNames.end()) {
                     ShowWarningError(state,
-                                     EnergyPlus::format(R"(Meter:Custom="{}", contains a reference to another Meter:Custom in field: {}="{}".)",
-                                                        ipsc->cAlphaArgs(1),
-                                                        ipsc->cAlphaFieldNames(fldIndex + 1),
-                                                        ipsc->cAlphaArgs(fldIndex + 1)));
+                                     std::format(R"(Meter:Custom="{}", contains a reference to another Meter:Custom in field: {}="{}".)",
+                                                 ipsc->cAlphaArgs(1),
+                                                 ipsc->cAlphaFieldNames(fldIndex + 1),
+                                                 ipsc->cAlphaArgs(fldIndex + 1)));
                     foundBadSrc = true;
                     break;
                 }
 
                 // A custom meter cannot reference another customDec meter
                 if (std::find(customDecMeterNames.begin(), customDecMeterNames.end(), meterOrVarNameUC) != customDecMeterNames.end()) {
-                    ShowWarningError(
-                        state,
-                        EnergyPlus::format(R"(Meter:Custom="{}", contains a reference to another Meter:CustomDecrement in field: {}="{}".)",
-                                           ipsc->cAlphaArgs(1),
-                                           ipsc->cAlphaFieldNames(fldIndex + 1),
-                                           ipsc->cAlphaArgs(fldIndex + 1)));
+                    ShowWarningError(state,
+                                     std::format(R"(Meter:Custom="{}", contains a reference to another Meter:CustomDecrement in field: {}="{}".)",
+                                                 ipsc->cAlphaArgs(1),
+                                                 ipsc->cAlphaFieldNames(fldIndex + 1),
+                                                 ipsc->cAlphaArgs(fldIndex + 1)));
                     foundBadSrc = true;
                     break;
                 }
@@ -791,15 +791,14 @@ namespace OutputProcessor {
                     } else if (units != srcMeter->units) {
                         ShowWarningCustom(state,
                                           eoh,
-                                          EnergyPlus::format(R"(Meter:Custom="{}", differing units in {}="{}".)",
-                                                             ipsc->cAlphaArgs(1),
-                                                             ipsc->cAlphaFieldNames(fldIndex + 1),
-                                                             meterOrVarNameUC));
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
-                                               Constant::unitNames[(int)units],
-                                               Constant::unitNames[(int)srcMeter->units]));
+                                          std::format(R"(Meter:Custom="{}", differing units in {}="{}".)",
+                                                      ipsc->cAlphaArgs(1),
+                                                      ipsc->cAlphaFieldNames(fldIndex + 1),
+                                                      meterOrVarNameUC));
+                        ShowContinueError(state,
+                                          std::format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
+                                                      Constant::unitNames[(int)units],
+                                                      Constant::unitNames[(int)srcMeter->units]));
                         foundBadSrc = true;
                         break;
                     }
@@ -813,15 +812,14 @@ namespace OutputProcessor {
                     if (srcDDVar->storeType != StoreType::Sum) {
                         ShowWarningCustom(state,
                                           eoh,
-                                          EnergyPlus::format(R"(Meter:Custom="{}", variable not summed variable {}="{}".)",
-                                                             ipsc->cAlphaArgs(1),
-                                                             ipsc->cAlphaFieldNames(fldIndex + 1),
-                                                             meterOrVarNameUC));
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
-                                               units != Constant::Units::Invalid ? Constant::unitNames[(int)units] : "Unknown",
-                                               Constant::unitNames[(int)srcDDVar->units]));
+                                          std::format(R"(Meter:Custom="{}", variable not summed variable {}="{}".)",
+                                                      ipsc->cAlphaArgs(1),
+                                                      ipsc->cAlphaFieldNames(fldIndex + 1),
+                                                      meterOrVarNameUC));
+                        ShowContinueError(state,
+                                          std::format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
+                                                      units != Constant::Units::Invalid ? Constant::unitNames[(int)units] : "Unknown",
+                                                      Constant::unitNames[(int)srcDDVar->units]));
                         foundBadSrc = true;
                         break;
                     }
@@ -832,12 +830,11 @@ namespace OutputProcessor {
                         // Otherwise it has to match the existing units
                     } else if (units != srcDDVar->units) {
                         ShowWarningCustom(
-                            state, eoh, EnergyPlus::format("differing units in {}=\"{}\".", ipsc->cAlphaFieldNames(fldIndex + 1), meterOrVarNameUC));
-                        ShowContinueError(
-                            state,
-                            EnergyPlus::format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
-                                               Constant::unitNames[(int)units],
-                                               Constant::unitNames[(int)srcDDVar->units]));
+                            state, eoh, std::format("differing units in {}=\"{}\".", ipsc->cAlphaFieldNames(fldIndex + 1), meterOrVarNameUC));
+                        ShowContinueError(state,
+                                          std::format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
+                                                      Constant::unitNames[(int)units],
+                                                      Constant::unitNames[(int)srcDDVar->units]));
                         foundBadSrc = true;
                         break;
                     }
@@ -872,10 +869,10 @@ namespace OutputProcessor {
                 } else {
                     // Cannot use ShowWarningItemNotFound because this string appears in a unit test
                     ShowWarningError(state,
-                                     EnergyPlus::format(R"(Meter:Custom="{}", invalid {}="{}".)",
-                                                        ipsc->cAlphaArgs(1),
-                                                        ipsc->cAlphaFieldNames(fldIndex + 1),
-                                                        ipsc->cAlphaArgs(fldIndex + 1)));
+                                     std::format(R"(Meter:Custom="{}", invalid {}="{}".)",
+                                                 ipsc->cAlphaArgs(1),
+                                                 ipsc->cAlphaFieldNames(fldIndex + 1),
+                                                 ipsc->cAlphaArgs(fldIndex + 1)));
                     ShowContinueError(state, "...will not be shown with the Meter results.");
                     // Not setting the foundBadSrc flag here.
                 }
@@ -2137,13 +2134,11 @@ namespace OutputProcessor {
             return "-";
         }
 
-        static constexpr std::string_view DateFmt("{:02}-{:3}-{:02}:{:02}");
-
         // ((month*100 + day)*100 + hour)*100 + minute
-        int Month;  // month in integer EnergyPlus::format(1-12)
-        int Day;    // day in integer EnergyPlus::format(1-31)
-        int Hour;   // hour in integer EnergyPlus::format(1-24)
-        int Minute; // minute in integer EnergyPlus::format(0:59)
+        int Month;  // month in integer format(1-12)
+        int Day;    // day in integer format(1-31)
+        int Hour;   // hour in integer format(1-24)
+        int Minute; // minute in integer format(0:59)
 
         General::DecodeMonDayHrMin(codedDate, Month, Day, Hour, Minute);
 
@@ -2208,7 +2203,7 @@ namespace OutputProcessor {
             assert(false);
         }
 
-        return EnergyPlus::format(DateFmt, Day, monthName, Hour, Minute);
+        return std::format("{:02}-{:3}-{:02}:{:02}", Day, monthName, Hour, Minute);
     }
 
     std::string OutVar::multiplierString() const
@@ -2341,17 +2336,17 @@ namespace OutputProcessor {
         case ReportFreq::EachCall:
         case ReportFreq::TimeStep: {
             assert(Month != -1 && DayOfMonth != -1 && Hour != -1 && StartMinute != -1 && EndMinute != -1 && DST != -1 && !DayType.empty());
-            print<FormatSyntax::FMT>(outputFile,
-                                     "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
-                                     reportStr,
-                                     DayOfSimChr,
-                                     Month,
-                                     DayOfMonth,
-                                     DST,
-                                     Hour,
-                                     StartMinute,
-                                     EndMinute,
-                                     DayType);
+            print(outputFile,
+                  "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
+                  reportStr,
+                  DayOfSimChr,
+                  Month,
+                  DayOfMonth,
+                  DST,
+                  Hour,
+                  StartMinute,
+                  EndMinute,
+                  DayType);
 
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
@@ -2373,17 +2368,17 @@ namespace OutputProcessor {
 
         case ReportFreq::Hour: {
             assert(Month != -1 && DayOfMonth != -1 && Hour != -1 && DST != -1 && !DayType.empty());
-            print<FormatSyntax::FMT>(outputFile,
-                                     "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
-                                     reportStr,
-                                     DayOfSimChr,
-                                     Month,
-                                     DayOfMonth,
-                                     DST,
-                                     Hour,
-                                     0.0,
-                                     60.0,
-                                     DayType);
+            print(outputFile,
+                  "{},{},{:2d},{:2d},{:2d},{:2d},{:5.2f},{:5.2f},{}\n",
+                  reportStr,
+                  DayOfSimChr,
+                  Month,
+                  DayOfMonth,
+                  DST,
+                  Hour,
+                  0.0,
+                  60.0,
+                  DayType);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2403,7 +2398,7 @@ namespace OutputProcessor {
         } break;
         case ReportFreq::Day: {
             assert(Month != -1 && DayOfMonth != -1 && DST != -1 && !DayType.empty());
-            print<FormatSyntax::FMT>(outputFile, "{},{},{:2d},{:2d},{:2d},{}\n", reportStr, DayOfSimChr, Month, DayOfMonth, DST, DayType);
+            print(outputFile, "{},{},{:2d},{:2d},{:2d},{}\n", reportStr, DayOfSimChr, Month, DayOfMonth, DST, DayType);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2424,7 +2419,7 @@ namespace OutputProcessor {
 
         case ReportFreq::Month: {
             assert(Month != -1);
-            print<FormatSyntax::FMT>(outputFile, "{},{},{:2d}\n", reportStr, DayOfSimChr, Month);
+            print(outputFile, "{},{},{:2d}\n", reportStr, DayOfSimChr, Month);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2437,7 +2432,7 @@ namespace OutputProcessor {
         } break;
 
         case ReportFreq::Simulation: {
-            print<FormatSyntax::FMT>(outputFile, "{},{}\n", reportStr, DayOfSimChr);
+            print(outputFile, "{},{}\n", reportStr, DayOfSimChr);
             if (writeToSQL && sql) {
                 sql->createSQLiteTimeIndexRecord(reportingInterval,
                                                  reportID,
@@ -2450,7 +2445,7 @@ namespace OutputProcessor {
         default: {
             if (sql) {
                 sql->sqliteWriteMessage(
-                    format<FormatSyntax::FMT>("Illegal reportingInterval passed to WriteTimeStampFormatData: {}", (int)reportingInterval));
+                    std::format("Illegal reportingInterval passed to WriteTimeStampFormatData: {}", static_cast<int>(reportingInterval)));
             }
         } break;
         } // switch (reportFreq)
@@ -2706,20 +2701,34 @@ namespace OutputProcessor {
         } else { // if ( ( reportingInterval == ReportDaily ) || ( reportingInterval == ReportMonthly ) || ( reportingInterval == ReportSim ) ) {
                  // // 2, 3, 4
             // Append the min and max strings with date information
-            char minValString[128], maxValString[128];
-            dtoa(MinVal, minValString);
-            dtoa(MaxVal, maxValString);
+            std::array<char, 128> minValString{}, maxValString{};
+            dtoa(MinVal, minValString.data());
+            dtoa(MaxVal, maxValString.data());
 
             std::string minDateString = produceDateString(MinValDate, freq);
             std::string maxDateString = produceDateString(MaxValDate, freq);
 
             if (state.files.mtr.good()) {
-                print(state.files.mtr, "{},{},{},{},{},{}\n", RptNum, NumberOut, minValString, minDateString, maxValString, maxDateString);
+                print(state.files.mtr,
+                      "{},{},{},{},{},{}\n",
+                      RptNum,
+                      NumberOut,
+                      minValString.data(),
+                      minDateString,
+                      maxValString.data(),
+                      maxDateString);
             }
 
             ++state.dataGlobal->StdMeterRecordCount;
             if (state.files.eso.good() && !RptFO) {
-                print(state.files.eso, "{},{},{},{},{},{}\n", RptNum, NumberOut, minValString, minDateString, maxValString, maxDateString);
+                print(state.files.eso,
+                      "{},{},{},{},{},{}\n",
+                      RptNum,
+                      NumberOut,
+                      minValString.data(),
+                      minDateString,
+                      maxValString.data(),
+                      maxDateString);
                 ++state.dataGlobal->StdOutputRecordCount;
             }
         }
@@ -2755,9 +2764,9 @@ namespace OutputProcessor {
         }
 
         if (state.files.eso.good()) {
-            char numericData[129];
-            dtoa(repValue, numericData);
-            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, numericData);
+            std::array<char, 129> numericData{};
+            dtoa(repValue, numericData.data());
+            print(state.files.eso, "{},{}\n", reportID, numericData.data());
         }
     } // WriteNumericData()
 
@@ -2789,7 +2798,7 @@ namespace OutputProcessor {
         }
 
         if (state.files.eso.good()) {
-            print<FormatSyntax::FMT>(state.files.eso, "{},{}\n", reportID, fmt::format_int(repValue).c_str());
+            print(state.files.eso, "{},{}\n", reportID, repValue);
         }
     } // WriteNumericData()
 
@@ -2838,14 +2847,21 @@ namespace OutputProcessor {
             if ((freq == ReportFreq::EachCall) || (freq == ReportFreq::TimeStep) || (freq == ReportFreq::Hour)) { // -1, 0, 1
                 print(state.files.eso, "{},{}\n", ReportID, NumberOut);
             } else {
-                char minValString[128], maxValString[128];
-                dtoa(MinValue, minValString);
-                dtoa(MaxValue, maxValString);
+                std::array<char, 128> minValString{}, maxValString{};
+                dtoa(MinValue, minValString.data());
+                dtoa(MaxValue, maxValString.data());
 
                 std::string minDateString = produceDateString(minValueDate, freq);
                 std::string maxDateString = produceDateString(maxValueDate, freq);
 
-                print(state.files.eso, "{},{},{},{},{},{}\n", ReportID, NumberOut, minValString, minDateString, maxValString, maxDateString);
+                print(state.files.eso,
+                      "{},{},{},{},{},{}\n",
+                      ReportID,
+                      NumberOut,
+                      minValString.data(),
+                      minDateString,
+                      maxValString.data(),
+                      maxDateString);
             }
         }
     } // OutVar::WriteReportData()
@@ -3736,7 +3752,7 @@ void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType co
         ReportMeters(state, ReportFreq::Year, TimePrint);
 
         state.dataGlobal->CalendarYear += 1;
-        state.dataGlobal->CalendarYearChr = fmt::to_string(state.dataGlobal->CalendarYear);
+        state.dataGlobal->CalendarYearChr = std::to_string(state.dataGlobal->CalendarYear);
     }
 } // UpdateDataandReport()
 
@@ -4052,8 +4068,8 @@ void SetInitialMeterReportingAndOutputNames(EnergyPlusData &state,
                 std::format(R"(Output:Meter:MeterFileOnly requested for "{}" ({}), already on "Output:Meter". Will report to both {} and {})",
                             meter->Name,
                             reportFreqNames[(freq == ReportFreq::EachCall) ? (int)ReportFreq::TimeStep : (int)freq],
-                            state.files.eso.filePath.filename().string(),
-                            state.files.mtr.filePath.filename().string()));
+                            state.files.eso.filePath.filename(),
+                            state.files.mtr.filePath.filename()));
         }
         if (!period.Rpt) {
             period.Rpt = true;
@@ -4902,7 +4918,7 @@ int initErrorFile(EnergyPlusData &state)
 {
     state.files.err_stream = std::make_unique<std::ofstream>(state.files.outputErrFilePath);
     if (state.files.err_stream->bad()) {
-        DisplayString(state, std::format("ERROR: Could not open file {} for output (write).", state.files.outputErrFilePath.string()));
+        DisplayString(state, std::format("ERROR: Could not open file {} for output (write).", state.files.outputErrFilePath));
         return EXIT_FAILURE;
     }
 

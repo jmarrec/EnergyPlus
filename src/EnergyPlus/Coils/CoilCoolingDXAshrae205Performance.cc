@@ -115,7 +115,7 @@ CoilCoolingDX205Performance::CoilCoolingDX205Performance(EnergyPlus::EnergyPlusD
         representation =
             std::dynamic_pointer_cast<rs0004_ns::RS0004>(RSInstanceFactory::create("RS0004", rep_file_path.string().c_str(), coil_logger));
         if (nullptr == representation) {
-            ShowSevereError(state, std::format("{} is not an instance of an ASHRAE205 Coil.", rep_file_path.string()));
+            ShowSevereError(state, std::format("{} is not an instance of an ASHRAE205 Coil.", rep_file_path));
             errorsFound = true;
         } else {
             representation->performance.performance_map_cooling.get_logger()->set_message_context(&logger_context);

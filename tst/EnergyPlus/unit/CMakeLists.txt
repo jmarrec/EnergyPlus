@@ -125,6 +125,7 @@ set(test_src
     FiniteDifferenceGroundTemperatureModel.unit.cc
     FluidCoolers.unit.cc
     FluidProperties.unit.cc
+    Formatters.unit.cc
     FuelCellElectricGenerator.unit.cc
     Furnaces.unit.cc
     General.unit.cc
@@ -308,7 +309,10 @@ endif()
 # Executable name will be EnergyPlus_tests
 # Execute energyplus_tests --help for options using gtest runner
 # Execute energyplus_tests with no arguments to run all tests
-create_test_targets(energyplus "${test_src}" "${test_dependencies}" True)
+create_test_targets(energyplus "${test_src}" "${test_dependencies}")
+if(ENABLE_PCH)
+  target_precompile_headers(energyplus_tests PRIVATE ${EP_TEST_CXX_PCH_HEADERS})
+endif()
 
 # For CommandLineInterface.unit.cc, make an in.idf / in.epw in the test directory so we can test the legacy CLI (applies to CTest which sets the current directory to this one)
 configure_file("${PROJECT_SOURCE_DIR}/weather/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw" "${CMAKE_CURRENT_BINARY_DIR}/in.epw" COPYONLY)

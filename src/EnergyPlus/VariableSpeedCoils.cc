@@ -141,23 +141,22 @@ namespace VariableSpeedCoils {
         if (CompIndex == 0) {
             DXCoilNum = Util::FindItemInList(CompName, state.dataVariableSpeedCoils->VarSpeedCoil);
             if (DXCoilNum == 0) {
-                ShowFatalError(state, EnergyPlus::format("WaterToAirHPVSWEquationFit not found={}", CompName));
+                ShowFatalError(state, std::format("WaterToAirHPVSWEquationFit not found={}", CompName));
             }
             CompIndex = DXCoilNum;
         } else {
             DXCoilNum = CompIndex;
             if (DXCoilNum > state.dataVariableSpeedCoils->NumVarSpeedCoils || DXCoilNum < 1) {
-                ShowFatalError(
-                    state,
-                    EnergyPlus::format("SimVariableSpeedCoils: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
-                                       DXCoilNum,
-                                       state.dataVariableSpeedCoils->NumVarSpeedCoils,
-                                       CompName));
+                ShowFatalError(state,
+                               std::format("SimVariableSpeedCoils: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
+                                           DXCoilNum,
+                                           state.dataVariableSpeedCoils->NumVarSpeedCoils,
+                                           CompName));
             }
             if (!CompName.empty() && CompName != state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).Name) {
                 ShowFatalError(
                     state,
-                    EnergyPlus::format(
+                    std::format(
                         "SimVariableSpeedCoils: Invalid CompIndex passed={}, WaterToAir HP name={}, stored WaterToAir HP Name for that index={}",
                         DXCoilNum,
                         CompName,
@@ -350,8 +349,8 @@ namespace VariableSpeedCoils {
 
                 cFieldName = "Number of Speeds";
                 if (varSpeedCoil.NumOfSpeeds < 1) {
-                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state, EnergyPlus::format("...{} must be >= 1. entered number is {}", cFieldName, varSpeedCoil.NumOfSpeeds));
+                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                    ShowContinueError(state, std::format("...{} must be >= 1. entered number is {}", cFieldName, varSpeedCoil.NumOfSpeeds));
                     ErrorsFound = true;
                 }
 
@@ -360,9 +359,9 @@ namespace VariableSpeedCoils {
                 }
                 cFieldName = "Nominal Speed Level";
                 if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
-                    ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(
-                        state, EnergyPlus::format("...{} must be valid speed level entered number is {}", cFieldName, varSpeedCoil.NormSpedLevel));
+                    ShowSevereError(state, std::format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                    ShowContinueError(state,
+                                      std::format("...{} must be valid speed level entered number is {}", cFieldName, varSpeedCoil.NormSpedLevel));
                     ErrorsFound = true;
                 }
 
@@ -378,33 +377,32 @@ namespace VariableSpeedCoils {
                 } else {
                     CurveVal = Curve::CurveValue(state, varSpeedCoil.PLFFPLR, 1.0);
                     if (CurveVal > 1.10 || CurveVal < 0.90) {
-                        ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                        ShowContinueError(state, EnergyPlus::format("...Curve output at rated conditions = {:.3f}", CurveVal));
+                        ShowWarningError(state, std::format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                        ShowContinueError(state, std::format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
+                        ShowContinueError(state, std::format("...Curve output at rated conditions = {:.3f}", CurveVal));
                     }
                 }
 
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
                     std::string fieldName;
-                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_total_cooling_capacity");
+                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_total_cooling_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_sensible_heat_ratio");
+                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_sensible_heat_ratio");
                     varSpeedCoil.MSRatedSHR(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_cooling_cop");
+                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_cooling_cop");
                     varSpeedCoil.MSRatedCOP(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_air_flow_rate");
+                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_air_flow_rate");
                     varSpeedCoil.MSRatedAirVolFlowRate(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
-                    fieldName = EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_water_flow_rate");
+                    fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_rated_water_flow_rate");
                     varSpeedCoil.MSRatedWaterVolFlowRate(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
                     fieldName =
-                        EnergyPlus::format("speed_{}{}", std::to_string(I), "_reference_unit_waste_heat_fraction_of_input_power_at_rated_conditions");
+                        std::format("speed_{}{}", std::to_string(I), "_reference_unit_waste_heat_fraction_of_input_power_at_rated_conditions");
                     varSpeedCoil.MSWasteHeatFrac(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
 
                     std::string fieldValue =
-                        EnergyPlus::format("speed_{}{}", std::to_string(I), "_total_cooling_capacity_function_of_temperature_curve_name");
+                        std::format("speed_{}{}", std::to_string(I), "_total_cooling_capacity_function_of_temperature_curve_name");
                     std::string cFieldName_curve =
-                        EnergyPlus::format("Speed_{}{}", std::to_string(I), " Total Cooling Capacity Function of Temperature Curve Name");
+                        std::format("Speed_{}{}", std::to_string(I), " Total Cooling Capacity Function of Temperature Curve Name");
                     std::string const coolCapFTCurveName = s_ip->getAlphaFieldValue(fields, schemaProps, fieldValue);
                     if (coolCapFTCurveName.empty()) {
                         ShowWarningEmptyField(state, eoh, cFieldName_curve, "Required field is blank.");
@@ -1800,7 +1798,7 @@ namespace VariableSpeedCoils {
                     if (varSpeedCoil.MSRatedTotCap(I) < 1.e-10) {
                         cFieldName = std::format("Speed_{}{}", std::to_string(I), " Reference Unit Gross Rated Heating Capacity");
                         ShowSevereError(state, std::format("{}{}=\"{}\", invalid value", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(state, EnergyPlus::format("...too small {}=[{:.2R}].", cFieldName, varSpeedCoil.MSRatedTotCap(I)));
+                        ShowContinueError(state, std::format("...too small {}=[{:.2f}].", cFieldName, varSpeedCoil.MSRatedTotCap(I)));
                         ErrorsFound = true;
                     }
                     fieldName = std::format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_heating_cop");
@@ -4128,18 +4126,24 @@ namespace VariableSpeedCoils {
 
                         CoolCapAtPeak = (rhoair * VolFlowRate * (MixEnth - SupEnth)) + FanCoolLoad;
                         if (CoolCapAtPeak < 0) { // This conditional will also catch the initialization value, -999.0
-                            ShowWarningError(
-                                state,
-                                std::format(
-                                    "In calculating capacity for coil {} on design day {}, the air state would yield negative coil capacity sizing.",
-                                    varSpeedCoil.Name,
-                                    state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).CoolDesDay));
-                            ShowContinueError(state, EnergyPlus::format("The air properties are: T_mix = {:.4R}", MixTemp));
-                            ShowContinueError(state, EnergyPlus::format("                        T_supply = {:.4R}", SupTemp));
-                            ShowContinueError(state, EnergyPlus::format("                        H_mix = {:.4R}", MixEnth));
-                            ShowContinueError(state, EnergyPlus::format("                        H_supply = {:.4R}", SupEnth));
-                            ShowContinueError(state, EnergyPlus::format("                        W_mix = {:.4R}", MixHumRat));
-                            ShowContinueError(state, EnergyPlus::format("                        W_supply = {:.4R}", SupHumRat));
+                            if (finalSysSizing.CoolDDNum > 0) {
+                                ShowWarningError(state,
+                                                 std::format("In calculating capacity for coil {} on design day {} when system cooling load is "
+                                                             "available, the air state would yield negative coil capacity sizing.",
+                                                             varSpeedCoil.Name,
+                                                             finalSysSizing.CoolDesDay));
+                            } else {
+                                ShowWarningError(state,
+                                                 std::format("In calculating capacity for coil {} when system cooling load is not available, the air "
+                                                             "state would yield negative coil capacity sizing.",
+                                                             varSpeedCoil.Name));
+                            }
+                            ShowContinueError(state, std::format("The air properties are: T_mix = {:.4f}", MixTemp));
+                            ShowContinueError(state, std::format("                        T_supply = {:.4f}", SupTemp));
+                            ShowContinueError(state, std::format("                        H_mix = {:.4f}", MixEnth));
+                            ShowContinueError(state, std::format("                        H_supply = {:.4f}", SupEnth));
+                            ShowContinueError(state, std::format("                        W_mix = {:.4f}", MixHumRat));
+                            ShowContinueError(state, std::format("                        W_supply = {:.4f}", SupHumRat));
                             ShowContinueError(state, "Cooling capacity is set to zero during sizing; simulation continues.");
                         }
                         if (state.dataSize->UnitarySysEqSizing(state.dataSize->CurSysNum).CoolingCapacity &&
@@ -4289,11 +4293,9 @@ namespace VariableSpeedCoils {
                                                     varSpeedCoil.CoolHeatType,
                                                     CurrentObjSubfix));
                             ShowContinueError(state, std::format("Coil Name = {}", varSpeedCoil.Name));
-                            ShowContinueError(state,
-                                              EnergyPlus::format("User-Specified Rated Total Cooling Capacity of {:.2R} [W]", RatedCapCoolTotalUser));
+                            ShowContinueError(state, std::format("User-Specified Rated Total Cooling Capacity of {:.2f} [W]", RatedCapCoolTotalUser));
                             ShowContinueError(
-                                state,
-                                EnergyPlus::format("differs from Design Size Rated Total Cooling Capacity of {:.2R} [W]", RatedCapCoolTotalDes));
+                                state, std::format("differs from Design Size Rated Total Cooling Capacity of {:.2f} [W]", RatedCapCoolTotalDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -4415,9 +4417,8 @@ namespace VariableSpeedCoils {
                                                 varSpeedCoil.CoolHeatType,
                                                 CurrentObjSubfix));
                         ShowContinueError(state, std::format("Coil Name = {}", varSpeedCoil.Name));
-                        ShowContinueError(state, EnergyPlus::format("User-Specified Rated Total Heating Capacity of {:.2R} [W]", RatedCapHeatUser));
-                        ShowContinueError(state,
-                                          EnergyPlus::format("differs from Design Size Rated Total Heating Capacity of {:.2R} [W]", RatedCapHeatDes));
+                        ShowContinueError(state, std::format("User-Specified Rated Total Heating Capacity of {:.2f} [W]", RatedCapHeatUser));
+                        ShowContinueError(state, std::format("differs from Design Size Rated Total Heating Capacity of {:.2f} [W]", RatedCapHeatDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
@@ -4459,10 +4460,9 @@ namespace VariableSpeedCoils {
                                                     varSpeedCoil.CoolHeatType,
                                                     CurrentObjSubfix));
                             ShowContinueError(state, std::format("Coil Name = {}", varSpeedCoil.Name));
+                            ShowContinueError(state, std::format("User-Specified Rated Air Flow Rate of {:.5f} [m3/s]", RatedAirVolFlowRateUser));
                             ShowContinueError(state,
-                                              EnergyPlus::format("User-Specified Rated Air Flow Rate of {:.5R} [m3/s]", RatedAirVolFlowRateUser));
-                            ShowContinueError(
-                                state, EnergyPlus::format("differs from Design Size Rated Air Flow Rate of {:.5R} [m3/s]", RatedAirVolFlowRateDes));
+                                              std::format("differs from Design Size Rated Air Flow Rate of {:.5f} [m3/s]", RatedAirVolFlowRateDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -4712,9 +4712,9 @@ namespace VariableSpeedCoils {
                                     Mode,
                                     Mode + 1));
                     ShowContinueError(state,
-                                      EnergyPlus::format("Instead, {:.2R} > {:.2R}",
-                                                         varSpeedCoil.MSRatedAirVolFlowRate(Mode),
-                                                         varSpeedCoil.MSRatedAirVolFlowRate(Mode + 1)));
+                                      std::format("Instead, {:.2f} > {:.2f}",
+                                                  varSpeedCoil.MSRatedAirVolFlowRate(Mode),
+                                                  varSpeedCoil.MSRatedAirVolFlowRate(Mode + 1)));
                     ShowFatalError(state, "Preceding conditions cause termination.");
                 }
             }
@@ -4736,10 +4736,9 @@ namespace VariableSpeedCoils {
                                                 varSpeedCoil.CoolHeatType,
                                                 CurrentObjSubfix));
                         ShowContinueError(state, std::format("Coil Name = {}", varSpeedCoil.Name));
+                        ShowContinueError(state, std::format("User-Specified Rated Water Flow Rate of {:.5f} [m3/s]", RatedWaterVolFlowRateUser));
                         ShowContinueError(state,
-                                          EnergyPlus::format("User-Specified Rated Water Flow Rate of {:.5R} [m3/s]", RatedWaterVolFlowRateUser));
-                        ShowContinueError(
-                            state, EnergyPlus::format("differs from Design Size Rated Water Flow Rate of {:.5R} [m3/s]", RatedWaterVolFlowRateDes));
+                                          std::format("differs from Design Size Rated Water Flow Rate of {:.5f} [m3/s]", RatedWaterVolFlowRateDes));
                         ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                         ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                     }
@@ -4792,10 +4791,9 @@ namespace VariableSpeedCoils {
                                 varSpeedCoil.Name,
                                 Mode,
                                 Mode + 1));
-                ShowContinueError(state,
-                                  EnergyPlus::format("Instead, {:.2R} > {:.2R}",
-                                                     varSpeedCoil.MSRatedAirVolFlowRate(Mode),
-                                                     varSpeedCoil.MSRatedAirVolFlowRate(Mode + 1)));
+                ShowContinueError(
+                    state,
+                    std::format("Instead, {:.2f} > {:.2f}", varSpeedCoil.MSRatedAirVolFlowRate(Mode), varSpeedCoil.MSRatedAirVolFlowRate(Mode + 1)));
                 ShowFatalError(state, "Preceding conditions cause termination.");
             }
         }
@@ -4811,8 +4809,8 @@ namespace VariableSpeedCoils {
                                 varSpeedCoil.Name,
                                 Mode,
                                 Mode + 1));
-                ShowContinueError(
-                    state, EnergyPlus::format("Instead, {:.2R} > {:.2R}", varSpeedCoil.MSRatedTotCap(Mode), varSpeedCoil.MSRatedTotCap(Mode + 1)));
+                ShowContinueError(state,
+                                  std::format("Instead, {:.2f} > {:.2f}", varSpeedCoil.MSRatedTotCap(Mode), varSpeedCoil.MSRatedTotCap(Mode + 1)));
                 ShowFatalError(state, "Preceding conditions cause termination.");
             }
         }
@@ -5028,12 +5026,11 @@ namespace VariableSpeedCoils {
                                                     CurrentObjSubfix));
                             ShowContinueError(state, std::format("Coil Name = {}", varSpeedCoil.Name));
                             ShowContinueError(state,
-                                              EnergyPlus::format("User-Specified Evaporative Condenser Pump Rated Power Consumption of {:.2R} [W]",
-                                                                 EvapCondPumpElecNomPowerUser));
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format("differs from Design Size Evaporative Condenser Pump Rated Power Consumption of {:.2R} [W]",
-                                                   EvapCondPumpElecNomPowerDes));
+                                              std::format("User-Specified Evaporative Condenser Pump Rated Power Consumption of {:.2f} [W]",
+                                                          EvapCondPumpElecNomPowerUser));
+                            ShowContinueError(state,
+                                              std::format("differs from Design Size Evaporative Condenser Pump Rated Power Consumption of {:.2f} [W]",
+                                                          EvapCondPumpElecNomPowerDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -5077,11 +5074,10 @@ namespace VariableSpeedCoils {
                                                     varSpeedCoil.CoolHeatType,
                                                     CurrentObjSubfix));
                             ShowContinueError(state, std::format("Coil Name = {}", varSpeedCoil.Name));
+                            ShowContinueError(state,
+                                              std::format("User-Specified Resistive Defrost Heater Capacity of {:.2f} [W]", DefrostCapacityUser));
                             ShowContinueError(
-                                state, EnergyPlus::format("User-Specified Resistive Defrost Heater Capacity of {:.2R} [W]", DefrostCapacityUser));
-                            ShowContinueError(
-                                state,
-                                EnergyPlus::format("differs from Design Size Resistive Defrost Heater Capacity of {:.2R} [W]", DefrostCapacityDes));
+                                state, std::format("differs from Design Size Resistive Defrost Heater Capacity of {:.2f} [W]", DefrostCapacityDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }

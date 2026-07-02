@@ -1018,15 +1018,13 @@ namespace HWBaseboardRadiator {
                         hWBaseboard.ScaledHeatingCapacity * state.dataHeatBal->Zone(state.dataSize->DataZoneNumber).FloorArea;
                     TempSize = zoneEqSizing.DesHeatingLoad;
                     state.dataSize->DataScalableCapSizingON = true;
-                } else if (CapSizingMethod == DataSizing::FractionOfAutosizedHeatingCapacity) {
+                } else { // CapSizingMethod == DataSizing::FractionOfAutosizedHeatingCapacity
                     CheckZoneSizing(state, CompType, CompName);
                     zoneEqSizing.HeatingCapacity = true;
                     state.dataSize->DataFracOfAutosizedHeatingCapacity = hWBaseboard.ScaledHeatingCapacity;
                     zoneEqSizing.DesHeatingLoad = state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).NonAirSysDesHeatLoad;
                     TempSize = DataSizing::AutoSize;
                     state.dataSize->DataScalableCapSizingON = true;
-                } else {
-                    TempSize = hWBaseboard.ScaledHeatingCapacity;
                 }
                 bool PrintFlag = false;
                 bool errorsFound = false;
@@ -1038,6 +1036,14 @@ namespace HWBaseboardRadiator {
                     hWBaseboard.RatedCapacity = DataSizing::AutoSize;
                 } else {
                     hWBaseboard.RatedCapacity = TempSize;
+                }
+                if (!state.dataSize->FinalZoneSizing.empty() &&
+                    state.dataSize->CurZoneEqNum <= static_cast<int>(state.dataSize->FinalZoneSizing.size())) {
+                    BaseSizer::reportSizerOutput(state,
+                                                 cCMO_BBRadiator_Water,
+                                                 hWBaseboard.Name,
+                                                 "Design Size Heating Load [W]",
+                                                 state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).NonAirSysDesHeatLoad);
                 }
                 RatedCapacityDes = TempSize;
                 state.dataSize->DataScalableCapSizingON = false;

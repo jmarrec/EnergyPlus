@@ -946,14 +946,9 @@ void PopulateCoolingCoilStandardRatingInformation(InputOutputFile &eio,
     // TODO: TOO BIG |Capacity from 135K (39565 W) to 250K Btu/hr (73268 W) - calculated as per AHRI Standard 365-2009 -
     // Ratings not yet supported in EnergyPlus
     // Define the format string based on the condition
-    std::string_view Format_991;
-    if (!AHRI2023StandardRatings) {
-        Format_991 = " DX Cooling Coil Standard Rating Information, {}, {}, {:.1f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.1f}\n";
-    } else {
-        Format_991 = " DX Cooling Coil AHRI 2023 Standard Rating Information, {}, {}, {:.1f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.1f}\n";
-    }
     print(eio,
-          Format_991,
+          " {}, {}, {}, {:.1f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.1f}\n",
+          AHRI2023StandardRatings ? "DX Cooling Coil AHRI 2023 Standard Rating Information" : "DX Cooling Coil Standard Rating Information",
           "Coil:Cooling:DX",
           coilName,
           capacity,

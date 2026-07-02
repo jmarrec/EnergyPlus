@@ -59,7 +59,6 @@
 
 // Third Party Headers
 #include <embedded/EmbeddedEpJSONSchema.hh>
-#include <fmt/os.h>
 #include <milo/dtoa.h>
 #include <milo/itoa.h>
 
@@ -262,7 +261,7 @@ void cleanEPJSON(json &epjson)
 void InputProcessor::processInput(EnergyPlusData &state)
 {
     if (!FileSystem::fileExists(state.dataStrGlobals->inputFilePath)) {
-        ShowFatalError(state, EnergyPlus::format("Input file path {} not found", state.dataStrGlobals->inputFilePath.string()));
+        ShowFatalError(state, std::format("Input file path {} not found", state.dataStrGlobals->inputFilePath));
         return;
     }
 
@@ -293,21 +292,8 @@ void InputProcessor::processInput(EnergyPlusData &state)
     bool versionMatch = checkVersionMatch(state);
     bool unsupportedFound = checkForUnsupportedObjects(state);
 
-    if (!is_valid || hasErrors || unsupportedFound) {
-        ShowFatalError(state, "Errors occurred on processing input file. Preceding condition(s) cause termination.");
-    }
-
-    if (state.dataGlobal->isEpJSON && (state.dataGlobal->outputEpJSONConversion || state.dataGlobal->outputEpJSONConversionOnly)) {
-        if (versionMatch) {
-            std::string const encoded = idf_parser->encode(epJSON, schema());
-            fs::path convertedEpJSON = FileSystem::makeNativePath(
-                FileSystem::replaceFileExtension(state.dataStrGlobals->outDirPath / state.dataStrGlobals->inputFilePathNameOnly, ".idf"));
-            FileSystem::writeFile<FileSystem::FileTypes::IDF>(convertedEpJSON, encoded);
-        } else {
-            ShowWarningError(state, "Skipping conversion of epJSON to IDF due to mismatched Version.");
-        }
-    }
-
+    // Set up the object/field lookup maps before checking for preprocessor messages below, since
+    // preProcessorCheck() needs getObjectItem() to be functional.
     initializeMaps();
 
     int MaxArgs = 0;
@@ -321,6 +307,26 @@ void InputProcessor::processInput(EnergyPlusData &state)
     state.dataIPShortCut->cNumericFieldNames.allocate(MaxNumeric);
     state.dataIPShortCut->rNumericArgs.dimension(MaxNumeric, 0.0);
     state.dataIPShortCut->lNumericFieldBlanks.dimension(MaxNumeric, false);
+
+    // Check for Output:PreprocessorMessage objects here, before the fatal abort below, so that a
+    // preprocessor's actual root-cause message (e.g. from ExpandObjects) is shown to the user even
+    // when the preprocessor's malformed output also triggers epJSON schema validation errors.
+    bool const PreP_Fatal = preProcessorCheck(state);
+
+    if (!is_valid || hasErrors || unsupportedFound || PreP_Fatal) {
+        ShowFatalError(state, "Errors occurred on processing input file. Preceding condition(s) cause termination.");
+    }
+
+    if (state.dataGlobal->isEpJSON && (state.dataGlobal->outputEpJSONConversion || state.dataGlobal->outputEpJSONConversionOnly)) {
+        if (versionMatch) {
+            std::string const encoded = idf_parser->encode(epJSON, schema());
+            fs::path convertedEpJSON = FileSystem::makeNativePath(
+                FileSystem::replaceFileExtension(state.dataStrGlobals->outDirPath / state.dataStrGlobals->inputFilePathNameOnly, ".idf"));
+            FileSystem::writeFile<FileSystem::FileTypes::IDF>(convertedEpJSON, encoded);
+        } else {
+            ShowWarningError(state, "Skipping conversion of epJSON to IDF due to mismatched Version.");
+        }
+    }
 
     reportIDFRecordsStats(state);
 }
@@ -537,7 +543,7 @@ int InputProcessor::getNumObjectsFound(EnergyPlusData &state, std::string_view c
     if (schema()["properties"].find(std::string(ObjectWord)) == schema()["properties"].end()) {
         auto tmp_umit = caseInsensitiveObjectMap.find(convertToUpper(ObjectWord));
         if (tmp_umit == caseInsensitiveObjectMap.end()) {
-            ShowWarningError(state, EnergyPlus::format("Requested Object not found in Definitions: {}", ObjectWord));
+            ShowWarningError(state, std::format("Requested Object not found in Definitions: {}", ObjectWord));
         }
     }
     return 0;
@@ -916,7 +922,7 @@ const json &InputProcessor::getJSONObjectItem(EnergyPlusData &state, std::string
         auto tmp_umit = caseInsensitiveObjectMap.find(convertToUpper(objectInfo.objectType));
         if (tmp_umit == caseInsensitiveObjectMap.end()) {
             // indicates object type not found, see function GeneralRoutines::ValidateComponent
-            ShowFatalError(state, EnergyPlus::format(R"(ObjectType of type "{}" requested was not found in input)", objectInfo.objectType));
+            ShowFatalError(state, std::format(R"(ObjectType of type "{}" requested was not found in input)", objectInfo.objectType));
         }
         objectInfo.objectType = tmp_umit->second;
         obj_iter = epJSON.find(objectInfo.objectType);
@@ -936,8 +942,8 @@ const json &InputProcessor::getJSONObjectItem(EnergyPlusData &state, std::string
         }
     }
 
-    ShowFatalError(
-        state, EnergyPlus::format(R"(Name "{}" requested was not found in input for ObjectType "{}")", objectInfo.objectType, objectInfo.objectName));
+    ShowFatalError(state,
+                   std::format(R"(Name "{}" requested was not found in input for ObjectType "{}")", objectInfo.objectType, objectInfo.objectName));
     throw;
 }
 
@@ -1045,7 +1051,7 @@ void InputProcessor::getObjectItem(EnergyPlusData &state,
         auto const field_info = legacy_idd_field_info.find(field);
         auto const &field_info_val = field_info.value();
         if (field_info == legacy_idd_field_info.end()) {
-            ShowFatalError(state, EnergyPlus::format(R"(Could not find field = "{}" in "{}" in epJSON Schema.)", field, Object));
+            ShowFatalError(state, std::format(R"(Could not find field = "{}" in "{}" in epJSON Schema.)", field, Object));
         }
 
         bool within_idf_fields = (i < maxFields.max_fields);
@@ -1102,7 +1108,7 @@ void InputProcessor::getObjectItem(EnergyPlusData &state,
                     auto const &field_info_val = field_info.value();
 
                     if (field_info == legacy_idd_field_info.end()) {
-                        ShowFatalError(state, EnergyPlus::format(R"(Could not find field = "{}" in "{}" in epJSON Schema.)", field_name, Object));
+                        ShowFatalError(state, std::format(R"(Could not find field = "{}" in "{}" in epJSON Schema.)", field_name, Object));
                     }
 
                     bool within_idf_extensible_fields = (extensible_count < maxFields.max_extensible_fields);
@@ -1429,7 +1435,7 @@ void InputProcessor::getObjectDefMaxArgs(EnergyPlusData &state,
     if (auto found = props.find(std::string(ObjectWord)); found == props.end()) {
         auto tmp_umit = caseInsensitiveObjectMap.find(convertToUpper(ObjectWord));
         if (tmp_umit == caseInsensitiveObjectMap.end()) {
-            ShowSevereError(state, EnergyPlus::format(R"(getObjectDefMaxArgs: Did not find object="{}" in list of objects.)", ObjectWord));
+            ShowSevereError(state, std::format(R"(getObjectDefMaxArgs: Did not find object="{}" in list of objects.)", ObjectWord));
             return;
         }
         object = &props[tmp_umit->second];
@@ -1442,7 +1448,7 @@ void InputProcessor::getObjectDefMaxArgs(EnergyPlusData &state,
     if (auto found = epJSON.find(std::string(ObjectWord)); found == epJSON.end()) {
         auto tmp_umit = caseInsensitiveObjectMap.find(convertToUpper(ObjectWord));
         if (tmp_umit == caseInsensitiveObjectMap.end()) {
-            ShowSevereError(state, EnergyPlus::format(R"(getObjectDefMaxArgs: Did not find object="{}" in list of objects.)", ObjectWord));
+            ShowSevereError(state, std::format(R"(getObjectDefMaxArgs: Did not find object="{}" in list of objects.)", ObjectWord));
             return;
         }
         objects = &epJSON[tmp_umit->second];
@@ -1731,14 +1737,14 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
     }
 
     if ((!unusedInputs.empty()) && !state.dataGlobal->DisplayUnusedObjects) {
-        u64toa(unusedInputs.size(), s);
-        ShowMessage(state, "There are " + std::string(s) + " unused objects in input.");
+        ShowMessage(state, std::format("There are {} unused objects in input.", unusedInputs.size()));
         ShowMessage(state, "Use Output:Diagnostics,DisplayUnusedObjects; to see them.");
     }
 }
 
-void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) // True if a preprocessor flags a fatal error
+bool InputProcessor::preProcessorCheck(EnergyPlusData &state) // Returns true if a preprocessor flags a fatal error
 {
+    bool PreP_Fatal = false;
 
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Linda Lawrie
@@ -1852,6 +1858,7 @@ void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) 
             }
         }
     }
+    return PreP_Fatal;
 }
 
 void InputProcessor::preScanReportingVariables(EnergyPlusData &state)

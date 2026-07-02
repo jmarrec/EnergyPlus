@@ -2636,6 +2636,7 @@ namespace BranchInputManager {
                     MatchNode = state.dataBranchInputManager->Branch(Found).Component(1).InletNode;
                     MatchNodeName = state.dataBranchInputManager->Branch(Found).Component(1).InletNodeName;
                     BranchInletNodeName = state.dataBranchInputManager->Branch(Found).Component(1).InletNodeName;
+                    CheckBranchEquipInZoneHVACEquipList(state, Found, ErrFound);
                 } else {
                     ShowWarningError(state, std::format("Branch has no components={}", state.dataBranchInputManager->Branch(Found).Name));
                 }
