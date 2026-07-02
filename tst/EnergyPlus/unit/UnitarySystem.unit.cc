@@ -28475,4 +28475,21 @@ TEST_F(EnergyPlusFixture, UnitarySystem_AFN_RTF)
 
     // Check that the runtime fraction is less than one so the impact of cycling fan is correctly accounted for in the AFN
     EXPECT_TRUE(state->dataAirLoop->AirLoopAFNInfo(1).AFNLoopOnOffFanRTF < 1);
+
+    state->dataHVACGlobal->NumPrimaryAirSys = 1;
+    state->afn->DisSysNumOfCVFs = 1;
+    state->afn->DisSysCompCVFData.allocate(1);
+    state->afn->DisSysCompCVFData(1).AirLoopNum = 1;
+    state->afn->DisSysCompCVFData(1).fanType = HVAC::FanType::OnOff;
+    state->afn->DisSysCompCVFData(1).InletNode = 1;
+    state->dataLoopNodes->Node(1).MassFlowRate = 1.0;
+    state->dataAirLoop->AirLoopAFNInfo(1).LoopFanOperationMode = HVAC::FanOp::Cycling;
+    state->dataAirLoop->AirLoopAFNInfo(1).LoopOnOffFanPartLoadRatio = 0.8;
+    state->afn->LoopPartLoadRatio.allocate(1);
+    state->afn->LoopOnOffFanRunTimeFraction.allocate(1);
+    state->afn->LoopOnOffFanRunTimeFraction = 1.0;
+
+    state->afn->update_onoff_fan_runtime_fractions();
+
+    EXPECT_NEAR(state->dataAirLoop->AirLoopAFNInfo(1).AFNLoopOnOffFanRTF, state->afn->LoopOnOffFanRunTimeFraction(1), 1e-6);
 }
