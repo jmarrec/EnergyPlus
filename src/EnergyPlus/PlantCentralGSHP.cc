@@ -930,7 +930,7 @@ void WrapperSpecs::setupOutputVars(EnergyPlusData &state)
             SetupOutputVariable(state,
                                 std::format("Chiller Heater Operation Mode Unit {}", ChillerHeaterNum),
                                 Constant::Units::None,
-                                chillerHeater.Report.CurrentMode,
+                                chillerHeater.Report.currentMode,
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 chillerHeater.Name);
@@ -1766,7 +1766,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
     for (int ChillerHeaterNum = 1; ChillerHeaterNum <= this->ChillerHeaterNums; ++ChillerHeaterNum) {
 
         // Initialize local variables for each chiller heater
-        CurrentMode CurrentMode = CurrentMode::Off;
+        CurrentMode currentMode = CurrentMode::Off;
         state.dataPlantCentralGSHP->ChillerCapFT = 0.0;
         state.dataPlantCentralGSHP->ChillerEIRFT = 0.0;
         state.dataPlantCentralGSHP->ChillerEIRFPLR = 0.0;
@@ -1785,7 +1785,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
         Real64 CondOutletTemp = CondInletTemp;
 
         auto &chillerHeater = this->ChillerHeater(ChillerHeaterNum);
-        chillerHeater.Report.CurrentMode = CurrentMode::Off;
+        chillerHeater.Report.currentMode = CurrentMode::Off;
 
         // Find proper schedule values
         if (this->NumOfComp != this->ChillerHeaterNums) { // Identical units exist
@@ -1862,13 +1862,13 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
             IsLoadCoolRemaining = false;
             EvapMassFlowRate = 0.0;
             CondMassFlowRate = 0.0;
-            CurrentMode = CurrentMode::Off;
+            currentMode = CurrentMode::Off;
         }
 
         // Chiller heater is on when cooling load for this chiller heater remains and chilled water available
         if (IsLoadCoolRemaining && (EvapMassFlowRate > 0) && (this->WrapperComp(CompNum).chSched->getCurrentVal() > 0)) {
             // Indicate current mode is cooling-only mode. Simultaneous clg/htg mode will be set later
-            CurrentMode = CurrentMode::CoolingOnly;
+            currentMode = CurrentMode::CoolingOnly;
 
             // Assign proper performance curve information depending on the control mode
             // Cooling curve is used only for cooling-only mode, and the others (Simultaneous and heating) read the heating curve
@@ -1971,7 +1971,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
 
             // Run evaporator checks and adjust outlet temp and QEvaporator if necessary
             WrapperSpecs::checkEvapOutletTemp(
-                state, ChillerHeaterNum, EvapOutletTemp, TempLowLimitEout, EvapInletTemp, QEvaporator, EvapMassFlowRate, Cp, CurrentMode);
+                state, ChillerHeaterNum, EvapOutletTemp, TempLowLimitEout, EvapInletTemp, QEvaporator, EvapMassFlowRate, Cp, currentMode);
 
             // Calculate part load once more since evaporator capacity might be modified
             WrapperSpecs::calcPLRAndCyclingRatio(state, AvailChillerCap, PartLoadRat, MinPartLoadRat, MaxPartLoadRat, QEvaporator, FRAC);
@@ -2013,7 +2013,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
 
             // Initialize reporting variable when this chiller doesn't need to operate
             if (QEvaporator == 0.0) {
-                CurrentMode = CurrentMode::Off;
+                currentMode = CurrentMode::Off;
                 state.dataPlantCentralGSHP->ChillerPartLoadRatio = 0.0;
                 state.dataPlantCentralGSHP->ChillerCyclingRatio = 0.0;
                 state.dataPlantCentralGSHP->ChillerFalseLoadRate = 0.0;
@@ -2035,7 +2035,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
         chillerHeater.EvapInletNode.Temp = EvapInletTemp;
         chillerHeater.CondOutletNode.Temp = CondOutletTemp;
         chillerHeater.CondInletNode.Temp = CondInletTemp;
-        chillerHeater.Report.CurrentMode = CurrentMode;
+        chillerHeater.Report.currentMode = currentMode;
         chillerHeater.Report.ChillerPartLoadRatio = state.dataPlantCentralGSHP->ChillerPartLoadRatio;
         chillerHeater.Report.ChillerCyclingRatio = state.dataPlantCentralGSHP->ChillerCyclingRatio;
         chillerHeater.Report.ChillerFalseLoadRate = state.dataPlantCentralGSHP->ChillerFalseLoadRate;
@@ -2055,7 +2055,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
         chillerHeater.Report.ActualCOP = ActualCOP;
 
         if (this->SimulClgDominant || this->SimulHtgDominant) { // Store for using these cooling side data in the hot water loop
-            chillerHeater.Report.CurrentMode = CurrentMode;
+            chillerHeater.Report.currentMode = currentMode;
             chillerHeater.Report.ChillerPartLoadRatioSimul = state.dataPlantCentralGSHP->ChillerPartLoadRatio;
             chillerHeater.Report.ChillerCyclingRatioSimul = state.dataPlantCentralGSHP->ChillerCyclingRatio;
             chillerHeater.Report.ChillerFalseLoadRateSimul = state.dataPlantCentralGSHP->ChillerFalseLoadRate;
@@ -2112,7 +2112,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
         auto &chillerHeater = this->ChillerHeater(ChillerHeaterNum);
 
         // Set module level inlet and outlet nodes and initialize other local variables
-        CurrentMode CurrentMode = CurrentMode::Off;
+        CurrentMode currentMode = CurrentMode::Off;
         state.dataPlantCentralGSHP->ChillerPartLoadRatio = 0.0;
         state.dataPlantCentralGSHP->ChillerCyclingRatio = 0.0;
         state.dataPlantCentralGSHP->ChillerFalseLoadRate = 0.0;
@@ -2227,10 +2227,10 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                 // Always off even heating load remains if this CH is assumed to be off in the loop 1
                 if (this->SimulClgDominant) {
                     if (chillerHeater.Report.QEvapSimul == 0.0) {
-                        CurrentMode = CurrentMode::Off;
+                        currentMode = CurrentMode::Off;
                         IsLoadHeatRemaining = false;
                     } else { // Heat recovery
-                        CurrentMode = CurrentMode::HeatRecovery;
+                        currentMode = CurrentMode::HeatRecovery;
                     }
                 }
             } // End of simultaneous clg/htg mode determination
@@ -2239,10 +2239,10 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
             IsLoadHeatRemaining = false;
             CondMassFlowRate = 0.0;
             EvapMassFlowRate = 0.0;
-            CurrentMode = CurrentMode::Off;
+            currentMode = CurrentMode::Off;
             if (this->SimulClgDominant) {
                 if (chillerHeater.Report.QEvapSimul > 0.0) {
-                    CurrentMode = CurrentMode::CoolingDominant;
+                    currentMode = CurrentMode::CoolingDominant;
                 }
             } // End of mode determination
         } // End of system operation determinatoin
@@ -2251,9 +2251,9 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
             // Operation mode
             if (this->SimulHtgDominant) {
                 if (chillerHeater.Report.QEvapSimul == 0.0) {
-                    CurrentMode = CurrentMode::HeatingDominant; // No cooling necessary
+                    currentMode = CurrentMode::HeatingDominant; // No cooling necessary
                 } else { // Heat recovery mode. Both chilled water and hot water loops are connected. No condenser flow.
-                    CurrentMode = CurrentMode::HeatRecovery;
+                    currentMode = CurrentMode::HeatRecovery;
                 }
             }
 
@@ -2262,15 +2262,15 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
             // Fix for Defect #10065: When the heating load is dominant and the Current Mode is 3 (HeatRecovery),
             // simulation must go through the "heating" side to properly update the power consumption.
             // Otherwise, the power consumption could come back zero for heating and cooling.
-            if (this->SimulClgDominant || (CurrentMode == CurrentMode::HeatRecovery && !this->SimulHtgDominant)) {
-                CurrentMode = CurrentMode::HeatRecovery;
+            if (this->SimulClgDominant || (currentMode == CurrentMode::HeatRecovery && !this->SimulHtgDominant)) {
+                currentMode = CurrentMode::HeatRecovery;
                 QCondenser = chillerHeater.Report.QCondSimul;
                 this->adjustChillerHeaterCondFlowTemp(state, QCondenser, CondMassFlowRate, CondOutletTemp, CondInletTemp, CondDeltaTemp);
             } else { // Either Mode 2 (CoolingOnly) or 3 (HeatRecovery) or 5 (HeatingDominant) ??
                 if (this->SimulHtgDominant) {
-                    CurrentMode = CurrentMode::HeatingDominant;
+                    currentMode = CurrentMode::HeatingDominant;
                 } else {
-                    CurrentMode = CurrentMode::CoolingDominant;
+                    currentMode = CurrentMode::CoolingDominant;
                 }
 
                 state.dataPlantCentralGSHP->ChillerCapFT = 0.0;
@@ -2334,7 +2334,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                                                   QEvaporator,
                                                   EvapMassFlowRate,
                                                   Cp,
-                                                  CurrentMode);
+                                                  currentMode);
 
                 WrapperSpecs::calcPLRAndCyclingRatio(state, AvailChillerCap, PartLoadRat, MinPartLoadRat, MaxPartLoadRat, QEvaporator, FRAC);
 
@@ -2364,7 +2364,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                 // Limit mass flow rate for this chiller heater to the available mass at given temperature conditions
                 // when mass flow rate calculated to meet the load is greater than the maximum available
                 // then recalculate heating load this chiller heater can meet
-                if (CurrentMode == CurrentMode::HeatingOnly || this->SimulHtgDominant) {
+                if (currentMode == CurrentMode::HeatingOnly || this->SimulHtgDominant) {
                     if (CondMassFlowRate > DataBranchAirLoopPlant::MassFlowTolerance && CondDeltaTemp > 0.0) {
                         this->adjustChillerHeaterCondFlowTemp(state, QCondenser, CondMassFlowRate, CondOutletTemp, CondInletTemp, CondDeltaTemp);
                         if (qCondenserFullLoad > 0.0) {
@@ -2404,7 +2404,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
             }
 
             if (QCondenser == 0.0) {
-                CurrentMode = CurrentMode::Off;
+                currentMode = CurrentMode::Off;
                 state.dataPlantCentralGSHP->ChillerPartLoadRatio = 0.0;
                 state.dataPlantCentralGSHP->ChillerCyclingRatio = 0.0;
                 state.dataPlantCentralGSHP->ChillerFalseLoadRate = 0.0;
@@ -2418,7 +2418,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
             }
 
             // Heat recovery or cooling dominant modes need to use the evaporator side information
-            if (CurrentMode == CurrentMode::HeatRecovery || CurrentMode == CurrentMode::CoolingDominant) {
+            if (currentMode == CurrentMode::HeatRecovery || currentMode == CurrentMode::CoolingDominant) {
                 state.dataPlantCentralGSHP->ChillerPartLoadRatio = chillerHeater.Report.ChillerPartLoadRatioSimul;
                 state.dataPlantCentralGSHP->ChillerCyclingRatio = chillerHeater.Report.ChillerCyclingRatioSimul;
                 state.dataPlantCentralGSHP->ChillerFalseLoadRate = chillerHeater.Report.ChillerFalseLoadRateSimul;
@@ -2437,8 +2437,8 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
         }
 
         // Check if it is mode 4 (CoolingDominant), then skip binding local variables
-        if (CurrentMode == CurrentMode::CoolingDominant) {
-            chillerHeater.Report.CurrentMode = CurrentMode;
+        if (currentMode == CurrentMode::CoolingDominant) {
+            chillerHeater.Report.currentMode = currentMode;
         } else {
             chillerHeater.EvapOutletNode.MassFlowRate = EvapMassFlowRate;
             chillerHeater.CondOutletNode.MassFlowRate = CondMassFlowRate;
@@ -2446,7 +2446,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
             chillerHeater.EvapInletNode.Temp = EvapInletTemp;
             chillerHeater.CondOutletNode.Temp = CondOutletTemp;
             chillerHeater.CondInletNode.Temp = CondInletTemp;
-            chillerHeater.Report.CurrentMode = CurrentMode;
+            chillerHeater.Report.currentMode = currentMode;
             chillerHeater.Report.ChillerPartLoadRatio = state.dataPlantCentralGSHP->ChillerPartLoadRatio;
             chillerHeater.Report.ChillerCyclingRatio = state.dataPlantCentralGSHP->ChillerCyclingRatio;
             chillerHeater.Report.ChillerFalseLoadRate = state.dataPlantCentralGSHP->ChillerFalseLoadRate;
@@ -2805,7 +2805,7 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                 chillerHeater.EvapInletNode.Temp = CHWInletTemp;
                 chillerHeater.CondOutletNode.Temp = GLHEInletTemp;
                 chillerHeater.CondInletNode.Temp = GLHEInletTemp;
-                chillerHeater.Report.CurrentMode = CurrentMode::Off;
+                chillerHeater.Report.currentMode = CurrentMode::Off;
                 chillerHeater.Report.ChillerPartLoadRatio = 0.0;
                 chillerHeater.Report.ChillerCyclingRatio = 0.0;
                 chillerHeater.Report.ChillerFalseLoadRate = 0.0;
@@ -2895,14 +2895,14 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                 if (this->SimulClgDominant) {
                     for (int ChillerHeaterNum = 1; ChillerHeaterNum <= this->ChillerHeaterNums; ++ChillerHeaterNum) {
                         auto const &chillerHeater = this->ChillerHeater(ChillerHeaterNum);
-                        CurrentMode CurrentMode = chillerHeater.Report.CurrentMode;
+                        CurrentMode currentMode = chillerHeater.Report.currentMode;
                         CHWInletTemp = this->Report.CHWInletTempSimul;
                         GLHEInletTemp = this->Report.GLHEInletTempSimul;
                         CHWInletMassFlowRate = this->Report.CHWmdotSimul;
                         GLHEInletMassFlowRate = this->Report.GLHEmdotSimul;
 
-                        if (CurrentMode != CurrentMode::Off) {              // This chiller heater unit is on
-                            if (CurrentMode == CurrentMode::HeatRecovery) { // Heat recovery mode. Both chilled water and hot water connections
+                        if (currentMode != CurrentMode::Off) {              // This chiller heater unit is on
+                            if (currentMode == CurrentMode::HeatRecovery) { // Heat recovery mode. Both chilled water and hot water connections
                                 CHWOutletMassFlowRate += chillerHeater.Report.EvapmdotSimul; // Wrapper evaporator side to plant chilled water loop
                                 HWOutletMassFlowRate += chillerHeater.Report.Condmdot;       // Wrapper condenser side to plant hot water loop
                                 if (HWInletMassFlowRate > 0.0) {
@@ -3006,12 +3006,12 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                     for (int ChillerHeaterNum = 1; ChillerHeaterNum <= this->ChillerHeaterNums; ++ChillerHeaterNum) {
                         auto &chillerHeater = this->ChillerHeater(ChillerHeaterNum);
                         // Set temperatures and mass flow rates for the cooling side
-                        CurrentMode CurrentMode = chillerHeater.Report.CurrentMode;
+                        CurrentMode currentMode = chillerHeater.Report.currentMode;
                         CHWInletTemp = this->Report.CHWInletTempSimul;
                         CHWInletMassFlowRate = this->Report.CHWmdotSimul;
 
-                        if (CurrentMode != CurrentMode::Off) {              // This chiller heater unit is on
-                            if (CurrentMode == CurrentMode::HeatRecovery) { // Heat recovery mode. Both chilled water and hot water connections
+                        if (currentMode != CurrentMode::Off) {              // This chiller heater unit is on
+                            if (currentMode == CurrentMode::HeatRecovery) { // Heat recovery mode. Both chilled water and hot water connections
                                 CHWOutletMassFlowRate += chillerHeater.Report.EvapmdotSimul; // Wrapper evaporator side to plant chilled water loop
                                 HWOutletMassFlowRate += chillerHeater.Report.Condmdot;       // Wrapper condenser side to plant hot water loop
                                 if (CHWInletMassFlowRate > 0.0) {
@@ -3228,7 +3228,7 @@ void WrapperSpecs::CalcWrapperModel(EnergyPlusData &state, Real64 &MyLoad, int c
                     chillerHeater.EvapInletNode.Temp = CHWInletTemp;
                     chillerHeater.CondOutletNode.Temp = GLHEInletTemp;
                     chillerHeater.CondInletNode.Temp = GLHEInletTemp;
-                    chillerHeater.Report.CurrentMode = CurrentMode::Off;
+                    chillerHeater.Report.currentMode = CurrentMode::Off;
                     chillerHeater.Report.ChillerPartLoadRatio = 0.0;
                     chillerHeater.Report.ChillerCyclingRatio = 0.0;
                     chillerHeater.Report.ChillerFalseLoadRate = 0.0;

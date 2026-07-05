@@ -110,7 +110,7 @@ namespace PlantCentralGSHP {
 
     struct CHReportVars
     {
-        CurrentMode CurrentMode = CurrentMode::Invalid; // 0-off; 1-CoolingOnly; 2-HeatingOnly; 3-HeatRecovery; 4-CoolingDominant; 5-HeatingDominant
+        CurrentMode currentMode = CurrentMode::Invalid; // 0-off; 1-CoolingOnly; 2-HeatingOnly; 3-HeatRecovery; 4-CoolingDominant; 5-HeatingDominant
         Real64 ChillerPartLoadRatio = 0.0;              // Chiller PLR (Load/Capacity)
         Real64 ChillerCyclingRatio = 0.0;               // Chiller cycling ratio (time on/time step)
         Real64 ChillerFalseLoad = 0.0;                  // Chiller false load over and above water side load [J]
