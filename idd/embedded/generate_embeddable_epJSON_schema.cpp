@@ -71,6 +71,7 @@ static constexpr auto header = R"cpp(
 #include <embedded/EmbeddedEpJSONSchema.hh>
 
 #include <array>
+#include <string>
 
 namespace EnergyPlus {
 
