@@ -3042,7 +3042,7 @@ namespace WindowComplexManager {
             // is assumed that nothing is transmitted through
             asol(nlayer) += state.dataHeatBal->SurfQdotRadIntGainsInPerArea(SurfNum);
 
-            presure = state.dataEnvrn->OutBaroPress;
+            presure(0) = state.dataEnvrn->OutBaroPress;
 
             // Instead of doing temperature guess get solution from previous iteration.  That should be much better than guess
             for (k = 1; k <= 2 * nlayer; ++k) {
@@ -3075,7 +3075,7 @@ namespace WindowComplexManager {
             fclr = 1.0;
             ibc(1) = 0;
             ibc(2) = 0;
-            presure = 101325.0;
+            presure(0) = 101325.0;
             iwd = 0; // Windward wind direction
             isky = 0;
             esky = 1.0;

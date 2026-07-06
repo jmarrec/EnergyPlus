@@ -52,6 +52,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataGlobals.hh>
+#include <EnergyPlus/DisplayRoutines.hh>|
 #include <EnergyPlus/TARCOGArgs.hh>
 #include <EnergyPlus/TARCOGCommon.hh>
 #include <EnergyPlus/TARCOGGasses90.hh>
@@ -2679,12 +2680,12 @@ void filmg(EnergyPlusData &state,
             state.dataThermalISO15099Calc->frctg(l) = frct(l, i + 1);
         }
 
-        if (presure(i + 1) > VacuumPressure) {
+        if (presure(i) > VacuumPressure) {
             GASSES90(state,
                      tmean,
                      state.dataThermalISO15099Calc->ipropg,
                      state.dataThermalISO15099Calc->frctg,
-                     presure(i + 1),
+                     presure(i),
                      nmix(i + 1),
                      wght,
                      gcon,
@@ -2719,7 +2720,7 @@ void filmg(EnergyPlusData &state,
             // write(*,*)'Nusselt,Rayleigh,Prandtl,hgas(k),k'
             // write(*,*) gnu,gr*pr,pr,hgas(k),k
         } else { // low pressure calculations
-            GassesLow(tmean, wght(iprop(1, i + 1)), presure(i + 1), gama(iprop(1, i + 1)), con, nperr, ErrorMessage);
+            GassesLow(tmean, wght(iprop(1, i + 1)), presure(i), gama(iprop(1, i + 1)), con, nperr, ErrorMessage);
             hcgas(i + 1) = con;
         } // if (pressure(i+1).gt.VacuumPressure) then
     }
