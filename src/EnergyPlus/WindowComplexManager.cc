@@ -3076,7 +3076,7 @@ namespace WindowComplexManager {
             ibc(1) = 0;
             ibc(2) = 0;
             presure(1) = 101325.0; // presure(1) is exterior environment
-            iwd = 0; // Windward wind direction
+            iwd = 0;               // Windward wind direction
             isky = 0;
             esky = 1.0;
             height = 1.0;
