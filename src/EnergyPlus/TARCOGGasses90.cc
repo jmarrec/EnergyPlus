@@ -267,7 +267,7 @@ void GassesLow(Real64 const tmean, Real64 const mwght, Real64 const pressure, Re
 
     Real64 const B = alpha * (gama + 1) / (gama - 1) * std::sqrt(Constant::UniversalGasConst / (8 * Constant::Pi * mwght * tmean));
 
-    con = B * pressure;  // B already has the 133.28 Pa -> torr conversion in it?
+    con = B * pressure;
 }
 
 } // namespace EnergyPlus::TARCOGGasses90
