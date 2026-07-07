@@ -56,7 +56,6 @@
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/Vector3.hh>
-// #include <ObjexxFCL/Vector4.hh>
 #include <ObjexxFCL/member.functions.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
@@ -9244,7 +9243,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
                 for (int R = RefPt; R <= RefPt + illumMap.Xnum - 1; ++R) {
                     int IllumOut = nint(illumMap.refPts(R).lumsHr[iLum_Illum]);
                     std::string String = std::to_string(IllumOut);
-                    ;
+
                     if (!illumMap.refPts(R).inBounds) {
                         String = "*" + String;
                     }
