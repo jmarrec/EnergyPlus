@@ -1680,7 +1680,7 @@ The Loop Demand Side design flow rate,\({\dot V_{Dmd,des}}\) , is set equal to t
 {\dot V_{Dmd,des}} = {\dot V_{Sup,des}}
 \end{equation}
 
-The design heat transfer capacity and UA for the heat exchanger are calculated using the design temperatures for the two plant loops. The loop design temperature difference for the Loop Supply Side, \(\Delta {T_{SupLoop,Des}}\) , is used to determine a nominal capacity. If the UA is not autosized then the delta T is determined using the loop set point temperataures, or average of the loop high and low set point temperatures for DualSetpointDeadband control. Cp and rho are calculated at an initialization temperature of 5.05 C.
+The design heat transfer capacity and UA for the heat exchanger are calculated using the design temperatures for the two plant loops. The loop design temperature difference for the Loop Supply Side, \(\Delta {T_{SupLoop,Des}}\) , is entered in a Sizing:Plant object and is used to determine a nominal capacity. If the UA is not autosized, and Sizing:Plant objects are not provided, then the delta T is determined using the loop set point temperataures, or average of the loop high and low set point temperatures for DualSetpointDeadband control. Cp and rho are calculated at an initialization temperature of 5.05 C. The following equations are used to calculated Nominal Capacity where a Sizing:Plant object is specified and when loop set point temperatures are used:
 
 \begin{equation}
 \dot Q = V_{Sup,des} \rho {c_p} \Delta {T_{SupLoop,Des}}, or
