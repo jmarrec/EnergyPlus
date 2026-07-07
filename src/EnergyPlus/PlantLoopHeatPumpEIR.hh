@@ -459,7 +459,11 @@ namespace EIRPlantLoopHeatPumps {
         };
 
         // additional variables
-        HeatPumpAirToWater *companionHeatPumpCoil = nullptr;
+        // Base has EIRPlantLoopHeatPump *companionHeatPumpCoil = nullptr;
+        // In a our casz we KNOW it's a HeatPumpAirToWater because we assign in pairUpCompanionCoils,
+        // so we can safely static_cast<HeatPumpAirToWater> when needed (in calcOpMode)
+        // HeatPumpAirToWater *companionHeatPumpCoil = nullptr;
+
         std::string availSchedName;            // availability schedule
         Sched::Schedule *availSched = nullptr; // availability schedule
         OperatingModeControlMethod operatingModeControlMethod = OperatingModeControlMethod::Load;
