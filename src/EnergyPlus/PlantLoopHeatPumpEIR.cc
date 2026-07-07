@@ -667,7 +667,7 @@ void HeatPumpAirToWater::calcPowerUsage(EnergyPlusData &state, Real64 availableC
     int localSpeedLevel = 0;
     for (int i = 0; i < this->numSpeeds; i++) {
         capacityModifierFuncTempHigh =
-            Curve::CurveValue(state, this->capFuncTempCurveIndex[i], loadSideOutletSetpointTemp, this->sourceSideInletTemp);
+            Curve::CurveValue(state, this->capFuncTempCurveIndices[i], loadSideOutletSetpointTemp, this->sourceSideInletTemp);
         capacityHigh = this->ratedCapacity[i] * capacityModifierFuncTempHigh;
         localSpeedLevel = i;
         if (std::fabs(currentLoadNthUnit) <= capacityHigh) {
@@ -681,14 +681,14 @@ void HeatPumpAirToWater::calcPowerUsage(EnergyPlusData &state, Real64 availableC
     Real64 eirModifierFuncPLRLow = 1.0;
     if (localSpeedLevel > 0) {
         eirModifierFuncTempLow =
-            Curve::CurveValue(state, this->powerRatioFuncTempCurveIndex[localSpeedLevel - 1], this->loadSideOutletTemp, this->sourceSideInletTemp);
-        eirModifierFuncPLRLow = Curve::CurveValue(state, this->powerRatioFuncPLRCurveIndex[localSpeedLevel - 1], this->partLoadRatio);
+            Curve::CurveValue(state, this->powerRatioFuncTempCurveIndices[localSpeedLevel - 1], this->loadSideOutletTemp, this->sourceSideInletTemp);
+        eirModifierFuncPLRLow = Curve::CurveValue(state, this->powerRatioFuncPLRCurveIndices[localSpeedLevel - 1], this->partLoadRatio);
         this->eirModCurveCheck(state, eirModifierFuncTempLow);
         this->eirModFPLRCurveCheck(state, eirModifierFuncPLRLow);
     }
     Real64 eirModifierFuncTempHigh =
-        Curve::CurveValue(state, this->powerRatioFuncTempCurveIndex[localSpeedLevel], this->loadSideOutletTemp, this->sourceSideInletTemp);
-    Real64 eirModifierFuncPLRHigh = Curve::CurveValue(state, this->powerRatioFuncPLRCurveIndex[localSpeedLevel], this->partLoadRatio);
+        Curve::CurveValue(state, this->powerRatioFuncTempCurveIndices[localSpeedLevel], this->loadSideOutletTemp, this->sourceSideInletTemp);
+    Real64 eirModifierFuncPLRHigh = Curve::CurveValue(state, this->powerRatioFuncPLRCurveIndices[localSpeedLevel], this->partLoadRatio);
     // check curves value and resets to zero if negative
     this->eirModCurveCheck(state, eirModifierFuncTempHigh);
     this->eirModFPLRCurveCheck(state, eirModifierFuncPLRHigh);
@@ -4157,8 +4157,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     }
                     thisAWHP.ratedCOP[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
                         fields, schemaProps, std::format("rated_cop_for_{}_at_speed_{}", modeKeyWord, i + 1));
-                    thisAWHP.capFuncTempCurveIndex[i] = Curve::GetCurveIndex(state, capFtName);
-                    if (thisAWHP.capFuncTempCurveIndex[i] == 0) {
+                    thisAWHP.capFuncTempCurveIndices[i] = Curve::GetCurveIndex(state, capFtName);
+                    if (thisAWHP.capFuncTempCurveIndices[i] == 0) {
                         ShowSevereError(
                             state,
                             std::format("Invalid curve name for HeatPump:AirToWater (name={}; entered curve name: {}", thisAWHP.name, capFtName));
@@ -4175,8 +4175,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     }
 
                     std::string const eirFtName = Util::makeUPPER(fields.at(eirFtFieldName).get<std::string>());
-                    thisAWHP.powerRatioFuncTempCurveIndex[i] = Curve::GetCurveIndex(state, eirFtName);
-                    if (thisAWHP.powerRatioFuncTempCurveIndex[i] == 0) {
+                    thisAWHP.powerRatioFuncTempCurveIndices[i] = Curve::GetCurveIndex(state, eirFtName);
+                    if (thisAWHP.powerRatioFuncTempCurveIndices[i] == 0) {
                         ShowSevereError(
                             state,
                             std::format("Invalid curve name for HeatPump:AirToWater (name={}; entered curve name: {}", thisAWHP.name, eirFtName));
@@ -4192,8 +4192,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                         errorsFound = true;
                     }
                     std::string const eirFplrName = Util::makeUPPER(fields.at(eirFplrFieldName).get<std::string>());
-                    thisAWHP.powerRatioFuncPLRCurveIndex[i] = Curve::GetCurveIndex(state, eirFplrName);
-                    if (thisAWHP.powerRatioFuncPLRCurveIndex[i] == 0) {
+                    thisAWHP.powerRatioFuncPLRCurveIndices[i] = Curve::GetCurveIndex(state, eirFplrName);
+                    if (thisAWHP.powerRatioFuncPLRCurveIndices[i] == 0) {
                         ShowSevereError(
                             state,
                             std::format("Invalid curve name for HeatPump:AirToWater (name={}; entered curve name: {}", thisAWHP.name, eirFplrName));
@@ -4217,8 +4217,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                         fields, schemaProps, std::format("rated_{}_capacity_in_booster_mode", modeKeyWord));
                     thisAWHP.ratedCOP[speedLevelBooster] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
                         fields, schemaProps, std::format("rated_{}_cop_in_booster_mode", modeKeyWord));
-                    thisAWHP.capFuncTempCurveIndex[speedLevelBooster] = Curve::GetCurveIndex(state, capFtName);
-                    if (thisAWHP.capFuncTempCurveIndex[speedLevelBooster] == 0) {
+                    thisAWHP.capFuncTempCurveIndices[speedLevelBooster] = Curve::GetCurveIndex(state, capFtName);
+                    if (thisAWHP.capFuncTempCurveIndices[speedLevelBooster] == 0) {
                         ShowSevereError(
                             state,
                             std::format("Invalid curve name for HeatPump:AirToWater (name={}; entered curve name: {}", thisAWHP.name, capFtName));
@@ -4234,8 +4234,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     }
 
                     std::string const eirFtName = Util::makeUPPER(fields.at(eirFtFieldName).get<std::string>());
-                    thisAWHP.powerRatioFuncTempCurveIndex[speedLevelBooster] = Curve::GetCurveIndex(state, eirFtName);
-                    if (thisAWHP.powerRatioFuncTempCurveIndex[speedLevelBooster] == 0) {
+                    thisAWHP.powerRatioFuncTempCurveIndices[speedLevelBooster] = Curve::GetCurveIndex(state, eirFtName);
+                    if (thisAWHP.powerRatioFuncTempCurveIndices[speedLevelBooster] == 0) {
                         ShowSevereError(
                             state,
                             std::format("Invalid curve name for HeatPump:AirToWater (name={}; entered curve name: {}", thisAWHP.name, eirFtName));
@@ -4250,8 +4250,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                         errorsFound = true;
                     }
                     std::string const eirFplrName = Util::makeUPPER(fields.at(eirFplrFieldName).get<std::string>());
-                    thisAWHP.powerRatioFuncPLRCurveIndex[speedLevelBooster] = Curve::GetCurveIndex(state, eirFplrName);
-                    if (thisAWHP.powerRatioFuncPLRCurveIndex[speedLevelBooster] == 0) {
+                    thisAWHP.powerRatioFuncPLRCurveIndices[speedLevelBooster] = Curve::GetCurveIndex(state, eirFplrName);
+                    if (thisAWHP.powerRatioFuncPLRCurveIndices[speedLevelBooster] == 0) {
                         ShowSevereError(
                             state,
                             std::format("Invalid curve name for HeatPump:AirToWater (name={}; entered curve name: {}", thisAWHP.name, eirFplrName));
@@ -4552,7 +4552,7 @@ void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 cu
     if (this->companionHeatPumpCoil == nullptr) {
         this->operatingMode = 1;
         if (this->OperationModeEMSOverrideOn) {
-            auto curveIndex = this->capFuncTempCurveIndex[this->numSpeeds - 1];
+            auto curveIndex = this->capFuncTempCurveIndices[this->numSpeeds - 1];
             auto capacityModifierFuncTemp = Curve::CurveValue(state, curveIndex, this->loadSideOutletTemp, this->sourceSideInletTemp);
             auto availableCapacityOneUnit = this->referenceCapacityOneUnit * capacityModifierFuncTemp;
             this->operatingMode = ceil(fabs(currentLoad) / availableCapacityOneUnit);
@@ -4571,7 +4571,7 @@ void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 cu
         auto &this_loop_side(this_loop.LoopSide(LoopSideNum));
         auto &this_component = this_loop_side.Branch(BranchNum).Comp(CompNum);
         auto companionLoad = this_component.MyLoad;
-        auto curveIndex = this->capFuncTempCurveIndex[this->numSpeeds - 1];
+        auto curveIndex = this->capFuncTempCurveIndices[this->numSpeeds - 1];
         auto capacityModifierFuncTemp = Curve::CurveValue(state, curveIndex, this->loadSideOutletTemp, this->sourceSideInletTemp);
         auto availableCapacityOneUnit = this->referenceCapacityOneUnit * capacityModifierFuncTemp;
         auto &companionCoil = this->companionHeatPumpCoil;
@@ -4740,7 +4740,7 @@ void HeatPumpAirToWater::doPhysics(EnergyPlusData &state, Real64 currentLoad)
     Real64 localPartLoadRatio = 0.0;
 
     Real64 availableCapacity;
-    this->calcAvailableCapacity(state, currentLoad, this->capFuncTempCurveIndex[this->numSpeeds - 1], availableCapacity, localPartLoadRatio);
+    this->calcAvailableCapacity(state, currentLoad, this->capFuncTempCurveIndices[this->numSpeeds - 1], availableCapacity, localPartLoadRatio);
     if (this->waterTempExceeded) { // turn off the equipment if water temp exceeded operation limits
         this->loadSideMassFlowRate = 0.0;
         this->sourceSideMassFlowRate = 0.0;
