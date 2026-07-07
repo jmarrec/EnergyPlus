@@ -4574,33 +4574,36 @@ void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 cu
         auto curveIndex = this->capFuncTempCurveIndices[this->numSpeeds - 1];
         auto capacityModifierFuncTemp = Curve::CurveValue(state, curveIndex, this->loadSideOutletTemp, this->sourceSideInletTemp);
         auto availableCapacityOneUnit = this->referenceCapacityOneUnit * capacityModifierFuncTemp;
-        auto &companionCoil = this->companionHeatPumpCoil;
+
+        // This is safe because we know companionHeatPumpCoil is a HeatPumpAirToWater, so we can static_cast it
+        auto &companionCoil = static_cast<HeatPumpAirToWater &>(*this->companionHeatPumpCoil);
+
         auto companionCapacityModifierFuncTemp =
-            Curve::CurveValue(state, curveIndex, companionCoil->loadSideOutletTemp, companionCoil->sourceSideInletTemp);
-        auto companionAvailableCapacityOneUnit = companionCoil->referenceCapacityOneUnit * companionCapacityModifierFuncTemp;
+            Curve::CurveValue(state, curveIndex, companionCoil.loadSideOutletTemp, companionCoil.sourceSideInletTemp);
+        auto companionAvailableCapacityOneUnit = companionCoil.referenceCapacityOneUnit * companionCapacityModifierFuncTemp;
         if (this->OperationModeEMSOverrideOn) {
             if (this->OperationModeEMSOverrideValue > 0) {
                 this->operatingMode = min(this->heatPumpMultiplier, this->OperationModeEMSOverrideValue);
-                this->companionHeatPumpCoil->operatingMode = 0;
+                companionCoil.operatingMode = 0;
             }
         } else if (this->operatingModeControlMethod == OperatingModeControlMethod::ScheduledModes) {
             auto numUnitsOn = static_cast<int>(this->operationModeControlSche->getCurrentVal());
             if (numUnitsOn > 0) {
                 this->operatingMode = min(this->heatPumpMultiplier, numUnitsOn);
-                this->companionHeatPumpCoil->operatingMode = 0;
+                companionCoil.operatingMode = 0;
             } else {
                 this->operatingMode = 0;
-                this->companionHeatPumpCoil->operatingMode = min(this->companionHeatPumpCoil->heatPumpMultiplier, -numUnitsOn);
+                companionCoil.operatingMode = min(companionCoil.heatPumpMultiplier, -numUnitsOn);
             }
         } else {
             if (modeCalcMethod == OperatingModeControlOptionMultipleUnit::SingleMode) {
                 // all HP unit either all in heating or all in cooling mode
                 if (fabs(currentLoad) < fabs(companionLoad)) {
                     this->operatingMode = 0;
-                    this->companionHeatPumpCoil->operatingMode = ceil(fabs(companionLoad) / companionAvailableCapacityOneUnit);
+                    companionCoil.operatingMode = ceil(fabs(companionLoad) / companionAvailableCapacityOneUnit);
                 } else {
                     this->operatingMode = ceil(fabs(currentLoad) / availableCapacityOneUnit);
-                    this->companionHeatPumpCoil->operatingMode = 0;
+                    companionCoil.operatingMode = 0;
                 }
             } else {
                 Real64 coolingLoad = 0.0;
@@ -4700,20 +4703,20 @@ void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 cu
                 }
                 if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
                     this->operatingMode = numHeatingUnit;
-                    this->companionHeatPumpCoil->operatingMode = numCoolingUnit;
+                    companionCoil.operatingMode = numCoolingUnit;
                 } else {
                     this->operatingMode = numCoolingUnit;
-                    this->companionHeatPumpCoil->operatingMode = numHeatingUnit;
+                    companionCoil.operatingMode = numHeatingUnit;
                 }
             }
             this->operatingMode = min(this->heatPumpMultiplier, this->operatingMode);
-            companionCoil->operatingMode = min(companionCoil->heatPumpMultiplier, companionCoil->operatingMode);
-            if (this->companionHeatPumpCoil->operatingMode == 0) {
-                this->companionHeatPumpCoil->loadSideHeatTransfer = 0.0;
-                this->companionHeatPumpCoil->sourceSideHeatTransfer = 0.0;
-                this->companionHeatPumpCoil->loadSideMassFlowRate = 0.0;
-                this->companionHeatPumpCoil->sourceSideMassFlowRate = 0.0;
-                this->companionHeatPumpCoil->speedLevel = 0.0;
+            companionCoil.operatingMode = min(companionCoil.heatPumpMultiplier, companionCoil.operatingMode);
+            if (companionCoil.operatingMode == 0) {
+                companionCoil.loadSideHeatTransfer = 0.0;
+                companionCoil.sourceSideHeatTransfer = 0.0;
+                companionCoil.loadSideMassFlowRate = 0.0;
+                companionCoil.sourceSideMassFlowRate = 0.0;
+                companionCoil.speedLevel = 0.0;
             }
         }
     }
