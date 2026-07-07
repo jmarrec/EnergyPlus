@@ -2946,7 +2946,7 @@ namespace WindowComplexManager {
                 auto const *matGap = dynamic_cast<Material::MaterialComplexWindowGap const *>(mat);
                 ++IGap;
                 gap(IGap) = matGap->Thickness;
-                presure(IGap) = matGap->Pressure;
+                presure(IGap + 1) = matGap->Pressure;
 
                 GapDefMax(IGap) = matGap->deflectedThickness;
 
@@ -3042,7 +3042,7 @@ namespace WindowComplexManager {
             // is assumed that nothing is transmitted through
             asol(nlayer) += state.dataHeatBal->SurfQdotRadIntGainsInPerArea(SurfNum);
 
-            presure(0) = state.dataEnvrn->OutBaroPress;
+            presure = state.dataEnvrn->OutBaroPress;
 
             // Instead of doing temperature guess get solution from previous iteration.  That should be much better than guess
             for (k = 1; k <= 2 * nlayer; ++k) {
@@ -3075,7 +3075,7 @@ namespace WindowComplexManager {
             fclr = 1.0;
             ibc(1) = 0;
             ibc(2) = 0;
-            presure(0) = 101325.0;
+            presure(1) = 101325.0; // presure(1) is exterior environment
             iwd = 0; // Windward wind direction
             isky = 0;
             esky = 1.0;
