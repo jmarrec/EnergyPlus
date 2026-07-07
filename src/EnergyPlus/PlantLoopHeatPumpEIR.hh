@@ -206,7 +206,6 @@ namespace EIRPlantLoopHeatPumps {
         int recurringConcurrentOperationWarningIndex = 0;
 
         // logic flags
-        bool oneTimeInitFlag = true;
         bool envrnInit = true;
 
         // recurrent warning messages index integers
@@ -388,7 +387,6 @@ namespace EIRPlantLoopHeatPumps {
         // New additions for GAHP only
         Constant::eFuel fuelType = Constant::eFuel::Invalid; // Fuel type assignment
         std::string endUseSubcat;
-        DataPlant::FlowMode flowMode = DataPlant::FlowMode::Invalid;
         Real64 desSupplyTemp = 60.0;
         Real64 desTempLift = 11.1;
         OATempCurveVar oaTempCurveInputVar = OATempCurveVar::DryBulb;
@@ -417,9 +415,6 @@ namespace EIRPlantLoopHeatPumps {
         Real64 loadSideVolumeFlowRate = 0.0;
         Real64 fuelRate = 0.0;   // Unit in W
         Real64 fuelEnergy = 0.0; // Unit in J
-        int capModFTErrorIndex = 0;
-        int eirModFTErrorIndex = 0;
-        int eirModFPLRErrorIndex = 0;
         int eirDefrostFTErrorIndex = 0;
         int eirAuxElecFTErrorIndex = 0;
         int eirAuxElecFPLRErrorIndex = 0;
