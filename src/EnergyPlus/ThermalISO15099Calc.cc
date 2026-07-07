@@ -52,7 +52,6 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataGlobals.hh>
-#include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/TARCOGArgs.hh>
 #include <EnergyPlus/TARCOGCommon.hh>
 #include <EnergyPlus/TARCOGGasses90.hh>
