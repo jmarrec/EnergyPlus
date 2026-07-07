@@ -2019,7 +2019,7 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
     state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = Node::SensedNodeFlagValue;
 
     // reset the flag to force re-running oneTimeInit
-    thisHeatingPLHP->oneTimeInitFlag = true;
+    thisHeatingPLHP->oneTimeInitFlagPLHP = true;
     thisHeatingPLHP->SetpointSetToLoopErrDone = false;
     thisHeatingPLHP->onInitLoopEquip(*state, myLocation);
 

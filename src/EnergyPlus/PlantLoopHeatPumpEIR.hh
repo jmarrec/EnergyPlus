@@ -206,6 +206,7 @@ namespace EIRPlantLoopHeatPumps {
         int recurringConcurrentOperationWarningIndex = 0;
 
         // logic flags
+        bool oneTimeInitFlagPLHP = true;
         bool envrnInit = true;
 
         // recurrent warning messages index integers

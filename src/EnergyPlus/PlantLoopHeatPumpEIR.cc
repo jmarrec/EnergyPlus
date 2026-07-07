@@ -2334,7 +2334,7 @@ void EIRPlantLoopHeatPump::oneTimeInit(EnergyPlusData &state)
     // This function does all the one-time initialization
     constexpr std::string_view routineName = "EIRPlantLoopHeatPump : oneTimeInit"; // + __FUNCTION__;
 
-    if (this->oneTimeInitFlag) {
+    if (this->oneTimeInitFlagPLHP) {
         bool errFlag = false;
         std::string suffix;
         if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
@@ -2707,7 +2707,7 @@ void EIRPlantLoopHeatPump::oneTimeInit(EnergyPlusData &state)
         if (errFlag) {
             ShowFatalError(state, std::format("{}: Program terminated due to previous condition(s).", routineName));
         }
-        this->oneTimeInitFlag = false;
+        this->oneTimeInitFlagPLHP = false;
     }
 }
 
@@ -4307,7 +4307,7 @@ void EIRFuelFiredHeatPump::oneTimeInit(EnergyPlusData &state)
     // This function does all the one-time initialization
     constexpr std::string_view routineName = "EIRFuelFiredHeatPump : oneTimeInit"; // + __FUNCTION__;
 
-    if (this->oneTimeInitFlag) {
+    if (this->oneTimeInitFlagPLHP) {
         bool errFlag = false;
 
         // setup output variables
@@ -4493,7 +4493,7 @@ void EIRFuelFiredHeatPump::oneTimeInit(EnergyPlusData &state)
         if (errFlag) {
             ShowFatalError(state, std::format("{}: Program terminated due to previous condition(s).", routineName));
         }
-        this->oneTimeInitFlag = false;
+        this->oneTimeInitFlagPLHP = false;
     }
 }
 
