@@ -2835,6 +2835,10 @@ void HeatPumpAirToWater::oneTimeInit(EnergyPlusData &state)
     this->oneTimeInitFlagAWHP = false;
 }
 
+// TODO: sizeLoadSide() is not virtual, and the only production call site (EIRPlantLoopHeatPump::onInitLoopEquip,
+// via `this->sizeLoadSide(state);`) is compiled in the base class's own scope, so it always statically resolves to
+// EIRPlantLoopHeatPump::sizeLoadSide. This override is therefore unreachable dead code today; the
+// referenceCapacityOneUnit recompute below never runs. Pre-existing issue, unrelated to the Wshadow-field cleanup.
 void HeatPumpAirToWater::sizeLoadSide(EnergyPlusData &state)
 {
     EIRPlantLoopHeatPump::sizeLoadSide(state);
@@ -3351,7 +3355,7 @@ void HeatPumpAirToWater::pairUpCompanionCoils(EnergyPlusData &state)
             std::string potentialCompanionName = Util::makeUPPER(potentialCompanionCoil.name);
             if (potentialCompanionName == targetCompanionName) {
                 if (thisCoilType != potentialCompanionType) {
-                    thisHP.companionHeatPumpCoil = &potentialCompanionCoil;
+                    thisHP.companionAWHPCoil = &potentialCompanionCoil;
                     break;
                 }
             }
@@ -4545,7 +4549,7 @@ Real64 EIRFuelFiredHeatPump::getDynamicMaxCapacity(EnergyPlusData &state)
 
 void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 currentLoad, OperatingModeControlOptionMultipleUnit modeCalcMethod)
 {
-    if (this->companionHeatPumpCoil == nullptr) {
+    if (this->companionAWHPCoil == nullptr) {
         this->operatingMode = 1;
         if (this->OperationModeEMSOverrideOn) {
             auto curveIndex = this->capFuncTempCurveIndices[this->numSpeeds - 1];
@@ -4559,10 +4563,12 @@ void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 cu
             }
         }
     } else {
-        auto LoopNum = this->companionHeatPumpCoil->loadSidePlantLoc.loopNum;
-        auto LoopSideNum = this->companionHeatPumpCoil->loadSidePlantLoc.loopSideNum;
-        auto BranchNum = this->companionHeatPumpCoil->loadSidePlantLoc.branchNum;
-        auto CompNum = this->companionHeatPumpCoil->loadSidePlantLoc.compNum;
+        auto &companionCoil = *this->companionAWHPCoil;
+
+        auto LoopNum = companionCoil.loadSidePlantLoc.loopNum;
+        auto LoopSideNum = companionCoil.loadSidePlantLoc.loopSideNum;
+        auto BranchNum = companionCoil.loadSidePlantLoc.branchNum;
+        auto CompNum = companionCoil.loadSidePlantLoc.compNum;
         auto &this_loop(state.dataPlnt->PlantLoop(LoopNum));
         auto &this_loop_side(this_loop.LoopSide(LoopSideNum));
         auto &this_component = this_loop_side.Branch(BranchNum).Comp(CompNum);
@@ -4570,9 +4576,6 @@ void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 cu
         auto curveIndex = this->capFuncTempCurveIndices[this->numSpeeds - 1];
         auto capacityModifierFuncTemp = Curve::CurveValue(state, curveIndex, this->loadSideOutletTemp, this->sourceSideInletTemp);
         auto availableCapacityOneUnit = this->referenceCapacityOneUnit * capacityModifierFuncTemp;
-
-        // This is safe because we know companionHeatPumpCoil is a HeatPumpAirToWater, so we can static_cast it
-        auto &companionCoil = static_cast<HeatPumpAirToWater &>(*this->companionHeatPumpCoil);
 
         auto companionCapacityModifierFuncTemp =
             Curve::CurveValue(state, curveIndex, companionCoil.loadSideOutletTemp, companionCoil.sourceSideInletTemp);

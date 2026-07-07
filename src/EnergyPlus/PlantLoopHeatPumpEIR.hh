@@ -459,10 +459,13 @@ namespace EIRPlantLoopHeatPumps {
         };
 
         // additional variables
-        // Base has EIRPlantLoopHeatPump *companionHeatPumpCoil = nullptr;
-        // In a our casz we KNOW it's a HeatPumpAirToWater because we assign in pairUpCompanionCoils,
-        // so we can safely static_cast<HeatPumpAirToWater> when needed (in calcOpMode)
-        // HeatPumpAirToWater *companionHeatPumpCoil = nullptr;
+        // Deliberately NOT named companionHeatPumpCoil: the base class's own EIRPlantLoopHeatPump::companionHeatPumpCoil
+        // must stay null for HeatPumpAirToWater objects, because EIRPlantLoopHeatPump::sizeLoadSide() (and other base
+        // sizing methods) branch on it being non-null to size off a companion coil using logic that was written for,
+        // and only checks for, the plain PlantLoopHeatPump:EIR:Heating/Cooling pair (DataPlant::PlantEquipmentType::
+        // HeatPumpEIRHeating/Cooling), not HeatPumpAirToWater. This member is used instead by
+        // HeatPumpAirToWater::pairUpCompanionCoils() and HeatPumpAirToWater::calcOpMode().
+        HeatPumpAirToWater *companionAWHPCoil = nullptr;
 
         std::string availSchedName;            // availability schedule
         Sched::Schedule *availSched = nullptr; // availability schedule

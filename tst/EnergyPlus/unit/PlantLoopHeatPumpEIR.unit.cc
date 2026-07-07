@@ -1384,8 +1384,8 @@ TEST_F(EnergyPlusFixture, calcOpMode_AWHP)
     state->init_state(*state);
     auto thisAWHP = HeatPumpAirToWater();
     auto companionAWHP = HeatPumpAirToWater();
-    thisAWHP.companionHeatPumpCoil = &companionAWHP;
-    companionAWHP.companionHeatPumpCoil = &thisAWHP;
+    thisAWHP.companionAWHPCoil = &companionAWHP;
+    companionAWHP.companionAWHPCoil = &thisAWHP;
     thisAWHP.heatPumpMultiplier = 6;
     companionAWHP.heatPumpMultiplier = 6;
     thisAWHP.referenceCapacityOneUnit = 100;
