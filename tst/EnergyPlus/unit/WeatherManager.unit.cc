@@ -1056,9 +1056,9 @@ TEST_F(EnergyPlusFixture, IRHoriz_InterpretWeatherZeroIRHoriz)
     bool ErrorFound;
     std::string ErrOut;
 
-    for (auto WeatherDataLine : Lines) {
+    for (auto loopWeatherDataLine : Lines) {
         Weather::InterpretWeatherDataLine(*state,
-                                          WeatherDataLine,
+                                          loopWeatherDataLine,
                                           ErrorFound,
                                           WYear,
                                           WMonth,

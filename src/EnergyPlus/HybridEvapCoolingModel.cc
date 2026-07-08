@@ -1045,7 +1045,7 @@ namespace HybridEvapCoolingModel {
         return averagedVal;
     }
 
-    Real64 Model::CalculatePartRuntimeFraction(Real64 MinOA_Msa,
+    Real64 Model::CalculatePartRuntimeFraction(Real64 t_MinOA_Msa,
                                                Real64 Mvent,
                                                Real64 RequestedCoolingLoad,
                                                Real64 RequestedHeatingLoad,
@@ -1079,7 +1079,7 @@ namespace HybridEvapCoolingModel {
         PLHumidRatio = PLDehumidRatio = PLVentRatio = PLSensibleCoolingRatio = PLSensibleHeatingRatio = 0;
 
         if (VentilationRequested && Mvent > 0) {
-            PLVentRatio = MinOA_Msa / Mvent;
+            PLVentRatio = t_MinOA_Msa / Mvent;
         }
         PartRuntimeFraction = PLVentRatio;
 
