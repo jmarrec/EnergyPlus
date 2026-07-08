@@ -2082,22 +2082,16 @@ void InitializePredefinedMonthlyTitles(EnergyPlusData &state)
     ort->namedMonthly(62).title = "MechanicalVentilationLoadsMonthly";
     ort->namedMonthly(63).title = "HeatEmissionsReportMonthly";
 
-    if (numNamedMonthly != NumMonthlyReports) {
-        ShowFatalError(
-            state,
-            std::format("InitializePredefinedMonthlyTitles: Number of Monthly Reports in OutputReportTabular=[{}] does not match number in "
-                        "DataOutputs=[{}].",
-                        numNamedMonthly,
-                        NumMonthlyReports));
-    } else {
-        for (int xcount = 1; xcount <= numNamedMonthly; ++xcount) {
-            if (!Util::SameString(MonthlyNamedReports(xcount), ort->namedMonthly(xcount).title)) {
-                ShowSevereError(state,
-                                "InitializePredefinedMonthlyTitles: Monthly Report Titles in OutputReportTabular do not match titles in DataOutput.");
-                ShowContinueError(state, std::format("first mismatch at ORT [{}] =\"{}\".", numNamedMonthly, ort->namedMonthly(xcount).title));
-                ShowContinueError(state, std::format("same location in DO =\"{}\".", MonthlyNamedReports(xcount)));
-                ShowFatalError(state, "Preceding condition causes termination.");
-            }
+    static_assert(numNamedMonthly == NumMonthlyReports,
+                  "InitializePredefinedMonthlyTitles: Number of Monthly Reports in OutputReportTabular does not match number in DataOutputs.");
+
+    for (int xcount = 1; xcount <= numNamedMonthly; ++xcount) {
+        if (!Util::SameString(MonthlyNamedReports(xcount), ort->namedMonthly(xcount).title)) {
+            ShowSevereError(state,
+                            "InitializePredefinedMonthlyTitles: Monthly Report Titles in OutputReportTabular do not match titles in DataOutput.");
+            ShowContinueError(state, std::format("first mismatch at ORT [{}] =\"{}\".", numNamedMonthly, ort->namedMonthly(xcount).title));
+            ShowContinueError(state, std::format("same location in DO =\"{}\".", MonthlyNamedReports(xcount)));
+            ShowFatalError(state, "Preceding condition causes termination.");
         }
     }
 }
