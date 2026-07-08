@@ -274,7 +274,7 @@ protected:
     bool process_json(nlohmann::json const &epJSON, bool use_assertions = true);
 
     // Opens output files as stringstreams
-    void openOutputFiles(EnergyPlusData &state);
+    void openOutputFiles(EnergyPlusData &t_state);
 
     // A worker function that keeps trailing spaces in multiline raw string literals
     void replace_pipes_with_spaces(std::string &stringLiteral)

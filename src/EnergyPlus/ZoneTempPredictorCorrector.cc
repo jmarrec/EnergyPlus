@@ -2414,7 +2414,7 @@ void InitZoneAirSetPoints(EnergyPlusData &state)
             state.dataZoneEnergyDemand->spaceSysMoistureDemand.allocate(state.dataGlobal->numSpaces);
         }
 
-        int TRefFlag; // Flag for Reference Temperature process in Zones
+        int TRefFlag = 0; // Flag for Reference Temperature process in Zones
         for (int zoneNum = 1; zoneNum <= NumOfZones; ++zoneNum) {
             bool FirstSurfFlag = true;
             for (int spaceNum : state.dataHeatBal->Zone(zoneNum).spaceIndexes) {
