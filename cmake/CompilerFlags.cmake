@@ -101,6 +101,7 @@ elseif(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" O
   # Turn on warnings about constructs/situations that may be non-portable or outside of the standard
   target_compile_options(project_warnings INTERFACE -Wall) # Turn on warnings
   target_compile_options(project_warnings INTERFACE -Wextra) # Turn on warnings
+  target_compile_options(project_warnings INTERFACE -Wsuggest-override) # Flag virtual overrides missing the `override` keyword
   target_compile_options(project_warnings INTERFACE -Wno-unknown-pragmas)
   if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
     target_compile_options(project_warnings INTERFACE -Wno-deprecated-copy)

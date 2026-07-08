@@ -126,7 +126,7 @@ public:
     bool ErrorsFound = false;
 
 protected:
-    virtual void SetUp()
+    void SetUp() override
     {
         EnergyPlusFixture::SetUp(); // Sets up the base fixture first.
 
@@ -516,7 +516,7 @@ protected:
         dxCoil2.PLFFPLR(1) = Sch1;
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
     }
