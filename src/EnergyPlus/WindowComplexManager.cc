@@ -2770,8 +2770,6 @@ namespace WindowComplexManager {
         hrout = 0.0;
         hcout = 0.0;
 
-        Pa = state.dataEnvrn->OutBaroPress;
-
         ThermalModelNum = state.dataConstruction->Construct(ConstrNum).BSDFInput.ThermalModel;
         standard = state.dataMaterial->WindowThermalModel(ThermalModelNum).CalculationStandard;
         ThermalMod = state.dataMaterial->WindowThermalModel(ThermalModelNum).ThermalModel;
@@ -2993,9 +2991,10 @@ namespace WindowComplexManager {
 
         } // End of loop over glass, gap and blind/shade layers in a window construction
 
-        // gap pressures are already set above, but we still need to indoor and outdoor environment pressures here
-        presure(1) = state.dataEnvrn->OutBaroPress;          // outdoor environment
-        presure(nlayer + 1) = state.dataEnvrn->OutBaroPress; // indoor environment
+        // gap pressures are already set above, but we still need to set indoor/outdoor environment pressures here
+        Pa = state.dataEnvrn->OutBaroPress;
+        presure(1) = Pa;          // outdoor environment
+        presure(nlayer + 1) = Pa; // indoor environment
 
         if (CalcCondition == DataBSDFWindow::Condition::Invalid) {
             // now calculate correct areas for multipliers
