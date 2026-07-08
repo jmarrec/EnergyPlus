@@ -2993,6 +2993,10 @@ namespace WindowComplexManager {
 
         } // End of loop over glass, gap and blind/shade layers in a window construction
 
+        // gap pressures are already set above, but we still need to indoor and outdoor environment pressures here
+        presure(1) = state.dataEnvrn->OutBaroPress;          // outdoor environment
+        presure(nlayer + 1) = state.dataEnvrn->OutBaroPress; // indoor environment
+
         if (CalcCondition == DataBSDFWindow::Condition::Invalid) {
             // now calculate correct areas for multipliers
             for (Lay = 1; Lay <= nlayer; ++Lay) {
@@ -3042,8 +3046,6 @@ namespace WindowComplexManager {
             // is assumed that nothing is transmitted through
             asol(nlayer) += state.dataHeatBal->SurfQdotRadIntGainsInPerArea(SurfNum);
 
-            presure = state.dataEnvrn->OutBaroPress;
-
             // Instead of doing temperature guess get solution from previous iteration.  That should be much better than guess
             for (k = 1; k <= 2 * nlayer; ++k) {
                 theta(k) = state.dataSurface->SurfaceWindow(SurfNum).thetaFace[k];
@@ -3075,9 +3077,7 @@ namespace WindowComplexManager {
             fclr = 1.0;
             ibc(1) = 0;
             ibc(2) = 0;
-            presure(1) = 101325.0;          // outdoor environment
-            presure(nlayer + 1) = 101325.0; // indoor environment
-            iwd = 0;                        // Windward wind direction
+            iwd = 0; // Windward wind direction
             isky = 0;
             esky = 1.0;
             height = 1.0;
