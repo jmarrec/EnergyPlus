@@ -8922,7 +8922,7 @@ namespace InternalHeatGains {
         // the subroutine returns the index of matched internal gain device or -1 if no match found.
 
         int DeviceNum;
-        int DeviceIndex;
+        int DeviceIndex = -1;
         if (state.dataHeatBal->spaceIntGainDevices(spaceNum).numberOfDevices == 0) {
             DeviceIndex = -1;
             return DeviceIndex;

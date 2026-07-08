@@ -79,19 +79,19 @@ namespace EnergyPlus {
 //    state->dataInputProcessing->inputProcessor = InputProcessor::factory();
 //}
 
-void EnergyPlusFixture::openOutputFiles(EnergyPlusData &state)
+void EnergyPlusFixture::openOutputFiles(EnergyPlusData &t_state)
 {
-    state.files.eio.open_as_stringstream();
-    state.files.mtr.open_as_stringstream();
-    state.files.eso.open_as_stringstream();
-    state.files.audit.open_as_stringstream();
-    state.files.bnd.open_as_stringstream();
-    state.files.debug.open_as_stringstream();
-    state.files.mtd.open_as_stringstream();
-    state.files.edd.open_as_stringstream();
-    state.files.zsz.open_as_stringstream();
-    state.files.spsz.open_as_stringstream();
-    state.files.ssz.open_as_stringstream();
+    t_state.files.eio.open_as_stringstream();
+    t_state.files.mtr.open_as_stringstream();
+    t_state.files.eso.open_as_stringstream();
+    t_state.files.audit.open_as_stringstream();
+    t_state.files.bnd.open_as_stringstream();
+    t_state.files.debug.open_as_stringstream();
+    t_state.files.mtd.open_as_stringstream();
+    t_state.files.edd.open_as_stringstream();
+    t_state.files.zsz.open_as_stringstream();
+    t_state.files.spsz.open_as_stringstream();
+    t_state.files.ssz.open_as_stringstream();
 }
 
 void EnergyPlusFixture::SetUp()

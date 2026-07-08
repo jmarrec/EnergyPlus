@@ -489,7 +489,7 @@ void AddMonthlyFieldSetInput(
     // SUBROUTINE ARGUMENT DEFINITIONS:
 
     // SUBROUTINE PARAMETER DEFINITIONS:
-    int constexpr sizeIncrement(50);
+    int constexpr localSizeIncrement(50);
     auto &ort = state.dataOutRptTab;
 
     // INTERFACE BLOCK SPECIFICATIONS:
@@ -502,8 +502,8 @@ void AddMonthlyFieldSetInput(
     // na
 
     if (!allocated(ort->MonthlyFieldSetInput)) {
-        ort->MonthlyFieldSetInput.allocate(sizeIncrement);
-        ort->sizeMonthlyFieldSetInput = sizeIncrement;
+        ort->MonthlyFieldSetInput.allocate(localSizeIncrement);
+        ort->sizeMonthlyFieldSetInput = localSizeIncrement;
         ort->MonthlyFieldSetInputCount = 1;
     } else {
         ++ort->MonthlyFieldSetInputCount;
@@ -18031,12 +18031,14 @@ std::string ConvertToEscaped(std::string const &inString, bool isXML) // Input S
             s += "&lt;";
         } else if (c == '>') {
             s += "&gt;";
-        } else if (c == char(176) && !isXML) {
+        } else if (static_cast<unsigned char>(c) == 176 && !isXML) {
             s += "&deg;";
-        } else if (c == char(226) && char(inString[index]) == char(137) && char(inString[index + 1]) == char(164) && !isXML) { // ≤
+        } else if (static_cast<unsigned char>(c) == 226 && static_cast<unsigned char>(inString[index]) == 137 &&
+                   static_cast<unsigned char>(inString[index + 1]) == 164 && !isXML) { // ≤
             s += "&le;";
             index += 2;
-        } else if (c == char(226) && char(inString[index]) == char(137) && char(inString[index + 1]) == char(165) && !isXML) { // ≥
+        } else if (static_cast<unsigned char>(c) == 226 && static_cast<unsigned char>(inString[index]) == 137 &&
+                   static_cast<unsigned char>(inString[index + 1]) == 165 && !isXML) { // ≥
             s += "&ge;";
             index += 2;
         } else if (c == '\xC2') {
