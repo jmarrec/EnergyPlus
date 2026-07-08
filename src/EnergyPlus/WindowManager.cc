@@ -1978,7 +1978,7 @@ namespace Window {
         }
     } // SystemPropertiesAtLambdaAndPhi()
 
-    Real64 solarSpectrumAverage(EnergyPlusData const &state, gsl::span<Real64 const> p)
+    Real64 solarSpectrumAverage(EnergyPlusData const &state, std::span<Real64 const> p)
     {
         Real64 num = 0.0;
         Real64 denom = 0.0;
@@ -1992,7 +1992,7 @@ namespace Window {
         return num / denom; // dangerous, doesn't check for zero denominator
     }
 
-    Real64 visibleSpectrumAverage(EnergyPlusData const &state, gsl::span<Real64 const> p)
+    Real64 visibleSpectrumAverage(EnergyPlusData const &state, std::span<Real64 const> p)
     {
         //       AUTHOR         Adapted by F.Winkelmann from WINDOW 5
         //                      subroutine w4vis
@@ -2022,8 +2022,8 @@ namespace Window {
         return num / denom; // dangerous, doesn't check for zero denominator
     }
 
-    Real64 Interpolate(gsl::span<Real64 const> x, // Array of data points for independent variable
-                       gsl::span<Real64 const> y, // Array of data points for dependent variable
+    Real64 Interpolate(std::span<Real64 const> x, // Array of data points for independent variable
+                       std::span<Real64 const> y, // Array of data points for dependent variable
                        int const npts,            // Number of data pairs
                        Real64 const xin           // Given value of x
     )

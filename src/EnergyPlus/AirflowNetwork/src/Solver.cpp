@@ -13315,7 +13315,7 @@ namespace AirflowNetwork {
         if (Toperative > (Tcomfort + ComfortBand)) {
             if (opening_probability(state, ZoneNum, TimeCloseDuration)) {
                 OpeningProbStatus = ProbabilityCheck::ForceChange;
-                ; // forced to open
+                // forced to open
             } else {
                 OpeningProbStatus = ProbabilityCheck::KeepStatus; // Keep previous status
             }
