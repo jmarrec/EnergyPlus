@@ -4,6 +4,8 @@ SPECIFICATION OF INTERIOR AND EXTERIOR SIDE VALUES OF MATERIAL/CONSTRUCTION RADI
 Rick Strand, University of Illinois at Urbana-Champaign
 
  - First Draft: June 23, 2026
+ - Second Draft: June 30, 2026
+ - Third/Final Version: July 9, 2026
 
 ## Justification for New Feature ##
 
@@ -12,6 +14,8 @@ In EnergyPlus, there is a built-in assumption for opaque building materials that
 ## E-mail and Conference Call Conclusions ##
 
 **EnergyPlus Technicalities Call, June 24, 2026**: Given that this was a new NFP and was posted the day before the Technicalities Call, there were not a lot of comments on this proposal.  One comment from Scott Horowitz was to make sure that the ability to specify both exterior and interior face absorptivities in EMS is addressed.  EMS was not mentioned in the original draft proposal.  To address this concern, a section on EMS has been added below in Approach 1.  The only opinions expressed regarding which approach to take were in support of Approach 1, though admittedly this was a small sample and there was not full attendance for the call.
+
+**EnergyPlus Technicalities Call, July 8, 2026**: Three comments were brought up either during this call or after it was completed via comments on GitHub.  First, there was a question related to how this will be defined for interior walls which blur the line somewhat between inside and outside facing directions.  This will be investigated during implementation to determine the best approach to take.  Second, the proposed IO Ref sections for the new parameters in Approach 1 included some sloppy cut and paste.  The defaults for the new, optional parameters (inside absorptances) should default to the exterior values both in the code and in the documentation.  This is corrected below.  Third, the naming convention proposed does not follow the established pattern in EnergyPlus which uses "inside face" and "outside face".  This is also now corrected below.  With these corrections, there was general consensus that this can now proceed to implementation as proposed below as "Approach 1".
 
 
 ## Overview ##
@@ -58,7 +62,7 @@ Testing will consist of running various input files using the existing model wit
 
 ## Input Output Reference Documentation ##
 
-If Approach 1 is chosen, one would need to add to the current material and no-mass material definitions already existing in the IO Reference.  The names of the current absorptances would have an "exterior" added to the field name and description and additional fields would be 
+If Approach 1 is chosen, one would need to add to the current material and no-mass material definitions already existing in the IO Reference.  The names of the current absorptances would have an "outside" added to the field name and description and additional fields would be named with "inside" in the field name (see below in Input Description)
 
 ## Input Description ##
 
@@ -73,19 +77,20 @@ If Approach 1 is chosen, one would need to add to the current material and no-ma
 
 This would need to change to the following:
 
-1.9.3.1.7 Field: Thermal Absorptance Exterior Face
+1.9.3.1.7 Field: Thermal Absorptance Outside Face
 The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 microns) radiation that is absorbed by the material. This particular field is for the exterior side or face only. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the outside surface heat balances. For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing “black body” conditions). The default value for this field is 0.9.
-1.9.3.1.8 Field: Solar Absorptance Exterior Face
+1.9.3.1.8 Field: Solar Absorptance Outside Face
 The solar absorptance field in the Material input syntax represents the fraction of incident solar radiation that is absorbed by the material. This particular field is for the exterior side or face only. Solar radiation (0.3 to 2.537 μm) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the outside surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
-1.9.3.1.9 Field: Visible Absorptance Exterior Face
+1.9.3.1.9 Field: Visible Absorptance Outside Face
 The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the exterior side or face only. Visible wavelength radiation (0.37 to 0.78 μm weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the outside surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
 
-1.9.3.1.10 Field: Thermal Absorptance Interior Face
-The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 microns) radiation that is absorbed by the material. This particular field is for the interior side or face only. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the inside surface heat balances. For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing “black body” conditions). The default value for this field is 0.9.
-1.9.3.1.11 Field: Solar Absorptance Interior Face
-The solar absorptance field in the Material input syntax represents the fraction of incident solar radiation that is absorbed by the material. This particular field is for the interior side or face only. Solar radiation (0.3 to 2.537 μm) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the inside surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
-1.9.3.1.12 Field: Visible Absorptance Interior Face
-The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the interior side or face only. Visible wavelength radiation (0.37 to 0.78 μm weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the inside surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
+1.9.3.1.10 Field: Thermal Absorptance Inside Face
+The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 microns) radiation that is absorbed by the material. This particular field is for the interior side or face only. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the inside surface heat balances. For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing “black body” conditions). This is an optional field, and the default value for this field is the value enteredd for the Thermal Absorptance Outside Face entered in the field shown above.
+1.9.3.1.11 Field: Solar Absorptance Inside Face
+The solar absorptance field in the Material input syntax represents the fraction of incident solar radiation that is absorbed by the material. This particular field is for the interior side or face only. Solar radiation (0.3 to 2.537 μm) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the inside surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. This is an optional field, and the default value for this field is the value enteredd for the Solar Absorptance Outside Face entered in the field shown above.
+1.9.3.1.12 Field: Visible Absorptance Inside Face
+The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the interior side or face only. Visible wavelength radiation (0.37 to 0.78 μm weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the inside surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. This is an optional field, and the default value for this field is the value enteredd for the Visible Absorptance Outside Face entered in the field shown above.
+
 
 Similar changes would need to be made to the Material:NoMass object.
 
@@ -106,37 +111,37 @@ It can be one of the following: surface temperature, surface received solar radi
 
 To accommodate information at both sides or faces of the material, the above documentation would need to change to:
 
-1.9.11.1.3 Field: Control Signal Exterior Face
+1.9.11.1.3 Field: Control Signal Outside Face
 
-For the exterior face of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is “Scheduled”, then a schedule needs to be specified in “Thermal Absorptance Schedule Name” or “Solar Absorptance Schedule Name”. The schedule value will override the material absorptance value. If the control signal is not “Scheduled”, then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in “Thermal Absorptance Function Name” or “Solar Absorptance Function Name”. If not specified, the control signal will assumed to be surface temperature.
-1.9.11.1.4 Field: Thermal Absorptance Function Name Exterior FaceThe name of a Curve or a Table:Lookup object describing the relationship between the control signal and the thermal absorptance at the exterior side or face.
+For the outside or exterior face of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is “Scheduled”, then a schedule needs to be specified in “Thermal Absorptance Schedule Name” or “Solar Absorptance Schedule Name”. The schedule value will override the material absorptance value. If the control signal is not “Scheduled”, then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in “Thermal Absorptance Function Name” or “Solar Absorptance Function Name”. If not specified, the control signal will assumed to be surface temperature.
+1.9.11.1.4 Field: Thermal Absorptance Function Name Outside FaceThe name of a Curve or a Table:Lookup object describing the relationship between the control signal and the thermal absorptance at the outside or exterior side or face.
 
-1.9.11.1.5 Field: Thermal Absorptance Schedule Name Exterior Face
-The name of a Schedule object that overwrites the material thermal absorptance at the exterior side or face. If neither this field or the previous field are defined, then the thermal absorptance is assumed to be constant.
+1.9.11.1.5 Field: Thermal Absorptance Schedule Name Outside Face
+The name of a Schedule object that overwrites the material thermal absorptance at the outside or exterior side or face. If neither this field or the previous field are defined, then the thermal absorptance is assumed to be constant.
 
-1.9.11.1.6 Field: Solar Absorptance Function Name Exterior Face
-The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance at the exterior side or face.
-1.9.11.1.7 Field: Solar Absorptance Schedule Name Exterior Face
-The name of a Schedule object that overwrites the material solar absorptance at the exterior side or face. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
+1.9.11.1.6 Field: Solar Absorptance Function Name Outside Face
+The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance at the outside or exterior side or face.
+1.9.11.1.7 Field: Solar Absorptance Schedule Name Outside Face
+The name of a Schedule object that overwrites the material solar absorptance at the outside or exterior side or face. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
 
-1.9.11.1.8 Field: Control Signal Interior Face
+1.9.11.1.8 Field: Control Signal Inside Face
 
-For the interior face of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is “Scheduled”, then a schedule needs to be specified in “Thermal Absorptance Schedule Name” or “Solar Absorptance Schedule Name”. The schedule value will override the material absorptance value. If the control signal is not “Scheduled”, then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in “Thermal Absorptance Function Name” or “Solar Absorptance Function Name”. If not specified, the control signal will assumed to be surface temperature.
-1.9.11.1.9 Field: Thermal Absorptance Function Name Interior FaceThe name of a Curve or a Table:Lookup object describing the relationship between the control signal and the thermal absorptance at the interior side or face.
+For the inside or interior face of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is “Scheduled”, then a schedule needs to be specified in “Thermal Absorptance Schedule Name” or “Solar Absorptance Schedule Name”. The schedule value will override the material absorptance value. If the control signal is not “Scheduled”, then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in “Thermal Absorptance Function Name” or “Solar Absorptance Function Name”. If not specified, the control signal will assumed to be surface temperature.
+1.9.11.1.9 Field: Thermal Absorptance Function Name Inside FaceThe name of a Curve or a Table:Lookup object describing the relationship between the control signal and the thermal absorptance at the inside or interior side or face.
 
-1.9.11.1.10 Field: Thermal Absorptance Schedule Name Interior Face
-The name of a Schedule object that overwrites the material thermal absorptance at the interior side or face. If neither this field or the previous field are defined, then the thermal absorptance is assumed to be constant.
+1.9.11.1.10 Field: Thermal Absorptance Schedule Name Inside Face
+The name of a Schedule object that overwrites the material thermal absorptance at the inside or interior side or face. If neither this field or the previous field are defined, then the thermal absorptance is assumed to be constant.
 
-1.9.11.1.11 Field: Solar Absorptance Function Name Interior Face
-The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance at the interior side or face.
-1.9.11.1.12 Field: Solar Absorptance Schedule Name Interior Face
-The name of a Schedule object that overwrites the material solar absorptance at the interior side or face. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
+1.9.11.1.11 Field: Solar Absorptance Function Name Inside Face
+The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance at the inside or interior side or face.
+1.9.11.1.12 Field: Solar Absorptance Schedule Name Inside Face
+The name of a Schedule object that overwrites the material solar absorptance at the inside or interior side or face. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
 
 ### Approach 1, Phase 3: Modification of Text in EMS Application Guide
 
 Currently, there is a section entitled "Material Surface Properties".  This paragraph will be replaced with the following:
 
-Six actuators are available for controlling the surface properties material related to absorptance. Material layers used in a Construction object can have different thermal, solar, and visible absorptances at the exterior and interior side of the layer. The material at the outside of the construction defines the absorptances at the exterior using the exterior values of these parameters for this material. The material at the inside of the construction defines the absorptances at the interior using the interior values of these parameters. The absorptances determine how much radiation in the thermal, solar, and visible spectrum are absorbed at the surface and thus impact the heat balance of the surface. Actuators called “Material” are available with the control types: “Surface Property Solar Absorptance Exterior Face,” “Surface Property Thermal Absorptance Exterior Face,” “Surface Property Visible Absorptance Exterior Face,”“Surface Property Solar Absorptance Interior Face,” “Surface Property Thermal Absorptance Interior Face,” and “Surface Property Visible Absorptance Interior Face,”   These are dimensionless parameters between 0.0 and 1.0.  These actuators are useful for modeling switchable coatings such as thermochromic paints. Note that for a single-layer construction, both the inside and outside properties will be overwritten. Properties at both faces can also be modified using the “MaterialProperty:VariableAbsorptance” input object (see InputOutputReference).
+Six actuators are available for controlling the surface properties material related to absorptance. Material layers used in a Construction object can have different thermal, solar, and visible absorptances at the exterior and interior side of the layer. The material at the outside of the construction defines the absorptances at the exterior using the exterior values of these parameters for this material. The material at the inside of the construction defines the absorptances at the interior using the interior values of these parameters. The absorptances determine how much radiation in the thermal, solar, and visible spectrum are absorbed at the surface and thus impact the heat balance of the surface. Actuators called “Material” are available with the control types: “Surface Property Solar Absorptance Outside Face,” “Surface Property Thermal Absorptance Outside Face,” “Surface Property Visible Absorptance Outside Face,”“Surface Property Solar Absorptance Inside Face,” “Surface Property Thermal Absorptance Inside Face,” and “Surface Property Visible Absorptance Inside Face,”   These are dimensionless parameters between 0.0 and 1.0.  These actuators are useful for modeling switchable coatings such as thermochromic paints. Note that for a single-layer construction, both the inside and outside properties will be overwritten. Properties at both faces can also be modified using the “MaterialProperty:VariableAbsorptance” input object (see InputOutputReference).
 
 ### Approach 2: This would require the addition of a Construction:WithAbsorptances.  The syntax for this object would change from the current:
 
