@@ -51,7 +51,7 @@ set(EP_CXX_PCH_HEADERS
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/src/EnergyPlus/Data/EnergyPlusData.hh>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/ObjexxFCL/src/ObjexxFCL/Array.functions.hh>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/ObjexxFCL/src/ObjexxFCL/Array1D.hh>"
-    "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/nlohmann/json.hpp>"
+    "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/third_party/nlohmann/nlohmann/json.hpp>"
     "$<$<COMPILE_LANGUAGE:CXX>:${PROJECT_SOURCE_DIR}/src/EnergyPlus/Formatters.hh>")
 set(EP_TEST_CXX_PCH_HEADERS
     ${EP_CXX_PCH_HEADERS}

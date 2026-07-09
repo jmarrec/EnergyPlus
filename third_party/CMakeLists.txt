@@ -1,33 +1,17 @@
-#### Create interface for JSON for Modern C++ so we can include it in targets
-# add_library( ModernJSON INTERFACE )
-# target_include_directories( ModernJSON INTERFACE "${PROJECT_SOURCE_DIR}/nlohmann" "${PROJECT_SOURCE_DIR}/doj" )
-
-add_library( nlohmann_json INTERFACE )
-target_compile_definitions(
-        nlohmann_json
-        INTERFACE
-        JSON_USE_IMPLICIT_CONVERSIONS=1
-)
-if(NOT MSVC)  # This is really only needed with newer Clang, but gcc is fine with it
-  target_compile_options(nlohmann_json INTERFACE -Wno-deprecated-declarations)
-endif()
-target_compile_options(nlohmann_json INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,AppleClang>:-Wno-shorten-64-to-32>)
-target_include_directories(
-        nlohmann_json
-        SYSTEM INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-)
-set_source_files_properties(
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/nlohmann/json.hpp
-  TARGET_DIRECTORY nlohmann_json
-  PROPERTIES COMPILE_FLAGS -Wno-deprecated-declarations
-)
+# JSON for Modern C++ (header-only)
+add_subdirectory(nlohmann)
 
 # CLI11 (header-only, used for command-line parsing)
 add_subdirectory(CLI)
 
 # valijson (header-only, used for epJSON schema validation)
 add_subdirectory(valijson)
+
+# fast_float (header-only, used for fast string-to-number parsing)
+add_subdirectory(fast_float)
+
+# milo (header-only, used for fast number-to-string formatting)
+add_subdirectory(milo)
 
 # To avoid modifying every third_party library
 # we link the project_options in here for every library in this
@@ -151,11 +135,11 @@ endif()
 add_subdirectory(ObjexxFCL)
 set_target_properties(objexx PROPERTIES FOLDER ThirdParty/ObjexxFCL)
 
-add_subdirectory(BCVTB)
-set_target_properties(bcvtb PROPERTIES FOLDER ThirdParty/BCVTB)
-
 add_subdirectory(Expat)
 set_target_properties(epexpat PROPERTIES FOLDER ThirdParty/Expat)
+
+add_subdirectory(BCVTB)
+set_target_properties(bcvtb PROPERTIES FOLDER ThirdParty/BCVTB)
 
 add_subdirectory(FMI)
 set_target_properties(epfmiimport PROPERTIES FOLDER ThirdParty/FMI)
