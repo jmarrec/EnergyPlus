@@ -23,6 +23,12 @@ set_source_files_properties(
   PROPERTIES COMPILE_FLAGS -Wno-deprecated-declarations
 )
 
+# CLI11 (header-only, used for command-line parsing)
+add_subdirectory(CLI)
+
+# valijson (header-only, used for epJSON schema validation)
+add_subdirectory(valijson)
+
 # To avoid modifying every third_party library
 # we link the project_options in here for every library in this
 # subdirectory
@@ -100,13 +106,6 @@ mark_as_advanced(INSTALL_GTEST)
 set(RE2_BUILD_TESTING
     OFF
     CACHE BOOL "" FORCE)
-
-# Don't force Penumbra testing just because OpenGL is found, allow the developer to set it to ON or OFF as they want
-#if(OPENGL_FOUND)
-#  set(BUILD_PENUMBRA_TESTING
-#      ${BUILD_TESTING}
-#      CACHE BOOL "" FORCE)
-#endif()
 
 # We don't want to enable the global project_warnings for any of the third party projects
 link_libraries(project_options)
@@ -186,6 +185,18 @@ set(KIVA_COVERAGE OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(kiva)
 set_target_properties(libkiva PROPERTIES FOLDER ThirdParty/Kiva)
+# libkiva exports "${kiva_SOURCE_DIR}/vendor/eigen" as a PUBLIC include, but our vendored Kiva
+# has vendor/eigen removed: point it at the shared copy instead. PUBLIC because libkiva's public
+# headers (e.g. Ground.hpp) include Eigen, so consumers (energypluslib) need it too.
+# Note: ssc/splinter carries its own private, flattened Eigen 3.2.8 copy and does not use this one
+# (upstream ssc removed it in favor of OR-Tools in 2026, see NatLabRockies/ssc#1367).
+# SYSTEM is needed here: the add_subdirectory(third_party SYSTEM) property only makes interface
+# includes system for *consumers*, while this Eigen dir must also be -isystem when libkiva
+# compiles its own sources (old Eigen triggers -Wdeprecated-enum-enum-conversion under C++20).
+target_include_directories(libkiva SYSTEM PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/eigen")
+# EnergyPlus includes kiva headers with a <libkiva/...> prefix (e.g. HeatBalanceKivaManager.hh),
+# which libkiva's own exported include dirs don't serve: export the parent dir for that spelling.
+target_include_directories(libkiva PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/kiva/src")
 
 if(NOT APPLE)
   add_subdirectory(FMUParser)
