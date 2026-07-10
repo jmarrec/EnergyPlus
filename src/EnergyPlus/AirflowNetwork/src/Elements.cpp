@@ -445,7 +445,7 @@ namespace AirflowNetwork {
         return 1;
     }
 
-    int SurfaceCrack::calculate(EnergyPlusData &state,
+    int SurfaceCrack::calculate([[maybe_unused]] EnergyPlusData &state,
                                 Real64 const pdrop,       // Total pressure drop across a component (P1 - P2) [Pa]
                                 const Real64 multiplier,  // Element multiplier
                                 const Real64 control,     // Element control signal
@@ -784,7 +784,7 @@ namespace AirflowNetwork {
     int DetailedFan::calculate(EnergyPlusData &state,
                                bool const LFLAG,                         // Initialization flag. If = true, use laminar relationship
                                Real64 const PDROP,                       // Total pressure drop across a component (P1 - P2) [Pa]
-                               int const i,                              // Linkage number
+                               [[maybe_unused]] int const i,             // Linkage number
                                [[maybe_unused]] const Real64 multiplier, // Element multiplier
                                const Real64 control,                     // Element control signal
                                const AirState &propN,                    // Node 1 properties
@@ -1071,7 +1071,7 @@ namespace AirflowNetwork {
     int Damper::calculate([[maybe_unused]] EnergyPlusData &state,
                           bool const LFLAG,                         // Initialization flag. If = true, use laminar relationship
                           Real64 const PDROP,                       // Total pressure drop across a component (P1 - P2) [Pa]
-                          int const i,                              // Linkage number
+                          [[maybe_unused]] int const i,             // Linkage number
                           [[maybe_unused]] const Real64 multiplier, // Element multiplier
                           [[maybe_unused]] const Real64 control,    // Element control signal
                           const AirState &propN,                    // Node 1 properties
