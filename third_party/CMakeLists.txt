@@ -233,8 +233,11 @@ mark_as_advanced(FORCE libtk205_BUILD_TESTING)
 target_link_libraries(libtk205 PRIVATE project_options project_fp_options)
 list(APPEND all_third_party_targets libtk205)
 
-# unconditionnally turn off zlib
-target_link_libraries(miniziplib PRIVATE turn_off_warnings)
+# unconditionnally turn off zlib and ssc
+set(too_noisy_targets miniziplib ssc splinter shared)
+foreach(target IN LISTS too_noisy_targets)
+  target_link_libraries(${target} PRIVATE turn_off_warnings)
+endforeach()
 
 if(NOT ENABLE_WARNINGS_IN_THIRD_PARTY)
   foreach(target IN LISTS all_third_party_targets)
@@ -244,8 +247,9 @@ if(NOT ENABLE_WARNINGS_IN_THIRD_PARTY)
   endforeach()
 else()
   set(skip_libs
-    # Way too noisy
-    # ssc shared splinter miniziplib epexpat
+    ${too_noisy_targets}
+    # Too noisy as well
+    epexpat re2
     # vendored libraries
     glad glfw
   )
