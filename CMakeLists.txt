@@ -72,7 +72,12 @@ add_library(project_fp_options INTERFACE)
 
 add_library(project_warnings INTERFACE)
 
+# Useful for checking once in a while if a third-party library is generating scary warnings, but too noisy for normal development
+option(ENABLE_WARNINGS_IN_THIRD_PARTY "Enable warnings in third-party libraries" OFF)
+mark_as_advanced(ENABLE_WARNINGS_IN_THIRD_PARTY)
+
 add_library(turn_off_warnings INTERFACE)
+add_library(warnings_as_not_error INTERFACE) # -Wno-error
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)

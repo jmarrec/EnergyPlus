@@ -80,6 +80,7 @@ if(MSVC AND NOT ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")) # Visual C++ (VS 
   target_compile_options(project_options INTERFACE $<$<CONFIG:Debug>:/RTCsu>) # Runtime checks
   target_compile_options(project_fp_options INTERFACE $<$<CONFIG:Debug>:/fp:strict>) # Floating point model
   target_compile_options(turn_off_warnings INTERFACE /W0)
+  target_compile_options(warnings_as_not_error INTERFACE /WX-) # Disable treating warnings as errors
 
   option(FORCE_DEBUG_ARITHM_MSVC "Enable trapping floating point exceptions in non Debug mode" OFF)
   mark_as_advanced(FORCE_DEBUG_ARITHM_MSVC)
@@ -168,6 +169,7 @@ elseif(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" O
   # ADD_CXX_RELEASE_DEFINITIONS("-Ofast") # -Ofast (or -ffast-math) needed to auto-vectorize floating point loops
 
   target_compile_options(turn_off_warnings INTERFACE -w)
+  target_compile_options(warnings_as_not_error INTERFACE -Wno-error) # Disable treating warnings as errors
 
 elseif(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
 
