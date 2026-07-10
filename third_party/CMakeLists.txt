@@ -256,7 +256,11 @@ else()
 
   add_library(skip_common_warnings INTERFACE)
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    target_compile_options(skip_common_warnings INTERFACE -Wno-unused-variable -Wno-unused-parameter -Wno-suggest-override)
+    target_compile_options(skip_common_warnings
+      INTERFACE
+        -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function
+        -Wno-suggest-override
+    )
   endif()
 
   foreach(target IN LISTS all_third_party_targets)
@@ -270,5 +274,4 @@ else()
       target_link_libraries(${target} PRIVATE project_warnings warnings_as_not_error skip_common_warnings)
     endif()
   endforeach()
-
 endif()
