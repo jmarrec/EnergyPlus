@@ -2233,7 +2233,7 @@ namespace AirflowNetwork {
             if (PDROP >= 0.0) {
                 // Flow in positive direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propN.density * area * area);
                     A1 = (propN.viscosity * LamDynCoef * ld) / (2.0 * propN.density * area * hydraulicDiameter);
                     A0 = -PDROP;
@@ -2269,7 +2269,7 @@ namespace AirflowNetwork {
             } else {
                 // Flow in negative direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propM.density * area * area);
                     A1 = (propM.viscosity * LamDynCoef * ld) / (2.0 * propM.density * area * hydraulicDiameter);
                     A0 = PDROP;
@@ -2379,7 +2379,7 @@ namespace AirflowNetwork {
         if (PDROP >= 0.0) {
             // Flow in positive direction.
             // Laminar flow coefficient !=0
-            if (LamFriCoef >= 0.001) {
+            if constexpr (LamFriCoef >= 0.001) {
                 A2 = LamFriCoef / (2.0 * propN.density * area * area);
                 A1 = (propN.viscosity * LamDynCoef * ld) / (2.0 * propN.density * area * hydraulicDiameter);
                 A0 = -PDROP;
@@ -2415,7 +2415,7 @@ namespace AirflowNetwork {
         } else {
             // Flow in negative direction.
             // Laminar flow coefficient !=0
-            if (LamFriCoef >= 0.001) {
+            if constexpr (LamFriCoef >= 0.001) {
                 A2 = LamFriCoef / (2.0 * propM.density * area * area);
                 A1 = (propM.viscosity * LamDynCoef * ld) / (2.0 * propM.density * area * hydraulicDiameter);
                 A0 = PDROP;
@@ -2535,7 +2535,7 @@ namespace AirflowNetwork {
             if (PDROP >= 0.0) {
                 // Flow in positive direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propN.density * area * area);
                     A1 = (propN.viscosity * LamDynCoef * ld) / (2.0 * propN.density * area * hydraulicDiameter);
                     A0 = -PDROP;
@@ -2571,7 +2571,7 @@ namespace AirflowNetwork {
             } else {
                 // Flow in negative direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propM.density * area * area);
                     A1 = (propM.viscosity * LamDynCoef * ld) / (2.0 * propM.density * area * hydraulicDiameter);
                     A0 = PDROP;
@@ -2696,7 +2696,7 @@ namespace AirflowNetwork {
             if (PDROP >= 0.0) {
                 // Flow in positive direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propN.density * area * area);
                     A1 = (propN.viscosity * LamDynCoef * ld) / (2.0 * propN.density * area * hydraulicDiameter);
                     A0 = -PDROP;
@@ -2729,7 +2729,7 @@ namespace AirflowNetwork {
             } else {
                 // Flow in negative direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propM.density * area * area);
                     A1 = (propM.viscosity * LamDynCoef * ld) / (2.0 * propM.density * area * hydraulicDiameter);
                     A0 = PDROP;
@@ -2831,7 +2831,7 @@ namespace AirflowNetwork {
         if (PDROP >= 0.0) {
             // Flow in positive direction.
             // Laminar flow coefficient !=0
-            if (LamFriCoef >= 0.001) {
+            if constexpr (LamFriCoef >= 0.001) {
                 A2 = LamFriCoef / (2.0 * propN.density * area * area);
                 A1 = (propN.viscosity * LamDynCoef * ld) / (2.0 * propN.density * area * hydraulicDiameter);
                 A0 = -PDROP;
@@ -2864,7 +2864,7 @@ namespace AirflowNetwork {
         } else {
             // Flow in negative direction.
             // Laminar flow coefficient !=0
-            if (LamFriCoef >= 0.001) {
+            if constexpr (LamFriCoef >= 0.001) {
                 A2 = LamFriCoef / (2.0 * propM.density * area * area);
                 A1 = (propM.viscosity * LamDynCoef * ld) / (2.0 * propM.density * area * hydraulicDiameter);
                 A0 = PDROP;
@@ -3697,7 +3697,7 @@ namespace AirflowNetwork {
             if (PDROP >= 0.0) {
                 // Flow in positive direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propN.density * area * area);
                     A1 = (propN.viscosity * LamDynCoef * ld) / (2.0 * propN.density * area * Diameter);
                     A0 = -PDROP;
@@ -3730,7 +3730,7 @@ namespace AirflowNetwork {
             } else {
                 // Flow in negative direction.
                 // Laminar flow coefficient !=0
-                if (LamFriCoef >= 0.001) {
+                if constexpr (LamFriCoef >= 0.001) {
                     A2 = LamFriCoef / (2.0 * propM.density * area * area);
                     A1 = (propM.viscosity * LamDynCoef * ld) / (2.0 * propM.density * area * Diameter);
                     A0 = PDROP;

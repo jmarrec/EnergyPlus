@@ -54,6 +54,9 @@ set_target_properties(ssc PROPERTIES FOLDER ThirdParty/ssc)
 set_target_properties(shared PROPERTIES FOLDER ThirdParty/ssc)
 set_target_properties(splinter PROPERTIES FOLDER ThirdParty/ssc)
 target_compile_features(ssc PRIVATE cxx_std_11)
+if(MSVC)
+  target_compile_options(shared PRIVATE /wd4244)
+endif()
 list(APPEND all_third_party_targets ssc shared splinter)
 
 # Make sure C++20 flag is kept at 20 after SSC

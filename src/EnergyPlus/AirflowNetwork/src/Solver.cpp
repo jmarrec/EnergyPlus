@@ -13212,7 +13212,7 @@ namespace AirflowNetwork {
         Real64 viscosity{AirflowNetwork::AIRDYNAMICVISCOSITY_CONSTEXPR(20)};
         velocity = flowrate / A;
 
-        if (LamFriCoef >= 0.001) {
+        if constexpr (LamFriCoef >= 0.001) {
             A2 = LamFriCoef / (2.0 * m_state.dataEnvrn->StdRhoAir * A * A);
             A1 = (viscosity * LamDynCoef * ld) / (2.0 * m_state.dataEnvrn->StdRhoAir * A * hydraulicDiameter);
             A0 = -DeltaP;
