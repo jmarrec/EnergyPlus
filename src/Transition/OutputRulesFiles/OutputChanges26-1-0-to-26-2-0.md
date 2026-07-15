@@ -39,6 +39,3 @@ Refrigeration Zone Air Chiller Coil Frost Accumulation Mass
 Refrigeration Zone Air Chiller Coil Defrost Electricity Rate
 
 Refrigeration Zone Air Chiller Coil Defrost Electricity Energy
-
-
-
