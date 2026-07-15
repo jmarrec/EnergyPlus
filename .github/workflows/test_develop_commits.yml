@@ -29,6 +29,8 @@ jobs:
 #          nproc: 3
 #          pretty: "Standard Build on Mac x64"
 #          alternate: false
+#          build-type: release
+#          run-tests: true
         # - os: macos-14
         #   macos_dev_target: 14.0
         #   arch: arm64
@@ -38,6 +40,7 @@ jobs:
         #   pretty: "Standard Build on Mac arm64"
         #   alternate: false
         #   build-type: release
+        #   run-tests: true
 #        - os: ubuntu-24.04
 #          arch: x86_64
 #          python-arch: x64
@@ -45,6 +48,8 @@ jobs:
 #          nproc: 4
 #          pretty: "Standard Build on Ubuntu 24.04"
 #          alternate: false
+#          build-type: release
+#          run-tests: true
         - os: windows-2022
           arch: x86_64
           python-arch: x64
@@ -53,6 +58,7 @@ jobs:
           pretty: "Standard Build on Windows VS 2022"
           alternate: false
           build-type: debug
+          run-tests: false
         # - os: ubuntu-24.04
         #   arch: x86_64
         #   python-arch: x64
@@ -61,6 +67,7 @@ jobs:
         #   pretty: "Alternate Build on Ubuntu 24.04"
         #   alternate: true
         #   build-type: release
+        #   run-tests: true
 
     steps:
 
@@ -133,8 +140,7 @@ jobs:
         echo "::remove-matcher owner=gcc-problem-matcher::"
 
     - name: Test
-      # Not running test on alternate build yet, I need to test things
-      if: matrix.alternate == false
+      if: matrix.run-tests == true
       working-directory: ./build
       run: |
         begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
