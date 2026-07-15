@@ -114,7 +114,7 @@ jobs:
       working-directory: ./build/
       run: >
         cmake
-        -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_BUILD_TYPE="${{ matrix.build-type }}"
         -DLINK_WITH_PYTHON=OFF
         -DUSE_PSYCHROMETRICS_CACHING=OFF
         -DUSE_GLYCOL_CACHING=OFF
@@ -129,7 +129,7 @@ jobs:
       working-directory: ./build
       run: |
         echo "::add-matcher::./.github/workflows/cpp-problem-matcher.json"
-        cmake --build . -j ${{ matrix.nproc }} --config Release
+        cmake --build . -j ${{ matrix.nproc }} --config "${{ matrix.build-type }}"
         echo "::remove-matcher owner=gcc-problem-matcher::"
 
     - name: Test
@@ -146,14 +146,14 @@ jobs:
         Green='\033[0;32m'
 
         begin_group "Running CTests"
-        if ctest -C Release -j ${{ matrix.nproc }}; then
+        if ctest -C "${{ matrix.build-type }}" -j ${{ matrix.nproc }}; then
           echo "::endgroup::"
           echo -e "✅ ${Green}All tests passed${Color_Off}"
         else
           echo "::endgroup::"
           echo -e "❌ ${Red}Some Tests Failed${Color_Off}"
           begin_group "Re-running failed tests verbosely..."
-          ctest -C Release --rerun-failed -VV || true
+          ctest -C "${{ matrix.build-type }}" --rerun-failed -VV || true
           echo "::endgroup::"
           exit 1
         fi;
