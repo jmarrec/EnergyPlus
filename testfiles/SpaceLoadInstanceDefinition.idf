@@ -55,6 +55,12 @@
 !
 ! - OtherEquipment
 !    - OtherEquipment: a single OtherEquipment:Definition and OtherEquipment:Instance for Space1-1BR, 352 W
+!
+! - Lights:
+!    - A single Lights:Definition for a 60W incadescent bulb.
+!    - 2 Lights:Instance with actual bulb counts as Multiplier
+!       - 1 assigned a SpaceList "1BR SpaceList": 6 in 1BR apartments
+!       - 1 assigned directed to the Space "Space2-2BR": 11 bulbs
 
   Version,26.2;
 
@@ -742,6 +748,11 @@
     Space2-2BR,              !- Space Name
     Space3-1BR;              !- Space Name
 
+  SpaceList,
+    1BR SpaceList,           !- Name
+    Space1-1BR,              !- Space Name
+    Space3-1BR;              !- Space Name
+
   ElectricEquipment:Definition,
     Apartment Elec Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
@@ -1051,6 +1062,72 @@
     For: Weekends WinterDesignDay Holiday,  !- Field
     Until: 24:00,            !- Field
     0.2;                     !- Field
+
+  Lights:Definition,
+    Lights 60W Incandescent Definition,  !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    60.0,                    !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.21,                    !- Return Air Fraction
+    0.59,                    !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    No,                      !- Return Air Fraction Calculated from Plenum Temperature
+    ,                        !- Return Air Fraction Function of Plenum Temperature Coefficient 1
+    ;                        !- Return Air Fraction Function of Plenum Temperature Coefficient 2 {1/K}
+
+  Lights:Instance,
+    1BR Lights,              !- Name
+    Lights 60W Incandescent Definition,  !- Lights Definition Name
+    1BR SpaceList,           !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    0.7,                     !- Fraction Replaceable
+    6.0,                     !- Multiplier
+    Lighting,                !- End-Use Subcategory
+    ,                        !- Return Air Heat Gain Node Name
+    ;                        !- Exhaust Air Heat Gain Node Name
+
+  Lights:Instance,
+    Space2-2BR Lights,       !- Name
+    Lights 60W Incandescent Definition,  !- Lights Definition Name
+    Space2-2BR,              !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                !- Schedule Name
+    0.7,                     !- Fraction Replaceable
+    11.0,                    !- Multiplier
+    Lighting,                !- End-Use Subcategory
+    ,                        !- Return Air Heat Gain Node Name
+    ;                        !- Exhaust Air Heat Gain Node Name
+
+  Schedule:Compact,
+    LIGHTS-1,                !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field
+    For: WeekDays SummerDesignDay CustomDay1 CustomDay2,  !- Field
+    Until: 8:00,             !- Field
+    0.05,                    !- Field
+    Until: 9:00,             !- Field
+    0.9,                     !- Field
+    Until: 10:00,            !- Field
+    0.95,                    !- Field
+    Until: 11:00,            !- Field
+    1.00,                    !- Field
+    Until: 12:00,            !- Field
+    0.95,                    !- Field
+    Until: 13:00,            !- Field
+    0.8,                     !- Field
+    Until: 14:00,            !- Field
+    0.9,                     !- Field
+    Until: 18:00,            !- Field
+    1.00,                    !- Field
+    Until: 19:00,            !- Field
+    0.60,                    !- Field
+    Until: 21:00,            !- Field
+    0.40,                    !- Field
+    Until: 24:00,            !- Field
+    0.05,                    !- Field
+    For: Weekends WinterDesignDay Holiday,  !- Field
+    Until: 24:00,            !- Field
+    0.05;                    !- Field
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report Name
