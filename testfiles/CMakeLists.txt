@@ -610,6 +610,7 @@ add_simulation_test(IDF_FILE SolarShadingTest_ExternalFraction.idf EPW_FILE USA_
 add_simulation_test(IDF_FILE SolarShadingTest_DisableSelfShading.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
 add_simulation_test(IDF_FILE SolarShadingTest_DisableSelfShadingGroup.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
 add_simulation_test(IDF_FILE SolarShadingTest_ImportedShading.idf EPW_FILE USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw)
+add_simulation_test(IDF_FILE SpaceLoadInstanceDefinition.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE SpectralAngularOpticalProperties_TableData.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE StackedZonesWithInterzoneIRTLayers.idf EPW_FILE USA_IL_University.of.Illinois-Willard.AP.725315_TMY3.epw)
 add_simulation_test(IDF_FILE Standard621SimplifiedProcedure_PIUterminal.idf EPW_FILE USA_IL_Chicago-OHare_TMY2.epw)
