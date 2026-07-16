@@ -1,7 +1,7 @@
 name: Develop Branch Testing
 
 on:
-  pull_request:
+  push:
     branches: [ develop ]  # run this on all commits to the develop branch
 
 defaults:
@@ -31,16 +31,16 @@ jobs:
 #          alternate: false
 #          build-type: release
 #          run-tests: true
-        # - os: macos-14
-        #   macos_dev_target: 14.0
-        #   arch: arm64
-        #   python-arch: arm64
-        #   generator: "Unix Makefiles"
-        #   nproc: 3
-        #   pretty: "Standard Build on Mac arm64"
-        #   alternate: false
-        #   build-type: release
-        #   run-tests: true
+        - os: macos-14
+          macos_dev_target: 14.0
+          arch: arm64
+          python-arch: arm64
+          generator: "Unix Makefiles"
+          nproc: 3
+          pretty: "Standard Build on Mac arm64"
+          alternate: false
+          build-type: release
+          run-tests: true
 #        - os: ubuntu-24.04
 #          arch: x86_64
 #          python-arch: x64
@@ -59,15 +59,15 @@ jobs:
           alternate: false
           build-type: debug
           run-tests: false
-        # - os: ubuntu-24.04
-        #   arch: x86_64
-        #   python-arch: x64
-        #   generator: "Unix Makefiles"
-        #   nproc: 4
-        #   pretty: "Alternate Build on Ubuntu 24.04"
-        #   alternate: true
-        #   build-type: release
-        #   run-tests: true
+        - os: ubuntu-24.04
+          arch: x86_64
+          python-arch: x64
+          generator: "Unix Makefiles"
+          nproc: 4
+          pretty: "Alternate Build on Ubuntu 24.04"
+          alternate: true
+          build-type: release
+          run-tests: true
 
     steps:
 
