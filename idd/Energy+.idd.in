@@ -4885,7 +4885,7 @@ Schedule:Week:Rule,
        \memo Rules are evaluated in ascending Rule Priority Order; the first matching rule wins.
        \memo A rule matches a day if: (a) the day falls within the specified date ranges,
        \memo AND (b) the corresponding Apply <DayOfWeek> field is Yes.
-       \extensible:4 - repeat last two fields (Start Month, Start Day, End Month, End Day)
+       \extensible:4 - repeat last four fields (Start Month, Start Day, End Month, End Day)
        \min-fields 11
   A1,  \field Name
        \type alpha
