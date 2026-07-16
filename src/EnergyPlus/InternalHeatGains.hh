@@ -50,6 +50,7 @@
 
 // C++ Headers
 #include <span>
+#include <vector>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
@@ -91,12 +92,29 @@ namespace InternalHeatGains {
         int numOfSpaces = 0;
         int spaceStartPtr = 0;
         bool spaceListActive = false;
+        bool isInstance = false;     // True if this is an <objectType>:Instance object (references an <objectType>:Definition)
         EPVector<int> spaceNums;     // Indexes to spaces associated with this input object
         EPVector<std::string> names; // Names for each instance created from this input object
     };
 
+    struct ZoneEquipDefinitionData // Electric, Gas, HotWater, Steam, Other Equipment Definitions
+    {
+        // Members
+        std::string Name;                                                 // Definition object name
+        DesignLevelMethod designLevelMethod = DesignLevelMethod::Invalid; // Method used to determine design level
+        Real64 levelValue = 0.0;      // design level for internal gain definition (read based on designLevelMethod, could be W, W/m2, etc.)
+        bool levelIsBlank = false;    // True if design level field is blank in input
+        std::string levelField;       // Name of the field used to determine the design level (used for error messages)
+        Real64 FractionLatent = 0.0;  // Percentage (fraction 0.0-1.0) of sensible heat gain that is latent
+        Real64 FractionRadiant = 0.0; // Percentage (fraction 0.0-1.0) of sensible heat gain that is radiant
+        Real64 FractionLost = 0.0;    // Percentage (fraction 0.0-1.0) of sensible heat gain that is lost
+        Real64 CO2RateFactor = 0.0;   // CO2 rate factor [m3/s/W], only for Gas and OtherEquipment
+    };
+
     void ManageInternalHeatGains(EnergyPlusData &state,
                                  ObjexxFCL::Optional_bool_const InitOnly = _); // when true, just calls the get input, if appropriate and returns.
+
+    std::vector<ZoneEquipDefinitionData> GetSpaceLoadDefinition(EnergyPlusData &state, const std::string &objectType);
 
     void GetInternalHeatGainsInput(EnergyPlusData &state);
 
@@ -106,7 +124,8 @@ namespace InternalHeatGains {
                                 int &numInputObjects,
                                 int &numGainInstances,
                                 bool &errors,
-                                const bool zoneListNotAllowed = false);
+                                const bool zoneListNotAllowed = false,
+                                const std::string &instanceObjectType = "");
 
     Real64 setDesignLevel(EnergyPlusData &state,
                           bool &ErrorsFound,
