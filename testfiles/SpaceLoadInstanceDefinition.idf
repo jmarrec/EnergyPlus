@@ -49,6 +49,9 @@
 !
 ! - HotWaterEquipment:
 !   - Dishwashing: A single HotWaterEquipment:Definition, 300W. A single HotWaterEquipment:Instance, which applies to the "All Zones" ZoneList
+!
+! - SteamEquipment:
+!    - Steam: a single Steam:Definition and Steam:Instance for Space2-2BR, 105 W
 
   Version,26.2;
 
@@ -983,6 +986,24 @@
     1.0,                     !- Multiplier
     Dishwashing;             !- End-Use Subcategory
 
+  SteamEquipment:Definition,
+    Steam Equip Definition,  !- Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    105.0,                   !- Design Level {W}
+    ,                        !- Power per Floor Area {W/m2}
+    ,                        !- Power per Person {W/person}
+    0.5,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
+
+  SteamEquipment:Instance,
+    Steam Equip,             !- Name
+    Steam Equip Definition,  !- Steam Equipment Definition Name
+    Space2-2BR,              !- Zone or ZoneList or Space or SpaceList Name
+    EQUIP-1,                 !- Schedule Name
+    1.0,                     !- Multiplier
+    Steam;                   !- End-Use Subcategory
+
   Schedule:Compact,
     EQUIP-1,                 !- Name
     Fractional,              !- Schedule Type Limits Name
@@ -1013,7 +1034,7 @@
 
   Schedule:Constant,Always On Discrete,OnOff,1.0;
 
-  Schedule:Constant,Always Off Discrete,OnOff,0.0;
+  Schedule:Constant,Always Off Discrete,OnOff;
 
   Schedule:Constant,Always On Continuous,Fractional,1.0;
 
