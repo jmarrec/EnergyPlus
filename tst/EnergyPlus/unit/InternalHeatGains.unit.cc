@@ -6346,3 +6346,494 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance_ThermalComfort)
     ASSERT_NE(people.airVelocitySched, nullptr);
     EXPECT_EQ(people.airVelocitySched->Name, "AIRVELOCITYSCHEDULE");
 }
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_ITEAirCooledInstance)
+{
+    // Two instances sharing one definition; verify name, zone, power, fractions, end-use subcategories.
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+        "Zone,Zone2;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "Schedule:Constant,OpSched1,SchType1,1.0;",
+        "Schedule:Constant,OpSched2,SchType1,0.5;",
+        "Schedule:Constant,CPUSched,SchType1,1.0;",
+
+        "ElectricEquipment:ITE:AirCooled:Instance,",
+        "  Zone1 ITE,               !- Name",
+        "  ServerDef,               !- ElectricEquipment ITE AirCooled Definition Name",
+        "  Zone1,                   !- Zone or Space Name",
+        "  10,                      !- Multiplier",
+        "  OpSched1,                !- Design Power Input Schedule Name",
+        "  CPUSched,                !- CPU Loading Schedule Name",
+        "  ,                        !- Air Inlet Room Air Model Node Name",
+        "  ,                        !- Air Outlet Room Air Model Node Name",
+        "  Zone1 Supply Node,       !- Supply Air Node Name",
+        "  CPU-Cat,                 !- CPU End-Use Subcategory",
+        "  Fan-Cat,                 !- Fan End-Use Subcategory",
+        "  UPS-Cat;                 !- Electric Power Supply End-Use Subcategory",
+
+        "ElectricEquipment:ITE:AirCooled:Instance,",
+        "  Zone2 ITE,               !- Name",
+        "  SERVERDEF,               !- ElectricEquipment ITE AirCooled Definition Name",
+        "  Zone2,                   !- Zone or Space Name",
+        "  5,                       !- Multiplier",
+        "  OpSched2,                !- Design Power Input Schedule Name",
+        "  CPUSched,                !- CPU Loading Schedule Name",
+        "  ,                        !- Air Inlet Room Air Model Node Name",
+        "  ,                        !- Air Outlet Room Air Model Node Name",
+        "  Zone2 Supply Node,       !- Supply Air Node Name",
+        "  ,                        !- CPU End-Use Subcategory",
+        "  ,                        !- Fan End-Use Subcategory",
+        "  ;                        !- Electric Power Supply End-Use Subcategory",
+
+        "ElectricEquipment:ITE:AirCooled:Definition,",
+        "  ServerDef,               !- Name",
+        "  FlowFromSystem,          !- Air Flow Calculation Method",
+        "  EquipmentLevel,          !- Design Power Input Calculation Method",
+        "  1000,                    !- Watts per Unit {W}",
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  CPU Power fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name",
+        "  0.3,                     !- Design Fan Power Input Fraction",
+        "  0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}",
+        "  AirFlow fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name",
+        "  FanPower fFlow,          !- Fan Power Input Function of Flow Curve Name",
+        "  20.0,                    !- Design Entering Air Temperature {C}",
+        "  A3,                      !- Environmental Class",
+        "  AdjustedSupply,          !- Air Inlet Connection Type",
+        "  0.1,                     !- Design Recirculation Fraction",
+        "  ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name",
+        "  0.9,                     !- Design Electric Power Supply Efficiency",
+        "  UPS Effic fPLR,          !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name",
+        "  1.0;                     !- Fraction of Electric Power Supply Losses to Zone",
+
+        "Curve:Biquadratic,",
+        "  CPU Power fLoadTemp,      !- Name",
+        "  -1.0,                    !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.06667,                 !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "  AirFlow fLoadTemp,        !- Name",
+        "  -1.4,                    !- Coefficient1 Constant",
+        "  0.9,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.1,                     !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "  FanPower fFlow,           !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x",
+        "  99.0;                    !- Maximum Value of x",
+
+        "Curve:Quadratic,",
+        "  UPS Effic fPLR,           !- Name",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x",
+        "  99.0;                    !- Maximum Value of x",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+    EXPECT_FALSE(has_err_output());
+
+    ASSERT_EQ(state->dataHeatBal->TotITEquip, 2);
+
+    for (int i = 1; i <= state->dataHeatBal->TotITEquip; ++i) {
+        const auto &ite = state->dataHeatBal->ZoneITEq(i);
+        if (ite.Name == "ZONE1 ITE") {
+            EXPECT_EQ(state->dataHeatBal->Zone(ite.ZonePtr).Name, "ZONE1");
+            EXPECT_EQ(ite.operSched->Name, "OPSCHED1");
+            EXPECT_EQ(ite.EndUseSubcategoryCPU, "CPU-Cat");
+            EXPECT_EQ(ite.EndUseSubcategoryFan, "Fan-Cat");
+            EXPECT_EQ(ite.EndUseSubcategoryUPS, "UPS-Cat");
+            // 1000 W/unit * 10 units = 10000 W
+            EXPECT_NEAR(ite.DesignTotalPower, 10000.0, 1e-6);
+        } else if (ite.Name == "ZONE2 ITE") {
+            EXPECT_EQ(state->dataHeatBal->Zone(ite.ZonePtr).Name, "ZONE2");
+            EXPECT_EQ(ite.operSched->Name, "OPSCHED2");
+            // 1000 W/unit * 5 units = 5000 W
+            EXPECT_NEAR(ite.DesignTotalPower, 5000.0, 1e-6);
+        } else {
+            FAIL() << "Unexpected ITE name: " << ite.Name;
+        }
+        // Both share the same definition
+        EXPECT_NEAR(ite.DesignFanPowerFrac, 0.3, 1e-6);
+        EXPECT_NEAR(ite.DesignRecircFrac, 0.1, 1e-6);
+        EXPECT_NEAR(ite.DesignUPSEfficiency, 0.9, 1e-6);
+        EXPECT_NEAR(ite.UPSLossToZoneFrac, 1.0, 1e-6);
+        EXPECT_NEAR(ite.DesignTAirIn, 20.0, 1e-6);
+        // DesignAirVolFlowRate = DesignFanAirFlowPerPower * DesignTotalPower
+        EXPECT_NEAR(ite.DesignAirVolFlowRate, 0.0001 * ite.DesignTotalPower, 1e-6);
+    }
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_ITEAirCooledInstance_InvalidDefinition)
+{
+    // Typo in definition name → Severe error + Fatal
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ElectricEquipment:ITE:AirCooled:Instance,",
+        "  Zone1 ITE,               !- Name",
+        "  ServerDef WITH A TYPO,   !- ElectricEquipment ITE AirCooled Definition Name",
+        "  Zone1,                   !- Zone or Space Name",
+        "  10,                      !- Multiplier",
+        "  ,                        !- Design Power Input Schedule Name",
+        "  ,                        !- CPU Loading Schedule Name",
+        "  ,                        !- Air Inlet Room Air Model Node Name",
+        "  ,                        !- Air Outlet Room Air Model Node Name",
+        "  ,                        !- Supply Air Node Name",
+        "  ,                        !- CPU End-Use Subcategory",
+        "  ,                        !- Fan End-Use Subcategory",
+        "  ;                        !- Electric Power Supply End-Use Subcategory",
+
+        "ElectricEquipment:ITE:AirCooled:Definition,",
+        "  ServerDef,               !- Name",
+        "  FlowFromSystem,          !- Air Flow Calculation Method",
+        "  EquipmentLevel,          !- Design Power Input Calculation Method",
+        "  1000,                    !- Watts per Unit {W}",
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  CPU Power fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name",
+        "  0.3,                     !- Design Fan Power Input Fraction",
+        "  0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}",
+        "  AirFlow fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name",
+        "  FanPower fFlow,          !- Fan Power Input Function of Flow Curve Name",
+        "  20.0,                    !- Design Entering Air Temperature {C}",
+        "  A3,                      !- Environmental Class",
+        "  AdjustedSupply,          !- Air Inlet Connection Type",
+        "  0.1,                     !- Design Recirculation Fraction",
+        "  ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name",
+        "  0.9,                     !- Design Electric Power Supply Efficiency",
+        "  ,                        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name",
+        "  1.0;                     !- Fraction of Electric Power Supply Losses to Zone",
+
+        "Curve:Biquadratic,",
+        "  CPU Power fLoadTemp,      !- Name",
+        "  -1.0,                    !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.06667,                 !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "  AirFlow fLoadTemp,        !- Name",
+        "  -1.4,                    !- Coefficient1 Constant",
+        "  0.9,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.1,                     !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "  FanPower fFlow,           !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x",
+        "  99.0;                    !- Maximum Value of x",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: ElectricEquipment:ITE:AirCooled:Instance = ZONE1 ITE",
+        "   **   ~~~   ** ElectricEquipment ITE AirCooled Definition Name = SERVERDEF WITH A TYPO, item not found.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_ITEAirCooledInstance_WattsPerArea)
+{
+    // Watts/Area method: DesignTotalPower = watts_per_floor_area * zone floor area
+    std::string const idf_objects = delimited_string({
+        "Zone,",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  3.0,                     !- Ceiling Height {m}",
+        "  300.0,                   !- Volume {m3}",
+        "  50.0;                    !- Floor Area {m2}",
+
+        "ElectricEquipment:ITE:AirCooled:Instance,",
+        "  Zone1 ITE,               !- Name",
+        "  ServerDefArea,           !- ElectricEquipment ITE AirCooled Definition Name",
+        "  Zone1,                   !- Zone or Space Name",
+        "  1,                       !- Multiplier",
+        "  ,                        !- Design Power Input Schedule Name",
+        "  ,                        !- CPU Loading Schedule Name",
+        "  ,                        !- Air Inlet Room Air Model Node Name",
+        "  ,                        !- Air Outlet Room Air Model Node Name",
+        "  Zone1 Supply Node,       !- Supply Air Node Name",
+        "  ,                        !- CPU End-Use Subcategory",
+        "  ,                        !- Fan End-Use Subcategory",
+        "  ;                        !- Electric Power Supply End-Use Subcategory",
+
+        "ElectricEquipment:ITE:AirCooled:Definition,",
+        "  ServerDefArea,           !- Name",
+        "  FlowFromSystem,          !- Air Flow Calculation Method",
+        "  Watts/Area,              !- Design Power Input Calculation Method",
+        "  ,                        !- Watts per Unit {W}",
+        "  200.0,                   !- Watts per Floor Area {W/m2}",
+        "  CPU Power fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name",
+        "  0.3,                     !- Design Fan Power Input Fraction",
+        "  0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}",
+        "  AirFlow fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name",
+        "  FanPower fFlow,          !- Fan Power Input Function of Flow Curve Name",
+        "  20.0,                    !- Design Entering Air Temperature {C}",
+        "  A3,                      !- Environmental Class",
+        "  AdjustedSupply,          !- Air Inlet Connection Type",
+        "  0.0,                     !- Design Recirculation Fraction",
+        "  ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name",
+        "  1.0,                     !- Design Electric Power Supply Efficiency",
+        "  ,                        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name",
+        "  1.0;                     !- Fraction of Electric Power Supply Losses to Zone",
+
+        "Curve:Biquadratic,",
+        "  CPU Power fLoadTemp,      !- Name",
+        "  -1.0,                    !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.06667,                 !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "  AirFlow fLoadTemp,        !- Name",
+        "  -1.4,                    !- Coefficient1 Constant",
+        "  0.9,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.1,                     !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "  FanPower fFlow,           !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x",
+        "  99.0;                    !- Maximum Value of x",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataHeatBal->Zone(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+    state->dataHeatBal->space(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+    EXPECT_FALSE(has_err_output());
+
+    ASSERT_EQ(state->dataHeatBal->TotITEquip, 1);
+    const auto &ite = state->dataHeatBal->ZoneITEq(1);
+    EXPECT_EQ(ite.Name, "ZONE1 ITE");
+    // 200 W/m2 * 50 m2 = 10000 W
+    EXPECT_NEAR(ite.DesignTotalPower, 200.0 * 50.0, 1e-6);
+    EXPECT_NEAR(ite.DesignFanPowerFrac, 0.3, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_ITEAirCooledInstance_MissingLevelField)
+{
+    // EquipmentLevel specified but watts_per_unit field is blank → two warnings, DesignTotalPower == 0
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ElectricEquipment:ITE:AirCooled:Instance,",
+        "  Zone1 ITE,               !- Name",
+        "  ServerDef,               !- ElectricEquipment ITE AirCooled Definition Name",
+        "  Zone1,                   !- Zone or Space Name",
+        "  10,                      !- Multiplier",
+        "  ,                        !- Design Power Input Schedule Name",
+        "  ,                        !- CPU Loading Schedule Name",
+        "  ,                        !- Air Inlet Room Air Model Node Name",
+        "  ,                        !- Air Outlet Room Air Model Node Name",
+        "  Zone1 Supply Node,       !- Supply Air Node Name",
+        "  ,                        !- CPU End-Use Subcategory",
+        "  ,                        !- Fan End-Use Subcategory",
+        "  ;                        !- Electric Power Supply End-Use Subcategory",
+
+        "ElectricEquipment:ITE:AirCooled:Definition,",
+        "  ServerDef,               !- Name",
+        "  FlowFromSystem,          !- Air Flow Calculation Method",
+        "  EquipmentLevel,          !- Design Power Input Calculation Method",
+        "  ,                        !- Watts per Unit {W}", // intentionally blank to trigger warning
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  CPU Power fLoadTemp,     !- CPU Power Input Function of Loading and Air Temperature Curve Name",
+        "  0.3,                     !- Design Fan Power Input Fraction",
+        "  0.0001,                  !- Design Fan Air Flow Rate per Power Input {m3/s-W}",
+        "  AirFlow fLoadTemp,       !- Air Flow Function of Loading and Air Temperature Curve Name",
+        "  FanPower fFlow,          !- Fan Power Input Function of Flow Curve Name",
+        "  20.0,                    !- Design Entering Air Temperature {C}",
+        "  A3,                      !- Environmental Class",
+        "  AdjustedSupply,          !- Air Inlet Connection Type",
+        "  0.0,                     !- Design Recirculation Fraction",
+        "  ,                        !- Recirculation Function of Loading and Supply Temperature Curve Name",
+        "  1.0,                     !- Design Electric Power Supply Efficiency",
+        "  ,                        !- Electric Power Supply Efficiency Function of Part Load Ratio Curve Name",
+        "  1.0;                     !- Fraction of Electric Power Supply Losses to Zone",
+
+        "Curve:Biquadratic,",
+        "  CPU Power fLoadTemp,      !- Name",
+        "  -1.0,                    !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.06667,                 !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "  AirFlow fLoadTemp,        !- Name",
+        "  -1.4,                    !- Coefficient1 Constant",
+        "  0.9,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.1,                     !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.5,                     !- Maximum Value of x",
+        "  -10,                     !- Minimum Value of y",
+        "  99.0,                    !- Maximum Value of y",
+        "  0.0,                     !- Minimum Curve Output",
+        "  99.0,                    !- Maximum Curve Output",
+        "  Dimensionless,           !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "  FanPower fFlow,           !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x",
+        "  99.0;                    !- Maximum Value of x",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        R"(   ** Warning ** GetITEAirCooledDefinition: ElectricEquipment:ITE:AirCooled:Definition="SERVERDEF", specifies Method=EQUIPMENTLEVEL, but the corresponding field "watts_per_unit" is blank. 0 will result.)",
+        R"(   ** Warning ** GetInternalHeatGains: ElectricEquipment:ITE:AirCooled:Instance="ZONE1 ITE", specifies EquipmentLevel, but the definition's Watts per Unit is blank.  0 IT Equipment will result.)",
+    })));
+
+    ASSERT_EQ(state->dataHeatBal->TotITEquip, 1);
+    const auto &ite = state->dataHeatBal->ZoneITEq(1);
+    EXPECT_NEAR(ite.DesignTotalPower, 0.0, 1e-6);
+}
