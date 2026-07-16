@@ -39,16 +39,16 @@
 ! Internal Gains description
 !
 ! - ElectricEquipment:
-!
 !   - General Plug Loads: a single ElectricEquipment:Definition, with 6.67 W/m2, shared by three instances: 1 for each Space, with multiplier = 1
 !
 !   - Bathroom Fan: A single ElectricEquipment:Definition object is used with EquipmentLevel, 100W
 !                   the 1BR spaces use a multiplier of 1, the 2BR one a multiplier of 2
 !
 ! - GasEquipment:
+!   - Cooking Range: A single GasEquipment:Definition, 200W. A single GasEquipment:Instance, which applies to the "All Spaces" SpaceList
 !
-!   - Cooking Range: A single Definition, 200W. A single instance, which applies to the "All Spaces" SpaceList
-
+! - HotWaterEquipment:
+!   - Dishwashing: A single HotWaterEquipment:Definition, 300W. A single HotWaterEquipment:Instance, which applies to the "All Zones" ZoneList
 
   Version,26.2;
 
@@ -965,12 +965,55 @@
     1.0,                     !- Multiplier
     Cooking;                 !- End-Use Subcategory
 
+  HotWaterEquipment:Definition,
+    Dishwashing HW Equip Definition,  !- Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    300.0,                   !- Design Level {W}
+    ,                        !- Power per Floor Area {W/m2}
+    ,                        !- Power per Person {W/person}
+    0.2,                     !- Fraction Latent
+    0.1,                     !- Fraction Radiant
+    0.5;                     !- Fraction Lost
+
+  HotWaterEquipment:Instance,
+    Dishwashing HW Equip,    !- Name
+    Dishwashing HW Equip Definition,  !- Hot Water Equipment Definition Name
+    All Zones,               !- Zone or ZoneList or Space or SpaceList Name
+    EQUIP-1,                 !- Schedule Name
+    1.0,                     !- Multiplier
+    Dishwashing;             !- End-Use Subcategory
+
+  Schedule:Compact,
+    EQUIP-1,                 !- Name
+    Fractional,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field
+    For: WeekDays SummerDesignDay CustomDay1 CustomDay2,  !- Field
+    Until: 8:00,             !- Field
+    0.02,                    !- Field
+    Until: 9:00,             !- Field
+    0.4,                     !- Field
+    Until: 14:00,            !- Field
+    0.9,                     !- Field
+    Until: 15:00,            !- Field
+    0.8,                     !- Field
+    Until: 16:00,            !- Field
+    0.7,                     !- Field
+    Until: 18:00,            !- Field
+    0.5,                     !- Field
+    Until: 20:00,            !- Field
+    0.3,                     !- Field
+    Until: 24:00,            !- Field
+    0.02,                    !- Field
+    For: Weekends WinterDesignDay Holiday,  !- Field
+    Until: 24:00,            !- Field
+    0.2;                     !- Field
+
   Output:Table:SummaryReports,
     AllSummary;              !- Report Name
 
   Schedule:Constant,Always On Discrete,OnOff,1.0;
 
-  Schedule:Constant,Always Off Discrete,OnOff 1;
+  Schedule:Constant,Always Off Discrete,OnOff,0.0;
 
   Schedule:Constant,Always On Continuous,Fractional,1.0;
 
