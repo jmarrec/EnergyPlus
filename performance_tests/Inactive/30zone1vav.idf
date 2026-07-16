@@ -413,15 +413,19 @@
 
   People,
     rm1_3_C_PEOPLE,          !- Name
+    rm1_3_C_PEOPLE Definition,  !- People Definition Name
     rm1_3_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_3_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_3_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_3_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_3_CActSched,         !- Name
@@ -799,15 +803,19 @@
 
   People,
     rm1_4_C_PEOPLE,          !- Name
+    rm1_4_C_PEOPLE Definition,  !- People Definition Name
     rm1_4_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_4_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_4_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_4_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_4_CActSched,         !- Name
@@ -1134,15 +1142,19 @@
 
   People,
     rm1_5_C_PEOPLE,          !- Name
+    rm1_5_C_PEOPLE Definition,  !- People Definition Name
     rm1_5_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_5_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_5_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_5_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_5_CActSched,         !- Name
@@ -1505,15 +1517,19 @@
 
   People,
     rm1_6_C_PEOPLE,          !- Name
+    rm1_6_C_PEOPLE Definition,  !- People Definition Name
     rm1_6_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_6_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_6_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_6_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_6_CActSched,         !- Name
@@ -1912,15 +1928,19 @@
 
   People,
     rm1_7_C_PEOPLE,          !- Name
+    rm1_7_C_PEOPLE Definition,  !- People Definition Name
     rm1_7_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_7_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_7_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_7_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_7_CActSched,         !- Name
@@ -2355,15 +2375,19 @@
 
   People,
     rm1_8_C_PEOPLE,          !- Name
+    rm1_8_C_PEOPLE Definition,  !- People Definition Name
     rm1_8_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_8_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_8_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_8_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_8_CActSched,         !- Name
@@ -2834,15 +2858,19 @@
 
   People,
     rm1_9_C_PEOPLE,          !- Name
+    rm1_9_C_PEOPLE Definition,  !- People Definition Name
     rm1_9_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_9_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_9_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_9_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_9_CActSched,         !- Name
@@ -3352,15 +3380,19 @@
 
   People,
     rm1_10_C_PEOPLE,         !- Name
+    rm1_10_C_PEOPLE Definition,  !- People Definition Name
     rm1_10_C,                !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_10_CActSched;        !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_10_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_10_CActSched;        !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_10_CActSched,        !- Name
@@ -3907,15 +3939,19 @@
 
   People,
     rm1_1_C_PEOPLE,          !- Name
+    rm1_1_C_PEOPLE Definition,  !- People Definition Name
     rm1_1_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_1_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_1_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_1_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_1_CActSched,         !- Name
@@ -4498,15 +4534,19 @@
 
   People,
     rm1_2_C_PEOPLE,          !- Name
+    rm1_2_C_PEOPLE Definition,  !- People Definition Name
     rm1_2_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm1_2_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm1_2_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm1_2_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm1_2_CActSched,         !- Name
@@ -5089,15 +5129,19 @@
 
   People,
     rm2_1_C_PEOPLE,          !- Name
+    rm2_1_C_PEOPLE Definition,  !- People Definition Name
     rm2_1_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_1_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_1_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_1_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_1_CActSched,         !- Name
@@ -5469,15 +5513,19 @@
 
   People,
     rm2_2_C_PEOPLE,          !- Name
+    rm2_2_C_PEOPLE Definition,  !- People Definition Name
     rm2_2_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_2_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_2_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_2_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_2_CActSched,         !- Name
@@ -5804,15 +5852,19 @@
 
   People,
     rm2_3_C_PEOPLE,          !- Name
+    rm2_3_C_PEOPLE Definition,  !- People Definition Name
     rm2_3_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_3_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_3_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_3_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_3_CActSched,         !- Name
@@ -6175,15 +6227,19 @@
 
   People,
     rm2_4_C_PEOPLE,          !- Name
+    rm2_4_C_PEOPLE Definition,  !- People Definition Name
     rm2_4_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_4_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_4_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_4_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_4_CActSched,         !- Name
@@ -6582,15 +6638,19 @@
 
   People,
     rm2_5_C_PEOPLE,          !- Name
+    rm2_5_C_PEOPLE Definition,  !- People Definition Name
     rm2_5_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_5_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_5_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_5_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_5_CActSched,         !- Name
@@ -7025,15 +7085,19 @@
 
   People,
     rm2_6_C_PEOPLE,          !- Name
+    rm2_6_C_PEOPLE Definition,  !- People Definition Name
     rm2_6_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_6_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_6_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_6_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_6_CActSched,         !- Name
@@ -7504,15 +7568,19 @@
 
   People,
     rm2_7_C_PEOPLE,          !- Name
+    rm2_7_C_PEOPLE Definition,  !- People Definition Name
     rm2_7_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_7_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_7_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_7_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_7_CActSched,         !- Name
@@ -8022,15 +8090,19 @@
 
   People,
     rm2_8_C_PEOPLE,          !- Name
+    rm2_8_C_PEOPLE Definition,  !- People Definition Name
     rm2_8_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_8_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_8_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_8_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_8_CActSched,         !- Name
@@ -8577,15 +8649,19 @@
 
   People,
     rm2_9_C_PEOPLE,          !- Name
+    rm2_9_C_PEOPLE Definition,  !- People Definition Name
     rm2_9_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_9_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_9_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_9_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_9_CActSched,         !- Name
@@ -9168,15 +9244,19 @@
 
   People,
     rm2_10_C_PEOPLE,         !- Name
+    rm2_10_C_PEOPLE Definition,  !- People Definition Name
     rm2_10_C,                !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm2_10_CActSched;        !- Activity Level Schedule Name
+
+  People:Definition,
+    rm2_10_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm2_10_CActSched;        !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm2_10_CActSched,        !- Name
@@ -9759,15 +9839,19 @@
 
   People,
     rm3_1_C_PEOPLE,          !- Name
+    rm3_1_C_PEOPLE Definition,  !- People Definition Name
     rm3_1_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_1_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_1_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_1_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_1_CActSched,         !- Name
@@ -10139,15 +10223,19 @@
 
   People,
     rm3_2_C_PEOPLE,          !- Name
+    rm3_2_C_PEOPLE Definition,  !- People Definition Name
     rm3_2_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_2_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_2_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_2_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_2_CActSched,         !- Name
@@ -10474,15 +10562,19 @@
 
   People,
     rm3_3_C_PEOPLE,          !- Name
+    rm3_3_C_PEOPLE Definition,  !- People Definition Name
     rm3_3_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_3_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_3_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_3_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_3_CActSched,         !- Name
@@ -10845,15 +10937,19 @@
 
   People,
     rm3_4_C_PEOPLE,          !- Name
+    rm3_4_C_PEOPLE Definition,  !- People Definition Name
     rm3_4_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_4_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_4_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_4_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_4_CActSched,         !- Name
@@ -11252,15 +11348,19 @@
 
   People,
     rm3_5_C_PEOPLE,          !- Name
+    rm3_5_C_PEOPLE Definition,  !- People Definition Name
     rm3_5_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_5_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_5_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_5_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_5_CActSched,         !- Name
@@ -11695,15 +11795,19 @@
 
   People,
     rm3_6_C_PEOPLE,          !- Name
+    rm3_6_C_PEOPLE Definition,  !- People Definition Name
     rm3_6_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_6_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_6_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_6_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_6_CActSched,         !- Name
@@ -12174,15 +12278,19 @@
 
   People,
     rm3_7_C_PEOPLE,          !- Name
+    rm3_7_C_PEOPLE Definition,  !- People Definition Name
     rm3_7_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_7_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_7_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_7_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_7_CActSched,         !- Name
@@ -12692,15 +12800,19 @@
 
   People,
     rm3_8_C_PEOPLE,          !- Name
+    rm3_8_C_PEOPLE Definition,  !- People Definition Name
     rm3_8_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_8_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_8_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_8_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_8_CActSched,         !- Name
@@ -13247,15 +13359,19 @@
 
   People,
     rm3_9_C_PEOPLE,          !- Name
+    rm3_9_C_PEOPLE Definition,  !- People Definition Name
     rm3_9_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_9_CActSched;         !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_9_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_9_CActSched;         !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_9_CActSched,         !- Name
@@ -13838,15 +13954,19 @@
 
   People,
     rm3_10_C_PEOPLE,         !- Name
+    rm3_10_C_PEOPLE Definition,  !- People Definition Name
     rm3_10_C,                !- Zone or ZoneList or Space or SpaceList Name
     OffOcc,                  !- Number of People Schedule Name
+    rm3_10_CActSched;        !- Activity Level Schedule Name
+
+  People:Definition,
+    rm3_10_C_PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.363636,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    rm3_10_CActSched;        !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     rm3_10_CActSched,        !- Name

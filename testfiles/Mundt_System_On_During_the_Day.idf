@@ -1671,51 +1671,67 @@
 
   People,
     WEST ZONE People 1,      !- Name
+    WEST ZONE People 1 Definition,  !- People Definition Name
     WEST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    WEST ZONE People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     5.000000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     EAST ZONE People 1,      !- Name
+    EAST ZONE People 1 Definition,  !- People Definition Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    EAST ZONE People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     5.000000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     MID-UPP ZONE People 1,   !- Name
+    MID-UPP ZONE People 1 Definition,  !- People Definition Name
     MID-UPP ZONE,            !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    MID-UPP ZONE People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     3.000000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     MID-LOW ZONE People 1,   !- Name
+    MID-LOW ZONE People 1 Definition,  !- People Definition Name
     MID-LOW ZONE,            !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    MID-LOW ZONE People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     3.000000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     MID-UPP ZONE Lights 1,   !- Name

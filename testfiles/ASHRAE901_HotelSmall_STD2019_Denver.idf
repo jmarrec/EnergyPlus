@@ -12908,1005 +12908,1273 @@
 
   People,
     CorridorFlr1_People,     !- Name
+    CorridorFlr1_People Definition,  !- People Definition Name
     CorridorFlr1,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    CorridorFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     CorridorFlr2_People,     !- Name
+    CorridorFlr2_People Definition,  !- People Definition Name
     CorridorFlr2,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    CorridorFlr2_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     CorridorFlr3_People,     !- Name
+    CorridorFlr3_People Definition,  !- People Definition Name
     CorridorFlr3,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    CorridorFlr3_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     CorridorFlr4_People,     !- Name
+    CorridorFlr4_People Definition,  !- People Definition Name
     CorridorFlr4,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    CorridorFlr4_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     ElevatorCoreFlr1_People, !- Name
+    ElevatorCoreFlr1_People Definition,  !- People Definition Name
     ElevatorCoreFlr1,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ElevatorCoreFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     ElevatorCoreFlr2_People, !- Name
+    ElevatorCoreFlr2_People Definition,  !- People Definition Name
     ElevatorCoreFlr2,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ElevatorCoreFlr2_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     ElevatorCoreFlr3_People, !- Name
+    ElevatorCoreFlr3_People Definition,  !- People Definition Name
     ElevatorCoreFlr3,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ElevatorCoreFlr3_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     ElevatorCoreFlr4_People, !- Name
+    ElevatorCoreFlr4_People Definition,  !- People Definition Name
     ElevatorCoreFlr4,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ElevatorCoreFlr4_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     EmployeeLoungeFlr1_People,  !- Name
+    EmployeeLoungeFlr1_People Definition,  !- People Definition Name
     EmployeeLoungeFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     EmployeeLounge_Occ_Sch,  !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    EmployeeLoungeFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     18,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     ExerciseCenterFlr1_People,  !- Name
+    ExerciseCenterFlr1_People Definition,  !- People Definition Name
     ExerciseCenterFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     ExerciseCenter_Occ_Sch,  !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    ExerciseCenterFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     7,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontLoungeFlr1_People,  !- Name
+    FrontLoungeFlr1_People Definition,  !- People Definition Name
     FrontLoungeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     Lobby_Occ_Sch,           !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontLoungeFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     53,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontOfficeFlr1_People,  !- Name
+    FrontOfficeFlr1_People Definition,  !- People Definition Name
     FrontOfficeFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     Office_Occ_w_SB_Sch,     !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontOfficeFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     10,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStairsFlr1_People,  !- Name
+    FrontStairsFlr1_People Definition,  !- People Definition Name
     FrontStairsFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStairsFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStairsFlr2_People,  !- Name
+    FrontStairsFlr2_People Definition,  !- People Definition Name
     FrontStairsFlr2,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStairsFlr2_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStairsFlr3_People,  !- Name
+    FrontStairsFlr3_People Definition,  !- People Definition Name
     FrontStairsFlr3,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStairsFlr3_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStairsFlr4_People,  !- Name
+    FrontStairsFlr4_People Definition,  !- People Definition Name
     FrontStairsFlr4,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStairsFlr4_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStorageFlr1_People, !- Name
+    FrontStorageFlr1_People Definition,  !- People Definition Name
     FrontStorageFlr1,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStorageFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStorageFlr2_People, !- Name
+    FrontStorageFlr2_People Definition,  !- People Definition Name
     FrontStorageFlr2,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStorageFlr2_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStorageFlr3_People, !- Name
+    FrontStorageFlr3_People Definition,  !- People Definition Name
     FrontStorageFlr3,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStorageFlr3_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     FrontStorageFlr4_People, !- Name
+    FrontStorageFlr4_People Definition,  !- People Definition Name
     FrontStorageFlr4,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    FrontStorageFlr4_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom101_People,     !- Name
+    GuestRoom101_People Definition,  !- People Definition Name
     GuestRoom101,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom101_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom102_People,     !- Name
+    GuestRoom102_People Definition,  !- People Definition Name
     GuestRoom102,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom102_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom103_People,     !- Name
+    GuestRoom103_People Definition,  !- People Definition Name
     GuestRoom103,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom103_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom104_People,     !- Name
+    GuestRoom104_People Definition,  !- People Definition Name
     GuestRoom104,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom104_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom105_People,     !- Name
+    GuestRoom105_People Definition,  !- People Definition Name
     GuestRoom105,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom105_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom201_People,     !- Name
+    GuestRoom201_People Definition,  !- People Definition Name
     GuestRoom201,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom201_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom202_205_People, !- Name
+    GuestRoom202_205_People Definition,  !- People Definition Name
     GuestRoom202_205,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom202_205_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom206_208_People, !- Name
+    GuestRoom206_208_People Definition,  !- People Definition Name
     GuestRoom206_208,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom206_208_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom209_212_People, !- Name
+    GuestRoom209_212_People Definition,  !- People Definition Name
     GuestRoom209_212,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom209_212_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom213_People,     !- Name
+    GuestRoom213_People Definition,  !- People Definition Name
     GuestRoom213,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom213_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom214_People,     !- Name
+    GuestRoom214_People Definition,  !- People Definition Name
     GuestRoom214,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom214_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom215_218_People, !- Name
+    GuestRoom215_218_People Definition,  !- People Definition Name
     GuestRoom215_218,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom215_218_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom219_People,     !- Name
+    GuestRoom219_People Definition,  !- People Definition Name
     GuestRoom219,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom219_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom220_223_People, !- Name
+    GuestRoom220_223_People Definition,  !- People Definition Name
     GuestRoom220_223,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom220_223_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom224_People,     !- Name
+    GuestRoom224_People Definition,  !- People Definition Name
     GuestRoom224,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom224_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom301_People,     !- Name
+    GuestRoom301_People Definition,  !- People Definition Name
     GuestRoom301,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom301_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom302_305_People, !- Name
+    GuestRoom302_305_People Definition,  !- People Definition Name
     GuestRoom302_305,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom302_305_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom306_308_People, !- Name
+    GuestRoom306_308_People Definition,  !- People Definition Name
     GuestRoom306_308,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom306_308_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom309_312_People, !- Name
+    GuestRoom309_312_People Definition,  !- People Definition Name
     GuestRoom309_312,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom309_312_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom313_People,     !- Name
+    GuestRoom313_People Definition,  !- People Definition Name
     GuestRoom313,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom313_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom314_People,     !- Name
+    GuestRoom314_People Definition,  !- People Definition Name
     GuestRoom314,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom314_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom315_318_People, !- Name
+    GuestRoom315_318_People Definition,  !- People Definition Name
     GuestRoom315_318,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom315_318_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom319_People,     !- Name
+    GuestRoom319_People Definition,  !- People Definition Name
     GuestRoom319,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom319_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom320_323_People, !- Name
+    GuestRoom320_323_People Definition,  !- People Definition Name
     GuestRoom320_323,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom320_323_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom324_People,     !- Name
+    GuestRoom324_People Definition,  !- People Definition Name
     GuestRoom324,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom324_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom401_People,     !- Name
+    GuestRoom401_People Definition,  !- People Definition Name
     GuestRoom401,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom401_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom402_405_People, !- Name
+    GuestRoom402_405_People Definition,  !- People Definition Name
     GuestRoom402_405,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom402_405_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom406_408_People, !- Name
+    GuestRoom406_408_People Definition,  !- People Definition Name
     GuestRoom406_408,        !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom406_408_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     4.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom409_412_People, !- Name
+    GuestRoom409_412_People Definition,  !- People Definition Name
     GuestRoom409_412,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom409_412_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom413_People,     !- Name
+    GuestRoom413_People Definition,  !- People Definition Name
     GuestRoom413,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom413_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom414_People,     !- Name
+    GuestRoom414_People Definition,  !- People Definition Name
     GuestRoom414,            !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom414_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom415_418_People, !- Name
+    GuestRoom415_418_People Definition,  !- People Definition Name
     GuestRoom415_418,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom415_418_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom419_People,     !- Name
+    GuestRoom419_People Definition,  !- People Definition Name
     GuestRoom419,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom419_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom420_423_People, !- Name
+    GuestRoom420_423_People Definition,  !- People Definition Name
     GuestRoom420_423,        !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom420_423_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     6,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     GuestRoom424_People,     !- Name
+    GuestRoom424_People Definition,  !- People Definition Name
     GuestRoom424,            !- Zone or ZoneList or Space or SpaceList Name
     GuestRoom_Occ_Sch,       !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    GuestRoom424_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1.5,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     LaundryRoomFlr1_People,  !- Name
+    LaundryRoomFlr1_People Definition,  !- People Definition Name
     LaundryRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     LaundryRoom_Occ_Sch,     !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    LaundryRoomFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     MechanicalRoomFlr1_People,  !- Name
+    MechanicalRoomFlr1_People Definition,  !- People Definition Name
     MechanicalRoomFlr1,      !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    MechanicalRoomFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     MeetingRoomFlr1_People,  !- Name
+    MeetingRoomFlr1_People Definition,  !- People Definition Name
     MeetingRoomFlr1,         !- Zone or ZoneList or Space or SpaceList Name
-    MeetingRoom_Occ_w_SB_Sch,!- Number of People Schedule Name
+    MeetingRoom_Occ_w_SB_Sch,  !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    MeetingRoomFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     43,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStairsFlr1_People,   !- Name
+    RearStairsFlr1_People Definition,  !- People Definition Name
     RearStairsFlr1,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStairsFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStairsFlr2_People,   !- Name
+    RearStairsFlr2_People Definition,  !- People Definition Name
     RearStairsFlr2,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStairsFlr2_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStairsFlr3_People,   !- Name
+    RearStairsFlr3_People Definition,  !- People Definition Name
     RearStairsFlr3,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStairsFlr3_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStairsFlr4_People,   !- Name
+    RearStairsFlr4_People Definition,  !- People Definition Name
     RearStairsFlr4,          !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStairsFlr4_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStorageFlr1_People,  !- Name
+    RearStorageFlr1_People Definition,  !- People Definition Name
     RearStorageFlr1,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStorageFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStorageFlr2_People,  !- Name
+    RearStorageFlr2_People Definition,  !- People Definition Name
     RearStorageFlr2,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStorageFlr2_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStorageFlr3_People,  !- Name
+    RearStorageFlr3_People Definition,  !- People Definition Name
     RearStorageFlr3,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStorageFlr3_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RearStorageFlr4_People,  !- Name
+    RearStorageFlr4_People Definition,  !- People Definition Name
     RearStorageFlr4,         !- Zone or ZoneList or Space or SpaceList Name
     AlwaysOff,               !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RearStorageFlr4_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     0,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     RestroomFlr1_People,     !- Name
+    RestroomFlr1_People Definition,  !- People Definition Name
     RestroomFlr1,            !- Zone or ZoneList or Space or SpaceList Name
     Lobby_Occ_Sch,           !- Number of People Schedule Name
+    Activity_Sch;            !- Activity Level Schedule Name
+
+  People:Definition,
+    RestroomFlr1_People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     1,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Activity_Sch,            !- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type

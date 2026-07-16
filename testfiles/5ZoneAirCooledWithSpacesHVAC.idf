@@ -906,15 +906,19 @@
 
   People,
     Zone 1 People,           !- Name
+    Zone 1 People Definition,  !- People Definition Name
     Zone 1,                  !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    Zone 1 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     Zone 1 Lights,           !- Name
@@ -1125,15 +1129,19 @@
 
   People,
     Zone 2 People,           !- Name
+    Zone 2 People Definition,  !- People Definition Name
     Zone 2,                  !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    Zone 2 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     5,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     Zone 2 Lights,           !- Name
@@ -1293,15 +1301,19 @@
 
   People,
     Zone 3 People,           !- Name
+    Zone 3 People Definition,  !- People Definition Name
     Zone 3,                  !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    Zone 3 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     Space 3 Open Office 1 Lights,  !- Name
@@ -1695,15 +1707,19 @@
 
   People,
     Zone 4 People,           !- Name
+    Zone 4 People Definition,  !- People Definition Name
     Zone 4,                  !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    Zone 4 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     5,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     Zone 4 Lights,           !- Name
@@ -1863,33 +1879,41 @@
 
   People,
     Zone 5 People,           !- Name
+    Zone 5 People Definition,  !- People Definition Name
     Zone 5,                  !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    Zone 5 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     20,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZoneList People,         !- Name
+    ZoneList People Definition,  !- People Definition Name
     All Zones,               !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd,                 !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    ,                        !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule;  !- Clothing Insulation Calculation Method
+
+  People:Definition,
+    ZoneList People Definition,  !- Name
     People/Area,             !- Number of People Calculation Method
     ,                        !- Number of People
     0.5,                     !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    ActSchd,                 !- Activity Level Schedule Name
     0.0000000382,            !- Carbon Dioxide Generation Rate {m3/s-W}
     No,                      !- Enable ASHRAE 55 Comfort Warnings
-    EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    ,                        !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule;  !- Clothing Insulation Calculation Method
+    EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   Lights,
     Zone 5 Lights,           !- Name

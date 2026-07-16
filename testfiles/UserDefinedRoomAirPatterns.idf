@@ -8815,200 +8815,236 @@
 
   People,
     ZN1_SW_1,                !- Name
+    ZN1_SW_1 Definition,     !- People Definition Name
     ZN1_SW_1,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    ZN1_SW_1 Definition,     !- Name
     people,                  !- Number of People Calculation Method
     1.250,                   !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
     FANGER;                  !- Thermal Comfort Model 1 Type
 
   People,
     ZN2_S_1,                 !- Name
+    ZN2_S_1 Definition,      !- People Definition Name
     ZN2_S_1,                 !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    ZN2_S_1 Definition,      !- Name
     people,                  !- Number of People Calculation Method
     15.178,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
     FANGER;                  !- Thermal Comfort Model 1 Type
 
   People,
     ZN3_SE_1,                !- Name
+    ZN3_SE_1 Definition,     !- People Definition Name
     ZN3_SE_1,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    ZN3_SE_1 Definition,     !- Name
     people,                  !- Number of People Calculation Method
     1.250,                   !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    FANGER;                  !- Thermal Comfort Model 1 Type
+
+  People,
+    ZN4_E_1,                 !- Name
+    ZN4_E_1 Definition,      !- People Definition Name
+    ZN4_E_1,                 !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN4_E_1,                 !- Name
-    ZN4_E_1,                 !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN4_E_1 Definition,      !- Name
     people,                  !- Number of People Calculation Method
     4.571,                   !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    FANGER;                  !- Thermal Comfort Model 1 Type
+
+  People,
+    ZN5_NE_1,                !- Name
+    ZN5_NE_1 Definition,     !- People Definition Name
+    ZN5_NE_1,                !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN5_NE_1,                !- Name
-    ZN5_NE_1,                !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN5_NE_1 Definition,     !- Name
     people,                  !- Number of People Calculation Method
     1.250,                   !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    FANGER;                  !- Thermal Comfort Model 1 Type
+
+  People,
+    ZN6_N_1,                 !- Name
+    ZN6_N_1 Definition,      !- People Definition Name
+    ZN6_N_1,                 !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN6_N_1,                 !- Name
-    ZN6_N_1,                 !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN6_N_1 Definition,      !- Name
     people,                  !- Number of People Calculation Method
     15.178,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    FANGER;                  !- Thermal Comfort Model 1 Type
+
+  People,
+    ZN7_NW_1,                !- Name
+    ZN7_NW_1 Definition,     !- People Definition Name
+    ZN7_NW_1,                !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN7_NW_1,                !- Name
-    ZN7_NW_1,                !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN7_NW_1 Definition,     !- Name
     people,                  !- Number of People Calculation Method
     1.250,                   !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    FANGER;                  !- Thermal Comfort Model 1 Type
+
+  People,
+    ZN8_W_1,                 !- Name
+    ZN8_W_1 Definition,      !- People Definition Name
+    ZN8_W_1,                 !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN8_W_1,                 !- Name
-    ZN8_W_1,                 !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN8_W_1 Definition,      !- Name
     people,                  !- Number of People Calculation Method
     4.571,                   !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    FANGER;                  !- Thermal Comfort Model 1 Type
+
+  People,
+    ZN9_Core_1,              !- Name
+    ZN9_Core_1 Definition,   !- People Definition Name
+    ZN9_Core_1,              !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN9_Core_1,              !- Name
-    ZN9_Core_1,              !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN9_Core_1 Definition,   !- Name
     people,                  !- Number of People Calculation Method
     55.503,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH,            !- Air Velocity Schedule Name
     FANGER;                  !- Thermal Comfort Model 1 Type
 
   ZoneInfiltration:DesignFlowRate,

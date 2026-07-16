@@ -978,68 +978,80 @@
 
   People,
     WestPeople,              !- Name
+    WestPeople Definition,   !- People Definition Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
+    Activity Sch,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    Work Eff Sch,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    Clothing Sch,            !- Clothing Insulation Schedule Name
+    Air Velo Sch;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    WestPeople Definition,   !- Name
     people,                  !- Number of People Calculation Method
     3.000000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    Activity Sch,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    Work Eff Sch,            !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    Clothing Sch,            !- Clothing Insulation Schedule Name
-    Air Velo Sch,            !- Air Velocity Schedule Name
     FANGER;                  !- Thermal Comfort Model 1 Type
 
   People,
     EastPeople,              !- Name
+    EastPeople Definition,   !- People Definition Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
+    Activity Sch,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    Work Eff Sch,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    Clothing Sch,            !- Clothing Insulation Schedule Name
+    Air Velo Sch;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    EastPeople Definition,   !- Name
     people,                  !- Number of People Calculation Method
     3.000000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    Activity Sch,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    FANGER;                  !- Thermal Comfort Model 1 Type
+
+  People,
+    NorthPeople,             !- Name
+    NorthPeople Definition,  !- People Definition Name
+    NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
+    OFFICE OCCUPANCY,        !- Number of People Schedule Name
+    Activity Sch,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     Work Eff Sch,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
-    Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Air Velo Sch;            !- Air Velocity Schedule Name
 
-  People,
-    NorthPeople,             !- Name
-    NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
-    OFFICE OCCUPANCY,        !- Number of People Schedule Name
+  People:Definition,
+    NorthPeople Definition,  !- Name
     people,                  !- Number of People Calculation Method
     4.000000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    Activity Sch,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    Work Eff Sch,            !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    Clothing Sch,            !- Clothing Insulation Schedule Name
-    Air Velo Sch,            !- Air Velocity Schedule Name
     FANGER;                  !- Thermal Comfort Model 1 Type
 
   Lights,

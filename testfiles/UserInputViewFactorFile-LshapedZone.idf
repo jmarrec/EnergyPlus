@@ -1330,29 +1330,37 @@
 
   People,
     Lshaped zonePeople,      !- Name
+    Lshaped zonePeople Definition,  !- People Definition Name
     Lshaped zone,            !- Zone or ZoneList or Space or SpaceList Name
     Lshaped zone-PeopleSchedule,  !- Number of People Schedule Name
+    Lshaped zone-PeopleActivity;  !- Activity Level Schedule Name
+
+  People:Definition,
+    Lshaped zonePeople Definition,  !- Name
     people,                  !- Number of People Calculation Method
     1,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Lshaped zone-PeopleActivity;  !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
 ! =========================
 
   People,
     LshapedZoneBasePeople,   !- Name
+    LshapedZoneBasePeople Definition,  !- People Definition Name
     LshapedZoneBase,         !- Zone or ZoneList or Space or SpaceList Name
     LshapedZoneBase-PeopleSchedule,  !- Number of People Schedule Name
+    LshapedZoneBase-PeopleActivity;  !- Activity Level Schedule Name
+
+  People:Definition,
+    LshapedZoneBasePeople Definition,  !- Name
     people,                  !- Number of People Calculation Method
     1,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    LshapedZoneBase-PeopleActivity;  !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     Lshaped zoneLights,      !- Name

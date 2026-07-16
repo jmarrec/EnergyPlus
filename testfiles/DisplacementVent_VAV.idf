@@ -614,15 +614,19 @@
 
   People,
     ZONE ONE People 1,       !- Name
+    ZONE ONE People 1 Definition,  !- People Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     WorkHours ScheduleG,     !- Number of People Schedule Name
+    Live Gang;               !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE ONE People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     10,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.5,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Live Gang;               !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   ElectricEquipment,
     ZONE ONE ElecEq 1,       !- Name

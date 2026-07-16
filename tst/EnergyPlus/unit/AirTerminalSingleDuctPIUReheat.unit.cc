@@ -935,15 +935,19 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIU_SimTest)
 
         "People,",
         "    OpenOffice - CZ1-3 People,  !- Name",
+        "    OpenOffice - CZ1-3 People Definition, !- People Definition Name",
         "    OpenOffice - ZoneList,   !- Zone or ZoneList Name",
         "    Office Work Occupancy,   !- Number of People Schedule Name",
+        "    Office Activity;         !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "    OpenOffice - CZ1-3 People Definition, !- Name",
         "    People/Area,             !- Number of People Calculation Method",
         "    ,                        !- Number of People",
         "    0.50,                    !- People per Zone Floor Area {person/m2}",
         "    ,                        !- Zone Floor Area per Person {m2/person}",
         "    0.3,                     !- Fraction Radiant",
-        "    ,                        !- Sensible Heat Fraction",
-        "    Office Activity;         !- Activity Level Schedule Name",
+        "    ;                        !- Sensible Heat Fraction",
 
         "Lights,",
         "    OpenOffice Lights,       !- Name",

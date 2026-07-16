@@ -4179,15 +4179,19 @@
 
   People,
     Office People,           !- Name
+    Office People Definition,  !- People Definition Name
     Zone1 Office,            !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH,            !- Number of People Schedule Name
+    Office Activity Schedule;  !- Activity Level Schedule Name
+
+  People:Definition,
+    Office People Definition,  !- Name
     People,                  !- Number of People Calculation Method
     5,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     autocalculate,           !- Sensible Heat Fraction
-    Office Activity Schedule,!- Activity Level Schedule Name
     ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type

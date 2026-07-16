@@ -944,63 +944,83 @@
 
   People,
     ZONE1 People 1,          !- Name
+    ZONE1 People 1 Definition,  !- People Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE1 People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     15,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZONE1 People 2,          !- Name
+    ZONE1 People 2 Definition,  !- People Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE1 People 2 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     10,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZONE1 People 3,          !- Name
+    ZONE1 People 3 Definition,  !- People Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE1 People 3 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     15,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZONE1 People 4,          !- Name
+    ZONE1 People 4 Definition,  !- People Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE1 People 4 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     10,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   People,
     ZONE1 People 5,          !- Name
+    ZONE1 People 5 Definition,  !- People Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED,               !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    ZONE1 People 5 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     60,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     ZONE1 Lights 1,          !- Name

@@ -832,15 +832,19 @@
 
   People,
     SPACE1-1 People,         !- Name
+    SPACE1-1 People Definition,  !- People Definition Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SPACE1-1 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     SPACE1-1 Lights,         !- Name
@@ -1051,15 +1055,19 @@
 
   People,
     SPACE2-1 People,         !- Name
+    SPACE2-1 People Definition,  !- People Definition Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SPACE2-1 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     5,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     SPACE2-1 Lights,         !- Name
@@ -1235,15 +1243,19 @@
 
   People,
     SPACE3-1 People,         !- Name
+    SPACE3-1 People Definition,  !- People Definition Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SPACE3-1 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     SPACE3-1 Lights,         !- Name
@@ -1434,15 +1446,19 @@
 
   People,
     SPACE4-1 People,         !- Name
+    SPACE4-1 People Definition,  !- People Definition Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SPACE4-1 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     5,                       !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     SPACE4-1 Lights,         !- Name
@@ -1618,15 +1634,19 @@
 
   People,
     SPACE5-1 People,         !- Name
+    SPACE5-1 People Definition,  !- People Definition Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SPACE5-1 People Definition,  !- Name
     people,                  !- Number of People Calculation Method
     20,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Lights,
     SPACE5-1 Lights,         !- Name

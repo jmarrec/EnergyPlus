@@ -427,15 +427,19 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctCVNoReheat_OASpecification)
 
         "  People,",
         "    West Zone People,        !- Name",
+        "    West Zone People Definition, !- People Definition Name",
         "    West Zone,               !- Zone or ZoneList Name",
         "    OFFICE OCCUPANCY,        !- Number of People Schedule Name",
+        "    Activity Sch;            !- Activity Level Schedule Name",
+
+        "  People:Definition,",
+        "    West Zone People Definition, !- Name",
         "    people,                  !- Number of People Calculation Method",
         "    3.000000,                !- Number of People",
         "    ,                        !- People per Zone Floor Area {person/m2}",
         "    ,                        !- Zone Floor Area per Person {m2/person}",
         "    0.3000000,               !- Fraction Radiant",
-        "    ,                        !- Sensible Heat Fraction",
-        "    Activity Sch;            !- Activity Level Schedule Name",
+        "    ;                        !- Sensible Heat Fraction",
 
         "  Schedule:Compact,",
         "    OFFICE OCCUPANCY,        !- Name",
@@ -799,15 +803,19 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctCVNoReheat_OAVolumeFlowRateReport
 
         "  People,",
         "    West Zone People,        !- Name",
+        "    West Zone People Definition, !- People Definition Name",
         "    West Zone,               !- Zone or ZoneList Name",
         "    Office Occupancy,        !- Number of People Schedule Name",
+        "    Activity Sch;            !- Activity Level Schedule Name",
+
+        "  People:Definition,",
+        "    West Zone People Definition, !- Name",
         "    people,                  !- Number of People Calculation Method",
         "    3.000000,                !- Number of People",
         "    ,                        !- People per Zone Floor Area {person/m2}",
         "    ,                        !- Zone Floor Area per Person {m2/person}",
         "    0.3000000,               !- Fraction Radiant",
-        "    ,                        !- Sensible Heat Fraction",
-        "    Activity Sch;            !- Activity Level Schedule Name",
+        "    ;                        !- Sensible Heat Fraction",
 
         "  Schedule:Compact,",
         "    Office Occupancy,        !- Name",

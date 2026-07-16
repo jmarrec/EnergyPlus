@@ -610,15 +610,19 @@
 
   People,
     ROOM PEOPLE,             !- Name
+    ROOM PEOPLE Definition,  !- People Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     Sch Peo,                 !- Number of People Schedule Name
+    Sch Act;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    ROOM PEOPLE Definition,  !- Name
     People,                  !- Number of People Calculation Method
     3.2,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6,                     !- Fraction Radiant
-    Autocalculate,           !- Sensible Heat Fraction
-    Sch Act;                 !- Activity Level Schedule Name
+    Autocalculate;           !- Sensible Heat Fraction
 
   ScheduleTypeLimits,
     Any Number;              !- Name

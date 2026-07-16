@@ -2400,39 +2400,35 @@
 
   People,
     ZN1_S_Space_1,           !- Name
+    ZN1_S_Space_1 Definition,  !- People Definition Name
     ZN1_S_Space_1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH,            !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    40.392,                  !- Number of People
-    ,                        !- People per Floor Area {person/m2}
-    ,                        !- Floor Area per Person {m2/person}
-    0.300,                   !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
     ACTIVITY_SCH,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
-    ,                        !- Enable ASHRAE 55 Comfort Warnings
-    EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
     AIR_VELO_SCH;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    ZN1_S_Space_1 Definition,  !- Name
+    people,                  !- Number of People Calculation Method
+    40.392,                  !- Number of People
+    ,                        !- People per Floor Area {person/m2}
+    ,                        !- Floor Area per Person {m2/person}
+    0.300,                   !- Fraction Radiant
+    ,                        !- Sensible Heat Fraction
+    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    ,                        !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   People,
     ZN2_E_Space_1,           !- Name
+    ZN2_E_Space_1 Definition,  !- People Definition Name
     ZN2_E_Space_1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH,            !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    5.974,                   !- Number of People
-    ,                        !- People per Floor Area {person/m2}
-    ,                        !- Floor Area per Person {m2/person}
-    0.300,                   !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
     ACTIVITY_SCH,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
-    ,                        !- Enable ASHRAE 55 Comfort Warnings
-    EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
@@ -2440,20 +2436,49 @@
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
     AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
+  People:Definition,
+    ZN2_E_Space_1 Definition,  !- Name
+    people,                  !- Number of People Calculation Method
+    5.974,                   !- Number of People
+    ,                        !- People per Floor Area {person/m2}
+    ,                        !- Floor Area per Person {m2/person}
+    0.300,                   !- Fraction Radiant
+    ,                        !- Sensible Heat Fraction
+    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    ,                        !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
+
   People,
     ZN3_N_Space_1,           !- Name
+    ZN3_N_Space_1 Definition,  !- People Definition Name
     ZN3_N_Space_1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
+    AIR_VELO_SCH;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    ZN3_N_Space_1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     40.392,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
-    EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
+
+  People,
+    ZN4_W_Space_1,           !- Name
+    ZN4_W_Space_1 Definition,  !- People Definition Name
+    ZN4_W_Space_1,           !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
@@ -2461,20 +2486,24 @@
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
     AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN4_W_Space_1,           !- Name
-    ZN4_W_Space_1,           !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN4_W_Space_1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     5.974,                   !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
-    EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
+
+  People,
+    ZN5_Core_Space_1,        !- Name
+    ZN5_Core_Space_1 Definition,  !- People Definition Name
+    ZN5_Core_Space_1,        !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
     ,                        !- Surface Name/Angle Factor List Name
     WORK_EFF_SCH,            !- Work Efficiency Schedule Name
     ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
@@ -2482,26 +2511,17 @@
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
     AIR_VELO_SCH;            !- Air Velocity Schedule Name
 
-  People,
-    ZN5_Core_Space_1,        !- Name
-    ZN5_Core_Space_1,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_OCC_SCH,            !- Number of People Schedule Name
+  People:Definition,
+    ZN5_Core_Space_1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     74.489,                  !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.300,                   !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ACTIVITY_SCH,            !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
-    EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
-    AIR_VELO_SCH;            !- Air Velocity Schedule Name
+    EnclosureAveraged;       !- Mean Radiant Temperature Calculation Type
 
   ZoneInfiltration:DesignFlowRate,
     ZN1_S_Space_1 Infl 1,    !- Name

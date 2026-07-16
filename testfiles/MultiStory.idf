@@ -436,15 +436,19 @@
 
   People,
     Office Buildings,        !- Name
+    Office Buildings Definition,  !- People Definition Name
     AllZones,                !- Zone or ZoneList or Space or SpaceList Name
     OCC-SCHED-BldgAvg,       !- Number of People Schedule Name
+    ActSchd134;              !- Activity Level Schedule Name
+
+  People:Definition,
+    Office Buildings Definition,  !- Name
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
     9.29,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.55,                    !- Sensible Heat Fraction
-    ActSchd134;              !- Activity Level Schedule Name
+    0.55;                    !- Sensible Heat Fraction
 
   Lights,
     Office Buildings,        !- Name

@@ -468,15 +468,19 @@
 
   People,
     SPACE1-1 People 1,       !- Name
+    SPACE1-1 People 1 Definition,  !- People Definition Name
     Main Zone,               !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SPACE1-1 People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONEINFILTRATION:DESIGNFLOWRATE ===========
 

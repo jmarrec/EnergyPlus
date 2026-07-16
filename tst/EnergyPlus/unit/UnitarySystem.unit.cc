@@ -18027,15 +18027,19 @@ TEST_F(EnergyPlusFixture, Test_UnitarySystemModel_SubcoolReheatCoil)
 
   People,
     SPACE1-1 People 1,       !- Name
+    SPACE1-1 People 1 Definition,  !- People Definition Name
     ZONE ONE,                !- Zone or ZoneList Name
     OCCUPY-1,                !- Number of People Schedule Name
+    ActSchd;                 !- Activity Level Schedule Name
+
+  People:Definition,
+    SPACE1-1 People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     11,                      !- Number of People
     ,                        !- People per Zone Floor Area {person/m2}
     ,                        !- Zone Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
   Schedule:Compact,
     OCCUPY-1,                !- Name
@@ -24919,27 +24923,35 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
         "  People,",
         "    SPACE1-1 People 1,       !- Name",
+        "    SPACE1-1 People 1 Definition, !- People Definition Name",
         "    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name",
         "    OCCUPY-1,                !- Number of People Schedule Name",
+        "    ActSchd;                 !- Activity Level Schedule Name",
+
+        "  People:Definition,",
+        "    SPACE1-1 People 1 Definition, !- Name",
         "    people,                  !- Number of People Calculation Method",
         "    11,                      !- Number of People",
         "    ,                        !- People per Floor Area {person/m2}",
         "    ,                        !- Floor Area per Person {m2/person}",
         "    0.3,                     !- Fraction Radiant",
-        "    ,                        !- Sensible Heat Fraction",
-        "    ActSchd;                 !- Activity Level Schedule Name",
+        "    ;                        !- Sensible Heat Fraction",
 
         "  People,",
         "    SPACE2-1 People 1,       !- Name",
+        "    SPACE2-1 People 1 Definition, !- People Definition Name",
         "    SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name",
         "    OCCUPY-1,                !- Number of People Schedule Name",
+        "    ActSchd;                 !- Activity Level Schedule Name",
+
+        "  People:Definition,",
+        "    SPACE2-1 People 1 Definition, !- Name",
         "    people,                  !- Number of People Calculation Method",
         "    5,                       !- Number of People",
         "    ,                        !- People per Floor Area {person/m2}",
         "    ,                        !- Floor Area per Person {m2/person}",
         "    0.3,                     !- Fraction Radiant",
-        "    ,                        !- Sensible Heat Fraction",
-        "    ActSchd;                 !- Activity Level Schedule Name",
+        "    ;                        !- Sensible Heat Fraction",
 
         "  Lights,",
         "    SPACE1-1 Lights 1,       !- Name",

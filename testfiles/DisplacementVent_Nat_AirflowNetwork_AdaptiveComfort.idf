@@ -561,24 +561,28 @@
 
   People,
     ZONE ONE People 1,       !- Name
+    ZONE ONE People 1 Definition,  !- People Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     WorkHours ScheduleG,     !- Number of People Schedule Name
+    Live Gang,               !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    Work Eff Sch,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    Clothing Sch,            !- Clothing Insulation Schedule Name
+    Air Velo Sch;            !- Air Velocity Schedule Name
+
+  People:Definition,
+    ZONE ONE People 1 Definition,  !- Name
     people,                  !- Number of People Calculation Method
     10,                      !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.5,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    Live Gang,               !- Activity Level Schedule Name
     3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
-    ,                        !- Surface Name/Angle Factor List Name
-    Work Eff Sch,            !- Work Efficiency Schedule Name
-    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
-    ,                        !- Clothing Insulation Calculation Method Schedule Name
-    Clothing Sch,            !- Clothing Insulation Schedule Name
-    Air Velo Sch,            !- Air Velocity Schedule Name
     AdaptiveASH55,           !- Thermal Comfort Model 1 Type
     AdaptiveCEN15251;        !- Thermal Comfort Model 2 Type
 

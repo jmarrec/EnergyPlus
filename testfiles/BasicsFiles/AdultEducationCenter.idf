@@ -1018,15 +1018,19 @@
 
   People,
     Full Building - 1 Zone_People_1,  !- Name
+    Full Building - 1 Zone_People_1 Definition,  !- People Definition Name
     Full Building - 1 Zone,  !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
+    Activity Lvl   1;        !- Activity Level Schedule Name
+
+  People:Definition,
+    Full Building - 1 Zone_People_1 Definition,  !- Name
     People,                  !- Number of People Calculation Method
     205.0000,                !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.7000000,               !- Fraction Radiant
-    ,                        !- Sensible Heat Fraction
-    Activity Lvl   1;        !- Activity Level Schedule Name
+    ;                        !- Sensible Heat Fraction
 
 !-   ===========  ALL OBJECTS IN CLASS: LIGHTS ===========
 
