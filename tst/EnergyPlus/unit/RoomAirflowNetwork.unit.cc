@@ -502,8 +502,12 @@ TEST_F(EnergyPlusFixture, RoomAirInternalGains_InternalHeatGains_Check)
         "  0;                       !- Fraction Replaceable",
         " ElectricEquipment,",
         "  Electric Equipment 1,  !- Name",
+        "  Electric Equipment 1 Definition, !- Electric Equipment Definition Name",
         "  living_unit1,               !- Zone or ZoneList Name",
-        "  sch,               !- Schedule Name",
+        "  sch;               !- Schedule Name",
+
+        " ElectricEquipment:Definition,",
+        "  Electric Equipment 1 Definition, !- Name",
         "  EquipmentLevel,          !- Design Level Calculation Method",
         "  150.0,                   !- Design Level {W}",
         "  ,                        !- Watts per Zone Floor Area {W/m2}",

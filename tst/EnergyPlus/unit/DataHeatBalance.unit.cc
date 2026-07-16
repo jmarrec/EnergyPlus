@@ -471,8 +471,12 @@ TEST_F(EnergyPlusFixture, DataHeatBalance_CheckConstructLayers)
 
         "  ElectricEquipment,",
         "    West Zone ElecEq 1,      !- Name",
+        "    West Zone ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    West Zone,               !- Zone or ZoneList Name",
-        "    Intermittent,            !- Schedule Name",
+        "    Intermittent;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    West Zone ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    2928.751,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",

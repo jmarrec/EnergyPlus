@@ -2128,8 +2128,12 @@
 
   ElectricEquipment,
     ZONE 1 ElecEq 1,         !- Name
+    ZONE 1 ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZONE 1,                  !- Zone or ZoneList or Space or SpaceList Name
-    Residence Lighting,      !- Schedule Name
+    Residence Lighting;      !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE 1 ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     480.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2140,8 +2144,12 @@
 
   ElectricEquipment,
     ZONE 2 ElecEq 1,         !- Name
+    ZONE 2 ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZONE 2,                  !- Zone or ZoneList or Space or SpaceList Name
-    Residence Lighting,      !- Schedule Name
+    Residence Lighting;      !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE 2 ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     480.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2152,8 +2160,12 @@
 
   ElectricEquipment,
     ZONE 3 ElecEq 1,         !- Name
+    ZONE 3 ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZONE 3,                  !- Zone or ZoneList or Space or SpaceList Name
-    Residence Lighting,      !- Schedule Name
+    Residence Lighting;      !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE 3 ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     480.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

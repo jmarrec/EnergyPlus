@@ -887,8 +887,12 @@
 
   ElectricEquipment,
     SPACE1-1 Elec Equipment, !- Name
+    SPACE1-1 Elec Equipment Definition,  !- Electric Equipment Definition Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SPACE1-1 Elec Equipment Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1102,8 +1106,12 @@
 
   ElectricEquipment,
     SPACE2-1 Elec Equipment, !- Name
+    SPACE2-1 Elec Equipment Definition,  !- Electric Equipment Definition Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SPACE2-1 Elec Equipment Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     456,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1282,8 +1290,12 @@
 
   ElectricEquipment,
     SPACE3-1 Elec Equipment, !- Name
+    SPACE3-1 Elec Equipment Definition,  !- Electric Equipment Definition Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SPACE3-1 Elec Equipment Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1477,8 +1489,12 @@
 
   ElectricEquipment,
     SPACE4-1 Elec Equipment, !- Name
+    SPACE4-1 Elec Equipment Definition,  !- Electric Equipment Definition Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SPACE4-1 Elec Equipment Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     456,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1657,8 +1673,12 @@
 
   ElectricEquipment,
     SPACE5-1 Elec Equipment, !- Name
+    SPACE5-1 Elec Equipment Definition,  !- Electric Equipment Definition Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SPACE5-1 Elec Equipment Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1976,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

@@ -1603,68 +1603,88 @@
 
   ElectricEquipment,
     SOUTH PERIMETER ElecEq 1,!- Name
+    SOUTH PERIMETER ElecEq 1 Definition,  !- Electric Equipment Definition Name
     SOUTH PERIMETER,         !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    SOUTH PERIMETER ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     EAST PERIMETER ElecEq 1, !- Name
+    EAST PERIMETER ElecEq 1 Definition,  !- Electric Equipment Definition Name
     EAST PERIMETER,          !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    EAST PERIMETER ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     456,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     NORTH PERIMETER ElecEq 1,!- Name
+    NORTH PERIMETER ElecEq 1 Definition,  !- Electric Equipment Definition Name
     NORTH PERIMETER,         !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    NORTH PERIMETER ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     WEST PERIMETER ElecEq 1, !- Name
+    WEST PERIMETER ElecEq 1 Definition,  !- Electric Equipment Definition Name
     WEST PERIMETER,          !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    WEST PERIMETER ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     456,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     CORE ElecEq 1,           !- Name
+    CORE ElecEq 1 Definition,  !- Electric Equipment Definition Name
     CORE,                    !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    CORE ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1976,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ZoneInfiltration:DesignFlowRate,
     SOUTH PERIMETER Infil 1, !- Name

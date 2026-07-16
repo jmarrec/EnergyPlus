@@ -4611,107 +4611,139 @@
 
   ElectricEquipment,
     dishwasher1,             !- Name
+    dishwasher1 Definition,  !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     DishWasher,              !- Schedule Name
+    dishwasher;              !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    dishwasher1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     65.698787492023,         !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.15,                    !- Fraction Latent
     0.6,                     !- Fraction Radiant
-    0.25,                    !- Fraction Lost
-    dishwasher;              !- End-Use Subcategory
+    0.25;                    !- Fraction Lost
 
   ElectricEquipment,
     refrigerator1,           !- Name
+    refrigerator1 Definition,  !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     Refrigerator,            !- Schedule Name
+    refrigerator;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    refrigerator1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     91.0575745202123,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     1,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    refrigerator;            !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     clotheswasher1,          !- Name
+    clotheswasher1 Definition,  !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     ClothesWasher,           !- Schedule Name
+    clotheswasher;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    clotheswasher1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     28.4784377542718,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.8,                     !- Fraction Radiant
-    0.2,                     !- Fraction Lost
-    clotheswasher;           !- End-Use Subcategory
+    0.2;                     !- Fraction Lost
 
   ElectricEquipment,
     electric_dryer1,         !- Name
+    electric_dryer1 Definition,  !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     ClothesDryer,            !- Schedule Name
+    electric_dryer;          !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    electric_dryer1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     213.064557285022,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.05,                    !- Fraction Latent
     0.15,                    !- Fraction Radiant
-    0.8,                     !- Fraction Lost
-    electric_dryer;          !- End-Use Subcategory
+    0.8;                     !- Fraction Lost
 
   ElectricEquipment,
     electric_range1,         !- Name
+    electric_range1 Definition,  !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     CookingRange,            !- Schedule Name
+    electric_range;          !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    electric_range1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     248.154224774405,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.3,                     !- Fraction Latent
     0.4,                     !- Fraction Radiant
-    0.3,                     !- Fraction Lost
-    electric_range;          !- End-Use Subcategory
+    0.3;                     !- Fraction Lost
 
   ElectricEquipment,
     television1,             !- Name
+    television1 Definition,  !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     InteriorLighting,        !- Schedule Name
+    television;              !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    television1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     1,                       !- Fraction Radiant
-    0,                       !- Fraction Lost
-    television;              !- End-Use Subcategory
+    0;                       !- Fraction Lost
 
   ElectricEquipment,
     electric_mels1,          !- Name
+    electric_mels1 Definition,  !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     MiscPlugLoad,            !- Schedule Name
+    electric_mels;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    electric_mels1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     567.464237516869,        !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.06,                    !- Fraction Latent
     0.69,                    !- Fraction Radiant
-    0.25,                    !- Fraction Lost
-    electric_mels;           !- End-Use Subcategory
+    0.25;                    !- Fraction Lost
 
   ElectricEquipment,
     IECC_Adj1,               !- Name
+    IECC_Adj1 Definition,    !- Electric Equipment Definition Name
     living_unit1,            !- Zone or ZoneList or Space or SpaceList Name
     MiscPlugLoad,            !- Schedule Name
+    IECC_adj;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    IECC_Adj1 Definition,    !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     1.54356736989469,        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0624390461422629,      !- Fraction Latent
     0.41190936353998,        !- Fraction Radiant
-    0.251045347957769,       !- Fraction Lost
-    IECC_adj;                !- End-Use Subcategory
+    0.251045347957769;       !- Fraction Lost
 
 !- HVAC System definition from hvac.afn.tmpl...
 !-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:COMPACT ===========

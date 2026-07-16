@@ -964,8 +964,12 @@
 
   ElectricEquipment,
     All Spaces Elec Equip,   !- Name
+    All Spaces Elec Equip Definition,  !- Electric Equipment Definition Name
     AllConditionedSpaces,    !- Zone or ZoneList or Space or SpaceList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    All Spaces Elec Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.0,                    !- Watts per Floor Area {W/m2}

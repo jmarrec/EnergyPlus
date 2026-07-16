@@ -446,16 +446,20 @@
 
   ElectricEquipment,
     rm1_3_C_EQUIP,           !- Name
+    rm1_3_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_3_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_3_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -828,16 +832,20 @@
 
   ElectricEquipment,
     rm1_4_C_EQUIP,           !- Name
+    rm1_4_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_4_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_4_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -1159,16 +1167,20 @@
 
   ElectricEquipment,
     rm1_5_C_EQUIP,           !- Name
+    rm1_5_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_5_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_5_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -1526,16 +1538,20 @@
 
   ElectricEquipment,
     rm1_6_C_EQUIP,           !- Name
+    rm1_6_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_6_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_6_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -1929,16 +1945,20 @@
 
   ElectricEquipment,
     rm1_7_C_EQUIP,           !- Name
+    rm1_7_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_7_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_7_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -2368,16 +2388,20 @@
 
   ElectricEquipment,
     rm1_8_C_EQUIP,           !- Name
+    rm1_8_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_8_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_8_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -2843,16 +2867,20 @@
 
   ElectricEquipment,
     rm1_9_C_EQUIP,           !- Name
+    rm1_9_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_9_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_9_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -3357,16 +3385,20 @@
 
   ElectricEquipment,
     rm1_10_C_EQUIP,          !- Name
+    rm1_10_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_10_C,                !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_10_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -3908,16 +3940,20 @@
 
   ElectricEquipment,
     rm1_1_C_EQUIP,           !- Name
+    rm1_1_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_1_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_1_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 
@@ -4495,16 +4531,20 @@
 
   ElectricEquipment,
     rm1_2_C_EQUIP,           !- Name
+    rm1_2_C_EQUIP Definition,  !- Electric Equipment Definition Name
     rm1_2_C,                 !- Zone or ZoneList or Space or SpaceList Name
     OffLgt,                  !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    rm1_2_C_EQUIP Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     900.0001,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
  !! NOTE: rMaxInfilt=0.02461021,  ! DOE2 Wind Spd Terrain Corr=0.7057271
 

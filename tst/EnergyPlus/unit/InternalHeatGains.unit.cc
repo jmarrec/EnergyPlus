@@ -1239,8 +1239,12 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
 
         "  ElectricEquipment,",
         "    Main Zone Electric Equipment,  !- Name",
+        "    Main Zone Electric Equipment Definition, !- Electric Equipment Definition Name",
         "    Main Zone,               !- Zone or ZoneList Name",
-        "    Schedule1,               !- Schedule Name",
+        "    Schedule1;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Main Zone Electric Equipment Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    150.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",

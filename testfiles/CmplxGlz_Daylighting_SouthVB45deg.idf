@@ -85479,16 +85479,20 @@
 
   ElectricEquipment,
     COMFENZone ElecEq,       !- Name
+    COMFENZone ElecEq Definition,  !- Electric Equipment Definition Name
     COMFENZone,              !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-SCHED,             !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    COMFENZone ElecEq Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     27.876996994,            !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.5,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ZoneInfiltration:DesignFlowRate,
     COMFENZone Infil,        !- Name

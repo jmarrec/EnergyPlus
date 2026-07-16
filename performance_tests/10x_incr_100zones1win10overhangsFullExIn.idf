@@ -23574,16 +23574,20 @@
 
   ElectricEquipment,
     90.1-2010 - Office - OpenOffice Electric Equipment,  !- Name
+    90.1-2010 - Office - OpenOffice Electric Equipment Definition,  !- Electric Equipment Definition Name
     90.1-2010 - Office - OpenOffice,  !- Zone or ZoneList or Space or SpaceList Name
-    Medium Office Bldg Equip,!- Schedule Name
+    Medium Office Bldg Equip,  !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    90.1-2010 - Office - OpenOffice Electric Equipment Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     7.6423763958639,         !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Fraction Latent
     ,                        !- Fraction Radiant
-    ,                        !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    ;                        !- Fraction Lost
 
   ZoneInfiltration:DesignFlowRate,
     90.1-2010 - Office - OpenOffice Infiltration,  !- Name

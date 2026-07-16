@@ -584,8 +584,12 @@
 
   ElectricEquipment,
     ZONE ONE ElecEq 1,       !- Name
+    ZONE ONE ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    WorkHours ScheduleG,     !- Schedule Name
+    WorkHours ScheduleG;     !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONE ONE ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2200,                    !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

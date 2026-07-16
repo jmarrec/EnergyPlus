@@ -1729,8 +1729,12 @@
 
   ElectricEquipment,
     WEST ZONE ElecEq 1,      !- Name
+    WEST ZONE ElecEq 1 Definition,  !- Electric Equipment Definition Name
     WEST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
-    OFFICE EQUIP,            !- Schedule Name
+    OFFICE EQUIP;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    WEST ZONE ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1741,8 +1745,12 @@
 
   ElectricEquipment,
     EAST ZONE ElecEq 1,      !- Name
+    EAST ZONE ElecEq 1 Definition,  !- Electric Equipment Definition Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
-    OFFICE EQUIP,            !- Schedule Name
+    OFFICE EQUIP;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    EAST ZONE ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     464.375,                 !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1753,8 +1761,12 @@
 
   ElectricEquipment,
     NORTH ZONE ElecEq 1,     !- Name
+    NORTH ZONE ElecEq 1 Definition,  !- Electric Equipment Definition Name
     NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
-    OFFICE EQUIP,            !- Schedule Name
+    OFFICE EQUIP;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    NORTH ZONE ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

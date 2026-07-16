@@ -2778,8 +2778,12 @@
 
   ElectricEquipment,
     ZN1_Fl1_S_Space ElecEq 1,!- Name
+    ZN1_Fl1_S_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN1_Fl1_S_Space,         !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN1_Fl1_S_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.715,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2790,8 +2794,12 @@
 
   ElectricEquipment,
     ZN3_Fl1_E_Space ElecEq 1,!- Name
+    ZN3_Fl1_E_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN3_Fl1_E_Space,         !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN3_Fl1_E_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.716,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2802,8 +2810,12 @@
 
   ElectricEquipment,
     ZN5_Fl1_W_Space ElecEq 1,!- Name
+    ZN5_Fl1_W_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN5_Fl1_W_Space,         !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN5_Fl1_W_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.715,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2814,8 +2826,12 @@
 
   ElectricEquipment,
     ZN7_Fl1_N_Space ElecEq 1,!- Name
+    ZN7_Fl1_N_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN7_Fl1_N_Space,         !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN7_Fl1_N_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.715,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2826,8 +2842,12 @@
 
   ElectricEquipment,
     ZN9_Fl1_Core_Space ElecEq 1,  !- Name
+    ZN9_Fl1_Core_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN9_Fl1_Core_Space,      !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN9_Fl1_Core_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4779.639,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2838,8 +2858,12 @@
 
   ElectricEquipment,
     ZN11_Fl2_S_Space ElecEq 1,  !- Name
+    ZN11_Fl2_S_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN11_Fl2_S_Space,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN11_Fl2_S_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.715,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2850,8 +2874,12 @@
 
   ElectricEquipment,
     ZN13_Fl2_E_Space ElecEq 1,  !- Name
+    ZN13_Fl2_E_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN13_Fl2_E_Space,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN13_Fl2_E_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.716,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2862,8 +2890,12 @@
 
   ElectricEquipment,
     ZN15_Fl2_W_Space ElecEq 1,  !- Name
+    ZN15_Fl2_W_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN15_Fl2_W_Space,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN15_Fl2_W_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.715,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2874,8 +2906,12 @@
 
   ElectricEquipment,
     ZN17_Fl2_N_Space ElecEq 1,  !- Name
+    ZN17_Fl2_N_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN17_Fl2_N_Space,        !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN17_Fl2_N_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1243.715,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -2886,8 +2922,12 @@
 
   ElectricEquipment,
     ZN19_Fl2_Core_Space ElecEq 1,  !- Name
+    ZN19_Fl2_Core_Space ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZN19_Fl2_Core_Space,     !- Zone or ZoneList or Space or SpaceList Name
-    BLDG_EQUIP_SCH,          !- Schedule Name
+    BLDG_EQUIP_SCH;          !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZN19_Fl2_Core_Space ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4779.639,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

@@ -18097,8 +18097,12 @@ TEST_F(EnergyPlusFixture, Test_UnitarySystemModel_SubcoolReheatCoil)
 
   ElectricEquipment,
     SPACE1-1 ElecEq 1,       !- Name
+    SPACE1-1 ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZONE ONE,                !- Zone or ZoneList Name
-    EQUIP-1,                 !- Schedule Name
+    EQUIP-1;                 !- Schedule Name
+
+  ElectricEquipment:Definition,
+    SPACE1-1 ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
@@ -24966,8 +24970,12 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
         "    GeneralLights;           !- End-Use Subcategory",
         "  ElectricEquipment,",
         "    SPACE1-1 ElecEq 1,       !- Name",
+        "    SPACE1-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    SPACE1-1 ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1056,                    !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -24978,8 +24986,12 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
         "  ElectricEquipment,",
         "    SPACE2-1 ElecEq 1,       !- Name",
+        "    SPACE2-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    SPACE2-1 ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    456,                     !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",

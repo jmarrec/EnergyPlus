@@ -5430,341 +5430,445 @@
 
   ElectricEquipment,
     Bath_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Bath_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Bath_ZN_1_FLR_1,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Bath_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Cafeteria_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Cafeteria_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Cafeteria_ZN_1_FLR_1,    !- Zone or ZoneList or Space or SpaceList Name
     KITCHEN_ELEC_EQUIP_SCH,  !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Cafeteria_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     25.39,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Computer_Class_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Computer_Class_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Computer_Class_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Computer_Class_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     20.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corner_Class_1_Pod_1_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corner_Class_1_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_1_Pod_1_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_1_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corner_Class_1_Pod_2_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corner_Class_1_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_1_Pod_2_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_1_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corner_Class_1_Pod_3_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corner_Class_1_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_1_Pod_3_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_1_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corner_Class_2_Pod_1_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corner_Class_2_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_2_Pod_1_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_2_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corner_Class_2_Pod_2_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corner_Class_2_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_2_Pod_2_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_2_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corner_Class_2_Pod_3_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corner_Class_2_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_2_Pod_3_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_2_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corridor_Pod_1_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corridor_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corridor_Pod_1_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corridor_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corridor_Pod_2_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corridor_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corridor_Pod_2_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corridor_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Corridor_Pod_3_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Corridor_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corridor_Pod_3_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corridor_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Gym_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Gym_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Gym_ZN_1_FLR_1,          !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Gym_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     5.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_ZN_1_FLR_1_ExhFan_Equip,  !- Name
+    Kitchen_ZN_1_FLR_1_ExhFan_Equip Definition,  !- Electric Equipment Definition Name
     Kitchen_ZN_1_FLR_1,      !- Zone or ZoneList or Space or SpaceList Name
     Kitchen_Exhaust_SCH,     !- Schedule Name
+    KitchenExhFan;           !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_ZN_1_FLR_1_ExhFan_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     576,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.0000,                  !- Fraction Radiant
-    1.0000,                  !- Fraction Lost
-    KitchenExhFan;           !- End-Use Subcategory
+    1.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Kitchen_ZN_1_FLR_1_MiscElec_Equip,  !- Name
+    Kitchen_ZN_1_FLR_1_MiscElec_Equip Definition,  !- Electric Equipment Definition Name
     Kitchen_ZN_1_FLR_1,      !- Zone or ZoneList or Space or SpaceList Name
     KITCHEN_ELEC_EQUIP_SCH,  !- Schedule Name
+    MiscElec;                !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Kitchen_ZN_1_FLR_1_MiscElec_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     31996,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2500,                  !- Fraction Latent
     0.3000,                  !- Fraction Radiant
-    0.2000,                  !- Fraction Lost
-    MiscElec;                !- End-Use Subcategory
+    0.2000;                  !- Fraction Lost
 
   ElectricEquipment,
     Library_Media_Center_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Library_Media_Center_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Library_Media_Center_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Library_Media_Center_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Lobby_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Lobby_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Lobby_ZN_1_FLR_1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Lobby_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Main_Corridor_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
-    Main_Corridor_ZN_1_FLR_1,!- Zone or ZoneList or Space or SpaceList Name
+    Main_Corridor_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
+    Main_Corridor_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Main_Corridor_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Mech_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Mech_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mech_ZN_1_FLR_1,         !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mech_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.0,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Mult_Class_1_Pod_1_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Mult_Class_1_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_1_Pod_1_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_1_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Mult_Class_1_Pod_2_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Mult_Class_1_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_1_Pod_2_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_1_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Mult_Class_1_Pod_3_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Mult_Class_1_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_1_Pod_3_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_1_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Mult_Class_2_Pod_1_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Mult_Class_2_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_2_Pod_1_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_2_Pod_1_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Mult_Class_2_Pod_2_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Mult_Class_2_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_2_Pod_2_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_2_Pod_2_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Mult_Class_2_Pod_3_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Mult_Class_2_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_2_Pod_3_ZN_1_FLR_1,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_2_Pod_3_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     15.0,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ElectricEquipment,
     Offices_ZN_1_FLR_1_PlugMisc_Equip,  !- Name
+    Offices_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Offices_ZN_1_FLR_1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Offices_ZN_1_FLR_1_PlugMisc_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     10.8,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   GasEquipment,
     Kitchen_ZN_1_FLR_1_MiscGas_Equip,  !- Name

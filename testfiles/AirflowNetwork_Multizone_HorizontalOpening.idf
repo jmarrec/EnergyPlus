@@ -1569,8 +1569,12 @@
 
   ElectricEquipment,
     WEST_ZONE Equip,         !- Name
+    WEST_ZONE Equip Definition,  !- Electric Equipment Definition Name
     WEST_ZONE,               !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    WEST_ZONE Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1581,8 +1585,12 @@
 
   ElectricEquipment,
     EAST_ZONE Equip,         !- Name
+    EAST_ZONE Equip Definition,  !- Electric Equipment Definition Name
     EAST_ZONE,               !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    EAST_ZONE Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1464.375,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1593,8 +1601,12 @@
 
   ElectricEquipment,
     NORTH_ZONE Equip,        !- Name
+    NORTH_ZONE Equip Definition,  !- Electric Equipment Definition Name
     NORTH_ZONE,              !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    NORTH_ZONE Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1605,8 +1617,12 @@
 
   ElectricEquipment,
     WEST_ZONE_T Equip,       !- Name
+    WEST_ZONE_T Equip Definition,  !- Electric Equipment Definition Name
     WEST_ZONE_T,             !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    WEST_ZONE_T Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1617,8 +1633,12 @@
 
   ElectricEquipment,
     EAST_ZONE_T Equip,       !- Name
+    EAST_ZONE_T Equip Definition,  !- Electric Equipment Definition Name
     EAST_ZONE_T,             !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    EAST_ZONE_T Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1464.375,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1629,8 +1649,12 @@
 
   ElectricEquipment,
     NORTH_ZONE_T Equip,      !- Name
+    NORTH_ZONE_T Equip Definition,  !- Electric Equipment Definition Name
     NORTH_ZONE_T,            !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    NORTH_ZONE_T Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

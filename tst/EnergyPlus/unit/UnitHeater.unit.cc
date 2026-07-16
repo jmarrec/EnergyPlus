@@ -597,8 +597,12 @@ TEST_F(EnergyPlusFixture, UnitHeater_HWHeatingCoilUAAutoSizingTest)
 
         "  ElectricEquipment,",
         "    EAST ZONE ElecEq 1,      !- Name",
+        "    EAST ZONE ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    EAST ZONE,               !- Zone or ZoneList Name",
-        "    Intermittent,            !- Schedule Name",
+        "    Intermittent;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    EAST ZONE ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1464.375,                !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1804,8 +1808,12 @@ TEST_F(EnergyPlusFixture, UnitHeater_SecondPriorityZoneEquipment)
 
         "ElectricEquipment,",
         "    Main Zone ElecEq 1,      !- Name",
+        "    Main Zone ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    Main Zone,               !- Zone or ZoneList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    Main Zone ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    19760,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",

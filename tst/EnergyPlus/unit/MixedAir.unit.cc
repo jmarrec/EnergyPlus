@@ -3905,8 +3905,12 @@ TEST_F(EnergyPlusFixture, MixedAir_MiscGetsPart2)
 
         "ElectricEquipment,",
         "    SPACE1-1 ElecEq 1,       !- Name",
+        "    SPACE1-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    SPACE1-1,                !- Zone or ZoneList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    SPACE1-1 ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1056,                    !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3917,8 +3921,12 @@ TEST_F(EnergyPlusFixture, MixedAir_MiscGetsPart2)
 
         "ElectricEquipment,",
         "    SPACE2-1 ElecEq 1,       !- Name",
+        "    SPACE2-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    SPACE2-1,                !- Zone or ZoneList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    SPACE2-1 ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    456,                     !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3929,8 +3937,12 @@ TEST_F(EnergyPlusFixture, MixedAir_MiscGetsPart2)
 
         "ElectricEquipment,",
         "    SPACE3-1 ElecEq 1,       !- Name",
+        "    SPACE3-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    SPACE3-1,                !- Zone or ZoneList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    SPACE3-1 ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1056,                    !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3941,8 +3953,12 @@ TEST_F(EnergyPlusFixture, MixedAir_MiscGetsPart2)
 
         "ElectricEquipment,",
         "    SPACE4-1 ElecEq 1,       !- Name",
+        "    SPACE4-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    SPACE4-1,                !- Zone or ZoneList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    SPACE4-1 ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    456,                     !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3953,8 +3969,12 @@ TEST_F(EnergyPlusFixture, MixedAir_MiscGetsPart2)
 
         "ElectricEquipment,",
         "    SPACE5-1 ElecEq 1,       !- Name",
+        "    SPACE5-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",
         "    SPACE5-1,                !- Zone or ZoneList Name",
-        "    EQUIP-1,                 !- Schedule Name",
+        "    EQUIP-1;                 !- Schedule Name",
+
+        "ElectricEquipment:Definition,",
+        "    SPACE5-1 ElecEq 1 Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1976,                    !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",

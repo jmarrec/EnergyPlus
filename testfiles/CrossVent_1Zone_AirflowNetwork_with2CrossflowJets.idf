@@ -985,8 +985,12 @@
 
   ElectricEquipment,
     ZONA ElecEq 1,           !- Name
+    ZONA ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ZONA,                    !- Zone or ZoneList or Space or SpaceList Name
-    ON,                      !- Schedule Name
+    ON;                      !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ZONA ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     100,                     !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

@@ -1545,16 +1545,20 @@
 
   ElectricEquipment,
     Corner_Class_1_Pod_1_PlugMisc_Equip,  !- Name
+    Corner_Class_1_Pod_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_1_Pod_1,    !- Zone or ZoneList or Space or SpaceList Name
     Bldg_Equip_Sch,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_1_Pod_1_PlugMisc_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     894.9600,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !***** Space Conditioning For Zone: Corner_Class_1_Pod_1 *****
 
@@ -2429,16 +2433,20 @@
 
   ElectricEquipment,
     Mult_Class_1_Pod_1_PlugMisc_Equip,  !- Name
+    Mult_Class_1_Pod_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_1_Pod_1,      !- Zone or ZoneList or Space or SpaceList Name
     Bldg_Equip_Sch,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_1_Pod_1_PlugMisc_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4312.0800,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !***** Space Conditioning For Zone: Mult_Class_1_Pod_1 *****
 
@@ -3331,16 +3339,20 @@
 
   ElectricEquipment,
     Corner_Class_2_Pod_1_PlugMisc_Equip,  !- Name
+    Corner_Class_2_Pod_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Corner_Class_2_Pod_1,    !- Zone or ZoneList or Space or SpaceList Name
     Bldg_Equip_Sch,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Corner_Class_2_Pod_1_PlugMisc_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     894.9600,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !***** Space Conditioning For Zone: Corner_Class_2_Pod_1 *****
 
@@ -4015,16 +4027,20 @@
 
   ElectricEquipment,
     Mult_Class_2_Pod_1_PlugMisc_Equip,  !- Name
+    Mult_Class_2_Pod_1_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Mult_Class_2_Pod_1,      !- Zone or ZoneList or Space or SpaceList Name
     Bldg_Equip_Sch,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Mult_Class_2_Pod_1_PlugMisc_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4312.0800,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !***** Space Conditioning For Zone: Mult_Class_2_Pod_1 *****
 
@@ -6823,16 +6839,20 @@
 
   ElectricEquipment,
     Offices_PlugMisc_Equip,  !- Name
+    Offices_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Offices,                 !- Zone or ZoneList or Space or SpaceList Name
     Bldg_Equip_Sch,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Offices_PlugMisc_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1424.4300,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !***** Space Conditioning For Zone: Offices *****
 
@@ -7494,16 +7514,20 @@
 
   ElectricEquipment,
     Media_Center_PlugMisc_Equip,  !- Name
+    Media_Center_PlugMisc_Equip Definition,  !- Electric Equipment Definition Name
     Media_Center,            !- Zone or ZoneList or Space or SpaceList Name
     Bldg_Equip_Sch,          !- Schedule Name
+    General;                 !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Media_Center_PlugMisc_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1288.7700,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    General;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
 !***** Space Conditioning For Zone: Media_Center *****
 

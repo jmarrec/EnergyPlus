@@ -1384,8 +1384,12 @@
 
   ElectricEquipment,
     Lshaped zoneEEquip,      !- Name
+    Lshaped zoneEEquip Definition,  !- Electric Equipment Definition Name
     Lshaped zone,            !- Zone or ZoneList or Space or SpaceList Name
-    Lshaped zone-EquipSchedule,  !- Schedule Name
+    Lshaped zone-EquipSchedule;  !- Schedule Name
+
+  ElectricEquipment:Definition,
+    Lshaped zoneEEquip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1396,8 +1400,12 @@
 
   ElectricEquipment,
     LshapedZoneBaseEEquip,   !- Name
+    LshapedZoneBaseEEquip Definition,  !- Electric Equipment Definition Name
     LshapedZoneBase,         !- Zone or ZoneList or Space or SpaceList Name
-    LshapedZoneBase-EquipSchedule,  !- Schedule Name
+    LshapedZoneBase-EquipSchedule;  !- Schedule Name
+
+  ElectricEquipment:Definition,
+    LshapedZoneBaseEEquip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     0,                       !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

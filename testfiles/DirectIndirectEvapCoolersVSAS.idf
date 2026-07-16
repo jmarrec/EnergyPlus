@@ -3137,16 +3137,20 @@
 
   ElectricEquipment,
     units_gr_lf_units_gr_lf ElecEq 1_Equip,  !- Name
+    units_gr_lf_units_gr_lf ElecEq 1_Equip Definition,  !- Electric Equipment Definition Name
     units_gr_lf,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    GeneralEquipment;        !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    units_gr_lf_units_gr_lf ElecEq 1_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     4032.0000,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    GeneralEquipment;        !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:units_gr_lf:units_gr_lf ElecEq 1,  !- Name
@@ -3165,16 +3169,20 @@
 
   ElectricEquipment,
     units_gr_lf_units_gr_lf Refrig_Equip,  !- Name
+    units_gr_lf_units_gr_lf Refrig_Equip Definition,  !- Electric Equipment Definition Name
     units_gr_lf,             !- Zone or ZoneList or Space or SpaceList Name
     CONSTANT,                !- Schedule Name
+    Refrigerator;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    units_gr_lf_units_gr_lf Refrig_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     400.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    Refrigerator;            !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:units_gr_lf:units_gr_lf Refrig,  !- Name
@@ -3701,16 +3709,20 @@
 
   ElectricEquipment,
     units_gr_rt_units_gr_rt ElecEq 1_Equip,  !- Name
+    units_gr_rt_units_gr_rt ElecEq 1_Equip Definition,  !- Electric Equipment Definition Name
     units_gr_rt,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    GeneralEquipment;        !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    units_gr_rt_units_gr_rt ElecEq 1_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6048.0000,               !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    GeneralEquipment;        !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:units_gr_rt:units_gr_rt ElecEq 1,  !- Name
@@ -3729,16 +3741,20 @@
 
   ElectricEquipment,
     units_gr_rt_units_gr_rt Refrig_Equip,  !- Name
+    units_gr_rt_units_gr_rt Refrig_Equip Definition,  !- Electric Equipment Definition Name
     units_gr_rt,             !- Zone or ZoneList or Space or SpaceList Name
     CONSTANT,                !- Schedule Name
+    Refrigerator;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    units_gr_rt_units_gr_rt Refrig_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     600.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    Refrigerator;            !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:units_gr_rt:units_gr_rt Refrig,  !- Name
@@ -4090,16 +4106,20 @@
 
   ElectricEquipment,
     unit_s_g_unit_s_g ElecEq 1_Equip,  !- Name
+    unit_s_g_unit_s_g ElecEq 1_Equip Definition,  !- Electric Equipment Definition Name
     unit_s_g,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    GeneralEquipment;        !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    unit_s_g_unit_s_g ElecEq 1_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     903.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    GeneralEquipment;        !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:unit_s_g:unit_s_g ElecEq 1,  !- Name
@@ -4118,16 +4138,20 @@
 
   ElectricEquipment,
     unit_s_g_unit_s_g Refrig_Equip,  !- Name
+    unit_s_g_unit_s_g Refrig_Equip Definition,  !- Electric Equipment Definition Name
     unit_s_g,                !- Zone or ZoneList or Space or SpaceList Name
     CONSTANT,                !- Schedule Name
+    Refrigerator;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    unit_s_g_unit_s_g Refrig_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     100.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    Refrigerator;            !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:unit_s_g:unit_s_g Refrig,  !- Name
@@ -4479,16 +4503,20 @@
 
   ElectricEquipment,
     unit_n_g_unit_n_g ElecEq 1_Equip,  !- Name
+    unit_n_g_unit_n_g ElecEq 1_Equip Definition,  !- Electric Equipment Definition Name
     unit_n_g,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    GeneralEquipment;        !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    unit_n_g_unit_n_g ElecEq 1_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     903.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    GeneralEquipment;        !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:unit_n_g:unit_n_g ElecEq 1,  !- Name
@@ -4507,16 +4535,20 @@
 
   ElectricEquipment,
     unit_n_g_unit_n_g Refrig_Equip,  !- Name
+    unit_n_g_unit_n_g Refrig_Equip Definition,  !- Electric Equipment Definition Name
     unit_n_g,                !- Zone or ZoneList or Space or SpaceList Name
     CONSTANT,                !- Schedule Name
+    Refrigerator;            !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    unit_n_g_unit_n_g Refrig_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     100.0000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.6000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    Refrigerator;            !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     ElectricEquipment:unit_n_g:unit_n_g Refrig,  !- Name

@@ -909,8 +909,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_1x)
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -930,8 +934,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_1x)
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    Afternoon,               !- Schedule Name",
+        "    Afternoon;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -951,8 +959,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_1x)
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    Evening,                 !- Schedule Name",
+        "    Evening;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    750.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1380,8 +1392,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_10x)
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1401,8 +1417,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_10x)
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    Afternoon,               !- Schedule Name",
+        "    Afternoon;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1422,8 +1442,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_10x)
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    Evening,                 !- Schedule Name",
+        "    Evening;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    750.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1824,8 +1848,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_NonCoincident1)
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1845,8 +1873,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_NonCoincident1)
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    Afternoon,               !- Schedule Name",
+        "    Afternoon;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -1866,8 +1898,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_NonCoincident1)
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    Evening,                 !- Schedule Name",
+        "    Evening;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    750.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -2322,8 +2358,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_NonCoincident2)
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    July Morning,            !- Schedule Name",
+        "    July Morning;            !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    5000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -2349,8 +2389,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_NonCoincident2)
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    August Afternoon,        !- Schedule Name",
+        "    August Afternoon;        !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    10000.0,                 !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -2376,8 +2420,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_NonCoincident2)
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    September Evening,       !- Schedule Name",
+        "    September Evening;       !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    7500.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -2789,8 +2837,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_1x_NoLatent
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -2801,8 +2853,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_1x_NoLatent
 
         "  ElectricEquipment,",
         "    Space 1 Latent ElecEq,   !- Name",
+        "    Space 1 Latent ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 Latent ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -2822,8 +2878,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_1x_NoLatent
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    Afternoon,               !- Schedule Name",
+        "    Afternoon;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -2843,8 +2903,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_1x_NoLatent
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    Evening,                 !- Schedule Name",
+        "    Evening;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    750.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3253,8 +3317,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3265,8 +3333,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 1 Latent ElecEq,   !- Name",
+        "    Space 1 Latent ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 Latent ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3286,8 +3358,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    Afternoon,               !- Schedule Name",
+        "    Afternoon;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3307,8 +3383,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    Evening,                 !- Schedule Name",
+        "    Evening;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    750.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3717,8 +3797,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3729,8 +3813,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 1 Latent ElecEq,   !- Name",
+        "    Space 1 Latent ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 Latent ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3750,8 +3838,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    Afternoon,               !- Schedule Name",
+        "    Afternoon;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -3771,8 +3863,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_NoLaten
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    Evening,                 !- Schedule Name",
+        "    Evening;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    750.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -4142,8 +4238,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_Latent_
 
         "  ElectricEquipment,",
         "    Space 1 ElecEq,          !- Name",
+        "    Space 1 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    Morning,                 !- Schedule Name",
+        "    Morning;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    500.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -4154,8 +4254,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_Latent_
 
         "  ElectricEquipment,",
         "    Space 1 Latent ElecEq,   !- Name",
+        "    Space 1 Latent ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 1,                 !- Zone or ZoneList Name",
-        "    SummerMorning2,          !- Schedule Name",
+        "    SummerMorning2;          !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 1 Latent ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -4194,8 +4298,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_Latent_
 
         "  ElectricEquipment,",
         "    Space 2 ElecEq,          !- Name",
+        "    Space 2 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 2,                 !- Zone or ZoneList Name",
-        "    Afternoon,               !- Schedule Name",
+        "    Afternoon;               !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 2 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    1000.0,                  !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
@@ -4215,8 +4323,12 @@ TEST_F(EnergyPlusFixture, SizingManager_ZoneSizing_Coincident_NonAir_10x_Latent_
 
         "  ElectricEquipment,",
         "    Space 3 ElecEq,          !- Name",
+        "    Space 3 ElecEq Definition, !- Electric Equipment Definition Name",
         "    Space 3,                 !- Zone or ZoneList Name",
-        "    Evening,                 !- Schedule Name",
+        "    Evening;                 !- Schedule Name",
+
+        "  ElectricEquipment:Definition,",
+        "    Space 3 ElecEq Definition, !- Name",
         "    EquipmentLevel,          !- Design Level Calculation Method",
         "    750.0,                   !- Design Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",

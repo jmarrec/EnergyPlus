@@ -1051,8 +1051,12 @@
 
   ElectricEquipment,
     West Zone ElecEq 1,      !- Name
+    West Zone ElecEq 1 Definition,  !- Electric Equipment Definition Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
-    Intermittent,            !- Schedule Name
+    Intermittent;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    West Zone ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     7928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1063,8 +1067,12 @@
 
   ElectricEquipment,
     EAST ZONE ElecEq 1,      !- Name
+    EAST ZONE ElecEq 1 Definition,  !- Electric Equipment Definition Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
-    Intermittent,            !- Schedule Name
+    Intermittent;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    EAST ZONE ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     6464.375,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -1075,8 +1083,12 @@
 
   ElectricEquipment,
     NORTH ZONE ElecEq 1,     !- Name
+    NORTH ZONE ElecEq 1 Definition,  !- Electric Equipment Definition Name
     NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
-    Intermittent,            !- Schedule Name
+    Intermittent;            !- Schedule Name
+
+  ElectricEquipment:Definition,
+    NORTH ZONE ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     7928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}

@@ -5202,185 +5202,241 @@
 
   ElectricEquipment,
     Freezer_1 ElecEq,        !- Name
+    Freezer_1 ElecEq Definition,  !- Electric Equipment Definition Name
     Freezer_1,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Freezer_1 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Freezer_2 ElecEq,        !- Name
+    Freezer_2 ElecEq Definition,  !- Electric Equipment Definition Name
     Freezer_2,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Freezer_2 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Freezer_3 ElecEq,        !- Name
+    Freezer_3 ElecEq Definition,  !- Electric Equipment Definition Name
     Freezer_3,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Freezer_3 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Freezer_4 ElecEq,        !- Name
+    Freezer_4 ElecEq Definition,  !- Electric Equipment Definition Name
     Freezer_4,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Freezer_4 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Freezer_5 ElecEq,        !- Name
+    Freezer_5 ElecEq Definition,  !- Electric Equipment Definition Name
     Freezer_5,               !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Freezer_5 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     SubFreezer ElecEq,       !- Name
+    SubFreezer ElecEq Definition,  !- Electric Equipment Definition Name
     SubFreezer,              !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    SubFreezer ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Cooler_1 ElecEq,         !- Name
+    Cooler_1 ElecEq Definition,  !- Electric Equipment Definition Name
     Cooler_1,                !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Cooler_1 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Cooler_2 ElecEq,         !- Name
+    Cooler_2 ElecEq Definition,  !- Electric Equipment Definition Name
     Cooler_2,                !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Cooler_2 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Cooler_3 ElecEq,         !- Name
+    Cooler_3 ElecEq Definition,  !- Electric Equipment Definition Name
     Cooler_3,                !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Cooler_3 ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Dock ElecEq,             !- Name
+    Dock ElecEq Definition,  !- Electric Equipment Definition Name
     Dock,                    !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Dock ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     4.6,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Office1_Lower ElecEq,    !- Name
+    Office1_Lower ElecEq Definition,  !- Electric Equipment Definition Name
     Office1_Lower,           !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office1_Lower ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.42,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Office1_Upper ElecEq,    !- Name
+    Office1_Upper ElecEq Definition,  !- Electric Equipment Definition Name
     Office1_Upper,           !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office1_Upper ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.42,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Office2_Lower ElecEq,    !- Name
+    Office2_Lower ElecEq Definition,  !- Electric Equipment Definition Name
     Office2_Lower,           !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office2_Lower ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.42,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
   ElectricEquipment,
     Office2_Upper ElecEq,    !- Name
+    Office2_Upper ElecEq Definition,  !- Electric Equipment Definition Name
     Office2_Upper,           !- Zone or ZoneList or Space or SpaceList Name
     T24 Equip,               !- Schedule Name
+    0;                       !- End-Use Subcategory
+
+  ElectricEquipment:Definition,
+    Office2_Upper ElecEq Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     14.42,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.,                      !- Fraction Latent
     0.7,                     !- Fraction Radiant
-    0.,                      !- Fraction Lost
-    0;                       !- End-Use Subcategory
+    0.;                      !- Fraction Lost
 
 ! =============   Chiller systems for each zone  ======================
 !Start Subfreezer/blast freezer

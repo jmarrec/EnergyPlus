@@ -578,8 +578,12 @@
 
   ElectricEquipment,
     HEARTLAND AREA ElecEq 1, !- Name
+    HEARTLAND AREA ElecEq 1 Definition,  !- Electric Equipment Definition Name
     HEARTLAND AREA,          !- Zone or ZoneList or Space or SpaceList Name
-    CONSTANT,                !- Schedule Name
+    CONSTANT;                !- Schedule Name
+
+  ElectricEquipment:Definition,
+    HEARTLAND AREA ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     11600.00,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -626,8 +630,12 @@
 
   ElectricEquipment,
     OREGON WING ElecEq 1,    !- Name
+    OREGON WING ElecEq 1 Definition,  !- Electric Equipment Definition Name
     OREGON WING,             !- Zone or ZoneList or Space or SpaceList Name
-    CONSTANT,                !- Schedule Name
+    CONSTANT;                !- Schedule Name
+
+  ElectricEquipment:Definition,
+    OREGON WING ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3880.000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -674,8 +682,12 @@
 
   ElectricEquipment,
     GEORGIA WING ElecEq 1,   !- Name
+    GEORGIA WING ElecEq 1 Definition,  !- Electric Equipment Definition Name
     GEORGIA WING,            !- Zone or ZoneList or Space or SpaceList Name
-    CONSTANT,                !- Schedule Name
+    CONSTANT;                !- Schedule Name
+
+  ElectricEquipment:Definition,
+    GEORGIA WING ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3880.000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -722,8 +734,12 @@
 
   ElectricEquipment,
     ARIZONA WING ElecEq 1,   !- Name
+    ARIZONA WING ElecEq 1 Definition,  !- Electric Equipment Definition Name
     ARIZONA WING,            !- Zone or ZoneList or Space or SpaceList Name
-    CONSTANT,                !- Schedule Name
+    CONSTANT;                !- Schedule Name
+
+  ElectricEquipment:Definition,
+    ARIZONA WING ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3870.000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -770,8 +786,12 @@
 
   ElectricEquipment,
     MAINE WING ElecEq 1,     !- Name
+    MAINE WING ElecEq 1 Definition,  !- Electric Equipment Definition Name
     MAINE WING,              !- Zone or ZoneList or Space or SpaceList Name
-    CONSTANT,                !- Schedule Name
+    CONSTANT;                !- Schedule Name
+
+  ElectricEquipment:Definition,
+    MAINE WING ElecEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     3880.000,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
