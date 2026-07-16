@@ -1,7 +1,7 @@
 name: Develop Branch Testing
 
 on:
-  push:
+  pull_request:
     branches: [ develop ]  # run this on all commits to the develop branch
 
 defaults:
@@ -129,6 +129,8 @@ jobs:
         -DUSE_PSYCH_STATS=ON
         -DUSE_PSYCH_ERRORS=OFF
         -DENABLE_PCH=OFF
+        -DBUILD_TESTING:BOOL=ON
+        -DBUILD_FORTRAN:BOOL=ON
         ../
 
     - name: Build

@@ -210,7 +210,11 @@ TEST_F(EnergyPlusFixture, Psychrometrics_PsyWFnTdpPb_Test)
     TDP = 100.0;
     W = Psychrometrics::PsyWFnTdpPb(*state, TDP, PB);
     EXPECT_NEAR(17.5250143, W, 0.0001);
+#ifdef EP_psych_errors
     EXPECT_TRUE(compare_err_stream(error_string, true));
+#else
+    EXPECT_TRUE(compare_err_stream("", true));
+#endif
 
     // Denver barometric pressure
     PB = 81000.0;
@@ -225,7 +229,11 @@ TEST_F(EnergyPlusFixture, Psychrometrics_PsyWFnTdpPb_Test)
 
     W = Psychrometrics::PsyWFnTdpPb(*state, TDP, PB);
     EXPECT_NEAR(20.07942181, W, 0.0001);
+#ifdef EP_psych_errors
     EXPECT_TRUE(compare_err_stream(error_string1, true));
+#else
+    EXPECT_TRUE(compare_err_stream("", true));
+#endif
 }
 
 inline Real64 PsyCpAirFnWTdb(Real64 const dw, // humidity ratio {kgWater/kgDryAir}
