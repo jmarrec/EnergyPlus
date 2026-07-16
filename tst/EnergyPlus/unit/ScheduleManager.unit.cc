@@ -2829,3 +2829,141 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DateRangeWrapAround)
         EXPECT_EQ(0.3, v);
     }
 }
+
+TEST_F(EnergyPlusFixture, ScheduleYearRules_DateRangeDiffWeekdaysWithOverlap)
+{
+    // Test that overlapping rules apply to different weekdays
+    std::string const idf_objects = delimited_string({
+        "ScheduleTypeLimits,",
+        "  Fractional,                 !- Name",
+        "  0,                          !- Lower Limit Value",
+        "  1,                          !- Upper Limit Value",
+        "  Continuous;                 !- Numeric Type",
+        " ",
+        "Schedule:Day:Interval,",
+        "  always off,                 !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  No,                         !- Interpolate to Timestep",
+        "  24:00,                      !- Time 1",
+        "  0.05;                        !- Value Until Time 1",
+        " ",
+        "Schedule:Day:Interval,",
+        "  date range rule 1,          !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  No,                         !- Interpolate to Timestep",
+        "  24:00,                      !- Time 1",
+        "  0.2;                        !- Value Until Time 1",
+        " ",
+        "Schedule:Day:Interval,",
+        "  date range rule 2,          !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  No,                         !- Interpolate to Timestep",
+        "  24:00,                      !- Time 1",
+        "  0.3;                        !- Value Until Time 1",
+        " ",
+        "Schedule:Day:Interval,",
+        "  date range rule 3,          !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  No,                         !- Interpolate to Timestep",
+        "  24:00,                      !- Time 1",
+        "  0.5;                        !- Value Until Time 1",
+        " ",
+        "Schedule:Year:Rules,",
+        "  schedule year rules,        !- Name",
+        "  Fractional,                 !- Schedule Type Limits Name",
+        "  always off;                 !- Default Day Schedule Name",
+        " ",
+        "Schedule:Week:Rule,",
+        "  schedule rule 1,            !- Name",
+        "  schedule year rules,        !- Schedule Year Rules Name",
+        "  0,                          !- Rule Priority Order",
+        "  date range rule 1,          !- Day Schedule Name",
+        "  No,                         !- Apply Sunday",
+        "  Yes,                        !- Apply Monday",
+        "  No,                         !- Apply Tuesday",
+        "  No,                         !- Apply Wednesday",
+        "  No,                         !- Apply Thursday",
+        "  No,                         !- Apply Friday",
+        "  No,                         !- Apply Saturday",
+        "  1,                          !- Start Month",
+        "  1,                          !- Start Day",
+        "  1,                          !- End Month",
+        "  1;                          !- End Day",
+        " ",
+        "Schedule:Week:Rule,",
+        "  schedule rule 2,            !- Name",
+        "  schedule year rules,        !- Schedule Year Rules Name",
+        "  1,                          !- Rule Priority Order",
+        "  date range rule 2,          !- Day Schedule Name",
+        "  No,                         !- Apply Sunday",
+        "  No,                         !- Apply Monday",
+        "  Yes,                        !- Apply Tuesday",
+        "  No,                         !- Apply Wednesday",
+        "  No,                         !- Apply Thursday",
+        "  No,                         !- Apply Friday",
+        "  No,                         !- Apply Saturday",
+        "  1,                          !- Start Month",
+        "  1,                          !- Start Day",
+        "  1,                          !- End Month",
+        "  1;                          !- End Day",
+        " ",
+        "Schedule:Week:Rule,",
+        "  schedule rule 3,            !- Name",
+        "  schedule year rules,        !- Schedule Year Rules Name",
+        "  2,                          !- Rule Priority Order",
+        "  date range rule 3,          !- Day Schedule Name",
+        "  No,                         !- Apply Sunday",
+        "  No,                         !- Apply Monday",
+        "  Yes,                        !- Apply Tuesday",
+        "  No,                         !- Apply Wednesday",
+        "  No,                         !- Apply Thursday",
+        "  No,                         !- Apply Friday",
+        "  No,                         !- Apply Saturday",
+        "  1,                          !- Start Month",
+        "  1,                          !- Start Day",
+        "  1,                          !- End Month",
+        "  1;                          !- End Day",
+        " ",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    auto &s_glob = state->dataGlobal;
+
+    s_glob->TimeStepsInHour = 4;
+    s_glob->MinutesInTimeStep = 15;
+
+    state->init_state(*state);
+
+    auto const *sch = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "SCHEDULE YEAR RULES"));
+    EXPECT_NE(sch, nullptr);
+    EXPECT_EQ(367, sch->weekScheds.size());
+    EXPECT_EQ(sch->weekScheds.front(), nullptr);
+
+    auto &weekSched = sch->weekScheds[General::OrdinalDay(1, 1, 1)];
+    ASSERT_TRUE(weekSched->isUsed);
+
+    auto &daySched1 = weekSched->dayScheds[(int)Sched::DayType::Sunday];
+    ASSERT_TRUE(daySched1->isUsed);
+    for (auto v : daySched1->tsVals) {
+        EXPECT_EQ(0.05, v);
+    }
+
+    auto &daySched2 = weekSched->dayScheds[(int)Sched::DayType::Monday];
+    ASSERT_TRUE(daySched2->isUsed);
+    for (auto v : daySched2->tsVals) {
+        EXPECT_EQ(0.2, v);
+    }
+
+    auto &daySched3 = weekSched->dayScheds[(int)Sched::DayType::Tuesday];
+    ASSERT_TRUE(daySched3->isUsed);
+    for (auto v : daySched3->tsVals) {
+        EXPECT_EQ(0.3, v); // not 0.2 (Monday's value) or 0.5 (lower-priority Tuesday's value), or 0.05 (default value)
+    }
+
+    auto &daySched4 = weekSched->dayScheds[(int)Sched::DayType::Wednesday];
+    ASSERT_TRUE(daySched4->isUsed);
+    for (auto v : daySched4->tsVals) {
+        EXPECT_EQ(0.05, v);
+    }
+}
