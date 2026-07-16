@@ -974,9 +974,13 @@
 
   OtherEquipment,
     ZONE ONE OthEq 1,        !- Name
+    ZONE ONE OthEq 1 Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
-    Sch 1,                   !- Schedule Name
+    Sch 1;                   !- Schedule Name
+
+  OtherEquipment:Definition,
+    ZONE ONE OthEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     200.0,                   !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}

@@ -1503,9 +1503,13 @@
 
   OtherEquipment,
     BASE-1 OthEq 1,          !- Name
+    BASE-1 OthEq 1 Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     BASE-1,                  !- Zone or ZoneList or Space or SpaceList Name
-    AlwaysOn,                !- Schedule Name
+    AlwaysOn;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    BASE-1 OthEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     726,                     !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}

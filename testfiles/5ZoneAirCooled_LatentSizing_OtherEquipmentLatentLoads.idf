@@ -1745,9 +1745,13 @@
 
   OtherEquipment,
     SPACE1-1 Latent,         !- Name
+    SPACE1-1 Latent Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
-    LIGHTS-1,                !- Schedule Name
+    LIGHTS-1;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    SPACE1-1 Latent Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2000,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -1803,9 +1807,13 @@
 
   OtherEquipment,
     SPACE2-1 Latent,         !- Name
+    SPACE2-1 Latent Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
-    LIGHTS-1,                !- Schedule Name
+    LIGHTS-1;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    SPACE2-1 Latent Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2000,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -1861,9 +1869,13 @@
 
   OtherEquipment,
     SPACE3-1 Latent,         !- Name
+    SPACE3-1 Latent Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
-    LIGHTS-1,                !- Schedule Name
+    LIGHTS-1;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    SPACE3-1 Latent Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2000,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -1919,9 +1931,13 @@
 
   OtherEquipment,
     SPACE4-1 Latent,         !- Name
+    SPACE4-1 Latent Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
-    LIGHTS-1,                !- Schedule Name
+    LIGHTS-1;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    SPACE4-1 Latent Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2000,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
@@ -1977,9 +1993,13 @@
 
   OtherEquipment,
     SPACE5-1 Latent,         !- Name
+    SPACE5-1 Latent Definition,  !- Other Equipment Definition Name
     None,                    !- Fuel Type
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
-    LIGHTS-1,                !- Schedule Name
+    LIGHTS-1;                !- Schedule Name
+
+  OtherEquipment:Definition,
+    SPACE5-1 Latent Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     2000,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
