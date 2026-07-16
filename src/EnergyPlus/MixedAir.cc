@@ -1026,9 +1026,10 @@ void GetOutsideAirSysInputs(EnergyPlusData &state)
                 }
                 GetOACompNodeNumbers(state, OASysNum, ErrorsFound);
                 // check OA equipment list ordering for proper sequence of components
+                // these 2 locals are intentionally outside next for loop
+                int companionCoilAirInletNodeNum = 0;
                 bool transpiredCollectorOutletNodeNumFound = false;
                 for (int CompNum = 1; CompNum < OASys.NumComponents; ++CompNum) {
-                    int companionCoilAirInletNodeNum = 0;
                     // check outlet node is same as next components inlet node
                     if (OASys.ComponentType(CompNum) == "COILSYSTEM:COOLING:WATER" && CompNum < OASys.NumComponents) {
                         if (OASys.compPointer[CompNum] != nullptr) {
