@@ -1165,17 +1165,20 @@
 
   GasEquipment,
     ZN_1_FLR_1_SEC_1_MiscGas_Equip,  !- Name
+    ZN_1_FLR_1_SEC_1_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     ZN_1_FLR_1_SEC_1,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    ZN_1_FLR_1_SEC_1_MiscGas_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1488.2332,               !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GAS EQUIPMENT:ZN_1_FLR_1_SEC_1:MiscGas,  !- Name
@@ -1738,17 +1741,20 @@
 
   GasEquipment,
     ZN_1_FLR_1_SEC_2_MiscGas_Equip,  !- Name
+    ZN_1_FLR_1_SEC_2_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     ZN_1_FLR_1_SEC_2,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    ZN_1_FLR_1_SEC_2_MiscGas_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1297.9068,               !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GAS EQUIPMENT:ZN_1_FLR_1_SEC_2:MiscGas,  !- Name
@@ -2310,17 +2316,20 @@
 
   GasEquipment,
     ZN_1_FLR_1_SEC_3_MiscGas_Equip,  !- Name
+    ZN_1_FLR_1_SEC_3_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     ZN_1_FLR_1_SEC_3,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    ZN_1_FLR_1_SEC_3_MiscGas_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1488.2332,               !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GAS EQUIPMENT:ZN_1_FLR_1_SEC_3:MiscGas,  !- Name
@@ -2882,17 +2891,20 @@
 
   GasEquipment,
     ZN_1_FLR_1_SEC_4_MiscGas_Equip,  !- Name
+    ZN_1_FLR_1_SEC_4_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     ZN_1_FLR_1_SEC_4,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    ZN_1_FLR_1_SEC_4_MiscGas_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1297.9068,               !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GAS EQUIPMENT:ZN_1_FLR_1_SEC_4:MiscGas,  !- Name
@@ -3439,17 +3451,20 @@
 
   GasEquipment,
     ZN_1_FLR_1_SEC_5_MiscGas_Equip,  !- Name
+    ZN_1_FLR_1_SEC_5_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     ZN_1_FLR_1_SEC_5,        !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    ZN_1_FLR_1_SEC_5_MiscGas_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     452.9242,                !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    0,                       !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   ComponentCost:LineItem,
     GAS EQUIPMENT:ZN_1_FLR_1_SEC_5:MiscGas,  !- Name

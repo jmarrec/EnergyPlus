@@ -523,8 +523,12 @@
 
   GasEquipment,
     West Zone GasEq 1,       !- Name
+    West Zone GasEq 1 Definition,  !- Gas Equipment Definition Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
-    INTERMITTENT,            !- Schedule Name
+    INTERMITTENT;            !- Schedule Name
+
+  GasEquipment:Definition,
+    West Zone GasEq 1 Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000,                    !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}

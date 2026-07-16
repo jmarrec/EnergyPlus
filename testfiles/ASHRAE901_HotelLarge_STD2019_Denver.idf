@@ -7903,31 +7903,37 @@
 
   GasEquipment,
     Laundry_Flr_1_MiscGas_Equip,  !- Name
+    Laundry_Flr_1_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     Laundry_Flr_1,           !- Zone or ZoneList or Space or SpaceList Name
     BLDG_EQUIP_SCH,          !- Schedule Name
+    Laundry;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Laundry_Flr_1_MiscGas_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     41817.4489,              !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.0000,                  !- Fraction Latent
     0.5000,                  !- Fraction Radiant
-    0.0000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    Laundry;                 !- End-Use Subcategory
+    0.0000;                  !- Fraction Lost
 
   GasEquipment,
     Kitchen_Flr_6_MiscGas_Equip,  !- Name
+    Kitchen_Flr_6_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     Kitchen_Flr_6,           !- Zone or ZoneList or Space or SpaceList Name
     Kitchen_Gas_Equip_SCH,   !- Schedule Name
+    Cooking;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Kitchen_Flr_6_MiscGas_Equip Definition,  !- Name
     EquipmentLevel,          !- Design Level Calculation Method
     249920.3527,             !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.1000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.7000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    Cooking;                 !- End-Use Subcategory
+    0.7000;                  !- Fraction Lost
 
 !-   ===========  ALL OBJECTS IN CLASS: DAYLIGHTING:CONTROLS ===========
 

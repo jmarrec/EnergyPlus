@@ -11907,17 +11907,20 @@
 
   GasEquipment,
     Kitchen_Flr_5_MiscGas_Equip,  !- Name
+    Kitchen_Flr_5_MiscGas_Equip Definition,  !- Gas Equipment Definition Name
     Kitchen_Flr_5,           !- Zone or ZoneList or Space or SpaceList Name
     Kitchen_Gas_Equip_SCH,   !- Schedule Name
+    MiscGas;                 !- End-Use Subcategory
+
+  GasEquipment:Definition,
+    Kitchen_Flr_5_MiscGas_Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
     304.87,                  !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
     0.1000,                  !- Fraction Latent
     0.2000,                  !- Fraction Radiant
-    0.7000,                  !- Fraction Lost
-    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
-    MiscGas;                 !- End-Use Subcategory
+    0.7000;                  !- Fraction Lost
 
 ! ***EXTERIOR LOADS***
 
