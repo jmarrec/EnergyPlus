@@ -2266,11 +2266,11 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                 currentMode = CurrentMode::HeatRecovery;
                 QCondenser = chillerHeater.Report.QCondSimul;
                 this->adjustChillerHeaterCondFlowTemp(state, QCondenser, CondMassFlowRate, CondOutletTemp, CondInletTemp, CondDeltaTemp);
-            } else { // Either Mode 2 (CoolingOnly) or 3 (HeatRecovery) or 5 (HeatingDominant) ??
+            } else { // Either Mode 2 (HeatingOnly) or 3 (HeatRecovery) or 5 (HeatingDominant)
                 if (this->SimulHtgDominant) {
                     currentMode = CurrentMode::HeatingDominant;
                 } else {
-                    currentMode = CurrentMode::CoolingDominant;
+                    currentMode = CurrentMode::HeatingOnly;
                 }
 
                 state.dataPlantCentralGSHP->ChillerCapFT = 0.0;
