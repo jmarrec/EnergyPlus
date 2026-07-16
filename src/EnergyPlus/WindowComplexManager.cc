@@ -2688,7 +2688,7 @@ namespace WindowComplexManager {
         Real64 HcUnshadedOut(0.0);     // Hc value at outdoor surface of an unshaded subsystem [W/m^2.K]
         Real64 HcUnshadedIn(0.0);      // Hc value at indoor surface of an unshaded subsystem [W/m^2.K]
 
-        int ZoneNum; // Zone number corresponding to SurfNum
+        int ZoneNum = 0; // Zone number corresponding to SurfNum
 
         int TotLay; // Total number of layers in a construction
         //   (sum of solid layers and gap layers)
