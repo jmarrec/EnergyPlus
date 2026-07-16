@@ -318,6 +318,7 @@ namespace InternalHeatGains {
         const std::string hwEqModuleObject = "HotWaterEquipment";
         const std::string hwEqInstanceModuleObject = "HotWaterEquipment:Instance";
         const std::string stmEqModuleObject = "SteamEquipment";
+        const std::string stmEqInstanceModuleObject = "SteamEquipment:Instance";
         const std::string othEqModuleObject = "OtherEquipment";
         const std::string itEqModuleObject = "ElectricEquipment:ITE:AirCooled";
         const std::string bbModuleObject = "ZoneBaseboard:OutdoorTemperatureControlled";
@@ -347,6 +348,7 @@ namespace InternalHeatGains {
                                            hwEqModuleObject,
                                            hwEqInstanceModuleObject,
                                            stmEqModuleObject,
+                                           stmEqInstanceModuleObject,
                                            othEqModuleObject,
                                            itEqModuleObject,
                                            bbModuleObject,
@@ -2112,18 +2114,37 @@ namespace InternalHeatGains {
             } // for hwEqInputNum (HotWaterEquipment:Instance)
         } // TotHWEquip > 0
 
-        // SteamEquipment
+        // SteamEquipment and SteamEquipment:Instance (which references a SteamEquipment:Definition for its
+        // physical characteristics). Both kinds populate state.dataHeatBal->ZoneSteamEq, so downstream code
+        // treats them identically.
         EPVector<InternalHeatGains::GlobalInternalGainMiscObject> steamEqObjects;
         int numSteamEqStatements = 0;
-        setupIHGZonesAndSpaces(state, stmEqModuleObject, steamEqObjects, numSteamEqStatements, state.dataHeatBal->TotStmEquip, ErrorsFound);
+        setupIHGZonesAndSpaces(state,
+                               stmEqModuleObject,
+                               steamEqObjects,
+                               numSteamEqStatements,
+                               state.dataHeatBal->TotStmEquip,
+                               ErrorsFound,
+                               false,
+                               stmEqInstanceModuleObject);
 
         if (state.dataHeatBal->TotStmEquip > 0) {
             state.dataHeatBal->ZoneSteamEq.allocate(state.dataHeatBal->TotStmEquip);
             int stmEqNum = 0;
+
+            // SteamEquipment objects; the SteamEquipment:Instance ones are processed in the next loop.
+            int stmEqObjectNum = 0;
             for (int stmEqInputNum = 1; stmEqInputNum <= numSteamEqStatements; ++stmEqInputNum) {
+
+                auto &thisStmEqInput = steamEqObjects(stmEqInputNum);
+                if (thisStmEqInput.isInstance) {
+                    continue;
+                }
+                ++stmEqObjectNum;
+
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          stmEqModuleObject,
-                                                                         stmEqInputNum,
+                                                                         stmEqObjectNum,
                                                                          IHGAlphas,
                                                                          IHGNumAlphas,
                                                                          IHGNumbers,
@@ -2147,7 +2168,6 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                 }
 
-                auto &thisStmEqInput = steamEqObjects(stmEqInputNum);
                 DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
                 int fieldNum = 1;
                 switch (levelMethod) {
@@ -2238,6 +2258,135 @@ namespace InternalHeatGains {
 
                 } // for stmEqInputNum.NumOfSpaces
             } // for stmEqInputNum
+
+            // SteamEquipment:Instance objects: the physical characteristics (design level calculation
+            // method and heat gain fractions) come from the referenced SteamEquipment:Definition,
+            // scaled by the instance's Multiplier.
+            std::vector<ZoneEquipDefinitionData> const stmLoadDefs = GetSpaceLoadDefinition(state, "SteamEquipment:Definition");
+            int stmEqInstanceObjectNum = 0;
+            for (int stmEqInputNum = 1; stmEqInputNum <= numSteamEqStatements; ++stmEqInputNum) {
+
+                auto &thisStmEqInput = steamEqObjects(stmEqInputNum);
+                if (!thisStmEqInput.isInstance) {
+                    continue;
+                }
+                ++stmEqInstanceObjectNum;
+
+                state.dataInputProcessing->inputProcessor->getObjectItem(state,
+                                                                         stmEqInstanceModuleObject,
+                                                                         stmEqInstanceObjectNum,
+                                                                         IHGAlphas,
+                                                                         IHGNumAlphas,
+                                                                         IHGNumbers,
+                                                                         IHGNumNumbers,
+                                                                         IOStat,
+                                                                         IHGNumericFieldBlanks,
+                                                                         IHGAlphaFieldBlanks,
+                                                                         IHGAlphaFieldNames,
+                                                                         IHGNumericFieldNames);
+
+                ErrorObjectHeader eoh{routineName, stmEqInstanceModuleObject, IHGAlphas(1)};
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
+                    ErrorsFound = true;
+                } else if (schedPtr == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
+                    ErrorsFound = true;
+                } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
+                    ErrorsFound = true;
+                }
+
+                std::string const &defName = IHGAlphas(2);
+                auto itStmLoadDef = std::find_if(
+                    stmLoadDefs.begin(), stmLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itStmLoadDef == stmLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
+                }
+
+                Real64 const multiplier = IHGNumbers(1);
+
+                for (int Item1 = 1; Item1 <= thisStmEqInput.numOfSpaces; ++Item1) {
+                    ++stmEqNum;
+                    auto &thisZoneStmEq = state.dataHeatBal->ZoneSteamEq(stmEqNum);
+                    int const spaceNum = thisStmEqInput.spaceNums(Item1);
+                    int const zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+                    thisZoneStmEq.Name = thisStmEqInput.names(Item1);
+                    thisZoneStmEq.spaceIndex = spaceNum;
+                    thisZoneStmEq.ZonePtr = zoneNum;
+                    thisZoneStmEq.sched = schedPtr;
+
+                    // Steam equipment design level calculation method.
+                    thisZoneStmEq.DesignLevel = setDesignLevel(state,
+                                                               ErrorsFound,
+                                                               stmEqInstanceModuleObject,
+                                                               thisStmEqInput,
+                                                               itStmLoadDef->designLevelMethod,
+                                                               zoneNum,
+                                                               spaceNum,
+                                                               itStmLoadDef->levelValue,
+                                                               itStmLoadDef->levelIsBlank,
+                                                               itStmLoadDef->levelField) *
+                                                multiplier;
+
+                    // Calculate nominal min/max equipment level
+                    thisZoneStmEq.NomMinDesignLevel = thisZoneStmEq.DesignLevel * thisZoneStmEq.sched->getMinVal(state);
+                    thisZoneStmEq.NomMaxDesignLevel = thisZoneStmEq.DesignLevel * thisZoneStmEq.sched->getMaxVal(state);
+
+                    thisZoneStmEq.FractionLatent = itStmLoadDef->FractionLatent;
+                    thisZoneStmEq.FractionRadiant = itStmLoadDef->FractionRadiant;
+                    thisZoneStmEq.FractionLost = itStmLoadDef->FractionLost;
+                    // FractionConvected is a calculated field
+                    thisZoneStmEq.FractionConvected =
+                        1.0 - (thisZoneStmEq.FractionLatent + thisZoneStmEq.FractionRadiant + thisZoneStmEq.FractionLost);
+                    if (std::abs(thisZoneStmEq.FractionConvected) <= 0.001) {
+                        thisZoneStmEq.FractionConvected = 0.0;
+                    }
+                    if (thisZoneStmEq.FractionConvected < 0.0) {
+                        ShowSevereError(
+                            state, std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, stmEqInstanceModuleObject, thisStmEqInput.Name));
+                        ErrorsFound = true;
+                    }
+
+                    if (IHGNumAlphas > 4) {
+                        thisZoneStmEq.EndUseSubcategory = IHGAlphas(5);
+                    } else {
+                        thisZoneStmEq.EndUseSubcategory = "General";
+                    }
+
+                    if (thisZoneStmEq.ZonePtr <= 0) {
+                        continue; // Error, will be caught and terminated later
+                    }
+
+                    if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
+                        SetupEMSActuator(state,
+                                         "SteamEquipment",
+                                         thisZoneStmEq.Name,
+                                         "District Heating Power Level",
+                                         "[W]",
+                                         thisZoneStmEq.EMSZoneEquipOverrideOn,
+                                         thisZoneStmEq.EMSEquipPower);
+                        SetupEMSInternalVariable(
+                            state, "Process Steam District Heat Design Level", thisZoneStmEq.Name, "[W]", thisZoneStmEq.DesignLevel);
+                    } // EMS
+
+                    if (!ErrorsFound) {
+                        SetupSpaceInternalGain(state,
+                                               thisZoneStmEq.spaceIndex,
+                                               1.0,
+                                               thisZoneStmEq.Name,
+                                               DataHeatBalance::IntGainType::SteamEquipment,
+                                               &thisZoneStmEq.ConGainRate,
+                                               nullptr,
+                                               &thisZoneStmEq.RadGainRate,
+                                               &thisZoneStmEq.LatGainRate);
+                    }
+
+                } // for stmEqInputNum.NumOfSpaces
+            } // for stmEqInputNum (SteamEquipment:Instance)
         } // TotStmEquip > 0
 
         // OtherEquipment
