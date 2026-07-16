@@ -61,6 +61,12 @@
 !    - 2 Lights:Instance with actual bulb counts as Multiplier
 !       - 1 assigned a SpaceList "1BR SpaceList": 6 in 1BR apartments
 !       - 1 assigned directed to the Space "Space2-2BR": 11 bulbs
+!
+! - People:
+!    - A single People:Definition object with 1 people, defining CO2 generation an Thermal Comfort Models, etc
+!    - 2 People:Instance with actual people counts as Multiplier
+!       - 1 assigned a SpaceList "1BR SpaceList": 2 in 1BR apartments
+!       - 1 assigned directed to the Space "Space2-2BR": 3 people
 
   Version,26.2;
 
@@ -1128,6 +1134,141 @@
     For: Weekends WinterDesignDay Holiday,  !- Field
     Until: 24:00,            !- Field
     0.05;                    !- Field
+
+  People:Definition,
+    People Definition,       !- Name
+    People,                  !- Number of People Calculation Method
+    1.0,                     !- Number of People
+    ,                        !- People per Floor Area {person/m2}
+    ,                        !- Floor Area per Person {m2/person}
+    0.3,                     !- Fraction Radiant
+    Autocalculate,           !- Sensible Heat Fraction
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
+    No,                      !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
+    AdaptiveASH55,           !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 2 Type
+
+  People:Instance,
+    1BR People,              !- Name
+    People Definition,       !- People Definition Name
+    1BR SpaceList,           !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
+    AIR_VELO_SCH,            !- Air Velocity Schedule Name
+    2.0,                     !- Multiplier
+    ,                        !- Ankle Level Air Velocity Schedule Name
+    15.56,                   !- Cold Stress Temperature Threshold {C}
+    30.0;                    !- Heat Stress Temperature Threshold {C}
+
+  People:Instance,
+    Space2-2BR People,       !- Name
+    People Definition,       !- People Definition Name
+    Space2-2BR,              !- Zone or ZoneList or Space or SpaceList Name
+    BLDG_OCC_SCH,            !- Number of People Schedule Name
+    ACTIVITY_SCH,            !- Activity Level Schedule Name
+    ,                        !- Surface Name/Angle Factor List Name
+    WORK_EFF_SCH,            !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                        !- Clothing Insulation Calculation Method Schedule Name
+    CLOTHING_SCH,            !- Clothing Insulation Schedule Name
+    AIR_VELO_SCH,            !- Air Velocity Schedule Name
+    3.0,                     !- Multiplier
+    ,                        !- Ankle Level Air Velocity Schedule Name
+    15.56,                   !- Cold Stress Temperature Threshold {C}
+    30.0;                    !- Heat Stress Temperature Threshold {C}
+
+  Schedule:Compact,
+    ACTIVITY_SCH,            !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field
+    For: AllDays,            !- Field
+    Until: 24:00,            !- Field
+    120.;                    !- Field
+
+  Schedule:Compact,
+    AIR_VELO_SCH,            !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field
+    For: AllDays,            !- Field
+    Until: 24:00,            !- Field
+    0.2;                     !- Field
+
+  Schedule:Compact,
+    CLOTHING_SCH,            !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 04/30,          !- Field
+    For: AllDays,            !- Field
+    Until: 24:00,            !- Field
+    1.0,                     !- Field
+    Through: 09/30,          !- Field
+    For: AllDays,            !- Field
+    Until: 24:00,            !- Field
+    0.5,                     !- Field
+    Through: 12/31,          !- Field
+    For: AllDays,            !- Field
+    Until: 24:00,            !- Field
+    1.0;                     !- Field
+
+  Schedule:Compact,
+    WORK_EFF_SCH,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field
+    For: AllDays,            !- Field
+    Until: 24:00,            !- Field
+    0.0;                     !- Field
+
+  Schedule:Compact,
+    BLDG_OCC_SCH,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field
+    For: SummerDesignDay,    !- Field
+    Until: 06:00,            !- Field
+    0.0,                     !- Field
+    Until: 22:00,            !- Field
+    1.0,                     !- Field
+    Until: 24:00,            !- Field
+    0.05,                    !- Field
+    For: Weekdays,           !- Field
+    Until: 06:00,            !- Field
+    0.0,                     !- Field
+    Until: 07:00,            !- Field
+    0.1,                     !- Field
+    Until: 08:00,            !- Field
+    0.2,                     !- Field
+    Until: 12:00,            !- Field
+    0.95,                    !- Field
+    Until: 13:00,            !- Field
+    0.5,                     !- Field
+    Until: 17:00,            !- Field
+    0.95,                    !- Field
+    Until: 18:00,            !- Field
+    0.7,                     !- Field
+    Until: 20:00,            !- Field
+    0.4,                     !- Field
+    Until: 22:00,            !- Field
+    0.1,                     !- Field
+    Until: 24:00,            !- Field
+    0.05,                    !- Field
+    For: Saturday,           !- Field
+    Until: 06:00,            !- Field
+    0.0,                     !- Field
+    Until: 08:00,            !- Field
+    0.1,                     !- Field
+    Until: 14:00,            !- Field
+    0.5,                     !- Field
+    Until: 17:00,            !- Field
+    0.1,                     !- Field
+    Until: 24:00,            !- Field
+    0.0,                     !- Field
+    For: AllOtherDays,       !- Field
+    Until: 24:00,            !- Field
+    0.0;                     !- Field
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report Name
