@@ -319,6 +319,7 @@ namespace InternalHeatGains {
         const std::string stmEqModuleObject = "SteamEquipment";
         const std::string stmEqInstanceModuleObject = "SteamEquipment:Instance";
         const std::string othEqModuleObject = "OtherEquipment";
+        const std::string othEqInstanceModuleObject = "OtherEquipment:Instance";
         const std::string itEqModuleObject = "ElectricEquipment:ITE:AirCooled";
         const std::string bbModuleObject = "ZoneBaseboard:OutdoorTemperatureControlled";
         const std::string contamSSModuleObject = "ZoneContaminantSourceAndSink:CarbonDioxide";
@@ -349,6 +350,7 @@ namespace InternalHeatGains {
                                            stmEqModuleObject,
                                            stmEqInstanceModuleObject,
                                            othEqModuleObject,
+                                           othEqInstanceModuleObject,
                                            itEqModuleObject,
                                            bbModuleObject,
                                            contamSSModuleObject}) {
@@ -2386,19 +2388,37 @@ namespace InternalHeatGains {
             } // for stmEqInputNum (SteamEquipment:Instance)
         } // TotStmEquip > 0
 
-        // OtherEquipment
+        // OtherEquipment and OtherEquipment:Instance (which references an OtherEquipment:Definition for its
+        // physical characteristics; the Fuel Type stays on the instance). Both kinds populate
+        // state.dataHeatBal->ZoneOtherEq, so downstream code treats them identically.
         EPVector<InternalHeatGains::GlobalInternalGainMiscObject> otherEqObjects;
         int numOtherEqStatements = 0;
-        setupIHGZonesAndSpaces(state, othEqModuleObject, otherEqObjects, numOtherEqStatements, state.dataHeatBal->TotOthEquip, ErrorsFound);
+        setupIHGZonesAndSpaces(state,
+                               othEqModuleObject,
+                               otherEqObjects,
+                               numOtherEqStatements,
+                               state.dataHeatBal->TotOthEquip,
+                               ErrorsFound,
+                               false,
+                               othEqInstanceModuleObject);
 
         if (state.dataHeatBal->TotOthEquip > 0) {
             state.dataHeatBal->ZoneOtherEq.allocate(state.dataHeatBal->TotOthEquip);
             int othEqNum = 0;
+
+            // OtherEquipment objects; the OtherEquipment:Instance ones are processed in the next loop.
+            int othEqObjectNum = 0;
             for (int othEqInputNum = 1; othEqInputNum <= numOtherEqStatements; ++othEqInputNum) {
+
+                auto &thisOthEqInput = otherEqObjects(othEqInputNum);
+                if (thisOthEqInput.isInstance) {
+                    continue;
+                }
+                ++othEqObjectNum;
 
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          othEqModuleObject,
-                                                                         othEqInputNum,
+                                                                         othEqObjectNum,
                                                                          IHGAlphas,
                                                                          IHGNumAlphas,
                                                                          IHGNumbers,
@@ -2423,7 +2443,6 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                 }
 
-                auto &thisOthEqInput = otherEqObjects(othEqInputNum);
                 DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(5)));
                 int levelFieldNum = 1;
                 switch (levelMethod) {
@@ -2593,6 +2612,208 @@ namespace InternalHeatGains {
 
                 } // for othEqInputNum.NumOfSpaces
             } // for othEqInputNum
+
+            // OtherEquipment:Instance objects: the physical characteristics (design level calculation
+            // method, heat gain fractions and CO2 generation rate) come from the referenced
+            // OtherEquipment:Definition, scaled by the instance's Multiplier. The Fuel Type is
+            // installation-specific and stays on the instance.
+            std::vector<ZoneEquipDefinitionData> const othLoadDefs = GetSpaceLoadDefinition(state, "OtherEquipment:Definition");
+            int othEqInstanceObjectNum = 0;
+            for (int othEqInputNum = 1; othEqInputNum <= numOtherEqStatements; ++othEqInputNum) {
+
+                auto &thisOthEqInput = otherEqObjects(othEqInputNum);
+                if (!thisOthEqInput.isInstance) {
+                    continue;
+                }
+                ++othEqInstanceObjectNum;
+
+                state.dataInputProcessing->inputProcessor->getObjectItem(state,
+                                                                         othEqInstanceModuleObject,
+                                                                         othEqInstanceObjectNum,
+                                                                         IHGAlphas,
+                                                                         IHGNumAlphas,
+                                                                         IHGNumbers,
+                                                                         IHGNumNumbers,
+                                                                         IOStat,
+                                                                         IHGNumericFieldBlanks,
+                                                                         IHGAlphaFieldBlanks,
+                                                                         IHGAlphaFieldNames,
+                                                                         IHGNumericFieldNames);
+
+                ErrorObjectHeader eoh{routineName, othEqInstanceModuleObject, IHGAlphas(1)};
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(5));
+                if (IHGAlphaFieldBlanks(5)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(5));
+                    ErrorsFound = true;
+                } else if (schedPtr == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5));
+                    ErrorsFound = true;
+                } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5), Clusive::In, 0.0);
+                    ErrorsFound = true;
+                }
+
+                std::string const &defName = IHGAlphas(2);
+                auto itOthLoadDef = std::find_if(
+                    othLoadDefs.begin(), othLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itOthLoadDef == othLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
+                }
+
+                Real64 const multiplier = IHGNumbers(1);
+
+                for (int Item1 = 1; Item1 <= thisOthEqInput.numOfSpaces; ++Item1) {
+                    ++othEqNum;
+                    auto &thisZoneOthEq = state.dataHeatBal->ZoneOtherEq(othEqNum);
+                    int const spaceNum = thisOthEqInput.spaceNums(Item1);
+                    int const zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+                    thisZoneOthEq.Name = thisOthEqInput.names(Item1);
+                    thisZoneOthEq.spaceIndex = spaceNum;
+                    thisZoneOthEq.ZonePtr = zoneNum;
+                    thisZoneOthEq.sched = schedPtr;
+
+                    if (IHGAlphas(3) == "NONE" || IHGAlphaFieldBlanks(3)) {
+                        thisZoneOthEq.OtherEquipFuelType = Constant::eFuel::None;
+                    } else {
+                        thisZoneOthEq.OtherEquipFuelType = static_cast<Constant::eFuel>(getEnumValue(Constant::eFuelNamesUC, IHGAlphas(3)));
+                        if (thisZoneOthEq.OtherEquipFuelType == Constant::eFuel::Invalid ||
+                            thisZoneOthEq.OtherEquipFuelType == Constant::eFuel::Water) {
+                            ShowSevereError(state,
+                                            std::format("{}{}: invalid {} entered={} for {}={}",
+                                                        RoutineName,
+                                                        othEqInstanceModuleObject,
+                                                        IHGAlphaFieldNames(3),
+                                                        IHGAlphas(3),
+                                                        IHGAlphaFieldNames(1),
+                                                        thisOthEqInput.Name));
+                            ErrorsFound = true;
+                        }
+
+                        // Build list of fuel types used in each zone and space (excluding Water)
+
+                        bool found = false;
+                        for (Constant::eFuel fuelType : state.dataHeatBal->Zone(zoneNum).otherEquipFuelTypeNums) {
+                            if (thisZoneOthEq.OtherEquipFuelType == fuelType) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            state.dataHeatBal->Zone(zoneNum).otherEquipFuelTypeNums.emplace_back(thisZoneOthEq.OtherEquipFuelType);
+                        }
+                        found = false;
+                        for (Constant::eFuel fuelType : state.dataHeatBal->space(spaceNum).otherEquipFuelTypeNums) {
+                            if (thisZoneOthEq.OtherEquipFuelType == fuelType) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            state.dataHeatBal->space(spaceNum).otherEquipFuelTypeNums.emplace_back(thisZoneOthEq.OtherEquipFuelType);
+                        }
+                    }
+
+                    // equipment design level calculation method.
+                    thisZoneOthEq.DesignLevel = setDesignLevel(state,
+                                                               ErrorsFound,
+                                                               othEqInstanceModuleObject,
+                                                               thisOthEqInput,
+                                                               itOthLoadDef->designLevelMethod,
+                                                               zoneNum,
+                                                               spaceNum,
+                                                               itOthLoadDef->levelValue,
+                                                               itOthLoadDef->levelIsBlank,
+                                                               itOthLoadDef->levelField) *
+                                                multiplier;
+
+                    // Throw an error if the design level is negative and we have a fuel type
+                    if (thisZoneOthEq.DesignLevel < 0.0 && thisZoneOthEq.OtherEquipFuelType != Constant::eFuel::Invalid &&
+                        thisZoneOthEq.OtherEquipFuelType != Constant::eFuel::None) {
+                        ShowSevereError(state,
+                                        std::format("{}{}=\"{}\", {} is not allowed to be negative",
+                                                    RoutineName,
+                                                    othEqInstanceModuleObject,
+                                                    thisOthEqInput.Name,
+                                                    itOthLoadDef->levelField));
+                        ShowContinueError(
+                            state,
+                            std::format("... when a fuel type of {} is specified.", Constant::eFuelNames[(int)thisZoneOthEq.OtherEquipFuelType]));
+                        ErrorsFound = true;
+                    }
+
+                    // Calculate nominal min/max equipment level
+                    thisZoneOthEq.NomMinDesignLevel = thisZoneOthEq.DesignLevel * thisZoneOthEq.sched->getMinVal(state);
+                    thisZoneOthEq.NomMaxDesignLevel = thisZoneOthEq.DesignLevel * thisZoneOthEq.sched->getMaxVal(state);
+
+                    thisZoneOthEq.FractionLatent = itOthLoadDef->FractionLatent;
+                    thisZoneOthEq.FractionRadiant = itOthLoadDef->FractionRadiant;
+                    thisZoneOthEq.FractionLost = itOthLoadDef->FractionLost;
+
+                    thisZoneOthEq.CO2RateFactor = itOthLoadDef->CO2RateFactor;
+                    if (thisZoneOthEq.CO2RateFactor < 0.0) {
+                        ShowSevereError(state,
+                                        std::format("{}{}=\"{}\", Carbon Dioxide Generation Rate < 0.0, value ={:.2f}",
+                                                    RoutineName,
+                                                    othEqInstanceModuleObject,
+                                                    thisOthEqInput.Name,
+                                                    thisZoneOthEq.CO2RateFactor));
+                        ErrorsFound = true;
+                    }
+                    if (thisZoneOthEq.CO2RateFactor > 4.0e-7) {
+                        ShowSevereError(state,
+                                        std::format("{}{}=\"{}\", Carbon Dioxide Generation Rate > 4.0E-7, value ={:.2f}",
+                                                    RoutineName,
+                                                    othEqInstanceModuleObject,
+                                                    thisOthEqInput.Name,
+                                                    thisZoneOthEq.CO2RateFactor));
+                        ErrorsFound = true;
+                    }
+
+                    // FractionConvected is a calculated field
+                    thisZoneOthEq.FractionConvected =
+                        1.0 - (thisZoneOthEq.FractionLatent + thisZoneOthEq.FractionRadiant + thisZoneOthEq.FractionLost);
+                    if (std::abs(thisZoneOthEq.FractionConvected) <= 0.001) {
+                        thisZoneOthEq.FractionConvected = 0.0;
+                    }
+                    if (thisZoneOthEq.FractionConvected < 0.0) {
+                        ShowSevereError(
+                            state, std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, othEqInstanceModuleObject, thisOthEqInput.Name));
+                        ErrorsFound = true;
+                    }
+
+                    if (IHGNumAlphas > 5) {
+                        thisZoneOthEq.EndUseSubcategory = IHGAlphas(6);
+                    } else {
+                        thisZoneOthEq.EndUseSubcategory = "General";
+                    }
+
+                    if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
+                        SetupEMSActuator(state,
+                                         "OtherEquipment",
+                                         thisZoneOthEq.Name,
+                                         "Power Level",
+                                         "[W]",
+                                         thisZoneOthEq.EMSZoneEquipOverrideOn,
+                                         thisZoneOthEq.EMSEquipPower);
+                        SetupEMSInternalVariable(state, "Other Equipment Design Level", thisZoneOthEq.Name, "[W]", thisZoneOthEq.DesignLevel);
+                    } // EMS
+
+                    if (!ErrorsFound) {
+                        SetupSpaceInternalGain(state,
+                                               thisZoneOthEq.spaceIndex,
+                                               1.0,
+                                               thisZoneOthEq.Name,
+                                               DataHeatBalance::IntGainType::OtherEquipment,
+                                               &thisZoneOthEq.ConGainRate,
+                                               nullptr,
+                                               &thisZoneOthEq.RadGainRate,
+                                               &thisZoneOthEq.LatGainRate);
+                    }
+
+                } // for othEqInputNum.NumOfSpaces
+            } // for othEqInputNum (OtherEquipment:Instance)
         } // TotOtherEquip > 0
 
         // ElectricEquipment:ITE:AirCooled

@@ -5422,3 +5422,272 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_SteamEquipmentInstance_MissingLevelF
     EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
     EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
 }
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipmentInstance)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+        "Zone,Zone2;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "Schedule:Constant,Schedule2,SchType1,0.5;",
+
+        // A regular OtherEquipment object, which must coexist untouched with the new pair
+        "OtherEquipment,",
+        "  Zone2 Legacy OthEq,      !- Name",
+        "  None,                    !- Fuel Type",
+        "  Zone2,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  500.0,                   !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.0,                     !- Fraction Latent",
+        "  0.0,                     !- Fraction Radiant",
+        "  0.0;                     !- Fraction Lost",
+
+        "OtherEquipment:Instance,",
+        "  Zone1 OthEq,             !- Name",
+        "  OthEquipDef,             !- Other Equipment Definition Name",
+        "  NaturalGas,              !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  ,                        !- Multiplier",
+        "  Zone1Oth;                !- End-Use Subcategory",
+
+        "OtherEquipment:Instance,",
+        "  Zone2 OthEq,             !- Name",
+        "  OTHEQUIPDEF,             !- Other Equipment Definition Name",
+        "  NaturalGas,              !- Fuel Type",
+        "  ZOnE1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  ScheDULe2,               !- Schedule Name",
+        "  2.0,                     !- Multiplier",
+        "  Zone2Oth;                !- End-Use Subcategory",
+
+        "OtherEquipment:Definition,",
+        "  OthEquipDef,             !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  1500,                    !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2,                     !- Fraction Lost",
+        "  3.45E-8;                 !- Carbon Dioxide Generation Rate {m3/s-W}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    ASSERT_EQ(state->dataHeatBal->ZoneOtherEq.size(), 3u);
+    EXPECT_EQ(state->dataHeatBal->TotOthEquip, 3);
+
+    for (const auto &equip : state->dataHeatBal->ZoneOtherEq) {
+        std::string const &zoneName = state->dataHeatBal->Zone(equip.ZonePtr).Name;
+        std::string const &schedName = equip.sched->Name;
+        if (equip.Name == "ZONE2 LEGACY OTHEQ") {
+            EXPECT_EQ(zoneName, "ZONE2");
+            EXPECT_EQ(schedName, "SCHEDULE1");
+            EXPECT_EQ(equip.EndUseSubcategory, "General");
+            EXPECT_NEAR(equip.DesignLevel, 500.0, 1e-6);
+            EXPECT_ENUM_EQ(equip.OtherEquipFuelType, Constant::eFuel::None);
+            continue;
+        }
+        if (equip.Name == "ZONE1 OTHEQ") {
+            EXPECT_EQ(zoneName, "ZONE1");
+            EXPECT_EQ(schedName, "SCHEDULE1");
+            EXPECT_EQ(equip.EndUseSubcategory, "Zone1Oth");
+            // Blank Multiplier defaults to 1
+            EXPECT_NEAR(equip.DesignLevel, 1500.0, 1e-6);
+        } else if (equip.Name == "ZONE2 OTHEQ") {
+            EXPECT_EQ(zoneName, "ZONE1");
+            EXPECT_EQ(schedName, "SCHEDULE2");
+            EXPECT_EQ(equip.EndUseSubcategory, "Zone2Oth");
+            EXPECT_NEAR(equip.DesignLevel, 2.0 * 1500.0, 1e-6);
+        } else {
+            FAIL() << "Unexpected other equipment name: " << equip.Name;
+        }
+        // The Fuel Type is set on the instance
+        EXPECT_ENUM_EQ(equip.OtherEquipFuelType, Constant::eFuel::NaturalGas);
+        // From the shared definition
+        EXPECT_NEAR(equip.FractionLatent, 0.1, 1e-6);
+        EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
+        EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
+        EXPECT_NEAR(equip.CO2RateFactor, 3.45e-8, 1e-15);
+    }
+
+    EXPECT_EQ(state->dataHeatBal->Zone(1).otherEquipFuelTypeNums.size(), 1u);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipmentInstance_InvalidDefinition)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        "OtherEquipment:Instance,",
+        "  Zone1 OthEq,             !- Name",
+        "  OthEquipDef WITH A TYPO, !- Other Equipment Definition Name",
+        "  None,                    !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  1.0,                     !- Multiplier",
+        "  Zone1Oth;                !- End-Use Subcategory",
+
+        "OtherEquipment:Definition,",
+        "  OthEquipDef,             !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  1500,                    !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: OtherEquipment:Instance = ZONE1 OTHEQ",
+        "   **   ~~~   ** Other Equipment Definition Name = OTHEQUIPDEF WITH A TYPO, item not found.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipmentInstance_NegativeDesignLevel)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        "OtherEquipment:Instance,",
+        "  Zone1 OthEq,             !- Name",
+        "  OthEquipDef,             !- Other Equipment Definition Name",
+        "  NaturalGas,              !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  1.0,                     !- Multiplier",
+        "  Zone1Oth;                !- End-Use Subcategory",
+
+        "OtherEquipment:Definition,",
+        "  OthEquipDef,             !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  -500.0,                  !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    // A negative design level is not allowed when a fuel type is specified
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        R"(   ** Severe  ** GetInternalHeatGains: OtherEquipment:Instance="ZONE1 OTHEQ", design_level is not allowed to be negative)",
+        "   **   ~~~   ** ... when a fuel type of NaturalGas is specified.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipmentInstance_NegativeDesignLevelAllowed)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        // Without a fuel type, a negative design level is a valid way to model a heat loss
+        "OtherEquipment:Instance,",
+        "  Zone1 OthEq,             !- Name",
+        "  OthEquipDef,             !- Other Equipment Definition Name",
+        "  None,                    !- Fuel Type",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  2.0,                     !- Multiplier",
+        "  Zone1Oth;                !- End-Use Subcategory",
+
+        "OtherEquipment:Definition,",
+        "  OthEquipDef,             !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  -500.0,                  !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.0,                     !- Fraction Latent",
+        "  0.0,                     !- Fraction Radiant",
+        "  0.0;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+
+    ASSERT_EQ(state->dataHeatBal->ZoneOtherEq.size(), 1u);
+
+    const auto &equip = state->dataHeatBal->ZoneOtherEq(1);
+    EXPECT_EQ("ZONE1 OTHEQ", equip.Name);
+    EXPECT_ENUM_EQ(equip.OtherEquipFuelType, Constant::eFuel::None);
+    // The Multiplier also applies to negative (loss) design levels
+    EXPECT_NEAR(equip.DesignLevel, 2.0 * -500.0, 1e-6);
+}
