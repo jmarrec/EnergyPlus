@@ -23490,6 +23490,122 @@ OtherEquipment,
        \retaincase
        \default General
 
+OtherEquipment:Instance,
+   \memo Sets internal gains or losses for "other" equipment in the zone.
+   \memo The physical characteristics are given by the referenced OtherEquipment:Definition object.
+   \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
+   \memo then this definition applies to all applicable spaces, and each instance will
+   \memo be named with the Space Name plus this Object Name.
+   \min-fields 5
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference OtherEquipmentNames
+       \reference SpaceItemNames
+       \reference SpaceLoadNames
+       \reference SpaceComponentInstanceNames
+  A2 , \field Other Equipment Definition Name
+       \required-field
+       \type object-list
+       \object-list OtherEquipmentDefinitionNames
+  A3 , \field Fuel Type
+       \type choice
+       \key None
+       \key Electricity
+       \key NaturalGas
+       \key Propane
+       \key FuelOilNo1
+       \key FuelOilNo2
+       \key Diesel
+       \key Gasoline
+       \key Coal
+       \key OtherFuel1
+       \key OtherFuel2
+       \key DistrictHeatingWater
+       \key DistrictHeatingSteam
+       \key DistrictCooling
+       \default None
+  A4 , \field Zone or ZoneList or Space or SpaceList Name
+       \required-field
+       \type object-list
+       \object-list ZoneAndZoneListNames
+       \object-list SpaceAndSpaceListNames
+  A5 , \field Schedule Name
+       \required-field
+       \type object-list
+       \object-list ScheduleNames
+       \note units in Schedule should be fraction applied to design level of other equipment, generally (0.0 - 1.0)
+  N1 , \field Multiplier
+       \note Multiplies the design level from the referenced definition.
+       \type real
+       \minimum 0
+       \default 1
+  A6 ; \field End-Use Subcategory
+       \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
+       \type alpha
+       \retaincase
+       \default General
+
+OtherEquipment:Definition,
+   \memo Defines the physical characteristics (design level and heat gain fractions) for "other" equipment.
+   \memo Referenced by one or more OtherEquipment:Instance objects.
+   \min-fields 8
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference OtherEquipmentDefinitionNames
+       \reference SpaceComponentDefinitionNames
+  A2 , \field Design Level Calculation Method
+       \note The entered calculation method is used to create the maximum amount of other equipment.
+       \note to set a loss, use a negative value in the following fields.
+       \note for this set of attributes
+       \note Choices: EquipmentLevel => Design Level -- simply enter power input of equipment
+       \note Watts/Area or Power/Area => Power per Floor Area -- enter the number to apply. Value * Floor Area = Equipment Level
+       \note Watts/Person or Power/Person => Power per Person -- enter the number to apply. Value * Occupants = Equipment Level
+       \type choice
+       \key EquipmentLevel
+       \key Watts/Area
+       \key Watts/Person
+       \key Power/Area
+       \key Power/Person
+       \default EquipmentLevel
+  N1 , \field Design Level
+       \units W
+       \type real
+       \ip-units Btu/h
+  N2 , \field Power per Floor Area
+       \type real
+       \units W/m2
+       \ip-units Btu/h-ft2
+  N3 , \field Power per Person
+       \type real
+       \units W/person
+       \ip-units Btu/h-person
+  N4 , \field Fraction Latent
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+       \default 0
+  N5 , \field Fraction Radiant
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+       \default 0
+  N6 , \field Fraction Lost
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+       \default 0
+  N7 ; \field Carbon Dioxide Generation Rate
+       \note CO2 generation rate per unit of power input
+       \type real
+       \units m3/s-W
+       \ip-units (ft3/min)/(Btu/h)
+       \default 0.0
+       \minimum 0.0
+       \maximum 4.0E-7
+       \note The default value assumes the equipment is fully vented.
+
 IndoorLivingWall,
    \memo Indoor greenery systems such as indoor living walls are panels of plants, which grow hydroponically or from substrates.
    \memo The living wall structures can be either free-standing or attached to walls.
