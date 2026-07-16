@@ -1,0 +1,895 @@
+! SpaceLoadInstanceDefinition.idf
+! Basic file description:  1 story building divided into 3 interior conditioned zones
+!
+! Highlights:              Uses the SpaceLoad Instance + Definition pattern
+!
+!
+! Simulation Location/Run: CHICAGO_IL_USA TMY2-94846, 2 design days
+!                          Run Control executes 2 design days
+!
+! Location:                Chicago, IL
+!
+! Design Days:             CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
+!                          CHICAGO_IL_USA Annual Cooling 1% Design Conditions, MaxDB=  31.5°C MCWB=  23.0°C
+!
+! Run Period (Weather File): none
+!
+! Run Control:             No zone or system sizing, design day simulation.
+!
+! Building: Single floor, 3 zones : two 100m2 1 bedroom zones, and one 200m2 2BR zone in between
+!           The building is oriented due north.
+!
+! Floor Area:        130.1 m2 (1403 ft2)
+! Number of Stories: 1
+!
+! Zone Description Details:
+!            y (=North)
+!   ▲
+!   │                  building height = 3m
+! 10├───────────┼──────────────────────┼───────────┤
+!   │           │                      │           │
+!   │           │                      │           │
+!   │ Space1-1BR│      Space2-2BR      │ Space3-1BR│
+!   │           │                      │           │
+!   │           │                      │           │
+!   └───────────┴──────────────────────┴───────────┴──► x
+!  0           10          20         30          40
+!
+!
+! Internal Gains description
+!
+! - ElectricEquipment:
+!
+!   - General Plug Loads: a single ElectricEquipment:Definition, with 6.67 W/m2, shared by all three instances for each space multiplier = 1
+!
+!   - Bathroom Fan: A single ElectricEquipment:Definition object is used with EquipmentLevel, 100W
+!                   the 1BR spaces use a multiplier of 1, the 2BR one a multiplier of 2
+
+  Version,26.2;
+
+  Timestep,4;
+
+  Building,
+    Simple One Zone (Wireframe DXF),  !- Name
+    0.0,                     !- North Axis {deg}
+    Suburbs,                 !- Terrain
+    0.04,                    !- Loads Convergence Tolerance Value {W}
+    0.004,                   !- Temperature Convergence Tolerance Value {deltaC}
+    MinimalShadowing,        !- Solar Distribution
+    30,                      !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+  GlobalGeometryRules,
+    UpperLeftCorner,         !- Starting Vertex Position
+    Counterclockwise,        !- Vertex Entry Direction
+    Relative,                !- Coordinate System
+    Relative,                !- Daylighting Reference Point Coordinate System
+    Relative;                !- Rectangular Surface Coordinate System
+
+  SimulationControl,
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
+    No,                      !- Run Simulation for Weather File Run Periods
+    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    1;                       !- Maximum Number of HVAC Sizing Simulation Passes
+
+  Sizing:Parameters,
+    1.25,                    !- Heating Sizing Factor
+    1.15;                    !- Cooling Sizing Factor
+
+  RunPeriod,
+    Run Period 1,            !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    2009.0,                  !- Begin Year
+    12,                      !- End Month
+    31,                      !- End Day of Month
+    2009.0,                  !- End Year
+    Thursday,                !- Day of Week for Start Day
+    No,                      !- Use Weather File Holidays and Special Days
+    No,                      !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
+
+  Site:Location,
+    CHICAGO_IL_USA TMY2-94846,  !- Name
+    41.78,                   !- Latitude {deg}
+    -87.75,                  !- Longitude {deg}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
+
+! CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
+
+  SizingPeriod:DesignDay,
+    CHICAGO_IL_USA Annual Heating 99% Design Conditions DB,  !- Name
+    1,                       !- Month
+    21,                      !- Day of Month
+    WinterDesignDay,         !- Day Type
+    -17.3,                   !- Maximum Dry-Bulb Temperature {C}
+    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    WetBulb,                 !- Humidity Condition Type
+    -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    99063.0,                 !- Barometric Pressure {Pa}
+    4.9,                     !- Wind Speed {m/s}
+    270.0,                   !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    1.0;                     !- Sky Clearness
+
+! CHICAGO_IL_USA Annual Cooling 1% Design Conditions, MaxDB=  31.5°C MCWB=  23.0°C
+
+  SizingPeriod:DesignDay,
+    CHICAGO_IL_USA Annual Cooling 1% Design Conditions DB/MCWB,  !- Name
+    7,                       !- Month
+    21,                      !- Day of Month
+    SummerDesignDay,         !- Day Type
+    31.5,                    !- Maximum Dry-Bulb Temperature {C}
+    10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    99063.0,                 !- Barometric Pressure {Pa}
+    5.3,                     !- Wind Speed {m/s}
+    230.0,                   !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    1.0;                     !- Sky Clearness
+
+  Material:NoMass,
+    R13LAYER,                !- Name
+    Rough,                   !- Roughness
+    2.290965,                !- Thermal Resistance {m2-K/W}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
+
+  Material:NoMass,
+    R31LAYER,                !- Name
+    Rough,                   !- Roughness
+    5.456,                   !- Thermal Resistance {m2-K/W}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
+
+  Material,
+    C5 - 4 IN HW CONCRETE,   !- Name
+    MediumRough,             !- Roughness
+    0.1014984,               !- Thickness {m}
+    1.729577,                !- Conductivity {W/m-K}
+    2242.585,                !- Density {kg/m3}
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
+
+  Construction,
+    R13WALL,                 !- Name
+    R13LAYER;                !- Outside Layer
+
+  Construction,
+    FLOOR,                   !- Name
+    C5 - 4 IN HW CONCRETE;   !- Outside Layer
+
+  Construction,
+    ROOF31,                  !- Name
+    R31LAYER;                !- Outside Layer
+
+  Zone,
+    Space1-1BR Zn,           !- Name
+    ,                        !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
+    ,                        !- Type
+    1,                       !- Multiplier
+    ,                        !- Ceiling Height {m}
+    ,                        !- Volume {m3}
+    ,                        !- Floor Area {m2}
+    ,                        !- Zone Inside Convection Algorithm
+    ,                        !- Zone Outside Convection Algorithm
+    Yes;                     !- Part of Total Floor Area
+
+  Space,
+    Space1-1BR,              !- Name
+    Space1-1BR Zn,           !- Zone Name
+    ,                        !- Ceiling Height {m}
+    ,                        !- Volume {m3}
+    ,                        !- Floor Area {m2}
+    ;                        !- Space Type
+
+  BuildingSurface:Detailed,
+    Space1-1BR Floor,        !- Name
+    Floor,                   !- Surface Type
+    FLOOR,                   !- Construction Name
+    Space1-1BR Zn,           !- Zone Name
+    Space1-1BR,              !- Space Name
+    Ground,                  !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space1-1BR RoofCeiling,  !- Name
+    Roof,                    !- Surface Type
+    ROOF31,                  !- Construction Name
+    Space1-1BR Zn,           !- Zone Name
+    Space1-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    0.0,                     !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space1-1BR Wall 1,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space1-1BR Zn,           !- Zone Name
+    Space1-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space1-1BR Wall 2,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space1-1BR Zn,           !- Zone Name
+    Space1-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space1-1BR Wall 3,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space1-1BR Zn,           !- Zone Name
+    Space1-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    0.0,                     !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space1-1BR Wall 4,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space1-1BR Zn,           !- Zone Name
+    Space1-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    0.0,                     !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    0.0,                     !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  Zone,
+    Space2-2BR Zn,           !- Name
+    ,                        !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
+    ,                        !- Type
+    1,                       !- Multiplier
+    ,                        !- Ceiling Height {m}
+    ,                        !- Volume {m3}
+    ,                        !- Floor Area {m2}
+    ,                        !- Zone Inside Convection Algorithm
+    ,                        !- Zone Outside Convection Algorithm
+    Yes;                     !- Part of Total Floor Area
+
+  Space,
+    Space2-2BR,              !- Name
+    Space2-2BR Zn,           !- Zone Name
+    ,                        !- Ceiling Height {m}
+    ,                        !- Volume {m3}
+    ,                        !- Floor Area {m2}
+    ;                        !- Space Type
+
+  BuildingSurface:Detailed,
+    Space2-2BR Floor,        !- Name
+    Floor,                   !- Surface Type
+    FLOOR,                   !- Construction Name
+    Space2-2BR Zn,           !- Zone Name
+    Space2-2BR,              !- Space Name
+    Ground,                  !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space2-2BR RoofCeiling,  !- Name
+    Roof,                    !- Surface Type
+    ROOF31,                  !- Construction Name
+    Space2-2BR Zn,           !- Zone Name
+    Space2-2BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space2-2BR Wall 1,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space2-2BR Zn,           !- Zone Name
+    Space2-2BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space2-2BR Wall 2,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space2-2BR Zn,           !- Zone Name
+    Space2-2BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space2-2BR Wall 3,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space2-2BR Zn,           !- Zone Name
+    Space2-2BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space2-2BR Wall 4,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space2-2BR Zn,           !- Zone Name
+    Space2-2BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    10.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  Zone,
+    Space3-1BR Zn,           !- Name
+    ,                        !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
+    ,                        !- Type
+    1,                       !- Multiplier
+    ,                        !- Ceiling Height {m}
+    ,                        !- Volume {m3}
+    ,                        !- Floor Area {m2}
+    ,                        !- Zone Inside Convection Algorithm
+    ,                        !- Zone Outside Convection Algorithm
+    Yes;                     !- Part of Total Floor Area
+
+  Space,
+    Space3-1BR,              !- Name
+    Space3-1BR Zn,           !- Zone Name
+    ,                        !- Ceiling Height {m}
+    ,                        !- Volume {m3}
+    ,                        !- Floor Area {m2}
+    ;                        !- Space Type
+
+  BuildingSurface:Detailed,
+    Space3-1BR Floor,        !- Name
+    Floor,                   !- Surface Type
+    FLOOR,                   !- Construction Name
+    Space3-1BR Zn,           !- Zone Name
+    Space3-1BR,              !- Space Name
+    Ground,                  !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    40.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space3-1BR RoofCeiling,  !- Name
+    Roof,                    !- Surface Type
+    ROOF31,                  !- Construction Name
+    Space3-1BR Zn,           !- Zone Name
+    Space3-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space3-1BR Wall 1,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space3-1BR Zn,           !- Zone Name
+    Space3-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    40.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space3-1BR Wall 2,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space3-1BR Zn,           !- Zone Name
+    Space3-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    40.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space3-1BR Wall 3,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space3-1BR Zn,           !- Zone Name
+    Space3-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    0.0,                     !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  BuildingSurface:Detailed,
+    Space3-1BR Wall 4,       !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    Space3-1BR Zn,           !- Zone Name
+    Space3-1BR,              !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    ,                        !- Number of Vertices
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    3.0,                     !- Vertex Z-coordinate {m}
+    40.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0,                     !- Vertex Z-coordinate {m}
+    30.0,                    !- Vertex X-coordinate {m}
+    10.0,                    !- Vertex Y-coordinate {m}
+    0.0;                     !- Vertex Z-coordinate {m}
+
+  ElectricEquipment:Definition,
+    Apartment Elec Equip Definition,  !- Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Design Level {W}
+    6.67,                    !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Fraction Latent
+    0.5,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
+
+  ElectricEquipment:Instance,
+    Space1-1BR Elec Equip Instance,  !- Name
+    Apartment Elec Equip Definition,  !- Electric Equipment Definition Name
+    Space1-1BR,              !- Zone or ZoneList or Space or SpaceList Name
+    ApartmentMidRise EQP_APT_SCH,  !- Schedule Name
+    1.0,                     !- Multiplier
+    plug_loads;              !- End-Use Subcategory
+
+  ElectricEquipment:Instance,
+    Space2-2BR Elec Equip Instance,  !- Name
+    Apartment Elec Equip Definition,  !- Electric Equipment Definition Name
+    Space2-2BR,              !- Zone or ZoneList or Space or SpaceList Name
+    ApartmentMidRise EQP_APT_SCH,  !- Schedule Name
+    1.0,                     !- Multiplier
+    plug_loads;              !- End-Use Subcategory
+
+  ElectricEquipment:Instance,
+    Space3-1BR Elec Equip Instance,  !- Name
+    Apartment Elec Equip Definition,  !- Electric Equipment Definition Name
+    Space3-1BR,              !- Zone or ZoneList or Space or SpaceList Name
+    ApartmentMidRise EQP_APT_SCH,  !- Schedule Name
+    1.0,                     !- Multiplier
+    plug_loads;              !- End-Use Subcategory
+
+  Schedule:Day:Interval,
+    ApartmentMidRise EQP_APT_SCH Default,  !- Name
+    Fractional,              !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    01:00,                   !- Time {hh:mm}
+    0.649,                   !- Value Until Time
+    02:00,                   !- Time {hh:mm}
+    0.597,                   !- Value Until Time
+    03:00,                   !- Time {hh:mm}
+    0.572,                   !- Value Until Time
+    04:00,                   !- Time {hh:mm}
+    0.559,                   !- Value Until Time
+    05:00,                   !- Time {hh:mm}
+    0.566,                   !- Value Until Time
+    06:00,                   !- Time {hh:mm}
+    0.584,                   !- Value Until Time
+    07:00,                   !- Time {hh:mm}
+    0.625,                   !- Value Until Time
+    08:00,                   !- Time {hh:mm}
+    0.681,                   !- Value Until Time
+    09:00,                   !- Time {hh:mm}
+    0.713,                   !- Value Until Time
+    10:00,                   !- Time {hh:mm}
+    0.721,                   !- Value Until Time
+    11:00,                   !- Time {hh:mm}
+    0.72,                    !- Value Until Time
+    12:00,                   !- Time {hh:mm}
+    0.712,                   !- Value Until Time
+    13:00,                   !- Time {hh:mm}
+    0.716,                   !- Value Until Time
+    14:00,                   !- Time {hh:mm}
+    0.704,                   !- Value Until Time
+    15:00,                   !- Time {hh:mm}
+    0.705,                   !- Value Until Time
+    16:00,                   !- Time {hh:mm}
+    0.718,                   !- Value Until Time
+    17:00,                   !- Time {hh:mm}
+    0.779,                   !- Value Until Time
+    18:00,                   !- Time {hh:mm}
+    0.918,                   !- Value Until Time
+    19:00,                   !- Time {hh:mm}
+    1.0,                     !- Value Until Time
+    20:00,                   !- Time {hh:mm}
+    0.983,                   !- Value Until Time
+    21:00,                   !- Time {hh:mm}
+    0.938,                   !- Value Until Time
+    22:00,                   !- Time {hh:mm}
+    0.891,                   !- Value Until Time
+    23:00,                   !- Time {hh:mm}
+    0.835,                   !- Value Until Time
+    24:00,                   !- Time {hh:mm}
+    0.748;                   !- Value Until Time
+
+  Schedule:Week:Daily,
+    ApartmentMidRise EQP_APT_SCH Week Rule - Jan1-Dec31,  !- Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Sunday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Monday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Tuesday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Wednesday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Thursday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Friday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Saturday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- Holiday Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- SummerDesignDay Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- WinterDesignDay Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default,  !- CustomDay1 Schedule:Day Name
+    ApartmentMidRise EQP_APT_SCH Default;  !- CustomDay2 Schedule:Day Name
+
+  Schedule:Year,
+    ApartmentMidRise EQP_APT_SCH,  !- Name
+    Fractional,              !- Schedule Type Limits Name
+    ApartmentMidRise EQP_APT_SCH Week Rule - Jan1-Dec31,  !- Schedule:Week Name
+    1,                       !- Start Month
+    1,                       !- Start Day
+    12,                      !- End Month
+    31;                      !- End Day
+
+  ElectricEquipment:Definition,
+    Bathroom Fan,            !- Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    100.0,                   !- Design Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Fraction Latent
+    0.0,                     !- Fraction Radiant
+    0.5;                     !- Fraction Lost
+
+  ElectricEquipment:Instance,
+    Space1-1BR Bathroom Fan,  !- Name
+    Bathroom Fan,            !- Electric Equipment Definition Name
+    Space1-1BR,              !- Zone or ZoneList or Space or SpaceList Name
+    Always On Continuous,    !- Schedule Name
+    1.0,                     !- Multiplier
+    bathroom_fans;           !- End-Use Subcategory
+
+  ElectricEquipment:Instance,
+    Space2-2BR 2 Bathroom Fans,  !- Name
+    Bathroom Fan,            !- Electric Equipment Definition Name
+    Space2-2BR,              !- Zone or ZoneList or Space or SpaceList Name
+    Always On Continuous,    !- Schedule Name
+    1.0,                     !- Multiplier
+    bathroom_fans;           !- End-Use Subcategory
+
+  ElectricEquipment:Instance,
+    Space3-1BR Bathroom Fan,  !- Name
+    Bathroom Fan,            !- Electric Equipment Definition Name
+    Space3-1BR,              !- Zone or ZoneList or Space or SpaceList Name
+    Always On Continuous,    !- Schedule Name
+    1.0,                     !- Multiplier
+    bathroom_fans;           !- End-Use Subcategory
+
+  Output:Table:SummaryReports,
+    AllSummary;              !- Report Name
+
+  Schedule:Constant,Always On Discrete,OnOff,1.0;
+
+  Schedule:Constant,Always Off Discrete,OnOff 1;
+
+  Schedule:Constant,Always On Continuous,Fractional,1.0;
+
+  ScheduleTypeLimits,
+    Fractional,              !- Name
+    0.0,                     !- Lower Limit Value {BasedOnField A3}
+    1.0,                     !- Upper Limit Value {BasedOnField A3}
+    Continuous;              !- Numeric Type
+
+  ScheduleTypeLimits,
+    OnOff,                   !- Name
+    0.0,                     !- Lower Limit Value {BasedOnField A3}
+    1.0,                     !- Upper Limit Value {BasedOnField A3}
+    Discrete,                !- Numeric Type
+    Availability;            !- Unit Type
+
+  OutputControl:Table:Style,
+    HTML;                    !- Column Separator
+
+  Output:VariableDictionary,IDF,Unsorted;
+
+  Output:SQLite,
+    SimpleAndTabular;        !- Option Type
