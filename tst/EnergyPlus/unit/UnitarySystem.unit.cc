@@ -18068,17 +18068,21 @@ TEST_F(EnergyPlusFixture, Test_UnitarySystemModel_SubcoolReheatCoil)
 
   Lights,
     SPACE1-1 Lights 1,       !- Name
+    SPACE1-1 Lights 1 Definition,  !- Lights Definition Name
     ZONE ONE,                !- Zone or ZoneList Name
     LIGHTS-1,                !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    SPACE1-1 Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1584,                    !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Schedule:Compact,
     LIGHTS-1,                !- Name
@@ -24955,31 +24959,39 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
         "  Lights,",
         "    SPACE1-1 Lights 1,       !- Name",
+        "    SPACE1-1 Lights 1 Definition, !- Lights Definition Name",
         "    SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name",
         "    LIGHTS-1,                !- Schedule Name",
+        "    0,                       !- Fraction Replaceable",
+        "    GeneralLights;           !- End-Use Subcategory",
+
+        "  Lights:Definition,",
+        "    SPACE1-1 Lights 1 Definition, !- Name",
         "    LightingLevel,           !- Design Level Calculation Method",
         "    1584,                    !- Lighting Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
         "    ,                        !- Watts per Person {W/person}",
         "    0,                       !- Return Air Fraction",
         "    0.59,                    !- Fraction Radiant",
-        "    0.2,                     !- Fraction Visible",
-        "    0,                       !- Fraction Replaceable",
-        "    GeneralLights;           !- End-Use Subcategory",
+        "    0.2;                     !- Fraction Visible",
 
         "  Lights,",
         "    SPACE2-1 Lights 1,       !- Name",
+        "    SPACE2-1 Lights 1 Definition, !- Lights Definition Name",
         "    SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name",
         "    LIGHTS-1,                !- Schedule Name",
+        "    0,                       !- Fraction Replaceable",
+        "    GeneralLights;           !- End-Use Subcategory",
+
+        "  Lights:Definition,",
+        "    SPACE2-1 Lights 1 Definition, !- Name",
         "    LightingLevel,           !- Design Level Calculation Method",
         "    684,                     !- Lighting Level {W}",
         "    ,                        !- Watts per Zone Floor Area {W/m2}",
         "    ,                        !- Watts per Person {W/person}",
         "    0,                       !- Return Air Fraction",
         "    0.59,                    !- Fraction Radiant",
-        "    0.2,                     !- Fraction Visible",
-        "    0,                       !- Fraction Replaceable",
-        "    GeneralLights;           !- End-Use Subcategory",
+        "    0.2;                     !- Fraction Visible",
         "  ElectricEquipment,",
         "    SPACE1-1 ElecEq 1,       !- Name",
         "    SPACE1-1 ElecEq 1 Definition, !- Electric Equipment Definition Name",

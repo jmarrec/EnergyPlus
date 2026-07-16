@@ -36,8 +36,14 @@
 
   Lights,
     ZONE ONE Lights,         !- Name
+    ZONE ONE Lights Definition,  !- Lights Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting,         !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE ONE Lights Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1000,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -45,8 +51,6 @@
     0,                       !- Return Air Fraction
     0.72,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   WindowMaterial:Glazing,

@@ -5139,17 +5139,21 @@
 
   Lights,
     interior lighting,       !- Name
+    interior lighting Definition,  !- Lights Definition Name
     conditioned space 1,     !- Zone or ZoneList or Space or SpaceList Name
     interior lighting schedule,  !- Schedule Name
+    1,                       !- Fraction Replaceable
+    interior lighting;       !- End-Use Subcategory
+
+  Lights:Definition,
+    interior lighting Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     214.762680488708,        !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.6,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    interior lighting;       !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
 !-   ===========  ALL OBJECTS IN CLASS: ELECTRICEQUIPMENT ===========
 

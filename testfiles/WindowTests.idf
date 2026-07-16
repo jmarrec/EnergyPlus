@@ -2527,29 +2527,37 @@
 
   Lights,
     DPW Lights,              !- Name
+    DPW Lights Definition,   !- Lights Definition Name
     DPW,                     !- Zone or ZoneList or Space or SpaceList Name
     On,                      !- Schedule Name
+    ;                        !- Fraction Replaceable
+
+  Lights:Definition,
+    DPW Lights Definition,   !- Name
     LightingLevel,           !- Design Level Calculation Method
     100,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     ,                        !- Fraction Radiant
-    ,                        !- Fraction Visible
-    ;                        !- Fraction Replaceable
+    ;                        !- Fraction Visible
 
   Lights,
     DPSG Lights,             !- Name
+    DPSG Lights Definition,  !- Lights Definition Name
     DPSG,                    !- Zone or ZoneList or Space or SpaceList Name
     On,                      !- Schedule Name
+    ;                        !- Fraction Replaceable
+
+  Lights:Definition,
+    DPSG Lights Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     100,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
     ,                        !- Fraction Radiant
-    ,                        !- Fraction Visible
-    ;                        !- Fraction Replaceable
+    ;                        !- Fraction Visible
 
   Schedule:Constant,On,Integer,1.0;
 

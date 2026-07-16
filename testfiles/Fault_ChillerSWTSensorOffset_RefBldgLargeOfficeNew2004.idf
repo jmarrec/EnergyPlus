@@ -3685,8 +3685,14 @@
 
   Lights,
     Basement_Lights,         !- Name
+    Basement_Lights Definition,  !- Lights Definition Name
     Basement,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Basement_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3694,14 +3700,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Core_bottom_Lights,      !- Name
+    Core_bottom_Lights Definition,  !- Lights Definition Name
     Core_bottom,             !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Core_bottom_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3709,14 +3719,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Core_mid_Lights,         !- Name
+    Core_mid_Lights Definition,  !- Lights Definition Name
     Core_mid,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Core_mid_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3724,14 +3738,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Core_top_Lights,         !- Name
+    Core_top_Lights Definition,  !- Lights Definition Name
     Core_top,                !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Core_top_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3739,14 +3757,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_bot_ZN_1_Lights,  !- Name
+    Perimeter_bot_ZN_1_Lights Definition,  !- Lights Definition Name
     Perimeter_bot_ZN_1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_bot_ZN_1_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3754,14 +3776,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_bot_ZN_2_Lights,  !- Name
+    Perimeter_bot_ZN_2_Lights Definition,  !- Lights Definition Name
     Perimeter_bot_ZN_2,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_bot_ZN_2_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3769,14 +3795,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_bot_ZN_3_Lights,  !- Name
+    Perimeter_bot_ZN_3_Lights Definition,  !- Lights Definition Name
     Perimeter_bot_ZN_3,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_bot_ZN_3_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3784,14 +3814,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_bot_ZN_4_Lights,  !- Name
+    Perimeter_bot_ZN_4_Lights Definition,  !- Lights Definition Name
     Perimeter_bot_ZN_4,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_bot_ZN_4_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3799,14 +3833,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_mid_ZN_1_Lights,  !- Name
+    Perimeter_mid_ZN_1_Lights Definition,  !- Lights Definition Name
     Perimeter_mid_ZN_1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_mid_ZN_1_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3814,14 +3852,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_mid_ZN_2_Lights,  !- Name
+    Perimeter_mid_ZN_2_Lights Definition,  !- Lights Definition Name
     Perimeter_mid_ZN_2,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_mid_ZN_2_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3829,14 +3871,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_mid_ZN_3_Lights,  !- Name
+    Perimeter_mid_ZN_3_Lights Definition,  !- Lights Definition Name
     Perimeter_mid_ZN_3,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_mid_ZN_3_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3844,14 +3890,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_mid_ZN_4_Lights,  !- Name
+    Perimeter_mid_ZN_4_Lights Definition,  !- Lights Definition Name
     Perimeter_mid_ZN_4,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_mid_ZN_4_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3859,14 +3909,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_top_ZN_1_Lights,  !- Name
+    Perimeter_top_ZN_1_Lights Definition,  !- Lights Definition Name
     Perimeter_top_ZN_1,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_top_ZN_1_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3874,14 +3928,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_top_ZN_2_Lights,  !- Name
+    Perimeter_top_ZN_2_Lights Definition,  !- Lights Definition Name
     Perimeter_top_ZN_2,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_top_ZN_2_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3889,14 +3947,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_top_ZN_3_Lights,  !- Name
+    Perimeter_top_ZN_3_Lights Definition,  !- Lights Definition Name
     Perimeter_top_ZN_3,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_top_ZN_3_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3904,14 +3966,18 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   Lights,
     Perimeter_top_ZN_4_Lights,  !- Name
+    Perimeter_top_ZN_4_Lights Definition,  !- Lights Definition Name
     Perimeter_top_ZN_4,      !- Zone or ZoneList or Space or SpaceList Name
     BLDG_LIGHT_SCH,          !- Schedule Name
+    1.0000,                  !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Perimeter_top_ZN_4_Lights Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.76,                   !- Watts per Floor Area {W/m2}
@@ -3919,8 +3985,6 @@
     0.0000,                  !- Return Air Fraction
     0.7000,                  !- Fraction Radiant
     0.2000,                  !- Fraction Visible
-    1.0000,                  !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
 ! ***EQUIPMENT GAINS***

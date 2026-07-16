@@ -428,8 +428,14 @@
 
   Lights,
     Light,                   !- Name
+    Light Definition,        !- Lights Definition Name
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     Always On,               !- Schedule Name
+    1,                       !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Light Definition,        !- Name
     LightingLevel,           !- Design Level Calculation Method
     60,                      !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
@@ -437,8 +443,6 @@
     0,                       !- Return Air Fraction
     0,                       !- Fraction Radiant
     0,                       !- Fraction Visible
-    1,                       !- Fraction Replaceable
-    General,                 !- End-Use Subcategory
     No;                      !- Return Air Fraction Calculated from Plenum Temperature
 
   ElectricEquipment,

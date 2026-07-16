@@ -1398,59 +1398,75 @@
 
   Lights,
     ZSF1 Lights 1,           !- Name
+    ZSF1 Lights 1 Definition,  !- Lights Definition Name
     ZSF1,                    !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZSF1 Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     3025,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.35;                    !- Fraction Visible
 
   Lights,
     ZNF1 Lights 1,           !- Name
+    ZNF1 Lights 1 Definition,  !- Lights Definition Name
     ZNF1,                    !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZNF1 Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     3025,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.35;                    !- Fraction Visible
 
   Lights,
     ZSF2 Lights 1,           !- Name
+    ZSF2 Lights 1 Definition,  !- Lights Definition Name
     ZSF2,                    !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
-    LightingLevel,           !- Design Level Calculation Method
-    3025,                    !- Lighting Level {W}
-    ,                        !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
     0,                       !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
-  Lights,
-    ZNF2 Lights 1,           !- Name
-    ZNF2,                    !- Zone or ZoneList or Space or SpaceList Name
-    LIT-SCHED,               !- Schedule Name
+  Lights:Definition,
+    ZSF2 Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     3025,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.35,                    !- Fraction Radiant
-    0.35,                    !- Fraction Visible
+    0.35;                    !- Fraction Visible
+
+  Lights,
+    ZNF2 Lights 1,           !- Name
+    ZNF2 Lights 1 Definition,  !- Lights Definition Name
+    ZNF2,                    !- Zone or ZoneList or Space or SpaceList Name
+    LIT-SCHED,               !- Schedule Name
     0,                       !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZNF2 Lights 1 Definition,  !- Name
+    LightingLevel,           !- Design Level Calculation Method
+    3025,                    !- Lighting Level {W}
+    ,                        !- Watts per Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0,                       !- Return Air Fraction
+    0.35,                    !- Fraction Radiant
+    0.35;                    !- Fraction Visible
 
   ElectricEquipment,
     ZSF1 ElecEq 1,           !- Name

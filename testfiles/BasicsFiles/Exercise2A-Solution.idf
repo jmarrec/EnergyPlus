@@ -1649,73 +1649,93 @@
 
   Lights,
     SOUTH PERIMETER Lights 1,!- Name
+    SOUTH PERIMETER Lights 1 Definition,  !- Lights Definition Name
     SOUTH PERIMETER,         !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    SOUTH PERIMETER Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1584,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     EAST PERIMETER Lights 1, !- Name
+    EAST PERIMETER Lights 1 Definition,  !- Lights Definition Name
     EAST PERIMETER,          !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    EAST PERIMETER Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     684,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     NORTH PERIMETER Lights 1,!- Name
+    NORTH PERIMETER Lights 1 Definition,  !- Lights Definition Name
     NORTH PERIMETER,         !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    NORTH PERIMETER Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1584,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     WEST PERIMETER Lights 1, !- Name
+    WEST PERIMETER Lights 1 Definition,  !- Lights Definition Name
     WEST PERIMETER,          !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    WEST PERIMETER Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     684,                     !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   Lights,
     CORE Lights 1,           !- Name
+    CORE Lights 1 Definition,  !- Lights Definition Name
     CORE,                    !- Zone or ZoneList or Space or SpaceList Name
     Office Lighting 2,       !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    CORE Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2964,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2;                     !- Fraction Visible
 
   ElectricEquipment,
     SOUTH PERIMETER ElecEq 1,!- Name

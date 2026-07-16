@@ -1024,73 +1024,93 @@
 
   Lights,
     ZONE1 Lights 1,          !- Name
+    ZONE1 Lights 1 Definition,  !- Lights Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE1 Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2633,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.31,                    !- Fraction Radiant
-    0.19,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.19;                    !- Fraction Visible
 
   Lights,
     ZONE1 Lights 2,          !- Name
+    ZONE1 Lights 2 Definition,  !- Lights Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE1 Lights 2 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.31,                    !- Fraction Radiant
-    0.19,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.19;                    !- Fraction Visible
 
   Lights,
     ZONE1 Lights 3,          !- Name
+    ZONE1 Lights 3 Definition,  !- Lights Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE1 Lights 3 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     2633,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.31,                    !- Fraction Radiant
-    0.19,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.19;                    !- Fraction Visible
 
   Lights,
     ZONE1 Lights 4,          !- Name
+    ZONE1 Lights 4 Definition,  !- Lights Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE1 Lights 4 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1657,                    !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.31,                    !- Fraction Radiant
-    0.19,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.19;                    !- Fraction Visible
 
   Lights,
     ZONE1 Lights 5,          !- Name
+    ZONE1 Lights 5 Definition,  !- Lights Definition Name
     ZONE1,                   !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED,               !- Schedule Name
+    0,                       !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    ZONE1 Lights 5 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     10080,                   !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.31,                    !- Fraction Radiant
-    0.19,                    !- Fraction Visible
-    0,                       !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.19;                    !- Fraction Visible
 
   ElectricEquipment,
     ZONE1 ElecEq 1,          !- Name

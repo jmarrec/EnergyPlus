@@ -440,17 +440,21 @@
 
   Lights,
     3i2eFc1ofBz80jvIMxrXvL Lights 1,  !- Name
+    3i2eFc1ofBz80jvIMxrXvL Lights 1 Definition,  !- Lights Definition Name
     3i2eFc1ofBz80jvIMxrXvL,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   3,            !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    3i2eFc1ofBz80jvIMxrXvL Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
   Daylighting:Controls,
     1fNY1vx3jAvesY6geZTgIV_DaylCtrl,  !- Name
@@ -489,17 +493,21 @@
 
   Lights,
     1fNY1vx3jAvesY6geZTgIV Lights 1,  !- Name
+    1fNY1vx3jAvesY6geZTgIV Lights 1 Definition,  !- Lights Definition Name
     1fNY1vx3jAvesY6geZTgIV,  !- Zone or ZoneList or Space or SpaceList Name
     BLDG Sch   3,            !- Schedule Name
+    1.0,                     !- Fraction Replaceable
+    GeneralLights;           !- End-Use Subcategory
+
+  Lights:Definition,
+    1fNY1vx3jAvesY6geZTgIV Lights 1 Definition,  !- Name
     LightingLevel,           !- Design Level Calculation Method
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0000000E+00,           !- Return Air Fraction
     0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+    0.2000000;               !- Fraction Visible
 
 ! =========== Interior Thermal SURFACE Object List ===========
    ! Vertices in World Coordinate System, beginning in exterior upper left

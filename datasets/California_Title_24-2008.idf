@@ -39,17 +39,21 @@
 
   Lights,
     Auditoriums,             !- Name
+    Auditoriums Definition,  !- Lights Definition Name
     Auditoriums,             !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Auditoriums Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     15.15,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Auditoriums,             !- Name
@@ -115,17 +119,21 @@
 
   Lights,
     Classroom Building,      !- Name
+    Classroom Building Definition,  !- Lights Definition Name
     Classroom Building,      !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Classroom Building Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Classroom Building,      !- Name
@@ -191,17 +199,21 @@
 
   Lights,
     Commercial and Industrial Building,  !- Name
+    Commercial and Industrial Building Definition,  !- Lights Definition Name
     Commercial and Industrial Building,  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Commercial and Industrial Building Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     6.46,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Commercial and Industrial Building,  !- Name
@@ -267,17 +279,21 @@
 
   Lights,
     Convention Centers,      !- Name
+    Convention Centers Definition,  !- Lights Definition Name
     Convention Centers,      !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Convention Centers Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     12.92,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Convention Centers,      !- Name
@@ -343,17 +359,21 @@
 
   Lights,
     Financial Institutions,  !- Name
+    Financial Institutions Definition,  !- Lights Definition Name
     Financial Institutions,  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Financial Institutions Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Financial Institutions,  !- Name
@@ -419,17 +439,21 @@
 
   Lights,
     General Commercial and Industrial Work Buildings,  !- Name
+    General Commercial and Industrial Work Buildings Definition,  !- Lights Definition Name
     General Commercial and Industrial Work Buildings,  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    General Commercial and Industrial Work Buildings Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     General Commercial and Industrial Work Buildings,  !- Name
@@ -495,17 +519,21 @@
 
   Lights,
     Grocery Stores,          !- Name
+    Grocery Stores Definition,  !- Lights Definition Name
     Grocery Stores,          !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Grocery Stores Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     16.15,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Grocery Stores,          !- Name
@@ -571,17 +599,21 @@
 
   Lights,
     Library,                 !- Name
+    Library Definition,      !- Lights Definition Name
     Library,                 !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Library Definition,      !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.99,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Library,                 !- Name
@@ -647,17 +679,21 @@
 
   Lights,
     Medical Buildings and Clinics,  !- Name
+    Medical Buildings and Clinics Definition,  !- Lights Definition Name
     Medical Buildings and Clinics,  !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Medical Buildings and Clinics Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Medical Buildings and Clinics,  !- Name
@@ -723,17 +759,21 @@
 
   Lights,
     Office Buildings,        !- Name
+    Office Buildings Definition,  !- Lights Definition Name
     Office Buildings,        !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Office Buildings Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     9.15,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Office Buildings,        !- Name
@@ -799,17 +839,21 @@
 
   Lights,
     Religious Facilities,    !- Name
+    Religious Facilities Definition,  !- Lights Definition Name
     Religious Facilities,    !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Religious Facilities Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     17.22,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Religious Facilities,    !- Name
@@ -875,17 +919,21 @@
 
   Lights,
     Restaurants,             !- Name
+    Restaurants Definition,  !- Lights Definition Name
     Restaurants,             !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Restaurants Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     12.92,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Restaurants,             !- Name
@@ -951,17 +999,21 @@
 
   Lights,
     Schools,                 !- Name
+    Schools Definition,      !- Lights Definition Name
     Schools,                 !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Schools Definition,      !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Schools,                 !- Name
@@ -1027,17 +1079,21 @@
 
   Lights,
     Theaters,                !- Name
+    Theaters Definition,     !- Lights Definition Name
     Theaters,                !- Zone or ZoneList or Space or SpaceList Name
     LIT-SCHED-BldgAvg,       !- Schedule Name
+    ,                        !- Fraction Replaceable
+    General;                 !- End-Use Subcategory
+
+  Lights:Definition,
+    Theaters Definition,     !- Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Lighting Level {W}
     13.99,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.42,                    !- Fraction Radiant
-    0.18,                    !- Fraction Visible
-    ,                        !- Fraction Replaceable
-    General;                 !- End-Use Subcategory
+    0.18;                    !- Fraction Visible
 
   ElectricEquipment,
     Theaters,                !- Name
