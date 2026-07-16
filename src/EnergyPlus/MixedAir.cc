@@ -1024,11 +1024,11 @@ void GetOutsideAirSysInputs(EnergyPlusData &state)
                                         "UNDEFINED",
                                         "UNDEFINED");
                 }
-                GetOACompNodeNumbers(state, OASysNum);
-                int companionCoilAirInletNodeNum = 0;
-                bool transpiredCollectorOutletNodeNumFound = false;
+                GetOACompNodeNumbers(state, OASysNum, ErrorsFound);
                 // check OA equipment list ordering for proper sequence of components
+                bool transpiredCollectorOutletNodeNumFound = false;
                 for (int CompNum = 1; CompNum < OASys.NumComponents; ++CompNum) {
+                    int companionCoilAirInletNodeNum = 0;
                     // check outlet node is same as next components inlet node
                     if (OASys.ComponentType(CompNum) == "COILSYSTEM:COOLING:WATER" && CompNum < OASys.NumComponents) {
                         if (OASys.compPointer[CompNum] != nullptr) {
@@ -5555,32 +5555,32 @@ int GetOACompListNumber(EnergyPlusData &state, int const OASysNum) // OA Sys Num
     return state.dataAirLoop->OutsideAirSys(OASysNum).NumComponents;
 }
 
-void GetOACompNodeNumbers(EnergyPlusData &state, int OASysNum)
+void GetOACompNodeNumbers(EnergyPlusData &state, int OASysNum, bool &errorsFound)
 {
     std::string const cCurrentModuleObject = "AirLoopHVAC:OutdoorAirSystem:EquipmentList";
     Array1D_int OAMixerInletNodeNums;
-    bool InletNodeErrFlag = false;
-    bool OutletNodeErrFlag = false;
-    bool errorsFound = false;
+    bool LocalErrorsFound = false;
     int compNum = 0;
     auto &thisOutsideAirSys = state.dataAirLoop->OutsideAirSys(OASysNum);
     for (int CompNum = 1; CompNum <= thisOutsideAirSys.NumComponents; ++CompNum) {
+        bool InletNodeErrFlag = false;
+        bool OutletNodeErrFlag = false;
         std::string const &CompType = thisOutsideAirSys.ComponentType(CompNum);
         std::string const &CompName = thisOutsideAirSys.ComponentName(CompNum);
         const std::string typeNameUC = Util::makeUPPER(thisOutsideAirSys.ComponentType(CompNum));
         switch (static_cast<MixedAir::ValidEquipListType>(getEnumValue(MixedAir::validEquipNamesUC, typeNameUC))) {
         case MixedAir::ValidEquipListType::OutdoorAirMixer:
-            OAMixerInletNodeNums = GetOAMixerNodeNumbers(state, CompName, errorsFound);
+            OAMixerInletNodeNums = GetOAMixerNodeNumbers(state, CompName, LocalErrorsFound);
             thisOutsideAirSys.InletNodeNum(CompNum) = OAMixerInletNodeNums(1);
             thisOutsideAirSys.OutletNodeNum(CompNum) = OAMixerInletNodeNums(4);
             break;
         case MixedAir::ValidEquipListType::CoilUserDefined:
-            UserDefinedComponents::GetUserDefinedCoilIndex(state, CompName, compNum, errorsFound, cCurrentModuleObject);
+            UserDefinedComponents::GetUserDefinedCoilIndex(state, CompName, compNum, LocalErrorsFound, cCurrentModuleObject);
             UserDefinedComponents::GetUserDefinedCoilAirInletNode(
-                state, CompName, thisOutsideAirSys.InletNodeNum(CompNum), errorsFound, cCurrentModuleObject);
+                state, CompName, thisOutsideAirSys.InletNodeNum(CompNum), InletNodeErrFlag, cCurrentModuleObject);
 
             UserDefinedComponents::GetUserDefinedCoilAirOutletNode(
-                state, CompName, thisOutsideAirSys.OutletNodeNum(CompNum), errorsFound, cCurrentModuleObject);
+                state, CompName, thisOutsideAirSys.OutletNodeNum(CompNum), OutletNodeErrFlag, cCurrentModuleObject);
             break;
         case MixedAir::ValidEquipListType::FanSystemModel:
         case MixedAir::ValidEquipListType::FanConstantVolume:
@@ -5715,6 +5715,7 @@ void GetOACompNodeNumbers(EnergyPlusData &state, int OASysNum)
             errorsFound = true;
         }
     }
+    errorsFound = errorsFound || LocalErrorsFound;
 }
 
 std::string GetOACompName(EnergyPlusData &state,

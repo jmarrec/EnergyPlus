@@ -525,7 +525,7 @@ namespace MixedAir {
 
     int GetOACompListNumber(EnergyPlusData &state, int OASysNum); // OA Sys Number
 
-    void GetOACompNodeNumbers(EnergyPlusData &state, int OASysNum); // OA Sys Number
+    void GetOACompNodeNumbers(EnergyPlusData &state, int const OASysNum, bool &errorsFound); // OA Sys Number
 
     std::string GetOACompName(EnergyPlusData &state,
                               int OASysNum, // OA Sys Number
