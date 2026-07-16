@@ -21924,6 +21924,229 @@ People,
        \note this is the indoor safe temperature threshold for heat stress
        \default 30
 
+People:Instance,
+   \memo Sets internal gains and contaminant rates for occupants in the zone.
+   \memo The physical characteristics are given by the referenced People:Definition object.
+   \memo If a ZoneList, SpaceList, or a Zone comprised of more than one Space is specified
+   \memo then this definition applies to all applicable spaces, and each instance will
+   \memo be named with the Space Name plus this Object Name.
+   \min-fields 5
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference PeopleNames
+       \reference SpaceItemNames
+       \reference SpaceLoadNames
+       \reference SpaceComponentInstanceNames
+  A2 , \field People Definition Name
+       \required-field
+       \type object-list
+       \object-list PeopleDefinitionNames
+  A3 , \field Zone or ZoneList or Space or SpaceList Name
+       \required-field
+       \type object-list
+       \object-list ZoneAndZoneListNames
+       \object-list SpaceAndSpaceListNames
+  A4 , \field Number of People Schedule Name
+       \required-field
+       \type object-list
+       \note units in schedule should be fraction applied to number of people (0.0 - 1.0)
+       \object-list ScheduleNames
+  A5 , \field Activity Level Schedule Name
+       \required-field
+       \note Note that W has to be converted to mets in TC routine
+       \type object-list
+       \note units in schedule are W/person
+       \object-list ScheduleNames
+  A6 , \field Surface Name/Angle Factor List Name
+       \type object-list
+       \object-list AllHeatTranAngFacNames
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  A7 , \field Work Efficiency Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note units in schedule are 0.0 to 1.0
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  A8 , \field Clothing Insulation Calculation Method
+       \type choice
+       \key ClothingInsulationSchedule
+       \key DynamicClothingModelASHRAE55
+       \key CalculationMethodSchedule
+       \default ClothingInsulationSchedule
+  A9 , \field Clothing Insulation Calculation Method Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note a schedule value of 1 for the Scheduled method, and 2 for the DynamicClothingModelASHRAE55 method
+  A10, \field Clothing Insulation Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note use "Clo" from ASHRAE or Thermal Comfort guides
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  A11, \field Air Velocity Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note units in the schedule are m/s
+       \note optional (only required for runs of thermal comfort models: Fanger, Pierce, KSU, CoolingEffectASH55 and AnkleDraftASH55)
+  N1 , \field Multiplier
+       \note Multiplies the number of people from the referenced definition.
+       \type real
+       \minimum 0
+       \default 1
+  A12, \field Ankle Level Air Velocity Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note units in the schedule are m/s
+       \note this is the schedule of the air speed at the 0.1 m above the floor
+       \note optional (only required for runs of thermal comfort models AnkleDraftASH55)
+  N2 , \field Cold Stress Temperature Threshold
+       \type real
+       \units C
+       \note this is the indoor safe temperature threshold for cold stress
+       \default 15.56
+  N3 ; \field Heat Stress Temperature Threshold
+       \type real
+       \units C
+       \note this is the indoor safe temperature threshold for heat stress
+       \default 30
+
+People:Definition,
+   \memo Defines the physical characteristics (number of people, heat gain fractions, CO2 generation rate
+   \memo and thermal comfort model selections) for occupants.
+   \memo Referenced by one or more People:Instance objects.
+   \min-fields 5
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference PeopleDefinitionNames
+       \reference SpaceComponentDefinitionNames
+  A2 , \field Number of People Calculation Method
+       \note The entered calculation method is used to create the maximum number of people
+       \note for this set of attributes (i.e. sensible fraction, schedule, etc)
+       \note Choices: People -- simply enter number of occupants.
+       \note People per Floor Area -- enter the number to apply. Value * Floor Area = Number of people
+       \note Floor Area per Person -- enter the number to apply. Floor Area / Value = Number of people
+       \type choice
+       \key People
+       \key People/Area
+       \key Area/Person
+       \default People
+  N1 , \field Number of People
+       \type real
+       \minimum 0
+  N2 , \field People per Floor Area
+       \type real
+       \minimum 0
+       \units person/m2
+  N3 , \field Floor Area per Person
+       \type real
+       \minimum 0
+       \units m2/person
+  N4 , \field Fraction Radiant
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+       \default 0.3
+       \note This is radiant fraction of the sensible heat released by people in a zone. This value will be
+       \note multiplied by the total sensible heat released by people yields the amount of long wavelength
+       \note radiation gain from people in a zone. Default value is 0.30.
+  N5 , \field Sensible Heat Fraction
+       \note if input, overrides program calculated sensible/latent split
+       \autocalculatable
+       \default autocalculate
+       \minimum 0.0
+       \maximum 1.0
+  N6 , \field Carbon Dioxide Generation Rate
+       \note CO2 generation rate per unit of activity level.
+       \type real
+       \units m3/s-W
+       \default 3.82E-8
+       \minimum 0.0
+       \maximum 3.82E-7
+       \note The default value is obtained from ASHRAE Std 62.1 at 0.0084 cfm/met/person over
+       \note the general adult population.
+  A3 , \field Enable ASHRAE 55 Comfort Warnings
+       \type choice
+       \key Yes
+       \key No
+       \default No
+  A4 , \field Mean Radiant Temperature Calculation Type
+       \note optional (only required for thermal comfort runs)
+       \type choice
+       \key EnclosureAveraged
+       \key SurfaceWeighted
+       \key AngleFactor
+       \default EnclosureAveraged
+  A5 , \field Thermal Comfort Model 1 Type
+       \type choice
+       \key Fanger
+       \key Pierce
+       \key KSU
+       \key AdaptiveASH55
+       \key AdaptiveCEN15251
+       \key CoolingEffectASH55
+       \key AnkleDraftASH55
+       \note optional (only needed for people thermal comfort results reporting)
+  A6 , \field Thermal Comfort Model 2 Type
+       \type choice
+       \key Fanger
+       \key Pierce
+       \key KSU
+       \key AdaptiveASH55
+       \key AdaptiveCEN15251
+       \key CoolingEffectASH55
+       \key AnkleDraftASH55
+       \note optional (second type of thermal comfort model and results reporting)
+  A7 , \field Thermal Comfort Model 3 Type
+       \type choice
+       \key Fanger
+       \key Pierce
+       \key KSU
+       \key AdaptiveASH55
+       \key AdaptiveCEN15251
+       \key CoolingEffectASH55
+       \key AnkleDraftASH55
+       \note optional (third thermal comfort model and report type)
+  A8 , \field Thermal Comfort Model 4 Type
+       \type choice
+       \key Fanger
+       \key Pierce
+       \key KSU
+       \key AdaptiveASH55
+       \key AdaptiveCEN15251
+       \key CoolingEffectASH55
+       \key AnkleDraftASH55
+       \note optional (fourth thermal comfort model and report type)
+  A9 , \field Thermal Comfort Model 5 Type
+       \type choice
+       \key Fanger
+       \key Pierce
+       \key KSU
+       \key AdaptiveASH55
+       \key AdaptiveCEN15251
+       \key CoolingEffectASH55
+       \key AnkleDraftASH55
+       \note optional (fifth thermal comfort model and report type)
+  A10, \field Thermal Comfort Model 6 Type
+       \type choice
+       \key Fanger
+       \key Pierce
+       \key KSU
+       \key AdaptiveASH55
+       \key AdaptiveCEN15251
+       \key CoolingEffectASH55
+       \key AnkleDraftASH55
+       \note optional (sixth thermal comfort model and report type)
+  A11; \field Thermal Comfort Model 7 Type
+       \type choice
+       \key Fanger
+       \key Pierce
+       \key KSU
+       \key AdaptiveASH55
+       \key AdaptiveCEN15251
+       \key CoolingEffectASH55
+       \key AnkleDraftASH55
+       \note optional (seventh thermal comfort model and report type)
+
 ComfortViewFactorAngles,
        \memo Used to specify radiant view factors for thermal comfort calculations.
        \memo Note that the following angle factor fractions must sum up to 1.0

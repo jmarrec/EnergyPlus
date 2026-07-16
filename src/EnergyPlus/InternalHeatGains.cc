@@ -310,6 +310,7 @@ namespace InternalHeatGains {
         }
 
         const std::string peopleModuleObject = "People";
+        const std::string peopleInstanceModuleObject = "People:Instance";
         const std::string lightsModuleObject = "Lights";
         const std::string lightsInstanceModuleObject = "Lights:Instance";
         const std::string elecEqModuleObject = "ElectricEquipment";
@@ -342,6 +343,7 @@ namespace InternalHeatGains {
             int MaxNums = 0;
             int NumParams = 0;
             for (const auto &moduleName : {peopleModuleObject,
+                                           peopleInstanceModuleObject,
                                            lightsModuleObject,
                                            lightsInstanceModuleObject,
                                            elecEqModuleObject,
@@ -373,17 +375,37 @@ namespace InternalHeatGains {
         }
 
         // PEOPLE: Includes both information related to the heat balance and thermal comfort
+        // People and People:Instance (which references a People:Definition for its physical
+        // characteristics). Both kinds populate state.dataHeatBal->People, so downstream code
+        // treats them identically.
         EPVector<InternalHeatGains::GlobalInternalGainMiscObject> peopleObjects;
         int numPeopleStatements = 0;
-        setupIHGZonesAndSpaces(state, peopleModuleObject, peopleObjects, numPeopleStatements, state.dataHeatBal->TotPeople, ErrorsFound);
+        setupIHGZonesAndSpaces(state,
+                               peopleModuleObject,
+                               peopleObjects,
+                               numPeopleStatements,
+                               state.dataHeatBal->TotPeople,
+                               ErrorsFound,
+                               false,
+                               peopleInstanceModuleObject);
 
         if (state.dataHeatBal->TotPeople > 0) {
             state.dataHeatBal->People.allocate(state.dataHeatBal->TotPeople);
             int peopleNum = 0;
+
+            // People objects; the People:Instance ones are processed in the next loop.
+            int peopleObjectNum = 0;
             for (int peopleInputNum = 1; peopleInputNum <= numPeopleStatements; ++peopleInputNum) {
+
+                auto &thisPeopleInput = peopleObjects(peopleInputNum);
+                if (thisPeopleInput.isInstance) {
+                    continue;
+                }
+                ++peopleObjectNum;
+
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          peopleModuleObject,
-                                                                         peopleInputNum,
+                                                                         peopleObjectNum,
                                                                          IHGAlphas,
                                                                          IHGNumAlphas,
                                                                          IHGNumbers,
@@ -407,7 +429,6 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                 }
 
-                auto &thisPeopleInput = peopleObjects(peopleInputNum);
                 DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
                 int fieldNum = 1;
                 switch (levelMethod) {
@@ -835,9 +856,392 @@ namespace InternalHeatGains {
                 }
             }
 
+            // People:Instance objects: the physical characteristics (number of people calculation method,
+            // heat gain fractions, CO2 generation rate and thermal comfort model selections) come from the
+            // referenced People:Definition, with the number of people scaled by the instance's Multiplier.
+            // The schedules, surface/angle factor list and stress thresholds are installation-specific and
+            // stay on the instance.
+            std::vector<PeopleDefinitionData> const peopleDefs = GetPeopleDefinition(state);
+            int peopleInstanceObjectNum = 0;
+            for (int peopleInputNum = 1; peopleInputNum <= numPeopleStatements; ++peopleInputNum) {
+
+                auto &thisPeopleInput = peopleObjects(peopleInputNum);
+                if (!thisPeopleInput.isInstance) {
+                    continue;
+                }
+                ++peopleInstanceObjectNum;
+
+                state.dataInputProcessing->inputProcessor->getObjectItem(state,
+                                                                         peopleInstanceModuleObject,
+                                                                         peopleInstanceObjectNum,
+                                                                         IHGAlphas,
+                                                                         IHGNumAlphas,
+                                                                         IHGNumbers,
+                                                                         IHGNumNumbers,
+                                                                         IOStat,
+                                                                         IHGNumericFieldBlanks,
+                                                                         IHGAlphaFieldBlanks,
+                                                                         IHGAlphaFieldNames,
+                                                                         IHGNumericFieldNames);
+
+                ErrorObjectHeader eoh{routineName, peopleInstanceModuleObject, IHGAlphas(1)};
+                // A4: Number of People Schedule Name
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
+                    ErrorsFound = true;
+                } else if (schedPtr == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
+                    ErrorsFound = true;
+                } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
+                    ErrorsFound = true;
+                }
+
+                std::string const &defName = IHGAlphas(2);
+                auto itPeopleDef =
+                    std::find_if(peopleDefs.begin(), peopleDefs.end(), [&defName](PeopleDefinitionData const &def) { return def.Name == defName; });
+                if (itPeopleDef == peopleDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
+                }
+
+                Real64 const multiplier = IHGNumbers(1);
+
+                // Create one People instance for every space associated with this People:Instance input object
+                for (int Item1 = 1; Item1 <= thisPeopleInput.numOfSpaces; ++Item1) {
+                    ++peopleNum;
+                    auto &thisPeople = state.dataHeatBal->People(peopleNum);
+                    int const spaceNum = thisPeopleInput.spaceNums(Item1);
+                    int const zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+                    thisPeople.Name = thisPeopleInput.names(Item1);
+                    thisPeople.spaceIndex = spaceNum;
+                    thisPeople.ZonePtr = zoneNum;
+                    thisPeople.sched = schedPtr;
+
+                    // Number of people calculation method (from the definition)
+                    thisPeople.NumberOfPeople = setDesignLevel(state,
+                                                               ErrorsFound,
+                                                               peopleInstanceModuleObject,
+                                                               thisPeopleInput,
+                                                               itPeopleDef->designLevelMethod,
+                                                               zoneNum,
+                                                               spaceNum,
+                                                               itPeopleDef->levelValue,
+                                                               itPeopleDef->levelIsBlank,
+                                                               itPeopleDef->levelField) *
+                                                multiplier;
+
+                    // Calculate nominal min/max people
+                    thisPeople.NomMinNumberPeople = thisPeople.NumberOfPeople * thisPeople.sched->getMinVal(state);
+                    thisPeople.NomMaxNumberPeople = thisPeople.NumberOfPeople * thisPeople.sched->getMaxVal(state);
+
+                    if (zoneNum > 0) {
+                        state.dataHeatBal->Zone(zoneNum).TotOccupants += thisPeople.NumberOfPeople;
+                        // Note that min/max occupants are non-coincident
+                        state.dataHeatBal->Zone(zoneNum).minOccupants += thisPeople.NomMinNumberPeople;
+                        state.dataHeatBal->Zone(zoneNum).maxOccupants += thisPeople.NomMaxNumberPeople;
+                    }
+
+                    if (spaceNum > 0) {
+                        state.dataHeatBal->space(spaceNum).TotOccupants += thisPeople.NumberOfPeople;
+                        // Note that min/max occupants are non-coincident
+                        state.dataHeatBal->space(spaceNum).minOccupants += thisPeople.NomMinNumberPeople;
+                        state.dataHeatBal->space(spaceNum).maxOccupants += thisPeople.NomMaxNumberPeople;
+                    }
+                    thisPeople.FractionRadiant = itPeopleDef->FractionRadiant;
+                    thisPeople.FractionConvected = 1.0 - thisPeople.FractionRadiant;
+                    if (Item1 == 1) {
+                        if (thisPeople.FractionConvected < 0.0) {
+                            ShowSevereError(state,
+                                            std::format("{}{}=\"{}\", Fraction Radiant > 1.0, value ={:.2f}",
+                                                        RoutineName,
+                                                        peopleInstanceModuleObject,
+                                                        IHGAlphas(1),
+                                                        itPeopleDef->FractionRadiant));
+                            ErrorsFound = true;
+                        }
+                    }
+
+                    thisPeople.UserSpecSensFrac = itPeopleDef->UserSpecSensFrac;
+                    thisPeople.CO2RateFactor = itPeopleDef->CO2RateFactor;
+
+                    if (thisPeople.CO2RateFactor < 0.0) {
+                        ShowSevereError(state,
+                                        std::format("{}{}=\"{}\", Carbon Dioxide Generation Rate < 0.0, value ={:.2f}",
+                                                    RoutineName,
+                                                    peopleInstanceModuleObject,
+                                                    IHGAlphas(1),
+                                                    thisPeople.CO2RateFactor));
+                        ErrorsFound = true;
+                    }
+
+                    // N2: Cold Stress Temperature Threshold, N3: Heat Stress Temperature Threshold
+                    if (IHGNumNumbers >= 2 && !IHGNumericFieldBlanks(2)) {
+                        thisPeople.ColdStressTempThresh = IHGNumbers(2);
+                    } else {
+                        thisPeople.ColdStressTempThresh = 15.56; // degree C
+                    }
+
+                    if (IHGNumNumbers >= 3 && !IHGNumericFieldBlanks(3)) {
+                        thisPeople.HeatStressTempThresh = IHGNumbers(3);
+                    } else {
+                        thisPeople.HeatStressTempThresh = 30.0; // degree C
+                    }
+
+                    // A5: Activity Level Schedule Name
+                    thisPeople.activityLevelSched = Sched::GetSchedule(state, IHGAlphas(5));
+
+                    if (Item1 == 1) {
+                        if (IHGAlphaFieldBlanks(5)) {
+                            ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(5));
+                            ErrorsFound = true;
+                        } else if (thisPeople.activityLevelSched == nullptr) {
+                            ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5));
+                            ErrorsFound = true;
+                        } else if (!thisPeople.activityLevelSched->checkMinVal(state, Clusive::In, 0.0)) {
+                            Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5), Clusive::In, 0.0);
+                            ErrorsFound = true;
+                        } else if (!thisPeople.activityLevelSched->checkMinMaxVals(state, Clusive::In, 70.0, Clusive::In, 1000.0)) {
+                            Sched::ShowWarningBadMinMax(state,
+                                                        eoh,
+                                                        IHGAlphaFieldNames(5),
+                                                        IHGAlphas(5),
+                                                        Clusive::In,
+                                                        70.0,
+                                                        Clusive::In,
+                                                        1000.0,
+                                                        "Values fall outside of typical w/person range for thermal comfort reporting.");
+                        }
+                    }
+
+                    // ASHRAE 55 warnings and thermal comfort flags come from the definition
+                    thisPeople.Show55Warning = itPeopleDef->Show55Warning;
+
+                    if (itPeopleDef->usingThermalComfort) {
+
+                        thisPeople.MRTCalcType = itPeopleDef->MRTCalcType;
+
+                        thisPeople.Fanger = itPeopleDef->Fanger;
+                        thisPeople.Pierce = itPeopleDef->Pierce;
+                        thisPeople.KSU = itPeopleDef->KSU;
+                        thisPeople.AdaptiveASH55 = itPeopleDef->AdaptiveASH55;
+                        thisPeople.AdaptiveCEN15251 = itPeopleDef->AdaptiveCEN15251;
+                        thisPeople.CoolingEffectASH55 = itPeopleDef->CoolingEffectASH55;
+                        thisPeople.AnkleDraftASH55 = itPeopleDef->AnkleDraftASH55;
+
+                        bool const ModelWithAdditionalInputs =
+                            thisPeople.Fanger || thisPeople.Pierce || thisPeople.KSU || thisPeople.CoolingEffectASH55 || thisPeople.AnkleDraftASH55;
+
+                        // A6: Surface Name/Angle Factor List Name
+                        switch (thisPeople.MRTCalcType) {
+                        case DataHeatBalance::CalcMRT::EnclosureAveraged: {
+                            // nothing to do here
+                        } break;
+                        case DataHeatBalance::CalcMRT::SurfaceWeighted: {
+                            thisPeople.SurfacePtr = Util::FindItemInList(IHGAlphas(6), state.dataSurface->Surface);
+                            if (thisPeople.SurfacePtr == 0 && ModelWithAdditionalInputs) {
+                                if (Item1 == 1) {
+                                    ShowSevereError(state,
+                                                    std::format("{}{}=\"{}\", invalid Surface Name={}",
+                                                                RoutineName,
+                                                                peopleInstanceModuleObject,
+                                                                IHGAlphas(1),
+                                                                IHGAlphas(6)));
+                                    ErrorsFound = true;
+                                }
+                            } else {
+                                int const surfRadEnclNum = state.dataSurface->Surface(thisPeople.SurfacePtr).RadEnclIndex;
+                                int const thisPeopleRadEnclNum = state.dataHeatBal->space(thisPeople.spaceIndex).radiantEnclosureNum;
+                                if (surfRadEnclNum != thisPeopleRadEnclNum && ModelWithAdditionalInputs) {
+                                    ShowSevereError(state,
+                                                    std::format("{}{}=\"{}\", Surface referenced in {}={} in different enclosure.",
+                                                                RoutineName,
+                                                                peopleInstanceModuleObject,
+                                                                IHGAlphas(1),
+                                                                IHGAlphaFieldNames(6),
+                                                                IHGAlphas(6)));
+                                    ShowContinueError(state,
+                                                      std::format("Surface is in Enclosure={} and {} is in Enclosure={}",
+                                                                  state.dataViewFactor->EnclRadInfo(surfRadEnclNum).Name,
+                                                                  peopleInstanceModuleObject,
+                                                                  state.dataViewFactor->EnclRadInfo(thisPeopleRadEnclNum).Name));
+                                    ErrorsFound = true;
+                                }
+                            }
+
+                        } break;
+                        case DataHeatBalance::CalcMRT::AngleFactor: {
+                            thisPeople.AngleFactorListName = IHGAlphas(6);
+
+                        } break;
+                        default: {
+                            // The People:Definition getter has already defaulted invalid keys to EnclosureAveraged
+                        } break;
+                        } // switch (thisPeople.MRTCalcType)
+
+                        // A7: Work Efficiency Schedule Name
+                        if (!IHGAlphaFieldBlanks(7)) {
+                            thisPeople.workEffSched = Sched::GetSchedule(state, IHGAlphas(7));
+                        }
+
+                        if (Item1 == 1) {
+                            if (IHGAlphaFieldBlanks(7)) {
+                                if (ModelWithAdditionalInputs) {
+                                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(7));
+                                    ShowContinueError(state,
+                                                      "It is required when Thermal Comfort Model Type is one of "
+                                                      "\"Fanger\", \"Pierce\", \"KSU\", \"CoolingEffectASH55\" or \"AnkleDraftASH55\"");
+                                    ErrorsFound = true;
+                                }
+                            } else if (thisPeople.workEffSched == nullptr) {
+                                ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(7), IHGAlphas(7));
+                                ErrorsFound = true;
+                            } else if (!thisPeople.workEffSched->checkMinMaxVals(state, Clusive::In, 0.0, Clusive::In, 1.0)) {
+                                Sched::ShowSevereBadMinMax(state, eoh, IHGAlphaFieldNames(7), IHGAlphas(7), Clusive::In, 0.0, Clusive::In, 1.0);
+                                ErrorsFound = true;
+                            }
+                        }
+
+                        // A8: Clothing Insulation Calculation Method
+                        if (IHGAlphas(8).empty()) { // Using IHGAlphaFieldBlanks(8) doesn't work because this value is defaulted
+                        } else if ((thisPeople.clothingType = static_cast<ClothingType>(getEnumValue(clothingTypeNamesUC, IHGAlphas(8)))) ==
+                                   ClothingType::Invalid) {
+                            ShowSevereInvalidKey(state, eoh, IHGAlphaFieldNames(8), IHGAlphas(8));
+                            ErrorsFound = true;
+
+                        } else {
+
+                            switch (thisPeople.clothingType) {
+
+                            case ClothingType::InsulationSchedule: {
+                                // A10: Clothing Insulation Schedule Name
+                                thisPeople.clothingSched = Sched::GetSchedule(state, IHGAlphas(10));
+                                if (Item1 == 1) {
+                                    if (IHGAlphaFieldBlanks(10)) {
+                                        if (ModelWithAdditionalInputs) {
+                                            ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(10), IHGAlphaFieldNames(8), IHGAlphas(8));
+                                            ErrorsFound = true;
+                                        }
+                                    } else if (thisPeople.clothingSched == nullptr) {
+                                        if (ModelWithAdditionalInputs) {
+                                            ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(10), IHGAlphas(10));
+                                            ErrorsFound = true;
+                                        }
+                                    } else if (!thisPeople.clothingSched->checkMinVal(state, Clusive::In, 0.0)) {
+                                        Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(10), IHGAlphas(10), Clusive::In, 0.0);
+                                        ErrorsFound = true;
+                                    } else if (!thisPeople.clothingSched->checkMaxVal(state, Clusive::In, 2.0)) {
+                                        Sched::ShowWarningBadMax(state, eoh, IHGAlphaFieldNames(10), IHGAlphas(10), Clusive::In, 2.0, "");
+                                    }
+                                }
+                            } break;
+
+                            case ClothingType::DynamicAshrae55: {
+                            } break; // nothing extra to do, at least for now
+
+                            case ClothingType::CalculationSchedule: {
+                                // A9: Clothing Insulation Calculation Method Schedule Name
+                                thisPeople.clothingMethodSched = Sched::GetSchedule(state, IHGAlphas(9));
+
+                                if (Item1 == 1) {
+                                    if (thisPeople.clothingMethodSched == nullptr) {
+                                        ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(9), IHGAlphas(9));
+                                        ErrorsFound = true;
+                                    }
+                                }
+
+                                if (thisPeople.clothingMethodSched->hasVal(state, 1)) {
+                                    if ((thisPeople.clothingSched = Sched::GetSchedule(state, IHGAlphas(10))) == nullptr) {
+                                        if (Item1 == 1) {
+                                            ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(10), IHGAlphas(10));
+                                            ErrorsFound = true;
+                                        }
+                                    }
+                                }
+                            } break;
+
+                            default: {
+                            } break; // nothing to do for the other cases
+                            } // switch (thisPeople.clothingType)
+                        }
+
+                        // A11: Air Velocity Schedule Name
+                        if (!IHGAlphaFieldBlanks(11)) {
+                            thisPeople.airVelocitySched = Sched::GetSchedule(state, IHGAlphas(11));
+                        }
+
+                        if (Item1 == 1) {
+                            if (IHGAlphaFieldBlanks(11)) {
+                                if (ModelWithAdditionalInputs) {
+                                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(11));
+                                    ShowContinueError(state,
+                                                      "Required when Thermal Comfort Model Type is one of "
+                                                      "\"Fanger\", \"Pierce\", \"KSU\", \"CoolingEffectASH55\" or \"AnkleDraftASH55\"");
+                                    ErrorsFound = true;
+                                }
+                            } else if (thisPeople.airVelocitySched == nullptr) {
+                                ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(11), IHGAlphas(11));
+                                ErrorsFound = true;
+                            } else if (!thisPeople.airVelocitySched->checkMinVal(state, Clusive::In, 0.0)) {
+                                Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(11), IHGAlphas(11), Clusive::In, 0.0);
+                                ErrorsFound = true;
+                            }
+                        }
+
+                        // A12: Ankle Level Air Velocity Schedule Name
+                        if (!IHGAlphas(12).empty()) { // Using IHGAlphaFieldBlanks(12) doesn't work because this field has a default
+                            thisPeople.ankleAirVelocitySched = Sched::GetSchedule(state, IHGAlphas(12));
+                        }
+
+                        if (Item1 == 1) {
+                            if (IHGAlphaFieldBlanks(12)) {
+                                if (thisPeople.AnkleDraftASH55) {
+                                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(12), IHGAlphas(12));
+                                    ShowContinueError(state, "Required when Thermal Comfort Model Type \"AnkleDraftASH55\" is used.");
+                                    ErrorsFound = true;
+                                }
+                            } else if (thisPeople.ankleAirVelocitySched == nullptr) {
+                                ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(12), IHGAlphas(12));
+                                ErrorsFound = true;
+                            }
+                        }
+
+                    } else { // check if comfort schedules are present with no thermal comfort model selected
+                        bool const NoTCModelSelectedWithSchedules =
+                            CheckThermalComfortSchedules(IHGAlphaFieldBlanks(7), IHGAlphaFieldBlanks(10), IHGAlphaFieldBlanks(11));
+                        if (NoTCModelSelectedWithSchedules && Item1 == 1) {
+                            ShowWarningError(state,
+                                             std::format("{}{}=\"{}\" has comfort related schedules but no thermal comfort model selected.",
+                                                         RoutineName,
+                                                         peopleInstanceModuleObject,
+                                                         IHGAlphas(1)));
+                            ShowContinueError(state,
+                                              "If schedules are specified for air velocity, clothing insulation, and/or work efficiency but no "
+                                              "thermal comfort");
+                            ShowContinueError(
+                                state, "thermal comfort model is selected, the schedules will be listed as unused schedules in the .err file.");
+                            ShowContinueError(
+                                state,
+                                "To avoid these errors, select a valid thermal comfort model or eliminate these schedules in the PEOPLE input.");
+                        }
+                    } // usingThermalComfort
+
+                    if (thisPeople.ZonePtr <= 0) {
+                        continue; // Error, will be caught and terminated later
+                    }
+                }
+            } // for peopleInputNum (People:Instance)
+
             ThermalComfort::GetAngleFactorList(state);
 
             for (int peopleNum2 = 1; peopleNum2 <= state.dataHeatBal->TotPeople; ++peopleNum2) {
+                if (state.dataHeatBal->People(peopleNum2).ZonePtr == 0) {
+                    // Unfilled entry: a People:Instance referencing an unknown People:Definition was
+                    // skipped. ErrorsFound is set, the fatal error occurs after get-input completes.
+                    continue;
+                }
                 if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                     SetupEMSActuator(state,
                                      "People",
@@ -4428,6 +4832,132 @@ namespace InternalHeatGains {
         }
 
         return spaceLoadDefs;
+    }
+
+    std::vector<PeopleDefinitionData> GetPeopleDefinition(EnergyPlusData &state)
+    {
+        constexpr std::string_view routineName = "GetPeopleDefinition: ";
+
+        std::vector<PeopleDefinitionData> peopleDefs;
+
+        auto &ip = state.dataInputProcessing->inputProcessor;
+        auto const instances = ip->epJSON.find("People:Definition");
+        if (instances != ip->epJSON.end()) {
+            auto const &objectSchemaProps = ip->getObjectSchemaProps(state, "People:Definition");
+            auto &instancesValue = instances.value();
+            peopleDefs.reserve(instancesValue.size());
+
+            for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
+                auto &peopleDef = peopleDefs.emplace_back();
+                auto const &objectFields = instance.value();
+                ip->markObjectAsUsed("People:Definition", instance.key());
+
+                peopleDef.Name = Util::makeUPPER(instance.key());
+
+                std::string const designLevelMethodName =
+                    ip->getAlphaFieldValue(objectFields, objectSchemaProps, "number_of_people_calculation_method", true);
+                peopleDef.designLevelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, designLevelMethodName));
+
+                switch (peopleDef.designLevelMethod) {
+                case DesignLevelMethod::People: {
+                    peopleDef.levelField = "number_of_people";
+                } break;
+                case DesignLevelMethod::PeoplePerArea: {
+                    peopleDef.levelField = "people_per_floor_area";
+                } break;
+                case DesignLevelMethod::AreaPerPerson: {
+                    peopleDef.levelField = "floor_area_per_person";
+                } break;
+                default: {
+                    peopleDef.levelField = "number_of_people";
+                } break;
+                }
+
+                if (objectFields.find(peopleDef.levelField) == objectFields.end()) {
+                    ShowWarningError(state,
+                                     std::format("{}People:Definition=\"{}\", specifies Method={}, but the corresponding field \"{}\" is blank. "
+                                                 "0 will result.",
+                                                 routineName,
+                                                 peopleDef.Name,
+                                                 designLevelMethodName,
+                                                 peopleDef.levelField));
+                    peopleDef.levelIsBlank = true;
+                }
+                peopleDef.levelValue = ip->getRealFieldValue(objectFields, objectSchemaProps, peopleDef.levelField);
+
+                peopleDef.FractionRadiant = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_radiant");
+                peopleDef.UserSpecSensFrac = ip->getRealFieldValue(objectFields, objectSchemaProps, "sensible_heat_fraction");
+                peopleDef.CO2RateFactor = ip->getRealFieldValue(objectFields, objectSchemaProps, "carbon_dioxide_generation_rate");
+
+                std::string const ashrae55 = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "enable_ashrae_55_comfort_warnings", true);
+                if (BooleanSwitch bs = getYesNoValue(ashrae55); bs != BooleanSwitch::Invalid) {
+                    peopleDef.Show55Warning = static_cast<bool>(bs);
+                }
+
+                std::string const mrtTypeName =
+                    ip->getAlphaFieldValue(objectFields, objectSchemaProps, "mean_radiant_temperature_calculation_type", true);
+                if (!mrtTypeName.empty()) {
+                    peopleDef.MRTCalcType = static_cast<DataHeatBalance::CalcMRT>(getEnumValue(DataHeatBalance::CalcMRTTypeNamesUC, mrtTypeName));
+                }
+
+                static constexpr std::array<std::string_view, 7> tcModelFieldNames = {"thermal_comfort_model_1_type",
+                                                                                      "thermal_comfort_model_2_type",
+                                                                                      "thermal_comfort_model_3_type",
+                                                                                      "thermal_comfort_model_4_type",
+                                                                                      "thermal_comfort_model_5_type",
+                                                                                      "thermal_comfort_model_6_type",
+                                                                                      "thermal_comfort_model_7_type"};
+
+                for (auto const &fieldName : tcModelFieldNames) {
+                    auto tcIt = objectFields.find(std::string(fieldName));
+                    if (tcIt == objectFields.end()) {
+                        continue;
+                    }
+                    std::string const tcType = Util::makeUPPER(tcIt->get<std::string>());
+                    if (tcType.empty()) {
+                        // blank entry - just ignore this
+                    } else if (tcType == "FANGER") {
+                        peopleDef.Fanger = true;
+                        peopleDef.usingThermalComfort = true;
+                    } else if (tcType == "PIERCE") {
+                        peopleDef.Pierce = true;
+                        state.dataHeatBal->AnyThermalComfortPierceModel = true;
+                        peopleDef.usingThermalComfort = true;
+                    } else if (tcType == "KSU") {
+                        peopleDef.KSU = true;
+                        state.dataHeatBal->AnyThermalComfortKSUModel = true;
+                        peopleDef.usingThermalComfort = true;
+                    } else if (tcType == "ADAPTIVEASH55") {
+                        peopleDef.AdaptiveASH55 = true;
+                        state.dataHeatBal->AdaptiveComfortRequested_ASH55 = true;
+                        peopleDef.usingThermalComfort = true;
+                    } else if (tcType == "ADAPTIVECEN15251") {
+                        peopleDef.AdaptiveCEN15251 = true;
+                        state.dataHeatBal->AdaptiveComfortRequested_CEN15251 = true;
+                        peopleDef.usingThermalComfort = true;
+                    } else if (tcType == "COOLINGEFFECTASH55") {
+                        peopleDef.CoolingEffectASH55 = true;
+                        state.dataHeatBal->AnyThermalComfortCoolingEffectModel = true;
+                        peopleDef.usingThermalComfort = true;
+                    } else if (tcType == "ANKLEDRAFTASH55") {
+                        peopleDef.AnkleDraftASH55 = true;
+                        state.dataHeatBal->AnyThermalComfortAnkleDraftModel = true;
+                        peopleDef.usingThermalComfort = true;
+                    } else {
+                        ShowWarningError(state,
+                                         std::format("{}People:Definition=\"{}\", invalid Thermal Comfort Model Type={}. Ignored.",
+                                                     routineName,
+                                                     peopleDef.Name,
+                                                     tcIt->get<std::string>()));
+                        ShowContinueError(state,
+                                          "Valid Values are \"Fanger\", \"Pierce\", \"KSU\", \"AdaptiveASH55\", "
+                                          "\"AdaptiveCEN15251\", \"CoolingEffectASH55\", \"AnkleDraftASH55\"");
+                    }
+                }
+            }
+        }
+
+        return peopleDefs;
     }
 
     std::vector<LightsDefinitionData> GetLightsDefinition(EnergyPlusData &state)

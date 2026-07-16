@@ -5986,3 +5986,363 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_LightsInstance_MissingLevelField)
     EXPECT_EQ("ZONE1 LIGHTS", lights.Name);
     EXPECT_NEAR(lights.DesignLevel, 0.0, 1e-6);
 }
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+        "Zone,Zone2;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,AnyNumber;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "Schedule:Constant,Schedule2,SchType1,0.5;",
+        "Schedule:Constant,ActivitySchedule,AnyNumber,100.0;",
+
+        // A regular People object, which must coexist untouched with the new pair
+        "People,",
+        "  Zone2 Legacy People,     !- Name",
+        "  Zone2,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Number of People Schedule Name",
+        "  People,                  !- Number of People Calculation Method",
+        "  3.0,                     !- Number of People",
+        "  ,                        !- People per Floor Area {person/m2}",
+        "  ,                        !- Floor Area per Person {m2/person}",
+        "  0.3,                     !- Fraction Radiant",
+        "  autocalculate,           !- Sensible Heat Fraction",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Instance,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Instance,",
+        "  Zone1 More People,       !- Name",
+        "  PEOPLEDef,               !- People Definition Name",
+        "  ZOnE1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  ScheDULe2,               !- Number of People Schedule Name",
+        "  ActivitySchedule,        !- Activity Level Schedule Name",
+        "  ,                        !- Surface Name/Angle Factor List Name",
+        "  ,                        !- Work Efficiency Schedule Name",
+        "  ,                        !- Clothing Insulation Calculation Method",
+        "  ,                        !- Clothing Insulation Calculation Method Schedule Name",
+        "  ,                        !- Clothing Insulation Schedule Name",
+        "  ,                        !- Air Velocity Schedule Name",
+        "  2.0,                     !- Multiplier",
+        "  ,                        !- Ankle Level Air Velocity Schedule Name",
+        "  10.0,                    !- Cold Stress Temperature Threshold {C}",
+        "  28.0;                    !- Heat Stress Temperature Threshold {C}",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People,                  !- Number of People Calculation Method",
+        "  4.0,                     !- Number of People",
+        "  ,                        !- People per Floor Area {person/m2}",
+        "  ,                        !- Floor Area per Person {m2/person}",
+        "  0.35,                    !- Fraction Radiant",
+        "  0.6,                     !- Sensible Heat Fraction",
+        "  3.0E-8;                  !- Carbon Dioxide Generation Rate {m3/s-W}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    ASSERT_EQ(state->dataHeatBal->People.size(), 3u);
+    EXPECT_EQ(state->dataHeatBal->TotPeople, 3);
+
+    for (const auto &people : state->dataHeatBal->People) {
+        std::string const &zoneName = state->dataHeatBal->Zone(people.ZonePtr).Name;
+        std::string const &schedName = people.sched->Name;
+        if (people.Name == "ZONE2 LEGACY PEOPLE") {
+            EXPECT_EQ(zoneName, "ZONE2");
+            EXPECT_EQ(schedName, "SCHEDULE1");
+            EXPECT_NEAR(people.NumberOfPeople, 3.0, 1e-6);
+            EXPECT_NEAR(people.FractionRadiant, 0.3, 1e-6);
+            EXPECT_NEAR(people.UserSpecSensFrac, Constant::AutoCalculate, 1e-6);
+            continue;
+        }
+        if (people.Name == "ZONE1 PEOPLE") {
+            EXPECT_EQ(schedName, "SCHEDULE1");
+            // Blank Multiplier defaults to 1
+            EXPECT_NEAR(people.NumberOfPeople, 4.0, 1e-6);
+            // Default stress thresholds
+            EXPECT_NEAR(people.ColdStressTempThresh, 15.56, 1e-6);
+            EXPECT_NEAR(people.HeatStressTempThresh, 30.0, 1e-6);
+        } else if (people.Name == "ZONE1 MORE PEOPLE") {
+            EXPECT_EQ(schedName, "SCHEDULE2");
+            EXPECT_NEAR(people.NumberOfPeople, 2.0 * 4.0, 1e-6);
+            // The stress thresholds are set on the instance
+            EXPECT_NEAR(people.ColdStressTempThresh, 10.0, 1e-6);
+            EXPECT_NEAR(people.HeatStressTempThresh, 28.0, 1e-6);
+        } else {
+            FAIL() << "Unexpected people name: " << people.Name;
+        }
+        EXPECT_EQ(zoneName, "ZONE1");
+        // From the shared definition
+        EXPECT_NEAR(people.FractionRadiant, 0.35, 1e-6);
+        EXPECT_NEAR(people.UserSpecSensFrac, 0.6, 1e-6);
+        EXPECT_NEAR(people.CO2RateFactor, 3.0e-8, 1e-15);
+    }
+
+    // Occupants accumulate on the zone: 4 + 8 in Zone1, 3 in Zone2
+    EXPECT_NEAR(state->dataHeatBal->Zone(1).TotOccupants, 12.0, 1e-6);
+    EXPECT_NEAR(state->dataHeatBal->Zone(2).TotOccupants, 3.0, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance_InvalidDefinition)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,AnyNumber;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,AnyNumber,100.0;",
+
+        "People:Instance,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef WITH A TYPO,   !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People,                  !- Number of People Calculation Method",
+        "  4.0;                     !- Number of People",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: People:Instance = ZONE1 PEOPLE",
+        "   **   ~~~   ** People Definition Name = PEOPLEDEF WITH A TYPO, item not found.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance_PerArea)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  3.0,                     !- Ceiling Height {m}",
+        "  300.0,                   !- Volume {m3}",
+        "  100.0;                   !- Floor Area {m2}",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,AnyNumber;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,AnyNumber,100.0;",
+
+        "People:Instance,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People/Area,             !- Number of People Calculation Method",
+        "  ,                        !- Number of People",
+        "  0.1;                     !- People per Floor Area {person/m2}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    // Assignment of UserEnteredFloorArea to Zone FloorArea is done in GetSurfaceData, we just mimic it here to get the correct design level
+    // calculation for this test
+    state->dataHeatBal->Zone(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+    state->dataHeatBal->space(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    ASSERT_EQ(state->dataHeatBal->People.size(), 1u);
+
+    const auto &people = state->dataHeatBal->People(1);
+    EXPECT_EQ("ZONE1 PEOPLE", people.Name);
+    EXPECT_NEAR(people.NumberOfPeople, 100.0 * 0.1, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance_MissingLevelField)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,AnyNumber;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,AnyNumber,100.0;",
+
+        "People:Instance,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People/Area,             !- Number of People Calculation Method",
+        "  4.0,                     !- Number of People",
+        "  ,                        !- People per Floor Area {person/m2}", // Shouldn't be blank
+        "  ;                        !- Floor Area per Person {m2/person}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        R"(   ** Warning ** GetPeopleDefinition: People:Definition="PEOPLEDEF", specifies Method=PEOPLE/AREA, but the corresponding field "people_per_floor_area" is blank. 0 will result.)",
+        R"(   ** Warning ** GetInternalHeatGains: People:Instance="ZONE1 PEOPLE", specifies people_per_floor_area, but that field is blank.  0 People:Instance will result.)",
+    })));
+
+    ASSERT_EQ(state->dataHeatBal->People.size(), 1u);
+    EXPECT_NEAR(state->dataHeatBal->People(1).NumberOfPeople, 0.0, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance_ThermalComfort)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+        "ScheduleTypeLimits,AnyNumber;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "Schedule:Constant,ActivitySchedule,AnyNumber,100.0;",
+        "Schedule:Constant,WorkEffSchedule,SchType1,0.5;",
+        "Schedule:Constant,ClothingSchedule,AnyNumber,1.0;",
+        "Schedule:Constant,AirVelocitySchedule,AnyNumber,0.2;",
+
+        "People:Instance,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Number of People Schedule Name",
+        "  ActivitySchedule,        !- Activity Level Schedule Name",
+        "  ,                        !- Surface Name/Angle Factor List Name",
+        "  WorkEffSchedule,         !- Work Efficiency Schedule Name",
+        "  ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method",
+        "  ,                        !- Clothing Insulation Calculation Method Schedule Name",
+        "  ClothingSchedule,        !- Clothing Insulation Schedule Name",
+        "  AirVelocitySchedule,     !- Air Velocity Schedule Name",
+        "  2.0;                     !- Multiplier",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People,                  !- Number of People Calculation Method",
+        "  4.0,                     !- Number of People",
+        "  ,                        !- People per Floor Area {person/m2}",
+        "  ,                        !- Floor Area per Person {m2/person}",
+        "  0.3,                     !- Fraction Radiant",
+        "  autocalculate,           !- Sensible Heat Fraction",
+        "  ,                        !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "  Yes,                     !- Enable ASHRAE 55 Comfort Warnings",
+        "  EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type",
+        "  Fanger,                  !- Thermal Comfort Model 1 Type",
+        "  Pierce;                  !- Thermal Comfort Model 2 Type",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+
+    ASSERT_EQ(state->dataHeatBal->People.size(), 1u);
+
+    const auto &people = state->dataHeatBal->People(1);
+    EXPECT_EQ("ZONE1 PEOPLE", people.Name);
+    EXPECT_NEAR(people.NumberOfPeople, 2.0 * 4.0, 1e-6);
+    // Thermal comfort selections come from the definition
+    EXPECT_TRUE(people.Show55Warning);
+    EXPECT_TRUE(people.Fanger);
+    EXPECT_TRUE(people.Pierce);
+    EXPECT_FALSE(people.KSU);
+    EXPECT_TRUE(state->dataHeatBal->AnyThermalComfortPierceModel);
+    EXPECT_ENUM_EQ(people.MRTCalcType, DataHeatBalance::CalcMRT::EnclosureAveraged);
+    // The comfort-related schedules stay on the instance
+    ASSERT_NE(people.workEffSched, nullptr);
+    EXPECT_EQ(people.workEffSched->Name, "WORKEFFSCHEDULE");
+    ASSERT_NE(people.clothingSched, nullptr);
+    EXPECT_EQ(people.clothingSched->Name, "CLOTHINGSCHEDULE");
+    ASSERT_NE(people.airVelocitySched, nullptr);
+    EXPECT_EQ(people.airVelocitySched->Name, "AIRVELOCITYSCHEDULE");
+}
