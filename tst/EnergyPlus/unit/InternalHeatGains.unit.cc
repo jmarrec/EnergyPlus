@@ -4369,3 +4369,356 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipmentInstance_MissingLev
     EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
     EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
 }
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_GasEquipmentInstance)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+        "Zone,Zone2;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+        "Schedule:Constant,Schedule2,SchType1,0.5;",
+
+        // A regular GasEquipment object, which must coexist untouched with the new pair
+        "GasEquipment,",
+        "  Zone2 Legacy GasEq,      !- Name",
+        "  Zone2,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  500.0,                   !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.0,                     !- Fraction Latent",
+        "  0.0,                     !- Fraction Radiant",
+        "  0.0;                     !- Fraction Lost",
+
+        "GasEquipment:Instance,",
+        "  Zone1 GasEq,             !- Name",
+        "  GasEquipDef,             !- Gas Equipment Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  ,                        !- Multiplier",
+        "  Zone1Gas;                !- End-Use Subcategory",
+
+        "GasEquipment:Instance,",
+        "  Zone2 GasEq,             !- Name",
+        "  GASEQUIPDEF,             !- Gas Equipment Definition Name",
+        "  ZOnE1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  ScheDULe2,               !- Schedule Name",
+        "  2.0,                     !- Multiplier",
+        "  Zone2Gas;                !- End-Use Subcategory",
+
+        "GasEquipment:Definition,",
+        "  GasEquipDef,             !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  1500,                    !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2,                     !- Fraction Lost",
+        "  3.45E-8;                 !- Carbon Dioxide Generation Rate {m3/s-W}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    ASSERT_EQ(state->dataHeatBal->ZoneGas.size(), 3u);
+    EXPECT_EQ(state->dataHeatBal->TotGasEquip, 3);
+
+    for (const auto &equip : state->dataHeatBal->ZoneGas) {
+        std::string const &zoneName = state->dataHeatBal->Zone(equip.ZonePtr).Name;
+        std::string const &schedName = equip.sched->Name;
+        if (equip.Name == "ZONE2 LEGACY GASEQ") {
+            EXPECT_EQ(zoneName, "ZONE2");
+            EXPECT_EQ(schedName, "SCHEDULE1");
+            EXPECT_EQ(equip.EndUseSubcategory, "General");
+            EXPECT_NEAR(equip.DesignLevel, 500.0, 1e-6);
+            EXPECT_NEAR(equip.CO2RateFactor, 0.0, 1e-15);
+            continue;
+        }
+        if (equip.Name == "ZONE1 GASEQ") {
+            EXPECT_EQ(zoneName, "ZONE1");
+            EXPECT_EQ(schedName, "SCHEDULE1");
+            EXPECT_EQ(equip.EndUseSubcategory, "Zone1Gas");
+            // Blank Multiplier defaults to 1
+            EXPECT_NEAR(equip.DesignLevel, 1500.0, 1e-6);
+        } else if (equip.Name == "ZONE2 GASEQ") {
+            EXPECT_EQ(zoneName, "ZONE1");
+            EXPECT_EQ(schedName, "SCHEDULE2");
+            EXPECT_EQ(equip.EndUseSubcategory, "Zone2Gas");
+            EXPECT_NEAR(equip.DesignLevel, 2.0 * 1500.0, 1e-6);
+        } else {
+            FAIL() << "Unexpected gas equipment name: " << equip.Name;
+        }
+        // From the shared definition
+        EXPECT_NEAR(equip.FractionLatent, 0.1, 1e-6);
+        EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
+        EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
+        EXPECT_NEAR(equip.CO2RateFactor, 3.45e-8, 1e-15);
+    }
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_GasEquipmentInstance_InvalidDefinition)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        "GasEquipment:Instance,",
+        "  Zone1 GasEq,             !- Name",
+        "  GasEquipDef WITH A TYPO, !- Gas Equipment Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  1.0,                     !- Multiplier",
+        "  Zone1Gas;                !- End-Use Subcategory",
+
+        "GasEquipment:Definition,",
+        "  GasEquipDef,             !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  1500,                    !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: GasEquipment:Instance = ZONE1 GASEQ",
+        "   **   ~~~   ** Gas Equipment Definition Name = GASEQUIPDEF WITH A TYPO, item not found.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_GasEquipmentInstance_PerArea)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  3.0,                     !- Ceiling Height {m}",
+        "  300.0,                   !- Volume {m3}",
+        "  100.0;                   !- Floor Area {m2}",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        "GasEquipment:Instance,",
+        "  Zone1 GasEq,             !- Name",
+        "  GasEquipDef,             !- Gas Equipment Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  1.0,                     !- Multiplier",
+        "  Zone1Gas;                !- End-Use Subcategory",
+
+        // Power/Area exercises the Watts/Power field name aliasing in GetSpaceLoadDefinition
+        "GasEquipment:Definition,",
+        "  GasEquipDef,             !- Name",
+        "  Power/Area,              !- Design Level Calculation Method",
+        "  ,                        !- Design Level {W}",
+        "  10.0,                    !- Power per Floor Area {W/m2}",
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    // Assignment of UserEnteredFloorArea to Zone FloorArea is done in GetSurfaceData, we just mimic it here to get the correct design level
+    // calculation for this test
+    state->dataHeatBal->Zone(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+    state->dataHeatBal->space(1).FloorArea = state->dataHeatBal->Zone(1).UserEnteredFloorArea;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    ASSERT_EQ(state->dataHeatBal->ZoneGas.size(), 1u);
+
+    const auto &equip = state->dataHeatBal->ZoneGas(1);
+    EXPECT_EQ("ZONE1 GASEQ", equip.Name);
+    EXPECT_EQ(state->dataHeatBal->Zone(equip.ZonePtr).Name, "ZONE1");
+    EXPECT_EQ(equip.sched->Name, "SCHEDULE1");
+    EXPECT_EQ(equip.EndUseSubcategory, "Zone1Gas");
+    EXPECT_NEAR(equip.DesignLevel, 100.0 * 10.0, 1e-6);
+    EXPECT_NEAR(equip.FractionLatent, 0.1, 1e-6);
+    EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
+    EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_GasEquipmentInstance_PerPerson)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        "GasEquipment:Instance,",
+        "  Zone1 GasEq,             !- Name",
+        "  GasEquipDef,             !- Gas Equipment Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  1.0,                     !- Multiplier",
+        "  Zone1Gas;                !- End-Use Subcategory",
+
+        "GasEquipment:Definition,",
+        "  GasEquipDef,             !- Name",
+        "  Power/Person,            !- Design Level Calculation Method",
+        "  ,                        !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}",
+        "  10.0,                    !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    // Fake having people in the zone by setting the number of occupants to 12
+    constexpr Real64 TotOccupants = 12.0;
+    state->dataHeatBal->Zone(1).TotOccupants = TotOccupants;
+    state->dataHeatBal->space(1).TotOccupants = TotOccupants;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_FALSE(has_err_output());
+    EXPECT_TRUE(compare_err_stream("", true));
+
+    ASSERT_EQ(state->dataHeatBal->ZoneGas.size(), 1u);
+
+    const auto &equip = state->dataHeatBal->ZoneGas(1);
+    EXPECT_EQ("ZONE1 GASEQ", equip.Name);
+    EXPECT_EQ(state->dataHeatBal->Zone(equip.ZonePtr).Name, "ZONE1");
+    EXPECT_EQ(equip.sched->Name, "SCHEDULE1");
+    EXPECT_EQ(equip.EndUseSubcategory, "Zone1Gas");
+    EXPECT_NEAR(equip.DesignLevel, TotOccupants * 10.0, 1e-6);
+    EXPECT_NEAR(equip.FractionLatent, 0.1, 1e-6);
+    EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
+    EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_GasEquipmentInstance_MissingLevelField)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,SchType1,1.0;",
+
+        "GasEquipment:Instance,",
+        "  Zone1 GasEq,             !- Name",
+        "  GasEquipDef,             !- Gas Equipment Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  Schedule1,               !- Schedule Name",
+        "  1.0,                     !- Multiplier",
+        "  Zone1Gas;                !- End-Use Subcategory",
+
+        "GasEquipment:Definition,",
+        "  GasEquipDef,             !- Name",
+        "  Power/Area,              !- Design Level Calculation Method",
+        "  1500,                    !- Design Level {W}",
+        "  ,                        !- Power per Floor Area {W/m2}", // Shouldn't be blank
+        "  ,                        !- Power per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        R"(   ** Warning ** GetSpaceLoadDefinition: GasEquipment:Definition="GASEQUIPDEF", specifies Method=POWER/AREA, but the corresponding field "power_per_floor_area" is blank. 0 will result.)",
+        R"(   ** Warning ** GetInternalHeatGains: GasEquipment:Instance="ZONE1 GASEQ", specifies power_per_floor_area, but that field is blank.  0 GasEquipment:Instance will result.)",
+    })));
+
+    ASSERT_EQ(state->dataHeatBal->ZoneGas.size(), 1u);
+
+    const auto &equip = state->dataHeatBal->ZoneGas(1);
+    EXPECT_EQ("ZONE1 GASEQ", equip.Name);
+    EXPECT_EQ(state->dataHeatBal->Zone(equip.ZonePtr).Name, "ZONE1");
+    EXPECT_EQ(equip.sched->Name, "SCHEDULE1");
+    EXPECT_EQ(equip.EndUseSubcategory, "Zone1Gas");
+    EXPECT_NEAR(equip.DesignLevel, 0.0, 1e-6);
+    EXPECT_NEAR(equip.FractionLatent, 0.1, 1e-6);
+    EXPECT_NEAR(equip.FractionRadiant, 0.3, 1e-6);
+    EXPECT_NEAR(equip.FractionLost, 0.2, 1e-6);
+}

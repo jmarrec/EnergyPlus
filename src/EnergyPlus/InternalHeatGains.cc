@@ -314,6 +314,7 @@ namespace InternalHeatGains {
         const std::string elecEqModuleObject = "ElectricEquipment";
         const std::string elecEqInstanceModuleObject = "ElectricEquipment:Instance";
         const std::string gasEqModuleObject = "GasEquipment";
+        const std::string gasEqInstanceModuleObject = "GasEquipment:Instance";
         const std::string hwEqModuleObject = "HotWaterEquipment";
         const std::string stmEqModuleObject = "SteamEquipment";
         const std::string othEqModuleObject = "OtherEquipment";
@@ -341,6 +342,7 @@ namespace InternalHeatGains {
                                            elecEqModuleObject,
                                            elecEqInstanceModuleObject,
                                            gasEqModuleObject,
+                                           gasEqInstanceModuleObject,
                                            hwEqModuleObject,
                                            stmEqModuleObject,
                                            othEqModuleObject,
@@ -1528,19 +1530,37 @@ namespace InternalHeatGains {
             } // for elecEqInputNum (ElectricEquipment:Instance)
         } // TotElecEquip > 0
 
-        // GasEquipment
+        // GasEquipment and GasEquipment:Instance (which references a GasEquipment:Definition for its
+        // physical characteristics). Both kinds populate state.dataHeatBal->ZoneGas, so downstream code
+        // treats them identically.
         EPVector<InternalHeatGains::GlobalInternalGainMiscObject> zoneGasObjects;
         int numZoneGasStatements = 0;
-        setupIHGZonesAndSpaces(state, gasEqModuleObject, zoneGasObjects, numZoneGasStatements, state.dataHeatBal->TotGasEquip, ErrorsFound);
+        setupIHGZonesAndSpaces(state,
+                               gasEqModuleObject,
+                               zoneGasObjects,
+                               numZoneGasStatements,
+                               state.dataHeatBal->TotGasEquip,
+                               ErrorsFound,
+                               false,
+                               gasEqInstanceModuleObject);
 
         if (state.dataHeatBal->TotGasEquip > 0) {
             state.dataHeatBal->ZoneGas.allocate(state.dataHeatBal->TotGasEquip);
             int gasEqNum = 0;
+
+            // GasEquipment objects; the GasEquipment:Instance ones are processed in the next loop.
+            int gasEqObjectNum = 0;
             for (int gasEqInputNum = 1; gasEqInputNum <= numZoneGasStatements; ++gasEqInputNum) {
+
+                auto &thisGasEqInput = zoneGasObjects(gasEqInputNum);
+                if (thisGasEqInput.isInstance) {
+                    continue;
+                }
+                ++gasEqObjectNum;
 
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          gasEqModuleObject,
-                                                                         gasEqInputNum,
+                                                                         gasEqObjectNum,
                                                                          IHGAlphas,
                                                                          IHGNumAlphas,
                                                                          IHGNumbers,
@@ -1564,7 +1584,6 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                 }
 
-                auto &thisGasEqInput = zoneGasObjects(gasEqInputNum);
                 DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
                 int fieldNum = 1;
                 switch (levelMethod) {
@@ -1678,6 +1697,154 @@ namespace InternalHeatGains {
 
                 } // for gasEqInputNum.NumOfSpaces
             } // for gasEqInputNum
+
+            // GasEquipment:Instance objects: the physical characteristics (design level calculation
+            // method, heat gain fractions and CO2 generation rate) come from the referenced
+            // GasEquipment:Definition, scaled by the instance's Multiplier.
+            std::vector<ZoneEquipDefinitionData> const gasLoadDefs = GetSpaceLoadDefinition(state, "GasEquipment:Definition");
+            int gasEqInstanceObjectNum = 0;
+            for (int gasEqInputNum = 1; gasEqInputNum <= numZoneGasStatements; ++gasEqInputNum) {
+
+                auto &thisGasEqInput = zoneGasObjects(gasEqInputNum);
+                if (!thisGasEqInput.isInstance) {
+                    continue;
+                }
+                ++gasEqInstanceObjectNum;
+
+                state.dataInputProcessing->inputProcessor->getObjectItem(state,
+                                                                         gasEqInstanceModuleObject,
+                                                                         gasEqInstanceObjectNum,
+                                                                         IHGAlphas,
+                                                                         IHGNumAlphas,
+                                                                         IHGNumbers,
+                                                                         IHGNumNumbers,
+                                                                         IOStat,
+                                                                         IHGNumericFieldBlanks,
+                                                                         IHGAlphaFieldBlanks,
+                                                                         IHGAlphaFieldNames,
+                                                                         IHGNumericFieldNames);
+
+                ErrorObjectHeader eoh{routineName, gasEqInstanceModuleObject, IHGAlphas(1)};
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
+                    ErrorsFound = true;
+                } else if (schedPtr == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
+                    ErrorsFound = true;
+                } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
+                    ErrorsFound = true;
+                }
+
+                std::string const &defName = IHGAlphas(2);
+                auto itGasLoadDef = std::find_if(
+                    gasLoadDefs.begin(), gasLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itGasLoadDef == gasLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
+                }
+
+                Real64 const multiplier = IHGNumbers(1);
+
+                for (int Item1 = 1; Item1 <= thisGasEqInput.numOfSpaces; ++Item1) {
+                    ++gasEqNum;
+                    auto &thisZoneGas = state.dataHeatBal->ZoneGas(gasEqNum);
+                    int const spaceNum = thisGasEqInput.spaceNums(Item1);
+                    int const zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+                    thisZoneGas.Name = thisGasEqInput.names(Item1);
+                    thisZoneGas.spaceIndex = spaceNum;
+                    thisZoneGas.ZonePtr = zoneNum;
+                    thisZoneGas.sched = schedPtr;
+
+                    // Gas equipment design level calculation method.
+                    thisZoneGas.DesignLevel = setDesignLevel(state,
+                                                             ErrorsFound,
+                                                             gasEqInstanceModuleObject,
+                                                             thisGasEqInput,
+                                                             itGasLoadDef->designLevelMethod,
+                                                             zoneNum,
+                                                             spaceNum,
+                                                             itGasLoadDef->levelValue,
+                                                             itGasLoadDef->levelIsBlank,
+                                                             itGasLoadDef->levelField) *
+                                              multiplier;
+
+                    // Calculate nominal min/max equipment level
+                    thisZoneGas.NomMinDesignLevel = thisZoneGas.DesignLevel * thisZoneGas.sched->getMinVal(state);
+                    thisZoneGas.NomMaxDesignLevel = thisZoneGas.DesignLevel * thisZoneGas.sched->getMaxVal(state);
+
+                    thisZoneGas.FractionLatent = itGasLoadDef->FractionLatent;
+                    thisZoneGas.FractionRadiant = itGasLoadDef->FractionRadiant;
+                    thisZoneGas.FractionLost = itGasLoadDef->FractionLost;
+
+                    thisZoneGas.CO2RateFactor = itGasLoadDef->CO2RateFactor;
+                    if (thisZoneGas.CO2RateFactor < 0.0) {
+                        ShowSevereError(state,
+                                        std::format("{}{}=\"{}\", Carbon Dioxide Generation Rate < 0.0, value ={:.2f}",
+                                                    RoutineName,
+                                                    gasEqInstanceModuleObject,
+                                                    thisGasEqInput.Name,
+                                                    thisZoneGas.CO2RateFactor));
+                        ErrorsFound = true;
+                    }
+                    if (thisZoneGas.CO2RateFactor > 4.0e-7) {
+                        ShowSevereError(state,
+                                        std::format("{}{}=\"{}\", Carbon Dioxide Generation Rate > 4.0E-7, value ={:.2f}",
+                                                    RoutineName,
+                                                    gasEqInstanceModuleObject,
+                                                    thisGasEqInput.Name,
+                                                    thisZoneGas.CO2RateFactor));
+                        ErrorsFound = true;
+                    }
+                    // FractionConvected is a calculated field
+                    thisZoneGas.FractionConvected = 1.0 - (thisZoneGas.FractionLatent + thisZoneGas.FractionRadiant + thisZoneGas.FractionLost);
+                    if (std::abs(thisZoneGas.FractionConvected) <= 0.001) {
+                        thisZoneGas.FractionConvected = 0.0;
+                    }
+                    if (thisZoneGas.FractionConvected < 0.0) {
+                        if (Item1 == 1) {
+                            ShowSevereError(
+                                state,
+                                std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, gasEqInstanceModuleObject, thisGasEqInput.Name));
+                            ErrorsFound = true;
+                        }
+                    }
+
+                    if (IHGNumAlphas > 4) {
+                        thisZoneGas.EndUseSubcategory = IHGAlphas(5);
+                    } else {
+                        thisZoneGas.EndUseSubcategory = "General";
+                    }
+
+                    if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
+                        SetupEMSActuator(state,
+                                         "GasEquipment",
+                                         thisZoneGas.Name,
+                                         "NaturalGas Rate",
+                                         "[W]",
+                                         thisZoneGas.EMSZoneEquipOverrideOn,
+                                         thisZoneGas.EMSEquipPower);
+                        SetupEMSInternalVariable(state, "Gas Process Power Design Level", thisZoneGas.Name, "[W]", thisZoneGas.DesignLevel);
+                    } // EMS
+
+                    if (!ErrorsFound) {
+                        SetupSpaceInternalGain(state,
+                                               thisZoneGas.spaceIndex,
+                                               1.0,
+                                               thisZoneGas.Name,
+                                               DataHeatBalance::IntGainType::GasEquipment,
+                                               &thisZoneGas.ConGainRate,
+                                               nullptr,
+                                               &thisZoneGas.RadGainRate,
+                                               &thisZoneGas.LatGainRate,
+                                               nullptr,
+                                               &thisZoneGas.CO2GainRate);
+                    }
+
+                } // for gasEqInputNum.NumOfSpaces
+            } // for gasEqInputNum (GasEquipment:Instance)
         } // TotGasEquip > 0
 
         // HotWaterEquipment
