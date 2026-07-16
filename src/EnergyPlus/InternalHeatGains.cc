@@ -1379,6 +1379,11 @@ namespace InternalHeatGains {
 
             if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 for (int lightsNum2 = 1; lightsNum2 <= state.dataHeatBal->TotLights; ++lightsNum2) {
+                    if (state.dataHeatBal->Lights(lightsNum2).ZonePtr == 0) {
+                        // Unfilled entry: a Lights:Instance referencing an unknown Lights:Definition was
+                        // skipped. ErrorsFound is set, the fatal error occurs after get-input completes.
+                        continue;
+                    }
                     SetupEMSActuator(state,
                                      "Lights",
                                      state.dataHeatBal->Lights(lightsNum2).Name,
@@ -1396,6 +1401,11 @@ namespace InternalHeatGains {
             for (int lightsNum2 = 1; lightsNum2 <= state.dataHeatBal->TotLights; ++lightsNum2) {
                 int spaceNum = state.dataHeatBal->Lights(lightsNum2).spaceIndex;
                 int zoneNum = state.dataHeatBal->Lights(lightsNum2).ZonePtr;
+                if (zoneNum == 0) {
+                    // Unfilled entry: a Lights:Instance referencing an unknown Lights:Definition was
+                    // skipped. ErrorsFound is set, the fatal error occurs after get-input completes.
+                    continue;
+                }
                 // setup internal gains
                 int returnNodeNum = 0;
                 if ((state.dataHeatBal->Lights(lightsNum2).ZoneReturnNum > 0) &&
