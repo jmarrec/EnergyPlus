@@ -111,10 +111,28 @@ namespace InternalHeatGains {
         Real64 CO2RateFactor = 0.0;   // CO2 rate factor [m3/s/W], only for Gas and OtherEquipment
     };
 
+    struct LightsDefinitionData // Lights:Definition
+    {
+        // Members
+        std::string Name;                                                 // Definition object name
+        DesignLevelMethod designLevelMethod = DesignLevelMethod::Invalid; // LightingLevel, WattsPerArea, or WattsPerPerson
+        Real64 levelValue = 0.0;                                          // design level read from the matched field
+        bool levelIsBlank = false;                                        // True if design level field is blank in input
+        std::string levelField;                                           // Schema field name used for the level (for error messages)
+        Real64 FractionReturnAir = 0.0;                                   // Fraction of sensible heat that goes to return air
+        Real64 FractionRadiant = 0.0;                                     // Fraction of sensible heat that is radiant
+        Real64 FractionShortWave = 0.0;                                   // Fraction of sensible heat that is short-wave (visible)
+        bool FractionReturnAirIsCalculated = false;                       // True if return-air fraction is calculated from plenum temperature
+        Real64 FractionReturnAirPlenTempCoeff1 = 0.0;
+        Real64 FractionReturnAirPlenTempCoeff2 = 0.0;
+    };
+
     void ManageInternalHeatGains(EnergyPlusData &state,
                                  ObjexxFCL::Optional_bool_const InitOnly = _); // when true, just calls the get input, if appropriate and returns.
 
     std::vector<ZoneEquipDefinitionData> GetSpaceLoadDefinition(EnergyPlusData &state, const std::string &objectType);
+
+    std::vector<LightsDefinitionData> GetLightsDefinition(EnergyPlusData &state);
 
     void GetInternalHeatGainsInput(EnergyPlusData &state);
 
