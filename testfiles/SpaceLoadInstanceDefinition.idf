@@ -40,10 +40,15 @@
 !
 ! - ElectricEquipment:
 !
-!   - General Plug Loads: a single ElectricEquipment:Definition, with 6.67 W/m2, shared by all three instances for each space multiplier = 1
+!   - General Plug Loads: a single ElectricEquipment:Definition, with 6.67 W/m2, shared by three instances: 1 for each Space, with multiplier = 1
 !
 !   - Bathroom Fan: A single ElectricEquipment:Definition object is used with EquipmentLevel, 100W
 !                   the 1BR spaces use a multiplier of 1, the 2BR one a multiplier of 2
+!
+! - GasEquipment:
+!
+!   - Cooking Range: A single Definition, 200W. A single instance, which applies to the "All Spaces" SpaceList
+
 
   Version,26.2;
 
@@ -719,6 +724,18 @@
     10.0,                    !- Vertex Y-coordinate {m}
     0.0;                     !- Vertex Z-coordinate {m}
 
+  ZoneList,
+    All Zones,               !- Name
+    Space1-1BR Zn,           !- Zone Name
+    Space2-2BR Zn,           !- Zone Name
+    Space3-1BR Zn;           !- Zone Name
+
+  SpaceList,
+    All Spaces,              !- Name
+    Space1-1BR,              !- Space Name
+    Space2-2BR,              !- Space Name
+    Space3-1BR;              !- Space Name
+
   ElectricEquipment:Definition,
     Apartment Elec Equip Definition,  !- Name
     Watts/Area,              !- Design Level Calculation Method
@@ -863,6 +880,90 @@
     Always On Continuous,    !- Schedule Name
     1.0,                     !- Multiplier
     bathroom_fans;           !- End-Use Subcategory
+
+  Schedule:Day:Interval,
+    cooking range schedule allday1,  !- Name
+    Fractional,              !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    05:00,                   !- Time {hh:mm}
+    0.0597014925373134,      !- Value Until Time
+    06:00,                   !- Time {hh:mm}
+    0.111940298507463,       !- Value Until Time
+    07:00,                   !- Time {hh:mm}
+    0.171641791044776,       !- Value Until Time
+    08:00,                   !- Time {hh:mm}
+    0.291044776119403,       !- Value Until Time
+    11:00,                   !- Time {hh:mm}
+    0.343283582089552,       !- Value Until Time
+    12:00,                   !- Time {hh:mm}
+    0.402985074626866,       !- Value Until Time
+    13:00,                   !- Time {hh:mm}
+    0.462686567164179,       !- Value Until Time
+    14:00,                   !- Time {hh:mm}
+    0.343283582089552,       !- Value Until Time
+    15:00,                   !- Time {hh:mm}
+    0.291044776119403,       !- Value Until Time
+    16:00,                   !- Time {hh:mm}
+    0.402985074626866,       !- Value Until Time
+    17:00,                   !- Time {hh:mm}
+    0.567164179104478,       !- Value Until Time
+    18:00,                   !- Time {hh:mm}
+    1.0,                     !- Value Until Time
+    19:00,                   !- Time {hh:mm}
+    0.850746268656716,       !- Value Until Time
+    20:00,                   !- Time {hh:mm}
+    0.432835820895522,       !- Value Until Time
+    21:00,                   !- Time {hh:mm}
+    0.291044776119403,       !- Value Until Time
+    22:00,                   !- Time {hh:mm}
+    0.23134328358209,        !- Value Until Time
+    23:00,                   !- Time {hh:mm}
+    0.171641791044776,       !- Value Until Time
+    24:00,                   !- Time {hh:mm}
+    0.111940298507463;       !- Value Until Time
+
+  Schedule:Week:Daily,
+    cooking range schedule Week Rule - Jan1-Dec31,  !- Name
+    cooking range schedule allday1,  !- Sunday Schedule:Day Name
+    cooking range schedule allday1,  !- Monday Schedule:Day Name
+    cooking range schedule allday1,  !- Tuesday Schedule:Day Name
+    cooking range schedule allday1,  !- Wednesday Schedule:Day Name
+    cooking range schedule allday1,  !- Thursday Schedule:Day Name
+    cooking range schedule allday1,  !- Friday Schedule:Day Name
+    cooking range schedule allday1,  !- Saturday Schedule:Day Name
+    cooking range schedule allday1,  !- Holiday Schedule:Day Name
+    cooking range schedule allday1,  !- SummerDesignDay Schedule:Day Name
+    cooking range schedule allday1,  !- WinterDesignDay Schedule:Day Name
+    cooking range schedule allday1,  !- CustomDay1 Schedule:Day Name
+    cooking range schedule allday1;  !- CustomDay2 Schedule:Day Name
+
+  Schedule:Year,
+    cooking range schedule,  !- Name
+    Fractional,              !- Schedule Type Limits Name
+    cooking range schedule Week Rule - Jan1-Dec31,  !- Schedule:Week Name
+    1,                       !- Start Month
+    1,                       !- Start Day
+    12,                      !- End Month
+    31;                      !- End Day
+
+  GasEquipment:Definition,
+    Cooking Range Definition,  !- Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    200.0,                   !- Design Level {W}
+    ,                        !- Power per Floor Area {W/m2}
+    ,                        !- Power per Person {W/person}
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.3,                     !- Fraction Lost
+    3.45e-08;                !- Carbon Dioxide Generation Rate {m3/s-W}
+
+  GasEquipment:Instance,
+    Cooking Range,           !- Name
+    Cooking Range Definition,  !- Gas Equipment Definition Name
+    All Spaces,              !- Zone or ZoneList or Space or SpaceList Name
+    cooking range schedule,  !- Schedule Name
+    1.0,                     !- Multiplier
+    Cooking;                 !- End-Use Subcategory
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report Name
