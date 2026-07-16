@@ -46,10 +46,12 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <cmath>
 #include <format>
 #include <map>
 #include <string>
+#include <vector>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
@@ -309,6 +311,7 @@ namespace InternalHeatGains {
         const std::string peopleModuleObject = "People";
         const std::string lightsModuleObject = "Lights";
         const std::string elecEqModuleObject = "ElectricEquipment";
+        const std::string elecEqInstanceModuleObject = "ElectricEquipment:Instance";
         const std::string gasEqModuleObject = "GasEquipment";
         const std::string hwEqModuleObject = "HotWaterEquipment";
         const std::string stmEqModuleObject = "SteamEquipment";
@@ -335,6 +338,7 @@ namespace InternalHeatGains {
             for (const auto &moduleName : {peopleModuleObject,
                                            lightsModuleObject,
                                            elecEqModuleObject,
+                                           elecEqInstanceModuleObject,
                                            gasEqModuleObject,
                                            hwEqModuleObject,
                                            stmEqModuleObject,
@@ -1260,24 +1264,38 @@ namespace InternalHeatGains {
         PreDefTableEntry(state, state.dataOutRptPredefined->pdchInLtArea, "Interior Lighting Total", sumArea);
         PreDefTableEntry(state, state.dataOutRptPredefined->pdchInLtPower, "Interior Lighting Total", sumPower);
 
-        // ElectricEquipment
-        // Declared in state because the lights inputs are needed for demand manager
+        // ElectricEquipment and ElectricEquipment:Instance (which references an ElectricEquipment:Definition
+        // for its physical characteristics). Both kinds populate state.dataHeatBal->ZoneElectric, so
+        // downstream code treats them identically.
+        // Declared in state because the electric equipment inputs are needed for demand manager
         int numZoneElectricStatements = 0;
         setupIHGZonesAndSpaces(state,
                                elecEqModuleObject,
                                state.dataInternalHeatGains->zoneElectricObjects,
                                numZoneElectricStatements,
                                state.dataHeatBal->TotElecEquip,
-                               ErrorsFound);
+                               ErrorsFound,
+                               false,
+                               elecEqInstanceModuleObject);
 
         if (state.dataHeatBal->TotElecEquip > 0) {
             state.dataHeatBal->ZoneElectric.allocate(state.dataHeatBal->TotElecEquip);
             int elecEqNum = 0;
+
+            // ElectricEquipment objects. In zoneElectricObjects they come first, in IDF order,
+            // followed by the ElectricEquipment:Instance ones (processed in the next loop).
+            int elecEqObjectNum = 0;
             for (int elecEqInputNum = 1; elecEqInputNum <= numZoneElectricStatements; ++elecEqInputNum) {
+
+                auto &thisElecEqInput = state.dataInternalHeatGains->zoneElectricObjects(elecEqInputNum);
+                if (thisElecEqInput.isInstance) {
+                    continue;
+                }
+                ++elecEqObjectNum;
 
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          elecEqModuleObject,
-                                                                         elecEqInputNum,
+                                                                         elecEqObjectNum,
                                                                          IHGAlphas,
                                                                          IHGNumAlphas,
                                                                          IHGNumbers,
@@ -1301,7 +1319,6 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                 }
 
-                auto &thisElecEqInput = state.dataInternalHeatGains->zoneElectricObjects(elecEqInputNum);
                 DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
                 int fieldNum = 1;
                 switch (levelMethod) {
@@ -1384,6 +1401,128 @@ namespace InternalHeatGains {
                     }
                 } // for elecEqInputNum.NumOfSpaces
             } // for elecEqInputNum
+
+            // ElectricEquipment:Instance objects: the physical characteristics (design level calculation
+            // method and heat gain fractions) come from the referenced ElectricEquipment:Definition,
+            // scaled by the instance's Multiplier.
+            std::vector<ZoneEquipDefinitionData> const elecLoadDefs = GetSpaceLoadDefinition(state, "ElectricEquipment:Definition");
+            int elecEqInstanceObjectNum = 0;
+            for (int elecEqInputNum = 1; elecEqInputNum <= numZoneElectricStatements; ++elecEqInputNum) {
+
+                auto &thisElecEqInput = state.dataInternalHeatGains->zoneElectricObjects(elecEqInputNum);
+                if (!thisElecEqInput.isInstance) {
+                    continue;
+                }
+                ++elecEqInstanceObjectNum;
+
+                state.dataInputProcessing->inputProcessor->getObjectItem(state,
+                                                                         elecEqInstanceModuleObject,
+                                                                         elecEqInstanceObjectNum,
+                                                                         IHGAlphas,
+                                                                         IHGNumAlphas,
+                                                                         IHGNumbers,
+                                                                         IHGNumNumbers,
+                                                                         IOStat,
+                                                                         IHGNumericFieldBlanks,
+                                                                         IHGAlphaFieldBlanks,
+                                                                         IHGAlphaFieldNames,
+                                                                         IHGNumericFieldNames);
+
+                ErrorObjectHeader eoh{routineName, elecEqInstanceModuleObject, IHGAlphas(1)};
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
+                    ErrorsFound = true;
+                } else if (schedPtr == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
+                    ErrorsFound = true;
+                } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
+                    ErrorsFound = true;
+                }
+
+                std::string const &defName = IHGAlphas(2);
+                auto itElecLoadDef = std::find_if(
+                    elecLoadDefs.begin(), elecLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itElecLoadDef == elecLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
+                }
+
+                Real64 const multiplier = IHGNumbers(1);
+
+                for (int Item1 = 1; Item1 <= thisElecEqInput.numOfSpaces; ++Item1) {
+                    ++elecEqNum;
+                    auto &thisZoneElectric = state.dataHeatBal->ZoneElectric(elecEqNum);
+                    int const spaceNum = thisElecEqInput.spaceNums(Item1);
+                    int const zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+                    thisZoneElectric.Name = thisElecEqInput.names(Item1);
+                    thisZoneElectric.spaceIndex = spaceNum;
+                    thisZoneElectric.ZonePtr = zoneNum;
+                    thisZoneElectric.sched = schedPtr;
+
+                    // Electric equipment design level calculation method.
+                    thisZoneElectric.DesignLevel = setDesignLevel(state,
+                                                                  ErrorsFound,
+                                                                  elecEqInstanceModuleObject,
+                                                                  thisElecEqInput,
+                                                                  itElecLoadDef->designLevelMethod,
+                                                                  zoneNum,
+                                                                  spaceNum,
+                                                                  itElecLoadDef->levelValue,
+                                                                  itElecLoadDef->levelIsBlank,
+                                                                  itElecLoadDef->levelField) *
+                                                   multiplier;
+
+                    // Calculate nominal min/max equipment level
+                    thisZoneElectric.NomMinDesignLevel = thisZoneElectric.DesignLevel * thisZoneElectric.sched->getMinVal(state);
+                    thisZoneElectric.NomMaxDesignLevel = thisZoneElectric.DesignLevel * thisZoneElectric.sched->getMaxVal(state);
+
+                    thisZoneElectric.FractionLatent = itElecLoadDef->FractionLatent;
+                    thisZoneElectric.FractionRadiant = itElecLoadDef->FractionRadiant;
+                    thisZoneElectric.FractionLost = itElecLoadDef->FractionLost;
+                    // FractionConvected is a calculated field
+                    thisZoneElectric.FractionConvected =
+                        1.0 - (thisZoneElectric.FractionLatent + thisZoneElectric.FractionRadiant + thisZoneElectric.FractionLost);
+                    if (std::abs(thisZoneElectric.FractionConvected) <= 0.001) {
+                        thisZoneElectric.FractionConvected = 0.0;
+                    }
+                    if (thisZoneElectric.FractionConvected < 0.0) {
+                        ShowSevereError(
+                            state, std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, elecEqInstanceModuleObject, thisElecEqInput.Name));
+                        ErrorsFound = true;
+                    }
+
+                    if (IHGNumAlphas > 4) {
+                        thisZoneElectric.EndUseSubcategory = IHGAlphas(5);
+                    } else {
+                        thisZoneElectric.EndUseSubcategory = "General";
+                    }
+                    if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
+                        SetupEMSActuator(state,
+                                         "ElectricEquipment",
+                                         thisZoneElectric.Name,
+                                         "Electricity Rate",
+                                         "[W]",
+                                         thisZoneElectric.EMSZoneEquipOverrideOn,
+                                         thisZoneElectric.EMSEquipPower);
+                        SetupEMSInternalVariable(
+                            state, "Plug and Process Power Design Level", thisZoneElectric.Name, "[W]", thisZoneElectric.DesignLevel);
+                    } // EMS
+                    if (!ErrorsFound) {
+                        SetupSpaceInternalGain(state,
+                                               thisZoneElectric.spaceIndex,
+                                               1.0,
+                                               thisZoneElectric.Name,
+                                               DataHeatBalance::IntGainType::ElectricEquipment,
+                                               &thisZoneElectric.ConGainRate,
+                                               nullptr,
+                                               &thisZoneElectric.RadGainRate,
+                                               &thisZoneElectric.LatGainRate);
+                    }
+                } // for elecEqInputNum.NumOfSpaces
+            } // for elecEqInputNum (ElectricEquipment:Instance)
         } // TotElecEquip > 0
 
         // GasEquipment
@@ -3298,40 +3437,147 @@ namespace InternalHeatGains {
         }
     }
 
+    std::vector<ZoneEquipDefinitionData> GetSpaceLoadDefinition(EnergyPlusData &state, const std::string &objectType)
+    {
+        constexpr std::string_view routineName = "GetSpaceLoadDefinition: ";
+
+        static constexpr std::array<std::string_view, static_cast<int>(DesignLevelMethod::Num)> DesignLevelMethodFieldNames = {
+            "number_of_people",      // DesignLevelMethod::People
+            "people_per_floor_area", // DesignLevelMethod::PeoplePerArea
+            "floor_area_per_person", // DesignLevelMethod::AreaPerPerson
+            "lighting_level",        // DesignLevelMethod::LightingLevel
+            "design_level",          // DesignLevelMethod::EquipmentLevel
+            "watts_per_floor_area",  // DesignLevelMethod::WattsPerArea
+            "watts_per_person",      // DesignLevelMethod::WattsPerPerson
+            "power_per_floor_area",  // DesignLevelMethod::PowerPerArea
+            "power_per_person"       // DesignLevelMethod::PowerPerPerson
+        };
+
+        std::vector<ZoneEquipDefinitionData> spaceLoadDefs;
+
+        auto &ip = state.dataInputProcessing->inputProcessor;
+        auto const instances = ip->epJSON.find(objectType);
+        if (instances != ip->epJSON.end()) {
+            auto const &objectSchemaProps = ip->getObjectSchemaProps(state, objectType);
+            auto &instancesValue = instances.value();
+            spaceLoadDefs.reserve(instancesValue.size());
+
+            for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
+                auto &spaceLoadDef = spaceLoadDefs.emplace_back();
+
+                auto const &objectFields = instance.value();
+                ip->markObjectAsUsed(objectType, instance.key());
+
+                spaceLoadDef.Name = Util::makeUPPER(instance.key());
+
+                std::string const designLevelMethodName =
+                    ip->getAlphaFieldValue(objectFields, objectSchemaProps, "design_level_calculation_method", true);
+                spaceLoadDef.designLevelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, designLevelMethodName));
+                spaceLoadDef.levelField = std::string{DesignLevelMethodFieldNames[static_cast<int>(spaceLoadDef.designLevelMethod)]};
+
+                // Watts/Area and Power/Area are aliases that resolve to different field names depending
+                // on the object type (e.g. ElectricEquipment:Definition uses watts_per_floor_area,
+                // SteamEquipment:Definition uses power_per_floor_area). Remap to whichever name the
+                // schema actually contains.
+                static constexpr std::array<std::pair<std::string_view, std::string_view>, 2> wattsAliases{{
+                    {"watts_per_floor_area", "power_per_floor_area"},
+                    {"watts_per_person", "power_per_person"},
+                }};
+                for (auto const &[watts, power] : wattsAliases) {
+                    if (spaceLoadDef.levelField == watts && objectSchemaProps.find(std::string(watts)) == objectSchemaProps.end()) {
+                        spaceLoadDef.levelField = std::string(power);
+                        break;
+                    }
+                    if (spaceLoadDef.levelField == power && objectSchemaProps.find(std::string(power)) == objectSchemaProps.end()) {
+                        spaceLoadDef.levelField = std::string(watts);
+                        break;
+                    }
+                }
+
+                auto it = objectFields.find(spaceLoadDef.levelField);
+                if (it == objectFields.end()) {
+                    ShowWarningError(state,
+                                     std::format("{}{}=\"{}\", specifies Method={}, but the corresponding field \"{}\" is blank. 0 will result.",
+                                                 routineName,
+                                                 objectType,
+                                                 spaceLoadDef.Name,
+                                                 designLevelMethodName,
+                                                 spaceLoadDef.levelField));
+                    spaceLoadDef.levelIsBlank = true;
+                }
+                spaceLoadDef.levelValue = ip->getRealFieldValue(objectFields, objectSchemaProps, spaceLoadDef.levelField);
+
+                spaceLoadDef.FractionLatent = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_latent");
+                spaceLoadDef.FractionRadiant = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_radiant");
+                spaceLoadDef.FractionLost = ip->getRealFieldValue(objectFields, objectSchemaProps, "fraction_lost");
+
+                if (objectFields.find("carbon_dioxide_generation_rate") != objectFields.end()) {
+                    spaceLoadDef.CO2RateFactor = ip->getRealFieldValue(objectFields, objectSchemaProps, "carbon_dioxide_generation_rate");
+                }
+            }
+        }
+
+        return spaceLoadDefs;
+    }
+
     void setupIHGZonesAndSpaces(EnergyPlusData &state,
                                 const std::string &objectType,
                                 EPVector<InternalHeatGains::GlobalInternalGainMiscObject> &inputObjects,
                                 int &numInputObjects,
                                 int &numGainInstances,
                                 bool &errors,
-                                const bool zoneListNotAllowed)
+                                const bool zoneListNotAllowed,
+                                const std::string &instanceObjectType)
     {
-        // This function pre-processes the input objects for objectType and determines the ultimate number
+        // This function pre-processes the input objects for objectType (and, when instanceObjectType is given,
+        // for the companion <objectType>:Instance object) and determines the ultimate number
         // of simulation instances for each input object after expansion for SpaceList, Zone, or ZoneList.
-        // inputObjects is allocated here and filled with data for further input processing.
+        // inputObjects is allocated here and filled with data for further input processing:
+        // the objectType statements first in IDF order, then the instanceObjectType ones.
 
         constexpr std::string_view routineName = "setupIHGZonesAndSpaces: ";
 
         auto &ip = state.dataInputProcessing->inputProcessor;
-        auto const instances = ip->epJSON.find(objectType);
-        if (instances != ip->epJSON.end()) {
-            bool localErrFlag = false;
-            auto const &objectSchemaProps = ip->getObjectSchemaProps(state, objectType);
-            auto &instancesValue = instances.value();
-            numInputObjects = int(instancesValue.size());
-            inputObjects.allocate(numInputObjects);
 
-            numGainInstances = 0;
+        const std::vector<std::string> objectTypes =
+            instanceObjectType.empty() ? std::vector<std::string>{objectType} : std::vector<std::string>{objectType, instanceObjectType};
+
+        numInputObjects = 0;
+        for (const std::string &thisObjectType : objectTypes) {
+            auto const instances = ip->epJSON.find(thisObjectType);
+            if (instances != ip->epJSON.end()) {
+                numInputObjects += int(instances.value().size());
+            }
+        }
+        if (numInputObjects == 0) {
+            return;
+        }
+        inputObjects.allocate(numInputObjects);
+
+        numGainInstances = 0;
+        bool localErrFlag = false;
+        int objNumOffset = 0;
+
+        for (const std::string &thisObjectType : objectTypes) {
+            bool const isInstance = (thisObjectType == instanceObjectType);
+            auto const instances = ip->epJSON.find(thisObjectType);
+            if (instances == ip->epJSON.end()) {
+                continue;
+            }
+            auto const &objectSchemaProps = ip->getObjectSchemaProps(state, thisObjectType);
+            auto &instancesValue = instances.value();
+
             int counter = 0;
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
                 auto const &objectFields = instance.value();
                 std::string const &thisObjectName = Util::makeUPPER(instance.key());
-                ip->markObjectAsUsed(objectType, instance.key());
+                ip->markObjectAsUsed(thisObjectType, instance.key());
 
                 // For incoming idf, maintain object order
                 ++counter;
-                int objNum = ip->getIDFObjNum(state, objectType, counter);
+                int const objNum = objNumOffset + ip->getIDFObjNum(state, thisObjectType, counter);
                 inputObjects(objNum).Name = thisObjectName;
+                inputObjects(objNum).isInstance = isInstance;
                 std::string areaFieldName;
                 if (zoneListNotAllowed) {
                     areaFieldName = "zone_or_space_name";
@@ -3374,7 +3620,8 @@ namespace InternalHeatGains {
                     if (zoneListNotAllowed) {
                         ShowSevereError(
                             state,
-                            std::format("{}=\"{}\" ZoneList Name=\"{}\" not allowed for {}.", objectType, thisObjectName, areaName, objectType));
+                            std::format(
+                                "{}=\"{}\" ZoneList Name=\"{}\" not allowed for {}.", thisObjectType, thisObjectName, areaName, thisObjectType));
                         errors = true;
                         localErrFlag = true;
                     } else {
@@ -3399,7 +3646,8 @@ namespace InternalHeatGains {
                     if (zoneListNotAllowed) {
                         ShowSevereError(
                             state,
-                            std::format("{}=\"{}\" SpaceList Name=\"{}\" not allowed for {}.", objectType, thisObjectName, areaName, objectType));
+                            std::format(
+                                "{}=\"{}\" SpaceList Name=\"{}\" not allowed for {}.", thisObjectType, thisObjectName, areaName, thisObjectType));
                         errors = true;
                         localErrFlag = true;
                     } else {
@@ -3416,15 +3664,17 @@ namespace InternalHeatGains {
                     }
                     continue;
                 }
-                ShowSevereError(state, std::format("{}=\"{}\" invalid {}=\"{}\" not found.", objectType, thisObjectName, areaFieldName, areaName));
+                ShowSevereError(state,
+                                std::format("{}=\"{}\" invalid {}=\"{}\" not found.", thisObjectType, thisObjectName, areaFieldName, areaName));
                 errors = true;
                 localErrFlag = true;
             }
-            if (localErrFlag) {
-                ShowSevereError(state, std::format("{}Errors with invalid names in {} objects.", routineName, objectType));
-                ShowContinueError(state, "...These will not be read in.  Other errors may occur.");
-                numGainInstances = 0;
-            }
+            objNumOffset += int(instancesValue.size());
+        }
+        if (localErrFlag) {
+            ShowSevereError(state, std::format("{}Errors with invalid names in {} objects.", routineName, objectType));
+            ShowContinueError(state, "...These will not be read in.  Other errors may occur.");
+            numGainInstances = 0;
         }
     }
 
