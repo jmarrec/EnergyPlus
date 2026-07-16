@@ -7999,7 +7999,7 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 }
 
                 if (thisDXCoil.RatedAirVolFlowRate2 > thisDXCoil.RatedAirVolFlowRate(Mode)) {
-                    ShowFatalError(
+                    ShowSevereError(
                         state,
                         std::format("SizeDXCoil: {} {}, Rated Air Volume Flow Rate, low speed must be less than or equal to Rated Air Volume "
                                     "Flow Rate, high speed.",

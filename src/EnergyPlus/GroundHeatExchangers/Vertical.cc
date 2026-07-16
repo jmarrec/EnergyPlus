@@ -282,18 +282,18 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
                 ShowContinueError(state, "If you enter more than one, only the first is used to specify the borehole design");
                 ShowContinueError(state, std::format("Check references to these objects for GHE:System object: {}", this->name));
                 errorsFound = true;
-            }
-
-            std::vector<std::shared_ptr<GLHEVertSingle>> tempVectOfBHObjects;
-            auto const &vars = j.at("vertical_well_locations");
-            for (auto const &var : vars) {
-                if (!var.at("ghe_vertical_single_object_name").empty()) {
-                    std::shared_ptr<GLHEVertSingle> tempBHptr =
-                        GLHEVertSingle::GetSingleBH(state, Util::makeUPPER(var.at("ghe_vertical_single_object_name").get<std::string>()));
-                    tempVectOfBHObjects.push_back(tempBHptr);
-                    this->myRespFactors = BuildAndGetResponseFactorsObjectFromSingleBHs(state, tempVectOfBHObjects);
+            } else {
+                std::vector<std::shared_ptr<GLHEVertSingle>> tempVectOfBHObjects;
+                auto const &vars = j.at("vertical_well_locations");
+                for (auto const &var : vars) {
+                    if (!var.at("ghe_vertical_single_object_name").empty()) {
+                        std::shared_ptr<GLHEVertSingle> tempBHptr =
+                            GLHEVertSingle::GetSingleBH(state, Util::makeUPPER(var.at("ghe_vertical_single_object_name").get<std::string>()));
+                        tempVectOfBHObjects.push_back(tempBHptr);
+                        this->myRespFactors = BuildAndGetResponseFactorsObjectFromSingleBHs(state, tempVectOfBHObjects);
+                    }
+                    break;
                 }
-                break;
             }
             if (!this->myRespFactors) {
                 ShowSevereError(state, "Something went wrong creating response factor for GroundHeatExchanger, check previous errors.");

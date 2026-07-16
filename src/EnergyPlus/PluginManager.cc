@@ -1065,7 +1065,6 @@ int PluginManager::getGlobalVariableHandle(EnergyPlusData &state, const std::str
         ShowContinueError(state, std::format("    \"{}\"", gvName));
     }
     ShowFatalError(state, "Plugin global variable problem causes program termination");
-    return -1; // hush the compiler warning
 }
 #else
 int PluginManager::getGlobalVariableHandle([[maybe_unused]] EnergyPlusData &state,
