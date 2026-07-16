@@ -316,6 +316,7 @@ namespace InternalHeatGains {
         const std::string gasEqModuleObject = "GasEquipment";
         const std::string gasEqInstanceModuleObject = "GasEquipment:Instance";
         const std::string hwEqModuleObject = "HotWaterEquipment";
+        const std::string hwEqInstanceModuleObject = "HotWaterEquipment:Instance";
         const std::string stmEqModuleObject = "SteamEquipment";
         const std::string othEqModuleObject = "OtherEquipment";
         const std::string itEqModuleObject = "ElectricEquipment:ITE:AirCooled";
@@ -344,6 +345,7 @@ namespace InternalHeatGains {
                                            gasEqModuleObject,
                                            gasEqInstanceModuleObject,
                                            hwEqModuleObject,
+                                           hwEqInstanceModuleObject,
                                            stmEqModuleObject,
                                            othEqModuleObject,
                                            itEqModuleObject,
@@ -1847,19 +1849,37 @@ namespace InternalHeatGains {
             } // for gasEqInputNum (GasEquipment:Instance)
         } // TotGasEquip > 0
 
-        // HotWaterEquipment
+        // HotWaterEquipment and HotWaterEquipment:Instance (which references a HotWaterEquipment:Definition
+        // for its physical characteristics). Both kinds populate state.dataHeatBal->ZoneHWEq, so downstream
+        // code treats them identically.
         EPVector<InternalHeatGains::GlobalInternalGainMiscObject> hotWaterEqObjects;
         int numHotWaterEqStatements = 0;
-        setupIHGZonesAndSpaces(state, hwEqModuleObject, hotWaterEqObjects, numHotWaterEqStatements, state.dataHeatBal->TotHWEquip, ErrorsFound);
+        setupIHGZonesAndSpaces(state,
+                               hwEqModuleObject,
+                               hotWaterEqObjects,
+                               numHotWaterEqStatements,
+                               state.dataHeatBal->TotHWEquip,
+                               ErrorsFound,
+                               false,
+                               hwEqInstanceModuleObject);
 
         if (state.dataHeatBal->TotHWEquip > 0) {
             state.dataHeatBal->ZoneHWEq.allocate(state.dataHeatBal->TotHWEquip);
             int hwEqNum = 0;
+
+            // HotWaterEquipment objects; the HotWaterEquipment:Instance ones are processed in the next loop.
+            int hwEqObjectNum = 0;
             for (int hwEqInputNum = 1; hwEqInputNum <= numHotWaterEqStatements; ++hwEqInputNum) {
+
+                auto &thisHWEqInput = hotWaterEqObjects(hwEqInputNum);
+                if (thisHWEqInput.isInstance) {
+                    continue;
+                }
+                ++hwEqObjectNum;
 
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          hwEqModuleObject,
-                                                                         hwEqInputNum,
+                                                                         hwEqObjectNum,
                                                                          IHGAlphas,
                                                                          IHGNumAlphas,
                                                                          IHGNumbers,
@@ -1883,7 +1903,6 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                 }
 
-                auto &thisHWEqInput = hotWaterEqObjects(hwEqInputNum);
                 DesignLevelMethod const levelMethod = static_cast<DesignLevelMethod>(getEnumValue(DesignLevelMethodNamesUC, IHGAlphas(4)));
                 int fieldNum = 1;
                 switch (levelMethod) {
@@ -1968,6 +1987,129 @@ namespace InternalHeatGains {
 
                 } // for hwEqInputNum.NumOfSpaces
             } // for hwEqInputNum
+
+            // HotWaterEquipment:Instance objects: the physical characteristics (design level calculation
+            // method and heat gain fractions) come from the referenced HotWaterEquipment:Definition,
+            // scaled by the instance's Multiplier.
+            std::vector<ZoneEquipDefinitionData> const hwLoadDefs = GetSpaceLoadDefinition(state, "HotWaterEquipment:Definition");
+            int hwEqInstanceObjectNum = 0;
+            for (int hwEqInputNum = 1; hwEqInputNum <= numHotWaterEqStatements; ++hwEqInputNum) {
+
+                auto &thisHWEqInput = hotWaterEqObjects(hwEqInputNum);
+                if (!thisHWEqInput.isInstance) {
+                    continue;
+                }
+                ++hwEqInstanceObjectNum;
+
+                state.dataInputProcessing->inputProcessor->getObjectItem(state,
+                                                                         hwEqInstanceModuleObject,
+                                                                         hwEqInstanceObjectNum,
+                                                                         IHGAlphas,
+                                                                         IHGNumAlphas,
+                                                                         IHGNumbers,
+                                                                         IHGNumNumbers,
+                                                                         IOStat,
+                                                                         IHGNumericFieldBlanks,
+                                                                         IHGAlphaFieldBlanks,
+                                                                         IHGAlphaFieldNames,
+                                                                         IHGNumericFieldNames);
+
+                ErrorObjectHeader eoh{routineName, hwEqInstanceModuleObject, IHGAlphas(1)};
+                Sched::Schedule *schedPtr = Sched::GetSchedule(state, IHGAlphas(4));
+                if (IHGAlphaFieldBlanks(4)) {
+                    ShowSevereEmptyField(state, eoh, IHGAlphaFieldNames(4));
+                    ErrorsFound = true;
+                } else if (schedPtr == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4));
+                    ErrorsFound = true;
+                } else if (!schedPtr->checkMinVal(state, Clusive::In, 0.0)) {
+                    Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(4), IHGAlphas(4), Clusive::In, 0.0);
+                    ErrorsFound = true;
+                }
+
+                std::string const &defName = IHGAlphas(2);
+                auto itHWLoadDef = std::find_if(
+                    hwLoadDefs.begin(), hwLoadDefs.end(), [&defName](ZoneEquipDefinitionData const &def) { return def.Name == defName; });
+                if (itHWLoadDef == hwLoadDefs.end()) {
+                    ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
+                    ErrorsFound = true;
+                    continue;
+                }
+
+                Real64 const multiplier = IHGNumbers(1);
+
+                for (int Item1 = 1; Item1 <= thisHWEqInput.numOfSpaces; ++Item1) {
+                    ++hwEqNum;
+                    auto &thisZoneHWEq = state.dataHeatBal->ZoneHWEq(hwEqNum);
+                    int const spaceNum = thisHWEqInput.spaceNums(Item1);
+                    int const zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+                    thisZoneHWEq.Name = thisHWEqInput.names(Item1);
+                    thisZoneHWEq.spaceIndex = spaceNum;
+                    thisZoneHWEq.ZonePtr = zoneNum;
+                    thisZoneHWEq.sched = schedPtr;
+
+                    // Hot Water equipment design level calculation method.
+                    thisZoneHWEq.DesignLevel = setDesignLevel(state,
+                                                              ErrorsFound,
+                                                              hwEqInstanceModuleObject,
+                                                              thisHWEqInput,
+                                                              itHWLoadDef->designLevelMethod,
+                                                              zoneNum,
+                                                              spaceNum,
+                                                              itHWLoadDef->levelValue,
+                                                              itHWLoadDef->levelIsBlank,
+                                                              itHWLoadDef->levelField) *
+                                               multiplier;
+
+                    // Calculate nominal min/max equipment level
+                    thisZoneHWEq.NomMinDesignLevel = thisZoneHWEq.DesignLevel * thisZoneHWEq.sched->getMinVal(state);
+                    thisZoneHWEq.NomMaxDesignLevel = thisZoneHWEq.DesignLevel * thisZoneHWEq.sched->getMaxVal(state);
+
+                    thisZoneHWEq.FractionLatent = itHWLoadDef->FractionLatent;
+                    thisZoneHWEq.FractionRadiant = itHWLoadDef->FractionRadiant;
+                    thisZoneHWEq.FractionLost = itHWLoadDef->FractionLost;
+                    // FractionConvected is a calculated field
+                    thisZoneHWEq.FractionConvected = 1.0 - (thisZoneHWEq.FractionLatent + thisZoneHWEq.FractionRadiant + thisZoneHWEq.FractionLost);
+                    if (std::abs(thisZoneHWEq.FractionConvected) <= 0.001) {
+                        thisZoneHWEq.FractionConvected = 0.0;
+                    }
+                    if (thisZoneHWEq.FractionConvected < 0.0) {
+                        ShowSevereError(
+                            state, std::format("{}{}=\"{}\", Sum of Fractions > 1.0", RoutineName, hwEqInstanceModuleObject, thisHWEqInput.Name));
+                        ErrorsFound = true;
+                    }
+
+                    if (IHGNumAlphas > 4) {
+                        thisZoneHWEq.EndUseSubcategory = IHGAlphas(5);
+                    } else {
+                        thisZoneHWEq.EndUseSubcategory = "General";
+                    }
+
+                    if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
+                        SetupEMSActuator(state,
+                                         "HotWaterEquipment",
+                                         thisZoneHWEq.Name,
+                                         "District Heating Power Level",
+                                         "[W]",
+                                         thisZoneHWEq.EMSZoneEquipOverrideOn,
+                                         thisZoneHWEq.EMSEquipPower);
+                        SetupEMSInternalVariable(state, "Process District Heat Design Level", thisZoneHWEq.Name, "[W]", thisZoneHWEq.DesignLevel);
+                    } // EMS
+
+                    if (!ErrorsFound) {
+                        SetupSpaceInternalGain(state,
+                                               thisZoneHWEq.spaceIndex,
+                                               1.0,
+                                               thisZoneHWEq.Name,
+                                               DataHeatBalance::IntGainType::HotWaterEquipment,
+                                               &thisZoneHWEq.ConGainRate,
+                                               nullptr,
+                                               &thisZoneHWEq.RadGainRate,
+                                               &thisZoneHWEq.LatGainRate);
+                    }
+
+                } // for hwEqInputNum.NumOfSpaces
+            } // for hwEqInputNum (HotWaterEquipment:Instance)
         } // TotHWEquip > 0
 
         // SteamEquipment
