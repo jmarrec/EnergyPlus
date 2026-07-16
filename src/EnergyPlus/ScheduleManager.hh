@@ -417,7 +417,7 @@ namespace Sched {
     int GetWeekScheduleNum(EnergyPlusData &state, std::string const &name);
     WeekSchedule *GetWeekSchedule(EnergyPlusData &state, std::string const &name);
 
-    WeekRuleSchedule *GetPriorityWeekRuleSchedule(EnergyPlusData &state, std::string const &scheduleYearRulesName, int const day);
+    std::vector<WeekRuleSchedule *> GetPrioritizedWeekRuleSchedules(EnergyPlusData &state, std::string const &scheduleYearRulesName, int const day);
 
     int GetScheduleNum(EnergyPlusData &state, std::string const &name);
     Schedule *GetSchedule(EnergyPlusData &state, std::string const &name);

@@ -1117,7 +1117,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->weekScheduleMap.find(Alphas(1)) != s_sched->weekScheduleMap.end()) {
+            if (s_sched->weekRuleScheduleMap.find(Alphas(1)) != s_sched->weekRuleScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1459,16 +1459,21 @@ namespace Sched {
             int startPointer = General::OrdinalDay(1, 1, 1);
             int endPointer = General::OrdinalDay(12, 31, 1);
             for (int day = startPointer; day <= endPointer; ++day) {
-                auto *weekRuleSched = GetPriorityWeekRuleSchedule(state, Alphas(1), day);
-                if (weekRuleSched != nullptr) {
-                    Sched::WeekSchedule *weekSched;
-                    weekSched = GetWeekSchedule(state, weekRuleSched->Name);
-                    if (weekSched == nullptr) {
-                        weekSched = AddWeekSchedule(state, weekRuleSched->Name);
-                        weekSched->isUsed = true;
+                std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules = GetPrioritizedWeekRuleSchedules(state, Alphas(1), day);
+                for (Sched::WeekRuleSchedule *weekRuleSched : sortedWeekRuleSchedules) {
+                    if (weekRuleSched != nullptr) {
+                        Sched::WeekSchedule *weekSched;
+                        weekSched = GetWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
+                        if (weekSched == nullptr) {
+                            weekSched = AddWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
+                            weekSched->isUsed = true;
 
-                        for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
-                            weekSched->dayScheds[iDayType] = defaultDaySched;
+                            for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
+                                weekSched->dayScheds[iDayType] = defaultDaySched;
+                            }
+
+                            sched->weekScheds[day] = weekSched;
+                            ++daysInYear[day];
                         }
 
                         if (weekRuleSched->applySunday) {
@@ -1499,8 +1504,6 @@ namespace Sched {
                         weekSched->dayScheds[(int)Sched::DayType::CustomDay1] = customDay1Schedule;
                         weekSched->dayScheds[(int)Sched::DayType::CustomDay2] = customDay2Schedule;
                     }
-                    ++daysInYear[day];
-                    sched->weekScheds[day] = weekSched;
                 }
             }
 
@@ -2921,37 +2924,33 @@ namespace Sched {
         return (weekSched == nullptr) ? -1 : weekSched->Num;
     }
 
-    Sched::WeekRuleSchedule *GetPriorityWeekRuleSchedule(EnergyPlusData &state, std::string const &scheduleYearRulesName, int const day)
+    std::vector<Sched::WeekRuleSchedule *> GetPrioritizedWeekRuleSchedules(EnergyPlusData &state, std::string const &scheduleYearRulesName, int const day)
     {
         auto const &s_sched = state.dataSched;
 
-        int rulePriorityOrder = 99999;
+        std::vector<int> ruleOrders;
         std::vector<Sched::WeekRuleSchedule *> weekRuleSchedules;
         for (Sched::WeekRuleSchedule *weekRuleSchedule : s_sched->weekRuleSchedules) {
             if (weekRuleSchedule->scheduleYearRulesName == scheduleYearRulesName) {
-                std::vector<int> specificDays = weekRuleSchedule->specificDays;
-                if (std::find(std::begin(specificDays), std::end(specificDays), day) != std::end(specificDays)) {
-                    if (weekRuleSchedule->rulePriorityOrder < rulePriorityOrder) {
-                        weekRuleSchedules.push_back(weekRuleSchedule);
-                        rulePriorityOrder = weekRuleSchedule->rulePriorityOrder;
-                    }
+                std::vector<int> specDays = weekRuleSchedule->specificDays;
+                if (std::find(std::begin(specDays), std::end(specDays), day) != std::end(specDays)) {
+                    ruleOrders.push_back(weekRuleSchedule->rulePriorityOrder);
+                    weekRuleSchedules.push_back(weekRuleSchedule);
                 }
             }
         }
 
-        if (weekRuleSchedules.size() == 0) { // handle Feb 29 later
-            return nullptr;
+        std::vector<int> ixs(ruleOrders.size());
+        std::iota(ixs.begin(), ixs.end(), 0);
+        std::sort(ixs.begin(), ixs.end(), [&](int i, int j) { return ruleOrders[i] > ruleOrders[j]; });
+
+        std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules(ixs.size());
+        for (int i = 0; i < ixs.size(); ++i) {
+            sortedWeekRuleSchedules[i] = weekRuleSchedules[ixs[i]];
         }
 
-        Sched::WeekRuleSchedule *weekRuleSched = weekRuleSchedules.back();
-        if (!weekRuleSched->isUsed) {
-            weekRuleSched->isUsed = true;
-            auto *daySched = weekRuleSched->daySched;
-            daySched->isUsed = true;
-        }
-
-        return weekRuleSched;
-    } // GetPriorityWeekRuleSchedule()
+        return sortedWeekRuleSchedules; // returned rules ordered lowest priority to highest priority for a specific day
+    } // GetPrioritizedWeekRuleSchedules()
 
     Sched::DaySchedule *GetDaySchedule(EnergyPlusData &state, std::string const &name)
     {
