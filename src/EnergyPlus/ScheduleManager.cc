@@ -1383,9 +1383,11 @@ namespace Sched {
                 for (std::size_t j = i + 1; j < weekRuleSchedules.size(); ++j) {
                     if (weekRuleSchedules[i]->rulePriorityOrder == weekRuleSchedules[j]->rulePriorityOrder) {
                         ErrorsFound = true;
-                        ShowSevereMessage(
-                            state,
-                            std::format("{}: {} has week rules with duplicate Rule Priority Order = {}", routineName, Alphas(1), weekRuleSchedules[i]->rulePriorityOrder));
+                        ShowSevereMessage(state,
+                                          std::format("{}: {} has week rules with duplicate Rule Priority Order = {}",
+                                                      routineName,
+                                                      Alphas(1),
+                                                      weekRuleSchedules[i]->rulePriorityOrder));
                         ShowContinueError(state, "Priority must be unique within a Schedule:Year:Rules");
                     }
                 }

@@ -252,7 +252,7 @@ namespace Sched {
         // Members
         std::string scheduleYearRulesName;
         int rulePriorityOrder;
-        DaySchedule * daySched = nullptr;
+        DaySchedule *daySched = nullptr;
         bool applySunday;
         bool applyMonday;
         bool applyTuesday;

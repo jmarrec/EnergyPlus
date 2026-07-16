@@ -31,7 +31,7 @@ Our generalized set of options for OS <-> E+ Alignment:
 - Option 2 - Develop and push new objects into E+
 - Option 3 - Drop support for an OS model object API; measures need to deal with the deprecation
 - Option 4 - Data is backed; RT/FT on the fly (probably very expensive)
- 
+
 For handling `Schedule:Year:Rules`, we ultimately arrived at Option 2 (develop and push new objects into EnergyPlus).
 The schedule we propose to add is convenient and easily extensible (i.e., an attractive schedule type).
 
