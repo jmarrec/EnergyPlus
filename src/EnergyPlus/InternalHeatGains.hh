@@ -58,6 +58,7 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
+#include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/OutputReportTabular.hh>
 
@@ -111,6 +112,29 @@ namespace InternalHeatGains {
         Real64 CO2RateFactor = 0.0;   // CO2 rate factor [m3/s/W], only for Gas and OtherEquipment
     };
 
+    struct PeopleDefinitionData // People:Definition
+    {
+        // Members
+        std::string Name;                                                 // Definition object name
+        DesignLevelMethod designLevelMethod = DesignLevelMethod::Invalid; // People, PeoplePerArea, or AreaPerPerson
+        Real64 levelValue = 0.0;                                          // level value read from the matched field
+        bool levelIsBlank = false;                                        // True if design level field is blank in input
+        std::string levelField;                                           // Schema field name used for the level (for error messages)
+        Real64 FractionRadiant = 0.3;                                     // Fraction of sensible gain that is radiant (default 0.3)
+        Real64 UserSpecSensFrac = Constant::AutoCalculate;                // User-specified sensible fraction; default autocalculate
+        Real64 CO2RateFactor = 3.82e-8;                                   // CO2 generation rate [m3/s-W] (default per ASHRAE Std 62.1)
+        bool Show55Warning = false;                                       // True: emit ASHRAE 55 comfort warnings
+        DataHeatBalance::CalcMRT MRTCalcType = DataHeatBalance::CalcMRT::EnclosureAveraged;
+        bool Fanger = false;
+        bool Pierce = false;
+        bool KSU = false;
+        bool AdaptiveASH55 = false;
+        bool AdaptiveCEN15251 = false;
+        bool CoolingEffectASH55 = false;
+        bool AnkleDraftASH55 = false;
+        bool usingThermalComfort = false; // True if any thermal comfort model is enabled
+    };
+
     struct LightsDefinitionData // Lights:Definition
     {
         // Members
@@ -131,6 +155,8 @@ namespace InternalHeatGains {
                                  ObjexxFCL::Optional_bool_const InitOnly = _); // when true, just calls the get input, if appropriate and returns.
 
     std::vector<ZoneEquipDefinitionData> GetSpaceLoadDefinition(EnergyPlusData &state, const std::string &objectType);
+
+    std::vector<PeopleDefinitionData> GetPeopleDefinition(EnergyPlusData &state);
 
     std::vector<LightsDefinitionData> GetLightsDefinition(EnergyPlusData &state);
 
