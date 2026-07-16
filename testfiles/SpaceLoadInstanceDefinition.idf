@@ -1106,7 +1106,7 @@
 
   Schedule:Compact,
     LIGHTS-1,                !- Name
-    Fraction,                !- Schedule Type Limits Name
+    Fractional,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field
     For: WeekDays SummerDesignDay CustomDay1 CustomDay2,  !- Field
     Until: 8:00,             !- Field
@@ -1217,7 +1217,7 @@
 
   Schedule:Compact,
     WORK_EFF_SCH,            !- Name
-    Fraction,                !- Schedule Type Limits Name
+    Fractional,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field
     For: AllDays,            !- Field
     Until: 24:00,            !- Field
@@ -1225,7 +1225,7 @@
 
   Schedule:Compact,
     BLDG_OCC_SCH,            !- Name
-    Fraction,                !- Schedule Type Limits Name
+    Fractional,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field
     For: SummerDesignDay,    !- Field
     Until: 06:00,            !- Field
@@ -1291,6 +1291,9 @@
     1.0,                     !- Upper Limit Value {BasedOnField A3}
     Discrete,                !- Numeric Type
     Availability;            !- Unit Type
+
+  ScheduleTypeLimits,
+    Any Number;              !- Name
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
