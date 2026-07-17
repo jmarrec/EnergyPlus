@@ -752,20 +752,20 @@ void GLHEVert::performBoreholeFieldDesignAndSizingWithGHEDesigner(EnergyPlusData
     nlohmann::json gheDesignerInputs = this->getCommonGHEDesignerInputs(state);
 
     // grab thermal and borehole properties
-    nlohmann::json grout = {{"conductivity", this->grout.k}, {"rho_cp", this->grout.rhoCp}};
-    nlohmann::json soil = {
+    nlohmann::json groutJson = {{"conductivity", this->grout.k}, {"rho_cp", this->grout.rhoCp}};
+    nlohmann::json soilJson = {
         {"conductivity", this->soil.k},
         {"rho_cp", this->soil.rhoCp},
         {"undisturbed_temp", this->tempGround},
     };
     Real64 const shankSpacingForGHEDesigner = this->bhUTubeDist - this->pipe.outDia;
-    nlohmann::json pipe = {{"inner_diameter", this->pipe.innerDia},
-                           {"outer_diameter", this->pipe.outDia},
-                           {"shank_spacing", shankSpacingForGHEDesigner},
-                           {"roughness", 0.000001}, // TODO: This doesn't seem to be available on inputs
-                           {"conductivity", this->pipe.k},
-                           {"rho_cp", this->pipe.rhoCp},
-                           {"arrangement", "SINGLEUTUBE"}};
+    nlohmann::json pipeJson = {{"inner_diameter", this->pipe.innerDia},
+                               {"outer_diameter", this->pipe.outDia},
+                               {"shank_spacing", shankSpacingForGHEDesigner},
+                               {"roughness", 0.000001}, // TODO: This doesn't seem to be available on inputs
+                               {"conductivity", this->pipe.k},
+                               {"rho_cp", this->pipe.rhoCp},
+                               {"arrangement", "SINGLEUTUBE"}};
     nlohmann::json borehole = {{"buried_depth", this->myRespFactors->props->bhTopDepth}, // TODO: Confirm this is ready for access
                                {"diameter", this->bhDiameter}};
 
@@ -791,9 +791,9 @@ void GLHEVert::performBoreholeFieldDesignAndSizingWithGHEDesigner(EnergyPlusData
     nlohmann::json ghe1 = {{"flow_rate", this->sizingData.designFlowRatePerBorehole * 1000}, // convert m3/s to lps
                            {"flow_type", "BOREHOLE"}, //"SYSTEM"},  // TODO: I could NOT get it to size with SYSTEM...do I need to adjust flow rate?
                            // We should just delete SYSTEM from GHEDesigner.
-                           {"grout", grout},
-                           {"soil", soil},
-                           {"pipe", pipe},
+                           {"grout", groutJson},
+                           {"soil", soilJson},
+                           {"pipe", pipeJson},
                            {"borehole", borehole},
                            {"geometric_constraints", geometricConstraints},
                            {"design", design},
@@ -917,20 +917,20 @@ void GLHEVert::calcUniformBHWallTempGFunctionsWithGHEDesigner(EnergyPlusData &st
     Real64 const height = this->myRespFactors->myBorholes[0]->props->bhLength;
 
     // grab thermal and borehole properties
-    nlohmann::json grout = {{"conductivity", this->grout.k}, {"rho_cp", this->grout.rhoCp}};
-    nlohmann::json soil = {
+    nlohmann::json groutJson = {{"conductivity", this->grout.k}, {"rho_cp", this->grout.rhoCp}};
+    nlohmann::json soilJson = {
         {"conductivity", this->soil.k},
         {"rho_cp", this->soil.rhoCp},
         {"undisturbed_temp", this->tempGround},
     };
     Real64 const shankSpacingForGHEDesigner = this->bhUTubeDist - this->pipe.outDia;
-    nlohmann::json pipe = {{"inner_diameter", this->pipe.innerDia},
-                           {"outer_diameter", this->pipe.outDia},
-                           {"shank_spacing", shankSpacingForGHEDesigner},
-                           {"roughness", 0.000001}, // TODO: This doesn't seem to be available on inputs
-                           {"conductivity", this->pipe.k},
-                           {"rho_cp", this->pipe.rhoCp},
-                           {"arrangement", "SINGLEUTUBE"}};
+    nlohmann::json pipeJson = {{"inner_diameter", this->pipe.innerDia},
+                               {"outer_diameter", this->pipe.outDia},
+                               {"shank_spacing", shankSpacingForGHEDesigner},
+                               {"roughness", 0.000001}, // TODO: This doesn't seem to be available on inputs
+                               {"conductivity", this->pipe.k},
+                               {"rho_cp", this->pipe.rhoCp},
+                               {"arrangement", "SINGLEUTUBE"}};
     nlohmann::json borehole = {{"buried_depth", this->myRespFactors->props->bhTopDepth}, // TODO: Confirm this is ready for access
                                {"diameter", this->bhDiameter}};
 
@@ -945,9 +945,9 @@ void GLHEVert::calcUniformBHWallTempGFunctionsWithGHEDesigner(EnergyPlusData &st
     // set up the final borehole structure to fill out the input file
     nlohmann::json ghe1 = {{"flow_rate", this->designMassFlow},
                            {"flow_type", "SYSTEM"},
-                           {"grout", grout},
-                           {"soil", soil},
-                           {"pipe", pipe},
+                           {"grout", groutJson},
+                           {"soil", soilJson},
+                           {"pipe", pipeJson},
                            {"borehole", borehole},
                            {"pre_designed", preDesigned}};
     gheDesignerInputs["ground_heat_exchanger"] = {{"ghe1", ghe1}};

@@ -723,7 +723,7 @@ namespace SimulationManager {
         Array1D_string Alphas(10);
         Array1D<Real64> Number(4);
         int NumAlpha;
-        int NumNumber;
+        int NumNumber = 0;
         int IOStat;
         int NumDebugOut;
         int MinInt;
