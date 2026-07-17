@@ -4,7 +4,7 @@ Modify `obsolete` Tag Handling for Deprecation Warnings
 **Jason W. DeGraw, ORNL**
 
  - Original Date: 06/18/2026
- - Revision Date: N/A
+ - Revision Date: 07/17/2026
 
 
 ## Justification for New Feature ##
@@ -18,13 +18,13 @@ In practice, the IDD has two related mechanisms:
 - `\deprecated`, a field-level tag indicating that a field is no longer used
 - `\obsolete`, an object-level tag indicating that an object is no longer used and names a replacement object
 
-The `\deprecated` tag is too narrow for object-level deprecation, and the current `\obsolete` behavior assumes there is always a replacement object. That makes it difficult/impossible to mark an object as planned for removal when there is no direct successor.
+The `\deprecated` tag is too narrow for object-level deprecation, and the current documented `\obsolete` behavior assumes there is always a replacement object. That makes it difficult/impossible to mark an object as planned for removal when there is no direct successor. Looking through historical versions of the IDD, an object in version 1.3.0 was tagged with the `obsolete` tag with a value of `deleted`. The object was then removed from subsequent versions and skipped by transition.
 
-This proposal updates behavior so that the existing `\obsolete` tag can also support a "to be removed, no replacement" case, enabling EnergyPlus to better follow its own documented deprecation process without introducing new schema constructs.
+This proposal updates behavior so that the existing `\obsolete` tag explicitly supports the "to be removed, no replacement" case, enabling EnergyPlus to better follow its own documented deprecation process without introducing new schema constructs.
 
 ## E-mail and Conference Call Conclusions ##
 
-N/A
+The feature was discussed on two technicalities calls and suggestions were incorporated into the document.
 
 ## Overview ##
 
@@ -37,21 +37,21 @@ Today, the `obsolete` tag is interpreted as a replacement mapping:
 
 This proposal changes the handling of the tag based upon the value:
 
-- If the value of the `obsolete` tag is different from the object name, keep the current meaning: the object is obsolete and should be replaced by the named object.
-- If the value of the `obsolete` tag is the same as the object name, interpret it as "this object is obsolete and will be removed in the future with no replacement object."
+- If the value of the `obsolete` tag is `deleted`, interpret the tag to mean that "this object is obsolete and will be removed in the future with no replacement object."
+- In all other cases, keep the current meaning of the tag: the object is obsolete and should be replaced with the named object.
 
-This allows the existing tag to express both "replace this object with another object" and "this object is going away and there is no automatic path forward". No schema format changes are proposed. The change is strictly behavioral.
+This allows the existing tag to express both "replace this object with another object" and "this object is going away and there is no automatic path forward". No schema format changes are proposed. The change is strictly behavioral and formalizes what was previously done on a case-by-case basis.
 
 ## Approach ##
 
 The proposed implementation is to preserve the existing `obsolete` field but change how it is interpreted and handled by both the engine and transition:
 
 1. Modify transition warning behavior so the warning depends on the `obsolete` value:
-   - If `obsolete != object name`, warn that the object is obsolete and should be replaced with the named object.
-   - If `obsolete == object name`, warn that the object is obsolete, will be removed in the future, and has no replacement.
+   - If `obsolete != deleted`, warn that the object is obsolete and should be replaced with the named object.
+   - If `obsolete == deleted`, warn that the object is obsolete, will be removed in the future, and has no replacement.
 2. Add an EnergyPlus runtime warning for obsolete objects encountered by the engine:
-   - If `obsolete != object name`, warn that the object is obsolete and should be replaced with the named object.
-   - If `obsolete == object name`, warn that the object is obsolete, will be removed in the future, and has no replacement.
+   - If `obsolete != deleted`, warn that the object is obsolete and should be replaced with the named object.
+   - If `obsolete == deleted`, warn that the object is obsolete, will be removed in the future, and has no replacement.
 
 One motivating example is `Daylighting:DELight:ComplexFenestration`, which has been identified for possible deprecation in `Deprecation.html`. Under this proposal, it can be marked as:
 
@@ -59,11 +59,19 @@ One motivating example is `Daylighting:DELight:ComplexFenestration`, which has b
 Daylighting:DELight:ComplexFenestration,
        \min-fields 5
        \memo Used for DElight Complex Fenestration of all types
-       \obsolete Daylighting:DELight:ComplexFenestration
+       \obsolete New=>deleted
        ...
 ```
-
 This keeps the schema unchanged while signaling that the object is on a removal path without naming a successor object.
+
+Note that the IDD syntax calls for a `New=>` prefix, but then transition splits on `=>`, so the following are equivalent:
+
+```
+\obsolete New=>deleted
+\obsolete =>deleted
+```
+
+This is arguably a transition bug, and fixing it would expand the scope here too much.
 
 ## Testing/Validation/Data Sources ##
 
@@ -82,6 +90,7 @@ However, related user-facing documentation should be updated:
 
 - `Deprecation.html` should clarify that a self-referential `obsolete` tag means the object is marked for future removal with no designated replacement object.
 - If desired, warning messages can direct users to `Deprecation.html` and/or the relevant object documentation for more context.
+- The IDD documentation of the `obsolete` tag will be updated.
 
 ## Input Description ##
 
@@ -91,7 +100,7 @@ Proposed meanings:
 
 ```text
 OldObjectName
-    \obsolete NewObjectName
+    \obsolete New=>NewObjectName
 ```
 
 Means:
@@ -101,7 +110,7 @@ Means:
 
 ```text
 SameObjectName
-    \obsolete SameObjectName
+    \obsolete New=>deleted
 ```
 
 Means:
