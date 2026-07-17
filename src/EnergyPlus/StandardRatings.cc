@@ -4585,7 +4585,7 @@ namespace StandardRatings {
                             IntermediateCapacityAndPowerSEER2Case1(state, bl, q_low, n, p_low, PLFFPLRCurveIndex(spnum));
                         // This is the case and speed we're looking for now we exit and try calculating against the next bin
                         goto SpeedLoop3_exit;
-                    } else if (bl < q_full && spnum == 2) { // bl > q_low
+                    } else if (bl < q_full) { // bl > q_low
                         // Case 2A:
                         if (bl < q_int) {
                             // Section 11.2.1.3.2 CASE 2 - Building load can be matched by modulating the compressor speed between low speed & full
@@ -4600,7 +4600,7 @@ namespace StandardRatings {
                                 p_int, bl, q_int, n, Q_E_Int(spnum), P_E_Int(spnum), q_low, p_low, q_full, p_full);
                             goto SpeedLoop3_exit;
                         }
-                    } else if (bl >= q_full && spnum == nsp) {
+                    } else { // bl >= q_full
                         // Case 3:
                         // Section 11.2.1.3.3 CASE 3 - Building load is equal to or greater than unit capacity at full stage
                         std::tie(q, e, NetTotCoolCapBinned_2023, TotCoolElecPowerBinned_2023) =
