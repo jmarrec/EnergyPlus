@@ -2489,7 +2489,7 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DesignDayOverrides)
 
 TEST_F(EnergyPlusFixture, ScheduleYearRules_Validation)
 {
-    // Test unknown day schedule names and duplicate rule order (warning)
+    // Test unknown day schedule names and duplicate rule order (severe)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,               !- Name",
@@ -2563,7 +2563,7 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_Validation)
         "   **   ~~~   ** Default Day Schedule Name = DEFAULT DAY, item not found.",
         "   **  Fatal  ** ProcessScheduleInput: Preceding Errors cause termination.",
         "   ...Summary of Errors that led to program termination:",
-        "   ..... Reference severe error count=2",
+        "   ..... Reference severe error count=3",
         "   ..... Last severe error=ProcessScheduleInput: Schedule:Year:Rules = SCHEDULE YEAR RULES",
     });
 

@@ -1383,7 +1383,7 @@ namespace Sched {
                 for (std::size_t j = i + 1; j < weekRuleSchedules.size(); ++j) {
                     if (weekRuleSchedules[i]->rulePriorityOrder == weekRuleSchedules[j]->rulePriorityOrder) {
                         ErrorsFound = true;
-                        ShowSevereMessage(state,
+                        ShowSevereError(state,
                                           std::format("{}: {} has week rules with duplicate Rule Priority Order = {}",
                                                       routineName,
                                                       Alphas(1),
@@ -2950,7 +2950,7 @@ namespace Sched {
             sortedWeekRuleSchedules[i] = weekRuleSchedules[ixs[i]];
         }
 
-        return sortedWeekRuleSchedules; // returned rules ordered lowest priority to highest priority for a specific day
+        return sortedWeekRuleSchedules; // return rules ordered lowest priority to highest priority for a specific day
     } // GetPrioritizedWeekRuleSchedules()
 
     Sched::DaySchedule *GetDaySchedule(EnergyPlusData &state, std::string const &name)
