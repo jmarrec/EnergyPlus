@@ -2924,7 +2924,8 @@ namespace Sched {
         return (weekSched == nullptr) ? -1 : weekSched->Num;
     }
 
-    std::vector<Sched::WeekRuleSchedule *> GetPrioritizedWeekRuleSchedules(EnergyPlusData &state, std::string const &scheduleYearRulesName, int const day)
+    std::vector<Sched::WeekRuleSchedule *>
+    GetPrioritizedWeekRuleSchedules(EnergyPlusData &state, std::string const &scheduleYearRulesName, int const day)
     {
         auto const &s_sched = state.dataSched;
 
@@ -2945,7 +2946,7 @@ namespace Sched {
         std::sort(ixs.begin(), ixs.end(), [&](int i, int j) { return ruleOrders[i] > ruleOrders[j]; });
 
         std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules(ixs.size());
-        for (int i = 0; i < ixs.size(); ++i) {
+        for (int i = 0; i < (int)ixs.size(); ++i) {
             sortedWeekRuleSchedules[i] = weekRuleSchedules[ixs[i]];
         }
 
@@ -3613,16 +3614,16 @@ namespace Sched {
     {
         assert(!this->isMinMaxSet);
 
-        auto *daySched = this->daySched;
-        if (daySched == nullptr) {
+        auto *daySched1 = this->daySched;
+        if (daySched1 == nullptr) {
             return;
         }
-        if (!daySched->isMinMaxSet) {
-            daySched->setMinMaxVals(state);
+        if (!daySched1->isMinMaxSet) {
+            daySched1->setMinMaxVals(state);
         }
 
-        this->minVal = daySched->minVal;
-        this->maxVal = daySched->maxVal;
+        this->minVal = daySched1->minVal;
+        this->maxVal = daySched1->maxVal;
 
         this->isMinMaxSet = true;
     } // WeekRuleSchedule::setMinMaxVals()
