@@ -2724,20 +2724,20 @@ TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_VRFOU_Compressor)
         auto &vrfCond = state->dataHVACVarRefFlow->VRF(VRFCond);
 
         // A representative cooling operating point (same solver inputs used elsewhere in this test).
-        Real64 const TU_CoolingLoad = 6006.0; // IU cooling load [W]
-        Real64 const Tsuction = 8.86;         // suction temperature Te' [C]
-        Real64 const Tdischarge = 40.26;      // discharge temperature Tc' [C]
-        Real64 const Psuction = 1.2e6;        // suction pressure Pe' [Pa]
-        Real64 const T_comp_in = 25.0;        // compressor inlet temperature [C]
-        Real64 const h_comp_in = 4.3e5;       // compressor inlet enthalpy [J/kg]
-        Real64 const h_IU_evap_in = 2.5e5;    // IU evaporator inlet enthalpy [J/kg]
-        Real64 const Pipe_Q_c = 5.0;          // piping heat loss [W]
-        Real64 const CapMaxTc = 50.0;         // maximum Tc [C]
+        Real64 constexpr TU_CoolingLoad = 6006.0; // IU cooling load [W]
+        Real64 constexpr Tsuction = 8.86;         // suction temperature Te' [C]
+        Real64 constexpr Tdischarge = 40.26;      // discharge temperature Tc' [C]
+        Real64 constexpr Psuction = 1.2e6;        // suction pressure Pe' [Pa]
+        Real64 constexpr T_comp_in = 25.0;        // compressor inlet temperature [C]
+        Real64 constexpr h_comp_in = 4.3e5;       // compressor inlet enthalpy [J/kg]
+        Real64 constexpr h_IU_evap_in = 2.5e5;    // IU evaporator inlet enthalpy [J/kg]
+        Real64 constexpr Pipe_Q_c = 5.0;          // piping heat loss [W]
+        Real64 constexpr CapMaxTc = 50.0;         // maximum Tc [C]
         Real64 const Q_c_TU_PL = TU_CoolingLoad + Pipe_Q_c;
 
         // ---- Normal case: the iteration settles inside the 30 steps ----
         {
-            Real64 const Tolerance = 0.05;
+            Real64 constexpr Tolerance = 0.05;
             int Counter = 1;
             Real64 localNcomp = TU_CoolingLoad / vrfCond.CoolingCOP;
             Real64 Ncomp_new = localNcomp;
