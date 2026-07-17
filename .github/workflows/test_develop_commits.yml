@@ -1,7 +1,7 @@
 name: Develop Branch Testing
 
 on:
-  pull_request:
+  push:
     branches: [ develop ]  # run this on all commits to the develop branch
 
 defaults:
