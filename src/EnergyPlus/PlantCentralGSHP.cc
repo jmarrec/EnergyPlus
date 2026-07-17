@@ -114,8 +114,6 @@ PlantComponent *WrapperSpecs::factory(EnergyPlusData &state, std::string const &
     }
     // If we didn't find it, fatal
     ShowFatalError(state, std::format("LocalPlantCentralGSHPFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
-    // Shut up the compiler
-    return nullptr; // LCOV_EXCL_LINE
 }
 
 void WrapperSpecs::onInitLoopEquip(EnergyPlusData &state, const PlantLocation &calledFromLocation)
