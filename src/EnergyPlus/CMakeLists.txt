@@ -1151,7 +1151,9 @@ if(BUILD_TESTING)
 
   # Functional API does not need a run folder to be created
   add_test(NAME "API.TestFunctionalPython" COMMAND "${Python_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tst/EnergyPlus/api/TestFunctional.py")
-  set_tests_properties("API.TestFunctionalPython" PROPERTIES ENVIRONMENT PYTHONPATH=${DIR_WITH_PY_ENERGYPLUS})
+  set_tests_properties(
+    "API.TestFunctionalPython" PROPERTIES ENVIRONMENT
+                                           "PYTHONPATH=${DIR_WITH_PY_ENERGYPLUS};ENERGYPLUS_USE_PSYCH_ERRORS=$<BOOL:${USE_PSYCH_ERRORS}>")
 
   # Runtime tests need a folder to be created for output files, if we are building fortran, let's test that the python API properly sets the E+ install root by passing "-r"
   set(TEST_DIR "${PROJECT_BINARY_DIR}/tst/api/runtime_python")
