@@ -2773,7 +2773,7 @@ TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_VRFOU_Compressor)
 
         // ---- Cap case: an impossible tolerance can never be met, so the 30-iteration cap must stop it ----
         {
-            Real64 const Tolerance = -1.0; // |diff| <= negative is never true -> exercises the hard cap only
+            Real64 constexpr Tolerance = -1.0; // |diff| <= negative is never true -> exercises the hard cap only
             int Counter = 1;
             Real64 localNcomp = TU_CoolingLoad / vrfCond.CoolingCOP;
             Real64 Ncomp_new = localNcomp;
