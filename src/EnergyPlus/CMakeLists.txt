@@ -42,10 +42,10 @@ if(USE_PSYCH_ERRORS)
 endif()
 
 set(SRC
-    "${PROJECT_SOURCE_DIR}/third_party/milo/dtoa.h"
-    "${PROJECT_SOURCE_DIR}/third_party/milo/itoa.h"
-    "${PROJECT_SOURCE_DIR}/third_party/milo/diyfp.h"
-    "${PROJECT_SOURCE_DIR}/third_party/milo/ieee754.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/dtoa.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/itoa.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/diyfp.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/ieee754.h"
     AirLoopHVACDOAS.cc
     AirLoopHVACDOAS.hh
     AirTerminalUnit.hh
@@ -710,10 +710,10 @@ set(SRC
 create_src_groups("${SRC}")
 
 set(INPUTPARSING_SRC
-    "${PROJECT_SOURCE_DIR}/third_party/milo/dtoa.h"
-    "${PROJECT_SOURCE_DIR}/third_party/milo/itoa.h"
-    "${PROJECT_SOURCE_DIR}/third_party/milo/diyfp.h"
-    "${PROJECT_SOURCE_DIR}/third_party/milo/ieee754.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/dtoa.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/itoa.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/diyfp.h"
+    "${PROJECT_SOURCE_DIR}/third_party/milo/milo/ieee754.h"
     "${CMAKE_CURRENT_BINARY_DIR}/DataStringGlobals.cc"
     DataStringGlobals.hh
     FileSystem.cc
@@ -762,7 +762,7 @@ endif()
 
 add_library(energyplusparser STATIC ${INPUTPARSING_SRC})
 target_link_libraries(energyplusparser PUBLIC embedded_epjson_source nlohmann_json re2 ${CMAKE_DL_LIBS})
-target_link_libraries(energyplusparser PRIVATE project_options project_fp_options project_warnings)
+target_link_libraries(energyplusparser PRIVATE cli11 fast_float milo objexx valijson project_options project_fp_options project_warnings)
 if(WIN32)
   target_link_libraries(energyplusparser PUBLIC Shlwapi)
 endif()
@@ -807,9 +807,10 @@ target_link_libraries(
          Windows-CalcEngine
          airflownetworklib
          ssc
-         libtk205)
+         libtk205
+         fast_float)
 
-target_link_libraries(energypluslib PRIVATE project_options project_fp_options project_warnings)
+target_link_libraries(energypluslib PRIVATE cli11 milo valijson project_options project_fp_options project_warnings)
 if(ENABLE_PCH)
   target_precompile_headers(energypluslib PRIVATE ${EP_CXX_PCH_HEADERS})
 endif()
@@ -872,7 +873,7 @@ else() # windows
                             "${CMAKE_CURRENT_BINARY_DIR}/energyplusapi.rc")
 endif()
 target_link_libraries(energyplusapi PRIVATE energypluslib)
-target_link_libraries(energyplusapi PRIVATE project_options project_fp_options project_warnings)
+target_link_libraries(energyplusapi PRIVATE cli11 project_options project_fp_options project_warnings)
 
 set_target_properties(energyplusapi PROPERTIES INSTALL_NAME_DIR "@executable_path")
 if(ENABLE_UNITY)
@@ -886,7 +887,7 @@ if(APPLE OR UNIX)
 else() # windows
   add_executable(energyplus main.cc "${CMAKE_CURRENT_BINARY_DIR}/energyplus.rc")
 endif()
-target_link_libraries(energyplus PRIVATE energyplusapi project_options project_fp_options project_warnings)
+target_link_libraries(energyplus PRIVATE cli11 energyplusapi project_options project_fp_options project_warnings)
 
 set_target_properties(energyplus PROPERTIES VERSION ${ENERGYPLUS_VERSION})
 set_target_properties(energyplusapi PROPERTIES VERSION ${ENERGYPLUS_VERSION})

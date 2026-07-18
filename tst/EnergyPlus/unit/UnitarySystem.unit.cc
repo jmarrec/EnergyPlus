@@ -114,7 +114,7 @@ public:
     bool ErrorsFound = false;
 
 protected:
-    virtual void SetUp()
+    void SetUp() override
     {
         EnergyPlusFixture::SetUp(); // Sets up the base fixture first.
 
@@ -233,7 +233,7 @@ protected:
         state->dataSize->PlantSizData(2).DeltaT = 5.0;
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
     }
@@ -251,7 +251,7 @@ public:
     {
     }
 
-    virtual void SetUp()
+    void SetUp() override
     {
         EnergyPlusFixture::SetUp(); // Sets up individual test cases.
 
@@ -295,7 +295,7 @@ public:
         state->dataHeatBal->HeatReclaimVS_Coil.allocate(4);
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
     }
@@ -309,12 +309,12 @@ public:
     }
 
 protected:
-    virtual void SetUp()
+    void SetUp() override
     {
         EnergyPlusFixture::SetUp(); // Sets up the base fixture first.
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
     }

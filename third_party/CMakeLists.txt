@@ -1,27 +1,17 @@
-#### Create interface for JSON for Modern C++ so we can include it in targets
-# add_library( ModernJSON INTERFACE )
-# target_include_directories( ModernJSON INTERFACE "${PROJECT_SOURCE_DIR}/nlohmann" "${PROJECT_SOURCE_DIR}/doj" )
+# JSON for Modern C++ (header-only)
+add_subdirectory(nlohmann)
 
-add_library( nlohmann_json INTERFACE )
-target_compile_definitions(
-        nlohmann_json
-        INTERFACE
-        JSON_USE_IMPLICIT_CONVERSIONS=1
-)
-if(NOT MSVC)  # This is really only needed with newer Clang, but gcc is fine with it
-  target_compile_options(nlohmann_json INTERFACE -Wno-deprecated-declarations)
-endif()
-target_compile_options(nlohmann_json INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,AppleClang>:-Wno-shorten-64-to-32>)
-target_include_directories(
-        nlohmann_json
-        SYSTEM INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-)
-set_source_files_properties(
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/nlohmann/json.hpp
-  TARGET_DIRECTORY nlohmann_json
-  PROPERTIES COMPILE_FLAGS -Wno-deprecated-declarations
-)
+# CLI11 (header-only, used for command-line parsing)
+add_subdirectory(CLI)
+
+# valijson (header-only, used for epJSON schema validation)
+add_subdirectory(valijson)
+
+# fast_float (header-only, used for fast string-to-number parsing)
+add_subdirectory(fast_float)
+
+# milo (header-only, used for fast number-to-string formatting)
+add_subdirectory(milo)
 
 # To avoid modifying every third_party library
 # we link the project_options in here for every library in this
@@ -101,13 +91,6 @@ set(RE2_BUILD_TESTING
     OFF
     CACHE BOOL "" FORCE)
 
-# Don't force Penumbra testing just because OpenGL is found, allow the developer to set it to ON or OFF as they want
-#if(OPENGL_FOUND)
-#  set(BUILD_PENUMBRA_TESTING
-#      ${BUILD_TESTING}
-#      CACHE BOOL "" FORCE)
-#endif()
-
 # We don't want to enable the global project_warnings for any of the third party projects
 link_libraries(project_options)
 add_subdirectory(SQLite)
@@ -152,11 +135,11 @@ endif()
 add_subdirectory(ObjexxFCL)
 set_target_properties(objexx PROPERTIES FOLDER ThirdParty/ObjexxFCL)
 
-add_subdirectory(BCVTB)
-set_target_properties(bcvtb PROPERTIES FOLDER ThirdParty/BCVTB)
-
 add_subdirectory(Expat)
 set_target_properties(epexpat PROPERTIES FOLDER ThirdParty/Expat)
+
+add_subdirectory(BCVTB)
+set_target_properties(bcvtb PROPERTIES FOLDER ThirdParty/BCVTB)
 
 add_subdirectory(FMI)
 set_target_properties(epfmiimport PROPERTIES FOLDER ThirdParty/FMI)
@@ -186,6 +169,18 @@ set(KIVA_COVERAGE OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(kiva)
 set_target_properties(libkiva PROPERTIES FOLDER ThirdParty/Kiva)
+# libkiva exports "${kiva_SOURCE_DIR}/vendor/eigen" as a PUBLIC include, but our vendored Kiva
+# has vendor/eigen removed: point it at the shared copy instead. PUBLIC because libkiva's public
+# headers (e.g. Ground.hpp) include Eigen, so consumers (energypluslib) need it too.
+# Note: ssc/splinter carries its own private, flattened Eigen 3.2.8 copy and does not use this one
+# (upstream ssc removed it in favor of OR-Tools in 2026, see NatLabRockies/ssc#1367).
+# SYSTEM is needed here: the add_subdirectory(third_party SYSTEM) property only makes interface
+# includes system for *consumers*, while this Eigen dir must also be -isystem when libkiva
+# compiles its own sources (old Eigen triggers -Wdeprecated-enum-enum-conversion under C++20).
+target_include_directories(libkiva SYSTEM PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/eigen")
+# EnergyPlus includes kiva headers with a <libkiva/...> prefix (e.g. HeatBalanceKivaManager.hh),
+# which libkiva's own exported include dirs don't serve: export the parent dir for that spelling.
+target_include_directories(libkiva PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/kiva/src")
 
 if(NOT APPLE)
   add_subdirectory(FMUParser)
