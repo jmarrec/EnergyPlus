@@ -691,7 +691,7 @@ namespace AirflowNetwork {
                       std::array<Real64, 2> &DF     // Partial derivative:  DF/DP
                       ) override;
 
-        int calculate(EnergyPlusData &state,
+        int calculate([[maybe_unused]] EnergyPlusData &state,
                       const Real64 pdrop,       // Total pressure drop across a component (P1 - P2) [Pa]
                       const Real64 multiplier,  // Element multiplier
                       const Real64 control,     // Element control signal
@@ -1058,7 +1058,7 @@ namespace AirflowNetwork {
         int calculate([[maybe_unused]] EnergyPlusData &state,
                       bool const LFLAG,                         // Initialization flag.If = 1, use laminar relationship
                       Real64 const PDROP,                       // Total pressure drop across a component (P1 - P2) [Pa]
-                      int const i,                              // Linkage number
+                      [[maybe_unused]] int const i,             // Linkage number
                       [[maybe_unused]] const Real64 multiplier, // Element multiplier
                       [[maybe_unused]] const Real64 control,    // Element control signal
                       const AirState &propN,                    // Node 1 properties
@@ -1139,12 +1139,12 @@ namespace AirflowNetwork {
         {
         }
 
-        int calculate([[maybe_unused]] EnergyPlusData &state,
+        int calculate(EnergyPlusData &state,
                       bool const LFLAG,                         // Initialization flag.If = 1, use laminar relationship
                       Real64 const PDROP,                       // Total pressure drop across a component (P1 - P2) [Pa]
-                      int const i,                              // Linkage number
+                      [[maybe_unused]] int const i,             // Linkage number
                       [[maybe_unused]] const Real64 multiplier, // Element multiplier
-                      [[maybe_unused]] const Real64 control,    // Element control signal
+                      const Real64 control,                     // Element control signal
                       const AirState &propN,                    // Node 1 properties
                       const AirState &propM,                    // Node 2 properties
                       std::array<Real64, 2> &F,                 // Airflow through the component [kg/s]
