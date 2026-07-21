@@ -73,7 +73,7 @@ jobs:
 
     - name: Set up Python ${{ env.Python_REQUIRED_VERSION }}
       id: setup-python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ env.Python_REQUIRED_VERSION }}
 
