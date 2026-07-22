@@ -107,6 +107,8 @@ For each `BuildingSurface:Detailed` or `FenestrationSurface:Detailed` with a bla
 3. `DefaultConstructionSet` on the `Building`.
 4. If still unresolved → fatal error.
 
+For paired surfaces, when both surfaces have an explicit `Construction Name`, existing EnergyPlus validation remains unchanged. When at least one construction is inherited, an explicit assignment takes precedence over a Space assignment, and a Space assignment takes precedence over a Building assignment. The construction with higher precedence governs the pair, and EnergyPlus finds or creates its reversed construction for the paired surface.
+
 The lookup within a `DefaultConstructionSet` uses `surf.OriginalClass` (the IDD-declared type, set before the thermal remapping) and the outside boundary condition:
 
 | `surf.OriginalClass` | Outside BC | Slot in `DefaultConstructionSet` |
@@ -141,6 +143,10 @@ New unit tests in `tst/EnergyPlus/unit/SurfaceGeometry.unit.cc` covering:
 - Resolution via Space-level `DefaultConstructionSet`, with Building-level fallback for unset slots.
 - Space-level set overrides Building-level set for a specific surface type.
 - Adiabatic and interior partition construction resolution.
+- Paired surfaces retain existing validation when both constructions are explicit.
+- Paired surface resolution when an explicit assignment takes precedence over an inherited assignment.
+- Paired surface resolution when a Space assignment takes precedence over a Building assignment.
+- Creation or reuse of a reversed construction for the paired surface when inherited assignments participate in resolution.
 - Fatal error when construction cannot be resolved at any level.
 - Surfaces with hardcoded `Construction Name` are unaffected by any `DefaultConstructionSet`.
 - `FenestrationSurface:Detailed` with `Surface Type = FixedWindow / OperableWindow / Skylight / OverheadDoor` is parsed correctly, `OriginalClass` is set, and `Class` is remapped to `Window` / `Door` as appropriate.
