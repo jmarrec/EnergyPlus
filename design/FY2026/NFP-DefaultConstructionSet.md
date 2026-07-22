@@ -63,6 +63,8 @@ Remove `\required-field` from `Construction Name` (field A3) in `BuildingSurface
 
 Extend `FenestrationSurface:Detailed`'s `Surface Type` field with four new `\key` values: `FixedWindow`, `OperableWindow`, `Skylight`, `OverheadDoor`. These allow users (and the OpenStudio ForwardTranslator) to express sub-surface intent more precisely, eliminating the current lossy collapse of FixedWindow/OperableWindow/Skylight → `Window` and OverheadDoor → `Door`.
 
+These values are construction selection categories only. They do not change heat transfer, airflow, or operability behavior. Existing `Window` and `Door` values remain valid.
+
 ### C++ Changes
 
 **New `SurfaceClass` enum values** (`DataSurfaces.hh`):
