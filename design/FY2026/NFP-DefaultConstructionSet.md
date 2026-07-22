@@ -4,32 +4,29 @@ Default Construction Set
 **Kyle Benne, National Laboratory of the Rockies**
 
  - Original Date: 05/19/2026
- - Revision Date: 05/19/2026
+ - Revision Date: 07/22/2026
 
 ## Justification for New Feature ##
 
-For support of OS <-> E+ Alignment.
-`DefaultConstructionSet` is widely used in OpenStudio; breaking API here would have too much impact.
+EnergyPlus currently requires a `Construction Name` to be explicitly specified on every heat transfer surface and subsurface. In many models, these fields repeat a much smaller set of construction assignments based on surface type and outside boundary condition.
 
-EnergyPlus currently requires a `Construction Name` to be explicitly specified on every surface and sub-surface — potentially hundreds or thousands of objects in a large model.
+This proposal provides an optional representation for reducing that repetition. Construction assignments may be defined by semantic category at Building or Space scope, while individual surfaces may retain explicit assignments as exceptions. For a scope containing *N* surfaces whose assignments reduce to *K* applicable categories, the shared assignments can be represented by approximately *K* construction references plus a scope reference instead of *N* repeated construction references.
 
-In OpenStudio, instead of having to hardcode the Construction on each building Surface/SubSurface, we can assign a `DefaultConstructionSet` at various inheritance levels, from most specific to less specific:
+Use of this representation is optional for each individual surface:
 
-- Space
-- SpaceType (no E+ equivalent)
-- BuildingStory (no E+ equivalent)
-- Building
+- An explicitly specified `Construction Name` is authoritative and retains the existing behavior.
+- A blank `Construction Name` requests resolution through the surface's Space and then the Building.
+- Defining or referencing a `DefaultConstructionSet` does not change any surface that has an explicit `Construction Name`.
+- A model may mix explicit and inherited construction assignments.
+- If a blank `Construction Name` cannot be resolved, the input is invalid and EnergyPlus terminates with an error.
 
-Constructions are resolved at run time based on surface type and boundary condition. This offers several advantages:
-
-1. **DRY input data** — a single construction assignment at the building or space level avoids redundant repetition across every surface.
-2. **Easy global swaps** — changing a construction type (e.g., upgrading wall insulation) requires editing one object instead of hundreds.
-3. **Less error-prone** — assignment is based on a surface's semantic role (Exterior Wall, Interior Floor, Exterior Window, etc.) rather than requiring the user to manually track every surface.
-4. **OS ↔ E+ Alignment** — the E+ IDD and OpenStudio Model API share the same conceptual shape, reducing the translation surface and maintenance burden, and enabling OpenStudio to work directly on any IDF.
+This representation is not intended to replace explicit construction assignments or to be universally preferable. It trades some local explicitness for reduced repetition and centralized, scoped assignment. A surface with a blank field is not self contained. Users who prefer each surface assignment to remain directly visible can continue to use explicit `Construction Name` fields throughout the model.
 
 ## E-mail and Conference Call Conclusions ##
 
-N/A
+Pull request review identified improved schema alignment between OpenStudio and EnergyPlus and preservation of construction assignment intent during OpenStudio → EnergyPlus → OpenStudio round trips as project context that influenced the proposed object structure. A DOE request for improved schema alignment was also noted during review. These considerations are recorded here as context rather than presented as the native EnergyPlus justification for the feature; the justification above is the optional reduction of repeated construction assignments.
+
+Review also raised whether a single unique construction set at the Building scope would be simpler and more consistent with the word "default." The proposed use of multiple named sets and assignment at the Space scope is addressed in the scope rationale below. The handling of contextual defaults and inherited values should be carefully considered during implementation, particularly with respect to established input processing conventions and input processing order.
 
 ## Overview ##
 
@@ -45,6 +42,14 @@ Two existing objects are extended with an optional field:
 - **`Space`** — gains `Default Construction Set Name`.
 
 The `Construction Name` field on `BuildingSurface:Detailed`, `FenestrationSurface:Detailed`, and `InternalMass` is made optional. If blank, construction is resolved at input processing time by searching Space → Building; if still unresolved, a fatal error is issued.
+
+### Scope Rationale: Multiple Named Sets
+
+A single unique set at the Building scope would reduce repeated construction references for a model with one uniform assignment policy. It would not represent scoped specialization without returning to explicit assignments on every affected surface. For example, a building may use one broadly applicable set while basement spaces use different exterior wall and ground contact constructions but inherit all remaining categories from the Building.
+
+Multiple named `DefaultConstructionSet` objects allow a set to be reused by multiple Spaces and allow a Space to reference a partially populated set. Lookup is performed for the requested construction category. If the set at the Space scope does not supply that category, lookup continues to the set at the Building scope. The sets therefore do not act as competing global defaults. Each participates at an explicitly referenced scope with a defined priority.
+
+This proposal intentionally limits the available scopes to Building and Space. It does not introduce additional inheritance scopes such as SpaceType or BuildingStory. Surfaces that require distinctions not represented by the selected categories or scopes, such as assignments based on orientation, may continue to use an explicit `Construction Name`.
 
 ## Approach ##
 
@@ -286,7 +291,9 @@ The `Construction Name` field on `BuildingSurface:Detailed`, `FenestrationSurfac
 
 ## Outputs Description ##
 
-No new output variables are added.
+No new time series output variables are added.
+
+The existing Envelope Summary already reports the resolved Construction for each reported surface. To make inherited assignments auditable, it will be augmented with a Construction Assignment Source column whose values distinguish Explicit, Space, and Building assignments. No new report is introduced.
 
 ## Engineering Reference ##
 
