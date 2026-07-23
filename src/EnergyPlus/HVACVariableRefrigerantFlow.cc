@@ -11295,11 +11295,10 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
 
             if (!converged_10) {
                 ShowWarningMessage(state, std::format("{} \"{}\":", cVRFTypes(VRF_HeatPump), this->Name));
-                ShowContinueError(
-                    state,
-                    std::format("...{}: Iteration limit exceeded calculating cooling mode compressor power, maximum iterations = {}",
-                                       RoutineName,
-                                       Counter - 1));
+                ShowContinueError(state,
+                                  std::format("...{}: Iteration limit exceeded calculating cooling mode compressor power, maximum iterations = {}",
+                                              RoutineName,
+                                              Counter - 1));
             }
 
             // Update h_IU_evap_in in iterations Label12
@@ -11521,11 +11520,10 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
 
             if (!converged_20) {
                 ShowWarningMessage(state, std::format("{} \"{}\":", cVRFTypes(VRF_HeatPump), this->Name));
-                ShowContinueError(
-                    state,
-                    std::format("...{}: Iteration limit exceeded calculating heating mode compressor power, maximum iterations = {}",
-                                       RoutineName,
-                                       Counter - 1));
+                ShowContinueError(state,
+                                  std::format("...{}: Iteration limit exceeded calculating heating mode compressor power, maximum iterations = {}",
+                                              RoutineName,
+                                              Counter - 1));
             }
 
             // Update h_comp_out in iteration Label23
