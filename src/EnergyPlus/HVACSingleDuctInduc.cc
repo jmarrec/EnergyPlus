@@ -1243,7 +1243,8 @@ namespace HVACSingleDuctInduc {
         auto &adu = state.dataDefineEquipment->AirDistUnit(this->ADUNum);
         if (!state.dataSize->TermUnitFinalZoneSizing.empty()) {
             auto &sizing = state.dataSize->TermUnitFinalZoneSizing(adu.TermUnitSizingNum);
-            Real64 minZoneFlow = this->MaxSecAirMassFlow;
+            Real64 maxVolFlow = this->MaxTotAirVolFlow;
+            Real64 minZoneFlow = std::fmin((this->InducRatio * maxVolFlow / (1.0 + this->InducRatio)), (maxVolFlow / (1.0 + this->InducRatio)));
             OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMinFlow, adu.Name, minZoneFlow, 4);
             OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMinOutdoorFlow, adu.Name, sizing.MinOA, 4);
             OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermSupCoolingSP, adu.Name, sizing.CoolDesTemp);
