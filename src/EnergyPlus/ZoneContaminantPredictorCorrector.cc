@@ -1429,13 +1429,21 @@ void InitZoneContSetPoints(EnergyPlusData &state)
     for (int Loop = 1; Loop <= (int)state.dataContaminantBalance->ContaminantControlledZone.size(); ++Loop) {
         if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
             int ZoneNum = state.dataContaminantBalance->ContaminantControlledZone(Loop).ActualZoneNum;
-            state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) =
-                state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched->getCurrentVal();
+            if (state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched == nullptr) {
+                state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) = 0.0;
+            } else {
+                state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) =
+                    state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched->getCurrentVal();
+            }
         }
         if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
             int ZoneNum = state.dataContaminantBalance->ContaminantControlledZone(Loop).ActualZoneNum;
-            state.dataContaminantBalance->ZoneGCSetPoint(ZoneNum) =
-                state.dataContaminantBalance->ContaminantControlledZone(Loop).genericContamSetptSched->getCurrentVal();
+            if (state.dataContaminantBalance->ContaminantControlledZone(Loop).genericContamSetptSched == nullptr) {
+                state.dataContaminantBalance->ZoneGCSetPoint(ZoneNum) = 0.0;
+            } else {
+                state.dataContaminantBalance->ZoneGCSetPoint(ZoneNum) =
+                    state.dataContaminantBalance->ContaminantControlledZone(Loop).genericContamSetptSched->getCurrentVal();
+            }
         }
     }
 
