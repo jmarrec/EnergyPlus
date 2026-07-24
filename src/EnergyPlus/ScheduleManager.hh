@@ -264,12 +264,12 @@ namespace Sched {
 
         WeekRuleSchedule() = default;
         virtual ~WeekRuleSchedule() = default;
-        void can_instantiate()
+        void can_instantiate() override
         {
             assert(false);
         } // makes class concrete, but don't call this
 
-        void setMinMaxVals(EnergyPlusData &state);
+        void setMinMaxVals(EnergyPlusData &state) override;
     };
 
     struct Schedule : public DayOrYearSchedule
