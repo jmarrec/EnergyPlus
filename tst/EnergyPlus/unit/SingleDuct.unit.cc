@@ -2542,6 +2542,34 @@ TEST_F(EnergyPlusFixture, SingleDuct_VAVWaterCoilSizing)
     EXPECT_EQ(ZoneDesTemp, 17.0);
     EXPECT_EQ(ZoneDesHumRat, 0.008);
     EXPECT_NEAR(DesCoilLoad, 120.5, 0.1);
+
+    // Check TU sizing
+    auto &tu1 = state->dataSingleDuct->sd_airterminal(1);
+    Real64 minOA = state->dataSize->TermUnitFinalZoneSizing(1).MinOA;
+    Real64 maxAirFlow = tu1.MaxAirVolFlowRate;
+    EXPECT_NEAR(minOA, 0.05, 0.001);
+    EXPECT_NEAR(maxAirFlow, 0.327, 0.001);
+
+    // reset to autosize for next test
+    tu1.MaxAirVolFlowRate = DataSizing::AutoSize;
+    tu1.MaxHeatAirVolFlowRate = DataSizing::AutoSize;
+    tu1.ZoneMinAirFracDes = DataSizing::AutoSize;
+    tu1.ZoneFixedMinAir = DataSizing::AutoSize;
+    // expect a TU connected to a 100% OA system to size to the OA flow rate, not the zone design flow rate
+    state->dataSize->SysSizInput(1).loadSizingType = LoadSizing::Ventilation;
+    state->dataSize->SysSizInput(1).CoolOAOption = OAControl::AllOA;
+    state->dataSize->SysSizInput(1).HeatOAOption = OAControl::AllOA;
+    EXPECT_FALSE(state->dataAirSystemsData->PrimaryAirSystems(1).isAllOA);
+    state->dataSize->CurTermUnitSizingNum = 1;
+    state->files.eio.ensure_open(*state, "OpenOutputFiles", state->files.outputControl.eio);
+    tu1.SizeSys(*state);
+    EXPECT_NEAR(tu1.MaxAirVolFlowRate, 0.05, 0.001);
+    EXPECT_NEAR(tu1.MaxHeatAirVolFlowRate, 0.05, 0.001);
+    EXPECT_NEAR(tu1.ZoneMinAirFracDes, 1.0, 0.001);
+    EXPECT_EQ(tu1.ZoneMinAirFracMethod, SingleDuct::MinFlowFraction::Constant);
+    EXPECT_NEAR(tu1.ZoneFixedMinAir, 0.0, 0.001);
+    // minimum flow is actually MaxAirVolFlowRate * ZoneMinAirFracDes * ZoneTurndownMinAirFrac
+    EXPECT_NEAR(tu1.MaxAirVolFlowRate * tu1.ZoneMinAirFracDes * tu1.ZoneTurndownMinAirFrac, 0.05, 0.001);
 }
 
 TEST_F(EnergyPlusFixture, TerminalUnitMixerInitTest)
