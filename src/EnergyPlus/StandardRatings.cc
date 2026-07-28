@@ -4315,8 +4315,7 @@ namespace StandardRatings {
         Real64 TotCoolElecPowerBinned_2023(0.0); // Total cooling electric power corresponding to an outdoor bin temperature [W]
 
         Real64 constexpr SF(1.10); // Sizing Factor as per AHRI Std 210/240-2023 | equation 11.68
-        // Real64 constexpr V(1);     // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
-        Real64 constexpr V(0.93); // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
+        Real64 constexpr V(0.93);  // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
         // part-load factor based on user-input PLF curve and C_D value that accounts for the cyclic degradation, [-]
         // Real64 PartLoadFactorUser_2023(0.0);
 
@@ -4724,7 +4723,7 @@ namespace StandardRatings {
         Real64 EER2 = 0.0;
 
         Real64 constexpr SF(1.10); // Sizing Factor as per AHRI Std 210/240-2023 | equation 11.68
-        Real64 constexpr V(1);     // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
+        Real64 constexpr V(1.0);   // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
 
         Array1D<Real64> FanPowerPerEvapAirFlowRate_2023(nsp); // 2023 Fan power per air volume flow rate through the evaporator coil [W/(m3/s)]
         Array1D<Real64> Q_A_Full(nsp);                        // Total cooling capacity at A2 test condition (High speed) | q_A_Full
@@ -5090,8 +5089,7 @@ namespace StandardRatings {
         Real64 CoolingElecPowerMax_2023(0.0);         // outdoor unit electric power input at Max speed, [W]
 
         Real64 constexpr SF(1.10); // Sizing Factor as per AHRI Std 210/240-2023 | equation 11.68
-        // Real64 constexpr V(1);     // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
-        Real64 constexpr V(1.0); // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
+        Real64 constexpr V(1.0);   // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
 
         Real64 NetCoolingCapRatedMaxSpeed2023 = 0.0;
         Real64 SEER2_User = 0.0;
