@@ -9103,6 +9103,19 @@ Curve:Biquadratic,
     EXPECT_NEAR(DeliveredSensibleCapacity, 1010.6, 0.001);                                                         // actual delivered capacity
     EXPECT_NEAR(state->dataHeatingCoils->HeatingCoil(thisSys->m_SuppHeatCoilIndex).HeatingCoilRate, 18268.1, 0.1); // actual reheat load to meet SP
     EXPECT_NEAR(thisSys->m_MoistureLoadPredicted, -1467.1, 0.1); // dehumidification control type = CoolReheat so MoistureLoad < 0
+
+    // check UnitarySystem report variables
+    EXPECT_EQ(1, thisSys->m_CoolingSpeedNum);
+    EXPECT_NEAR(0.0000, thisSys->m_HeatingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(1.0000, thisSys->m_PartLoadFrac, 0.0001);
+    EXPECT_NEAR(1.0000, thisSys->m_CoolingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.9432, thisSys->FanPartLoadRatio, 0.0001);
+    EXPECT_NEAR(1.0000, thisSys->m_CompPartLoadRatio, 0.0001);
+    EXPECT_NEAR(1.0000, thisSys->m_CoolingCycRatio, 0.0001);
+    // report variables not reported for this coil type
+    EXPECT_NEAR(0.0, thisSys->m_CycRatio, 0.0001);
+    EXPECT_NEAR(0.0, thisSys->m_SpeedRatio, 0.0001);
+    EXPECT_NEAR(1.0, state->dataDXCoils->DXCoil(1).PartLoadRatio, 0.0001);
 }
 
 TEST_F(EnergyPlusFixture, UnitarySystemModel_VSDXCoilSizing)
@@ -10498,6 +10511,21 @@ Curve:Biquadratic,
     EXPECT_DOUBLE_EQ(state->dataLoopNodes->Node(InletNode).MassFlowRate,
                      thisSys->m_CoolMassFlowRate[thisSys->m_CoolingSpeedNum] * thisSys->m_PartLoadFrac); // cycling fan
     EXPECT_DOUBLE_EQ(state->dataLoopNodes->Node(InletNode).MassFlowRate, state->dataLoopNodes->Node(OutletNode).MassFlowRate);
+
+    // check UnitarySystem report variables
+    EXPECT_EQ(1, thisSys->m_CoolingSpeedNum);
+    EXPECT_NEAR(0.0000, thisSys->m_HeatingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.3391, thisSys->m_PartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.3391, thisSys->m_CoolingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.3391, thisSys->FanPartLoadRatio, 0.0001);
+    EXPECT_NEAR(0.3391, thisSys->m_CompPartLoadRatio, 0.0001);
+    EXPECT_NEAR(0.3391, thisSys->m_CoolingCycRatio, 0.0001);
+    // report variables reported at the coil level
+    EXPECT_NEAR(0.0, thisSys->m_CycRatio, 0.0001);
+    EXPECT_NEAR(0.0, thisSys->m_SpeedRatio, 0.0001);
+    EXPECT_NEAR(0.3391, state->dataVariableSpeedCoils->VarSpeedCoil(1).PartLoadRatio, 0.0001); // reports 0 to 1 for speed = 1
+    EXPECT_NEAR(1.0, state->dataVariableSpeedCoils->VarSpeedCoil(1).SpeedNumReport, 0.0001);
+    EXPECT_NEAR(0.0, state->dataVariableSpeedCoils->VarSpeedCoil(1).SpeedRatioReport, 0.0001); // is 0 unless speed > 1
 
     // compare fan RTF with fan PLR and global PLF
     FanPLR = state->dataLoopNodes->Node(InletNode).MassFlowRate / state->dataFans->fans(1)->maxAirMassFlowRate;
@@ -15003,6 +15031,21 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedCoils_SingleMode)
     EXPECT_NEAR(1.02, state->dataCurveManager->curves(22)->inputs[0],
                 0.0001);                                                     // Speed 1 Total EIR Function of Flow Fraction Curve input value
     EXPECT_NEAR(0.4896, state->dataHVACGlobal->MSHPMassFlowRateLow, 0.0001); // cycling ratio
+
+    // check UnitarySystem report variables
+    EXPECT_EQ(1, thisSys->m_CoolingSpeedNum);
+    EXPECT_EQ(0, thisSys->m_HeatingSpeedNum);
+    EXPECT_NEAR(0.0000, thisSys->m_HeatingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.5289, thisSys->m_PartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.5289, thisSys->m_CoolingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.5289, thisSys->FanPartLoadRatio, 0.0001);
+    EXPECT_NEAR(0.5289, thisSys->m_CompPartLoadRatio, 0.0001);
+    EXPECT_NEAR(0.5289, thisSys->m_CoolingCycRatio, 0.0001);
+    EXPECT_NEAR(0.5289, thisSys->m_CycRatio, 0.0001);
+    EXPECT_NEAR(0.0, thisSys->m_SpeedRatio, 0.0001);
+    EXPECT_NEAR(0.5289, state->dataDXCoils->DXCoil(1).PartLoadRatio, 0.0001); // cooling coil
+    EXPECT_NEAR(0.0000, state->dataDXCoils->DXCoil(2).PartLoadRatio, 0.0001); // heating coil
+
     // #8580
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(ControlZoneNum).RemainingOutputRequired = 1000.0; // heating load
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(ControlZoneNum).OutputRequiredToCoolingSP = 2000.0;
@@ -15045,6 +15088,21 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedCoils_SingleMode)
     EXPECT_NEAR(1.03138, state->dataCurveManager->curves(23)->output,
                 0.0001);                                                     // Speed 1 Total EIR Function of Flow Fraction Curve input value
     EXPECT_NEAR(0.4896, state->dataHVACGlobal->MSHPMassFlowRateLow, 0.0001); // cycling ratio
+
+    // check UnitarySystem report variables
+    EXPECT_EQ(0, thisSys->m_CoolingSpeedNum);
+    EXPECT_EQ(1, thisSys->m_HeatingSpeedNum);
+    EXPECT_NEAR(0.1536, thisSys->m_HeatingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.1536, thisSys->m_PartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.0000, thisSys->m_CoolingPartLoadFrac, 0.0001);
+    EXPECT_NEAR(0.1536, thisSys->FanPartLoadRatio, 0.0001);
+    EXPECT_NEAR(0.1536, thisSys->m_CompPartLoadRatio, 0.0001);
+    EXPECT_NEAR(0.0000, thisSys->m_CoolingCycRatio, 0.0001);
+    EXPECT_NEAR(0.1536, thisSys->m_HeatingCycRatio, 0.0001);
+    EXPECT_NEAR(0.1536, thisSys->m_CycRatio, 0.0001);
+    EXPECT_NEAR(0.0, thisSys->m_SpeedRatio, 0.0001);
+    EXPECT_NEAR(0.0000, state->dataDXCoils->DXCoil(1).PartLoadRatio, 0.0001); // cooling coil
+    EXPECT_NEAR(0.1597, state->dataDXCoils->DXCoil(2).PartLoadRatio, 0.0001); // heating coil
 }
 
 TEST_F(EnergyPlusFixture, UnitarySystemModel_MultispeedDXCoilHeatRecoveryHandling)
