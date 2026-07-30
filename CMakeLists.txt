@@ -164,7 +164,7 @@ if(APPLE AND BUILD_PACKAGE)
   # Otherwise, the register_install_codesign_target isn't added until you reconfigure cmake...
   include(cmake/CodeSigning.cmake)
 
-  # Defines CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION and CPACK_CODESIGNING_NOTARY_PROFILE_NAME
+  # Defines CPACK_CODESIGNING_DEVELOPER_ID_APPLICATION and CPACK_CODESIGNING_NOTARY_PROFILE_NAME
   setup_macos_codesigning_variables()
 endif()
 

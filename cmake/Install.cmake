@@ -643,7 +643,7 @@ if(WIN32 AND NOT UNIX)
   endif()
 endif()
 
-if(APPLE AND CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION)
+if(APPLE AND CPACK_CODESIGNING_DEVELOPER_ID_APPLICATION)
 
   set(FILES_TO_SIGN
     # Targets are signed already via register_install_codesign_target
@@ -663,7 +663,7 @@ if(APPLE AND CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION)
 
   # Codesign inner binaries and libraries, in the CPack staging area for the EnergyPlus project, component Unspecified
   # Define some required variables for the script in the scope of the install(SCRIPT) first
-  install(CODE "set(CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION \"${CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION}\")" COMPONENT Unspecified)
+  install(CODE "set(CPACK_CODESIGNING_DEVELOPER_ID_APPLICATION \"${CPACK_CODESIGNING_DEVELOPER_ID_APPLICATION}\")" COMPONENT Unspecified)
   install(CODE "set(CPACK_CODESIGNING_MACOS_IDENTIFIER \"${CPACK_CODESIGNING_MACOS_IDENTIFIER}\")" COMPONENT Unspecified)
   install(CODE "set(FILES_TO_SIGN \"${FILES_TO_SIGN}\")" COMPONENT Unspecified)
   # call the script
