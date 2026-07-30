@@ -138,17 +138,6 @@ if(NOT DOCUMENTATION_BUILD IN_LIST DocumentationBuildValues)
   message(FATAL_ERROR "DOCUMENTATION_BUILD must be one of ${DocumentationBuildValues}")
 endif()
 
-# Local only variables for ease of use in if blocks
-set(BUILD_DOCS OFF)
-set(BUILD_DOCS_ONLY_WITH_PACKAGE OFF)
-
-if(DOCUMENTATION_BUILD STREQUAL "BuildWithAll")
-  set(BUILD_DOCS ON)
-  set(BUILD_DOCS_ONLY_WITH_PACKAGE OFF)
-elseif(DOCUMENTATION_BUILD STREQUAL "BuildOnlyWithPackage")
-  set(BUILD_DOCS ON)
-  set(BUILD_DOCS_ONLY_WITH_PACKAGE ON)
-endif()
 #######################################################################
 
 option(LINK_WITH_PYTHON "Link with Python Library for Python Plugin Builds" OFF)
@@ -398,7 +387,7 @@ if(BUILD_PACKAGE)
   include(${PROJECT_SOURCE_DIR}/cmake/Install.cmake)
 endif()
 
-if(BUILD_DOCS)
+if(NOT DOCUMENTATION_BUILD STREQUAL "DoNotBuild")
   set(DOCS_TESTING
       ${BUILD_TESTING}
       CACHE INTERNAL "" FORCE)

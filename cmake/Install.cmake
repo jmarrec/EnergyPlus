@@ -551,15 +551,15 @@ endif()
 
 ##########################################################   D O C U M E N T A T I O N   #############################################################
 
-if(BUILD_DOCS)
+if(NOT DOCUMENTATION_BUILD STREQUAL "DoNotBuild")
 
   # If this isn't the case, then docs were already generated since added to the default make rule
-  if(BUILD_DOCS_ONLY_WITH_PACKAGE)
+  if(DOCUMENTATION_BUILD STREQUAL "BuildOnlyWithPackage")
 
     # Call the build of target docs explicitly here.
     # Note: This is because you can't do `add_dependencies(package docs)` (https://gitlab.kitware.com/cmake/cmake/issues/8438)
     # Adding another custom target to be added to the "ALL" one (so it runs) and make it depend on the actual "documentation" target doesn't work
-    # because it'll always run if you have enabled BUILD_DOCS, regardless of whether you are calling the target "package" or not
+    # because it'll always run if documentation is enabled, regardless of whether you are calling the target "package" or not
     #  add_custom_target(run_documentation ALL)
     #  add_dependencies(run_documentation documentation)
     #message(FATAL_ERROR "CMAKE_COMMAND=${CMAKE_COMMAND}")
@@ -612,7 +612,7 @@ if(BUILD_DOCS)
     install(FILES "${PROJECT_SOURCE_DIR}/doc/urls/EnergyPlusEssentials.url" DESTINATION "./Documentation" COMPONENT Documentation)
   endif()
 else()
-  message(AUTHOR_WARNING "BUILD_DOCS isn't enabled, so package won't include the PDFs")
+  message(AUTHOR_WARNING "DOCUMENTATION_BUILD is DoNotBuild, so package won't include the PDFs")
 endif()
 
 ##########################################################   S Y S T E M    L I B R A R I E S   ######################################################
