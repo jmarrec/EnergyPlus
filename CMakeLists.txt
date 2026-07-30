@@ -126,27 +126,6 @@ mark_as_advanced(BUILD_OBJEXXFCL_TESTING)
 
 #######################################################################
 
-# TODO: remove at next release
-# Temporary workaround to default the correct DOCUMENTATION_BUILD value if BUILD_DOCS existed in the cache or is passed via the command line
-# This warning will be triggered only once if it's from the Cache since I'm unsetting it
-# (such as when using the GUI or running `cmake .` instead of passing all command line arguments)
-if(DEFINED BUILD_DOCS)
-  if(NOT DEFINED DOCUMENTATION_BUILD)
-    if(BUILD_DOCS)
-      message(AUTHOR_WARNING "BUILD_DOCS (=ON) was deprecated in favor of the 'DOCUMENTATION_BUILD' choice, which was defaulted to 'BuildWithAll'")
-      set(DOCUMENTATION_BUILD
-          "BuildWithAll"
-          CACHE STRING "Build LaTeX-pdf documentation")
-    else()
-      message(AUTHOR_WARNING "BUILD_DOCS (=OFF) was deprecated in favor of the 'DOCUMENTATION_BUILD' choice, which was defaulted to 'DoNotBuild")
-    endif()
-  else()
-    message(AUTHOR_WARNING "DOCUMENTATION_BUILD is already defined and has value '${DOCUMENTATION_BUILD}', ignoring BUILD_DOCS")
-  endif()
-  unset(BUILD_DOCS CACHE)
-endif()
-# END TODO
-
 set(DocumentationBuildValues
     "DoNotBuild;BuildWithAll;BuildOnlyWithPackage"
     CACHE INTERNAL "List of possible values for the LaTeX-pdf documentation")
