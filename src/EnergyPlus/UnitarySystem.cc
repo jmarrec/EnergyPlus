@@ -538,13 +538,9 @@ namespace UnitarySystems {
                 this->m_MyFanFlag = false;
             } else {
                 if (this->m_FanExists) {
-                    // do not set false this->m_MyFanFlag so that next pass specific initialization and warning are executed
                     this->m_ActualFanVolFlowRate = state.dataFans->fans(this->m_FanIndex)->maxAirFlowRate;
-                } else if (this->m_AirLoopEquipment && AirLoopNum > 0) {
-                    this->m_ActualFanVolFlowRate = state.dataAirLoop->AirLoopFlow(AirLoopNum).DesSupply / state.dataEnvrn->StdRhoAir;
-                } else {
-                    this->m_MyFanFlag = false;
                 }
+                // do not set false this->m_MyFanFlag so that next pass specific initialization and warning are executed
             }
         }
 
@@ -2254,7 +2250,7 @@ namespace UnitarySystems {
             }
             if (this->m_DesignFanVolFlowRate <= 0.0) {
                 ShowWarningError(state, std::format("{}: {} = {}", RoutineName, CompType, CompName));
-                ShowFatalError(state, "Unable to determine fan air flow rate.");
+                ShowContinueError(state, "Unable to determine fan or system air flow rate.");
             }
         }
         if (!this->m_FanExists) {
@@ -15888,11 +15884,12 @@ namespace UnitarySystems {
 
         // set the system part-load ratio report variable
         if (this->m_CoolingPartLoadFrac > 0.0) {
-            this->m_PartLoadFrac = (this->m_CoolingSpeedNum > 1) ? 1.0 : this->m_CoolingPartLoadFrac;
-            this->m_CompPartLoadRatio = (this->m_CoolingSpeedNum > 1) ? 1.0 : this->m_CoolCompPartLoadRatio;
+            // SingleMode means pick a speed and cycle the coil at that speed
+            this->m_PartLoadFrac = (this->m_CoolingSpeedNum > 1 && !this->m_SingleMode) ? 1.0 : this->m_CoolingPartLoadFrac;
+            this->m_CompPartLoadRatio = (this->m_CoolingSpeedNum > 1 && !this->m_SingleMode) ? 1.0 : this->m_CoolCompPartLoadRatio;
         } else if (this->m_HeatingPartLoadFrac > 0.0) {
-            this->m_PartLoadFrac = (this->m_HeatingSpeedNum > 1) ? 1.0 : this->m_HeatingPartLoadFrac;
-            this->m_CompPartLoadRatio = (this->m_HeatingSpeedNum > 1) ? 1.0 : this->m_HeatCompPartLoadRatio;
+            this->m_PartLoadFrac = (this->m_HeatingSpeedNum > 1 && !this->m_SingleMode) ? 1.0 : this->m_HeatingPartLoadFrac;
+            this->m_CompPartLoadRatio = (this->m_HeatingSpeedNum > 1 && !this->m_SingleMode) ? 1.0 : this->m_HeatCompPartLoadRatio;
         } else {
             this->m_PartLoadFrac = 0.0;
             this->m_CompPartLoadRatio = max(this->m_CoolCompPartLoadRatio, this->m_HeatCompPartLoadRatio);
@@ -16190,7 +16187,7 @@ namespace UnitarySystems {
         }
 
         if (this->m_FanExists && this->AirOutNode > 0) {
-            if (this->m_ControlType == UnitarySysCtrlType::Setpoint) {
+            if (this->m_ControlType == UnitarySysCtrlType::Setpoint && !this->m_SingleMode) {
                 if (this->m_DesignMassFlowRate > 0.0) {
                     if (this->m_SpeedNum > 1 || (this->m_FanOpMode == HVAC::FanOp::Continuous)) {
                         this->FanPartLoadRatio = 1.0;
@@ -16208,7 +16205,8 @@ namespace UnitarySystems {
                 }
             } else {
                 if (state.dataUnitarySystems->CompOnMassFlow > 0.0) {
-                    this->FanPartLoadRatio = (this->m_SpeedNum > 1) ? 1.0 : AirMassFlow / state.dataUnitarySystems->CompOnMassFlow;
+                    this->FanPartLoadRatio =
+                        (this->m_SpeedNum > 1 && !this->m_SingleMode) ? 1.0 : AirMassFlow / state.dataUnitarySystems->CompOnMassFlow;
                 }
             }
 
