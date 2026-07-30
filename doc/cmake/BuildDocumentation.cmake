@@ -1,5 +1,5 @@
 # Caller needs to set:
-  # XELATEX, the path to the xelatex compiler
+  # XELATEX_COMPILER, the path to the xelatex compiler
   # INNAME, the name of the input tex file
   # OUTNAME, the pretty output name for the pdf
   # ORIGINAL_CMAKE_SOURCE_DIR, the root of the source repo
@@ -29,7 +29,7 @@ if(DOCS_TESTING)
     message("XELATEX_MEM_FLAGS=${XELATEX_MEM_FLAGS}")
   endif()
 
-  get_filename_component(XELATEX_BIN_DIR ${XELATEX} DIRECTORY)
+  get_filename_component(XELATEX_BIN_DIR ${XELATEX_COMPILER} DIRECTORY)
   find_program(PDFTOTEXT NAME pdftotext HINTS ${XELATEX_BIN_DIR})
   if(NOT PDFTOTEXT)
     message(AUTHOR_WARNING "pdftotext should be in your path to test whether the Table of Contents worked. On Windows it should be installed via miktex already, on ubuntu it's apt install poppler-utils, on mac brew install poppler")
@@ -87,7 +87,7 @@ if(DOCS_TESTING)
 endif()
 
 execute_process(
-  COMMAND "${XELATEX}" --interaction=${THIS_TEX_INTERACTION} ${XELATEX_MEM_FLAGS} ${INNAME}.tex
+  COMMAND "${XELATEX_COMPILER}" --interaction=${THIS_TEX_INTERACTION} ${XELATEX_MEM_FLAGS} ${INNAME}.tex
   TIMEOUT 600
   RESULT_VARIABLE ERRCODE
   COMMAND_ECHO ${COMMAND_ECHO_MODE}
@@ -102,7 +102,7 @@ if(DOCS_TESTING)
 endif()
 
 execute_process(
-  COMMAND "${XELATEX}" --interaction=${THIS_TEX_INTERACTION} ${XELATEX_MEM_FLAGS} ${INNAME}.tex
+  COMMAND "${XELATEX_COMPILER}" --interaction=${THIS_TEX_INTERACTION} ${XELATEX_MEM_FLAGS} ${INNAME}.tex
   TIMEOUT 600
   RESULT_VARIABLE ERRCODE
   COMMAND_ECHO ${COMMAND_ECHO_MODE}
@@ -117,7 +117,7 @@ if(DOCS_TESTING)
 endif()
 
 execute_process(
-  COMMAND "${XELATEX}" --interaction=${THIS_TEX_INTERACTION} ${XELATEX_MEM_FLAGS} ${INNAME}.tex
+  COMMAND "${XELATEX_COMPILER}" --interaction=${THIS_TEX_INTERACTION} ${XELATEX_MEM_FLAGS} ${INNAME}.tex
   TIMEOUT 600
   RESULT_VARIABLE ERRCODE
   COMMAND_ECHO ${COMMAND_ECHO_MODE}
