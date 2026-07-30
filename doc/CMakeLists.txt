@@ -27,8 +27,7 @@ if(EXISTS "${XELATEX_COMPILER}")
   file(COPY ${PROJECT_SOURCE_DIR}/index.html DESTINATION ${PROJECT_BINARY_DIR}/pdf)
 
   include("${PROJECT_SOURCE_DIR}/../cmake/Version.cmake")
-  # add a configure rule to the header file though
-  configure_file(${PROJECT_SOURCE_DIR}/title.tex.in ${PROJECT_SOURCE_DIR}/title.tex)
+  configure_file("${PROJECT_SOURCE_DIR}/title.tex.in" "${PROJECT_BINARY_DIR}/title.tex")
 
   # Add custom target to build only documentation, this target will depend on all individual PDFs
   if(hasParent AND DOCUMENTATION_BUILD STREQUAL "BuildOnlyWithPackage")
