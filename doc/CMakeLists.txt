@@ -9,7 +9,10 @@ if(NOT EXISTS ${Python_EXECUTABLE})
   find_package(Python 3.6 COMPONENTS Interpreter REQUIRED)
 endif()
 
-option(DOCS_TESTING "Test the docs for issues" OFF)
+get_directory_property(hasParent PARENT_DIRECTORY)
+if(NOT hasParent)
+  option(DOCS_TESTING "Test the docs for issues" OFF)
+endif()
 
 # this _should_ find the xelatex compiler, but for some reason it isn't populating for me
 find_package(LATEX)
@@ -35,7 +38,6 @@ if(EXISTS ${XELATEX})
   configure_file(${PROJECT_SOURCE_DIR}/title.tex.in ${PROJECT_SOURCE_DIR}/title.tex)
 
   # Add custom target to build only documentation, this target will depend on all individual PDFs
-  get_directory_property(hasParent PARENT_DIRECTORY)
   if(hasParent AND DOCUMENTATION_BUILD STREQUAL "BuildOnlyWithPackage")
     # Because we don't want to rebuild doc automatically, we do not add it to the 'ALL' rule
     message(STATUS "The target `docs` was added, but not to the default build rule. It will be triggered by `make docs` or `make package`")

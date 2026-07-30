@@ -126,9 +126,7 @@ mark_as_advanced(BUILD_OBJEXXFCL_TESTING)
 
 #######################################################################
 
-set(DocumentationBuildValues
-    "DoNotBuild;BuildWithAll;BuildOnlyWithPackage"
-    CACHE INTERNAL "List of possible values for the LaTeX-pdf documentation")
+set(DocumentationBuildValues "DoNotBuild;BuildWithAll;BuildOnlyWithPackage")
 set(DOCUMENTATION_BUILD
     "DoNotBuild"
     CACHE STRING "Build LaTeX-pdf documentation")
@@ -388,9 +386,7 @@ if(BUILD_PACKAGE)
 endif()
 
 if(NOT DOCUMENTATION_BUILD STREQUAL "DoNotBuild")
-  set(DOCS_TESTING
-      ${BUILD_TESTING}
-      CACHE INTERNAL "" FORCE)
+  set(DOCS_TESTING ${BUILD_TESTING})
   add_subdirectory(doc)
 endif()
 
