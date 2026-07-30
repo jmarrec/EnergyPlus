@@ -591,7 +591,8 @@ if(NOT DOCUMENTATION_BUILD STREQUAL "DoNotBuild")
     endif()
 
     # Getting these commands to work (especially with macro expansion) is tricky. Check the resulting `cmake_install.cmake` file in your build folder if need to debug this
-    install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" --build \"${PROJECT_BINARY_DIR}\" ${DOC_CONFIG_FLAG} ${DOC_BUILD_FLAGS} --target docs)"
+    install(CODE
+            "execute_process(COMMAND \"${CMAKE_COMMAND}\" --build \"${PROJECT_BINARY_DIR}\" ${DOC_CONFIG_FLAG} ${DOC_BUILD_FLAGS} --target docs COMMAND_ERROR_IS_FATAL ANY)"
             COMPONENT Documentation)
   endif()
 
