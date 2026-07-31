@@ -73,6 +73,7 @@
 #include <EnergyPlus/HeatBalanceSurfaceManager.hh>
 #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
+#include <EnergyPlus/InternalHeatGains.hh>
 #include <EnergyPlus/Material.hh>
 #include <EnergyPlus/OutAirNodeManager.hh>
 #include <EnergyPlus/ScheduleManager.hh>
@@ -2987,5 +2988,759 @@ TEST_F(EnergyPlusFixture, WindowPropertyFrameAndDivider_DividerChecks)
         "   **   ~~~   ** ...but Number of Horizontal Dividers > 0 or Number of Vertical Dividers > 0.",
         "   **   ~~~   ** ...Number of Horizontal Dividers and Number of Vertical Dividers set to 0.",
     })));
+}
+
+TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
+{
+    // Testing of Input for Implementation of ZoneMRTCalculation feature (#11392)
+    std::string const idf_objects = delimited_string({
+        "  GlobalGeometryRules,",
+        "    UpperLeftCorner,  !- Starting Vertex Position",
+        "    CounterClockWise, !- Vertex Entry Direction",
+        "    Relative;         !- Coordinate System",
+
+        "  Material,",
+        "    Mithril,          !- Name",
+        "    Rough,            !- Roughness",
+        "    0.0254,           !- Thickness {m}",
+        "    1.0,              !- Conductivity {W/m-K}",
+        "    500.0000,         !- Density {kg/m3}",
+        "    1000.000,         !- Specific Heat {J/kg-K}",
+        "    0.9000000,        !- Thermal Absorptance",
+        "    0.6500000,        !- Solar Absorptance",
+        "    0.6500000;        !- Visible Absorptance",
+
+        "  Construction,",
+        "    MiddleEarth,      !- Name",
+        "    Mithril;          !- Outside Layer",
+
+        "  Zone,",
+        "    Shire,            !- Name",
+        "    0,                !- Direction of Relative North {deg}",
+        "    0,                !- X Origin {m}",
+        "    0,                !- Y Origin {m}",
+        "    0,                !- Z Origin {m}",
+        "    1,                !- Type",
+        "    1,                !- Multiplier",
+        "    2.5,              !- Ceiling Height {m}",
+        "    100.0;            !- Volume {m3}",
+
+        "  Zone,",
+        "    Rivendell,        !- Name",
+        "    0,                !- Direction of Relative North {deg}",
+        "    0,                !- X Origin {m}",
+        "    0,                !- Y Origin {m}",
+        "    0,                !- Z Origin {m}",
+        "    1,                !- Type",
+        "    2,                !- Multiplier",
+        "    3.0,              !- Ceiling Height {m}",
+        "    150.0;            !- Volume {m3}",
+
+        "  Zone,",
+        "    Gondor,           !- Name",
+        "    0,                !- Direction of Relative North {deg}",
+        "    0,                !- X Origin {m}",
+        "    0,                !- Y Origin {m}",
+        "    0,                !- Z Origin {m}",
+        "    1,                !- Type",
+        "    1,                !- Multiplier",
+        "    4.0,              !- Ceiling Height {m}",
+        "    200.0;            !- Volume {m3}",
+
+        "  People,",
+        "    Baggins,          !- Name",
+        "    Shire,            !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    10,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    EnclosureAveraged; !- Mean Radiant Temperature Calculation Type",
+
+        "  People,",
+        "    Took,             !- Name",
+        "    Shire,            !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    12,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
+        "    ShireWall1;       !- Surface for Weighting",
+
+        "  People,",
+        "    Elves,            !- Name",
+        "    Rivendell,        !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    24,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
+        "    RivendellWall1;   !- Surface for Weighting",
+
+        "  People,",
+        "    Stewards,         !- Name",
+        "    Gondor,           !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    3,                !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    EnclosureAveraged; !- Mean Radiant Temperature Calculation Type",
+
+        "  People,",
+        "    Guards,           !- Name",
+        "    Gondor,           !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    24,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
+        "    GondorWall1;      !- Surface for Weighting",
+
+        "  People,",
+        "    MyPeople,         !- Name",
+        "    Gondor,           !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    24,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    AngleFactor,      !- Mean Radiant Temperature Calculation Type",
+        "    ViewFactors;      !- Surface for Weighting",
+
+        "  ComfortViewFactorAngles,",
+        "    ViewFactors, !- name of angle factor list",
+        "    GondorWall2, !- Surface name 1",
+        "    0.50,        !- Angle factor for surface 1",
+        "    GondorWall3, !- Surface name 2",
+        "    0.50;        !- Angle factor for surface 2",
+
+        "  Schedule:Compact,",
+        "    OccSchedule,      !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,1.0; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    ActivitySchedule, !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,70.; !- Field 3",
+
+        "  BuildingSurface:Detailed,",
+        "    ShireWall1,              !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Shire,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.0,0.0,0.0,             !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.0,0.0,5.0,             !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.0,0.0,5.0,            !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.0,0.0,0.0;            !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    RivendellWall1,          !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Rivendell,               !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.0,0.0,5.0,             !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.0,0.0,10.0,            !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.0,0.0,10.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.0,0.0,5.0;            !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    GondorWall1,             !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Gondor,                  !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.0,0.0,10.0,            !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.0,0.0,15.0,            !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.0,0.0,15.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.0,0.0,10.0;           !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    GondorWall2,             !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Gondor,                  !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    10.0,0.0,10.0,           !- X,Y,Z ==> Vertex 1 {m}",
+        "    10.0,0.0,15.0,           !- X,Y,Z ==> Vertex 2 {m}",
+        "    20.0,0.0,15.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    20.0,0.0,10.0;           !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    GondorWall3,             !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Gondor,                  !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    20.0,0.0,10.0,           !- X,Y,Z ==> Vertex 1 {m}",
+        "    20.0,0.0,15.0,           !- X,Y,Z ==> Vertex 2 {m}",
+        "    30.0,0.0,15.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    30.0,0.0,10.0;           !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  ZoneMRTCalculation,",
+        "    Rivendell,       !- Zone Name",
+        "    Elves,           !- People Name 1",
+        "    1.0;             !- MRT Weighting Factor 1",
+
+        "  ZoneMRTCalculation,",
+        "    Gondor,          !- Zone Name",
+        "    Stewards,        !- People Name 1",
+        "    0.2,             !- MRT Weighting Factor 1",
+        "    Guards,          !- People Name 1",
+        "    0.3,             !- MRT Weighting Factor 1",
+        "    MyPeople,        !- People Name 1",
+        "    0.4;             !- MRT Weighting Factor 1",
+
+        "  ZoneMRTCalculation,",
+        "    Shire,           !- Zone Name",
+        "    Baggins,         !- People Name 1",
+        "    0.6,             !- MRT Weighting Factor 1",
+        "    Took,            !- People Name 2",
+        "    0.4;             !- MRT Weighting Factor 2",
+
+    });
+
+    bool errorsFound = false;
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    Material::GetMaterialData(*state, errorsFound);
+    GetConstructData(*state, errorsFound);
+    GetZoneData(*state, errorsFound);
+    auto &dataSurfGeo = state->dataSurfaceGeometry;
+    auto &dataHB = state->dataHeatBal;
+    dataSurfGeo->CosZoneRelNorth.allocate(3);
+    dataSurfGeo->SinZoneRelNorth.allocate(3);
+    dataSurfGeo->CosZoneRelNorth(1) = std::cos(-dataHB->Zone(1).RelNorth * Constant::DegToRad);
+    dataSurfGeo->CosZoneRelNorth(2) = std::cos(-dataHB->Zone(2).RelNorth * Constant::DegToRad);
+    dataSurfGeo->CosZoneRelNorth(3) = std::cos(-dataHB->Zone(3).RelNorth * Constant::DegToRad);
+    dataSurfGeo->SinZoneRelNorth(1) = std::sin(-dataHB->Zone(1).RelNorth * Constant::DegToRad);
+    dataSurfGeo->SinZoneRelNorth(2) = std::sin(-dataHB->Zone(2).RelNorth * Constant::DegToRad);
+    dataSurfGeo->SinZoneRelNorth(3) = std::sin(-dataHB->Zone(3).RelNorth * Constant::DegToRad);
+    dataSurfGeo->CosBldgRelNorth = 1.0;
+    dataSurfGeo->SinBldgRelNorth = 0.0;
+    AllocateHeatBalArrays(*state);
+
+    SurfaceGeometry::GetSurfaceData(*state, errorsFound);
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+    HeatBalanceManager::getZoneMRTCalculationData(*state);
+
+    EXPECT_TRUE(dataHB->Zone(1).useZoneMRTCalc);
+    EXPECT_TRUE(dataHB->Zone(2).useZoneMRTCalc);
+    EXPECT_TRUE(dataHB->Zone(3).useZoneMRTCalc);
+
+    Real64 tolerance = 0.000001;
+
+    // First ZoneMRT statement is Zone 2 (Rivendell) with one people statement attached
+    auto &mrt1 = state->dataHeatBal->zoneMRTCalc(1);
+    EXPECT_EQ(mrt1.zoneIndex, 2);
+    EXPECT_EQ(mrt1.numPeople, 1);
+    EXPECT_NEAR(mrt1.sumFracZoneMRT, 1.0, tolerance);
+    EXPECT_NEAR(mrt1.fracZoneStdMRT, 0.0, tolerance);
+    EXPECT_EQ(mrt1.zoneMRTPeople(1).peopleIndex, 3);
+    EXPECT_NEAR(mrt1.zoneMRTPeople(1).fracMRT, 1.0, tolerance);
+
+    // Second ZoneMRT statement is Zone 3 (Gondor) with three people statements attached
+    auto &mrt2 = state->dataHeatBal->zoneMRTCalc(2);
+    EXPECT_EQ(mrt2.zoneIndex, 3);
+    EXPECT_EQ(mrt2.numPeople, 3);
+    EXPECT_NEAR(mrt2.sumFracZoneMRT, 0.9, tolerance);
+    EXPECT_NEAR(mrt2.fracZoneStdMRT, 0.1, tolerance);
+    EXPECT_EQ(mrt2.zoneMRTPeople(1).peopleIndex, 4);
+    EXPECT_NEAR(mrt2.zoneMRTPeople(1).fracMRT, 0.2, tolerance);
+    EXPECT_EQ(mrt2.zoneMRTPeople(2).peopleIndex, 5);
+    EXPECT_NEAR(mrt2.zoneMRTPeople(2).fracMRT, 0.3, tolerance);
+    EXPECT_EQ(mrt2.zoneMRTPeople(3).peopleIndex, 6);
+    EXPECT_NEAR(mrt2.zoneMRTPeople(3).fracMRT, 0.4, tolerance);
+
+    // Third and final ZoneMRT statement is Zone 1 (Shire) with two people statements attached
+    auto &mrt3 = state->dataHeatBal->zoneMRTCalc(3);
+    EXPECT_EQ(mrt3.zoneIndex, 1);
+    EXPECT_EQ(mrt3.numPeople, 2);
+    EXPECT_NEAR(mrt3.sumFracZoneMRT, 1.0, tolerance);
+    EXPECT_NEAR(mrt3.fracZoneStdMRT, 0.0, tolerance);
+    EXPECT_EQ(mrt3.zoneMRTPeople(1).peopleIndex, 1);
+    EXPECT_NEAR(mrt3.zoneMRTPeople(1).fracMRT, 0.6, tolerance);
+    EXPECT_EQ(mrt3.zoneMRTPeople(2).peopleIndex, 2);
+    EXPECT_NEAR(mrt3.zoneMRTPeople(2).fracMRT, 0.4, tolerance);
+}
+
+TEST_F(EnergyPlusFixture, ZoneMRTCalculation_CalculationTest)
+{
+    // Testing of Calculation (calcUserZoneMRT) for Implementation of ZoneMRTCalculation feature (#11392)
+    std::string const idf_objects = delimited_string({
+        "  GlobalGeometryRules,",
+        "    UpperLeftCorner,  !- Starting Vertex Position",
+        "    CounterClockWise, !- Vertex Entry Direction",
+        "    Relative;         !- Coordinate System",
+
+        "  Material,",
+        "    Mithril,          !- Name",
+        "    Rough,            !- Roughness",
+        "    0.0254,           !- Thickness {m}",
+        "    1.0,              !- Conductivity {W/m-K}",
+        "    500.0000,         !- Density {kg/m3}",
+        "    1000.000,         !- Specific Heat {J/kg-K}",
+        "    0.9000000,        !- Thermal Absorptance",
+        "    0.6500000,        !- Solar Absorptance",
+        "    0.6500000;        !- Visible Absorptance",
+
+        "  Construction,",
+        "    MiddleEarth,      !- Name",
+        "    Mithril;          !- Outside Layer",
+
+        "  Zone,",
+        "    Shire,            !- Name",
+        "    0,                !- Direction of Relative North {deg}",
+        "    0,                !- X Origin {m}",
+        "    0,                !- Y Origin {m}",
+        "    0,                !- Z Origin {m}",
+        "    1,                !- Type",
+        "    1,                !- Multiplier",
+        "    2.5,              !- Ceiling Height {m}",
+        "    100.0;            !- Volume {m3}",
+
+        "  Zone,",
+        "    Rivendell,        !- Name",
+        "    0,                !- Direction of Relative North {deg}",
+        "    0,                !- X Origin {m}",
+        "    0,                !- Y Origin {m}",
+        "    0,                !- Z Origin {m}",
+        "    1,                !- Type",
+        "    2,                !- Multiplier",
+        "    3.0,              !- Ceiling Height {m}",
+        "    150.0;            !- Volume {m3}",
+
+        "  Zone,",
+        "    Gondor,           !- Name",
+        "    0,                !- Direction of Relative North {deg}",
+        "    0,                !- X Origin {m}",
+        "    0,                !- Y Origin {m}",
+        "    0,                !- Z Origin {m}",
+        "    1,                !- Type",
+        "    1,                !- Multiplier",
+        "    4.0,              !- Ceiling Height {m}",
+        "    200.0;            !- Volume {m3}",
+
+        "  People,",
+        "    Baggins,          !- Name",
+        "    Shire,            !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    10,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    EnclosureAveraged, !- Mean Radiant Temperature Calculation Type",
+        "    ,                 !- Surface Name/Angle Factor List Name",
+        "    WorkEffSched,     !- Work Efficiency Schedule Name",
+        "    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method",
+        "    ,                 !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model 1 Type",
+
+        "  People,",
+        "    Took,             !- Name",
+        "    Shire,            !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    12,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
+        "    ShireWall1,       !- Surface for Weighting",
+        "    WorkEffSched,     !- Work Efficiency Schedule Name",
+        "    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method",
+        "    ,                 !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model 1 Type",
+
+        "  People,",
+        "    Elves,            !- Name",
+        "    Rivendell,        !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    24,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
+        "    RivendellWall1,   !- Surface for Weighting",
+        "    WorkEffSched,     !- Work Efficiency Schedule Name",
+        "    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method",
+        "    ,                 !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model 1 Type",
+
+        "  People,",
+        "    Stewards,         !- Name",
+        "    Gondor,           !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    3,                !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    EnclosureAveraged, !- Mean Radiant Temperature Calculation Type",
+        "    ,                 !- Surface Name/Angle Factor List Name",
+        "    WorkEffSched,     !- Work Efficiency Schedule Name",
+        "    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method",
+        "    ,                 !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model 1 Type",
+
+        "  People,",
+        "    Guards,           !- Name",
+        "    Gondor,           !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    24,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
+        "    GondorWall1,      !- Surface for Weighting",
+        "    WorkEffSched,     !- Work Efficiency Schedule Name",
+        "    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method",
+        "    ,                 !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model 1 Type",
+
+        "  People,",
+        "    MyPeople,         !- Name",
+        "    Gondor,           !- Zone or ZoneList or Space or SpaceList Name",
+        "    OccSchedule,      !- Number of People Schedule Name",
+        "    people,           !- Number of People Calculation Method",
+        "    24,               !- Number of People",
+        "    ,                 !- People per Floor Area {person/m2}",
+        "    ,                 !- Floor Area per Person {m2/person}",
+        "    0.3,              !- Fraction Radiant",
+        "    0.55,             !- Sensible Heat Fraction",
+        "    ActivitySchedule, !- Activity Level Schedule Name",
+        "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
+        "    AngleFactor,      !- Mean Radiant Temperature Calculation Type",
+        "    ViewFactors,      !- Surface for Weighting",
+        "    WorkEffSched,     !- Work Efficiency Schedule Name",
+        "    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method",
+        "    ,                 !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model 1 Type",
+
+        "  ComfortViewFactorAngles,",
+        "    ViewFactors, !- name of angle factor list",
+        "    GondorWall2, !- Surface name 1",
+        "    0.50,        !- Angle factor for surface 1",
+        "    GondorWall3, !- Surface name 2",
+        "    0.50;        !- Angle factor for surface 2",
+
+        "  Schedule:Compact,",
+        "    OccSchedule,      !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,1.0; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    ActivitySchedule, !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,70.; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    WorkEffSched,     !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,0.0; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    CloSched,         !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,1.0; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    AirVelSched,      !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,0.5; !- Field 3",
+
+        "  BuildingSurface:Detailed,",
+        "    ShireWall1,              !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Shire,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.0,0.0,0.0,             !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.0,0.0,5.0,             !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.0,0.0,5.0,            !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.0,0.0,0.0;            !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    RivendellWall1,          !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Rivendell,               !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.0,0.0,5.0,             !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.0,0.0,10.0,            !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.0,0.0,10.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.0,0.0,5.0;            !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    GondorWall1,             !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Gondor,                  !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.0,0.0,10.0,            !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.0,0.0,15.0,            !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.0,0.0,15.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.0,0.0,10.0;           !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    GondorWall2,             !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Gondor,                  !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    10.0,0.0,10.0,           !- X,Y,Z ==> Vertex 1 {m}",
+        "    10.0,0.0,15.0,           !- X,Y,Z ==> Vertex 2 {m}",
+        "    20.0,0.0,15.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    20.0,0.0,10.0;           !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  BuildingSurface:Detailed,",
+        "    GondorWall3,             !- Name",
+        "    WALL,                    !- Surface Type",
+        "    MiddleEarth,             !- Construction Name",
+        "    Gondor,                  !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.50000,                 !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    20.0,0.0,10.0,           !- X,Y,Z ==> Vertex 1 {m}",
+        "    20.0,0.0,15.0,           !- X,Y,Z ==> Vertex 2 {m}",
+        "    30.0,0.0,15.0,           !- X,Y,Z ==> Vertex 3 {m}",
+        "    30.0,0.0,10.0;           !- X,Y,Z ==> Vertex 4 {m}",
+
+        "  ZoneMRTCalculation,",
+        "    Rivendell,       !- Zone Name",
+        "    Elves,           !- People Name 1",
+        "    1.0;             !- MRT Weighting Factor 1",
+
+        "  ZoneMRTCalculation,",
+        "    Gondor,          !- Zone Name",
+        "    Stewards,        !- People Name 1",
+        "    0.2,             !- MRT Weighting Factor 1",
+        "    Guards,          !- People Name 1",
+        "    0.3,             !- MRT Weighting Factor 1",
+        "    MyPeople,        !- People Name 1",
+        "    0.4;             !- MRT Weighting Factor 1",
+
+        "  ZoneMRTCalculation,",
+        "    Shire,           !- Zone Name",
+        "    Baggins,         !- People Name 1",
+        "    0.6,             !- MRT Weighting Factor 1",
+        "    Took,            !- People Name 2",
+        "    0.4;             !- MRT Weighting Factor 2",
+
+    });
+
+    bool errorsFound = false;
+    Real64 actualResult;
+    Real64 expectedResult;
+    Real64 tolerance = 0.0001;
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    Material::GetMaterialData(*state, errorsFound);
+    GetConstructData(*state, errorsFound);
+    GetZoneData(*state, errorsFound);
+    auto &dataSurfGeo = state->dataSurfaceGeometry;
+    auto &dataHB = state->dataHeatBal;
+    dataSurfGeo->CosZoneRelNorth.allocate(3);
+    dataSurfGeo->SinZoneRelNorth.allocate(3);
+    dataSurfGeo->CosZoneRelNorth(1) = std::cos(-dataHB->Zone(1).RelNorth * Constant::DegToRad);
+    dataSurfGeo->CosZoneRelNorth(2) = std::cos(-dataHB->Zone(2).RelNorth * Constant::DegToRad);
+    dataSurfGeo->CosZoneRelNorth(3) = std::cos(-dataHB->Zone(3).RelNorth * Constant::DegToRad);
+    dataSurfGeo->SinZoneRelNorth(1) = std::sin(-dataHB->Zone(1).RelNorth * Constant::DegToRad);
+    dataSurfGeo->SinZoneRelNorth(2) = std::sin(-dataHB->Zone(2).RelNorth * Constant::DegToRad);
+    dataSurfGeo->SinZoneRelNorth(3) = std::sin(-dataHB->Zone(3).RelNorth * Constant::DegToRad);
+    dataSurfGeo->CosBldgRelNorth = 1.0;
+    dataSurfGeo->SinBldgRelNorth = 0.0;
+    AllocateHeatBalArrays(*state);
+
+    SurfaceGeometry::GetSurfaceData(*state, errorsFound);
+    auto &dataSurf = state->dataSurface;
+    dataSurf->Surface(1).RadEnclIndex = 1;
+    dataSurf->Surface(2).RadEnclIndex = 2;
+    dataSurf->Surface(3).RadEnclIndex = 3;
+    dataSurf->Surface(4).RadEnclIndex = 3;
+    dataSurf->Surface(5).RadEnclIndex = 3;
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+    HeatBalanceManager::getZoneMRTCalculationData(*state);
+
+    auto &dataHBSurf = state->dataHeatBalSurf;
+    auto &dataVF = state->dataViewFactor;
+
+    dataHBSurf->SurfInsideTempHist.allocate(1);
+    dataHBSurf->SurfInsideTempHist(1).allocate(5);
+
+    // Test 1: Zone 1 (Shire) is a combination of two people statements one enclosure averaged and one surface weighted
+    dataVF->EnclRadInfo(1).MRT = 22.0;
+    dataHBSurf->SurfInsideTempHist(1)(1) = 12.0;
+    expectedResult = 20.2; // Note that MAT defaults to 23.0 for only one surface here so that the surface weighted is the average of the surface
+                           // temperature and MAT
+    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, 1);
+    EXPECT_NEAR(actualResult, expectedResult, tolerance);
+
+    // Test 2: Zone 2 (Rivendell) has only one people statement that is surface weighted (only one surface)
+    dataVF->EnclRadInfo(2).MRT = 21.0;
+    dataHBSurf->SurfInsideTempHist(1)(2) = 11.0;
+    expectedResult = 17.0; // Note that MAT defaults to 23.0 for only one surface here so that the surface weighted is the average of the surface
+                           // temperature and MAT
+    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, 2);
+    EXPECT_NEAR(actualResult, expectedResult, tolerance);
+
+    // Test 3: Zone 3 (Gondor) has three people statements--one enclosure averaged, one surface weighted, and one view factor based
+    dataVF->EnclRadInfo(3).MRT = 20.0;
+    dataHBSurf->SurfInsideTempHist(1)(3) = 10.0;
+    dataHBSurf->SurfInsideTempHist(1)(4) = 12.0;
+    dataHBSurf->SurfInsideTempHist(1)(5) = 14.0;
+    state->dataZoneTempPredictorCorrector->zoneHeatBalance(3).MRT = 25.0;
+    expectedResult = 16.4521; // Note that MAT defaults to 23.0 surface weighted and standard MRT
+    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, 3);
+    EXPECT_NEAR(actualResult, expectedResult, tolerance);
 }
 } // namespace EnergyPlus

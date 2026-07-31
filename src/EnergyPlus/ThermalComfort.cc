@@ -2174,8 +2174,8 @@ namespace ThermalComfort {
                 CalcSurfaceWeightedMRT = 0.5 * (thisSurfaceTemp + CalcSurfaceWeightedMRT);
             }
         } else {
+            int spaceNum = thisSurface.spaceNum;
             if (state.dataThermalComforts->FirstTimeError) {
-                int spaceNum = thisSurface.spaceNum;
                 ShowWarningError(state,
                                  std::format("CalcSurfaceWeightedMRT: Areas*Inside surface emissivities are summing to zero for Enclosure=\"{}\"",
                                              thisRadEnclosure.Name));
@@ -2184,10 +2184,10 @@ namespace ThermalComfort {
                                               state.dataHeatBal->space(spaceNum).Name));
                 ShowContinueError(state, std::format("for Surface={}", thisSurface.Name));
                 state.dataThermalComforts->FirstTimeError = false;
-                CalcSurfaceWeightedMRT = state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNum).MAT;
-                if (AverageWithSurface) {
-                    CalcSurfaceWeightedMRT = 0.5 * (thisSurfaceTemp + CalcSurfaceWeightedMRT);
-                }
+            }
+            CalcSurfaceWeightedMRT = state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNum).MAT;
+            if (AverageWithSurface) {
+                CalcSurfaceWeightedMRT = 0.5 * (thisSurfaceTemp + CalcSurfaceWeightedMRT);
             }
         }
 
