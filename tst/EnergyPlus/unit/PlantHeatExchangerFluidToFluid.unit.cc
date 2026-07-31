@@ -2414,23 +2414,7 @@ TEST_F(EnergyPlusFixture, PlantHXControlWithFirstHVACIteration)
     EXPECT_NEAR(state->dataLoopNodes->Node(2).MassFlowRate, 0.0, 0.001);
 
     // test proportional sizing of HX based on Sizing:Plant differences in Plants connected to Fluid-to-Fluid HX
-    //
-    //   |--------->*  >-----|     |--------->*  >---------|        <-----
-    //   |   Primary Loop    |     |    Secondary Loop     |               \
-    //  Chiller           HX Dem  HX Sup            e.g., Load Profile      \  Sizing:Plant deltaT
-    //   |                   |     |                       |                /  * = plant supply side ExitTemp
-    //   |                   |     |                       |               /   Entering temp depends on type of plant (e.g., CW, HW)
-    //   |----------<  <-----|     |----------<  <---------|        <-----
-    //     sup side     dem side     sup side      dem side
-    //           Plant 1                    Plant 2
-    //
-    //  Plant size order: Load Profile registers a flow rate on Plant 2, HX Sup side uses that flow rate for sizing
-    //                    HX Dem side uses HX Sup side flow and Sizing:Plant DeltaT (and fluid Cp) to size HX Dem flow rate
-    //                    HX Dem side registers that flow rate on Plant 1 and chiller uses that data for chiller flow rate sizing
-    //    When Sizing:Plant DeltaT differs between Plant 1 and Plant 2, that difference should affect autosized flow rate
-    //    Fluid specific heat also affects fluid heat capacity and transfer rate
-    //
-    //    HX Dem side volume flow rate = HX Sup side volume flow rate * (Cp_HXsup * DeltaT_HXsup) / (Cp_HXdem * DeltaT_HXdem)
+    // HX Dem side volume flow rate = HX Sup side volume flow rate * (Cp_HXsup * DeltaT_HXsup) / (Cp_HXdem * DeltaT_HXdem)
 
     state->dataSize->PlantSizData.allocate(2);
     auto &supSizData = state->dataSize->PlantSizData(1);
