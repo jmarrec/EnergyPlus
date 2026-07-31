@@ -756,7 +756,7 @@ void HeatExchangerStruct::size(EnergyPlusData &state)
                 Dt_sup = state.dataSize->PlantSizData(PltSizNumSupSide).DeltaT;
                 Dt_dem = state.dataSize->PlantSizData(PltSizNumDmdSide).DeltaT;
             }
-            tmpDmdSideDesignVolFlowRate = tmpSupSideDesignVolFlowRate * ((Cp_sup * Dt_sup)/(Cp_dem * Dt_dem));
+            tmpDmdSideDesignVolFlowRate = tmpSupSideDesignVolFlowRate * ((Cp_sup * Dt_sup) / (Cp_dem * Dt_dem));
             if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                 this->DemandSideLoop.DesignVolumeFlowRate = tmpDmdSideDesignVolFlowRate;
             }
