@@ -1,12 +1,12 @@
 VERSION 5.00
-Begin VB.Form frmWhatsNew 
+Begin VB.Form frmWhatsNew
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "New Features of IDF Editor"
    ClientHeight    =   8280
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   10905
-   BeginProperty Font 
+   BeginProperty Font
       Name            =   "MS Sans Serif"
       Size            =   9.75
       Charset         =   0
@@ -22,8 +22,8 @@ Begin VB.Form frmWhatsNew
    ScaleWidth      =   10905
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
-   Begin VB.TextBox txtWhatsNew 
-      BeginProperty Font 
+   Begin VB.TextBox txtWhatsNew
+      BeginProperty Font
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
@@ -41,9 +41,9 @@ Begin VB.Form frmWhatsNew
       Top             =   120
       Width           =   10695
    End
-   Begin VB.CommandButton cmdClose 
+   Begin VB.CommandButton cmdClose
       Caption         =   "Close"
-      BeginProperty Font 
+      BeginProperty Font
          Name            =   "MS Sans Serif"
          Size            =   8.25
          Charset         =   0
@@ -58,9 +58,9 @@ Begin VB.Form frmWhatsNew
       Top             =   7800
       Width           =   1455
    End
-   Begin VB.Label Label1 
+   Begin VB.Label Label1
       Caption         =   "This dialog box is shown at start up one time and then can be found under HELP .. WHATS NEW"
-      BeginProperty Font 
+      BeginProperty Font
          Name            =   "MS Sans Serif"
          Size            =   8.25
          Charset         =   0
