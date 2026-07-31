@@ -2871,3 +2871,47 @@ ZoneProperty:UserViewFactors:BySurfaceName,Lshaped Zone,
   Lshaped Zone:South Wall,Lshaped Zone:East Wall,0.101310,
   <snip>
 \end{lstlisting}
+
+\subsection{ZoneMRTCalculation}\label{zonemrtcalculation}
+
+EnergyPlus has the ability to analyze various MRT calculations via the \hyperref[people]{People} statement. In the People input object, the user can select to have the standard MRT calculation impact the thermal comfort model or either a surface weighted or angle factor calculation (see \hyperref[field-mean-radiant-temperature-calculation-type]{Mean Radiant Temperature Calculation Type}) define the MRT for the thermal comfort model(s) chosen. Since it is possible to have multiple People statements per zone and each one can have a different MRT calculation, it might be desirable to have the zone MRT be based on one or more of these People statement defined MRT values. This would impact both the MRT of the zone as well as the operative temperature of the zone and thus would affect how systems that are controlled on either one of these temperatures to function. It is important to note that any of the People objects referenced in the ZoneMRTCalculation input object must select a thermal comfort model in order for the specific MRT calculation type in that People object to activate the calculation type.  Moreover, only a single ZoneMRTCalculation object can be linked to each unique zone.
+
+The ZoneMRTCalculation input object defines the relative weighting or contribution each people-based MRT contributes to the calculated zone MRT. It contains a zone name that refers to the zone in question and then continues with pairs of parameters that reference a specific people statement and the relative weighting factor that each of these statemnts contributes to the zone MRT. This list is extensible and can be as short as a single pair. All people objects referenced in this extensible list must be in the same zone.
+
+The sum of all weighting factors entered through a single ZoneMRTCalculation instance must be between 0.0 and 1.0. Error messages will be produced when this principle is violated. If the sum of all of the weighting factors is less than 1.0, the remaining portion will be based on the standard zone MRT that is an air-emissivity weighted average of all of the surface temperatures in the zone. The equation for this calculation is as follows:
+
+\begin{align}
+\begin{split}
+ZoneMRT = (fracPeople1)(People1MRT) + (fracPeople2)(People2MRT) + ... \\
+        + (1.0-sumFracAllPeople)stdMRT
+\end{split}
+\end{align}
+
+\subsubsection{Inputs}\label{inputs-zonemrtcalculation}
+
+This input fields for this object are defined below.
+
+\paragraph{Field: Zone Name}\label{field-zonemrtcalculation-zonename}
+
+This field specifies the name of the zone for which the MRT calculation details are being defined.  This must be a valid zone name that is defined elsewhere in this input file.
+
+\paragraph{Field: Pair \textless{}\#\textgreater{} People Statement Name}\label{field-zonemrtcalculation-peoplenameX}
+
+This field specifies the name of the People statement that will contribute to the zone MRT calculation.  In conjunction with the next parameter, it defines a fraction of the MRT calculation value for the zone named in the previous input.  Each People statement referenced must be used in the zone referenced in the Zone Name field above.
+
+\paragraph{Field: Pair \textless{}\#\textgreater{} MRT Weighting Factor}\label{field-zonemrtcalculation-weightingfactorX}
+
+This decimal fraction defines the contribution of the MRT calculated for the People statement referenced by its input pair in the previous field to the overall zone MRT.  The value of this parameter must be between 0.0 and 1.0.  Note that the sum of all weighting factors for all People statements referenced in these input field pairs must be between 0.0 and 1.0.  When the sum of the weighting factors is less than 1.0, the remaining portion of the MRT calculation comes from the standard area-emissivity weighted calculation of MRT for the zone.
+
+This object is extensible, so additional pairs of these last two fields of this type can be added to the end of this object. An example of this object is:
+
+\begin{lstlisting}
+ZoneMRTCalculation,
+  West Wing Zone,                   !- Zone Name
+  West Wing Office People,          !- People 1 Name
+  0.4,
+  West Wing Service Center People,  !- People 2 Name
+  0.3,
+  West Wing Reception People;       !- People 3 Name
+\end{lstlisting}
+
