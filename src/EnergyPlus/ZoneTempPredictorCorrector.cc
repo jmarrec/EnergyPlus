@@ -2170,8 +2170,8 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
     // Warn when a thermostat-controlled zone contains an ElectricEquipment:ITE:AirCooled object using FlowControlWithApproachTemperatures: in that
     // case the zone cooling setpoint is bypassed in PredictSystemLoads (LoadToCoolingSetPoint is driven by Zone.AdjustedReturnTempByITE instead), so
     // the zone air temperature will not track the thermostat
-    for (int TempControlledZoneNum = 1; TempControlledZoneNum <= state.dataZoneCtrls->NumTempControlledZones; ++TempControlledZoneNum) {
-        auto const &tempZone = state.dataZoneCtrls->TempControlledZone(TempControlledZoneNum);
+    for (int TempCtrlZoneNum = 1; TempCtrlZoneNum <= state.dataZoneCtrls->NumTempControlledZones; ++TempCtrlZoneNum) {
+        auto const &tempZone = state.dataZoneCtrls->TempControlledZone(TempCtrlZoneNum);
         if (tempZone.ActualZoneNum == 0) {
             continue;
         }

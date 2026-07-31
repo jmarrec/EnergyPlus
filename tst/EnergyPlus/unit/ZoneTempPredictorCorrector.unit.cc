@@ -2137,6 +2137,81 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_Test)
                                              true));
 }
 
+TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_ITEApproachTempWarning)
+{
+    // issue 10594: Zone cooling setpoint is bypassed when an ITE object uses FlowControlWithApproachTemperatures. Verify the user is warned.
+    std::string const idf_objects = delimited_string({
+        "ScheduleTypeLimits,",
+        "  Any Number;              !- Name",
+        " ",
+        "ScheduleTypeLimits,",
+        " Control Type,            !- Name",
+        " 0,                       !- Lower Limit Value",
+        " 4,                       !- Upper Limit Value",
+        " DISCRETE;                !- Numeric Type",
+        " ",
+        "Schedule:Compact,",
+        " ZONE CONTROL TYPE SCHED, !- Name",
+        " Control Type,            !- Schedule Type Limits Name",
+        " Through: 12/31,          !- Field 1",
+        " For: AllDays,            !- Field 2",
+        " Until: 24:00, 4.0;       !- Field 3",
+        " ",
+        "Schedule:Compact,",
+        " HeatingSetpoints,        !- Name",
+        " Any Number,              !- Schedule Type Limits Name",
+        " Through: 12/31,          !- Field 1",
+        " For: AllDays,            !- Field 2",
+        " Until: 24:00, 20.0;      !- Field 3",
+        " ",
+        "Schedule:Compact,",
+        " CoolingSetpoints,        !- Name",
+        " Any Number,              !- Schedule Type Limits Name",
+        " Through: 12/31,          !- Field 1",
+        " For: AllDays,            !- Field 2",
+        " Until: 24:00, 23.0;      !- Field 3",
+        " ",
+        "ThermostatSetpoint:DualSetpoint,",
+        " DualSetpoints,",
+        " HeatingSetpoints,",
+        " CoolingSetpoints;",
+        " ",
+        "ZoneControl:Thermostat,",
+        " East Zone Thermostat,",
+        " East Zone,",
+        " ZONE CONTROL TYPE SCHED,",
+        " ThermostatSetpoint:DualSetpoint,",
+        " DualSetpoints;",
+        " ",
+        "Zone,",
+        "  East Zone,  !- Name",
+        "  0, 0, 0, 0, !- Origin",
+        "  1,          !- Type",
+        "  1;          !- Multiplier",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    bool errFlag;
+    GetZoneData(*state, errFlag);
+
+    // Emulate what GetInternalHeatGainsInput does for an ITE object with Air Flow Calculation Method = FlowControlWithApproachTemperatures
+    state->dataHeatBal->TotITEquip = 1;
+    state->dataHeatBal->ZoneITEq.allocate(1);
+    state->dataHeatBal->ZoneITEq(1).Name = "EASTDATACENTER_EQUIP";
+    state->dataHeatBal->ZoneITEq(1).ZonePtr = 1;
+    state->dataHeatBal->ZoneITEq(1).FlowControlWithApproachTemps = true;
+    state->dataHeatBal->Zone(1).HasAdjustedReturnTempByITE = true;
+
+    GetZoneAirSetPoints(*state);
+
+    EXPECT_TRUE(compare_err_stream_substring("EASTDATACENTER_EQUIP", false));
+    EXPECT_TRUE(compare_err_stream_substring("EAST ZONE THERMOSTAT", false));
+    EXPECT_TRUE(compare_err_stream_substring("The zone cooling setpoint is ignored for this zone", false));
+    EXPECT_TRUE(compare_err_stream_substring("FlowFromSystem", true));
+}
+
 #ifdef GET_OUT
 TEST_F(EnergyPlusFixture, FillPredefinedTableOnThermostatSchedules_MultipleControls)
 {
