@@ -1789,7 +1789,7 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
     // Other components on this branch will request flow for this branch
 
     //  ! If this is a variable speed pump
-    if (thisPump.pumpType == PumpType::VarSpeed || thisPump.pumpType == PumpType::Bank_VarSpeed || thisPump.pumpType == PumpType::Cond) {
+    if (pumpType == PumpType::VarSpeed || pumpType == PumpType::Bank_VarSpeed || pumpType == PumpType::Cond) {
         if (DataPlant::CompData::getPlantComponent(state, thisPump.plantLoc).FlowCtrl == DataBranchAirLoopPlant::ControlType::SeriesActive) {
             daPumps->PumpMassFlowRate = 0.0;
         }
@@ -1825,7 +1825,7 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
     //****************************!
     //** UPDATE PUMP BANK USAGE **!
     //****************************!
-    switch (thisPump.pumpType) {
+    switch (pumpType) {
     case PumpType::Bank_VarSpeed:
     case PumpType::Bank_ConSpeed: {
         // previously, pumps did whatever they wanted
@@ -1865,6 +1865,7 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
     //****************************!
     //***** CALCULATE POWER (1) **!
     //****************************!
+
     switch (pumpType) {
     case PumpType::ConSpeed:
     case PumpType::VarSpeed:
@@ -1921,6 +1922,14 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
             PartLoadRatio,
             PartLoadRatio);
         ShowRecurringContinueErrorAtEnd(state, "...Fraction Full Load Power=", thisPump.PowerErrIndex2, FracFullLoadPower, FracFullLoadPower);
+    }
+    if (pumpType == PumpType::ConSpeed && VolFlowRate < thisPump.NomVolFlowRate) {
+        ShowRecurringWarningErrorAtEnd(
+            state,
+            std::format("{} Part Load Ratio < 1, {}, Name={}, pump has full power at low flow, VolFlowRate=", RoutineName, pumpTypeIDFNames[static_cast<int>(pumpType)], thisPump.Name),
+            thisPump.PLRErrIndex,
+            VolFlowRate,
+            VolFlowRate);
     }
 
     //****************************!
