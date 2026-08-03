@@ -78144,7 +78144,7 @@ CoolingTower:SingleSpeed,
        \type real
        \units C
        \default 25.6
-       \minimum 20.0
+       \minimum 10.0
        \note Enter the tower's design inlet air wet-bulb temperature
   N15, \field Design Approach Temperature
        \type real
@@ -78461,7 +78461,7 @@ CoolingTower:TwoSpeed,
        \type real
        \units C
        \default 25.6
-       \minimum 20.0
+       \minimum 10.0
        \note Enter the tower's design inlet air wet-bulb temperature
   N23, \field Design Approach Temperature
        \type real
@@ -78777,7 +78777,7 @@ CoolingTower:VariableSpeed:Merkel,
        \type real
        \units C
        \default 25.6
-       \minimum 20.0
+       \minimum 10.0
        \note Enter the tower's design inlet air wet-bulb temperature
   N19, \field Design Approach Temperature
        \type real
@@ -78941,7 +78941,7 @@ CoolingTower:VariableSpeed,
        \type real
        \units C
        \default 25.6
-       \minimum 20.0
+       \minimum 10.0
        \note Enter the tower's design inlet air wet-bulb temperature
   N2 , \field Design Approach Temperature
        \type real
