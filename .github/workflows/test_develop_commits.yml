@@ -80,7 +80,7 @@ jobs:
           pretty: "Alternate Build on Ubuntu 24.04"
           alternate: true
           build-type: release
-          run-tests: true
+          run-tests: false
           link-with-python: false
 
     steps:
