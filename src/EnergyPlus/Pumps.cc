@@ -1923,14 +1923,15 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
         ShowRecurringContinueErrorAtEnd(state, "...Fraction Full Load Power=", thisPump.PowerErrIndex2, FracFullLoadPower, FracFullLoadPower);
     }
     if (pumpType == PumpType::ConSpeed && daPumps->Power > 0.0 && VolFlowRate < 0.25 * thisPump.NomVolFlowRate) {
-        ShowRecurringWarningErrorAtEnd(state,
-                                       std::format("{} Part Load Ratio < 1, {}, Name={}, pump has full power even at less than 25% nominal flow rate, VolFlowRate=",
-                                                   RoutineName,
-                                                   pumpTypeIDFNames[static_cast<int>(pumpType)],
-                                                   thisPump.Name),
-                                       thisPump.PLRErrIndex,
-                                       VolFlowRate,
-                                       VolFlowRate);
+        ShowRecurringWarningErrorAtEnd(
+            state,
+            std::format("{} Part Load Ratio < 1, {}, Name={}, pump has full power even at less than 25% nominal flow rate, VolFlowRate=",
+                        RoutineName,
+                        pumpTypeIDFNames[static_cast<int>(pumpType)],
+                        thisPump.Name),
+            thisPump.PLRErrIndex,
+            VolFlowRate,
+            VolFlowRate);
     }
 
     //****************************!

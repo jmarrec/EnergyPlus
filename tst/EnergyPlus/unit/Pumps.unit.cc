@@ -862,7 +862,8 @@ TEST_F(EnergyPlusFixture, ConstantSpeedPumpLowFlowFullPower)
     EXPECT_NEAR(state->dataErrTracking->RecurringErrors[0].MaxValue, 0.0010002, 0.001);
     EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].Count, 1);
     EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].Message,
-              " ** Warning ** PlantPumps:CalcPumps:  Part Load Ratio < 1, Pump:ConstantSpeed, Name=CHW_LOOP PUMP1, pump has full power even at less than 25% nominal flow rate, VolFlowRate=");
+              " ** Warning ** PlantPumps:CalcPumps:  Part Load Ratio < 1, Pump:ConstantSpeed, Name=CHW_LOOP PUMP1, pump has full power even at less "
+              "than 25% nominal flow rate, VolFlowRate=");
 }
 
 } // namespace EnergyPlus
