@@ -212,12 +212,24 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             mat->Conductivity = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "conductivity");
             mat->Density = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "density");
             mat->SpecHeat = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "specific_heat");
-            mat->AbsorpThermal = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_absorptance");
-            mat->AbsorpThermalInput = mat->AbsorpThermal;
-            mat->AbsorpSolar = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "solar_absorptance");
-            mat->AbsorpSolarInput = mat->AbsorpSolar;
-            mat->AbsorpVisible = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance");
-            mat->AbsorpVisibleInput = mat->AbsorpVisible;
+            mat->AbsorpThermalOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_absorptance_outside_face");
+            mat->AbsorpThermalInputOut = mat->AbsorpThermalOut;
+            mat->AbsorpSolarOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "solar_absorptance_outside_face");
+            mat->AbsorpSolarInputOut = mat->AbsorpSolarOut;
+            mat->AbsorpVisibleOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance_outside_face");
+            mat->AbsorpVisibleInputOut = mat->AbsorpVisibleOut;
+            mat->AbsorpThermalIn = objectFields.contains("thermal_absorptance_inside_face")
+                                       ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_absorptance_inside_face")
+                                       : mat->AbsorpThermalOut;
+            mat->AbsorpThermalInputIn = mat->AbsorpThermalIn;
+            mat->AbsorpSolarIn = objectFields.contains("solar_absorptance_inside_face")
+                                     ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "solar_absorptance_inside_face")
+                                     : mat->AbsorpSolarOut;
+            mat->AbsorpSolarInputIn = mat->AbsorpSolarIn;
+            mat->AbsorpVisibleIn = objectFields.contains("visible_absorptance_inside_face")
+                                       ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance_inside_face")
+                                       : mat->AbsorpVisibleOut;
+            mat->AbsorpVisibleInputIn = mat->AbsorpVisibleIn;
 
             if (mat->Conductivity > 0.0) {
                 mat->Resistance = mat->NominalR = mat->Thickness / mat->Conductivity;
@@ -243,72 +255,75 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         mat->Density = 2240.0;    // kg/m3
         mat->SpecHeat = 900.0;    // J/kgK
         mat->Roughness = SurfaceRoughness::MediumRough;
-        mat->AbsorpSolar = 0.7;
-        mat->AbsorpThermal = 0.9;
-        mat->AbsorpVisible = 0.7;
+        mat->AbsorpSolarOut = 0.7;
+        mat->AbsorpThermalOut = 0.9;
+        mat->AbsorpVisibleOut = 0.7;
+        mat->AbsorpSolarIn = 0.7;
+        mat->AbsorpThermalIn = 0.9;
+        mat->AbsorpVisibleIn = 0.7;
         mat->Resistance = mat->NominalR = mat->Thickness / mat->Conductivity;
     }
 
     s_ipsc->cCurrentModuleObject = "Material:NoMass";
-    for (int Loop = 1; Loop <= s_mat->NumNoMasses; ++Loop) {
+    auto const instancesNM = s_ip->epJSON.find(s_ipsc->cCurrentModuleObject);
+    if (instancesNM != s_ip->epJSON.end()) {
+        auto const &objectSchemaProps = s_ip->getObjectSchemaProps(state, s_ipsc->cCurrentModuleObject);
 
-        // Call Input Get routine to retrieve material data
-        s_ip->getObjectItem(state,
-                            s_ipsc->cCurrentModuleObject,
-                            Loop,
-                            s_ipsc->cAlphaArgs,
-                            NumAlphas,
-                            s_ipsc->rNumericArgs,
-                            NumNums,
-                            IOStat,
-                            s_ipsc->lNumericFieldBlanks,
-                            s_ipsc->lAlphaFieldBlanks,
-                            s_ipsc->cAlphaFieldNames,
-                            s_ipsc->cNumericFieldNames);
+        auto &instancesValue = instancesNM.value();
 
-        ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
+        std::vector<std::string> idfSortedKeys = s_ip->getIDFOrderedKeys(state, s_ipsc->cCurrentModuleObject);
+        for (std::string const &key : idfSortedKeys) {
 
-        if (s_mat->materialMap.find(s_ipsc->cAlphaArgs(1)) != s_mat->materialMap.end()) {
-            ShowSevereDuplicateName(state, eoh);
-            ErrorsFound = true;
-            continue;
+            auto instance = instancesValue.find(key);
+            assert(instance != instancesValue.end());
+
+            auto const &objectFields = instance.value();
+            std::string matNameUC = Util::makeUPPER(key);
+            s_ip->markObjectAsUsed(s_ipsc->cCurrentModuleObject, key);
+
+            ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, key};
+
+            if (s_mat->materialMap.find(matNameUC) != s_mat->materialMap.end()) {
+                ShowSevereDuplicateName(state, eoh);
+                ErrorsFound = true;
+                continue;
+            }
+
+            // Load the material derived type from the input data.
+            auto *mat = new MaterialBase;
+            mat->group = Group::Regular;
+            mat->Name = key;
+
+            s_mat->materials.push_back(mat);
+            mat->Num = s_mat->materials.isize();
+            s_mat->materialMap.insert_or_assign(matNameUC, mat->Num);
+
+            std::string roughness = s_ip->getAlphaFieldValue(objectFields, objectSchemaProps, "roughness");
+            mat->Roughness = static_cast<SurfaceRoughness>(getEnumValue(surfaceRoughnessNamesUC, Util::makeUPPER(roughness)));
+
+            mat->Resistance = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_resistance");
+            mat->NominalR = mat->Resistance;
+            mat->ROnly = true;
+
+            mat->AbsorpThermalOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_absorptance_outside_face");
+            mat->AbsorpThermalInputOut = mat->AbsorpThermalOut;
+            mat->AbsorpSolarOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "solar_absorptance_outside_face");
+            mat->AbsorpSolarInputOut = mat->AbsorpSolarOut;
+            mat->AbsorpVisibleOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance_outside_face");
+            mat->AbsorpVisibleInputOut = mat->AbsorpVisibleOut;
+            mat->AbsorpThermalIn = objectFields.contains("thermal_absorptance_inside_face")
+                                       ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_absorptance_inside_face")
+                                       : mat->AbsorpThermalOut;
+            mat->AbsorpThermalInputIn = mat->AbsorpThermalIn;
+            mat->AbsorpSolarIn = objectFields.contains("solar_absorptance_inside_face")
+                                     ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "solar_absorptance_inside_face")
+                                     : mat->AbsorpSolarOut;
+            mat->AbsorpSolarInputIn = mat->AbsorpSolarIn;
+            mat->AbsorpVisibleIn = objectFields.contains("visible_absorptance_inside_face")
+                                       ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance_inside_face")
+                                       : mat->AbsorpVisibleOut;
+            mat->AbsorpVisibleInputIn = mat->AbsorpVisibleIn;
         }
-
-        auto *mat = new MaterialBase;
-        mat->group = Group::Regular;
-        mat->Name = s_ipsc->cAlphaArgs(1);
-
-        s_mat->materials.push_back(mat);
-        mat->Num = s_mat->materials.isize();
-        s_mat->materialMap.insert_or_assign(mat->Name, mat->Num);
-
-        mat->Roughness = static_cast<SurfaceRoughness>(getEnumValue(surfaceRoughnessNamesUC, Util::makeUPPER(s_ipsc->cAlphaArgs(2))));
-
-        mat->Resistance = s_ipsc->rNumericArgs(1);
-        mat->ROnly = true;
-        if (NumNums >= 2) {
-            mat->AbsorpThermal = s_ipsc->rNumericArgs(2);
-            mat->AbsorpThermalInput = s_ipsc->rNumericArgs(2);
-        } else {
-            mat->AbsorpThermal = 0.9;
-            mat->AbsorpThermalInput = 0.9;
-        }
-        if (NumNums >= 3) {
-            mat->AbsorpSolar = s_ipsc->rNumericArgs(3);
-            mat->AbsorpSolarInput = s_ipsc->rNumericArgs(3);
-        } else {
-            mat->AbsorpSolar = 0.7;
-            mat->AbsorpSolarInput = 0.7;
-        }
-        if (NumNums >= 4) {
-            mat->AbsorpVisible = s_ipsc->rNumericArgs(4);
-            mat->AbsorpVisibleInput = s_ipsc->rNumericArgs(4);
-        } else {
-            mat->AbsorpVisible = 0.7;
-            mat->AbsorpVisibleInput = 0.7;
-        }
-
-        mat->NominalR = mat->Resistance;
     }
 
     // Add a fictitious insulation layer for each construction defined with F or C factor method
@@ -324,9 +339,12 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
 
             mat->ROnly = true;
             mat->Roughness = SurfaceRoughness::MediumRough;
-            mat->AbsorpSolar = 0.0;
-            mat->AbsorpThermal = 0.0;
-            mat->AbsorpVisible = 0.0;
+            mat->AbsorpSolarOut = 0.0;
+            mat->AbsorpThermalOut = 0.0;
+            mat->AbsorpVisibleOut = 0.0;
+            mat->AbsorpSolarIn = 0.0;
+            mat->AbsorpThermalIn = 0.0;
+            mat->AbsorpVisibleIn = 0.0;
         }
     }
 
@@ -407,12 +425,18 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         // Load data for other properties that need defaults
         mat->ROnly = true;
         mat->NominalR = mat->Resistance = 0.01;
-        mat->AbsorpThermal = 0.9999;
-        mat->AbsorpThermalInput = 0.9999;
-        mat->AbsorpSolar = 1.0;
-        mat->AbsorpSolarInput = 1.0;
-        mat->AbsorpVisible = 1.0;
-        mat->AbsorpVisibleInput = 1.0;
+        mat->AbsorpThermalOut = 0.9999;
+        mat->AbsorpThermalInputOut = 0.9999;
+        mat->AbsorpSolarOut = 1.0;
+        mat->AbsorpSolarInputOut = 1.0;
+        mat->AbsorpVisibleOut = 1.0;
+        mat->AbsorpVisibleInputOut = 1.0;
+        mat->AbsorpThermalIn = 0.9999;
+        mat->AbsorpThermalInputIn = 0.9999;
+        mat->AbsorpSolarIn = 1.0;
+        mat->AbsorpSolarInputIn = 1.0;
+        mat->AbsorpVisibleIn = 1.0;
+        mat->AbsorpVisibleInputIn = 1.0;
     }
 
     // Glass materials, regular input: transmittance and front/back reflectance
@@ -473,7 +497,8 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         if (s_ipsc->rNumericArgs(12) == 0.0) {
             mat->GlassTransDirtFactor = 1.0;
         }
-        mat->AbsorpThermal = mat->AbsorpThermalBack;
+        mat->AbsorpThermalIn = mat->AbsorpThermalBack;
+        mat->AbsorpThermalOut = mat->AbsorpThermalFront;
 
         if (mat->Conductivity > 0.0) {
             mat->Resistance = mat->NominalR = mat->Thickness / mat->Conductivity;
@@ -828,7 +853,8 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         if (s_ipsc->rNumericArgs(9) == 0.0) {
             mat->GlassTransDirtFactor = 1.0;
         }
-        mat->AbsorpThermal = mat->AbsorpThermalBack;
+        mat->AbsorpThermalIn = mat->AbsorpThermalBack;
+        mat->AbsorpThermalOut = mat->AbsorpThermalFront;
 
         if (mat->Conductivity > 0.0) {
             mat->Resistance = mat->NominalR = mat->Thickness / mat->Conductivity;
@@ -1266,13 +1292,13 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         mat->ReflectShade = s_ipsc->rNumericArgs(2);
         mat->TransVis = s_ipsc->rNumericArgs(3);
         mat->ReflectShadeVis = s_ipsc->rNumericArgs(4);
-        mat->AbsorpThermal = s_ipsc->rNumericArgs(5);
-        mat->AbsorpThermalInput = s_ipsc->rNumericArgs(5);
+        mat->AbsorpThermalOut = s_ipsc->rNumericArgs(5);
+        mat->AbsorpThermalInputOut = s_ipsc->rNumericArgs(5);
         mat->TransThermal = s_ipsc->rNumericArgs(6);
         mat->Thickness = s_ipsc->rNumericArgs(7);
         mat->Conductivity = s_ipsc->rNumericArgs(8);
-        mat->AbsorpSolar = max(0.0, 1.0 - mat->Trans - mat->ReflectShade);
-        mat->AbsorpSolarInput = mat->AbsorpSolar;
+        mat->AbsorpSolarOut = max(0.0, 1.0 - mat->Trans - mat->ReflectShade);
+        mat->AbsorpSolarInputOut = mat->AbsorpSolarOut;
         mat->toGlassDist = s_ipsc->rNumericArgs(9);
         mat->topOpeningMult = s_ipsc->rNumericArgs(10);
         mat->bottomOpeningMult = s_ipsc->rNumericArgs(11);
@@ -1546,9 +1572,9 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             ShowSevereError(state, s_ipsc->cCurrentModuleObject + "=\"" + s_ipsc->cAlphaArgs(1) + "\", Illegal value.");
             ShowContinueError(state, s_ipsc->cNumericFieldNames(2) + " must be >= 0 and <= 1 for material " + matScreen->Name + '.');
         }
-        matScreen->AbsorpThermal = s_ipsc->rNumericArgs(3);
-        matScreen->AbsorpThermalInput = s_ipsc->rNumericArgs(3);
-        if (matScreen->AbsorpThermal < 0.0 || matScreen->AbsorpThermal > 1.0) {
+        matScreen->AbsorpThermalOut = s_ipsc->rNumericArgs(3);
+        matScreen->AbsorpThermalInputOut = s_ipsc->rNumericArgs(3);
+        if (matScreen->AbsorpThermalOut < 0.0 || matScreen->AbsorpThermalOut > 1.0) {
             ErrorsFound = true;
             ShowSevereError(state, s_ipsc->cCurrentModuleObject + "=\"" + s_ipsc->cAlphaArgs(1) + "\", Illegal value.");
             ShowContinueError(state, s_ipsc->cNumericFieldNames(3) + " must be >= 0 and <= 1");
@@ -1629,12 +1655,12 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         matScreen->ROnly = true;
 
         //   Calculate absorptance accounting for the open area in the screen assembly (used only in CreateShadedWindowConstruction)
-        matScreen->AbsorpSolar = max(0.0, 1.0 - matScreen->Trans - matScreen->ShadeRef);
-        matScreen->AbsorpSolarInput = matScreen->AbsorpSolar;
-        matScreen->AbsorpVisible = max(0.0, 1.0 - matScreen->TransVis - matScreen->ShadeRefVis);
-        matScreen->AbsorpVisibleInput = matScreen->AbsorpVisible;
-        matScreen->AbsorpThermal *= (1.0 - matScreen->Trans);
-        matScreen->AbsorpThermalInput = matScreen->AbsorpThermal;
+        matScreen->AbsorpSolarOut = max(0.0, 1.0 - matScreen->Trans - matScreen->ShadeRef);
+        matScreen->AbsorpSolarInputOut = matScreen->AbsorpSolarOut;
+        matScreen->AbsorpVisibleOut = max(0.0, 1.0 - matScreen->TransVis - matScreen->ShadeRefVis);
+        matScreen->AbsorpVisibleInputOut = matScreen->AbsorpVisibleOut;
+        matScreen->AbsorpThermalOut *= (1.0 - matScreen->Trans);
+        matScreen->AbsorpThermalInputOut = matScreen->AbsorpThermalOut;
 
         if (matScreen->Conductivity > 0.0) {
             matScreen->NominalR = (1.0 - matScreen->Trans) * matScreen->Thickness / matScreen->Conductivity;
@@ -1660,7 +1686,7 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             ShowContinueError(state, "See Engineering Reference for calculation procedure for visible solar transmittance.");
         }
 
-        if (matScreen->TransThermal + matScreen->AbsorpThermal >= 1.0) {
+        if (matScreen->TransThermal + matScreen->AbsorpThermalOut >= 1.0) {
             ErrorsFound = true;
             ShowSevereError(state, s_ipsc->cCurrentModuleObject + "=\"" + s_ipsc->cAlphaArgs(1) + "\", Illegal value combination.");
             ShowSevereError(state, "Thermal hemispherical emissivity plus open area fraction (1-diameter/spacing)**2 not < 1.0");
@@ -1793,7 +1819,7 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             ShowContinueError(state, "Calculated visible transmittance + visible reflectance not < 1.0");
             ShowContinueError(state, "See Engineering Reference for calculation procedure for visible solar transmittance.");
         }
-        if (matScreen->TransThermal + matScreen->AbsorpThermal >= 1.0) {
+        if (matScreen->TransThermal + matScreen->AbsorpThermalOut >= 1.0) {
             ErrorsFound = true;
             ShowSevereError(state, s_ipsc->cCurrentModuleObject + "=\"" + s_ipsc->cAlphaArgs(1) + "\", Illegal value combination.");
             ShowSevereError(state, "Thermal hemispherical emissivity plus open area fraction (1-diameter/spacing)**2 not < 1.0");
@@ -2276,9 +2302,9 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         mat->Conductivity = s_ipsc->rNumericArgs(7);
         mat->Density = s_ipsc->rNumericArgs(8);
         mat->SpecHeat = s_ipsc->rNumericArgs(9);
-        mat->AbsorpThermal = s_ipsc->rNumericArgs(10); // emissivity
-        mat->AbsorpSolar = s_ipsc->rNumericArgs(11);   // (1 - Albedo)
-        mat->AbsorpVisible = s_ipsc->rNumericArgs(12);
+        mat->AbsorpThermalOut = s_ipsc->rNumericArgs(10); // emissivity
+        mat->AbsorpSolarOut = s_ipsc->rNumericArgs(11);   // (1 - Albedo)
+        mat->AbsorpVisibleOut = s_ipsc->rNumericArgs(12);
         mat->Porosity = s_ipsc->rNumericArgs(13);
         mat->MinMoisture = s_ipsc->rNumericArgs(14);
         mat->InitMoisture = s_ipsc->rNumericArgs(15);
@@ -2600,9 +2626,10 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         // Simon: in heat balance radiation exchange routines AbsorpThermal is used
         // and program will crash if value is not assigned.  Not sure if this is correct
         // or some additional calculation is necessary. Simon TODO
-        mat->AbsorpThermal = s_ipsc->rNumericArgs(5);
         mat->AbsorpThermalFront = s_ipsc->rNumericArgs(4);
         mat->AbsorpThermalBack = s_ipsc->rNumericArgs(5);
+        mat->AbsorpThermalIn = mat->AbsorpThermalBack;
+        mat->AbsorpThermalOut = mat->AbsorpThermalFront;
 
         mat->topOpeningMult = s_ipsc->rNumericArgs(6);
         mat->bottomOpeningMult = s_ipsc->rNumericArgs(7);
@@ -2742,12 +2769,14 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         print(state.files.eio,
               "! <Material Details>,Material Name,ThermalResistance {{m2-K/w}},Roughness,Thickness {{m}},Conductivity "
               "{{w/m-K}},Density {{kg/m3}},Specific Heat "
-              "{{J/kg-K}},Absorptance:Thermal,Absorptance:Solar,Absorptance:Visible\n");
+              "{{J/kg-K}},Absorptance:Thermal:OutsideFace,Absorptance:Solar:OutsideFace,Absorptance:Visible:OutsideFace,"
+              "Absorptance:Thermal:InsideFace,Absorptance:Solar:InsideFace,Absorptance:Visible:InsideFace\n");
 
         print(state.files.eio, "! <Material:Air>,Material Name,ThermalResistance {{m2-K/w}}\n");
 
         // Formats
-        constexpr std::string_view Format_701(" Material Details,{},{:.5f},{},{:.4f},{:.3f},{:.3f},{:.3f},{:.4f},{:.4f},{:.4f}\n");
+        constexpr std::string_view Format_701(
+            " Material Details,{},{:.5f},{},{:.4f},{:.3f},{:.3f},{:.3f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f},{:.4f}\n");
         constexpr std::string_view Format_702(" Material:Air,{},{:.5f}\n");
 
         for (auto const *mat : s_mat->materials) {
@@ -2766,9 +2795,12 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
                       mat->Conductivity,
                       mat->Density,
                       mat->SpecHeat,
-                      mat->AbsorpThermal,
-                      mat->AbsorpSolar,
-                      mat->AbsorpVisible);
+                      mat->AbsorpThermalOut,
+                      mat->AbsorpSolarOut,
+                      mat->AbsorpVisibleOut,
+                      mat->AbsorpThermalIn,
+                      mat->AbsorpSolarIn,
+                      mat->AbsorpVisibleIn);
             } break;
             }
         }
@@ -3101,7 +3133,8 @@ void MaterialGlass::SetupSimpleWindowGlazingSystem(EnergyPlusData &state)
     this->TransThermal = 0.0;
     this->AbsorpThermalBack = 0.84;
     this->AbsorpThermalFront = 0.84;
-    this->AbsorpThermal = this->AbsorpThermalBack;
+    this->AbsorpThermalIn = this->AbsorpThermalBack;
+    this->AbsorpThermalOut = this->AbsorpThermalFront;
 
     // step 1. Determine U-factor without film coefficients
     // Simple window model has its own correlation for film coefficients (m2-K/W) under Winter conditions as function of U-factor

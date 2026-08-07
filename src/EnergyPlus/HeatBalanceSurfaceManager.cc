@@ -2464,8 +2464,8 @@ void EvalOutsideMovableInsulation(EnergyPlusData &state)
             movInsul.present = false;
             int ConstrNum = s_surf->SurfActiveConstruction(SurfNum);
             auto const *thisMaterial = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(1));
-            state.dataHeatBalSurf->SurfAbsSolarExt(SurfNum) = thisMaterial->AbsorpSolar;
-            state.dataHeatBalSurf->SurfAbsThermalExt(SurfNum) = thisMaterial->AbsorpThermal;
+            state.dataHeatBalSurf->SurfAbsSolarExt(SurfNum) = thisMaterial->AbsorpSolarOut;
+            state.dataHeatBalSurf->SurfAbsThermalExt(SurfNum) = thisMaterial->AbsorpThermalOut;
             state.dataHeatBalSurf->SurfRoughnessExt(SurfNum) = thisMaterial->Roughness;
             continue;
         }
@@ -2478,9 +2478,9 @@ void EvalOutsideMovableInsulation(EnergyPlusData &state)
             assert(matGlass != nullptr);
             state.dataHeatBalSurf->SurfAbsSolarExt(SurfNum) = max(0.0, 1.0 - matGlass->Trans - matGlass->ReflectSolBeamFront);
         } else {
-            state.dataHeatBalSurf->SurfAbsSolarExt(SurfNum) = mat->AbsorpSolar;
+            state.dataHeatBalSurf->SurfAbsSolarExt(SurfNum) = mat->AbsorpSolarOut;
         }
-        state.dataHeatBalSurf->SurfAbsThermalExt(SurfNum) = mat->AbsorpThermal;
+        state.dataHeatBalSurf->SurfAbsThermalExt(SurfNum) = mat->AbsorpThermalOut;
         state.dataHeatBalSurf->SurfRoughnessExt(SurfNum) = mat->Roughness;
     }
 }
@@ -2511,9 +2511,9 @@ void EvalInsideMovableInsulation(EnergyPlusData &state)
             assert(matGlass != nullptr);
             state.dataHeatBalSurf->SurfAbsSolarInt(SurfNum) = max(0.0, 1.0 - matGlass->Trans - matGlass->ReflectSolBeamFront);
         } else {
-            state.dataHeatBalSurf->SurfAbsSolarInt(SurfNum) = mat->AbsorpSolar;
+            state.dataHeatBalSurf->SurfAbsSolarInt(SurfNum) = mat->AbsorpSolarIn;
         }
-        state.dataHeatBalSurf->SurfAbsThermalInt(SurfNum) = mat->AbsorpThermal;
+        state.dataHeatBalSurf->SurfAbsThermalInt(SurfNum) = mat->AbsorpThermalIn;
     }
 }
 
@@ -3908,7 +3908,7 @@ void InitIntSolarDistribution(EnergyPlusData &state)
                         Real64 AbsExt = state.dataHeatBalSurf->SurfAbsSolarExt(SurfNum);
                         auto const *thisMaterial = s_mat->materials(thisConstruct.LayerPoint(1));
                         state.dataHeatBalSurf->SurfQRadSWOutMvIns(SurfNum) =
-                            state.dataHeatBalSurf->SurfOpaqQRadSWOutAbs(SurfNum) * AbsExt / thisMaterial->AbsorpSolar;
+                            state.dataHeatBalSurf->SurfOpaqQRadSWOutAbs(SurfNum) * AbsExt / thisMaterial->AbsorpSolarOut;
                         // For transparent insulation, allow some sunlight to get through the movable insulation.
                         // The equation below is derived by taking what is transmitted through the layer and applying
                         // the fraction that is absorbed plus the back reflected portion (first order reflection only)
@@ -3919,7 +3919,7 @@ void InitIntSolarDistribution(EnergyPlusData &state)
 
                         state.dataHeatBalSurf->SurfOpaqQRadSWOutAbs(SurfNum) =
                             transMovInsul * state.dataHeatBalSurf->SurfQRadSWOutMvIns(SurfNum) *
-                            ((thisMaterial->AbsorpSolar / AbsExt) + (1 - thisMaterial->AbsorpSolar));
+                            ((thisMaterial->AbsorpSolarOut / AbsExt) + (1 - thisMaterial->AbsorpSolarOut));
                     }
                 }
                 // RJH 08/30/07 - Add SurfWinInitialDifSolInAbs, SurfWinInitialDifSolwinAbs, and SurfWinInitialDifSolAbsByShade
@@ -4691,10 +4691,14 @@ void InitEMSControlledSurfaceProperties(EnergyPlusData &state)
         if (mat->group != Material::Group::Regular) {
             continue;
         }
-
-        mat->AbsorpSolar = mat->AbsorpSolarEMSOverrideOn ? max(min(mat->AbsorpSolarEMSOverride, 0.9999), 0.0001) : mat->AbsorpSolarInput;
-        mat->AbsorpThermal = mat->AbsorpThermalEMSOverrideOn ? max(min(mat->AbsorpThermalEMSOverride, 0.9999), 0.0001) : mat->AbsorpThermalInput;
-        mat->AbsorpVisible = mat->AbsorpVisibleEMSOverrideOn ? max(min(mat->AbsorpVisibleEMSOverride, 0.9999), 0.0001) : mat->AbsorpVisibleInput;
+        mat->AbsorpSolarOut = mat->AbsorpSolarEMSOverrideOn ? max(min(mat->AbsorpSolarEMSOverride, 0.9999), 0.0001) : mat->AbsorpSolarInputOut;
+        mat->AbsorpThermalOut =
+            mat->AbsorpThermalEMSOverrideOn ? max(min(mat->AbsorpThermalEMSOverride, 0.9999), 0.0001) : mat->AbsorpThermalInputOut;
+        mat->AbsorpVisibleOut =
+            mat->AbsorpVisibleEMSOverrideOn ? max(min(mat->AbsorpVisibleEMSOverride, 0.9999), 0.0001) : mat->AbsorpVisibleInputOut;
+        mat->AbsorpSolarIn = mat->AbsorpSolarEMSOverrideOn ? max(min(mat->AbsorpSolarEMSOverride, 0.9999), 0.0001) : mat->AbsorpSolarInputIn;
+        mat->AbsorpThermalIn = mat->AbsorpThermalEMSOverrideOn ? max(min(mat->AbsorpThermalEMSOverride, 0.9999), 0.0001) : mat->AbsorpThermalInputIn;
+        mat->AbsorpVisibleIn = mat->AbsorpVisibleEMSOverrideOn ? max(min(mat->AbsorpVisibleEMSOverride, 0.9999), 0.0001) : mat->AbsorpVisibleInputIn;
     } // loop over materials
 
     // second, loop over constructions
@@ -4709,17 +4713,17 @@ void InitEMSControlledSurfaceProperties(EnergyPlusData &state)
         InsideMaterNum = thisConstruct.LayerPoint(TotLayers);
         if (InsideMaterNum != 0) {
             auto const *mat = s_mat->materials(InsideMaterNum);
-            thisConstruct.InsideAbsorpVis = mat->AbsorpVisible;
-            thisConstruct.InsideAbsorpSolar = mat->AbsorpSolar;
-            thisConstruct.InsideAbsorpThermal = mat->AbsorpThermal;
+            thisConstruct.InsideAbsorpVis = mat->AbsorpVisibleIn;
+            thisConstruct.InsideAbsorpSolar = mat->AbsorpSolarIn;
+            thisConstruct.InsideAbsorpThermal = mat->AbsorpThermalIn;
         }
 
         OutsideMaterNum = thisConstruct.LayerPoint(1);
         if (OutsideMaterNum != 0) {
             auto const *mat = s_mat->materials(OutsideMaterNum);
-            thisConstruct.OutsideAbsorpVis = mat->AbsorpVisible;
-            thisConstruct.OutsideAbsorpSolar = mat->AbsorpSolar;
-            thisConstruct.OutsideAbsorpThermal = mat->AbsorpThermal;
+            thisConstruct.OutsideAbsorpVis = mat->AbsorpVisibleOut;
+            thisConstruct.OutsideAbsorpSolar = mat->AbsorpSolarOut;
+            thisConstruct.OutsideAbsorpThermal = mat->AbsorpThermalOut;
         }
     } // for (ConstrNum)
 } // InitEMSControlledSurfaceProperties()
@@ -7632,7 +7636,7 @@ void CalcHeatBalanceOutsideSurf(EnergyPlusData &state,
                 case DataSurfaces::KivaFoundation: {
                     auto const *thisMaterial = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(1));
                     Material::SurfaceRoughness RoughSurf = thisMaterial->Roughness;
-                    Real64 AbsThermSurf = thisMaterial->AbsorpThermal;
+                    Real64 AbsThermSurf = thisMaterial->AbsorpThermalOut;
 
                     // Set Kiva exterior convection algorithms
                     Convect::InitExtConvCoeff(state,
@@ -8379,7 +8383,7 @@ void CalcHeatBalanceInsideSurf2(EnergyPlusData &state,
                                 auto const *thisMaterial2 = s_mat->materials(constructionSh.LayerPoint(1));
                                 assert(thisMaterial2 != nullptr);
                                 RoughSurf = thisMaterial2->Roughness;
-                                EmisOut = thisMaterial2->AbsorpThermal;
+                                EmisOut = thisMaterial2->AbsorpThermalOut;
                             }
                         }
 
@@ -9090,7 +9094,7 @@ void CalcHeatBalanceInsideSurf2CTFOnly(EnergyPlusData &state,
                                         auto const &constructionSh = state.dataConstruction->Construct(ConstrNumSh);
                                         auto const *thisMaterial2 = s_mat->materials(constructionSh.LayerPoint(1));
                                         RoughSurf = thisMaterial2->Roughness;
-                                        EmisOut = thisMaterial2->AbsorpThermal;
+                                        EmisOut = thisMaterial2->AbsorpThermalOut;
                                     }
                                 }
 

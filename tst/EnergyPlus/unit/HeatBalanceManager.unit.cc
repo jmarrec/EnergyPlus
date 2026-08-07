@@ -2410,8 +2410,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSMaterialThermalAbsorptanceUpdate
     auto *mat = new Material::MaterialBase;
     mat->Name = "ROOF MATERIAL";
     mat->group = Material::Group::Regular;
-    mat->AbsorpThermal = initialThermalAbsorptance;
-    mat->AbsorpThermalInput = initialThermalAbsorptance;
+    mat->AbsorpThermalOut = initialThermalAbsorptance;
+    mat->AbsorpThermalInputOut = initialThermalAbsorptance;
+    mat->AbsorpThermalIn = initialThermalAbsorptance;
+    mat->AbsorpThermalInputIn = initialThermalAbsorptance;
     mat->AbsorpThermalEMSOverrideOn = true;
     mat->AbsorpThermalEMSOverride = emsThermalAbsorptance;
     state->dataMaterial->materials(1) = mat;
@@ -2428,7 +2430,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSMaterialThermalAbsorptanceUpdate
 
     HeatBalanceSurfaceManager::InitEMSControlledSurfaceProperties(*state);
 
-    EXPECT_EQ(mat->AbsorpThermal, emsThermalAbsorptance);
+    EXPECT_EQ(mat->AbsorpThermalOut, emsThermalAbsorptance);
     EXPECT_EQ(construction.InsideAbsorpThermal, emsThermalAbsorptance);
     EXPECT_EQ(construction.OutsideAbsorpThermal, emsThermalAbsorptance);
 }
