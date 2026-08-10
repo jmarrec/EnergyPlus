@@ -1163,7 +1163,7 @@ namespace Sched {
                 weekRuleSched->applySaturday = true;
             }
 
-            if (NumNumbers < 2){
+            if (NumNumbers < 2) {
                 int firstDay = General::OrdinalDay(1, 1, 1);
                 int lastDay = General::OrdinalDay(12, 31, 1);
                 for (int day = firstDay; day <= lastDay; ++day) {
