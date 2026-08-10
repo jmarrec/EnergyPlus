@@ -4444,11 +4444,7 @@
     Yes,                                        !- Apply Wednesday
     Yes,                                        !- Apply Thursday
     Yes,                                        !- Apply Friday
-    Yes,                                        !- Apply Saturday
-    1,                                          !- Start Month
-    1,                                          !- Start Day
-    12,                                         !- End Month
-    31;                                         !- End Day
+    Yes;                                        !- Apply Saturday
 
 !-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:CONSTANT ===========
 
