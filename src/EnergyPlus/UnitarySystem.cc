@@ -16014,7 +16014,7 @@ namespace UnitarySystems {
             this->m_ElecPower = locFanElecPower;
             this->m_ElecPowerConsumption = this->m_ElecPower * ReportingConstant;
             if (this->m_CoolingPartLoadFrac > 0.0) {
-                this->m_CompPartLoadRatio = 0.0; // not used for water coils
+                this->m_CompPartLoadRatio = 0.0; // not used for water coils or non-compressor coils
             }
         } break;
             // May not need
@@ -16078,6 +16078,9 @@ namespace UnitarySystems {
             if (this->m_LastMode == CoolingMode) {
                 this->m_CoolingAuxElecConsumption += this->m_AncillaryOffPower * (1.0 - this->m_PartLoadFrac) * ReportingConstant;
             }
+            if (this->m_CoolingPartLoadFrac > 0.0 && this->m_coolCoilType != HVAC::CoilType::CoolingDXPackagedThermalStorage) {
+                this->m_CompPartLoadRatio = 0.0; // not used for water coils or non-compressor coils
+            }
             // these coil types do not consume electricity or report electricity at the plant
         } break;
         default: { // all other DX cooling coils
@@ -16126,6 +16129,9 @@ namespace UnitarySystems {
             }
 
             elecHeatingPower = state.dataHVACGlobal->ElecHeatingCoilPower;
+            if (this->m_HeatingPartLoadFrac > 0.0) {
+                this->m_CompPartLoadRatio = 0.0; // not used for water coils or non-compressor coils
+            }
         } break;
         case HVAC::CoilType::HeatingDXSingleSpeed:
         case HVAC::CoilType::HeatingWAHP:
@@ -16173,7 +16179,21 @@ namespace UnitarySystems {
                 this->m_HeatingAuxElecConsumption += this->m_AncillaryOffPower * (1.0 - this->m_PartLoadFrac) * ReportingConstant;
             }
             if (this->m_HeatingPartLoadFrac > 0.0) {
-                this->m_CompPartLoadRatio = 0.0; // not used for water coils or non-compressor systems
+                this->m_CompPartLoadRatio = 0.0; // not used for water coils or non-compressor coils
+            }
+        } break;
+        case HVAC::CoilType::HeatingElectric:
+        case HVAC::CoilType::HeatingGasOrOtherFuel: {
+            if (state.dataUnitarySystems->HeatingLoad) {
+                this->m_TotalAuxElecPower =
+                    this->m_AncillaryOnPower * this->m_PartLoadFrac + this->m_AncillaryOffPower * (1.0 - this->m_PartLoadFrac);
+                this->m_HeatingAuxElecConsumption = this->m_AncillaryOnPower * this->m_PartLoadFrac * ReportingConstant;
+            }
+            if (this->m_LastMode == HeatingMode) {
+                this->m_HeatingAuxElecConsumption += this->m_AncillaryOffPower * (1.0 - this->m_PartLoadFrac) * ReportingConstant;
+            }
+            if (this->m_HeatingPartLoadFrac > 0.0) {
+                this->m_CompPartLoadRatio = 0.0; // not used for water coils or non-compressor coils
             }
         } break;
         default: {

@@ -6836,6 +6836,7 @@ SetpointManager:Scheduled,
     EXPECT_LT(state->dataLoopNodes->Node(thisSys->AirOutNode).HumRatMax, 0.0);
     EXPECT_GT(state->dataLoopNodes->Node(thisSys->AirOutNode).HumRat, 0.009); // and air outlet HumRat > 0.009 without dehumidification control
     EXPECT_LT(thisSys->m_CoolingPartLoadFrac, 1.0);
+    EXPECT_EQ(thisSys->m_CompPartLoadRatio, 0.0);
     Real64 sensOnlyPartLoadFrac = thisSys->m_CoolingPartLoadFrac;
     Real64 sensOnlyOutletAirHumRat = state->dataLoopNodes->Node(thisSys->AirOutNode).HumRat;
 
@@ -6907,6 +6908,7 @@ SetpointManager:Scheduled,
     // EXPECT_GT( Node( heatingCoilWaterInletNodeIndex ).MassFlowRate, 0.0 );
     // HW water node flow is the same at inlet and outlet
     EXPECT_EQ(state->dataLoopNodes->Node(heatingCoilWaterInletNodeIndex).MassFlowRate, state->dataLoopNodes->Node(5).MassFlowRate);
+    EXPECT_EQ(thisSys->m_CompPartLoadRatio, 0.0);
     // HW water outlet node temp is lower than water inlet node temp
     // TODO: FIXME: following is failing for some reason even after correcting nodes.
     // EXPECT_LT( Node( 5 ).Temp, Node( heatingCoilWaterInletNodeIndex ).Temp );
@@ -13067,6 +13069,7 @@ Schedule:Compact,
     // max other models will show 0 here and in this case water flow will equal max flow * PartLoadRatio
     EXPECT_NEAR(thisSys->HeatCoilWaterFlowRatio, 0.04123, 0.0001); // heating coil water flow ratio, heating coil is on
     EXPECT_NEAR(thisSys->CoolCoilWaterFlowRatio, 0.0, 0.0001);     // cooling coil water flow ratio, cooling coil is off
+    EXPECT_EQ(thisSys->m_CompPartLoadRatio, 0.0);                  // no system compressor
     EXPECT_NEAR(thisSys->FanPartLoadRatio, thisSys->MaxNoCoolHeatAirMassFlow / thisSys->MaxHeatAirMassFlow,
                 0.0001);                                                                  // fan PLR at minimum speed
     EXPECT_LT(state->dataLoopNodes->Node(OutletNode).Temp, thisSys->DesignMaxOutletTemp); // outlet temperature does not exceed max limit
@@ -13141,6 +13144,7 @@ Schedule:Compact,
                      state->dataLoopNodes->Node(OutletNode).MassFlowRate); // inlet = outlet flow rate
     EXPECT_NEAR(thisSys->HeatCoilWaterFlowRatio, 0.3277, 0.0001);          // heating coil water flow ratio, heating coil is on
     EXPECT_NEAR(thisSys->CoolCoilWaterFlowRatio, 0.0, 0.0001);             // cooling coil water flow ratio, cooling coil is off
+    EXPECT_EQ(thisSys->m_CompPartLoadRatio, 0.0);                          // no system compressor
     EXPECT_NEAR(thisSys->FanPartLoadRatio,
                 0.6638,
                 0.0001); // fan PLR above minimum and below maximum speed (0-1 means fraction between no load flow and full flow)
@@ -13184,6 +13188,7 @@ Schedule:Compact,
                      state->dataLoopNodes->Node(OutletNode).MassFlowRate); // inlet = outlet flow rate
     EXPECT_NEAR(thisSys->HeatCoilWaterFlowRatio, 0.7704, 0.001);           // heating coil water flow ratio, heating coil is on
     EXPECT_NEAR(thisSys->CoolCoilWaterFlowRatio, 0.0, 0.0001);             // cooling coil water flow ratio, cooling coil is off
+    EXPECT_EQ(thisSys->m_CompPartLoadRatio, 0.0);                          // no system compressor
     EXPECT_EQ(thisSys->FanPartLoadRatio, 1.0); // fan PLR at maximum speed (0-1 means fraction between no load flow and full flow)
     EXPECT_GT(state->dataLoopNodes->Node(OutletNode).Temp, thisSys->DesignMaxOutletTemp); // outlet temperature exceeds max limit
 
@@ -13284,6 +13289,7 @@ Schedule:Compact,
                      state->dataLoopNodes->Node(OutletNode).MassFlowRate); // inlet = outlet flow rate
     EXPECT_NEAR(thisSys->HeatCoilWaterFlowRatio, 0.0, 0.0001);             // heating coil water flow ratio, heating coil is off
     EXPECT_NEAR(thisSys->CoolCoilWaterFlowRatio, 0.103, 0.001);            // cooling coil water flow ratio, cooling coil is on
+    EXPECT_EQ(thisSys->m_CompPartLoadRatio, 0.0);                          // no system compressor
     EXPECT_NEAR(thisSys->FanPartLoadRatio, thisSys->MaxNoCoolHeatAirMassFlow / thisSys->MaxCoolAirMassFlow,
                 0.0001);                                                                  // fan PLR at minimum speed
     EXPECT_GT(state->dataLoopNodes->Node(OutletNode).Temp, thisSys->DesignMinOutletTemp); // outlet temperature is not below min limit
