@@ -16013,6 +16013,9 @@ namespace UnitarySystems {
             }
             this->m_ElecPower = locFanElecPower;
             this->m_ElecPowerConsumption = this->m_ElecPower * ReportingConstant;
+            if (this->m_CoolingPartLoadFrac > 0.0) {
+                this->m_CompPartLoadRatio = 0.0; // not used for water coils
+            }
         } break;
             // May not need
         case HVAC::CoilType::CoolingWAHPSimple: {
@@ -16168,6 +16171,9 @@ namespace UnitarySystems {
             }
             if (this->m_LastMode == HeatingMode) {
                 this->m_HeatingAuxElecConsumption += this->m_AncillaryOffPower * (1.0 - this->m_PartLoadFrac) * ReportingConstant;
+            }
+            if (this->m_HeatingPartLoadFrac > 0.0) {
+                this->m_CompPartLoadRatio = 0.0; // not used for water coils or non-compressor systems
             }
         } break;
         default: {
