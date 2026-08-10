@@ -5691,18 +5691,19 @@ void CalculateZoneMRT(EnergyPlusData &state,
                 thisEnclosure.MRT = sumMAT / (int)thisEnclosure.spaceNums.size();
             }
         }
-        // Adjust the zone MRT based on the current conditions and the user defined split
-        for (int mrtNum = 1; mrtNum <= state.dataHeatBal->totZoneMRT; mrtNum++) { // set up and check zone and people indices
-            auto &thisZoneMRT = state.dataHeatBal->zoneMRTCalc(mrtNum);
-            auto &thisZoneNum = thisZoneMRT.zoneIndex;
-            auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisZoneNum);
-            if (state.dataHeatBal->Zone(thisZoneNum).useZoneMRTCalc) {
-                thisZoneHB.MRT = calcUserZoneMRT(state, thisZoneNum);
-            }
-        }
         // Set space MRTs
         for (int spaceNum : thisEnclosure.spaceNums) {
             state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNum).MRT = thisEnclosure.MRT;
+        }
+    }
+
+    // Adjust the zone MRT based on the current conditions and the user defined split
+    for (int mrtNum = 1; mrtNum <= state.dataHeatBal->totZoneMRT; mrtNum++) { // set up and check zone and people indices
+        auto &thisZoneMRT = state.dataHeatBal->zoneMRTCalc(mrtNum);
+        auto &thisZoneNum = thisZoneMRT.zoneIndex;
+        auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisZoneNum);
+        if (state.dataHeatBal->Zone(thisZoneNum).useZoneMRTCalc) {
+            thisZoneHB.MRT = calcUserZoneMRT(state, thisZoneNum);
         }
     }
 

@@ -19459,14 +19459,17 @@ ZoneMRTCalculation,
   A1 , \field Zone Name
        \type alpha
        \reference ZoneNames
+       \required-field
   A2 , \field People 1 Name
        \begin-extensible
        \type object-list
        \object-list PeopleNames
+       \required-field
   N1 , \field MRT Weighting Factor 1
        \type real
        \minimum 0.0
        \maximum 1.0
+       \required-field
   A3 , \field People 2 Name
        \type object-list
        \object-list PeopleNames

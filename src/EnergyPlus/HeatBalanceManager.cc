@@ -2282,7 +2282,7 @@ namespace HeatBalanceManager {
         }
     }
 
-    void getZoneMRTCalculationData(EnergyPlusData &state) // Error flag indicator (true if errors found)
+    void getZoneMRTCalculationData(EnergyPlusData &state)
     {
         // SUBROUTINE INFORMATION:
         //       AUTHOR         Rick Strand, UIUC
@@ -2337,7 +2337,7 @@ namespace HeatBalanceManager {
             if (thisZoneMRT.zoneIndex <= 0) { // zone was not found so produce an error message alerting the user of the problem
                 ShowSevereError(
                     state,
-                    std::format("{}{}=\"{}, does not refer to a valid zone name when it should match one of the zones in this input file.",
+                    std::format("{}, {}=\"{}\" does not refer to a valid zone name when it should match one of the zones in this input file.",
                                 routineName,
                                 cCurrentModuleObject,
                                 thisZoneMRT.name));
@@ -2348,22 +2348,34 @@ namespace HeatBalanceManager {
             } else { // zone was found, set the flag to make sure the user specified MRT for this zone is calculated
                 state.dataHeatBal->Zone(thisZoneMRT.zoneIndex).useZoneMRTCalc = true;
             }
+            for (int mrtNum2 = 1; mrtNum2 < mrtNum; ++mrtNum2) {
+                auto &thisZoneMRT2 = state.dataHeatBal->zoneMRTCalc(mrtNum2);
+                if (thisZoneMRT.zoneIndex ==
+                    thisZoneMRT2.zoneIndex) { // zone was already referenced by another ZoneMRTCalculation object--not allowed
+                    ShowSevereError(state,
+                                    std::format("{}, {}=\"{}\" is already referenced by another {} input object.  Only one is allowed per zone.",
+                                                routineName,
+                                                cCurrentModuleObject,
+                                                thisZoneMRT.name,
+                                                cCurrentModuleObject));
+                    ShowFatalError(state, std::format("{} Errors found getting inputs. Previous error(s) cause program termination.", routineName));
+                }
+            }
             for (int pNum = 1; pNum <= thisZoneMRT.numPeople; pNum++) {
                 auto &thisPeople = state.dataHeatBal->zoneMRTCalc(mrtNum).zoneMRTPeople(pNum);
                 thisPeople.peopleIndex = Util::FindItemInList(thisPeople.name, state.dataHeatBal->People);
                 if (thisPeople.peopleIndex <= 0) { // people name was not matched so produce an error message
                     ShowSevereError(state,
-                                    std::format("{}{}=\"{} has a People name of {} which does not match a People statement in this input file.",
+                                    std::format("{}, {}=\"{}\" has a People name of {} which does not match a People statement in this input file.",
                                                 routineName,
                                                 cCurrentModuleObject,
                                                 thisZoneMRT.name,
                                                 thisPeople.name));
                     ShowContinueError(state, std::format("The contribution of this People instance will be reset to zero as a result."));
                     thisPeople.fracMRT = 0.0;
-                }
-                if (state.dataHeatBal->People(thisPeople.peopleIndex).ZonePtr != thisZoneMRT.zoneIndex) {
+                } else if (state.dataHeatBal->People(thisPeople.peopleIndex).ZonePtr != thisZoneMRT.zoneIndex) {
                     ShowSevereError(state,
-                                    std::format("{}{}=\"{} has a People name of {} which is not in the same ZONE as the Zone referenced",
+                                    std::format("{}, {}=\"{}\" has a People name of {} which is not in the same ZONE as the Zone referenced",
                                                 routineName,
                                                 cCurrentModuleObject,
                                                 thisZoneMRT.name,
@@ -2378,7 +2390,7 @@ namespace HeatBalanceManager {
             }
             if (thisZoneMRT.sumFracZoneMRT > 1.0) {
                 ShowSevereError(state,
-                                std::format("{}{}=\"{}, object has individual People MRT weighting factors that sum up to greater than 1.0.",
+                                std::format("{}, {}=\"{}\" object has individual People MRT weighting factors that sum up to greater than 1.0.",
                                             routineName,
                                             cCurrentModuleObject,
                                             thisZoneMRT.name));
