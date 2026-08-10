@@ -121,9 +121,9 @@ void ManageZoneContaminanUpdates(EnergyPlusData &state,
 
     if (state.dataZoneContaminantPredictorCorrector->GetZoneAirContamInputFlag) {
         if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
-            GetZoneContaminanInputs(state);
+            GetZoneContaminantInputs(state);
         }
-        GetZoneContaminanSetPoints(state);
+        GetZoneContaminantSetPoints(state);
         state.dataZoneContaminantPredictorCorrector->GetZoneAirContamInputFlag = false;
     }
 
@@ -155,7 +155,7 @@ void ManageZoneContaminanUpdates(EnergyPlusData &state,
     }
 }
 
-void GetZoneContaminanInputs(EnergyPlusData &state)
+void GetZoneContaminantInputs(EnergyPlusData &state)
 {
 
     // SUBROUTINE INFORMATION:
@@ -990,7 +990,7 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
     }
 }
 
-void GetZoneContaminanSetPoints(EnergyPlusData &state)
+void GetZoneContaminantSetPoints(EnergyPlusData &state)
 {
 
     // SUBROUTINE INFORMATION:
@@ -1427,10 +1427,10 @@ void InitZoneContSetPoints(EnergyPlusData &state)
     }
 
     for (int Loop = 1; Loop <= (int)state.dataContaminantBalance->ContaminantControlledZone.size(); ++Loop) {
-        ErrorsFound = false;
+        bool ErrorsFound = false;
         if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
             int ZoneNum = state.dataContaminantBalance->ContaminantControlledZone(Loop).ActualZoneNum;
-            // per GetZoneContaminanSetPoints, this can't be nullptr
+            // per GetZoneContaminantSetPoints, this can't be nullptr
             state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) =
                 state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched->getCurrentVal();
         }
