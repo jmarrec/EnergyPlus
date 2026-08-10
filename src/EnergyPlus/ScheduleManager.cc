@@ -1163,11 +1163,60 @@ namespace Sched {
                 weekRuleSched->applySaturday = true;
             }
 
+            if (NumNumbers < 2){
+                int firstDay = General::OrdinalDay(1, 1, 1);
+                int lastDay = General::OrdinalDay(12, 31, 1);
+                for (int day = firstDay; day <= lastDay; ++day) {
+                    weekRuleSched->specificDays.push_back(day);
+                }
+                continue;
+            }
+
             for (int idx = 2; idx <= NumNumbers; idx += 4) {
-                int startMonth = int(Numbers(idx));
-                int startDay = int(Numbers(idx + 1));
-                int endMonth = int(Numbers(idx + 2));
-                int endDay = int(Numbers(idx + 3));
+                int startMonth = 1;
+                int startDay = 1;
+                int endMonth = 12;
+                int endDay = 31;
+                if (idx == 2) {
+                    if (!lNumericBlanks(idx)) {
+                        startMonth = int(Numbers(idx));
+                    }
+                    if (!lNumericBlanks(idx + 1)) {
+                        startDay = int(Numbers(idx + 1));
+                    }
+                    if (!lNumericBlanks(idx + 2)) {
+                        endMonth = int(Numbers(idx + 2));
+                    }
+                    if (!lNumericBlanks(idx + 3)) {
+                        endDay = int(Numbers(idx + 3));
+                    }
+                } else {
+                    if (lNumericBlanks(idx)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx));
+                        ErrorsFound = true;
+                    } else {
+                        startMonth = int(Numbers(idx));
+                    }
+                    if (lNumericBlanks(idx + 1)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx + 1));
+                        ErrorsFound = true;
+                    } else {
+                        startDay = int(Numbers(idx + 1));
+                    }
+                    if (lNumericBlanks(idx + 2)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx + 2));
+                        ErrorsFound = true;
+                    } else {
+                        endMonth = int(Numbers(idx + 2));
+                    }
+                    if (lNumericBlanks(idx + 3)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx + 3));
+                        ErrorsFound = true;
+                    } else {
+                        endDay = int(Numbers(idx + 3));
+                    }
+                }
+
                 int startPointer = General::OrdinalDay(startMonth, startDay, 1);
                 int endPointer = General::OrdinalDay(endMonth, endDay, 1);
                 int firstDay = General::OrdinalDay(1, 1, 1);
