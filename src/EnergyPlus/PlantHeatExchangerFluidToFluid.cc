@@ -750,13 +750,17 @@ void HeatExchangerStruct::size(EnergyPlusData &state)
             Real64 Cp_dem = 1.0;
             Real64 Dt_sup = 1.0;
             Real64 Dt_dem = 1.0;
+            Real64 rho_sup = 1.0;
+            Real64 rho_dem = 1.0;
             if (PltSizNumSupSide > 0 && PltSizNumDmdSide > 0) {
                 Cp_sup = this->SupplySideLoop.loop->glycol->getSpecificHeat(state, Constant::InitConvTemp, RoutineName);
                 Cp_dem = this->DemandSideLoop.loop->glycol->getSpecificHeat(state, Constant::InitConvTemp, RoutineName);
                 Dt_sup = state.dataSize->PlantSizData(PltSizNumSupSide).DeltaT;
                 Dt_dem = state.dataSize->PlantSizData(PltSizNumDmdSide).DeltaT;
+                rho_sup = this->SupplySideLoop.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                rho_dem = this->DemandSideLoop.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
             }
-            tmpDmdSideDesignVolFlowRate = tmpSupSideDesignVolFlowRate * ((Cp_sup * Dt_sup) / (Cp_dem * Dt_dem));
+            tmpDmdSideDesignVolFlowRate = tmpSupSideDesignVolFlowRate * ((Cp_sup * Dt_sup * rho_sup) / (Cp_dem * Dt_dem * rho_dem));
             if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                 this->DemandSideLoop.DesignVolumeFlowRate = tmpDmdSideDesignVolFlowRate;
             }
