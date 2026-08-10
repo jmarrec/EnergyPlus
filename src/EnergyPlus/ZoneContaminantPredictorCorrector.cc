@@ -1427,23 +1427,28 @@ void InitZoneContSetPoints(EnergyPlusData &state)
     }
 
     for (int Loop = 1; Loop <= (int)state.dataContaminantBalance->ContaminantControlledZone.size(); ++Loop) {
+        ErrorsFound = false;
         if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
             int ZoneNum = state.dataContaminantBalance->ContaminantControlledZone(Loop).ActualZoneNum;
-            if (state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched == nullptr) {
-                state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) = 0.0;
-            } else {
-                state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) =
-                    state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched->getCurrentVal();
-            }
+            // per GetZoneContaminanSetPoints, this can't be nullptr
+            state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) =
+                state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched->getCurrentVal();
         }
         if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
             int ZoneNum = state.dataContaminantBalance->ContaminantControlledZone(Loop).ActualZoneNum;
             if (state.dataContaminantBalance->ContaminantControlledZone(Loop).genericContamSetptSched == nullptr) {
-                state.dataContaminantBalance->ZoneGCSetPoint(ZoneNum) = 0.0;
+                ShowSevereError(
+                    state,
+                    std::format("ZoneControl:ContaminantController: a Generic Contaminant Setpoint Schedule is not found for the controller ={}",
+                                state.dataContaminantBalance->ContaminantControlledZone(Loop).Name));
+                ErrorsFound = true;
             } else {
                 state.dataContaminantBalance->ZoneGCSetPoint(ZoneNum) =
                     state.dataContaminantBalance->ContaminantControlledZone(Loop).genericContamSetptSched->getCurrentVal();
             }
+        }
+        if (ErrorsFound) {
+            ShowFatalError(state, "ZoneControl:ContaminantController: Program terminates for preceding reason(s).");
         }
     }
 
