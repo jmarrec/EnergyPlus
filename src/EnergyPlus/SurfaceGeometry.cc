@@ -13428,6 +13428,7 @@ namespace SurfaceGeometry {
                 thisConstructNewSh.LayerPoint({1, TotLayersOld}) = state.dataConstruction->Construct(ConstrNum).LayerPoint({1, TotLayersOld});
                 thisConstructNewSh.LayerPoint(TotLayersNew) = ShDevNum;
                 thisConstructNewSh.InsideAbsorpSolar = thisMaterialSh->AbsorpSolarIn;
+                thisConstructNewSh.InsideAbsorpThermal = thisMaterialSh->AbsorpThermalBack;
                 auto const *thisMaterialShLayer1 = s_mat->materials(state.dataConstruction->Construct(ConstrNewSh).LayerPoint(1));
                 thisConstructNewSh.OutsideAbsorpSolar = thisMaterialShLayer1->AbsorpSolarOut;
                 thisConstructNewSh.OutsideAbsorpThermal = thisMaterialShLayer1->AbsorpThermalFront;
@@ -13437,6 +13438,7 @@ namespace SurfaceGeometry {
                 thisConstructNewSh.LayerPoint({2, TotLayersNew}) = state.dataConstruction->Construct(ConstrNum).LayerPoint({1, TotLayersOld});
                 auto const *thisMaterialShInside = s_mat->materials(state.dataConstruction->Construct(ConstrNewSh).LayerPoint(TotLayersNew));
                 thisConstructNewSh.InsideAbsorpSolar = thisMaterialShInside->AbsorpSolarIn;
+                thisConstructNewSh.InsideAbsorpThermal = thisMaterialShInside->AbsorpThermalBack;
                 thisConstructNewSh.OutsideAbsorpSolar = thisMaterialSh->AbsorpSolarOut;
                 thisConstructNewSh.OutsideAbsorpThermal = thisMaterialSh->AbsorpThermalFront;
             }

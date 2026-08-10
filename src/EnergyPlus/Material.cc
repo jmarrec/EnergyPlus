@@ -1294,6 +1294,10 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         mat->ReflectShadeVis = s_ipsc->rNumericArgs(4);
         mat->AbsorpThermalOut = s_ipsc->rNumericArgs(5);
         mat->AbsorpThermalInputOut = s_ipsc->rNumericArgs(5);
+        mat->AbsorpThermalIn = s_ipsc->rNumericArgs(5);
+        mat->AbsorpThermalInputIn = s_ipsc->rNumericArgs(5);
+        mat->AbsorpThermalFront = s_ipsc->rNumericArgs(5);
+        mat->AbsorpThermalBack = s_ipsc->rNumericArgs(5);
         mat->TransThermal = s_ipsc->rNumericArgs(6);
         mat->Thickness = s_ipsc->rNumericArgs(7);
         mat->Conductivity = s_ipsc->rNumericArgs(8);

@@ -742,6 +742,7 @@ void CheckAndSetConstructionProperties(EnergyPlusData &state,
             auto const *thisInsideMaterial = s_mat->materials(InsideMaterNum);
             thisConstruct.InsideAbsorpVis = thisInsideMaterial->AbsorpVisibleIn;
             thisConstruct.InsideAbsorpSolar = thisInsideMaterial->AbsorpSolarIn;
+            thisConstruct.InsideAbsorpThermal = thisInsideMaterial->AbsorpThermalIn;
         }
 
         if ((matOutside->group == Material::Group::Glass) || (matOutside->group == Material::Group::GlassSimple)) { // Glass
