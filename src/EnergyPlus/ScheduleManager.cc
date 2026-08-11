@@ -1501,7 +1501,8 @@ namespace Sched {
             int startPointer = General::OrdinalDay(1, 1, 1);
             int endPointer = General::OrdinalDay(12, 31, 1);
             for (int day = startPointer; day <= endPointer; ++day) {
-                std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules = GetPrioritizedWeekRuleSchedules(state, Util::makeUPPER(Alphas(1)), day);
+                std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules =
+                    GetPrioritizedWeekRuleSchedules(state, Util::makeUPPER(Alphas(1)), day);
 
                 Sched::WeekSchedule *weekSched;
                 weekSched = GetWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
