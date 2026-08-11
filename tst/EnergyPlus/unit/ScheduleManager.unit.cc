@@ -2446,12 +2446,21 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DesignDayOverrides)
         "  24:00,                   !- Time 1",
         "  0.8;                     !- Value Until Time 1",
         " ",
+        "Schedule:Day:Interval,",
+        "  custom day 1,            !- Name",
+        "  Fractional,              !- Schedule Type Limits Name",
+        "  No,                      !- Interpolate to Timestep",
+        "  24:00,                   !- Time 1",
+        "  0.3;                     !- Value Until Time 1",
+        " ",
         "Schedule:Year:Rules,",
         "  schedule year rules,     !- Name",
         "  Fractional,              !- Schedule Type Limits Name",
         "  default day,             !- Default Day Schedule Name",
         "  ,                        !- Summer Design Day Schedule Name",
-        "  winter design day;       !- Winter Design Day Schedule Name",
+        "  winter design day,       !- Winter Design Day Schedule Name",
+        "  ,                        !- Holiday Schedule Name",
+        "  custom day 1;            !- Custom Day 1 Schedule Name",
         " ",
     });
 
@@ -2473,6 +2482,7 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DesignDayOverrides)
     auto const &defaultDaySched = weekSched->dayScheds[(int)Sched::DayType::Monday];
     auto const &summerDaySched = weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay];
     auto const &winterDaySched = weekSched->dayScheds[(int)Sched::DayType::WinterDesignDay];
+    auto const &customDay1Sched = weekSched->dayScheds[(int)Sched::DayType::CustomDay1];
 
     for (auto v : defaultDaySched->tsVals) {
         EXPECT_EQ(0.1, v);
@@ -2484,6 +2494,10 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DesignDayOverrides)
 
     for (auto v : winterDaySched->tsVals) {
         EXPECT_EQ(0.8, v);
+    }
+
+    for (auto v : customDay1Sched->tsVals) {
+        EXPECT_EQ(0.3, v);
     }
 }
 

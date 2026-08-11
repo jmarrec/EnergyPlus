@@ -251,15 +251,15 @@ namespace Sched {
     {
         // Members
         std::string scheduleYearRulesName;
-        int rulePriorityOrder;
+        int rulePriorityOrder = 0;
         DaySchedule *daySched = nullptr;
-        bool applySunday;
-        bool applyMonday;
-        bool applyTuesday;
-        bool applyWednesday;
-        bool applyThursday;
-        bool applyFriday;
-        bool applySaturday;
+        bool applySunday = false;
+        bool applyMonday = false;
+        bool applyTuesday = false;
+        bool applyWednesday = false;
+        bool applyThursday = false;
+        bool applyFriday = false;
+        bool applySaturday = false;
         std::vector<int> specificDays;
 
         WeekRuleSchedule() = default;
