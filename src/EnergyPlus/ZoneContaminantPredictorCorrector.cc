@@ -1088,10 +1088,7 @@ void GetZoneContaminantSetPoints(EnergyPlusData &state)
             state.dataHeatBal->Zone(controlledZone.ActualZoneNum).zoneContamControllerSched = controlledZone.availSched;
         }
 
-        if (state.dataIPShortCut->lAlphaFieldBlanks(4)) {
-            ShowSevereEmptyField(state, eoh, state.dataIPShortCut->cAlphaFieldNames(4));
-            ErrorsFound = true;
-        } else if ((controlledZone.setptSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(4))) == nullptr) {
+        if ((controlledZone.setptSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(4))) == nullptr) {
             ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(4), state.dataIPShortCut->cAlphaArgs(4));
             ErrorsFound = true;
         } else if (!controlledZone.setptSched->checkMinMaxVals(state, Clusive::In, 0.0, Clusive::In, 2000.0)) {
@@ -1430,7 +1427,7 @@ void InitZoneContSetPoints(EnergyPlusData &state)
         bool ErrorsFound = false;
         if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
             int ZoneNum = state.dataContaminantBalance->ContaminantControlledZone(Loop).ActualZoneNum;
-            // per GetZoneContaminantSetPoints, this can't be nullptr
+            // since required field in idd, this can't be nullptr
             state.dataContaminantBalance->ZoneCO2SetPoint(ZoneNum) =
                 state.dataContaminantBalance->ContaminantControlledZone(Loop).setptSched->getCurrentVal();
         }
