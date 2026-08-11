@@ -2180,10 +2180,16 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
         }
 
         // Only matters if the thermostat actually has a cooling setpoint
-        bool hasCoolingControl = tempZone.setpts[(int)HVAC::SetptType::SingleCool].isUsed ||
-                                 tempZone.setpts[(int)HVAC::SetptType::SingleHeatCool].isUsed ||
-                                 tempZone.setpts[(int)HVAC::SetptType::DualHeatCool].isUsed;
-        if (!hasCoolingControl) {
+        if (tempZone.setptTypeSched == nullptr) {
+            continue;
+        }
+        bool hasActiveCoolingControl =
+            (tempZone.setpts[(int)HVAC::SetptType::SingleCool].isUsed && tempZone.setptTypeSched->hasVal(state, (int)HVAC::SetptType::SingleCool)) ||
+            (tempZone.setpts[(int)HVAC::SetptType::SingleHeatCool].isUsed &&
+             tempZone.setptTypeSched->hasVal(state, (int)HVAC::SetptType::SingleHeatCool)) ||
+            (tempZone.setpts[(int)HVAC::SetptType::DualHeatCool].isUsed &&
+             tempZone.setptTypeSched->hasVal(state, (int)HVAC::SetptType::DualHeatCool));
+        if (!hasActiveCoolingControl) {
             continue;
         }
 
