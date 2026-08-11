@@ -863,6 +863,25 @@ TEST_F(EnergyPlusFixture, ConstantSpeedPumpLowFlowFullPower)
     EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].Count, 1);
     auto const &msg = state->dataErrTracking->RecurringErrors[0].Message;
     EXPECT_NE(msg.find("pump has full power even at less than 25% nominal flow rate"), std::string::npos);
+    // Pressure overrides calculate power from the actual flow and pressure, so positive power is not necessarily full power.
+    state->dataPumps->PumpEquip(1).EMSPressureOverrideOn = true;
+    state->dataPumps->PumpEquip(1).EMSPressureOverrideValue = 200.0;
+
+    Pumps::CalcPumps(*state, 1, massflowrate, PumpRunning);
+
+    EXPECT_NEAR(state->dataPumps->PumpEquip(1).Power, 0.2778, 0.0001);
+    EXPECT_EQ(state->dataErrTracking->NumRecurringErrors, 1);
+    EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].Count, 1);
+
+    state->dataPumps->PumpEquip(1).EMSPressureOverrideOn = false;
+    state->dataPumps->PumpEquip(1).plantLoc.loop->UsePressureForPumpCalcs = true;
+    state->dataPumps->PumpEquip(1).plantLoc.loop->PressureDrop = 200.0;
+
+    Pumps::CalcPumps(*state, 1, massflowrate, PumpRunning);
+
+    EXPECT_NEAR(state->dataPumps->PumpEquip(1).Power, 0.2778, 0.0001);
+    EXPECT_EQ(state->dataErrTracking->NumRecurringErrors, 1);
+    EXPECT_EQ(state->dataErrTracking->RecurringErrors[0].Count, 1);
 }
 
 } // namespace EnergyPlus

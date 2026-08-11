@@ -1955,8 +1955,11 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
         daPumps->Power = VolFlowRate * thisPump.EMSPressureOverrideValue / TotalEffic;
     }
 
-    // #10821: Warn when constant speed pump is operating at less than full flow but consuming full power
-    if (pumpType == PumpType::ConSpeed && daPumps->Power > 0.0 && VolFlowRate < 0.25 * thisPump.NomVolFlowRate) {
+    // #10821: Warn when the nominal constant speed pump model is operating at low flow but consuming full power.
+    // Pressure-based and EMS pressure calculations override the nominal full-power model and must not trigger this warning.
+    bool const pumpPowerWasOverridden =
+        (thisPump.plantLoc.loopNum > 0 && thisPump.plantLoc.loop->UsePressureForPumpCalcs) || thisPump.EMSPressureOverrideOn;
+    if (pumpType == PumpType::ConSpeed && !pumpPowerWasOverridden && daPumps->Power > 0.0 && VolFlowRate < 0.25 * thisPump.NomVolFlowRate) {
         ShowRecurringWarningErrorAtEnd(
             state,
             std::format("{} Part Load Ratio < 1, {}, Name={}, pump has full power even at less than 25% nominal flow rate, VolFlowRate=",
