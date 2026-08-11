@@ -240,7 +240,7 @@ MyObject,
         "patternProperties": {
             ".*": {
                 "type": "object",
-                "properties": {"inlet_node_name": {"type": "string"}},
+                "properties": {"inlet_node_name": {"type": "string", "data_type": "node"}},
                 "required": [
                     "inlet_node_name",
                 ],
