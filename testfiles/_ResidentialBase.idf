@@ -4379,8 +4379,8 @@
 
   Schedule:Week:Rule,
     trans schedule winter=0.85 summer=0.7 rule, !- Name
-    trans schedule winter=0.85 summer=0.7,      !- Schedule Ruleset Name
-    2,                                          !- Rule Order
+    trans schedule winter=0.85 summer=0.7,      !- Schedule Year Rules Name
+    2,                                          !- Rule Priority Order
     trans schedule winter=0.85 summer=0.7 allday1, !- Day Schedule Name
     Yes,                                        !- Apply Sunday
     Yes,                                        !- Apply Monday
@@ -4396,8 +4396,8 @@
 
   Schedule:Week:Rule,
     trans schedule winter=0.85 summer=0.7 rule 1, !- Name
-    trans schedule winter=0.85 summer=0.7,      !- Schedule Ruleset Name
-    1,                                          !- Rule Order
+    trans schedule winter=0.85 summer=0.7,      !- Schedule Year Rules Name
+    1,                                          !- Rule Priority Order
     trans schedule winter=0.85 summer=0.7 allday121, !- Day Schedule Name
     Yes,                                        !- Apply Sunday
     Yes,                                        !- Apply Monday
@@ -4413,8 +4413,8 @@
 
   Schedule:Week:Rule,
     trans schedule winter=0.85 summer=0.7 rule 2, !- Name
-    trans schedule winter=0.85 summer=0.7,      !- Schedule Ruleset Name
-    0,                                          !- Rule Order
+    trans schedule winter=0.85 summer=0.7,      !- Schedule Year Rules Name
+    0,                                          !- Rule Priority Order
     trans schedule winter=0.85 summer=0.7 allday305, !- Day Schedule Name
     Yes,                                        !- Apply Sunday
     Yes,                                        !- Apply Monday
@@ -4435,8 +4435,8 @@
 
   Schedule:Week:Rule,
     clothes dryer schedule rule,                !- Name
-    clothes dryer schedule,                     !- Schedule Ruleset Name
-    0,                                          !- Rule Order
+    clothes dryer schedule,                     !- Schedule Year Rules Name
+    0,                                          !- Rule Priority Order
     clothes dryer schedule allday1,             !- Day Schedule Name
     Yes,                                        !- Apply Sunday
     Yes,                                        !- Apply Monday
