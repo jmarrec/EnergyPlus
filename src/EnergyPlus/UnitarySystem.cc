@@ -2244,13 +2244,16 @@ namespace UnitarySystems {
         // If not set, set DesignFanVolFlowRate as greater of cooling and heating to make sure this value > 0.
         // If fan is hard-sized, use that value, otherwise the fan will size to DesignFanVolFlowRate
         if (this->m_DesignFanVolFlowRate <= 0.0) {
+            // use max air flow if fan air flow is autosized
             this->m_DesignFanVolFlowRate = max(this->m_MaxCoolAirVolFlow, this->m_MaxHeatAirVolFlow);
+            // use fan air flow if fan is hard sized
             if (this->m_ActualFanVolFlowRate > 0.0) {
                 this->m_DesignFanVolFlowRate = this->m_ActualFanVolFlowRate;
             }
             if (this->m_DesignFanVolFlowRate <= 0.0) {
                 ShowWarningError(state, std::format("{}: {} = {}", RoutineName, CompType, CompName));
                 ShowContinueError(state, "Unable to determine fan or system air flow rate.");
+                this->m_DesignFanVolFlowRate = 0.0; // reset so it's not negative, should rarely ever get here (e.g., no load)
             }
         }
         if (!this->m_FanExists) {
@@ -16118,6 +16121,7 @@ namespace UnitarySystems {
         case HVAC::CoilType::HeatingElectricMultiStage: {
             this->m_CycRatio = max(this->m_CoolingCycRatio, this->m_HeatingCycRatio);
             this->m_SpeedRatio = max(this->m_CoolingSpeedRatio, this->m_HeatingSpeedRatio);
+            this->m_SpeedNum = max(this->m_CoolingSpeedNum, this->m_HeatingSpeedNum);
 
             if (state.dataUnitarySystems->HeatingLoad) {
                 this->m_TotalAuxElecPower =
