@@ -3982,7 +3982,7 @@ void SimZoneEquipment(EnergyPlusData &state, bool const FirstHVACIteration, bool
                                                               zoneEquipList.EquipIndex(EquipPtr));
                 LatOutputProvided = 0.0; // This baseboard does not add/remove any latent heat
                 // ConvectionCoefficients::DynamicIntConvSurfaceClassification does not use this flag??
-                zoneEquipList.EquipData(EquipPtr).ON = SysOutputProvided > 0.0;
+                zoneEquipList.EquipData(EquipPtr).ON = SysOutputProvided != 0.0;
             } break;
 
             case ZoneEquipType::ExhaustFan: { // 'Fan:ZoneExhaust'
