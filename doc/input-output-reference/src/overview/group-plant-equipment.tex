@@ -4343,6 +4343,8 @@ Outputs available from the boiler:
     HVAC,Average,Boiler Part Load Ratio
     \item
     HVAC,Average,Boiler Efficiency
+    \item
+    HVAC,Average,Boiler Coefficient of Performance {[}W/W{]}
 \end{itemize}
 
 ~ One of the following blocks will be applicable based on fuel type:
@@ -4497,6 +4499,12 @@ This output is the thermal efficiency for the boiler during heating operation. I
 
 \emph{Note that this variable is reported as zero when the boiler is not operating. When reported for frequencies longer than ``detailed'' (such as timestep, hourly, daily, monthly or environment), this output will only be meaningful when the boiler is operating for the entire reporting period. To determine an efficiency for a longer time period, compute the efficiency based on boiler heating rate divided by boiler gas rate over the desired period.}
 
+\paragraph{Boiler Coefficient of Performance {[]}}\label{boiler-coefficient-of-performance}
+
+This output is the coefficient of performance for the boiler during heating operation. It is calculated by dividing the boiler heating rate by the sum of the boiler electricity rate, boiler ancillary electricity rate and the boiler ancillary fuel (fuel type dependent) rate.
+
+\emph{Note that this variable is reported as zero when the boiler is not operating. When reported for frequencies longer than ``detailed'' (such as timestep, hourly, daily, monthly or environment), this output will only be meaningful when the boiler is operating for the entire reporting period. To determine an efficiency for a longer time period, compute the efficiency based on boiler heating rate divided by boiler gas rate over the desired period.}
+
 \paragraph{Boiler \textless{}Fuel Type\textgreater{} Rate {[}W{]}}\label{boiler-fuel-type-rate-w}
 
 \paragraph{Boiler \textless{}Fuel Type\textgreater{} Energy {[}J{]} \textbackslash{}}\label{boiler-fuel-type-energy-j}
@@ -4632,6 +4640,8 @@ Outputs available from the steam boiler:
     \item
     HVAC,Average,Boiler Steam Efficiency
     \item
+    HVAC,Average,Boiler Steam Coefficient of Performance {[}W/W{]}
+    \item
     Zone,Meter,Boilers:EnergyTransfer {[}J{]}
     \item
     HVAC,Average,Boiler Steam Inlet Temperature {[}C{]}
@@ -4742,6 +4752,12 @@ These outputs are the heating output (load) of the boiler. Energy is metered on 
 \paragraph{Boiler Steam Efficiency {[]}}\label{boiler-steam-efficiency}
 
 This output is the thermal efficiency for the boiler during heating operation. It is calculated as the boiler heat transfer rate (Boiler Heating Rate) divided by the ``fuel'' consumption rate by the boiler.
+
+\emph{Note that this variable is reported as zero when the boiler is not operating. When reported for frequencies longer than ``detailed'' (such as timestep, hourly, daily, monthly or environment), this output will only be meaningful when the boiler is operating for the entire reporting period. To determine an efficiency for a longer time period, compute the efficiency based on boiler heating rate divided by boiler \textless{}Fuel Type\textgreater{} rate over the desired period.}
+
+\paragraph{Boiler Steam Coefficient of Performance {[]}}\label{boile-steamr-coefficient-of-performance}
+
+This output is the coefficient of performance for the steam boiler during heating operation. It is calculated by dividing the boiler heating rate by the boiler fuel rate.
 
 \emph{Note that this variable is reported as zero when the boiler is not operating. When reported for frequencies longer than ``detailed'' (such as timestep, hourly, daily, monthly or environment), this output will only be meaningful when the boiler is operating for the entire reporting period. To determine an efficiency for a longer time period, compute the efficiency based on boiler heating rate divided by boiler \textless{}Fuel Type\textgreater{} rate over the desired period.}
 
