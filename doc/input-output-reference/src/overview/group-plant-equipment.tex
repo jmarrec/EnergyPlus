@@ -4501,9 +4501,9 @@ This output is the thermal efficiency for the boiler during heating operation. I
 
 \paragraph{Boiler Coefficient of Performance {[]}}\label{boiler-coefficient-of-performance}
 
-This output is the coefficient of performance for the boiler during heating operation. It is calculated by dividing the boiler heating rate by the sum of the boiler electricity rate, boiler ancillary electricity rate and the boiler ancillary fuel (fuel type dependent) rate.
+This output is the operating coefficient of performance for the boiler during heating operation. At each timestep, it is calculated by dividing Boiler Heating Rate by the sum of Boiler \textless{}Fuel Type\textgreater{} Rate, Boiler Ancillary Electricity Rate, and, for non-electric boilers, Boiler Ancillary \textless{}Fuel Type\textgreater{} Rate.
 
-\emph{Note that this variable is reported as zero when the boiler is not operating. When reported for frequencies longer than ``detailed'' (such as timestep, hourly, daily, monthly or environment), this output will only be meaningful when the boiler is operating for the entire reporting period. To determine an efficiency for a longer time period, compute the efficiency based on boiler heating rate divided by boiler gas rate over the desired period.}
+\emph{This variable is zero when the boiler is not producing heat. At reporting frequencies longer than ``detailed,'' EnergyPlus reports the time-weighted average of the timestep COP values, including zero values while the boiler is off. This value is not the COP for the reporting period. Calculate the reporting-period COP by dividing summed Boiler Heating Energy by the sum of Boiler \textless{}Fuel Type\textgreater{} Energy, Boiler Ancillary Electricity Energy, and, for non-electric boilers, Boiler Ancillary \textless{}Fuel Type\textgreater{} Energy over the same period.}
 
 \paragraph{Boiler \textless{}Fuel Type\textgreater{} Rate {[}W{]}}\label{boiler-fuel-type-rate-w}
 
@@ -4755,11 +4755,11 @@ This output is the thermal efficiency for the boiler during heating operation. I
 
 \emph{Note that this variable is reported as zero when the boiler is not operating. When reported for frequencies longer than ``detailed'' (such as timestep, hourly, daily, monthly or environment), this output will only be meaningful when the boiler is operating for the entire reporting period. To determine an efficiency for a longer time period, compute the efficiency based on boiler heating rate divided by boiler \textless{}Fuel Type\textgreater{} rate over the desired period.}
 
-\paragraph{Boiler Steam Coefficient of Performance {[]}}\label{boile-steamr-coefficient-of-performance}
+\paragraph{Boiler Steam Coefficient of Performance {[]}}\label{boiler-steam-coefficient-of-performance}
 
-This output is the coefficient of performance for the steam boiler during heating operation. It is calculated by dividing the boiler heating rate by the boiler fuel rate.
+This output is the operating coefficient of performance for the steam boiler during heating operation. At each timestep, it is calculated by dividing Boiler Heating Rate by Boiler \textless{}Fuel Type\textgreater{} Rate.
 
-\emph{Note that this variable is reported as zero when the boiler is not operating. When reported for frequencies longer than ``detailed'' (such as timestep, hourly, daily, monthly or environment), this output will only be meaningful when the boiler is operating for the entire reporting period. To determine an efficiency for a longer time period, compute the efficiency based on boiler heating rate divided by boiler \textless{}Fuel Type\textgreater{} rate over the desired period.}
+\emph{This variable is zero when the steam boiler is not producing heat. At reporting frequencies longer than ``detailed,'' EnergyPlus reports the time-weighted average of the timestep COP values, including zero values while the boiler is off. This value is not the COP for the reporting period. Calculate the reporting-period COP by dividing summed Boiler Heating Energy by summed Boiler \textless{}Fuel Type\textgreater{} Energy over the same period.}
 
 \paragraph{Boiler Steam Inlet Temperature {[}C{]}}\label{boiler-steam-inlet-temperature-c}
 
