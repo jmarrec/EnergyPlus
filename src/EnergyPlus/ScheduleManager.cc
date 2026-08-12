@@ -838,7 +838,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->dayScheduleMap.find(Alphas(1)) != s_sched->dayScheduleMap.end()) {
+            if (s_sched->dayScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->dayScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -893,7 +893,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->dayScheduleMap.find(Alphas(1)) != s_sched->dayScheduleMap.end()) {
+            if (s_sched->dayScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->dayScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -971,7 +971,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->dayScheduleMap.find(Alphas(1)) != s_sched->dayScheduleMap.end()) {
+            if (s_sched->dayScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->dayScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1081,7 +1081,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->weekScheduleMap.find(Alphas(1)) != s_sched->weekScheduleMap.end()) {
+            if (s_sched->weekScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->weekScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1117,14 +1117,14 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->weekRuleScheduleMap.find(Alphas(1)) != s_sched->weekRuleScheduleMap.end()) {
+            if (s_sched->weekRuleScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->weekRuleScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
             }
 
             auto *weekRuleSched = AddWeekRuleSchedule(state, Alphas(1));
-            weekRuleSched->scheduleYearRulesName = Alphas(2);
+            weekRuleSched->scheduleYearRulesName = Util::makeUPPER(Alphas(2));
             weekRuleSched->rulePriorityOrder = Numbers(1);
             auto *daySched = GetDaySchedule(state, Alphas(3));
             if (daySched == nullptr) {
@@ -1134,40 +1134,82 @@ namespace Sched {
             } else {
                 weekRuleSched->daySched = daySched;
             }
-            weekRuleSched->applySunday = false;
             if ((Alphas(4)) == "YES") {
                 weekRuleSched->applySunday = true;
             }
-            weekRuleSched->applyMonday = false;
             if ((Alphas(5)) == "YES") {
                 weekRuleSched->applyMonday = true;
             }
-            weekRuleSched->applyTuesday = false;
             if ((Alphas(6)) == "YES") {
                 weekRuleSched->applyTuesday = true;
             }
-            weekRuleSched->applyWednesday = false;
             if ((Alphas(7)) == "YES") {
                 weekRuleSched->applyWednesday = true;
             }
-            weekRuleSched->applyThursday = false;
             if ((Alphas(8)) == "YES") {
                 weekRuleSched->applyThursday = true;
             }
-            weekRuleSched->applyFriday = false;
             if ((Alphas(9)) == "YES") {
                 weekRuleSched->applyFriday = true;
             }
-            weekRuleSched->applySaturday = false;
             if ((Alphas(10)) == "YES") {
                 weekRuleSched->applySaturday = true;
             }
 
+            if (NumNumbers < 2) {
+                int firstDay = General::OrdinalDay(1, 1, 1);
+                int lastDay = General::OrdinalDay(12, 31, 1);
+                for (int day = firstDay; day <= lastDay; ++day) {
+                    weekRuleSched->specificDays.push_back(day);
+                }
+                continue;
+            }
+
             for (int idx = 2; idx <= NumNumbers; idx += 4) {
-                int startMonth = int(Numbers(idx));
-                int startDay = int(Numbers(idx + 1));
-                int endMonth = int(Numbers(idx + 2));
-                int endDay = int(Numbers(idx + 3));
+                int startMonth = 1;
+                int startDay = 1;
+                int endMonth = 12;
+                int endDay = 31;
+                if (idx == 2) {
+                    if (!lNumericBlanks(idx)) {
+                        startMonth = int(Numbers(idx));
+                    }
+                    if (!lNumericBlanks(idx + 1)) {
+                        startDay = int(Numbers(idx + 1));
+                    }
+                    if (!lNumericBlanks(idx + 2)) {
+                        endMonth = int(Numbers(idx + 2));
+                    }
+                    if (!lNumericBlanks(idx + 3)) {
+                        endDay = int(Numbers(idx + 3));
+                    }
+                } else {
+                    if (lNumericBlanks(idx)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx));
+                        ErrorsFound = true;
+                    } else {
+                        startMonth = int(Numbers(idx));
+                    }
+                    if (lNumericBlanks(idx + 1)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx + 1));
+                        ErrorsFound = true;
+                    } else {
+                        startDay = int(Numbers(idx + 1));
+                    }
+                    if (lNumericBlanks(idx + 2)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx + 2));
+                        ErrorsFound = true;
+                    } else {
+                        endMonth = int(Numbers(idx + 2));
+                    }
+                    if (lNumericBlanks(idx + 3)) {
+                        ShowSevereEmptyField(state, eoh, cNumericFields(idx + 3));
+                        ErrorsFound = true;
+                    } else {
+                        endDay = int(Numbers(idx + 3));
+                    }
+                }
+
                 int startPointer = General::OrdinalDay(startMonth, startDay, 1);
                 int endPointer = General::OrdinalDay(endMonth, endDay, 1);
                 int firstDay = General::OrdinalDay(1, 1, 1);
@@ -1265,7 +1307,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1366,7 +1408,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1375,7 +1417,7 @@ namespace Sched {
             // Validate rule orders, checking for duplicates
             std::vector<Sched::WeekRuleSchedule *> weekRuleSchedules;
             for (Sched::WeekRuleSchedule *weekRuleSchedule : s_sched->weekRuleSchedules) {
-                if (weekRuleSchedule->scheduleYearRulesName == Alphas(1)) {
+                if (weekRuleSchedule->scheduleYearRulesName == Util::makeUPPER(Alphas(1))) {
                     weekRuleSchedules.push_back(weekRuleSchedule);
                 }
             }
@@ -1459,22 +1501,31 @@ namespace Sched {
             int startPointer = General::OrdinalDay(1, 1, 1);
             int endPointer = General::OrdinalDay(12, 31, 1);
             for (int day = startPointer; day <= endPointer; ++day) {
-                std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules = GetPrioritizedWeekRuleSchedules(state, Alphas(1), day);
+                std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules =
+                    GetPrioritizedWeekRuleSchedules(state, Util::makeUPPER(Alphas(1)), day);
+
+                Sched::WeekSchedule *weekSched;
+                weekSched = GetWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
+                if (weekSched == nullptr) {
+                    weekSched = AddWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
+                    weekSched->isUsed = true;
+
+                    for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
+                        weekSched->dayScheds[iDayType] = defaultDaySched;
+                    }
+
+                    sched->weekScheds[day] = weekSched;
+                    ++daysInYear[day];
+                }
+
+                weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay] = summerDesignDaySchedule;
+                weekSched->dayScheds[(int)Sched::DayType::WinterDesignDay] = winterDesignDaySchedule;
+                weekSched->dayScheds[(int)Sched::DayType::Holiday] = holidaySchedule;
+                weekSched->dayScheds[(int)Sched::DayType::CustomDay1] = customDay1Schedule;
+                weekSched->dayScheds[(int)Sched::DayType::CustomDay2] = customDay2Schedule;
+
                 for (Sched::WeekRuleSchedule *weekRuleSched : sortedWeekRuleSchedules) {
                     if (weekRuleSched != nullptr) {
-                        Sched::WeekSchedule *weekSched;
-                        weekSched = GetWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
-                        if (weekSched == nullptr) {
-                            weekSched = AddWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
-                            weekSched->isUsed = true;
-
-                            for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
-                                weekSched->dayScheds[iDayType] = defaultDaySched;
-                            }
-
-                            sched->weekScheds[day] = weekSched;
-                            ++daysInYear[day];
-                        }
 
                         if (weekRuleSched->applySunday) {
                             weekSched->dayScheds[(int)Sched::DayType::Sunday] = weekRuleSched->daySched;
@@ -1497,12 +1548,6 @@ namespace Sched {
                         if (weekRuleSched->applySaturday) {
                             weekSched->dayScheds[(int)Sched::DayType::Saturday] = weekRuleSched->daySched;
                         }
-
-                        weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay] = summerDesignDaySchedule;
-                        weekSched->dayScheds[(int)Sched::DayType::WinterDesignDay] = winterDesignDaySchedule;
-                        weekSched->dayScheds[(int)Sched::DayType::Holiday] = holidaySchedule;
-                        weekSched->dayScheds[(int)Sched::DayType::CustomDay1] = customDay1Schedule;
-                        weekSched->dayScheds[(int)Sched::DayType::CustomDay2] = customDay2Schedule;
                     }
                 }
             }
@@ -1582,7 +1627,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1881,7 +1926,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -2266,7 +2311,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -2308,7 +2353,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -2368,7 +2413,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 if (NumExternalInterfaceSchedules >= 1) {
                     ShowContinueError(
@@ -2435,7 +2480,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 if (NumExternalInterfaceSchedules >= 1) {
                     ShowContinueError(
@@ -2933,7 +2978,7 @@ namespace Sched {
         std::vector<Sched::WeekRuleSchedule *> weekRuleSchedules;
         for (Sched::WeekRuleSchedule *weekRuleSchedule : s_sched->weekRuleSchedules) {
             if (weekRuleSchedule->scheduleYearRulesName == scheduleYearRulesName) {
-                std::vector<int> specDays = weekRuleSchedule->specificDays;
+                const std::vector<int> &specDays = weekRuleSchedule->specificDays;
                 if (std::find(std::begin(specDays), std::end(specDays), day) != std::end(specDays)) {
                     ruleOrders.push_back(weekRuleSchedule->rulePriorityOrder);
                     weekRuleSchedules.push_back(weekRuleSchedule);
