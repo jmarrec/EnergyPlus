@@ -22927,6 +22927,9 @@ ElectricEquipment:ITE:AirCooled,
        \note ITE objects defined for one zone, the same calculation method should apply.
        \note The FlowControlWithApproachTemperatures only applies to ITE zones with single duct VAV terminal unit.
        \note Other return air heat gains from window or lights are not allowed when FlowControlWithApproachTemperatures is chosen.
+       \note When FlowControlWithApproachTemperatures is chosen, the controlled variable is the supply air temperature,
+       \note not the well-mixed zone air temperature. The zone cooling setpoint from ZoneControl:Thermostat is ignored
+       \note for this zone and cooling unmet hours do not apply.
        \type choice
        \key FlowFromSystem
        \key FlowControlWithApproachTemperatures
