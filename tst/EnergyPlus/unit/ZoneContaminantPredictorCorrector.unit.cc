@@ -814,6 +814,7 @@ TEST_F(EnergyPlusFixture, ZoneContaminantPredictorCorrector_MissingGenericContam
     ASSERT_FALSE(ErrorsFound);
 
     EXPECT_NO_THROW(GetZoneContaminantSetPoints(*state));
+    AllocateHeatBalArrays(*state);
     EXPECT_THROW(InitZoneContSetPoints(*state), EnergyPlus::FatalError);
     EXPECT_TRUE(compare_err_stream_substring("ZoneControl:ContaminantController", false));
     EXPECT_TRUE(compare_err_stream_substring("Generic Contaminant Setpoint Schedule", false));
