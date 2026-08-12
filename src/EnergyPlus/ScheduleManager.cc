@@ -307,6 +307,26 @@ namespace Sched {
         return weekSched;
     } // AddWeekSchedule()
 
+    static WeekSchedule *AddInternalWeekSchedule(EnergyPlusData &state, std::string const &name)
+    {
+        auto const &s_sched = state.dataSched;
+
+        auto *weekSched = new WeekSchedule;
+        weekSched->Name = name;
+
+        // Fill the dayScheds with the Missing Day Schedule (Always Off)
+        for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
+            weekSched->dayScheds[iDayType] = s_sched->daySchedules[SchedNum_AlwaysOff];
+        }
+
+        weekSched->Num = (int)s_sched->weekSchedules.size();
+        s_sched->weekSchedules.push_back(weekSched);
+
+        // Internal week schedules are referenced directly by their parent schedule and must not
+        // be added to weekScheduleMap, where their generated names could collide with user input.
+        return weekSched;
+    }
+
     WeekRuleSchedule *AddWeekRuleSchedule(EnergyPlusData &state, std::string const &name)
     {
         auto const &s_sched = state.dataSched;
@@ -1210,6 +1230,21 @@ namespace Sched {
                     }
                 }
 
+                bool invalidDate = false;
+                if (startDay < 1 || !Weather::validMonthDay(startMonth, startDay, 1)) {
+                    ShowSevereCustom(state, eoh, std::format("Invalid start date = {}/{}", startMonth, startDay));
+                    ErrorsFound = true;
+                    invalidDate = true;
+                }
+                if (endDay < 1 || !Weather::validMonthDay(endMonth, endDay, 1)) {
+                    ShowSevereCustom(state, eoh, std::format("Invalid end date = {}/{}", endMonth, endDay));
+                    ErrorsFound = true;
+                    invalidDate = true;
+                }
+                if (invalidDate) {
+                    continue;
+                }
+
                 int startPointer = General::OrdinalDay(startMonth, startDay, 1);
                 int endPointer = General::OrdinalDay(endMonth, endDay, 1);
                 int firstDay = General::OrdinalDay(1, 1, 1);
@@ -1460,6 +1495,7 @@ namespace Sched {
                 if (summerDesignDaySchedule == nullptr) {
                     ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(4), Alphas(4));
                     ErrorsFound = true;
+                    summerDesignDaySchedule = defaultDaySched;
                 }
             }
             auto *winterDesignDaySchedule = defaultDaySched;
@@ -1468,6 +1504,7 @@ namespace Sched {
                 if (winterDesignDaySchedule == nullptr) {
                     ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(5), Alphas(5));
                     ErrorsFound = true;
+                    winterDesignDaySchedule = defaultDaySched;
                 }
             }
             auto *holidaySchedule = defaultDaySched;
@@ -1476,6 +1513,7 @@ namespace Sched {
                 if (holidaySchedule == nullptr) {
                     ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(6), Alphas(6));
                     ErrorsFound = true;
+                    holidaySchedule = defaultDaySched;
                 }
             }
             auto *customDay1Schedule = defaultDaySched;
@@ -1484,6 +1522,7 @@ namespace Sched {
                 if (customDay1Schedule == nullptr) {
                     ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(7), Alphas(7));
                     ErrorsFound = true;
+                    customDay1Schedule = defaultDaySched;
                 }
             }
             auto *customDay2Schedule = defaultDaySched;
@@ -1492,11 +1531,9 @@ namespace Sched {
                 if (customDay2Schedule == nullptr) {
                     ShowSevereItemNotFoundAudit(state, eoh, cAlphaFields(8), Alphas(8));
                     ErrorsFound = true;
+                    customDay2Schedule = defaultDaySched;
                 }
             }
-
-            std::array<int, 367> daysInYear;
-            std::fill(daysInYear.begin(), daysInYear.end(), 0);
 
             int startPointer = General::OrdinalDay(1, 1, 1);
             int endPointer = General::OrdinalDay(12, 31, 1);
@@ -1504,19 +1541,20 @@ namespace Sched {
                 std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules =
                     GetPrioritizedWeekRuleSchedules(state, Util::makeUPPER(Alphas(1)), day);
 
-                Sched::WeekSchedule *weekSched;
-                weekSched = GetWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
-                if (weekSched == nullptr) {
-                    weekSched = AddWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
-                    weekSched->isUsed = true;
-
-                    for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
-                        weekSched->dayScheds[iDayType] = defaultDaySched;
-                    }
-
-                    sched->weekScheds[day] = weekSched;
-                    ++daysInYear[day];
+                // An uncovered leap day inherits Feb 28 after all other days are generated.
+                // Keep generating Feb 29 when a rule explicitly covers it.
+                if (day == General::OrdinalDay(2, 29, 1) && sortedWeekRuleSchedules.empty()) {
+                    continue;
                 }
+
+                auto *weekSched = AddInternalWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
+                weekSched->isUsed = true;
+
+
+                for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
+                    weekSched->dayScheds[iDayType] = defaultDaySched;
+                }
+                sched->weekScheds[day] = weekSched;
 
                 weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay] = summerDesignDaySchedule;
                 weekSched->dayScheds[(int)Sched::DayType::WinterDesignDay] = winterDesignDaySchedule;
@@ -1554,31 +1592,8 @@ namespace Sched {
 
             // Perform Error checks on this item
             // Do special test for Feb 29.  Make equal to Feb 28.
-            if (daysInYear[60] == 0) {
-                daysInYear[60] = daysInYear[59];
+            if (sched->weekScheds[60] == nullptr) {
                 sched->weekScheds[60] = sched->weekScheds[59];
-            }
-
-            // Anything remaining (e.g., when no rules specified) gets default day schedule + any special days
-            for (int iDay = 1; iDay <= 366; ++iDay) {
-                if (daysInYear[iDay] == 0) {
-                    Sched::WeekSchedule *weekSched;
-                    weekSched = GetWeekSchedule(state, std::format("{}_{}", Alphas(1), Alphas(3)));
-                    if (weekSched == nullptr) {
-                        weekSched = AddWeekSchedule(state, std::format("{}_{}", Alphas(1), Alphas(3)));
-                        weekSched->isUsed = true;
-
-                        for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
-                            weekSched->dayScheds[iDayType] = defaultDaySched;
-                        }
-                        weekSched->dayScheds[(int)Sched::DayType::SummerDesignDay] = summerDesignDaySchedule;
-                        weekSched->dayScheds[(int)Sched::DayType::WinterDesignDay] = winterDesignDaySchedule;
-                        weekSched->dayScheds[(int)Sched::DayType::Holiday] = holidaySchedule;
-                        weekSched->dayScheds[(int)Sched::DayType::CustomDay1] = customDay1Schedule;
-                        weekSched->dayScheds[(int)Sched::DayType::CustomDay2] = customDay2Schedule;
-                    }
-                    sched->weekScheds[iDay] = weekSched;
-                }
             }
 
             if (s_glob->AnyEnergyManagementSystemInModel) { // setup constant schedules as actuators
