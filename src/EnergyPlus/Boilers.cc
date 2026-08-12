@@ -491,7 +491,7 @@ void BoilerSpecs::SetupOutputVars(EnergyPlusData &state)
                         OutputProcessor::StoreType::Average,
                         this->Name);
     SetupOutputVariable(state,
-                        "Boiler Steam Coefficient of Performance",
+                        "Boiler Coefficient of Performance",
                         Constant::Units::None,
                         this->BoilerCOP,
                         OutputProcessor::TimeStepType::System,
