@@ -3060,7 +3060,14 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    ActivitySchedule, !- Activity Level Schedule Name",
         "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
         "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
-        "    EnclosureAveraged; !- Mean Radiant Temperature Calculation Type",
+        "    EnclosureAveraged, !- Mean Radiant Temperature Calculation Type",
+        "    ,                 !- Surface Name/Angle Factor List Name",
+        "    WorfEffSched,     !- Work Efficiency Schedule",
+        "    ,                 !- Clothing Insulation Calculation Method",
+        "    allones,          !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    KSU;              !- Thermal Comfort Model",
 
         "  People,",
         "    Took,             !- Name",
@@ -3076,7 +3083,13 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
         "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
         "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
-        "    ShireWall1;       !- Surface for Weighting",
+        "    ShireWall1,       !- Surface for Weighting",
+        "    WorfEffSched,     !- Work Efficiency Schedule",
+        "    ,                 !- Clothing Insulation Calculation Method",
+        "    allones,          !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    KSU;              !- Thermal Comfort Model",
 
         "  People,",
         "    Elves,            !- Name",
@@ -3092,7 +3105,13 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
         "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
         "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
-        "    RivendellWall1;   !- Surface for Weighting",
+        "    RivendellWall1,   !- Surface for Weighting",
+        "    WorfEffSched,     !- Work Efficiency Schedule",
+        "    ,                 !- Clothing Insulation Calculation Method",
+        "    allones,          !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model",
 
         "  People,",
         "    Stewards,         !- Name",
@@ -3107,7 +3126,14 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    ActivitySchedule, !- Activity Level Schedule Name",
         "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
         "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
-        "    EnclosureAveraged; !- Mean Radiant Temperature Calculation Type",
+        "    EnclosureAveraged, !- Mean Radiant Temperature Calculation Type",
+        "    ,                 !- Surface Name/Angle Factor List Name",
+        "    WorfEffSched,     !- Work Efficiency Schedule",
+        "    ,                 !- Clothing Insulation Calculation Method",
+        "    allones,          !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    PIERCE;           !- Thermal Comfort Model",
 
         "  People,",
         "    Guards,           !- Name",
@@ -3123,7 +3149,13 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
         "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
         "    SurfaceWeighted,  !- Mean Radiant Temperature Calculation Type",
-        "    GondorWall1;      !- Surface for Weighting",
+        "    GondorWall1,      !- Surface for Weighting",
+        "    WorfEffSched,     !- Work Efficiency Schedule",
+        "    ,                 !- Clothing Insulation Calculation Method",
+        "    allones,          !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    KSU;              !- Thermal Comfort Model",
 
         "  People,",
         "    MyPeople,         !- Name",
@@ -3139,7 +3171,13 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    3.82E-8,          !- Carbon Dioxide Generation Rate {m3/s-W}",
         "    ,                 !- Enable ASHRAE 55 Comfort Warnings",
         "    AngleFactor,      !- Mean Radiant Temperature Calculation Type",
-        "    ViewFactors;      !- Surface for Weighting",
+        "    ViewFactors,      !- Surface for Weighting",
+        "    WorfEffSched,     !- Work Efficiency Schedule",
+        "    ,                 !- Clothing Insulation Calculation Method",
+        "    allones,          !- Clothing Insulation Calculation Method Schedule Name",
+        "    CloSched,         !- Clothing Insulation Schedule Name",
+        "    AirVelSched,      !- Air Velocity Schedule Name",
+        "    FANGER;           !- Thermal Comfort Model",
 
         "  ComfortViewFactorAngles,",
         "    ViewFactors, !- name of angle factor list",
@@ -3161,6 +3199,34 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    THROUGH: 12/31,   !- Field 1",
         "    FOR: AllDays,     !- Field 2",
         "    UNTIL: 24:00,70.; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    allones,          !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,1.0; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    WorfEffSched,     !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,0.0; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    CloSched,          !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,1.0; !- Field 3",
+
+        "  Schedule:Compact,",
+        "    AirVelSched,      !- Name",
+        "    Any Number,       !- Schedule Type Limits Name",
+        "    THROUGH: 12/31,   !- Field 1",
+        "    FOR: AllDays,     !- Field 2",
+        "    UNTIL: 24:00,0.5; !- Field 3",
 
         "  BuildingSurface:Detailed,",
         "    ShireWall1,              !- Name",
@@ -3293,6 +3359,12 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
     AllocateHeatBalArrays(*state);
 
     SurfaceGeometry::GetSurfaceData(*state, errorsFound);
+    state->dataSurface->Surface(1).RadEnclIndex = 1;
+    state->dataSurface->Surface(2).RadEnclIndex = 2;
+    state->dataSurface->Surface(3).RadEnclIndex = 3;
+    state->dataSurface->Surface(4).RadEnclIndex = 3;
+    state->dataSurface->Surface(5).RadEnclIndex = 3;
+
     InternalHeatGains::GetInternalHeatGainsInput(*state);
     HeatBalanceManager::getZoneMRTCalculationData(*state);
 
@@ -3679,6 +3751,7 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_CalculationTest)
     Real64 actualResult;
     Real64 expectedResult;
     Real64 tolerance = 0.0001;
+    int zoneMRTNum;
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -3717,30 +3790,33 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_CalculationTest)
     dataHBSurf->SurfInsideTempHist.allocate(1);
     dataHBSurf->SurfInsideTempHist(1).allocate(5);
 
-    // Test 1: Zone 1 (Shire) is a combination of two people statements one enclosure averaged and one surface weighted
+    // Test 1: Zone 1 (Shire) is a combination of two people statements one enclosure averaged and one surface weighted (ZoneMRT=3)
+    zoneMRTNum = 3;
     dataVF->EnclRadInfo(1).MRT = 22.0;
     dataHBSurf->SurfInsideTempHist(1)(1) = 12.0;
     expectedResult = 20.2; // Note that MAT defaults to 23.0 for only one surface here so that the surface weighted is the average of the surface
                            // temperature and MAT
-    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, 1);
+    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, zoneMRTNum);
     EXPECT_NEAR(actualResult, expectedResult, tolerance);
 
-    // Test 2: Zone 2 (Rivendell) has only one people statement that is surface weighted (only one surface)
+    // Test 2: Zone 2 (Rivendell) has only one people statement that is surface weighted (only one surface) (ZoneMRT=1)
+    zoneMRTNum = 1;
     dataVF->EnclRadInfo(2).MRT = 21.0;
     dataHBSurf->SurfInsideTempHist(1)(2) = 11.0;
     expectedResult = 17.0; // Note that MAT defaults to 23.0 for only one surface here so that the surface weighted is the average of the surface
                            // temperature and MAT
-    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, 2);
+    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, zoneMRTNum);
     EXPECT_NEAR(actualResult, expectedResult, tolerance);
 
-    // Test 3: Zone 3 (Gondor) has three people statements--one enclosure averaged, one surface weighted, and one view factor based
+    // Test 3: Zone 3 (Gondor) has three people statements--one enclosure averaged, one surface weighted, and one view factor based (ZoneMRT=2)
+    zoneMRTNum = 2;
     dataVF->EnclRadInfo(3).MRT = 20.0;
     dataHBSurf->SurfInsideTempHist(1)(3) = 10.0;
     dataHBSurf->SurfInsideTempHist(1)(4) = 12.0;
     dataHBSurf->SurfInsideTempHist(1)(5) = 14.0;
     state->dataZoneTempPredictorCorrector->zoneHeatBalance(3).MRT = 25.0;
     expectedResult = 16.4521; // Note that MAT defaults to 23.0 surface weighted and standard MRT
-    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, 3);
+    actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, zoneMRTNum);
     EXPECT_NEAR(actualResult, expectedResult, tolerance);
 }
 } // namespace EnergyPlus

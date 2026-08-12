@@ -19458,13 +19458,15 @@ ZoneMRTCalculation,
        \memo All People statements listed must be in the same Zone.
   A1 , \field Zone Name
        \type alpha
-       \reference ZoneNames
+       \type object-list
+       \object-list ZoneNames
        \required-field
   A2 , \field People 1 Name
        \begin-extensible
        \type object-list
        \object-list PeopleNames
        \required-field
+       \note The People name must match a People object name or its modified name if spaces are defined.
   N1 , \field MRT Weighting Factor 1
        \type real
        \minimum 0.0

@@ -2294,6 +2294,7 @@ namespace HeatBalanceManager {
         static constexpr std::string_view routineName = "getZoneMRTCalculationData";
         std::string const cCurrentModuleObject = "ZoneMRTCalculation";
         auto &s_ip = state.dataInputProcessing->inputProcessor;
+        bool errorsFound = false;
 
         auto const instances = s_ip->epJSON.find(cCurrentModuleObject);
         if (instances != s_ip->epJSON.end()) {
@@ -2304,7 +2305,7 @@ namespace HeatBalanceManager {
                 std::string zone_name = thisZoneName.value().get<std::string>();
                 DataHeatBalance::ZoneMRTData thisZnMRTObj;
                 thisZnMRTObj.name = Util::makeUPPER(zone_name);
-                s_ip->markObjectAsUsed(cCurrentModuleObject, zone_name);
+                s_ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
                 auto peoplePairs = fields.find("people_names");
                 if (peoplePairs != fields.end()) {
                     auto &peoplePairsArray = peoplePairs.value();
@@ -2341,10 +2342,9 @@ namespace HeatBalanceManager {
                                 routineName,
                                 cCurrentModuleObject,
                                 thisZoneMRT.name));
-                ShowContinueError(
-                    state,
-                    std::format(
-                        "This input object will not be used until it is corrected and the zone MRT will be equal to the stadard calculation."));
+                ShowContinueError(state,
+                                  std::format("This is not allowed and must be corrected for the ZoneMRTCalculation input to function properly."));
+                errorsFound = true;
             } else { // zone was found, set the flag to make sure the user specified MRT for this zone is calculated
                 state.dataHeatBal->Zone(thisZoneMRT.zoneIndex).useZoneMRTCalc = true;
             }
@@ -2358,7 +2358,7 @@ namespace HeatBalanceManager {
                                                 cCurrentModuleObject,
                                                 thisZoneMRT.name,
                                                 cCurrentModuleObject));
-                    ShowFatalError(state, std::format("{} Errors found getting inputs. Previous error(s) cause program termination.", routineName));
+                    errorsFound = true;
                 }
             }
             for (int pNum = 1; pNum <= thisZoneMRT.numPeople; pNum++) {
@@ -2371,8 +2371,8 @@ namespace HeatBalanceManager {
                                                 cCurrentModuleObject,
                                                 thisZoneMRT.name,
                                                 thisPeople.name));
-                    ShowContinueError(state, std::format("The contribution of this People instance will be reset to zero as a result."));
-                    thisPeople.fracMRT = 0.0;
+                    ShowContinueError(state, std::format("Consult the IDF for this run and the naming rules in the Input Output Reference."));
+                    errorsFound = true;
                 } else if (state.dataHeatBal->People(thisPeople.peopleIndex).ZonePtr != thisZoneMRT.zoneIndex) {
                     ShowSevereError(state,
                                     std::format("{}, {}=\"{}\" has a People name of {} which is not in the same ZONE as the Zone referenced",
@@ -2380,8 +2380,19 @@ namespace HeatBalanceManager {
                                                 cCurrentModuleObject,
                                                 thisZoneMRT.name,
                                                 thisPeople.name));
-                    ShowContinueError(state, std::format("The contribution of this People instance will be reset to zero as a result."));
-                    thisPeople.fracMRT = 0.0;
+                    ShowContinueError(
+                        state, std::format("This is not allowed and must be corrected for the ZoneMRTCalculation input to function properly."));
+                    errorsFound = true;
+                } else if (state.dataHeatBal->People(thisPeople.peopleIndex).MRTCalcType == DataHeatBalance::CalcMRT::Invalid) {
+                    ShowSevereError(state,
+                                    std::format("{}, {}=\"{}\" has a People name of {} that does not use a Thermal Comfort model",
+                                                routineName,
+                                                cCurrentModuleObject,
+                                                thisZoneMRT.name,
+                                                thisPeople.name));
+                    ShowContinueError(
+                        state, std::format("To be used within the ZoneMRTCalculation object, a named People object must use Fanger, KSU, etc."));
+                    errorsFound = true;
                 }
             }
             // Now that error checking is done, calculate sums and fractions that will be used throughout the simulation
@@ -2396,12 +2407,26 @@ namespace HeatBalanceManager {
                                             thisZoneMRT.name));
                 ShowContinueError(state,
                                   std::format("The weighting factors for this object will be reset to zero and the standard zone MRT will be used."));
+                // do not set errorsFound equal to true here as this is not will not cause any issues elsewhere
                 for (int pNum = 1; pNum <= thisZoneMRT.numPeople; pNum++) {
                     thisZoneMRT.zoneMRTPeople(pNum).fracMRT = 0.0;
                 }
                 thisZoneMRT.sumFracZoneMRT = 0.0;
             }
+            if (thisZoneMRT.sumFracZoneMRT < 1.0) {
+                ShowWarningMessage(state,
+                                   std::format("{}, {}=\"{}\" object has individual People MRT weighting factors that sum up to less than 1.0.",
+                                               routineName,
+                                               cCurrentModuleObject,
+                                               thisZoneMRT.name));
+                ShowContinueError(state, std::format("The remaining fraction of the MRT calculation will use the standard zone MRT."));
+                // do not set errorsFound equal to true here because this is possible and potentially intentional on the part of the user
+            }
             thisZoneMRT.fracZoneStdMRT = 1.0 - thisZoneMRT.sumFracZoneMRT;
+        }
+
+        if (errorsFound) {
+            ShowFatalError(state, std::format("{} Errors found getting inputs. Previous error(s) cause program termination.", routineName));
         }
 
         for (auto &thisZoneMRT : state.dataHeatBal->zoneMRTCalc) { // Set up the output variables

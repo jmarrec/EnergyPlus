@@ -5699,35 +5699,30 @@ void CalculateZoneMRT(EnergyPlusData &state,
 
     // Adjust the zone MRT based on the current conditions and the user defined split
     for (int mrtNum = 1; mrtNum <= state.dataHeatBal->totZoneMRT; mrtNum++) { // set up and check zone and people indices
-        auto &thisZoneMRT = state.dataHeatBal->zoneMRTCalc(mrtNum);
-        auto &thisZoneNum = thisZoneMRT.zoneIndex;
-        auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisZoneNum);
+        auto &thisZoneNum = state.dataHeatBal->zoneMRTCalc(mrtNum).zoneIndex;
         if (state.dataHeatBal->Zone(thisZoneNum).useZoneMRTCalc) {
-            thisZoneHB.MRT = calcUserZoneMRT(state, thisZoneNum);
+            state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisZoneNum).MRT = calcUserZoneMRT(state, mrtNum);
         }
     }
 
     state.dataHeatBalSurfMgr->CalculateZoneMRTfirstTime = false;
 }
 
-Real64 calcUserZoneMRT(EnergyPlusData &state, int zoneNum)
+Real64 calcUserZoneMRT(EnergyPlusData &state, int mrtNum)
 {
     // This Real64 calculates the user specified zone MRT based on input parameters and current conditions.
-    auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(zoneNum);
+    auto &thisZoneMRT = state.dataHeatBal->zoneMRTCalc(mrtNum);
+    auto &thisZoneNum = thisZoneMRT.zoneIndex;
+    auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisZoneNum);
     Real64 sumMRTfracs = 0.0; // Calculate user defined zone MRT
     Real64 stdMRTfrac = 0.0;
-    for (auto &thisZoneMRT : state.dataHeatBal->zoneMRTCalc) {
-        if (zoneNum != thisZoneMRT.zoneIndex) {
-            continue;
-        }
-        state.dataThermalComforts->ZoneNum = thisZoneMRT.zoneIndex;
-        for (int pNum = 1; pNum <= thisZoneMRT.numPeople; ++pNum) {
-            auto &thisPeople = thisZoneMRT.zoneMRTPeople(pNum);
-            thisPeople.peopleMRT = ThermalComfort::CalcRadTemp(state, thisPeople.peopleIndex);
-            sumMRTfracs += thisPeople.fracMRT * thisPeople.peopleMRT;
-        }
-        stdMRTfrac = thisZoneMRT.fracZoneStdMRT;
+    state.dataThermalComforts->ZoneNum = thisZoneMRT.zoneIndex;
+    for (int pNum = 1; pNum <= thisZoneMRT.numPeople; ++pNum) {
+        auto &thisPeople = thisZoneMRT.zoneMRTPeople(pNum);
+        thisPeople.peopleMRT = ThermalComfort::CalcRadTemp(state, thisPeople.peopleIndex);
+        sumMRTfracs += thisPeople.fracMRT * thisPeople.peopleMRT;
     }
+    stdMRTfrac = thisZoneMRT.fracZoneStdMRT;
     return sumMRTfracs + stdMRTfrac * thisZoneHB.stdMRT;
 }
 

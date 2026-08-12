@@ -1862,7 +1862,98 @@
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
-    ActSchd;                 !- Activity Level Schedule Name
+    ActSchd,                 !- Activity Level Schedule Name
+    ,                        !- Carbon dioxide generation rate
+    ,                        !- Enable ASHRAE55 comfort warnings
+    EnclosureAveraged,       !- MRT Calculation Type
+    ,                        !- Surface Name/Angle Factor List Name
+    WorfEffSched,            !- Work Efficiency Schedule
+    ,                        !- Clothing Insulation Calculation Method
+    allones,                 !- Clothing Insulation Calculation Method Schedule Name
+    CloSched,                !- Clothing Insulation Schedule Name
+    AirVelSched,             !- Air Velocity Schedule Name
+    PIERCE;                  !- Thermal Comfort Model
+
+  People,
+    Space 5 Office People,   !- Name
+    Space 5 Office,          !- Zone or ZoneList or Space or SpaceList Name
+    OCCUPY-1,                !- Number of People Schedule Name
+    people,                  !- Number of People Calculation Method
+    10,                      !- Number of People
+    ,                        !- People per Floor Area {person/m2}
+    ,                        !- Floor Area per Person {m2/person}
+    0.3,                     !- Fraction Radiant
+    ,                        !- Sensible Heat Fraction
+    ActSchd,                 !- Activity Level Schedule Name
+    ,
+    ,
+    SurfaceWeighted,         !- MRT Calculation Type
+    F5-1a,                   !- Surface Name/Angle Factor List Name
+    WorfEffSched,            !- Work Efficiency Schedule
+    ,                        !- Clothing Insulation Calculation Method
+    allones,                 !- Clothing Insulation Calculation Method Schedule Name
+    CloSched,                !- Clothing Insulation Schedule Name
+    AirVelSched,             !- Air Velocity Schedule Name
+    KSU;                     !- Thermal Comfort Model
+
+  People,
+    Space 5 Conference People, !- Name
+    Space 5 Conference,      !- Zone or ZoneList or Space or SpaceList Name
+    OCCUPY-1,                !- Number of People Schedule Name
+    people,                  !- Number of People Calculation Method
+    10,                      !- Number of People
+    ,                        !- People per Floor Area {person/m2}
+    ,                        !- Floor Area per Person {m2/person}
+    0.3,                     !- Fraction Radiant
+    ,                        !- Sensible Heat Fraction
+    ActSchd,                 !- Activity Level Schedule Name
+    ,
+    ,
+    SurfaceWeighted,         !- MRT Calculation Type
+    F5-1b,                   !- Surface Name/Angle Factor List Name
+    WorfEffSched,            !- Work Efficiency Schedule
+    ,                        !- Clothing Insulation Calculation Method
+    allones,                 !- Clothing Insulation Calculation Method Schedule Name
+    CloSched,                !- Clothing Insulation Schedule Name
+    AirVelSched,             !- Air Velocity Schedule Name
+    FANGER;                  !- Thermal Comfort Model
+
+  Schedule:Compact,
+    WorfEffSched,            !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 0.0;       !- Field 3
+
+  Schedule:Compact,
+    allones,                 !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 1.0;       !- Field 3
+
+  Schedule:Compact,
+    CloSched,                 !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 1.0;       !- Field 3
+
+  Schedule:Compact,
+    AirVelSched,             !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 0.3;       !- Field 3
+
+  ZoneMRTCalculation,
+    Zone 5,
+    Zone 5-Remainder Zone 5 People,
+    0.1,
+    Space 5 Office People,
+    0.4,
+    Space 5 Conference People,
+    0.4;
 
   People,
     ZoneList People,         !- Name
