@@ -1550,7 +1550,6 @@ namespace Sched {
                 auto *weekSched = AddInternalWeekSchedule(state, std::format("{}_{}", Alphas(1), day));
                 weekSched->isUsed = true;
 
-
                 for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
                     weekSched->dayScheds[iDayType] = defaultDaySched;
                 }
