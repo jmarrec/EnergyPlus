@@ -723,6 +723,10 @@ namespace DataSurfaces {
 
         std::vector<int> ConstituentSurfaceNums; // A vector of surface numbers which reference this surface for representative calculations
         int ConstructionStoredInputValue;        // holds the original value for Construction per surface input
+        // Mirrors ConstructionAssignments::SearchDistanceType, stored as int to avoid a header dependency:
+        // -1 = Invalid/not applicable, 0 = HardAssigned (explicit in input), 1 = Space, 2 = Building.
+        // Reported as the "Construction Assignment Source" column in the EnvelopeSummary report.
+        int ConstructionAssignmentSource = -1;
         SurfaceClass Class;
         SurfaceClass OriginalClass;
 
