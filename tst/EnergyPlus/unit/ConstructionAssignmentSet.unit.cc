@@ -1774,3 +1774,133 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_BuildingLevelOnly)
     EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), roof.ConstructionAssignmentSource);
     EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), floor.ConstructionAssignmentSource);
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_SpaceOverridesBuildingWithFallback)
+{
+    // A Space-level ConstructionAssignmentSet that only fills in the Exterior Wall slot overrides
+    // the Building-level set for that slot, while its unset Roof slot falls through to the
+    // Building-level set - mirroring the "Space3" pattern in the NFP's own example file.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  SurfaceConstructionAssignments,
+    Space3 Exterior Surface Constructions,  !- Name
+    ,                                       !- Floor Construction Name
+    Exterior Wall Construction - Space3;    !- Wall Construction Name
+
+  ConstructionAssignmentSet,
+    Space3 Construction Set,                !- Name
+    Space3 Exterior Surface Constructions;  !- Exterior Surface Construction Assignments Name
+
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Space,
+    Space3,                                 !- Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Space Type
+    Space3 Construction Set;                !- Construction Assignment Set Name
+
+  BuildingSurface:Detailed,
+    Space3 Wall,                            !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    Space3,                                 !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    SunExposed,                             !- Sun Exposure
+    WindExposed,                            !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 0, 3,                                !- X,Y,Z Vertex 1 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 0, 3;                               !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Space3 Roof,                            !- Name
+    Roof,                                   !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    Space3,                                 !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    SunExposed,                             !- Sun Exposure
+    WindExposed,                            !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 10, 3,                               !- X,Y,Z Vertex 1 {m}
+    0, 0, 3,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 3,                               !- X,Y,Z Vertex 3 {m}
+    10, 10, 3;                              !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int wallNum = Util::FindItemInList("SPACE3 WALL", state->dataSurface->Surface);
+    int roofNum = Util::FindItemInList("SPACE3 ROOF", state->dataSurface->Surface);
+    ASSERT_GT(wallNum, 0);
+    ASSERT_GT(roofNum, 0);
+
+    auto const &wall = state->dataSurface->Surface(wallNum);
+    auto const &roof = state->dataSurface->Surface(roofNum);
+
+    ASSERT_GT(wall.Construction, 0);
+    ASSERT_GT(roof.Construction, 0);
+
+    // Space-level set has a Wall entry: it wins over the Building-level "Exterior Wall Construction".
+    EXPECT_EQ("EXTERIOR WALL CONSTRUCTION - SPACE3", state->dataConstruction->Construct(wall.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Space), wall.ConstructionAssignmentSource);
+
+    // Space-level set has no Roof entry: falls through to the Building-level "Exterior Roof Construction".
+    EXPECT_EQ("EXTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), roof.ConstructionAssignmentSource);
+}
