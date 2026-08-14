@@ -53,10 +53,10 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/Construction.hh>
+#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataSurfaces.hh>
-#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/HeatBalanceManager.hh>
 #include <EnergyPlus/Material.hh>
 #include <EnergyPlus/SurfaceGeometry.hh>
@@ -109,6 +109,237 @@ constexpr std::string_view idf_constructions = R"(
   Construction,
     Constr IntPartition,     !- Name
     Mat Opaque;              !- Layer 1
+)";
+
+constexpr std::string_view idf_dcs_all_types = R"(
+ConstructionAssignmentSet,
+  Default Construction Set,               !- Name
+  Exterior Surface Constructions,         !- Exterior Surface Construction Assignments Name
+  Interior Surface Constructions,         !- Interior Surface Construction Assignments Name
+  Ground Surface Constructions,           !- Ground Contact Surface Construction Assignments Name
+  Exterior SubSurface Constructions,      !- Exterior SubSurface Construction Assignments Name
+  Interior SubSurface Constructions,      !- Interior SubSurface Construction Assignments Name
+  Interior Partition Construction,        !- Interior Partition Construction Name
+  Adiabatic Surface Construction;         !- Adiabatic Surface Construction Name
+
+SurfaceConstructionAssignments,
+  Exterior Surface Constructions,         !- Name
+  Exterior Floor Construction,            !- Floor Construction Name
+  Exterior Wall Construction,             !- Wall Construction Name
+  Exterior Roof Construction;             !- Roof Ceiling Construction Name
+
+SurfaceConstructionAssignments,
+  Interior Surface Constructions,         !- Name
+  Interior Floor Construction,            !- Floor Construction Name
+  Interior Wall Construction,             !- Wall Construction Name
+  Interior Roof Construction;             !- Roof Ceiling Construction Name
+
+SurfaceConstructionAssignments,
+  Ground Surface Constructions,           !- Name
+  Ground Floor Construction,              !- Floor Construction Name
+  Ground Wall Construction,               !- Wall Construction Name
+  Ground Roof Construction;               !- Roof Ceiling Construction Name
+
+SubSurfaceConstructionAssignments,
+  Exterior SubSurface Constructions,      !- Name
+  Exterior FixedWindow Construction,      !- Fixed Window Construction Name
+  Exterior OperableWindow Construction,   !- Operable Window Construction Name
+  Exterior Door Construction,             !- Door Construction Name
+  Exterior GlassDoor Construction,        !- Glass Door Construction Name
+  Exterior OverheadDoor Construction,     !- Overhead Door Construction Name
+  Exterior Skylight Construction,         !- Skylight Construction Name
+  Exterior TubularDaylightDome Construction, !- Tubular Daylight Dome Construction Name
+  Exterior TubularDaylightDiffuser Construction; !- Tubular Daylight Diffuser Construction Name
+
+SubSurfaceConstructionAssignments,
+  Interior SubSurface Constructions,      !- Name
+  Interior FixedWindow Construction,      !- Fixed Window Construction Name
+  Interior OperableWindow Construction,   !- Operable Window Construction Name
+  Interior Door Construction,             !- Door Construction Name
+  Interior GlassDoor Construction,        !- Glass Door Construction Name
+  Interior OverheadDoor Construction,     !- Overhead Door Construction Name
+  Interior Skylight Construction,         !- Skylight Construction Name
+  Interior TubularDaylightDome Construction, !- Tubular Daylight Dome Construction Name
+  Interior TubularDaylightDiffuser Construction; !- Tubular Daylight Diffuser Construction Name
+
+Construction,
+  Exterior Floor Construction,            !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Exterior Wall Construction,             !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Exterior Roof Construction,             !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Interior Floor Construction,            !- Name
+  R13LAYER,                               !- Outside Layer
+  C5 - 4 IN HW CONCRETE;                  !- Layer 2
+
+Construction,
+  Interior Wall Construction,             !- Name
+  G01a 19mm gypsum board,                 !- Outside Layer
+  C5 - 4 IN HW CONCRETE,                  !- Layer 2
+  G01a 19mm gypsum board;                 !- Layer 3
+
+Construction,
+  Interior Roof Construction,             !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Ground Floor Construction,              !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Ground Wall Construction,               !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Ground Roof Construction,               !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Exterior FixedWindow Construction,      !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior OperableWindow Construction,   !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior Door Construction,             !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Exterior GlassDoor Construction,        !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior OverheadDoor Construction,     !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Exterior Skylight Construction,         !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior TubularDaylightDome Construction, !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Exterior TubularDaylightDiffuser Construction, !- Name
+  Mat Glazing;                            !- Outside Layer
+
+Construction,
+  Interior FixedWindow Construction,      !- Name
+  Mat Interior Glazing;                   !- Outside Layer
+
+Construction,
+  Interior OperableWindow Construction,   !- Name
+  Mat Interior Glazing;                   !- Outside Layer
+
+Construction,
+  Interior Door Construction,             !- Name
+  G05 25mm wood;                          !- Outside Layer
+
+Construction,
+  Interior GlassDoor Construction,        !- Name
+  Mat Interior Glazing;                   !- Outside Layer
+
+Construction,
+  Interior OverheadDoor Construction,     !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Interior Skylight Construction,         !- Name
+  Mat Interior Glazing;                   !- Outside Layer
+
+Construction,
+  Interior TubularDaylightDome Construction, !- Name
+  Mat Interior Glazing;                   !- Outside Layer
+
+Construction,
+  Interior TubularDaylightDiffuser Construction, !- Name
+  Mat Interior Glazing;                   !- Outside Layer
+
+Construction,
+  Interior Partition Construction,        !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Adiabatic Surface Construction,         !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Construction,
+  Exterior Wall Construction - Space3,    !- Name
+  C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+  R13LAYER;                               !- Layer 2
+
+Material,
+  C5 - 4 IN HW CONCRETE,                  !- Name
+  MediumRough,                            !- Roughness
+  0.1014984,                              !- Thickness {m}
+  1.729577,                               !- Conductivity {W/m-K}
+  2242.585,                               !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.65,                                   !- Solar Absorptance
+  0.65;                                   !- Visible Absorptance
+
+Material:NoMass,
+  R13LAYER,                               !- Name
+  Rough,                                  !- Roughness
+  2.290965,                               !- Thermal Resistance {m2-K/W}
+  0.9,                                    !- Thermal Absorptance
+  0.75,                                   !- Solar Absorptance
+  0.75;                                   !- Visible Absorptance
+
+Material,
+  G01a 19mm gypsum board,                 !- Name
+  MediumSmooth,                           !- Roughness
+  0.019,                                  !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  800,                                    !- Density {kg/m3}
+  1090,                                   !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+WindowMaterial:SimpleGlazingSystem,
+  Mat Glazing,                            !- Name
+  0.1,                                    !- U-Factor {W/m2-K}
+  0.65;                                   !- Solar Heat Gain Coefficient
+
+WindowMaterial:SimpleGlazingSystem,
+  Mat Interior Glazing,                   !- Name
+  0.9,                                    !- U-Factor {W/m2-K}
+  0.8;                                    !- Solar Heat Gain Coefficient
+
+Material,
+  G05 25mm wood,                          !- Name
+  MediumSmooth,                           !- Roughness
+  0.0254,                                 !- Thickness {m}
+  0.15,                                   !- Conductivity {W/m-K}
+  608,                                    !- Density {kg/m3}
+  1630,                                   !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
 )";
 
 void loadConstructions(EnergyPlusData &state)
@@ -234,7 +465,8 @@ TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_BadConstructionName)
     bool ErrorsFound = false;
     ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
     EXPECT_TRUE(ErrorsFound);
-    EXPECT_TRUE(compare_err_stream_substring(R"(** Severe  ** GetConstructionAssignmentSetData: SubSurfaceConstructionAssignments="BAD SUBSURF")", false));
+    EXPECT_TRUE(
+        compare_err_stream_substring(R"(** Severe  ** GetConstructionAssignmentSetData: SubSurfaceConstructionAssignments="BAD SUBSURF")", false));
     EXPECT_TRUE(compare_err_stream_substring(R"(invalid fixed_window_construction_name="NONEXISTENT CONSTR" not found.)", false));
 }
 
@@ -261,7 +493,8 @@ TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_BadSurfConstrRef)
     ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
     EXPECT_TRUE(ErrorsFound);
     EXPECT_TRUE(compare_err_stream_substring(R"(** Severe  ** GetConstructionAssignmentSetData: ConstructionAssignmentSet="BAD DCS")", false));
-    EXPECT_TRUE(compare_err_stream_substring(R"(invalid exterior_surface_construction_assignments_name="NONEXISTENT SURF CONSTRS" not found.)", false));
+    EXPECT_TRUE(
+        compare_err_stream_substring(R"(invalid exterior_surface_construction_assignments_name="NONEXISTENT SURF CONSTRS" not found.)", false));
 }
 
 TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_WindowConstrInOpaqueSurfaceField)
@@ -312,8 +545,8 @@ TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_WrongConstrTypeInSubSurfaceF
     EXPECT_TRUE(compare_err_stream_substring(
         R"(SubSurfaceConstructionAssignments="BAD SUBSURF TYPE", invalid fixed_window_construction_name="CONSTR DOOR")", false));
     EXPECT_TRUE(compare_err_stream_substring(R"(has an opaque surface construction; it should have a window construction)", false));
-    EXPECT_TRUE(
-        compare_err_stream_substring(R"(SubSurfaceConstructionAssignments="BAD SUBSURF TYPE", invalid door_construction_name="CONSTR WINDOW")", false));
+    EXPECT_TRUE(compare_err_stream_substring(
+        R"(SubSurfaceConstructionAssignments="BAD SUBSURF TYPE", invalid door_construction_name="CONSTR WINDOW")", false));
     EXPECT_TRUE(compare_err_stream_substring(R"(has Window material)", false));
 }
 
@@ -401,9 +634,9 @@ TEST(ConstructionAssignmentSet_GetDefaultConstruction, AllCases)
 
     // Exterior subsurfaces
     EXPECT_EQ(10, dcs.getConstructionAssignment(makeSurf(DataSurfaces::SurfaceClass::FixedWindow, DataSurfaces::ExternalEnvironment)));
-    EXPECT_EQ(
-        10,
-        dcs.getConstructionAssignment(makeSurf(DataSurfaces::SurfaceClass::Window, DataSurfaces::ExternalEnvironment))); // generic -> FixedWindow slot
+    EXPECT_EQ(10,
+              dcs.getConstructionAssignment(
+                  makeSurf(DataSurfaces::SurfaceClass::Window, DataSurfaces::ExternalEnvironment))); // generic -> FixedWindow slot
     EXPECT_EQ(11, dcs.getConstructionAssignment(makeSurf(DataSurfaces::SurfaceClass::OperableWindow, DataSurfaces::ExternalEnvironment)));
     EXPECT_EQ(12, dcs.getConstructionAssignment(makeSurf(DataSurfaces::SurfaceClass::Door, DataSurfaces::ExternalEnvironment)));
     EXPECT_EQ(13, dcs.getConstructionAssignment(makeSurf(DataSurfaces::SurfaceClass::GlassDoor, DataSurfaces::ExternalEnvironment)));
@@ -1156,180 +1389,7 @@ TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_GetDefaultConstruction)
         "  0, 10, 0;                               !- X,Y,Z Vertex 4 {m}",
     });
 
-    std::string const constructions = delimited_string({
-        "ConstructionAssignmentSet,",
-        "  Default Construction Set,               !- Name",
-        "  Exterior Surface Constructions,         !- Exterior Surface Construction Assignments Name",
-        "  Interior Surface Constructions,         !- Interior Surface Construction Assignments Name",
-        "  Ground Surface Constructions,           !- Ground Contact Surface Construction Assignments Name",
-        "  Exterior SubSurface Constructions,      !- Exterior SubSurface Construction Assignments Name",
-        "  Interior SubSurface Constructions,      !- Interior SubSurface Construction Assignments Name",
-        "  Interior Partition Construction,        !- Interior Partition Construction Name",
-        "  Adiabatic Surface Construction;         !- Adiabatic Surface Construction Name",
-
-        "SurfaceConstructionAssignments,",
-        "  Exterior Surface Constructions,         !- Name",
-        "  Exterior Floor Construction,            !- Floor Construction Name",
-        "  Exterior Wall Construction,             !- Wall Construction Name",
-        "  Exterior Roof Construction;             !- Roof Ceiling Construction Name",
-
-        "SurfaceConstructionAssignments,",
-        "  Interior Surface Constructions,         !- Name",
-        "  Interior Floor Construction,            !- Floor Construction Name",
-        "  Interior Wall Construction,             !- Wall Construction Name",
-        "  Interior Roof Construction;             !- Roof Ceiling Construction Name",
-
-        "SurfaceConstructionAssignments,",
-        "  Ground Surface Constructions,           !- Name",
-        "  Ground Floor Construction,              !- Floor Construction Name",
-        "  Ground Wall Construction,               !- Wall Construction Name",
-        "  Ground Roof Construction;               !- Roof Ceiling Construction Name",
-
-        "SubSurfaceConstructionAssignments,",
-        "  Exterior SubSurface Constructions,      !- Name",
-        "  Exterior FixedWindow Construction,      !- Fixed Window Construction Name",
-        "  Exterior OperableWindow Construction,   !- Operable Window Construction Name",
-        "  Exterior Door Construction,             !- Door Construction Name",
-        "  Exterior GlassDoor Construction,        !- Glass Door Construction Name",
-        "  Exterior OverheadDoor Construction,     !- Overhead Door Construction Name",
-        "  Exterior Skylight Construction,         !- Skylight Construction Name",
-        "  Exterior TubularDaylightDome Construction, !- Tubular Daylight Dome Construction Name",
-        "  Exterior TubularDaylightDiffuser Construction; !- Tubular Daylight Diffuser Construction Name",
-
-        "SubSurfaceConstructionAssignments,",
-        "  Interior SubSurface Constructions,      !- Name",
-        "  Interior FixedWindow Construction,      !- Fixed Window Construction Name",
-        "  Interior OperableWindow Construction,   !- Operable Window Construction Name",
-        "  Interior Door Construction,             !- Door Construction Name",
-        "  Interior GlassDoor Construction,        !- Glass Door Construction Name",
-        "  Interior OverheadDoor Construction,     !- Overhead Door Construction Name",
-        "  Interior Skylight Construction,         !- Skylight Construction Name",
-        "  Interior TubularDaylightDome Construction, !- Tubular Daylight Dome Construction Name",
-        "  Interior TubularDaylightDiffuser Construction; !- Tubular Daylight Diffuser Construction Name",
-
-        "Construction,",
-        "  Exterior Floor Construction,            !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Exterior Wall Construction,             !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Exterior Roof Construction,             !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Interior Floor Construction,            !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Interior Wall Construction,             !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Interior Roof Construction,             !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Ground Floor Construction,              !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Ground Wall Construction,               !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Ground Roof Construction,               !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Exterior FixedWindow Construction,      !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Exterior OperableWindow Construction,   !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Exterior Door Construction,             !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Exterior GlassDoor Construction,        !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Exterior OverheadDoor Construction,     !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Exterior Skylight Construction,         !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Exterior TubularDaylightDome Construction, !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Exterior TubularDaylightDiffuser Construction, !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Interior FixedWindow Construction,      !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Interior OperableWindow Construction,   !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Interior Door Construction,             !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Interior GlassDoor Construction,        !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Interior OverheadDoor Construction,     !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Interior Skylight Construction,         !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Interior TubularDaylightDome Construction, !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Interior TubularDaylightDiffuser Construction, !- Name",
-        "  Mat Glazing;                            !- Outside Layer",
-
-        "Construction,",
-        "  Interior Partition Construction,        !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Construction,",
-        "  Adiabatic Surface Construction,         !- Name",
-        "  Mat Opaque;                             !- Outside Layer",
-
-        "Material:NoMass,",
-        "  Mat Opaque,                             !- Name",
-        "  Rough,                                  !- Roughness",
-        "  0.5,                                    !- Thermal Resistance {m2-K/W}",
-        "  0.9,                                    !- Thermal Absorptance",
-        "  0.9,                                    !- Solar Absorptance",
-        "  0.9;                                    !- Visible Absorptance",
-
-        "WindowMaterial:SimpleGlazingSystem,",
-        "  Mat Glazing,                            !- Name",
-        "  0.1,                                    !- U-Factor {W/m2-K}",
-        "  0.65;                                   !- Solar Heat Gain Coefficient",
-    });
-
-    ASSERT_TRUE(process_idf(constructions + geometry));
+    ASSERT_TRUE(process_idf(std::string(idf_dcs_all_types) + geometry));
     state->init_state(*state);
 
     bool ErrorsFound = false;
@@ -1579,4 +1639,138 @@ TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_SpaceBadDCSName)
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     EXPECT_TRUE(ErrorsFound);
     EXPECT_TRUE(compare_err_stream_substring(R"(invalid construction_assignment_set_name="NONEXISTENT DCS" not found.)", false));
+}
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_BuildingLevelOnly)
+{
+    // End-to-end: SurfaceGeometry::GetSurfaceData resolves blank Construction Name fields via the
+    // Building-level ConstructionAssignmentSet when there is no Space-level override.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    Wall1,                                  !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    SunExposed,                             !- Sun Exposure
+    WindExposed,                            !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 0, 3,                                !- X,Y,Z Vertex 1 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 0, 3;                               !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Roof1,                                  !- Name
+    Roof,                                   !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    SunExposed,                             !- Sun Exposure
+    WindExposed,                            !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 10, 3,                               !- X,Y,Z Vertex 1 {m}
+    0, 0, 3,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 3,                               !- X,Y,Z Vertex 3 {m}
+    10, 10, 3;                              !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Floor1,                                 !- Name
+    Floor,                                  !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 0,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 2 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+    0, 10, 0;                               !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    // Reads the Building object, including its Construction Assignment Set Name (A4), which
+    // ConstructionAssignments::GetConstructionAssignmentSetData resolves against the parsed DCS below.
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int wallNum = Util::FindItemInList("WALL1", state->dataSurface->Surface);
+    int roofNum = Util::FindItemInList("ROOF1", state->dataSurface->Surface);
+    int floorNum = Util::FindItemInList("FLOOR1", state->dataSurface->Surface);
+    ASSERT_GT(wallNum, 0);
+    ASSERT_GT(roofNum, 0);
+    ASSERT_GT(floorNum, 0);
+
+    auto const &wall = state->dataSurface->Surface(wallNum);
+    auto const &roof = state->dataSurface->Surface(roofNum);
+    auto const &floor = state->dataSurface->Surface(floorNum);
+
+    ASSERT_GT(wall.Construction, 0);
+    ASSERT_GT(roof.Construction, 0);
+    ASSERT_GT(floor.Construction, 0);
+
+    EXPECT_EQ("EXTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wall.Construction).Name);
+    EXPECT_EQ("EXTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
+    EXPECT_EQ("EXTERIOR FLOOR CONSTRUCTION", state->dataConstruction->Construct(floor.Construction).Name);
+
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), wall.ConstructionAssignmentSource);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), roof.ConstructionAssignmentSource);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), floor.ConstructionAssignmentSource);
 }
