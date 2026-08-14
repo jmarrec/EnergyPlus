@@ -2899,55 +2899,118 @@ void GetVariableAbsorptanceInput(EnergyPlusData &state, bool &errorsFound)
             continue;
         }
 
-        mat->absorpVarCtrlSignal = VariableAbsCtrlSignal::SurfaceTemperature; // default value
-        mat->absorpVarCtrlSignal = static_cast<VariableAbsCtrlSignal>(getEnumValue(variableAbsCtrlSignalNamesUC, s_ipsc->cAlphaArgs(3)));
+        mat->absorpVarCtrlSignalOut = VariableAbsCtrlSignal::SurfaceTemperature; // default value
+        mat->absorpVarCtrlSignalOut = static_cast<VariableAbsCtrlSignal>(getEnumValue(variableAbsCtrlSignalNamesUC, s_ipsc->cAlphaArgs(3)));
+        mat->absorpThermalVarCurveOut = Curve::GetCurve(state, s_ipsc->cAlphaArgs(4));
+        mat->absorpThermalVarSchedOut = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(5));
+        mat->absorpSolarVarCurveOut = Curve::GetCurve(state, s_ipsc->cAlphaArgs(6));
+        mat->absorpSolarVarSchedOut = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(7));
 
-        mat->absorpThermalVarCurve = Curve::GetCurve(state, s_ipsc->cAlphaArgs(4));
-        mat->absorpThermalVarSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(5));
-        mat->absorpSolarVarCurve = Curve::GetCurve(state, s_ipsc->cAlphaArgs(6));
-        mat->absorpSolarVarSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(7));
-        if (mat->absorpVarCtrlSignal == VariableAbsCtrlSignal::Scheduled) {
-            if ((mat->absorpThermalVarSched == nullptr) && (mat->absorpSolarVarSched == nullptr)) {
-                ShowSevereError(
-                    state,
-                    std::format(
-                        "{}: Control signal \"Scheduled\" is chosen but both thermal and solar absorptance schedules are undefined, for object {}",
-                        s_ipsc->cCurrentModuleObject,
-                        s_ipsc->cAlphaArgs(1)));
-                errorsFound = true;
-                return;
-            }
-            if ((mat->absorpThermalVarCurve != nullptr) || (mat->absorpSolarVarCurve != nullptr)) {
-                ShowWarningError(state,
-                                 std::format("{}: Control signal \"Scheduled\" is chosen. Thermal or solar absorptance function name is going to be "
-                                             "ignored, for object {}",
-                                             s_ipsc->cCurrentModuleObject,
-                                             s_ipsc->cAlphaArgs(1)));
-                errorsFound = true;
-                return;
-            }
-
-        } else { // controlled by performance table or curve
-            if ((mat->absorpThermalVarCurve == nullptr) && (mat->absorpSolarVarCurve == nullptr)) {
+        // error checking for outside face values
+        if (mat->absorpVarCtrlSignalOut == VariableAbsCtrlSignal::Scheduled) {
+            if ((mat->absorpThermalVarSchedOut == nullptr) && (mat->absorpSolarVarSchedOut == nullptr)) {
                 ShowSevereError(state,
-                                std::format("{}: Non-schedule control signal is chosen but both thermal and solar absorptance table or curve are "
-                                            "undefined, for object {}",
+                                std::format("{}: Control signal \"Scheduled\" is chosen but both outside face thermal and solar absorptance "
+                                            "schedules are undefined, for object {}",
                                             s_ipsc->cCurrentModuleObject,
                                             s_ipsc->cAlphaArgs(1)));
                 errorsFound = true;
                 return;
             }
-            if ((mat->absorpThermalVarSched != nullptr) || (mat->absorpSolarVarSched != nullptr)) {
-                ShowWarningError(state,
-                                 std::format("{}: Non-schedule control signal is chosen. Thermal or solar absorptance schedule name is going to be "
-                                             "ignored, for object {}",
-                                             s_ipsc->cCurrentModuleObject,
-                                             s_ipsc->cAlphaArgs(1)));
+            if ((mat->absorpThermalVarCurveOut != nullptr) || (mat->absorpSolarVarCurveOut != nullptr)) {
+                ShowWarningError(
+                    state,
+                    std::format("{}: Control signal \"Scheduled\" is chosen. Outside face thermal or solar absorptance function name is going to be "
+                                "ignored, for object {}",
+                                s_ipsc->cCurrentModuleObject,
+                                s_ipsc->cAlphaArgs(1)));
+                errorsFound = true;
+                return;
+            }
+
+        } else { // controlled by performance table or curve
+            if ((mat->absorpThermalVarCurveOut == nullptr) && (mat->absorpSolarVarCurveOut == nullptr)) {
+                ShowSevereError(
+                    state,
+                    std::format("{}: Non-schedule control signal is chosen but both outside face thermal and solar absorptance table or curve are "
+                                "undefined, for object {}",
+                                s_ipsc->cCurrentModuleObject,
+                                s_ipsc->cAlphaArgs(1)));
+                errorsFound = true;
+                return;
+            }
+            if ((mat->absorpThermalVarSchedOut != nullptr) || (mat->absorpSolarVarSchedOut != nullptr)) {
+                ShowWarningError(
+                    state,
+                    std::format("{}: Non-schedule control signal is chosen. Outside face thermal or solar absorptance schedule name is going to be "
+                                "ignored, for object {}",
+                                s_ipsc->cCurrentModuleObject,
+                                s_ipsc->cAlphaArgs(1)));
                 errorsFound = true;
                 return;
             }
         }
-    }
+
+        mat->absorpVarCtrlSignalIn = static_cast<VariableAbsCtrlSignal>(getEnumValue(variableAbsCtrlSignalNamesUC, s_ipsc->cAlphaArgs(8)));
+        if (mat->absorpVarCtrlSignalIn == VariableAbsCtrlSignal::Invalid) { // allow user to only specify the exterior surface absorptance variation
+            mat->absorpVarCtrlSignalIn = mat->absorpVarCtrlSignalOut;       // default to the exterior settings when not specified
+            mat->absorpThermalVarCurveIn = mat->absorpThermalVarCurveOut;
+            mat->absorpThermalVarSchedIn = mat->absorpThermalVarSchedOut;
+            mat->absorpSolarVarCurveIn = mat->absorpSolarVarCurveOut;
+            mat->absorpSolarVarSchedIn = mat->absorpSolarVarSchedOut;
+        } else {
+            mat->absorpThermalVarCurveIn = Curve::GetCurve(state, s_ipsc->cAlphaArgs(9));
+            mat->absorpThermalVarSchedIn = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(10));
+            mat->absorpSolarVarCurveIn = Curve::GetCurve(state, s_ipsc->cAlphaArgs(11));
+            mat->absorpSolarVarSchedIn = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(12));
+            // error checking for inside face values
+            if (mat->absorpVarCtrlSignalIn == VariableAbsCtrlSignal::Scheduled) {
+                if ((mat->absorpThermalVarSchedIn == nullptr) && (mat->absorpSolarVarSchedIn == nullptr)) {
+                    ShowSevereError(state,
+                                    std::format("{}: Control signal \"Scheduled\" is chosen but both inside face thermal and solar absorptance "
+                                                "schedules are undefined, for object {}",
+                                                s_ipsc->cCurrentModuleObject,
+                                                s_ipsc->cAlphaArgs(1)));
+                    errorsFound = true;
+                    return;
+                }
+                if ((mat->absorpThermalVarCurveIn != nullptr) || (mat->absorpSolarVarCurveIn != nullptr)) {
+                    ShowWarningError(
+                        state,
+                        std::format(
+                            "{}: Control signal \"Scheduled\" is chosen. Inside face thermal or solar absorptance function name is going to be "
+                            "ignored, for object {}",
+                            s_ipsc->cCurrentModuleObject,
+                            s_ipsc->cAlphaArgs(1)));
+                    errorsFound = true;
+                    return;
+                }
+
+            } else { // controlled by performance table or curve
+                if ((mat->absorpThermalVarCurveIn == nullptr) && (mat->absorpSolarVarCurveIn == nullptr)) {
+                    ShowSevereError(
+                        state,
+                        std::format("{}: Non-schedule control signal is chosen but both inside face thermal and solar absorptance table or curve are "
+                                    "undefined, for object {}",
+                                    s_ipsc->cCurrentModuleObject,
+                                    s_ipsc->cAlphaArgs(1)));
+                    errorsFound = true;
+                    return;
+                }
+                if ((mat->absorpThermalVarSchedIn != nullptr) || (mat->absorpSolarVarSchedIn != nullptr)) {
+                    ShowWarningError(
+                        state,
+                        std::format(
+                            "{}: Non-schedule control signal is chosen. Inside face thermal or solar absorptance schedule name is going to be "
+                            "ignored, for object {}",
+                            s_ipsc->cCurrentModuleObject,
+                            s_ipsc->cAlphaArgs(1)));
+                    errorsFound = true;
+                    return;
+                }
+            }
+        }
+    } // end of loop over variable absorbtance input objects
 } // GetVariableAbsorptanceInput()
 
 void GetWindowGlassSpectralData(EnergyPlusData &state, bool &ErrorsFound) // set to true if errors found in input

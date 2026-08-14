@@ -757,24 +757,40 @@ void GetVariableAbsorptanceSurfaceList(EnergyPlusData &state)
         if (thisConstruct.TotLayers == 0) {
             continue;
         }
-        if (thisConstruct.LayerPoint(1) == 0) {
-            continue; // error finding material number
+        if (thisConstruct.LayerPoint(1) == 0 || thisConstruct.LayerPoint(thisConstruct.TotLayers) == 0) {
+            continue; // error finding material number for either outside or inside (shouldn't ever get to this?)
         }
-        auto const *mat = state.dataMaterial->materials(thisConstruct.LayerPoint(1));
-        if (mat->group != Material::Group::Regular) {
+        auto const *matExt = state.dataMaterial->materials(thisConstruct.LayerPoint(1));
+        auto const *matInt = state.dataMaterial->materials(thisConstruct.LayerPoint(thisConstruct.TotLayers));
+        if (matExt->group != Material::Group::Regular && matInt->group != Material::Group::Regular) {
             continue;
         }
 
-        if (mat->absorpVarCtrlSignal != Material::VariableAbsCtrlSignal::Invalid) {
+        bool pushedBack =
+            false; // gets set to true when the exterior gets pushed back to avoid double counting a surface in AllVaryAbsOpaqSurfaceList
+        if (matExt->group == Material::Group::Regular && matExt->absorpVarCtrlSignalOut != Material::VariableAbsCtrlSignal::Invalid) {
             // check for dynamic coating defined on interior surface
             if (thisSurface.ExtBoundCond != ExternalEnvironment) {
-                ShowWarningError(
-                    state,
-                    std::format("MaterialProperty:VariableAbsorptance defined on an interior surface, {}. This VariableAbsorptance property "
-                                "will be ignored here",
-                                thisSurface.Name));
+                ShowWarningError(state,
+                                 std::format("MaterialProperty:VariableAbsorptance defined for the outside material of an interior surface, {}."
+                                             " This VariableAbsorptance property will be ignored here",
+                                             thisSurface.Name));
             } else {
                 state.dataSurface->AllVaryAbsOpaqSurfaceList.push_back(surfNum);
+                pushedBack = true;
+            }
+        }
+        if (matInt->group == Material::Group::Regular && matInt->absorpVarCtrlSignalIn != Material::VariableAbsCtrlSignal::Invalid) {
+            // check for dynamic coating defined on interior surface
+            if (thisSurface.ExtBoundCond != ExternalEnvironment) {
+                ShowWarningError(state,
+                                 std::format("MaterialProperty:VariableAbsorptance defined for the inside material of an interior surface, {}."
+                                             " This VariableAbsorptance property will be ignored here",
+                                             thisSurface.Name));
+            } else {
+                if (!pushedBack) {
+                    state.dataSurface->AllVaryAbsOpaqSurfaceList.push_back(surfNum); // only add if the outside didn't already add this
+                }
             }
         }
     }
@@ -786,11 +802,27 @@ void GetVariableAbsorptanceSurfaceList(EnergyPlusData &state)
             if (mat->group != Material::Group::Regular) {
                 continue;
             }
-            if (mat->absorpVarCtrlSignal != Material::VariableAbsCtrlSignal::Invalid) {
-                ShowWarningError(state,
-                                 std::format("MaterialProperty:VariableAbsorptance defined on a inside-layer materials, {}. This VariableAbsorptance "
-                                             "property will be ignored here",
-                                             mat->Name));
+            if (mat->absorpVarCtrlSignalOut != Material::VariableAbsCtrlSignal::Invalid) {
+                ShowWarningError(
+                    state,
+                    std::format("MaterialProperty:VariableAbsorptance for the outside face defined on an inside-layer materials, {} in {}."
+                                " This VariableAbsorptance property will be ignored here.",
+                                mat->Name,
+                                thisConstruct.Name));
+            }
+        }
+        for (int Layer = 1; Layer <= thisConstruct.TotLayers - 1; ++Layer) {
+            auto const *mat = state.dataMaterial->materials(thisConstruct.LayerPoint(Layer));
+            if (mat->group != Material::Group::Regular) {
+                continue;
+            }
+            if (mat->absorpVarCtrlSignalIn != Material::VariableAbsCtrlSignal::Invalid) {
+                ShowWarningError(
+                    state,
+                    std::format("MaterialProperty:VariableAbsorptance for the inside face defined on an outside-layer materials, {} in {}."
+                                " This VariableAbsorptance property will be ignored here.",
+                                mat->Name,
+                                thisConstruct.Name));
             }
         }
     }

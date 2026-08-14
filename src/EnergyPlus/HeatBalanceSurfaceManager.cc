@@ -236,38 +236,82 @@ void ManageSurfaceHeatBalance(EnergyPlusData &state)
 // Beginning Initialization Section of the Module
 //******************************************************************************
 
-void UpdateVariableAbsorptances(EnergyPlusData &state)
+void UpdateVariableAbsorptancesOut(EnergyPlusData &state)
 {
     auto &s_mat = state.dataMaterial;
     for (int surfNum : state.dataSurface->AllVaryAbsOpaqSurfaceList) {
         auto const &thisConstruct = state.dataConstruction->Construct(state.dataSurface->Surface(surfNum).Construction);
         auto const *thisMaterial = s_mat->materials(thisConstruct.LayerPoint(1));
         assert(thisMaterial != nullptr);
-        if (thisMaterial->absorpVarCtrlSignal == Material::VariableAbsCtrlSignal::Scheduled) {
-            if (thisMaterial->absorpThermalVarSched != nullptr) {
-                state.dataHeatBalSurf->SurfAbsThermalExt(surfNum) = max(min(thisMaterial->absorpThermalVarSched->getCurrentVal(), 0.9999), 0.0001);
+        if (thisMaterial->absorpVarCtrlSignalOut == Material::VariableAbsCtrlSignal::Invalid) {
+            continue; // this gets triggered when a material only uses the interior variable absorptances
+        }
+        if (thisMaterial->absorpVarCtrlSignalOut == Material::VariableAbsCtrlSignal::Scheduled) {
+            if (thisMaterial->absorpThermalVarSchedOut != nullptr) {
+                state.dataHeatBalSurf->SurfAbsThermalExt(surfNum) = max(min(thisMaterial->absorpThermalVarSchedOut->getCurrentVal(), 0.9999), 0.0001);
             }
-            if (thisMaterial->absorpSolarVarSched != nullptr) {
-                state.dataHeatBalSurf->SurfAbsSolarExt(surfNum) = max(min(thisMaterial->absorpThermalVarSched->getCurrentVal(), 0.9999), 0.0001);
+            if (thisMaterial->absorpSolarVarSchedOut != nullptr) {
+                state.dataHeatBalSurf->SurfAbsSolarExt(surfNum) = max(min(thisMaterial->absorpSolarVarSchedOut->getCurrentVal(), 0.9999), 0.0001);
             }
         } else {
             Real64 triggerValue;
-            if (thisMaterial->absorpVarCtrlSignal == Material::VariableAbsCtrlSignal::SurfaceTemperature) {
+            if (thisMaterial->absorpVarCtrlSignalOut == Material::VariableAbsCtrlSignal::SurfaceTemperature) {
                 triggerValue = state.dataHeatBalSurf->SurfTempOut(surfNum);
-            } else if (thisMaterial->absorpVarCtrlSignal == Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation) {
+            } else if (thisMaterial->absorpVarCtrlSignalOut == Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation) {
                 triggerValue = state.dataHeatBal->SurfQRadSWOutIncident(surfNum);
             } else { // controlled by heating cooling mode
                 int zoneNum = state.dataSurface->Surface(surfNum).Zone;
                 bool isCooling = (state.dataZoneEnergyDemand->ZoneSysEnergyDemand(zoneNum).TotalOutputRequired < 0);
                 triggerValue = static_cast<Real64>(isCooling);
             }
-            if (thisMaterial->absorpThermalVarCurve != nullptr) {
+            if (thisMaterial->absorpThermalVarCurveOut != nullptr) {
                 state.dataHeatBalSurf->SurfAbsThermalExt(surfNum) =
-                    max(min(thisMaterial->absorpThermalVarCurve->value(state, triggerValue), 0.9999), 0.0001);
+                    max(min(thisMaterial->absorpThermalVarCurveOut->value(state, triggerValue), 0.9999), 0.0001);
             }
-            if (thisMaterial->absorpSolarVarCurve != nullptr) {
+            if (thisMaterial->absorpSolarVarCurveOut != nullptr) {
                 state.dataHeatBalSurf->SurfAbsSolarExt(surfNum) =
-                    max(min(thisMaterial->absorpSolarVarCurve->value(state, triggerValue), 0.9999), 0.0001);
+                    max(min(thisMaterial->absorpSolarVarCurveOut->value(state, triggerValue), 0.9999), 0.0001);
+            }
+        }
+    }
+}
+
+void UpdateVariableAbsorptancesIn(EnergyPlusData &state)
+{
+    auto &s_mat = state.dataMaterial;
+    for (int surfNum : state.dataSurface->AllVaryAbsOpaqSurfaceList) {
+        auto const &thisConstruct = state.dataConstruction->Construct(state.dataSurface->Surface(surfNum).Construction);
+        auto const *thisMaterial = s_mat->materials(thisConstruct.LayerPoint(thisConstruct.TotLayers));
+        assert(thisMaterial != nullptr);
+        if (thisMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Invalid) {
+            continue; // this gets triggered when a material only uses the exterior variable absorptances
+        }
+        if (thisMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Scheduled) {
+            if (thisMaterial->absorpThermalVarSchedIn != nullptr) {
+                state.dataHeatBalSurf->SurfAbsThermalInt(surfNum) = max(min(thisMaterial->absorpThermalVarSchedIn->getCurrentVal(), 0.9999), 0.0001);
+            }
+            if (thisMaterial->absorpSolarVarSchedIn != nullptr) {
+                state.dataHeatBalSurf->SurfAbsSolarInt(surfNum) = max(min(thisMaterial->absorpSolarVarSchedIn->getCurrentVal(), 0.9999), 0.0001);
+            }
+        } else {
+            Real64 triggerValue;
+            if (thisMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::SurfaceTemperature) {
+                triggerValue = state.dataHeatBalSurf->SurfTempIn(surfNum);
+            } else if (thisMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation) {
+                triggerValue = state.dataHeatBal->SurfSWInAbsTotalReport(surfNum) /
+                               thisConstruct.InsideAbsorpThermal; // approximation of incident solar on inside
+            } else {                                              // controlled by heating cooling mode
+                int zoneNum = state.dataSurface->Surface(surfNum).Zone;
+                bool isCooling = (state.dataZoneEnergyDemand->ZoneSysEnergyDemand(zoneNum).TotalOutputRequired < 0);
+                triggerValue = static_cast<Real64>(isCooling);
+            }
+            if (thisMaterial->absorpThermalVarCurveIn != nullptr) {
+                state.dataHeatBalSurf->SurfAbsThermalInt(surfNum) =
+                    max(min(thisMaterial->absorpThermalVarCurveIn->value(state, triggerValue), 0.9999), 0.0001);
+            }
+            if (thisMaterial->absorpSolarVarCurveIn != nullptr) {
+                state.dataHeatBalSurf->SurfAbsSolarInt(surfNum) =
+                    max(min(thisMaterial->absorpSolarVarCurveIn->value(state, triggerValue), 0.9999), 0.0001);
             }
         }
     }
@@ -377,7 +421,8 @@ void InitSurfaceHeatBalance(EnergyPlusData &state)
     }
 
     // variable thermal solar absorptance overrides
-    UpdateVariableAbsorptances(state);
+    UpdateVariableAbsorptancesOut(state);
+    UpdateVariableAbsorptancesIn(state);
 
     // Do the Begin Environment initializations
     if (state.dataGlobal->BeginEnvrnFlag) {

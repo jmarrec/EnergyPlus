@@ -136,14 +136,14 @@ TEST_F(EnergyPlusFixture, GetMaterialDataReadVarAbsorptance)
 
     bool errors_found(false);
     Material::GetVariableAbsorptanceInput(*state, errors_found);
-    EXPECT_ENUM_EQ(mat1->absorpVarCtrlSignal, Material::VariableAbsCtrlSignal::SurfaceTemperature);
-    EXPECT_EQ(mat1->absorpThermalVarCurve->Num, 1);
-    EXPECT_EQ(mat1->absorpSolarVarCurve->Num, 2);
-    EXPECT_ENUM_EQ(mat2->absorpVarCtrlSignal, Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation);
-    EXPECT_EQ(mat2->absorpSolarVarCurve->Num, 2);
-    EXPECT_ENUM_EQ(mat3->absorpVarCtrlSignal, Material::VariableAbsCtrlSignal::Scheduled);
-    EXPECT_NE(mat3->absorpThermalVarSched, nullptr);
-    EXPECT_NE(mat3->absorpSolarVarSched, nullptr);
+    EXPECT_ENUM_EQ(mat1->absorpVarCtrlSignalOut, Material::VariableAbsCtrlSignal::SurfaceTemperature);
+    EXPECT_EQ(mat1->absorpThermalVarCurveOut->Num, 1);
+    EXPECT_EQ(mat1->absorpSolarVarCurveOut->Num, 2);
+    EXPECT_ENUM_EQ(mat2->absorpVarCtrlSignalOut, Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation);
+    EXPECT_EQ(mat2->absorpSolarVarCurveOut->Num, 2);
+    EXPECT_ENUM_EQ(mat3->absorpVarCtrlSignalOut, Material::VariableAbsCtrlSignal::Scheduled);
+    EXPECT_NE(mat3->absorpThermalVarSchedOut, nullptr);
+    EXPECT_NE(mat3->absorpSolarVarSchedOut, nullptr);
 
     std::string idf_objects_bad_inputs = delimited_string({
         "MaterialProperty:VariableAbsorptance,",

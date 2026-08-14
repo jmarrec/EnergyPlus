@@ -7813,14 +7813,13 @@ MaterialProperty:VariableAbsorptance,
   A7 , \field Solar Absorptance Schedule Name Outside Face
        \note only used when Control Signal = "Scheduled"
   A8 , \field Control Signal Inside Face
-       \required-field
        \type choice
        \key SurfaceTemperature
        \key SurfaceReceivedSolarRadiation
        \key SpaceHeatingCoolingMode
        \key Scheduled
-       \default SurfaceTemperature
        \note the variable that drives the change in thermal/solar absorptance
+       \note when this field is blank the inside face defaults back to the outside face values
   A9 , \field Thermal Absorptance Function Name Inside Face
        \note A Curve:* or Table:Lookup object encoding the relationship between
        \note the control signal value and the surface thermal absorptance.

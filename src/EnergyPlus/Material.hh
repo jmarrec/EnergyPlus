@@ -266,11 +266,16 @@ namespace Material {
         Real64 AbsorpVisibleEMSOverride = 0.0;   // value to use when EMS calling to override value for visible absorptance
 
         // dynamic thermal and solar absorptance coating parameters
-        VariableAbsCtrlSignal absorpVarCtrlSignal = VariableAbsCtrlSignal::Invalid;
-        Sched::Schedule *absorpThermalVarSched = nullptr;
-        Curve::Curve *absorpThermalVarCurve = nullptr;
-        Sched::Schedule *absorpSolarVarSched = nullptr;
-        Curve::Curve *absorpSolarVarCurve = nullptr;
+        VariableAbsCtrlSignal absorpVarCtrlSignalOut = VariableAbsCtrlSignal::Invalid;
+        Sched::Schedule *absorpThermalVarSchedOut = nullptr;
+        Curve::Curve *absorpThermalVarCurveOut = nullptr;
+        Sched::Schedule *absorpSolarVarSchedOut = nullptr;
+        Curve::Curve *absorpSolarVarCurveOut = nullptr;
+        VariableAbsCtrlSignal absorpVarCtrlSignalIn = VariableAbsCtrlSignal::Invalid;
+        Sched::Schedule *absorpThermalVarSchedIn = nullptr;
+        Curve::Curve *absorpThermalVarCurveIn = nullptr;
+        Sched::Schedule *absorpSolarVarSchedIn = nullptr;
+        Curve::Curve *absorpSolarVarCurveIn = nullptr;
 
         bool hasEMPD = false;
         bool hasHAMT = false;

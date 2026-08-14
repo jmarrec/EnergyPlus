@@ -8450,7 +8450,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
     EXPECT_DOUBLE_EQ(0.3, Surface_Living_South.ViewFactorGroundIR);
 }
 
-TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptances)
+TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptancesOut)
 {
     std::string const idf_objects = delimited_string({
         "Table:IndependentVariable,",
@@ -8543,16 +8543,16 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptanc
     auto *mat1 = new Material::MaterialBase;
     mat1->Name = "WALL_1";
     mat1->group = Material::Group::Regular;
-    mat1->absorpVarCtrlSignal = Material::VariableAbsCtrlSignal::SurfaceTemperature;
-    mat1->absorpThermalVarCurve = Curve::GetCurve(*state, "THERMAL_ABSORPTANCE_TABLE");
-    mat1->absorpSolarVarCurve = Curve::GetCurve(*state, "SOLAR_ABSORPTANCE_CURVE");
+    mat1->absorpVarCtrlSignalOut = Material::VariableAbsCtrlSignal::SurfaceTemperature;
+    mat1->absorpThermalVarCurveOut = Curve::GetCurve(*state, "THERMAL_ABSORPTANCE_TABLE");
+    mat1->absorpSolarVarCurveOut = Curve::GetCurve(*state, "SOLAR_ABSORPTANCE_CURVE");
     s_mat->materials.push_back(mat1);
 
     auto *mat2 = new Material::MaterialBase;
     mat2->Name = "WALL_2";
     mat2->group = Material::Group::Regular;
-    mat2->absorpVarCtrlSignal = Material::VariableAbsCtrlSignal::Scheduled;
-    mat2->absorpThermalVarSched = Sched::GetSchedule(*state, "THERMAL_ABS_SCH");
+    mat2->absorpVarCtrlSignalOut = Material::VariableAbsCtrlSignal::Scheduled;
+    mat2->absorpThermalVarSchedOut = Sched::GetSchedule(*state, "THERMAL_ABS_SCH");
     s_mat->materials.push_back(mat2);
 
     state->dataHeatBalSurf->SurfTempOut.allocate(2);
@@ -8563,7 +8563,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptanc
     state->dataHeatBalSurf->SurfAbsThermalExt = 0.5;
     state->dataHeatBalSurf->SurfAbsSolarExt.allocate(3);
     state->dataHeatBalSurf->SurfAbsSolarExt = 0.8;
-    UpdateVariableAbsorptances(*state);
+    UpdateVariableAbsorptancesOut(*state);
     // controlled by a lookup table
     EXPECT_NEAR(state->dataHeatBalSurf->SurfAbsThermalExt(1), 0.1, 1e-6);
     EXPECT_NEAR(state->dataHeatBalSurf->SurfAbsThermalExt(2), 0.3, 1e-6);
