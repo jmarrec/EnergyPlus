@@ -2919,3 +2919,109 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_FatalWhenUnresolvable)
     EXPECT_TRUE(compare_err_stream_substring(
         R"(Surface="WALL1" has no construction assigned and no applicable Construction Assignment Set was found.)", false));
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_BothExplicitPreExistingValidationUnaffected)
+{
+    // Both sides explicit, mismatched (not reverse-equal), never touch resolveConstructionWithSearchDistance.
+    // Confirms E+'s pre-existing interzone construction validation still fires unchanged.
+    std::string const idf_objects = std::string(idf_constructions) + R"(
+  Material:NoMass,
+    Mat Foo,
+    Rough, 0.2, 0.9, 0.9, 0.9;
+
+  Material:NoMass,
+    Mat Bar,
+    Rough, 0.5, 0.9, 0.9, 0.9;
+
+  Construction,
+    Constr WallA,
+    Mat Opaque,
+    Mat Foo;
+
+  Construction,
+    Constr WallB,
+    Mat Opaque,
+    Mat Bar;
+
+  Zone,
+    Zone1,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Zone,
+    Zone2,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    10, 0, 0,                               !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    WallA,                                  !- Name
+    Wall,                                   !- Surface Type
+    Constr WallA,                           !- Construction Name
+    Zone1,                                  !- Zone Name
+    ,                                       !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    WallB,                                  !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 0, 3,                               !- X,Y,Z Vertex 1 {m}
+    10, 10, 3,                              !- X,Y,Z Vertex 2 {m}
+    10, 10, 0,                              !- X,Y,Z Vertex 3 {m}
+    10, 0, 0;                               !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    WallB,                                  !- Name
+    Wall,                                   !- Surface Type
+    Constr WallB,                           !- Construction Name
+    Zone2,                                  !- Zone Name
+    ,                                       !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    WallA,                                  !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 3,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 3,                               !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 10, 0;                              !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->CosZoneRelNorth(2) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(2) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound), std::runtime_error);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream_substring("does not have the same materials in the reverse order", false));
+}
