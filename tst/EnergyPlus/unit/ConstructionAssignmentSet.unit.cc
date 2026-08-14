@@ -2377,3 +2377,142 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInherited
     EXPECT_EQ(totConstructsBefore, state->dataHeatBal->TotConstructs) << "No new construction should have been created; the reverse of \"Interior "
                                                                          "Roof Construction\" already exists as \"Interior Floor Construction\"";
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInheritedInPair_RoofFloor)
+{
+    // Unlike the Wall/Wall case, idf_dcs_all_types's "Interior Floor Construction" and "Interior Roof Construction"
+    // are ALREADY defined as reverses of each other.
+    // Here the Floor side is hardcoded, forcing the RoofCeiling side through the "defer to adjacent, reverse it" path
+    // even though its own inherited answer "Interior Roof Construction" would already have been correct (it's reverse equal)
+    //
+    //
+    // AssignReverseConstructionNumber searches for an existing construction with the matching reversed layer order before creating a new one,
+    // so the reversed result will land on a construction that is reverse equal and existing (not a newly generated "iz-..." duplicate).
+    // But it picks the FIRST construction that satisfies the constraint... In this case it happens to NOT be the "Interior Roof Construction"
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    Zone1,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Zone,
+    Zone2,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    3,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    Zone1RoofCeiling,                       !- Name
+    Roof,                                   !- Surface Type
+    ,                                       !- Construction Name
+    Zone1,                                  !- Zone Name
+    ,                                       !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    Zone2Floor,                             !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 10, 3,                               !- X,Y,Z Vertex 1 {m}
+    0, 0, 3,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 3,                               !- X,Y,Z Vertex 3 {m}
+    10, 10, 3;                              !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Zone2Floor,                             !- Name
+    Floor,                                  !- Surface Type
+    Interior Floor Construction,            !- Construction Name
+    Zone2,                                  !- Zone Name
+    ,                                       !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    Zone1RoofCeiling,                       !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 0,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 2 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+    0, 10, 0;                               !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->CosZoneRelNorth(2) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(2) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    int const totConstructsBefore = state->dataHeatBal->TotConstructs;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int roofNum = Util::FindItemInList("ZONE1ROOFCEILING", state->dataSurface->Surface);
+    int floorNum = Util::FindItemInList("ZONE2FLOOR", state->dataSurface->Surface);
+    ASSERT_GT(roofNum, 0);
+    ASSERT_GT(floorNum, 0);
+
+    auto const &roof = state->dataSurface->Surface(roofNum);
+    auto const &floor = state->dataSurface->Surface(floorNum);
+
+    ASSERT_GT(roof.Construction, 0);
+    ASSERT_GT(floor.Construction, 0);
+
+    // Floor is untouched: still its own explicit construction.
+    EXPECT_EQ("INTERIOR FLOOR CONSTRUCTION", state->dataConstruction->Construct(floor.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned), floor.ConstructionAssignmentSource);
+
+    // The Roof side's reversed-of-the-winner construction should land on the pre-existing
+    // "Interior Floor Construction" (an exact layer-order match), not a newly generated one.
+    EXPECT_EQ("INTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
+    EXPECT_EQ(totConstructsBefore, state->dataHeatBal->TotConstructs) << "No new construction should have been created; the reverse of \"Interior "
+                                                                         "Roof Construction\" already exists as \"Interior Roof Construction\"";
+}

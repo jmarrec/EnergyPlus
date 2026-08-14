@@ -219,21 +219,10 @@ namespace ConstructionAssignments {
             return thisCWSD;
         }
 
-        // both surfaces return a construction and they are not the same
-
-        if (thisCWSD.searchDistance < adjacentCWSD.searchDistance) {
-            // lower search distance to construction
-            return thisCWSD;
-        }
-
-        if (thisCWSD.searchDistance > adjacentCWSD.searchDistance) {
-            // lower search distance to adjacent construction: use its reverse
-            return reversedAdjacent();
-        }
-
-        // both surfaces return a construction, they are not the same, and both have same search distance
-
-        // TODO: if they are reversedEqualLayers -> IS THIS NEEDED REALLY?
+        // Different constructions, but already mirror-images of each other (e.g. a Floor/RoofCeiling
+        // pair modeled with dedicated, intentionally-reversed constructions): each side's own
+        // independently resolved construction is already correct, regardless of search distance -
+        // don't search for/create a reverse of whichever side "wins" below.
         {
             const auto &thisConstruct = state.dataConstruction->Construct(thisCWSD.constructionNum);
             const auto &adjacentConstruct = state.dataConstruction->Construct(adjacentCWSD.constructionNum);
@@ -257,7 +246,20 @@ namespace ConstructionAssignments {
             }
         }
 
-        // give up for now
+        // both surfaces return a construction, they are not the same, and are not reverse-equal
+
+        if (thisCWSD.searchDistance < adjacentCWSD.searchDistance) {
+            // lower search distance to construction
+            return thisCWSD;
+        }
+
+        if (thisCWSD.searchDistance > adjacentCWSD.searchDistance) {
+            // lower search distance to adjacent construction: use its reverse
+            return reversedAdjacent();
+        }
+
+        // both surfaces return a construction, they are not the same, they are not reverse-equal,
+        // and both have same search distance: give up for now
         ShowWarningError(
             state,
             std::format(
