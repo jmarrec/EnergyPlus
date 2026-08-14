@@ -1579,6 +1579,14 @@ void CheckSimpleController(EnergyPlusData &state, int const ControlNum, bool &Is
     // PRECONDITION: Setpoint must be known. See ControllerProps%IsSetPointDefinedFlag
 
     auto &controllerProps = state.dataHVACControllers->ControllerProps(ControlNum);
+
+    // If there is zero air flow through the sensed node then the controller must be Off with zero actuation to be considered converged.
+    // A warm restart may preserve a previous MaxActive solution which is invalid when air flow has dropped to zero. Reject such stale solutions here.
+    if (state.dataLoopNodes->Node(controllerProps.SensedNode).MassFlowRate == 0.0) {
+        IsConvergedFlag = (controllerProps.Mode == ControllerMode::Off) && (controllerProps.ActuatedValue == 0.0);
+        return;
+    }
+
     auto &rootFinders = state.dataHVACControllers->RootFinders(ControlNum);
 
     // Default initialization: assuming no convergence unless detected in the following code!
