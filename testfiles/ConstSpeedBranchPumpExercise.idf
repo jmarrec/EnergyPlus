@@ -121,21 +121,7 @@
     Plant Loop 1 Supply Inlet Branch,  !- Branch 1 Name
     Plant Loop 1 Supply Branch 1,  !- Branch 2 Name
     Plant Loop 1 Supply Branch 2,  !- Branch 3 Name
-    Plant Loop 1 Supply Bypass Branch,  !- Branch 4 Name
-    Plant Loop 1 Supply Outlet Branch;  !- Branch 5 Name
-
-  Branch,
-    Plant Loop 1 Supply Bypass Branch,      !- Name
-    ,                                       !- Pressure Drop Curve Name
-    Pipe:Adiabatic,                         !- Component Object Type 1
-    Plant Loop 1 Supply Bypass Pipe,        !- Component Name 1
-    Plant Loop 1 Supply Bypass Inlet Node,  !- Component Inlet Node Name 1
-    Plant Loop 1 Supply Bypass Outlet Node; !- Component Outlet Node Name 1
-
-  Pipe:Adiabatic,
-    Plant Loop 1 Supply Bypass Pipe,        !- Name
-    Plant Loop 1 Supply Bypass Inlet Node,  !- Inlet Node Name
-    Plant Loop 1 Supply Bypass Outlet Node; !- Outlet Node Name
+    Plant Loop 1 Supply Outlet Branch;  !- Branch 4 Name
 
   ConnectorList,
     Plant Loop 1 Supply Connector List,  !- Name
@@ -148,15 +134,13 @@
     Plant Loop 1 Supply Splitter,  !- Name
     Plant Loop 1 Supply Inlet Branch,  !- Inlet Branch Name
     Plant Loop 1 Supply Branch 1,  !- Outlet Branch 1 Name
-    Plant Loop 1 Supply Branch 2,  !- Outlet Branch 2 Name
-    Plant Loop 1 Supply Bypass Branch;  !- Outlet Branch 3 Name
+    Plant Loop 1 Supply Branch 2;  !- Outlet Branch 2 Name
 
   Connector:Mixer,
     Plant Loop 1 Supply Mixer,  !- Name
     Plant Loop 1 Supply Outlet Branch,  !- Outlet Branch Name
     Plant Loop 1 Supply Branch 1,  !- Inlet Branch 1 Name
-    Plant Loop 1 Supply Branch 2,  !- Inlet Branch 2 Name
-    Plant Loop 1 Supply Bypass Branch;  !- Inlet Branch 3 Name
+    Plant Loop 1 Supply Branch 2;  !- Inlet Branch 2 Name
 
   Branch,
     Plant Loop 1 Supply Inlet Branch,  !- Name
