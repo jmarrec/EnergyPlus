@@ -1776,21 +1776,14 @@ void SaveSimpleController(EnergyPlusData &state, int const ControlNum, bool cons
     // PURPOSE OF THIS SUBROUTINE:
     // Updates solution trackers if simple controller is converged.
 
-    auto &ControllerProps = state.dataHVACControllers->ControllerProps(ControlNum);
-
     // Save solution and mode for next call only if converged
     if (IsConvergedFlag) {
+        auto &ControllerProps = state.dataHVACControllers->ControllerProps(ControlNum);
         int PreviousSolutionIndex = FirstHVACIteration ? 1 : 2;
 
-        if (ControllerProps.Mode == ControllerMode::Active) {
-            ControllerProps.SolutionTrackers(PreviousSolutionIndex).DefinedFlag = true;
-            ControllerProps.SolutionTrackers(PreviousSolutionIndex).Mode = ControllerProps.Mode;
-            ControllerProps.SolutionTrackers(PreviousSolutionIndex).ActuatedValue = ControllerProps.NextActuatedValue;
-        } else {
-            ControllerProps.SolutionTrackers(PreviousSolutionIndex).DefinedFlag = false;
-            ControllerProps.SolutionTrackers(PreviousSolutionIndex).Mode = ControllerProps.Mode;
-            ControllerProps.SolutionTrackers(PreviousSolutionIndex).ActuatedValue = ControllerProps.NextActuatedValue;
-        }
+        ControllerProps.SolutionTrackers(PreviousSolutionIndex).DefinedFlag = (ControllerProps.Mode == ControllerMode::Active);
+        ControllerProps.SolutionTrackers(PreviousSolutionIndex).Mode = ControllerProps.Mode;
+        ControllerProps.SolutionTrackers(PreviousSolutionIndex).ActuatedValue = ControllerProps.NextActuatedValue;
     }
 }
 
@@ -2685,6 +2678,7 @@ void CheckCoilWaterInletNode(EnergyPlusData &state,
     for (auto const &ControllerProps : state.dataHVACControllers->ControllerProps) {
         if (ControllerProps.ActuatedNode == WaterInletNodeNum) {
             NodeNotFound = false;
+            break;
         }
     }
 }
