@@ -7067,8 +7067,12 @@ namespace SurfaceGeometry {
 
             state.dataSurface->IntMassObjects(Item).Name = s_ipsc->cAlphaArgs(1);
             state.dataSurface->IntMassObjects(Item).GrossArea = s_ipsc->rNumericArgs(1);
-            state.dataSurface->IntMassObjects(Item).Construction =
-                Util::FindItemInList(s_ipsc->cAlphaArgs(2), state.dataConstruction->Construct, state.dataHeatBal->TotConstructs);
+            // Allow a blank construction for InternalMass; it will be resolved based on ConstructionAssignmentSet
+            bool const constructionIsBlank = s_ipsc->lAlphaFieldBlanks(2);
+            if (!constructionIsBlank) {
+                state.dataSurface->IntMassObjects(Item).Construction =
+                    Util::FindItemInList(s_ipsc->cAlphaArgs(2), state.dataConstruction->Construct, state.dataHeatBal->TotConstructs);
+            }
             state.dataSurface->IntMassObjects(Item).ZoneOrZoneListName = s_ipsc->cAlphaArgs(3);
             int Item1 = Util::FindItemInList(s_ipsc->cAlphaArgs(3), state.dataHeatBal->Zone, state.dataGlobal->NumOfZones);
             int ZLItem = 0;
@@ -7145,7 +7149,9 @@ namespace SurfaceGeometry {
                 NumIntMassSurfaces = 0;
             }
 
-            if (state.dataSurface->IntMassObjects(Item).Construction == 0) {
+            if (constructionIsBlank) {
+                // Process later, resolved based on ConstructionAssignmentSet
+            } else if (state.dataSurface->IntMassObjects(Item).Construction == 0) {
                 ErrorsFound = true;
                 ShowSevereError(state,
                                 std::format("{}=\"{}\", {} not found={}",

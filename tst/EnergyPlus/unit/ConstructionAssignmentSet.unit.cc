@@ -1904,3 +1904,103 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_SpaceOverridesBuildingWithFallb
     EXPECT_EQ("EXTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
     EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), roof.ConstructionAssignmentSource);
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_AdiabaticAndInteriorPartition)
+{
+    // Adiabatic surfaces and InternalMass objects don't go through the Wall/Floor/Roof
+    // SurfaceConstructionAssignments dispatch - they resolve directly to the DCS's
+    // Adiabatic Surface Construction Name / Interior Partition Construction Name fields.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    AdiabaticWall,                          !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Adiabatic,                              !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 0, 3,                                !- X,Y,Z Vertex 1 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 0, 3;                               !- X,Y,Z Vertex 4 {m}
+
+  InternalMass,
+    IntMass1,                               !- Name
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone or ZoneList Name
+    ,                                       !- Space or SpaceList Name
+    10;                                     !- Surface Area {m2}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int adiabaticNum = Util::FindItemInList("ADIABATICWALL", state->dataSurface->Surface);
+    int intMassNum = Util::FindItemInList("INTMASS1", state->dataSurface->Surface);
+    ASSERT_GT(adiabaticNum, 0);
+    ASSERT_GT(intMassNum, 0);
+
+    auto const &adiabaticWall = state->dataSurface->Surface(adiabaticNum);
+    auto const &intMass = state->dataSurface->Surface(intMassNum);
+
+    ASSERT_GT(adiabaticWall.Construction, 0);
+    ASSERT_GT(intMass.Construction, 0);
+
+    EXPECT_EQ("ADIABATIC SURFACE CONSTRUCTION", state->dataConstruction->Construct(adiabaticWall.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), adiabaticWall.ConstructionAssignmentSource);
+
+    EXPECT_EQ("INTERIOR PARTITION CONSTRUCTION", state->dataConstruction->Construct(intMass.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), intMass.ConstructionAssignmentSource);
+}
