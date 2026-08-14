@@ -203,6 +203,7 @@ add_simulation_test(IDF_FILE CoilWaterDesuperheatingUnitaryCoilDX.idf EPW_FILE U
 add_simulation_test(IDF_FILE CommonPipe_Pri-Sec.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE CompSetPtControl.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE CondFD1ZonePurchAirAutoSizeWithPCM.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
+add_simulation_test(IDF_FILE ConstructionAssignmentSet.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE ConstSpeedBranchPumpExercise.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE Convection.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE ConvectionAdaptiveSmallOffice.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
