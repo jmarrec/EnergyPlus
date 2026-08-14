@@ -1959,7 +1959,8 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
     // Pressure-based and EMS pressure calculations override the nominal full-power model and must not trigger this warning.
     bool const pumpPowerWasOverridden =
         (thisPump.plantLoc.loopNum > 0 && thisPump.plantLoc.loop->UsePressureForPumpCalcs) || thisPump.EMSPressureOverrideOn;
-    if (pumpType == PumpType::ConSpeed && !pumpPowerWasOverridden && daPumps->Power > 0.0 && VolFlowRate < 0.25 * thisPump.NomVolFlowRate) {
+    if (pumpType == PumpType::ConSpeed && !pumpPowerWasOverridden && !state.dataGlobal->WarmupFlag && !state.dataGlobal->DoingSizing &&
+        !state.dataGlobal->KickOffSimulation && daPumps->Power > 0.0 && VolFlowRate < 0.25 * thisPump.NomVolFlowRate) {
         ShowRecurringWarningErrorAtEnd(
             state,
             std::format("{} Part Load Ratio < 1, {}, Name={}, pump has full power even at less than 25% nominal flow rate, VolFlowRate=",
