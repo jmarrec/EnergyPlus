@@ -2285,39 +2285,6 @@ namespace SurfaceGeometry {
             }
         }
 
-        // Resolve inherited construction assignments for surfaces with no explicit construction assigned.
-        // Done after BC reconciliation so ExtBoundCond is a real surface index (enabling
-        // adjacent-surface DCS lookup). iz- surfaces get AssignReverseConstructionNumber applied
-        // since AssignReverseConstructionNumber(0) was a no-op earlier.
-        for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
-            auto &surf = state.dataSurface->Surface(SurfNum);
-            if (!surf.HeatTransSurf || surf.Construction != 0) {
-                continue;
-            }
-            int constrNum = ConstructionAssignments::resolveConstructionWithSearchDistance(state, surf);
-            if (constrNum == 0) {
-                continue;
-            }
-            if (surf.Name.size() > 3 && surf.Name.substr(0, 3) == "iz-") {
-                constrNum = DataHeatBalance::AssignReverseConstructionNumber(state, constrNum, SurfError);
-            }
-            surf.Construction = constrNum;
-            surf.ConstructionStoredInputValue = constrNum;
-        }
-
-        // Verify every heat-transfer surface now has a construction
-        for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
-            auto const &surf = state.dataSurface->Surface(SurfNum);
-            if (!surf.HeatTransSurf || surf.Construction != 0) {
-                continue;
-            }
-            ShowSevereError(state,
-                            std::format("{}Surface=\"{}\" has no construction assigned and no applicable Construction Assignment Set was found.",
-                                        RoutineName,
-                                        surf.Name));
-            SurfError = true;
-        }
-
         setSurfaceFirstLast(state);
 
         // Set up Floor Areas for Zones and Spaces
@@ -2508,6 +2475,98 @@ namespace SurfaceGeometry {
                 // NOTE: This must be set early so that subsequent shading calculations are done correctly
                 surf.BaseSurf = SurfNum;
             }
+        }
+
+        // Resolve inherited construction assignments for surfaces with no explicit construction assigned.
+        // Done after BC reconciliation (ExtBoundCond is a real surface index, enabling adjacent-surface DCS
+        // lookup) and after OriginalClass is populated above (subsurface resolution switches on OriginalClass).
+        //
+        // This is done in two passes so that resolving one surface's construction can never be mistaken for
+        // a hard-assigned value when its still-unresolved interzone neighbor is looked at later in the same
+        // pass (resolveConstructionWithSearchDistance treats Surface.Construction != 0 as "hard assigned").
+        // Mirrors the side-effect-free query used by OpenStudio's Surface_Impl::constructionWithSearchDistance().
+        {
+            // Surfaces with an explicit (input) construction are reported as "Explicit" in the
+            // EnvelopeSummary's Construction Assignment Source column.
+            for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+                auto &surf = state.dataSurface->Surface(SurfNum);
+                if (surf.HeatTransSurf && surf.Construction != 0) {
+                    surf.ConstructionAssignmentSource = static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned);
+                }
+            }
+
+            std::vector<int> resolvedConstrNum(state.dataSurface->TotSurfaces + 1, 0);
+            std::vector<ConstructionAssignments::SearchDistanceType> resolvedSource(state.dataSurface->TotSurfaces + 1,
+                                                                                    ConstructionAssignments::SearchDistanceType::Invalid);
+            for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+                auto const &surf = state.dataSurface->Surface(SurfNum);
+                if (!surf.HeatTransSurf || surf.Construction != 0) {
+                    continue;
+                }
+                ConstructionAssignments::ConstructionWithSearchDistance cwsd =
+                    ConstructionAssignments::resolveConstructionWithSearchDistance(state, surf);
+                resolvedConstrNum[SurfNum] = cwsd.constructionNum;
+                resolvedSource[SurfNum] = cwsd.searchDistance;
+            }
+
+            // If both sides of an interzone pair were auto-resolved to the identical (non-reversed)
+            // construction, mirror OpenStudio's ForwardTranslator::resolveMatchedSurfaceConstructionConflicts:
+            // give one side (the alphabetically-later name, for repeatability) a generated reverse-layer
+            // construction instead, so the two sides aren't physically inconsistent with each other.
+            std::vector<bool> pairHandled(state.dataSurface->TotSurfaces + 1, false);
+            for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+                if (resolvedConstrNum[SurfNum] == 0 || pairHandled[SurfNum]) {
+                    continue;
+                }
+                int adjSurfNum = state.dataSurface->Surface(SurfNum).ExtBoundCond;
+                if (adjSurfNum <= 0 || adjSurfNum > state.dataSurface->TotSurfaces || adjSurfNum == SurfNum) {
+                    continue;
+                }
+                pairHandled[SurfNum] = true;
+                pairHandled[adjSurfNum] = true;
+                if (resolvedConstrNum[adjSurfNum] != resolvedConstrNum[SurfNum]) {
+                    continue;
+                }
+                int &laterSideConstrNum = (state.dataSurface->Surface(SurfNum).Name > state.dataSurface->Surface(adjSurfNum).Name)
+                                              ? resolvedConstrNum[SurfNum]
+                                              : resolvedConstrNum[adjSurfNum];
+                laterSideConstrNum = DataHeatBalance::AssignReverseConstructionNumber(state, laterSideConstrNum, SurfError);
+            }
+
+            // iz- surfaces (E+-synthesized mirror of an interzone surface the user didn't fully specify)
+            // always need the reverse of whatever their real counterpart resolved to.
+            for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+                if (resolvedConstrNum[SurfNum] == 0) {
+                    continue;
+                }
+                auto const &surf = state.dataSurface->Surface(SurfNum);
+                if (surf.Name.size() > 3 && surf.Name.substr(0, 3) == "iz-") {
+                    resolvedConstrNum[SurfNum] = DataHeatBalance::AssignReverseConstructionNumber(state, resolvedConstrNum[SurfNum], SurfError);
+                }
+            }
+
+            for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+                if (resolvedConstrNum[SurfNum] == 0) {
+                    continue;
+                }
+                auto &surf = state.dataSurface->Surface(SurfNum);
+                surf.Construction = resolvedConstrNum[SurfNum];
+                surf.ConstructionStoredInputValue = resolvedConstrNum[SurfNum];
+                surf.ConstructionAssignmentSource = static_cast<int>(resolvedSource[SurfNum]);
+            }
+        }
+
+        // Verify every heat-transfer surface now has a construction
+        for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+            auto const &surf = state.dataSurface->Surface(SurfNum);
+            if (!surf.HeatTransSurf || surf.Construction != 0) {
+                continue;
+            }
+            ShowSevereError(state,
+                            std::format("{}Surface=\"{}\" has no construction assigned and no applicable Construction Assignment Set was found.",
+                                        RoutineName,
+                                        surf.Name));
+            SurfError = true;
         }
 
         auto &s_mat = state.dataMaterial;

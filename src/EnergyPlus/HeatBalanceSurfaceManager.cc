@@ -624,6 +624,23 @@ void InitSurfaceHeatBalance(EnergyPlusData &state)
     state.dataHeatBalSurfMgr->InitSurfaceHeatBalancefirstTime = false;
 }
 
+// Maps SurfaceData::ConstructionAssignmentSource (mirrors ConstructionAssignments::SearchDistanceType, stored as
+// int to avoid a header dependency) to the display string used in the EnvelopeSummary's Construction Assignment
+// Source column.
+std::string_view constructionAssignmentSourceString(int constructionAssignmentSource)
+{
+    switch (constructionAssignmentSource) {
+    case 0:
+        return "Explicit";
+    case 1:
+        return "Space";
+    case 2:
+        return "Building";
+    default:
+        return "N/A";
+    }
+}
+
 void GatherForPredefinedReport(EnergyPlusData &state)
 {
 
@@ -814,6 +831,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
                 mult = thisZone.Multiplier * thisZone.ListMultiplier;
                 auto const &thisSpace = state.dataHeatBal->space(surface.spaceNum);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchOpCons, surfName, construct.Name);
+                OutputReportPredefined::PreDefTableEntry(state,
+                                                         state.dataOutRptPredefined->pdchOpConsSource,
+                                                         surfName,
+                                                         constructionAssignmentSourceString(surface.ConstructionAssignmentSource));
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchOpZone, surfName, thisZone.Name);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchOpSpace, surfName, thisSpace.Name);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchOpRefl, surfName, 1 - construct.OutsideAbsorpSolar);
@@ -847,6 +868,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
                 mult = thisZone.Multiplier * thisZone.ListMultiplier * surface.Multiplier;
                 auto const &thisSpace = state.dataHeatBal->space(surface.spaceNum);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFenCons, surfName, construct.Name);
+                OutputReportPredefined::PreDefTableEntry(state,
+                                                         state.dataOutRptPredefined->pdchFenConsSource,
+                                                         surfName,
+                                                         constructionAssignmentSourceString(surface.ConstructionAssignmentSource));
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFenZone, surfName, thisZone.Name);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFenSpace, surfName, thisSpace.Name);
                 // if the construction report is requested the SummerSHGC is already calculated
@@ -1134,6 +1159,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
                 auto const &thisSpace = state.dataHeatBal->space(surface.spaceNum);
                 OutputReportPredefined::PreDefTableEntry(
                     state, state.dataOutRptPredefined->pdchDrCons, surfName, state.dataConstruction->Construct(surface.Construction).Name);
+                OutputReportPredefined::PreDefTableEntry(state,
+                                                         state.dataOutRptPredefined->pdchDrConsSource,
+                                                         surfName,
+                                                         constructionAssignmentSourceString(surface.ConstructionAssignmentSource));
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchDrZone, surfName, thisZone.Name);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchDrSpace, surfName, thisSpace.Name);
                 OutputReportPredefined::PreDefTableEntry(
@@ -1155,6 +1184,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
                 mult = thisZone.Multiplier * thisZone.ListMultiplier;
                 auto const &thisSpace = state.dataHeatBal->space(surface.spaceNum);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntOpCons, surfName, construct.Name);
+                OutputReportPredefined::PreDefTableEntry(state,
+                                                         state.dataOutRptPredefined->pdchIntOpConsSource,
+                                                         surfName,
+                                                         constructionAssignmentSourceString(surface.ConstructionAssignmentSource));
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntOpZone, surfName, thisZone.Name);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntOpSpace, surfName, thisSpace.Name);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntOpAdjSurf, surfName, surface.ExtBoundCondName);
@@ -1191,6 +1224,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
                 if (!has_prefix(surface.Name,
                                 "iz-")) { // don't count created interzone surfaces that are mirrors of other surfaces
                     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntFenCons, surfName, construct.Name);
+                    OutputReportPredefined::PreDefTableEntry(state,
+                                                             state.dataOutRptPredefined->pdchIntFenConsSource,
+                                                             surfName,
+                                                             constructionAssignmentSourceString(surface.ConstructionAssignmentSource));
                     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntFenZone, surfName, thisZone.Name);
                     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntFenSpace, surfName, thisSpace.Name);
                     // include the frame area if present
@@ -1236,6 +1273,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
                 mult = thisZone.Multiplier * thisZone.ListMultiplier;
                 auto const &thisSpace = state.dataHeatBal->space(surface.spaceNum);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntDrCons, surfName, construct.Name);
+                OutputReportPredefined::PreDefTableEntry(state,
+                                                         state.dataOutRptPredefined->pdchIntDrConsSource,
+                                                         surfName,
+                                                         constructionAssignmentSourceString(surface.ConstructionAssignmentSource));
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntDrZone, surfName, thisZone.Name);
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchIntDrSpace, surfName, thisSpace.Name);
                 OutputReportPredefined::PreDefTableEntry(

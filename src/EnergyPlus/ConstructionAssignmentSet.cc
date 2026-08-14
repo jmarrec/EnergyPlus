@@ -51,10 +51,10 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/Construction.hh>
+#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataSurfaces.hh>
-#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
@@ -172,14 +172,14 @@ namespace ConstructionAssignments {
         return {.searchDistance = SearchDistanceType::Invalid, .constructionNum = 0};
     }
 
-    int resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface)
+    ConstructionWithSearchDistance resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface)
     {
 
         ConstructionWithSearchDistance thisCWSD = constructionWithSearchDistance(state, surface);
 
         // If no adjacent surface, return
         if (surface.ExtBoundCond <= 0) {
-            return thisCWSD.constructionNum;
+            return thisCWSD;
         }
 
         // TODO: should I resolve with adjacent surface too?
@@ -191,36 +191,36 @@ namespace ConstructionAssignments {
 
         if (thisFound && !adjacentFound) {
             // return this construction
-            return thisCWSD.constructionNum;
+            return thisCWSD;
         }
 
         if (!thisFound && adjacentFound) {
             // return adjacent construction
-            return adjacentCWSD.constructionNum;
+            return adjacentCWSD;
         }
 
         if (!thisFound && !adjacentFound) {
             // no constructions, nothing to be done
-            return 0;
+            return ConstructionWithSearchDistance{};
         }
 
         // both surfaces return a construction
 
         if (thisCWSD.constructionNum == adjacentCWSD.constructionNum) {
             // both surfaces have same construction
-            return thisCWSD.constructionNum;
+            return thisCWSD;
         }
 
         // both surfaces return a construction and they are not the same
 
         if (thisCWSD.searchDistance < adjacentCWSD.searchDistance) {
             // lower search distance to construction
-            return thisCWSD.constructionNum;
+            return thisCWSD;
         }
 
         if (thisCWSD.searchDistance > adjacentCWSD.searchDistance) {
             // lower search distance to adjacent construction
-            return adjacentCWSD.constructionNum;
+            return adjacentCWSD;
         }
 
         // both surfaces return a construction, they are not the same, and both have same search distance
@@ -245,7 +245,7 @@ namespace ConstructionAssignments {
 
             if (is_reversed_equal_layers) {
                 // these constructions are reverse equal
-                return thisCWSD.constructionNum;
+                return thisCWSD;
             }
         }
 
@@ -257,7 +257,7 @@ namespace ConstructionAssignments {
                 surface.Name,
                 otherSurface.Name,
                 state.dataConstruction->Construct(thisCWSD.constructionNum).Name));
-        return thisCWSD.constructionNum;
+        return thisCWSD;
     }
 
     void GetConstructionAssignmentSetData(EnergyPlusData &state, bool &ErrorsFound)
