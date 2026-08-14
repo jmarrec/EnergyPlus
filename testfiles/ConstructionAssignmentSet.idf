@@ -35,6 +35,10 @@
 !                          The legacy "Window", "Door", and "GlassDoor" types are used as well, so
 !                          both old and new types get their own SubSurfaceConstructionAssignments row.
 !
+!                          "Space1 Furniture" (InternalMass, blank Construction Name) exercises
+!                          resolution of the Building-level set's Interior Partition Construction
+!                          Name field.
+!
 ! Simulation Location/Run: CHICAGO_IL_USA TMY2-94846, 2 design days
 !
 ! Location:                Chicago, IL
@@ -76,6 +80,13 @@
     ,                        !- Volume {m3}
     ,                        !- Floor Area {m2}
     ;                        !- Space Type
+
+  InternalMass,
+    Space1 Furniture,        !- Name
+    ,                        !- Construction Name
+    ,                        !- Zone or ZoneList Name
+    Space1,                  !- Space or SpaceList Name
+    10;                      !- Surface Area {m2}
 
   BuildingSurface:Detailed,
     Space1 Floor,            !- Name
