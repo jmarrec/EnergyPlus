@@ -172,7 +172,8 @@ namespace ConstructionAssignments {
         return {.searchDistance = SearchDistanceType::Invalid, .constructionNum = 0};
     }
 
-    ConstructionWithSearchDistance resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface)
+    ConstructionWithSearchDistance
+    resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface, bool &ErrorsFound)
     {
 
         ConstructionWithSearchDistance thisCWSD = constructionWithSearchDistance(state, surface);
@@ -182,9 +183,16 @@ namespace ConstructionAssignments {
             return thisCWSD;
         }
 
-        // TODO: should I resolve with adjacent surface too?
         auto const &otherSurface = state.dataSurface->Surface(surface.ExtBoundCond);
         ConstructionWithSearchDistance adjacentCWSD = constructionWithSearchDistance(state, otherSurface);
+
+        // This surface is deferring to the adjacent surface's resolved construction: it needs the
+        // reverse (outside-to-inside) layer order, not the identical construction number, since
+        // this surface is the other side of the same physical assembly.
+        auto reversedAdjacent = [&]() -> ConstructionWithSearchDistance {
+            int const reversedConstrNum = DataHeatBalance::AssignReverseConstructionNumber(state, adjacentCWSD.constructionNum, ErrorsFound);
+            return {.searchDistance = adjacentCWSD.searchDistance, .constructionNum = reversedConstrNum};
+        };
 
         bool const thisFound = thisCWSD.searchDistance != SearchDistanceType::Invalid;
         bool const adjacentFound = adjacentCWSD.searchDistance != SearchDistanceType::Invalid;
@@ -195,8 +203,8 @@ namespace ConstructionAssignments {
         }
 
         if (!thisFound && adjacentFound) {
-            // return adjacent construction
-            return adjacentCWSD;
+            // return the reverse of the adjacent construction
+            return reversedAdjacent();
         }
 
         if (!thisFound && !adjacentFound) {
@@ -219,8 +227,8 @@ namespace ConstructionAssignments {
         }
 
         if (thisCWSD.searchDistance > adjacentCWSD.searchDistance) {
-            // lower search distance to adjacent construction
-            return adjacentCWSD;
+            // lower search distance to adjacent construction: use its reverse
+            return reversedAdjacent();
         }
 
         // both surfaces return a construction, they are not the same, and both have same search distance

@@ -2091,3 +2091,150 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitUnaffectedByConstructio
     EXPECT_EQ("INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wall.Construction).Name);
     EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned), wall.ConstructionAssignmentSource);
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInheritedInPair)
+{
+    // Two sides of an interzone wall: one hardcoded, one blank. Per the NFP, an explicit
+    // assignment takes precedence over an inherited one for the pair, and EnergyPlus finds or
+    // creates the reversed construction for the inherited side - it must NOT just copy the
+    // hardcoded side's construction number verbatim (that would leave both sides with the same
+    // outside-to-inside layer order, which is physically wrong for an asymmetric construction).
+    //
+    // WallA is explicit ("Exterior Wall Construction" = C5 concrete outside, R13LAYER inside).
+    // WallB is blank; the Building-level DCS would give it "Interior Wall Construction" (a
+    // different, gypsum-based construction) if inheritance won - it must not, since WallA's
+    // explicit assignment has higher precedence.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    Zone1,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0,                                      !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Zone,
+    Zone2,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    10,                                     !- X Origin {m}
+    0,                                      !- Y Origin {m}
+    0,                                      !- Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    WallA,                                  !- Name
+    Wall,                                   !- Surface Type
+    Exterior Wall Construction,             !- Construction Name
+    Zone1,                                  !- Zone Name
+    ,                                       !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    WallB,                                  !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 0, 3,                               !- X,Y,Z Vertex 1 {m}
+    10, 10, 3,                              !- X,Y,Z Vertex 2 {m}
+    10, 10, 0,                              !- X,Y,Z Vertex 3 {m}
+    10, 0, 0;                               !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    WallB,                                  !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    Zone2,                                  !- Zone Name
+    ,                                       !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    WallA,                                  !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 3,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 3,                               !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 10, 0;                              !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->CosZoneRelNorth(2) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(2) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int wallANum = Util::FindItemInList("WALLA", state->dataSurface->Surface);
+    int wallBNum = Util::FindItemInList("WALLB", state->dataSurface->Surface);
+    ASSERT_GT(wallANum, 0);
+    ASSERT_GT(wallBNum, 0);
+
+    auto const &wallA = state->dataSurface->Surface(wallANum);
+    auto const &wallB = state->dataSurface->Surface(wallBNum);
+
+    ASSERT_GT(wallA.Construction, 0);
+    ASSERT_GT(wallB.Construction, 0);
+
+    // WallA is untouched: still its own explicit construction.
+    EXPECT_EQ("EXTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wallA.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned), wallA.ConstructionAssignmentSource);
+
+    // WallB must NOT have inherited "Interior Wall Construction" from the Building-level DCS -
+    // WallA's explicit assignment has higher precedence and governs the pair.
+    EXPECT_NE("INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wallB.Construction).Name);
+
+    // WallB's construction must have the reverse layer order of WallA's "Exterior Wall
+    // Construction" (Outside Layer=C5 concrete, Layer 2=R13LAYER) - not the identical,
+    // unreversed construction number.
+    auto const &constrA = state->dataConstruction->Construct(wallA.Construction);
+    auto const &constrB = state->dataConstruction->Construct(wallB.Construction);
+    ASSERT_EQ(2, constrA.TotLayers);
+    ASSERT_EQ(2, constrB.TotLayers);
+    EXPECT_EQ(state->dataMaterial->materials(constrA.LayerPoint(1))->Name, state->dataMaterial->materials(constrB.LayerPoint(2))->Name);
+    EXPECT_EQ(state->dataMaterial->materials(constrA.LayerPoint(2))->Name, state->dataMaterial->materials(constrB.LayerPoint(1))->Name);
+    EXPECT_NE(wallA.Construction, wallB.Construction) << "WallB must not share WallA's construction number unreversed";
+}

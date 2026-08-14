@@ -2504,7 +2504,7 @@ namespace SurfaceGeometry {
                     continue;
                 }
                 ConstructionAssignments::ConstructionWithSearchDistance cwsd =
-                    ConstructionAssignments::resolveConstructionWithSearchDistance(state, surf);
+                    ConstructionAssignments::resolveConstructionWithSearchDistance(state, surf, SurfError);
                 resolvedConstrNum[SurfNum] = cwsd.constructionNum;
                 resolvedSource[SurfNum] = cwsd.searchDistance;
             }

@@ -87,8 +87,10 @@ namespace ConstructionAssignments {
     void GetConstructionAssignmentSetData(EnergyPlusData &state, bool &ErrorsFound); // If errors found in input
 
     // For a given surface, this function will call constructionWithSearchDistance for the surface and its adjacent surface (if it exists) and
-    // resolve which construction to return based on the search distance for both
-    ConstructionWithSearchDistance resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface);
+    // resolve which construction to return based on the search distance for both. When the adjacent surface's construction wins, the returned
+    // construction is its reverse (outside-to-inside) layer order, since this surface is the other side of the same assembly.
+    ConstructionWithSearchDistance
+    resolveConstructionWithSearchDistance(EnergyPlusData &state, DataSurfaces::SurfaceData const &surface, bool &ErrorsFound);
 
     // This is a helper only, use resolveConstructionWithSearchDistance instead for public usage
     // This function looks up a construction for the surface, checking surface, space, and building-level construction assignment sets.
