@@ -2710,3 +2710,156 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_BothSidesInheritedSameConstruct
     EXPECT_EQ(state->dataMaterial->materials(constrA.LayerPoint(1))->Name, state->dataMaterial->materials(constrB.LayerPoint(2))->Name);
     EXPECT_EQ(state->dataMaterial->materials(constrA.LayerPoint(2))->Name, state->dataMaterial->materials(constrB.LayerPoint(1))->Name);
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_SpacePrecedenceOverBuildingInPair)
+{
+    // WallA (Space1, own DCS) vs WallB (no Space, Building DCS): Space wins the pair, WallB gets
+    // WallA's reverse, not its own Building-inherited construction.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Construction,
+    Space Wall Construction,                !- Name
+    C5 - 4 IN HW CONCRETE,                  !- Outside Layer
+    R13LAYER;                               !- Layer 2
+
+  SurfaceConstructionAssignments,
+    Space1 Interior Surf Constrs,           !- Name
+    ,                                       !- Floor Construction Name
+    Space Wall Construction;                !- Wall Construction Name
+
+  ConstructionAssignmentSet,
+    Space1 DCS,                             !- Name
+    ,                                       !- Exterior Surface Construction Assignments Name
+    Space1 Interior Surf Constrs;           !- Interior Surface Construction Assignments Name
+
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    Zone1,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Zone,
+    Zone2,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    10, 0, 0,                               !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Space,
+    Space1,                                 !- Name
+    Zone1,                                  !- Zone Name
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Space Type
+    Space1 DCS;                             !- Construction Assignment Set Name
+
+  BuildingSurface:Detailed,
+    WallA,                                  !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    Zone1,                                  !- Zone Name
+    Space1,                                 !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    WallB,                                  !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 0, 3,                               !- X,Y,Z Vertex 1 {m}
+    10, 10, 3,                              !- X,Y,Z Vertex 2 {m}
+    10, 10, 0,                              !- X,Y,Z Vertex 3 {m}
+    10, 0, 0;                               !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    WallB,                                  !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    Zone2,                                  !- Zone Name
+    ,                                       !- Space Name
+    Surface,                                !- Outside Boundary Condition
+    WallA,                                  !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 3,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 3,                               !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 10, 0;                              !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->CosZoneRelNorth(2) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(2) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int wallANum = Util::FindItemInList("WALLA", state->dataSurface->Surface);
+    int wallBNum = Util::FindItemInList("WALLB", state->dataSurface->Surface);
+    ASSERT_GT(wallANum, 0);
+    ASSERT_GT(wallBNum, 0);
+
+    auto const &wallA = state->dataSurface->Surface(wallANum);
+    auto const &wallB = state->dataSurface->Surface(wallBNum);
+    ASSERT_GT(wallA.Construction, 0);
+    ASSERT_GT(wallB.Construction, 0);
+
+    EXPECT_EQ("SPACE WALL CONSTRUCTION", state->dataConstruction->Construct(wallA.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Space), wallA.ConstructionAssignmentSource);
+
+    // WallB must not keep its own Building-inherited "Interior Wall Construction" - Space wins the pair.
+    EXPECT_NE("INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wallB.Construction).Name);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Space), wallB.ConstructionAssignmentSource);
+
+    auto const &constrA = state->dataConstruction->Construct(wallA.Construction);
+    auto const &constrB = state->dataConstruction->Construct(wallB.Construction);
+    ASSERT_EQ(2, constrA.TotLayers);
+    ASSERT_EQ(2, constrB.TotLayers);
+    EXPECT_EQ(state->dataMaterial->materials(constrA.LayerPoint(1))->Name, state->dataMaterial->materials(constrB.LayerPoint(2))->Name);
+    EXPECT_EQ(state->dataMaterial->materials(constrA.LayerPoint(2))->Name, state->dataMaterial->materials(constrB.LayerPoint(1))->Name);
+}
