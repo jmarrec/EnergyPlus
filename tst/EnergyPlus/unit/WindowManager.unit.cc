@@ -7748,11 +7748,11 @@ TEST_F(EnergyPlusFixture, CFS_InteriorSolarDistribution_Test)
 TEST_F(EnergyPlusFixture, WindowManager_WindowGasPropertiesAtTemp_GasMixture)
 {
     auto &wm = state->dataWindowManager;
-    Real64 const T = 273.15; // gap mean temperature [K]
+    Real64 constexpr T = 273.15; // gap mean temperature [K]
 
     // Case 1: two-gas mixture, 10% Air + 90% Argon
     {
-        int const iGap = 0;
+        int constexpr iGap = 0;
         auto &gap = wm->gaps[iGap];
         gap.numGases = 2;
 
@@ -7777,7 +7777,7 @@ TEST_F(EnergyPlusFixture, WindowManager_WindowGasPropertiesAtTemp_GasMixture)
     // The only case where old `j <= NMix` reads truly out of bounds (gases[5] in std::array<Material::Gas, Material::maxMixGases>, and
     // fvis[5]/frct[5] in std::array<Real64, Material::maxMixGases>, all one past the end).
     {
-        int const iGap = 1;
+        int constexpr iGap = 1;
         auto &gap = wm->gaps[iGap];
         gap.numGases = Material::maxMixGases; // 5
         for (int k = 0; k < Material::maxMixGases; ++k) {
