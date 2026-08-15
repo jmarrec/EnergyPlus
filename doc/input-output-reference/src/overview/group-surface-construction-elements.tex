@@ -84,31 +84,64 @@ This field is used to enter the density of the material layer in units of kg/m\(
 
 This field represents the specific heat of the material layer in units of J/(kg-K). Note that these units are most likely different than those reported in textbooks and references which tend to use kJ/(kg-K) or J/(g-K). They were chosen for internal consistency within EnergyPlus. \textbf{Only values of specific heat of 100 or larger are allowed. Typical ranges are from 800 to 2000 J/(kg-K).}
 
-\paragraph{Field: Thermal Absorptance}\label{field-thermal-absorptance}
+\paragraph{Field: Thermal Absorptance Outside Face}\label{field-thermal-absorptance-outside-face}
 
-The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 microns) radiation that is absorbed by the material. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the surface heat balances (both inside and outside as appropriate). For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing ``black body'' conditions). The default value for this field is 0.9.
+The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 microns) radiation that is absorbed by the material. This particular field is for the exterior side or outside face. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the surface heat balances. For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing ``black body'' conditions). The default value for this field is 0.9.
 
-\paragraph{Field: Solar Absorptance}\label{field-solar-absorptance}
+\paragraph{Field: Solar Absorptance Outside Face}\label{field-solar-absorptance-outside-face}
 
-The solar absorptance field in the Material input syntax represents the fraction of incident~ solar radiation that is absorbed by the material. Solar radiation (0.3 to 2.537 $\mu{}m$) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the surface heat balances (both inside and outside as appropriate). If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
+The solar absorptance field in the Material input syntax represents the fraction of incident~ solar radiation that is absorbed by the material. This particular field is for the exterior side or outside face. Solar radiation (0.3 to 2.537 $\mu{}m$) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
 
-\paragraph{Field: Visible Absorptance}\label{field-visible-absorptance}
+\paragraph{Field: Visible Absorptance Outside Face}\label{field-visible-absorptance-outside-face}
 
-The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. Visible wavelength radiation (0.37 to 0.78 $\mu{}m$ weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the surface heat balances (both inside and outside as appropriate) as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
+The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the exterior side or outside face. Visible wavelength radiation (0.37 to 0.78 $\mu{}m$ weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
 
-An IDF example:
+\paragraph{Field: Thermal Absorptance Inside Face}\label{field-thermal-absorptance-inside-face}
+
+The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 microns) radiation that is absorbed by the material. This particular field is for the interior side or face only. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the inside surface heat balances. For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing "black body" conditions). This is an optional field, and the default value for this field is the value entered for the Thermal Absorptance Outside Face entered in the field shown above.
+
+\paragraph{Field: Solar Absorptance Inside Face}\label{field-solar-absorptance-inside-face}
+
+The solar absorptance field in the Material input syntax represents the fraction of incident solar radiation that is absorbed by the material. This particular field is for the interior side or face only. Solar radiation (0.3 to 2.537 microns) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the inside surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. This is an optional field, and the default value for this field is the value entered for the Solar Absorptance Outside Face entered in the field shown above.
+
+\paragraph{Field: Visible Absorptance Inside Face}\label{field-visible-absorptance-inside-face}
+
+The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the interior side or face only. Visible wavelength radiation (0.37 to 0.78 microns weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the inside surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. This is an optional field, and the default value for this field is the value entered for the Visible Absorptance Outside Face entered in the field shown above.
+
+Here are two IDF examples:
 
 \begin{lstlisting}
-Material,A2 - 4 IN DENSE FACE BRICK,  !- Material Name
+Material,
+  A2 - 4 IN DENSE FACE BRICK,  !- Material Name
   Rough,                      !- Roughness
   0.1014984,                  !- Thickness {m}
   1.245296,                   !- Conductivity {W/M*K}
   2082.400,                   !- Density {Kg/M**3}
   920.4800,                   !- Specific Heat {J/Kg*K}
-  0.9000000,                  !- Thermal Absorptance
-  0.9300000,                  !- Solar Absorptance
-  0.9300000;                  !- Visible Absorptance
+  0.9000000,                  !- Thermal Absorptance Outside Face
+  0.9300000,                  !- Solar Absorptance Outside Face
+  0.9300000;                  !- Visible Absorptance Outside Face
 \end{lstlisting}
+
+In the example above, because the inside face absorptance values are not specified separately, those values will default to the respective outside face absorptance values entered by the user.
+
+\begin{lstlisting}
+Material,
+  Material Diff Absorptances,  !- Material Name
+  Rough,                       !- Roughness
+  0.05,                        !- Thickness {m}
+  2.5,                         !- Conductivity {W/M*K}
+  1500.0,                      !- Density {Kg/M**3}
+  888.8,                       !- Specific Heat {J/Kg*K}
+  0.9000000,                   !- Thermal Absorptance Outside Face
+  0.7000000,                   !- Solar Absorptance Outside Face
+  0.7000000,                   !- Visible Absorptance Outside Face
+  0.6000000,                   !- Thermal Absorptance Inside Face
+  0.4500000,                   !- Solar Absorptance Inside Face
+  0.4500000;                   !- Visible Absorptance Inside Face
+\end{lstlisting}
+
+In this second example, different values have been assigned to both the inside and outside faces for the various absorptance values.
 
 \subsection{Material:NoMass}\label{materialnomass}
 
@@ -128,29 +161,58 @@ This alpha field defines the relative roughness of a particular material layer. 
 
 This field is used to enter the thermal resistance (R-value) of the material layer. Units for this parameter are (m\(^{2}\)-K)/W. Thermal resistance must be greater than zero. Note that most R-values in the USA are calculated in Inch-Pound units and must be converted to the SI equivalent.
 
-\paragraph{Field: Thermal Absorptance}\label{field-thermal-absorptance-1}
+\paragraph{Field: Thermal Absorptance Outside Face}\label{field-thermal-absorptance-outside-face-1}
 
-The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 $\mu{}m$) radiation that is absorbed by the material. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the surface heat balances (both inside and outside as appropriate). For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing ``black body'' conditions). The default value for this field is 0.9.
+The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 $\mu{}m$) radiation that is absorbed by the material. This particular field is for the exterior side or outside face. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the surface heat balances. For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing ``black body'' conditions). The default value for this field is 0.9.
 
-\paragraph{Field: Solar Absorptance}\label{field-solar-absorptance-1}
+\paragraph{Field: Solar Absorptance Outside Face}\label{field-solar-absorptance-outside-face-1}
 
-The solar absorptance field in the Material input syntax represents the fraction of incident~ solar radiation that is absorbed by the material. Solar radiation (0.3 to 2.537 $\mu{}m$) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the surface heat balances (both inside and outside as appropriate). If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
+The solar absorptance field in the Material input syntax represents the fraction of incident~ solar radiation that is absorbed by the material. This particular field is for the exterior side or outside face. Solar radiation (0.3 to 2.537 $\mu{}m$) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
 
-\paragraph{Field: Visible Absorptance}\label{field-visible-absorptance-1}
+\paragraph{Field: Visible Absorptance Outside Face}\label{field-visible-absorptance-outside-face-1}
 
-The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. Visible wavelength radiation (0.37 to 0.78 $\mu{}m$ weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the surface heat balances (both inside and outside as appropriate) as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
+The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the exterior side or outside face. Visible wavelength radiation (0.37 to 0.78 $\mu{}m$ weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7.
 
-An IDF example:
+\paragraph{Field: Thermal Absorptance Inside Face}\label{field-thermal-absorptance-inside-face-1}
+
+The thermal absorptance field in the Material input syntax represents the fraction of incident long wavelength (>2.5 microns) radiation that is absorbed by the material. This particular field is for the interior side or face only. This parameter is used when calculating the long wavelength radiant exchange between various surfaces and affects the inside surface heat balances. For long wavelength radiant exchange, thermal emissivity and thermal emittance are equal to thermal absorptance. Values for this field must be between 0.0 and 1.0 (with 1.0 representing "black body" conditions). This is an optional field, and the default value for this field is the value entered for the Thermal Absorptance Outside Face entered in the field shown above.
+
+\paragraph{Field: Solar Absorptance Inside Face}\label{field-solar-absorptance-inside-face-1}
+
+The solar absorptance field in the Material input syntax represents the fraction of incident solar radiation that is absorbed by the material. This particular field is for the interior side or face only. Solar radiation (0.3 to 2.537 microns) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the inside surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. This is an optional field, and the default value for this field is the value entered for the Solar Absorptance Outside Face entered in the field shown above.
+
+\paragraph{Field: Visible Absorptance Inside Face}\label{field-visible-absorptance-inside-face-1}
+
+The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the interior side or face only. Visible wavelength radiation (0.37 to 0.78 microns weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the inside surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. This is an optional field, and the default value for this field is the value entered for the Visible Absorptance Outside Face entered in the field shown above.
+
+Here are two IDF examples:
 
 \begin{lstlisting}
 Material:NoMass,
-  R13LAYER,                   !- Material Name
-  Rough,                      !- Roughness
-  2.290965,                   !- Resistance {M**2K/W}
-  0.9000000,                  !- Thermal Absorptance
-  0.7500000,                  !- Solar Absorptance
-  0.7500000;                  !- Visible Absorptance
+  R13LAYER,      !- Material Name
+  Rough,         !- Roughness
+  2.290965,      !- Resistance {M**2K/W}
+  0.9000000,     !- Thermal Absorptance Outside Face
+  0.7500000,     !- Solar Absorptance Outside Face
+  0.7500000;     !- Visible Absorptance Outside Face
 \end{lstlisting}
+
+In the example above, because the inside face absorptance values are not specified separately, those values will default to the respective outside face absorptance values entered by the user.
+
+\begin{lstlisting}
+Material:NoMass,
+  R13LAYER with diff abs, !- Material Name
+  Rough,                  !- Roughness
+  2.290965,               !- Resistance {M**2K/W}
+  0.9000000,              !- Thermal Absorptance Outside Face
+  0.7500000,              !- Solar Absorptance Outside Face
+  0.7500000,              !- Visible Absorptance Outside Face
+  0.2000000,              !- Thermal Absorptance Inside Face
+  0.2000000,              !- Solar Absorptance Inside Face
+  0.2000000;              !- Visible Absorptance Inside Face
+\end{lstlisting}
+
+In this second example, different values have been assigned to both the inside and outside faces for the various absorptance values.
 
 \subsection{Material:InfraredTransparent}\label{materialinfraredtransparent}
 
@@ -768,32 +830,78 @@ The name of the variable absorptance material property object.
 This field is a regular material name specifying the material with which this additional
 variable absorptance property information will be associated.
 
-\paragraph{Field: Control Signal}\label{field-control-signal}
+\paragraph{Field: Control Signal Outside Face}\label{field-control-signal-outside-face}
 
-It can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule.
-If the control signal is ``Scheduled'', then a schedule needs to be specified in ``Thermal Absorptance Schedule Name'' or
-``Solar Absorptance Schedule Name''. The schedule value will override the material absorptance value. If the control signal
-is not ``Scheduled'', then the control signal value at the target surface or zone will decide the absorptance, based on
-the function referenced in ``Thermal Absorptance Function Name'' or ``Solar Absorptance Function Name''. If not specified,
-the control signal will assumed to be surface temperature.
+For the outside face or exterior side of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is "Scheduled", then a schedule needs to be specified in "Thermal Absorptance Schedule Name" or "Solar Absorptance Schedule Name". The schedule value will override the material absorptance value. If the control signal is not "Scheduled", then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in "Thermal Absorptance Function Name" or "Solar Absorptance Function Name". If not specified, the control signal will be assumed to be surface temperature.
 
-\paragraph{Field: Thermal Absorptance Function Name}\label{field-thermal-absorptance-function-name}
+\paragraph{Field: Thermal Absorptance Function Name Outside Face}\label{field-thermal-absorptance-function-name-outside-face}
 
-The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the thermal absorptance.
+The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the thermal absorptance at the outside face or exterior side.
 
-\paragraph{Field: Thermal Absorptance Schedule Name}\label{field-thermal-absorptance-schedule-name}
+\paragraph{Field: Thermal Absorptance Schedule Name Outside Face}\label{field-thermal-absorptance-schedule-name-outside-face}
 
-The name of a Schedule object that overwrites the material thermal absorptance.
-If neither this field or the previous field are defined, then the thermal absorptance is assumed to be constant
+The name of a Schedule object that overwrites the material thermal absorptance at the outside face or exterior side. If neither this field or the previous field are defined, then the thermal absorptance is assumed to be constant.
 
-\paragraph{Field: Solar Absorptance Function Name}\label{field-solar-absorptance-function-name}
+\paragraph{Field: Solar Absorptance Function Name Outside Face}\label{field-solar-absorptance-function-name-outside-face}
 
-The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance.
+The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance at the outside face or exterior side.
 
-\paragraph{Field: Solar Absorptance Schedule Name}\label{field-solar-absorptance-schedule-name}
+\paragraph{Field: Solar Absorptance Schedule Name Outside Face}\label{field-solar-absorptance-schedule-name-outside-face}
 
-The name of a Schedule object that overwrites the material solar absorptance.
-If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant
+TThe name of a Schedule object that overwrites the material solar absorptance at the outside face or exterior side. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
+
+\paragraph{Field: Control Signal Inside Face}\label{field-control-signal-inside-face}
+
+For the inside face or interior side of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is "Scheduled", then a schedule needs to be specified in "Thermal Absorptance Schedule Name" or "Solar Absorptance Schedule Name". The schedule value will override the material absorptance value. If the control signal is not "Scheduled", then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in "Thermal Absorptance Function Name" or "Solar Absorptance Function Name". If not specified, the control signal will be assumed to be surface temperature.
+
+\paragraph{Field: Thermal Absorptance Function Name Inside Face}\label{field-thermal-absorptance-function-name-inside-face}
+
+The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the thermal absorptance at the inside face or interior side.
+
+\paragraph{Field: Thermal Absorptance Schedule Name Inside Face}\label{field-thermal-absorptance-schedule-name-inside-face}
+
+The name of a Schedule object that overwrites the material thermal absorptance at the inside face or interior side. If neither this field or the previous field are defined, then the thermal absorptance is assumed to be constant.
+
+\paragraph{Field: Solar Absorptance Function Name Inside Face}\label{field-solar-absorptance-function-name-inside-face}
+
+The name of a Curve or a Table:Lookup object describing the relationship between the control signal and the solar absorptance at the inside face or interior side.
+
+\paragraph{Field: Solar Absorptance Schedule Name Inside Face}\label{field-solar-absorptance-schedule-name-inside-face}
+
+TThe name of a Schedule object that overwrites the material solar absorptance at the inside face or interior side. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
+
+Here are two IDF examples of this object:
+
+\begin{lstlisting}
+  MaterialProperty:VariableAbsorptance,
+    variableThermalR13LAYER, !- Name
+    R13LAYER_vary,           !- Reference Material Name
+    SurfaceTemperature,      !- Outside Face Control Signal
+    ThermalAbsTempTable,     !- Outside Face Thermal Absorptance Function Name
+    ,                        !- Outside Face Thermal Absorptance Schedule Name
+    SolarAbsTempCurve,       !- Outside Face Solar Absorptance Function Name
+    ;                        !- Outside Face Solar Absorptance Schedule Name
+\end{lstlisting}
+
+In the example above, because the inside face absorptance variations are not specified separately, those values will default to the respective outside face absorptance variations entered by the user.
+
+\begin{lstlisting}
+  MaterialProperty:VariableAbsorptance,
+    variableAbsR13LAYERdiff, !- Name
+    R13LAYER_vary_diff,      !- Reference Material Name
+    SurfaceTemperature,      !- Outside Face Control Signal
+    ThermalAbsTempTable,     !- Outside Face Thermal Absorptance Function Name
+    ,                        !- Outside Face Thermal Absorptance Schedule Name
+    SolarAbsTempCurve,       !- Outside Face Solar Absorptance Function Name
+    ,                        !- Outside Face Solar Absorptance Schedule Name
+    Scheduled,               !- Inside Face Control Signal
+    ,                        !- Inside Face Thermal Absorptance Function Name
+    ThermalAbsSched,         !- Inside Face Thermal Absorptance Schedule Name
+    ,                        !- Inside Face Solar Absorptance Function Name
+    SolarAbsSched;           !- Inside Face Solar Absorptance Schedule Name
+\end{lstlisting}
+
+In this second example, different values have been assigned to both the inside and outside faces for the various absorptance values.
 
 \subsection{MaterialProperty:HeatAndMoistureTransfer:Settings}\label{materialpropertyheatandmoisturetransfersettings}
 

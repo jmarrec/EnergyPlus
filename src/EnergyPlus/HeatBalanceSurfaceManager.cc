@@ -2133,6 +2133,36 @@ void AllocateSurfaceHeatBalArrays(EnergyPlusData &state)
                                 OutputProcessor::StoreType::Average,
                                 surface.Name);
         }
+        // Set up output variables for absorptances
+        SetupOutputVariable(state,
+                            "Surface Thermal Absorptance Outside Face",
+                            Constant::Units::None,
+                            state.dataHeatBalSurf->SurfAbsThermalExt(loop),
+                            OutputProcessor::TimeStepType::Zone,
+                            OutputProcessor::StoreType::Average,
+                            surface.Name);
+        SetupOutputVariable(state,
+                            "Surface Solar Absorptance Outside Face",
+                            Constant::Units::None,
+                            state.dataHeatBalSurf->SurfAbsSolarExt(loop),
+                            OutputProcessor::TimeStepType::Zone,
+                            OutputProcessor::StoreType::Average,
+                            surface.Name);
+        SetupOutputVariable(state,
+                            "Surface Thermal Absorptance Inside Face",
+                            Constant::Units::None,
+                            state.dataHeatBalSurf->SurfAbsThermalInt(loop),
+                            OutputProcessor::TimeStepType::Zone,
+                            OutputProcessor::StoreType::Average,
+                            surface.Name);
+        SetupOutputVariable(state,
+                            "Surface Solar Absorptance Inside Face",
+                            Constant::Units::None,
+                            state.dataHeatBalSurf->SurfAbsSolarInt(loop),
+                            OutputProcessor::TimeStepType::Zone,
+                            OutputProcessor::StoreType::Average,
+                            surface.Name);
+
         if (state.dataConstruction->Construct(surface.Construction).SourceSinkPresent) {
             SetupOutputVariable(state,
                                 "Surface Internal Source Location Temperature",
