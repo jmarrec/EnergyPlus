@@ -3486,8 +3486,32 @@ namespace AirflowNetwork {
 
         // Write wind pressure coefficients in the EIO file
         if (!simulation_control.DuctLoss) {
-            print(m_state.files.eio, "! <AirflowNetwork Model:Wind Direction>, Wind Direction #1 to n (degree)\n");
-            print(m_state.files.eio, "AirflowNetwork Model:Wind Direction, ");
+
+            static std::string_view constexpr format_afn12DirHeader(
+                "! <AirflowNetwork Model:Wind Direction>, Wind Direction #1, Wind Direction #2, Wind Direction #3, Wind Direction #4, Wind Direction "
+                "#5, Wind Direction #6, Wind Direction #7, Wind Direction #8, Wind Direction #9, Wind Direction #10, Wind Direction #11, Wind "
+                "Direction #12\n");
+
+            static std::string_view constexpr format_afn36DirHeader(
+                "! <AirflowNetwork Model:Wind Direction>, Wind Direction #1, Wind Direction #2, Wind Direction #3, Wind Direction #4, Wind Direction "
+                "#5, Wind Direction #6, Wind Direction #7, Wind Direction #8, Wind Direction #9, Wind Direction #10, Wind Direction #11, Wind "
+                "Direction #12, Wind Direction #13, Wind Direction #14, Wind Direction #15, Wind Direction #16, Wind Direction #17, Wind Direction "
+                "#18, Wind Direction #19, Wind Direction #20, Wind Direction #21, Wind Direction #22, Wind Direction #23, Wind Direction #24, Wind "
+                "Direction #25, Wind Direction #26, Wind Direction #27, Wind Direction #28, Wind Direction #29, Wind Direction #30, Wind Direction "
+                "#31, Wind Direction #32, Wind Direction #33, Wind Direction #34, Wind Direction #35, Wind Direction #36\n");
+
+            static std::string_view constexpr format_afn12CoeffHeader(
+                "! <AirflowNetwork Model:Wind Pressure Coefficients>, Name, Coefficient #1, Coefficient #2, Coefficient #3, Coefficient #4, "
+                "Coefficient #5, Coefficient #6, Coefficient #7, Coefficient #8, Coefficient #9, Coefficient #10, Coefficient #11, Coefficient "
+                "#12\n");
+
+            static std::string_view constexpr format_afn36CoeffHeader(
+                "! <AirflowNetwork Model:Wind Pressure Coefficients>, Name, Coefficient #1, Coefficient #2, Coefficient #3, Coefficient #4, "
+                "Coefficient #5, Coefficient #6, Coefficient #7, Coefficient #8, Coefficient #9, Coefficient #10, Coefficient #11, Coefficient #12, "
+                "Coefficient #13, Coefficient #14, Coefficient #15, Coefficient #16, Coefficient #17, Coefficient #18, Coefficient #19, Coefficient "
+                "#20, Coefficient #21, Coefficient #22, Coefficient #23, Coefficient #24, Coefficient #25, Coefficient #26, Coefficient #27, "
+                "Coefficient #28, Coefficient #29, Coefficient #30, Coefficient #31, Coefficient #32, Coefficient #33, Coefficient #34, Coefficient "
+                "#35, Coefficient #36\n");
 
             int numWinDirs = 11;
             Real64 angleDelta = 30.0;
@@ -3496,13 +3520,25 @@ namespace AirflowNetwork {
                 angleDelta = 10.0;
             }
 
-            for (int i = 0; i < numWinDirs; ++i) {
-                print(m_state.files.eio, "{:.1f},", i * angleDelta);
-            }
-            print(m_state.files.eio, "{:.1f}\n", numWinDirs * angleDelta);
+            if (numWinDirs == 11) {
+                print(m_state.files.eio, format_afn12DirHeader);
+                print(m_state.files.eio, "AirflowNetwork Model:Wind Direction");
+                for (int j = 0; j < numWinDirs; ++j) {
+                    print(m_state.files.eio, ",{:.2f}", j * angleDelta);
+                }
+                print(m_state.files.eio, ",{:.2f}\n", numWinDirs * angleDelta);
 
-            print(m_state.files.eio,
-                  "! <AirflowNetwork Model:Wind Pressure Coefficients>, Name, Wind Pressure Coefficients #1 to n (dimensionless)\n");
+                print(m_state.files.eio, format_afn12CoeffHeader);
+            } else {
+                print(m_state.files.eio, format_afn36DirHeader);
+                print(m_state.files.eio, "AirflowNetwork Model:Wind Direction");
+                for (int j = 0; j < numWinDirs; ++j) {
+                    print(m_state.files.eio, ",{:.2f}", j * angleDelta);
+                }
+                print(m_state.files.eio, ",{:.2f}\n", numWinDirs * angleDelta);
+
+                print(m_state.files.eio, format_afn36CoeffHeader);
+            }
 
             // The old version used to write info with single-sided natural ventilation specific labeling, this version no longer does that.
             std::set<int> curves;
@@ -3511,7 +3547,6 @@ namespace AirflowNetwork {
             }
             for (auto index : curves) {
                 print(m_state.files.eio, "AirflowNetwork Model:Wind Pressure Coefficients, {}, ", Curve::GetCurveName(m_state, index));
-
                 for (int j = 0; j < numWinDirs; ++j) {
                     print(m_state.files.eio, "{:.2f},", Curve::CurveValue(m_state, index, j * angleDelta));
                 }
