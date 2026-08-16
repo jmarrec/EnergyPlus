@@ -3518,7 +3518,8 @@ namespace AirflowNetwork {
                 curves.insert(MultizoneExternalNodeData(i).curve);
             }
             for (auto index : curves) {
-                print(m_state.files.eio, "AirflowNetwork Model:Wind Pressure Coefficients (dimensionless), {}, ", Curve::GetCurveName(m_state, index));
+                print(
+                    m_state.files.eio, "AirflowNetwork Model:Wind Pressure Coefficients (dimensionless), {}, ", Curve::GetCurveName(m_state, index));
                 for (int j = 0; j < numWinDirs; ++j) {
                     print(m_state.files.eio, "{:.2f},", Curve::CurveValue(m_state, index, j * angleDelta));
                 }
