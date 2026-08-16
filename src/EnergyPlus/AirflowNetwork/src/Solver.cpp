@@ -3501,10 +3501,10 @@ namespace AirflowNetwork {
             print(m_state.files.eio, ", Wind Direction #{}\n", numWinDirs + 1);
 
             print(m_state.files.eio, "AirflowNetwork Model:Wind Direction (degrees)");
-            for (int j = 0; j <= numWinDirs; ++j) {
+            for (int j = 0; j < numWinDirs; ++j) {
                 print(m_state.files.eio, ",{:.2f}", j * angleDelta);
             }
-            print(m_state.files.eio, ",{:.2f}\n", (numWinDirs + 1) * angleDelta);
+            print(m_state.files.eio, ",{:.2f}\n", numWinDirs * angleDelta);
 
             print(m_state.files.eio, "! <AirflowNetwork Model:Wind Pressure Coefficients (dimensionless)>, Name");
             for (int j = 1; j <= numWinDirs; ++j) {
