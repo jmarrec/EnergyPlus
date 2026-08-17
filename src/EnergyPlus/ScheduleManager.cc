@@ -311,8 +311,14 @@ namespace Sched {
     {
         auto const &s_sched = state.dataSched;
 
+        std::string const generatedNameBase = std::format("{}_generated", name);
+        std::string generatedName = generatedNameBase;
+        for (int suffix = 2; s_sched->weekScheduleMap.find(Util::makeUPPER(generatedName)) != s_sched->weekScheduleMap.end(); ++suffix) {
+            generatedName = std::format("{}_{}", generatedNameBase, suffix);
+        }
+
         auto *weekSched = new WeekSchedule;
-        weekSched->Name = name;
+        weekSched->Name = generatedName;
 
         // Fill the dayScheds with the Missing Day Schedule (Always Off)
         for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
@@ -322,8 +328,8 @@ namespace Sched {
         weekSched->Num = (int)s_sched->weekSchedules.size();
         s_sched->weekSchedules.push_back(weekSched);
 
-        // Internal week schedules are referenced directly by their parent schedule and must not
-        // be added to weekScheduleMap, where their generated names could collide with user input.
+        // Internal week schedules are referenced directly by their parent schedule. Their unique
+        // report names are not added to weekScheduleMap because they are not user-facing objects.
         return weekSched;
     }
 
@@ -1597,6 +1603,16 @@ namespace Sched {
 
             if (s_glob->AnyEnergyManagementSystemInModel) { // setup constant schedules as actuators
                 SetupEMSActuator(state, "Schedule:Year:Rules", sched->Name, "Schedule Value", "[ ]", sched->EMSActuatedOn, sched->EMSVal);
+            }
+        }
+
+        // Schedule:Week:Rule objects are read before Schedule:Year:Rules, so validate their parent references after all parents have been processed.
+        for (auto const *weekRuleSchedule : s_sched->weekRuleSchedules) {
+            auto const parent = s_sched->scheduleMap.find(weekRuleSchedule->scheduleYearRulesName);
+            if (parent == s_sched->scheduleMap.end() || s_sched->schedules[parent->second]->type != SchedType::YearRules) {
+                ErrorObjectHeader ruleEoh{routineName, "Schedule:Week:Rule", weekRuleSchedule->Name};
+                ShowSevereItemNotFoundAudit(state, ruleEoh, "Schedule Year Rules Name", weekRuleSchedule->scheduleYearRulesName);
+                ErrorsFound = true;
             }
         }
 

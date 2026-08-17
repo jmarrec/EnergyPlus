@@ -3031,6 +3031,21 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_InternalWeekScheduleNameDoesNotColli
         "  user week day,",
         "  user week day;",
         " ",
+        "Schedule:Week:Daily,",
+        "  rules schedule_1_generated,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day,",
+        "  user week day;",
+        " ",
         "Schedule:Year,",
         "  user year schedule,",
         "  Fractional,",
@@ -3070,12 +3085,14 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_InternalWeekScheduleNameDoesNotColli
     state->init_state(*state);
 
     auto *userWeek = Sched::GetWeekSchedule(*state, "RULES SCHEDULE_1");
+    auto *userWeekWithGeneratedName = Sched::GetWeekSchedule(*state, "RULES SCHEDULE_1_GENERATED");
     auto *userWeekDay = Sched::GetDaySchedule(*state, "USER WEEK DAY");
     auto *ruleDay = Sched::GetDaySchedule(*state, "RULE DAY");
     auto const *userYear = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "USER YEAR SCHEDULE"));
     auto const *rulesYear = dynamic_cast<Sched::ScheduleDetailed const *>(Sched::GetSchedule(*state, "RULES SCHEDULE"));
 
     ASSERT_NE(nullptr, userWeek);
+    ASSERT_NE(nullptr, userWeekWithGeneratedName);
     ASSERT_NE(nullptr, userWeekDay);
     ASSERT_NE(nullptr, ruleDay);
     ASSERT_NE(nullptr, userYear);
@@ -3084,6 +3101,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_InternalWeekScheduleNameDoesNotColli
     EXPECT_EQ(userWeekDay, userWeek->dayScheds[(int)Sched::DayType::Sunday]);
     EXPECT_NE(userWeek, rulesYear->weekScheds[1]);
     EXPECT_EQ(ruleDay, rulesYear->weekScheds[1]->dayScheds[(int)Sched::DayType::Sunday]);
+    EXPECT_NE(userWeek->Name, rulesYear->weekScheds[1]->Name);
+    EXPECT_NE(userWeekWithGeneratedName->Name, rulesYear->weekScheds[1]->Name);
 }
 
 TEST_F(EnergyPlusFixture, ScheduleYearRules_InvalidSpecialDayScheduleFailsCleanly)
@@ -3167,4 +3186,52 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_InvalidCalendarDateIsRejected)
     state->dataGlobal->TimeStepsInHour = 4;
     state->dataGlobal->MinutesInTimeStep = 15;
     ASSERT_THROW(state->init_state(*state), EnergyPlus::FatalError);
+}
+
+TEST_F(EnergyPlusFixture, ScheduleYearRules_MissingParentIsRejected)
+{
+    std::string const idf_objects = delimited_string({
+        "ScheduleTypeLimits,",
+        "  Fractional,",
+        "  0,",
+        "  1,",
+        "  Continuous;",
+        " ",
+        "Schedule:Day:Interval,",
+        "  rule day,",
+        "  Fractional,",
+        "  No,",
+        "  24:00,",
+        "  1.0;",
+        " ",
+        "Schedule:Week:Rule,",
+        "  orphan rule,",
+        "  missing parent,",
+        "  0,",
+        "  rule day,",
+        "  Yes,",
+        "  Yes,",
+        "  Yes,",
+        "  Yes,",
+        "  Yes,",
+        "  Yes,",
+        "  Yes;",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 15;
+    ASSERT_THROW(state->init_state(*state), EnergyPlus::FatalError);
+
+    const std::string expected_error = delimited_string({
+        "   ** Severe  ** ProcessScheduleInput: Schedule:Week:Rule = ORPHAN RULE",
+        "   **   ~~~   ** Schedule Year Rules Name = MISSING PARENT, item not found.",
+        "   **  Fatal  ** ProcessScheduleInput: Preceding Errors cause termination.",
+        "   ...Summary of Errors that led to program termination:",
+        "   ..... Reference severe error count=1",
+        "   ..... Last severe error=ProcessScheduleInput: Schedule:Week:Rule = ORPHAN RULE",
+    });
+
+    compare_err_stream(expected_error);
 }
