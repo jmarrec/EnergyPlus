@@ -754,8 +754,8 @@ void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     int WMonth;
-    int LeapAddPrev;
-    int LeapAddCur;
+    int LeapAddPrev = 0;
+    int LeapAddCur = 0;
 
     if (Number < 0 || Number > 366) {
         return;
@@ -776,7 +776,7 @@ void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
         }
     }
     PMonth = WMonth;
-    PDay = Number - (EndOfMonth[WMonth - 1] + LeapAddCur);
+    PDay = Number - (EndOfMonth[WMonth - 1] + LeapAddPrev);
 }
 
 bool BetweenDateHoursLeftInclusive(

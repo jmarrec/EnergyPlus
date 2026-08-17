@@ -67,6 +67,32 @@ namespace EnergyPlus {
 
 using namespace EnergyPlus::General;
 
+TEST_F(EnergyPlusFixture, General_InvOrdinalDay)
+{
+    int month = 0;
+    int day = 0;
+
+    General::InvOrdinalDay(32, month, day, 0);
+    EXPECT_EQ(2, month);
+    EXPECT_EQ(1, day);
+
+    General::InvOrdinalDay(32, month, day, 1);
+    EXPECT_EQ(2, month);
+    EXPECT_EQ(1, day);
+
+    General::InvOrdinalDay(59, month, day, 1);
+    EXPECT_EQ(2, month);
+    EXPECT_EQ(28, day);
+
+    General::InvOrdinalDay(60, month, day, 1);
+    EXPECT_EQ(2, month);
+    EXPECT_EQ(29, day);
+
+    General::InvOrdinalDay(61, month, day, 1);
+    EXPECT_EQ(3, month);
+    EXPECT_EQ(1, day);
+}
+
 TEST_F(EnergyPlusFixture, General_ParseTime)
 {
     int Hours;
