@@ -4846,6 +4846,7 @@ Schedule:Year:Rules,
        \memo a prioritized list of override rules (Schedule:Week:Rule objects). Rules are evaluated
        \memo in ascending Rule Priority Order; the first matching rule for a given day is used.
        \memo If no rule matches, the Default Day Schedule is used.
+       \memo Exception: if no rule date range includes February 29, February 29 inherits February 28.
        \min-fields 3
   A1,  \field Name
        \type alpha

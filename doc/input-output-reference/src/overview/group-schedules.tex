@@ -421,6 +421,7 @@ Schedule:Compact,
 A Schedule:Year:Rules defines a yearly schedule using a default day profile and a prioritized list of override rules (\hyperref[scheduleweekrule]{Schedule:Week:Rule} objects).
 Rules are evaluated in ascending Rule Priority Order; the first matching rule for a given day is used.
 If no rule matches, the Default Day Schedule is used.
+February 29 is an exception: if no rule date range includes February 29, it inherits the resolved schedule for February 28 instead of using the default day schedule.
 
 \subsubsection{Inputs}\label{inputs-scheduleyearrules}
 
