@@ -1310,6 +1310,8 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         mat->rightOpeningMult = s_ipsc->rNumericArgs(13);
         mat->airFlowPermeability = s_ipsc->rNumericArgs(14);
         mat->ROnly = true;
+        mat->AbsorpSolarIn = mat->AbsorpSolarOut;
+        mat->AbsorpSolarInputIn = mat->AbsorpSolarIn;
 
         if (mat->Conductivity > 0.0) {
             mat->NominalR = mat->Thickness / mat->Conductivity;
@@ -1665,6 +1667,8 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         matScreen->AbsorpVisibleInputOut = matScreen->AbsorpVisibleOut;
         matScreen->AbsorpThermalOut *= (1.0 - matScreen->Trans);
         matScreen->AbsorpThermalInputOut = matScreen->AbsorpThermalOut;
+        matScreen->AbsorpThermalIn = matScreen->AbsorpThermalOut;
+        matScreen->AbsorpThermalInputIn = matScreen->AbsorpThermalIn;
 
         if (matScreen->Conductivity > 0.0) {
             matScreen->NominalR = (1.0 - matScreen->Trans) * matScreen->Thickness / matScreen->Conductivity;

@@ -421,7 +421,7 @@ TEST_F(EnergyPlusFixture, GetMaterialDataConstructAbsorpTest)
     });
 
     bool errorsFound = false;
-    Real64 const tolerance = 0.000001;
+    Real64 constexpr tolerance = 0.000001;
 
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -497,4 +497,57 @@ TEST_F(EnergyPlusFixture, GetMaterialDataConstructAbsorpTest)
     EXPECT_NEAR(dataCon->Construct(6).InsideAbsorpThermal, 0.35, tolerance);
     EXPECT_NEAR(dataCon->Construct(6).InsideAbsorpSolar, 0.25, tolerance);
     EXPECT_NEAR(dataCon->Construct(6).InsideAbsorpVis, 0.15, tolerance);
+}
+
+TEST_F(EnergyPlusFixture, GetMaterialDataWindowShadingFaceAbsorptances)
+{
+    std::string const idf_objects = delimited_string({
+        "WindowMaterial:Shade,",
+        "  Test Shade,              !- Name",
+        "  0.2,                     !- Solar Transmittance",
+        "  0.3,                     !- Solar Reflectance",
+        "  0.2,                     !- Visible Transmittance",
+        "  0.3,                     !- Visible Reflectance",
+        "  0.8,                     !- Infrared Hemispherical Emissivity",
+        "  0.0,                     !- Infrared Transmittance",
+        "  0.01,                    !- Thickness",
+        "  0.1,                     !- Conductivity",
+        "  0.05,                    !- Shade to Glass Distance",
+        "  0.0,                     !- Top Opening Multiplier",
+        "  0.0,                     !- Bottom Opening Multiplier",
+        "  0.0,                     !- Left-Side Opening Multiplier",
+        "  0.0,                     !- Right-Side Opening Multiplier",
+        "  0.0;                     !- Airflow Permeability",
+
+        "WindowMaterial:Screen,",
+        "  Test Screen,             !- Name",
+        "  ModelAsDiffuse,          !- Reflected Beam Transmittance Accounting Method",
+        "  0.2,                     !- Diffuse Solar Reflectance",
+        "  0.2,                     !- Diffuse Visible Reflectance",
+        "  0.8,                     !- Thermal Hemispherical Emissivity",
+        "  200.0,                   !- Conductivity",
+        "  0.002,                   !- Screen Material Spacing",
+        "  0.001,                   !- Screen Material Diameter",
+        "  0.025,                   !- Screen to Glass Distance",
+        "  0.0,                     !- Top Opening Multiplier",
+        "  0.0,                     !- Bottom Opening Multiplier",
+        "  0.0,                     !- Left Side Opening Multiplier",
+        "  0.0,                     !- Right Side Opening Multiplier",
+        "  5;                       !- Angle of Resolution for Screen Transmittance Output Map",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    bool errorsFound = false;
+    Material::GetMaterialData(*state, errorsFound);
+    ASSERT_FALSE(errorsFound);
+
+    auto const *shade = state->dataMaterial->materials(Material::GetMaterialNum(*state, "TEST SHADE"));
+    EXPECT_DOUBLE_EQ(0.5, shade->AbsorpSolarOut);
+    EXPECT_DOUBLE_EQ(shade->AbsorpSolarOut, shade->AbsorpSolarIn);
+    EXPECT_DOUBLE_EQ(shade->AbsorpSolarInputOut, shade->AbsorpSolarInputIn);
+
+    auto const *screen = state->dataMaterial->materials(Material::GetMaterialNum(*state, "TEST SCREEN"));
+    EXPECT_DOUBLE_EQ(0.6, screen->AbsorpThermalOut);
+    EXPECT_DOUBLE_EQ(screen->AbsorpThermalOut, screen->AbsorpThermalIn);
+    EXPECT_DOUBLE_EQ(screen->AbsorpThermalInputOut, screen->AbsorpThermalInputIn);
 }

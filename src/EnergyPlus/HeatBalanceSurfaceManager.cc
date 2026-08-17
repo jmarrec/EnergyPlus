@@ -298,9 +298,14 @@ void UpdateVariableAbsorptancesIn(EnergyPlusData &state)
             if (thisMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::SurfaceTemperature) {
                 triggerValue = state.dataHeatBalSurf->SurfTempIn(surfNum);
             } else if (thisMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation) {
-                triggerValue = state.dataHeatBal->SurfSWInAbsTotalReport(surfNum) /
-                               thisConstruct.InsideAbsorpThermal; // approximation of incident solar on inside
-            } else {                                              // controlled by heating cooling mode
+                auto const &surface = state.dataSurface->Surface(surfNum);
+                Real64 const solarAbsorptance = state.dataHeatBalSurf->SurfAbsSolarInt(surfNum);
+                if (surface.Area > 0.0 && solarAbsorptance > 0.0) {
+                    triggerValue = state.dataHeatBal->SurfSWInAbsTotalReport(surfNum) / (surface.Area * solarAbsorptance);
+                } else {
+                    triggerValue = 0.0;
+                }
+            } else { // controlled by heating cooling mode
                 int zoneNum = state.dataSurface->Surface(surfNum).Zone;
                 bool isCooling = (state.dataZoneEnergyDemand->ZoneSysEnergyDemand(zoneNum).TotalOutputRequired < 0);
                 triggerValue = static_cast<Real64>(isCooling);

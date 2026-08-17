@@ -8576,6 +8576,56 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptanc
     EXPECT_NEAR(state->dataHeatBalSurf->SurfAbsSolarExt(2), 0.5, 1e-6);
 }
 
+TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptancesInWithSolarRadiation)
+{
+    std::string const idf_objects = delimited_string({
+        "Curve:Linear,",
+        "SOLAR_ABSORPTANCE_CURVE, !- Name",
+        "0.2,                     !- Coefficient1 Constant",
+        "0.01,                    !- Coefficient2 x",
+        "0.0,                     !- Minimum Value of x",
+        "100.0;                   !- Maximum Value of x",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    state->dataSurface->Surface.allocate(1);
+    state->dataSurface->Surface(1).Name = "TEST SURFACE";
+    state->dataSurface->Surface(1).Construction = 1;
+    state->dataSurface->Surface(1).Area = 10.0;
+    state->dataSurface->AllVaryAbsOpaqSurfaceList = {1};
+
+    state->dataConstruction->Construct.allocate(1);
+    auto &construct = state->dataConstruction->Construct(1);
+    construct.TotLayers = 1;
+    construct.LayerPoint.allocate(1);
+    construct.LayerPoint(1) = 1;
+
+    auto *mat = new Material::MaterialBase;
+    mat->Name = "TEST MATERIAL";
+    mat->group = Material::Group::Regular;
+    mat->absorpVarCtrlSignalIn = Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation;
+    mat->absorpSolarVarCurveIn = Curve::GetCurve(*state, "SOLAR_ABSORPTANCE_CURVE");
+    state->dataMaterial->materials.push_back(mat);
+
+    state->dataHeatBalSurf->SurfAbsSolarInt.allocate(1);
+    state->dataHeatBalSurf->SurfAbsSolarInt(1) = 0.5;
+    state->dataHeatBal->SurfSWInAbsTotalReport.allocate(1);
+    state->dataHeatBal->SurfSWInAbsTotalReport(1) = 200.0;
+
+    UpdateVariableAbsorptancesIn(*state);
+
+    // 200 W absorbed / 10 m2 / 0.5 absorptance = 40 W/m2 incident
+    // 0.2 + 40 * 0.01 = 0.6
+    EXPECT_NEAR(state->dataHeatBalSurf->SurfAbsSolarInt(1), 0.6, 1e-6);
+
+    // A zero solar absorptance cannot be inverted, so use a zero incident-radiation signal.
+    state->dataHeatBalSurf->SurfAbsSolarInt(1) = 0.0;
+    UpdateVariableAbsorptancesIn(*state);
+    EXPECT_NEAR(state->dataHeatBalSurf->SurfAbsSolarInt(1), 0.2, 1e-6);
+}
+
 TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_UpdateThermalHistoriesIZSurfaceCheck)
 {
     state->dataSurface->TotSurfaces = 2;
