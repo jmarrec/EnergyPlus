@@ -2899,7 +2899,7 @@ This field specifies the name of the zone for which the MRT calculation details 
 
 This field specifies the name of the People statement that will contribute to the zone MRT calculation. In conjunction with the next parameter, it defines a fraction of the MRT calculation value for the zone named in the previous input. Each People statement referenced must be used in the zone referenced in the Zone Name field above.
 
-The People statement name listed here must match the actual name provided in the People statement referenced by this field. For People objects that reference a specific zone description without spaces or directly reference a space, this is simple the name of a valid People object in the input file. However, in the case where a People statement is defined for a zone that includes multiple spaces, EnergyPlus internally expands the People statement and alters the People name. For example, if a People statement is named Zone X People, is defined in Zone X, and Zone X contains two spaces called Space X1 and Space X2, the People statement internally is expanded to create two new People objects called "Space X1 Zone X People" and "Space X2 Zone X People" for Space X1 and Space X2, respectively. These are then valid names that can be referenced in this input field. "Zone X People" is no longer a valid name on its own due to this expansion for spaces.  Note also that if Zone X is not fully defined by Space X1 and Space X2 that there is a "remainder". This portion of the zone would also receive a new people object with the name "Zone X-Remainder" combined with the original name of "Zone X People" to create the name for a new people object of "Zone X-Remainder Zone X People". This is then also a valid name and can be referenced in this People Statement Name field. See the IDF examples below for more information.
+The People statement name listed here must match the actual name provided in the People statement referenced by this field. For People objects that reference a specific zone description without spaces or directly reference a space, this is simple the name of a valid People object in the input file. However, in the case where a People statement is defined for a zone that includes multiple spaces, EnergyPlus internally expands the People statement and alters the People name. For example, if a People statement is named Zone X People, is defined in Zone X, and Zone X contains two spaces called Space X1 and Space X2, the People statement internally is expanded to create two new People objects called "Space X1 Zone X People" and "Space X2 Zone X People" for Space X1 and Space X2, respectively. These are then valid names that can be referenced in this input field. "Zone X People" is no longer a valid name on its own due to this expansion for spaces.
 
 In addition, it is important to note that any People object referenced here MUST include at least one \hyperref[field-thermal-comfort-model-type-up-to-7-allowed]{Thermal Comfort model} selection in the People object.
 
@@ -2913,7 +2913,7 @@ This object is extensible, so additional pairs of these last two fields of this 
 ZoneMRTCalculation,
   West Wing Zone,                   !- Zone Name
   West Wing Office People,          !- People 1 Name
-  0.4,
+  0.5,
   West Wing Service Center People,  !- People 2 Name
   0.3,
   West Wing Reception People,       !- People 3 Name
@@ -2922,18 +2922,16 @@ ZoneMRTCalculation,
 
 where each of these people are different People defintions that are all assigned to the zone named West Wing Zone that does not have any spaces associated with it.
 
-For the case where West Wing Zone is a zone with a single People object named West Wing People associated with it but contains spaces named Oval Office, Staff Office, and Conference Room, the following, the following object would be valid:
+For the case where West Wing Zone is a zone with a single People object named West Wing People associated with it but contains spaces named Oval Office, Staff Office, and Conference Room, the following object would be valid:
 
 \begin{lstlisting}
 ZoneMRTCalculation,
   West Wing Zone,                   !- Zone Name
   Oval Office West Wing People,     !- People 1 Name
-  0.1,
+  0.4,
   Staff Office West Wing People,    !- People 2 Name
-  0.2,
+  0.4,
   Conference Room West Wing People,  !- People 3 Name
-  0.3,
-  West Wing Zone-Remainder West Wing People, !- People 4 Name
-  0.4;
+  0.2;
 \end{lstlisting}
 

@@ -1948,10 +1948,8 @@
 
   ZoneMRTCalculation,
     Zone 5,
-    Zone 5-Remainder Zone 5 People,
-    0.1,
     Space 5 Office People,
-    0.4,
+    0.6,
     Space 5 Conference People,
     0.4;
 
