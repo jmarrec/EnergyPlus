@@ -6220,48 +6220,43 @@ namespace SurfaceGeometry {
         // (2) if two glazing systems (separated by a mullion) on Data File, create a second window
         //     and adjust the dimensions of the original and second windows to those on the Data File
 
-        if (surfTemp.Construction != 0) {
+        if (surfTemp.Construction != 0 && state.dataConstruction->Construct(surfTemp.Construction).FromWindow5DataFile) {
 
-            if (state.dataConstruction->Construct(surfTemp.Construction).FromWindow5DataFile) {
+            ModifyWindow(state, SurfNum, ErrorsFound, AddedSubSurfaces);
 
-                ModifyWindow(state, SurfNum, ErrorsFound, AddedSubSurfaces);
+        } else {
+            // Calculate net area for the base surface. This must also happen when a
+            // ConstructionAssignmentSet will resolve a blank construction later.
+            // In case there is in error in this window's base surface (i.e. none)..
+            if (surfTemp.BaseSurf > 0) {
+                state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).Area -= surfTemp.Area;
 
-            } else {
-                // Calculate net area for base surface (note that ModifyWindow, above, adjusts net area of
-                // base surface for case where window construction is from Window5 Data File
-                // In case there is in error in this window's base surface (i.e. none)..
-                if (surfTemp.BaseSurf > 0) {
-                    state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).Area -= surfTemp.Area;
-
-                    // Subtract TDD:DIFFUSER area from other side interzone surface
-                    if ((surfTemp.Class == SurfaceClass::TDD_Diffuser) &&
-                        not_blank(
-                            state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).ExtBoundCondName)) { // Base surface is an interzone surface
-                        // Lookup interzone surface of the base surface
-                        // (Interzone surfaces have not been assigned yet, but all base surfaces should already be loaded.)
-                        int Found = Util::FindItemInList(state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).ExtBoundCondName,
-                                                         state.dataSurfaceGeometry->SurfaceTmp,
-                                                         SurfNum);
-                        if (Found != 0) {
-                            state.dataSurfaceGeometry->SurfaceTmp(Found).Area -= surfTemp.Area;
-                        }
+                // Subtract TDD:DIFFUSER area from other side interzone surface
+                if ((surfTemp.Class == SurfaceClass::TDD_Diffuser) &&
+                    not_blank(state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).ExtBoundCondName)) { // Base surface is an interzone surface
+                    // Lookup interzone surface of the base surface
+                    // (Interzone surfaces have not been assigned yet, but all base surfaces should already be loaded.)
+                    int Found = Util::FindItemInList(
+                        state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).ExtBoundCondName, state.dataSurfaceGeometry->SurfaceTmp, SurfNum);
+                    if (Found != 0) {
+                        state.dataSurfaceGeometry->SurfaceTmp(Found).Area -= surfTemp.Area;
                     }
-                    if (state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).Area <= 0.0) {
-                        ShowSevereError(state,
-                                        std::format("{}: Surface Openings have too much area for base surface={}",
-                                                    cRoutineName,
-                                                    state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).Name));
-                        ShowContinueError(state, std::format("Opening Surface creating error={}", surfTemp.Name));
-                        ErrorsFound = true;
-                    }
-                    // Net area of base surface with unity window multipliers (used in shadowing checks)
-                    // For Windows, Glass Doors and Doors, just one area is subtracted.  For the rest, should be
-                    // full area.
-                    if (SurfaceClassIsWindow(surfTemp.Class) || SurfaceClassIsDoor(surfTemp.Class)) {
-                        state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).NetAreaShadowCalc -= surfTemp.Area / surfTemp.Multiplier;
-                    } else {
-                        state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).NetAreaShadowCalc -= surfTemp.Area;
-                    }
+                }
+                if (state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).Area <= 0.0) {
+                    ShowSevereError(state,
+                                    std::format("{}: Surface Openings have too much area for base surface={}",
+                                                cRoutineName,
+                                                state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).Name));
+                    ShowContinueError(state, std::format("Opening Surface creating error={}", surfTemp.Name));
+                    ErrorsFound = true;
+                }
+                // Net area of base surface with unity window multipliers (used in shadowing checks)
+                // For Windows, Glass Doors and Doors, just one area is subtracted.  For the rest, should be
+                // full area.
+                if (SurfaceClassIsWindow(surfTemp.Class) || SurfaceClassIsDoor(surfTemp.Class)) {
+                    state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).NetAreaShadowCalc -= surfTemp.Area / surfTemp.Multiplier;
+                } else {
+                    state.dataSurfaceGeometry->SurfaceTmp(surfTemp.BaseSurf).NetAreaShadowCalc -= surfTemp.Area;
                 }
             }
         }
