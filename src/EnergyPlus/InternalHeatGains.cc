@@ -51,6 +51,7 @@
 #include <format>
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 // ObjexxFCL Headers
@@ -82,6 +83,7 @@
 #include <EnergyPlus/FuelCellElectricGenerator.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
+#include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/HeatBalanceIntRadExchange.hh>
 #include <EnergyPlus/HeatBalanceInternalHeatGains.hh>
 #include <EnergyPlus/HybridModel.hh>
@@ -671,7 +673,7 @@ namespace InternalHeatGains {
                             } break;
                             case DataHeatBalance::CalcMRT::SurfaceWeighted: {
                                 thisPeople.SurfacePtr = Util::FindItemInList(IHGAlphas(8), state.dataSurface->Surface);
-                                if (thisPeople.SurfacePtr == 0 && ModelWithAdditionalInputs) {
+                                if (thisPeople.SurfacePtr == 0) {
                                     if (Item1 == 1) {
                                         ShowSevereError(state,
                                                         std::format("{}{}=\"{}\", {}={} invalid Surface Name={}",
@@ -686,7 +688,7 @@ namespace InternalHeatGains {
                                 } else {
                                     int const surfRadEnclNum = state.dataSurface->Surface(thisPeople.SurfacePtr).RadEnclIndex;
                                     int const thisPeopleRadEnclNum = state.dataHeatBal->space(thisPeople.spaceIndex).radiantEnclosureNum;
-                                    if (surfRadEnclNum != thisPeopleRadEnclNum && ModelWithAdditionalInputs) {
+                                    if (surfRadEnclNum != thisPeopleRadEnclNum) {
                                         ShowSevereError(state,
                                                         std::format("{}{}=\"{}\", Surface referenced in {}={} in different enclosure.",
                                                                     RoutineName,
@@ -790,7 +792,7 @@ namespace InternalHeatGains {
                                         }
                                     }
 
-                                    if (thisPeople.clothingMethodSched->hasVal(state, 1)) {
+                                    if (thisPeople.clothingMethodSched != nullptr && thisPeople.clothingMethodSched->hasVal(state, 1)) {
                                         if ((thisPeople.clothingSched = Sched::GetSchedule(state, IHGAlphas(12))) == nullptr) {
                                             if (Item1 == 1) {
                                                 ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(12), IHGAlphas(12));
@@ -905,6 +907,9 @@ namespace InternalHeatGains {
                 if (itPeopleDef == peopleDefs.end()) {
                     ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
                     ErrorsFound = true;
+                    continue;
+                }
+                if (schedPtr == nullptr) {
                     continue;
                 }
 
@@ -1042,7 +1047,7 @@ namespace InternalHeatGains {
                         } break;
                         case DataHeatBalance::CalcMRT::SurfaceWeighted: {
                             thisPeople.SurfacePtr = Util::FindItemInList(IHGAlphas(6), state.dataSurface->Surface);
-                            if (thisPeople.SurfacePtr == 0 && ModelWithAdditionalInputs) {
+                            if (thisPeople.SurfacePtr == 0) {
                                 if (Item1 == 1) {
                                     ShowSevereError(state,
                                                     std::format("{}{}=\"{}\", invalid Surface Name={}",
@@ -1055,7 +1060,7 @@ namespace InternalHeatGains {
                             } else {
                                 int const surfRadEnclNum = state.dataSurface->Surface(thisPeople.SurfacePtr).RadEnclIndex;
                                 int const thisPeopleRadEnclNum = state.dataHeatBal->space(thisPeople.spaceIndex).radiantEnclosureNum;
-                                if (surfRadEnclNum != thisPeopleRadEnclNum && ModelWithAdditionalInputs) {
+                                if (surfRadEnclNum != thisPeopleRadEnclNum) {
                                     ShowSevereError(state,
                                                     std::format("{}{}=\"{}\", Surface referenced in {}={} in different enclosure.",
                                                                 RoutineName,
@@ -1153,7 +1158,7 @@ namespace InternalHeatGains {
                                     }
                                 }
 
-                                if (thisPeople.clothingMethodSched->hasVal(state, 1)) {
+                                if (thisPeople.clothingMethodSched != nullptr && thisPeople.clothingMethodSched->hasVal(state, 1)) {
                                     if ((thisPeople.clothingSched = Sched::GetSchedule(state, IHGAlphas(10))) == nullptr) {
                                         if (Item1 == 1) {
                                             ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(10), IHGAlphas(10));
@@ -1628,6 +1633,9 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                     continue;
                 }
+                if (schedPtr == nullptr) {
+                    continue;
+                }
 
                 Real64 const fractionReplaceable = IHGNumbers(1);
                 Real64 const multiplier = IHGNumbers(2);
@@ -2091,6 +2099,9 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                     continue;
                 }
+                if (schedPtr == nullptr) {
+                    continue;
+                }
 
                 Real64 const multiplier = IHGNumbers(1);
 
@@ -2382,6 +2393,9 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                     continue;
                 }
+                if (schedPtr == nullptr) {
+                    continue;
+                }
 
                 Real64 const multiplier = IHGNumbers(1);
 
@@ -2670,6 +2684,9 @@ namespace InternalHeatGains {
                     ErrorsFound = true;
                     continue;
                 }
+                if (schedPtr == nullptr) {
+                    continue;
+                }
 
                 Real64 const multiplier = IHGNumbers(1);
 
@@ -2937,6 +2954,9 @@ namespace InternalHeatGains {
                 if (itStmLoadDef == stmLoadDefs.end()) {
                     ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
                     ErrorsFound = true;
+                    continue;
+                }
+                if (schedPtr == nullptr) {
                     continue;
                 }
 
@@ -3293,6 +3313,9 @@ namespace InternalHeatGains {
                 if (itOthLoadDef == othLoadDefs.end()) {
                     ShowSevereItemNotFound(state, eoh, IHGAlphaFieldNames(2), defName);
                     ErrorsFound = true;
+                    continue;
+                }
+                if (schedPtr == nullptr) {
                     continue;
                 }
 
@@ -3932,6 +3955,9 @@ namespace InternalHeatGains {
                 } else if (!cpuSchedPtr->checkMinVal(state, Clusive::In, 0.0)) {
                     Sched::ShowSevereBadMin(state, eoh, IHGAlphaFieldNames(5), IHGAlphas(5), Clusive::In, 0.0);
                     ErrorsFound = true;
+                }
+                if (opSchedPtr == nullptr || cpuSchedPtr == nullptr) {
+                    continue;
                 }
 
                 Real64 const multiplier = IHGNumbers(1);
@@ -5528,6 +5554,7 @@ namespace InternalHeatGains {
 
         const std::vector<std::string> objectTypes =
             instanceObjectType.empty() ? std::vector<std::string>{objectType} : std::vector<std::string>{objectType, instanceObjectType};
+        std::unordered_map<std::string, std::string> uniqueObjectNames;
 
         numInputObjects = 0;
         for (const std::string &thisObjectType : objectTypes) {
@@ -5559,6 +5586,7 @@ namespace InternalHeatGains {
                 auto const &objectFields = instance.value();
                 std::string const &thisObjectName = Util::makeUPPER(instance.key());
                 ip->markObjectAsUsed(thisObjectType, instance.key());
+                GlobalNames::VerifyUniqueInterObjectName(state, uniqueObjectNames, thisObjectName, thisObjectType, "Name", errors);
 
                 // For incoming idf, maintain object order
                 ++counter;

@@ -4161,6 +4161,100 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipmentInstance_InvalidDef
     })));
 }
 
+TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipmentInstance_InvalidSchedule)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "ElectricEquipment:Instance,",
+        "  Zone1 ElecEq,            !- Name",
+        "  ElecEquipDef,            !- Electric Equipment Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  MissingSchedule,         !- Schedule Name",
+        "  1.0,                     !- Multiplier",
+        "  General;                 !- End-Use Subcategory",
+
+        "ElectricEquipment:Definition,",
+        "  ElecEquipDef,            !- Name",
+        "  EquipmentLevel,          !- Design Level Calculation Method",
+        "  100.0,                   !- Design Level {W}",
+        "  ,                        !- Watts per Floor Area {W/m2}",
+        "  ,                        !- Watts per Person {W/person}",
+        "  0.1,                     !- Fraction Latent",
+        "  0.3,                     !- Fraction Radiant",
+        "  0.2;                     !- Fraction Lost",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: ElectricEquipment:Instance = ZONE1 ELECEQ",
+        "   **   ~~~   ** Schedule Name = MISSINGSCHEDULE, item not found.",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipmentInstance_DuplicateLegacyName)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+        "Schedule:Constant,AlwaysOn,,1.0;",
+
+        "ElectricEquipment,",
+        "  Shared Name,",
+        "  Zone1,",
+        "  AlwaysOn,",
+        "  EquipmentLevel,",
+        "  50.0,",
+        "  ,",
+        "  ,",
+        "  0.0,",
+        "  0.0,",
+        "  0.0;",
+
+        "ElectricEquipment:Instance,",
+        "  Shared Name,",
+        "  ElecEquipDef,",
+        "  Zone1,",
+        "  AlwaysOn,",
+        "  1.0,",
+        "  General;",
+
+        "ElectricEquipment:Definition,",
+        "  ElecEquipDef,",
+        "  EquipmentLevel,",
+        "  100.0,",
+        "  ,",
+        "  ,",
+        "  0.0,",
+        "  0.0,",
+        "  0.0;",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+    EXPECT_TRUE(
+        compare_err_stream_substring("SHARED NAME with object type ElectricEquipment:Instance duplicates a name in object type ElectricEquipment"));
+}
+
 TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipmentInstance_PerArea)
 {
 
@@ -6345,6 +6439,52 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance_ThermalComfort)
     EXPECT_EQ(people.clothingSched->Name, "CLOTHINGSCHEDULE");
     ASSERT_NE(people.airVelocitySched, nullptr);
     EXPECT_EQ(people.airVelocitySched->Name, "AIRVELOCITYSCHEDULE");
+}
+
+TEST_F(EnergyPlusFixture, InternalHeatGains_PeopleInstance_AdaptiveSurfaceWeightedMissingSurface)
+{
+    std::string const idf_objects = delimited_string({
+        "Zone,Zone1;",
+
+        "Schedule:Constant,NumberSchedule,,1.0;",
+        "Schedule:Constant,ActivitySchedule,,100.0;",
+
+        "People:Instance,",
+        "  Zone1 People,            !- Name",
+        "  PeopleDef,               !- People Definition Name",
+        "  Zone1,                   !- Zone or ZoneList or Space or SpaceList Name",
+        "  NumberSchedule,          !- Number of People Schedule Name",
+        "  ActivitySchedule;        !- Activity Level Schedule Name",
+
+        "People:Definition,",
+        "  PeopleDef,               !- Name",
+        "  People,                  !- Number of People Calculation Method",
+        "  1.0,                     !- Number of People",
+        "  ,                        !- People per Floor Area {person/m2}",
+        "  ,                        !- Floor Area per Person {m2/person}",
+        "  0.3,                     !- Fraction Radiant",
+        "  autocalculate,           !- Sensible Heat Fraction",
+        "  ,                        !- Carbon Dioxide Generation Rate {m3/s-W}",
+        "  No,                      !- Enable ASHRAE 55 Comfort Warnings",
+        "  SurfaceWeighted,         !- Mean Radiant Temperature Calculation Type",
+        "  AdaptiveASH55;           !- Thermal Comfort Model 1 Type",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    EXPECT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), EnergyPlus::FatalError);
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** GetInternalHeatGains: People:Instance=\"ZONE1 PEOPLE\", invalid Surface Name=",
+        "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+    })));
 }
 
 TEST_F(EnergyPlusFixture, InternalHeatGains_ITEAirCooledInstance)
