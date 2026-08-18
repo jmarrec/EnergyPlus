@@ -407,6 +407,9 @@ TEST_F(EnergyPlusFixture, SysAvailManager_OptimumStart)
 TEST_F(EnergyPlusFixture, SysAvailManager_OptimumStartFanScheduleBounds)
 {
     std::string const idf_objects = delimited_string({
+        "Timestep,",
+        "  6;                      !- Number of Timesteps per Hour",
+
         "Schedule:Compact,",
         "  Fan Schedule,           !- Name",
         "  Fraction,               !- Schedule Type Limits Name",
@@ -416,8 +419,6 @@ TEST_F(EnergyPlusFixture, SysAvailManager_OptimumStartFanScheduleBounds)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-    state->dataGlobal->TimeStepsInHour = 6;
-    state->dataGlobal->MinutesInTimeStep = 10;
     state->init_state(*state);
 
     state->dataEnvrn->DayOfYear = 1;
