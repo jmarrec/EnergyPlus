@@ -3025,3 +3025,129 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_BothExplicitPreExistingValidati
     EXPECT_TRUE(ErrorsFound);
     EXPECT_TRUE(compare_err_stream_substring("does not have the same materials in the reverse order", false));
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_InheritedSubSurfaceAreaSubtractedFromBaseSurface)
+{
+    // A window with a blank Construction Name field is only resolved to a construction late,
+    // inside GetSurfaceData's DCS-resolution pass - well after GetHTSubSurfaceData has already
+    // decided whether to subtract the window's area from its base surface's Area/NetAreaShadowCalc.
+    // That subtraction must not be skipped just because the window's construction isn't known yet.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    Wall1,                                  !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    SunExposed,                             !- Sun Exposure
+    WindExposed,                            !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 0, 3,                                !- X,Y,Z Vertex 1 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 0, 3;                               !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Floor1,                                 !- Name
+    Floor,                                  !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 0,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 2 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+    0, 10, 0;                               !- X,Y,Z Vertex 4 {m}
+
+  FenestrationSurface:Detailed,
+    Window1,                                !- Name
+    FixedWindow,                            !- Surface Type
+    ,                                       !- Construction Name
+    Wall1,                                  !- Building Surface Name
+    ,                                       !- Outside Boundary Condition Object
+    ,                                       !- View Factor to Ground
+    ,                                       !- Frame and Divider Name
+    ,                                       !- Multiplier
+    ,                                       !- Number of Vertices
+    4, 0, 2,                                !- X,Y,Z Vertex 1 {m}
+    4, 0, 1,                                !- X,Y,Z Vertex 2 {m}
+    6, 0, 1,                                !- X,Y,Z Vertex 3 {m}
+    6, 0, 2;                                !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int const wallNum = Util::FindItemInList("WALL1", state->dataSurface->Surface);
+    int const windowNum = Util::FindItemInList("WINDOW1", state->dataSurface->Surface);
+    ASSERT_GT(wallNum, 0);
+    ASSERT_GT(windowNum, 0);
+
+    auto const &wall = state->dataSurface->Surface(wallNum);
+    auto const &window = state->dataSurface->Surface(windowNum);
+
+    // Both were blank in the IDF: confirm they really were inherited from the Building-level DCS,
+    // not hard-assigned, before trusting the area math below.
+    ASSERT_GT(wall.Construction, 0);
+    ASSERT_GT(window.Construction, 0);
+    EXPECT_EQ("EXTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wall.Construction).Name);
+    EXPECT_EQ("EXTERIOR FIXEDWINDOW CONSTRUCTION", state->dataConstruction->Construct(window.Construction).Name);
+
+    EXPECT_DOUBLE_EQ(2.0, window.Area);
+    EXPECT_DOUBLE_EQ(wall.GrossArea - window.Area, wall.Area);
+    EXPECT_DOUBLE_EQ(wall.GrossArea - (window.Area / window.Multiplier), wall.NetAreaShadowCalc);
+}
