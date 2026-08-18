@@ -2569,6 +2569,12 @@ namespace SurfaceGeometry {
             SurfError = true;
         }
 
+        // Fatal now: surfaces below assume every heat-transfer surface has a resolved (non-zero) Construction.
+        if (SurfError) {
+            ErrorsFound = true;
+            ShowFatalError(state, std::format("{}Errors discovered, program terminates.", RoutineName));
+        }
+
         auto &s_mat = state.dataMaterial;
 
         // I don't think this entire loop matters
