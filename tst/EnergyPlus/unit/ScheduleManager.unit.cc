@@ -1182,7 +1182,6 @@ TEST_F(EnergyPlusFixture, Schedule_NamesAreCaseInsensitive)
 
 TEST_F(EnergyPlusFixture, Schedule_GettersAcceptMixedCaseNames)
 {
-    Sched::InitConstantScheduleData(*state);
     auto *constantSchedule = Sched::AddScheduleConstant(*state, "Mixed Constant Schedule", 0.5);
     auto *schedule = Sched::AddScheduleDetailed(*state, "Mixed Schedule");
     auto *daySchedule = Sched::AddDaySchedule(*state, "Mixed Day Schedule");
