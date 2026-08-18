@@ -2541,6 +2541,7 @@ namespace SurfaceGeometry {
                 surf.Construction = resolvedConstrNum[SurfNum];
                 surf.ConstructionStoredInputValue = resolvedConstrNum[SurfNum];
                 surf.ConstructionAssignmentSource = static_cast<int>(resolvedSource[SurfNum]);
+                state.dataConstruction->Construct(surf.Construction).IsUsed = true;
             }
         }
 
