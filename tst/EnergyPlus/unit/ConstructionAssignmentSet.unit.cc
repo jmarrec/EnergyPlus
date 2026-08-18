@@ -3151,3 +3151,164 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_InheritedSubSurfaceAreaSubtract
     EXPECT_DOUBLE_EQ(wall.GrossArea - window.Area, wall.Area);
     EXPECT_DOUBLE_EQ(wall.GrossArea - (window.Area / window.Multiplier), wall.NetAreaShadowCalc);
 }
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_GeneratedInterzoneSurfaceIsReversedOnce)
+{
+    // WallA has a blank Construction Name and only names its zone (not a specific surface) as its
+    // Outside Boundary Condition Object, so GetSurfaceData auto-generates its "iz-WallA" mirror in
+    // the adjacent zone with a blank construction of its own. Both sides are blank, so both are
+    // independently resolved via the same Building-level DCS to the identical construction, then
+    // the "matching pair" cleanup gives one side the reversed layer order. A second, redundant
+    // reversal pass used to flip the generated side back, leaving both sides facing the same way.
+    //
+    // A fresh, asymmetric 2-layer construction built from brand-new materials is used (rather than
+    // reusing a construction from a shared fixture) so its reversed layer order can't coincidentally
+    // collide with some other, unrelated construction already in the model.
+    std::string const idf_objects = R"(
+  Material,
+    Mat A,                                  !- Name
+    MediumRough,                            !- Roughness
+    0.1,                                    !- Thickness {m}
+    1.0,                                    !- Conductivity {W/m-K}
+    1000,                                   !- Density {kg/m3}
+    1000,                                   !- Specific Heat {J/kg-K}
+    0.9, 0.7, 0.7;                          !- Thermal/Solar/Visible Absorptance
+
+  Material,
+    Mat B,                                  !- Name
+    MediumRough,                            !- Roughness
+    0.1,                                    !- Thickness {m}
+    1.0,                                    !- Conductivity {W/m-K}
+    1000,                                   !- Density {kg/m3}
+    1000,                                   !- Specific Heat {J/kg-K}
+    0.9, 0.7, 0.7;                          !- Thermal/Solar/Visible Absorptance
+
+  Construction,
+    Interior Wall Construction,             !- Name
+    Mat A,                                  !- Outside Layer
+    Mat B;                                  !- Layer 2
+
+  SurfaceConstructionAssignments,
+    Minimal Interior Surface Constructions, !- Name
+    ,                                       !- Floor Construction Name
+    Interior Wall Construction;             !- Wall Construction Name
+
+  ConstructionAssignmentSet,
+    Minimal DCS,                            !- Name
+    ,                                       !- Exterior Surface Construction Assignments Name
+    Minimal Interior Surface Constructions; !- Interior Surface Construction Assignments Name
+
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Minimal DCS;                            !- Construction Assignment Set Name
+
+  Zone,
+    Zone1,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  Zone,
+    Zone2,                                  !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    WallA,                                  !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    Zone1,                                  !- Zone Name
+    ,                                       !- Space Name
+    Zone,                                   !- Outside Boundary Condition
+    Zone2,                                  !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 0, 3,                               !- X,Y,Z Vertex 1 {m}
+    10, 10, 3,                              !- X,Y,Z Vertex 2 {m}
+    10, 10, 0,                              !- X,Y,Z Vertex 3 {m}
+    10, 0, 0;                               !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(2);
+    state->dataSurfaceGeometry->CosZoneRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    int const totConstructsBefore = state->dataHeatBal->TotConstructs;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    compare_err_stream("");
+    ASSERT_FALSE(ErrorsFound);
+
+    int const wallANum = Util::FindItemInList("WALLA", state->dataSurface->Surface);
+    int const generatedWallNum = Util::FindItemInList("iz-WALLA", state->dataSurface->Surface);
+    ASSERT_GT(wallANum, 0);
+    ASSERT_GT(generatedWallNum, 0);
+
+    auto const &wallA = state->dataSurface->Surface(wallANum);
+    auto const &generatedWall = state->dataSurface->Surface(generatedWallNum);
+    ASSERT_GT(wallA.Construction, 0);
+    ASSERT_GT(generatedWall.Construction, 0);
+
+    // Both were purely inherited (neither hardcoded), both via the Building-level DCS.
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), wallA.ConstructionAssignmentSource);
+    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), generatedWall.ConstructionAssignmentSource);
+
+    // "iz-WallA" > "WallA" alphabetically, so the generated side is the one that gets auto-reversed;
+    // WallA keeps the construction as originally resolved.
+    EXPECT_EQ("INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wallA.Construction).Name);
+    EXPECT_NE(wallA.Construction, generatedWall.Construction) << "Generated side must not share WallA's construction number unreversed";
+
+    // Mat A/Mat B are brand new, used nowhere else in the model, so [Mat B, Mat A] (the reverse of
+    // Interior Wall Construction) has no pre-existing match anywhere: AssignReverseConstructionNumber
+    // must create a genuinely new construction for the generated side, not reuse an unrelated one.
+    EXPECT_EQ("iz-INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(generatedWall.Construction).Name);
+    EXPECT_EQ(totConstructsBefore + 1, state->dataHeatBal->TotConstructs) << "Exactly one new construction should have been created";
+
+    auto const &wallAConstruction = state->dataConstruction->Construct(wallA.Construction);
+    auto const &generatedWallConstruction = state->dataConstruction->Construct(generatedWall.Construction);
+    ASSERT_EQ(2, wallAConstruction.TotLayers);
+    ASSERT_EQ(2, generatedWallConstruction.TotLayers);
+    EXPECT_EQ(wallAConstruction.LayerPoint(1), generatedWallConstruction.LayerPoint(2));
+    EXPECT_EQ(wallAConstruction.LayerPoint(2), generatedWallConstruction.LayerPoint(1));
+}
