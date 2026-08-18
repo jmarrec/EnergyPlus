@@ -5717,13 +5717,17 @@ Real64 calcUserZoneMRT(EnergyPlusData &state, int mrtNum)
     Real64 sumMRTfracs = 0.0; // Calculate user defined zone MRT
     Real64 stdMRTfrac = 0.0;
     state.dataThermalComforts->ZoneNum = thisZoneMRT.zoneIndex;
-    for (int pNum = 1; pNum <= thisZoneMRT.numPeople; ++pNum) {
-        auto &thisPeople = thisZoneMRT.zoneMRTPeople(pNum);
-        thisPeople.peopleMRT = ThermalComfort::CalcRadTemp(state, thisPeople.peopleIndex);
-        sumMRTfracs += thisPeople.fracMRT * thisPeople.peopleMRT;
+    if (thisZoneMRT.zoneIndex > 0) {
+        for (int pNum = 1; pNum <= thisZoneMRT.numPeople; ++pNum) {
+            auto &thisPeople = thisZoneMRT.zoneMRTPeople(pNum);
+            thisPeople.peopleMRT = ThermalComfort::CalcRadTemp(state, thisPeople.peopleIndex);
+            sumMRTfracs += thisPeople.fracMRT * thisPeople.peopleMRT;
+        }
+        stdMRTfrac = thisZoneMRT.fracZoneStdMRT;
+        return sumMRTfracs + stdMRTfrac * thisZoneHB.stdMRT;
+    } else {
+        return thisZoneHB.stdMRT;
     }
-    stdMRTfrac = thisZoneMRT.fracZoneStdMRT;
-    return sumMRTfracs + stdMRTfrac * thisZoneHB.stdMRT;
 }
 
 // End of Record Keeping subroutines for the HB Module

@@ -3325,7 +3325,7 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
         "    Guards,          !- People Name 1",
         "    0.3,             !- MRT Weighting Factor 1",
         "    MyPeople,        !- People Name 1",
-        "    0.4;             !- MRT Weighting Factor 1",
+        "    0.5;             !- MRT Weighting Factor 1",
 
         "  ZoneMRTCalculation,",
         "    Shire,           !- Zone Name",
@@ -3387,14 +3387,14 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
     auto &mrt2 = state->dataHeatBal->zoneMRTCalc(2);
     EXPECT_EQ(mrt2.zoneIndex, 3);
     EXPECT_EQ(mrt2.numPeople, 3);
-    EXPECT_NEAR(mrt2.sumFracZoneMRT, 0.9, tolerance);
-    EXPECT_NEAR(mrt2.fracZoneStdMRT, 0.1, tolerance);
+    EXPECT_NEAR(mrt2.sumFracZoneMRT, 1.0, tolerance);
+    EXPECT_NEAR(mrt2.fracZoneStdMRT, 0.0, tolerance);
     EXPECT_EQ(mrt2.zoneMRTPeople(1).peopleIndex, 4);
     EXPECT_NEAR(mrt2.zoneMRTPeople(1).fracMRT, 0.2, tolerance);
     EXPECT_EQ(mrt2.zoneMRTPeople(2).peopleIndex, 5);
     EXPECT_NEAR(mrt2.zoneMRTPeople(2).fracMRT, 0.3, tolerance);
     EXPECT_EQ(mrt2.zoneMRTPeople(3).peopleIndex, 6);
-    EXPECT_NEAR(mrt2.zoneMRTPeople(3).fracMRT, 0.4, tolerance);
+    EXPECT_NEAR(mrt2.zoneMRTPeople(3).fracMRT, 0.5, tolerance);
 
     // Third and final ZoneMRT statement is Zone 1 (Shire) with two people statements attached
     auto &mrt3 = state->dataHeatBal->zoneMRTCalc(3);
@@ -3736,7 +3736,7 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_CalculationTest)
         "    Guards,          !- People Name 1",
         "    0.3,             !- MRT Weighting Factor 1",
         "    MyPeople,        !- People Name 1",
-        "    0.4;             !- MRT Weighting Factor 1",
+        "    0.5;             !- MRT Weighting Factor 1",
 
         "  ZoneMRTCalculation,",
         "    Shire,           !- Zone Name",
@@ -3815,7 +3815,7 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_CalculationTest)
     dataHBSurf->SurfInsideTempHist(1)(4) = 12.0;
     dataHBSurf->SurfInsideTempHist(1)(5) = 14.0;
     state->dataZoneTempPredictorCorrector->zoneHeatBalance(3).MRT = 25.0;
-    expectedResult = 16.4521; // Note that MAT defaults to 23.0 surface weighted and standard MRT
+    expectedResult = 15.4526; // Note that MAT defaults to 23.0 for surface weighted and standard MRT
     actualResult = HeatBalanceSurfaceManager::calcUserZoneMRT(*state, zoneMRTNum);
     EXPECT_NEAR(actualResult, expectedResult, tolerance);
 }

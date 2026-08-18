@@ -2307,7 +2307,14 @@ namespace HeatBalanceManager {
                 thisZnMRTObj.name = Util::makeUPPER(zone_name);
                 s_ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
                 auto peoplePairs = fields.find("people_names");
-                if (peoplePairs != fields.end()) {
+                if (peoplePairs == fields.end() || peoplePairs.value().empty()) {
+                    ShowSevereError(state,
+                                    std::format("{}, {}=\"{}\" must include at least one People name and MRT weighting factor pair.",
+                                                routineName,
+                                                cCurrentModuleObject,
+                                                thisZnMRTObj.name));
+                    errorsFound = true;
+                } else {
                     auto &peoplePairsArray = peoplePairs.value();
                     thisZnMRTObj.numPeople = peoplePairsArray.size();
                     for (auto &peoplePair : peoplePairsArray) {
@@ -2396,10 +2403,11 @@ namespace HeatBalanceManager {
                 }
             }
             // Now that error checking is done, calculate sums and fractions that will be used throughout the simulation
+            Real64 constexpr tolerance = 0.000001;
             for (int pNum = 1; pNum <= thisZoneMRT.numPeople; pNum++) {
                 thisZoneMRT.sumFracZoneMRT += thisZoneMRT.zoneMRTPeople(pNum).fracMRT;
             }
-            if (thisZoneMRT.sumFracZoneMRT > 1.0) {
+            if ((thisZoneMRT.sumFracZoneMRT - 1.0) > tolerance) {
                 ShowSevereError(state,
                                 std::format("{}, {}=\"{}\" object has individual People MRT weighting factors that sum up to greater than 1.0.",
                                             routineName,
@@ -2413,7 +2421,7 @@ namespace HeatBalanceManager {
                 }
                 thisZoneMRT.sumFracZoneMRT = 0.0;
             }
-            if (thisZoneMRT.sumFracZoneMRT < 1.0) {
+            if ((1.0 - thisZoneMRT.sumFracZoneMRT) > tolerance) {
                 ShowWarningMessage(state,
                                    std::format("{}, {}=\"{}\" object has individual People MRT weighting factors that sum up to less than 1.0.",
                                                routineName,
@@ -2422,7 +2430,7 @@ namespace HeatBalanceManager {
                 ShowContinueError(state, std::format("The remaining fraction of the MRT calculation will use the standard zone MRT."));
                 // do not set errorsFound equal to true here because this is possible and potentially intentional on the part of the user
             }
-            thisZoneMRT.fracZoneStdMRT = 1.0 - thisZoneMRT.sumFracZoneMRT;
+            thisZoneMRT.fracZoneStdMRT = max(1.0 - thisZoneMRT.sumFracZoneMRT, 0.0);
         }
 
         if (errorsFound) {
