@@ -1773,6 +1773,10 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_BuildingLevelOnly)
     EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), wall.ConstructionAssignmentSource);
     EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), roof.ConstructionAssignmentSource);
     EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), floor.ConstructionAssignmentSource);
+
+    // A DCS-inherited construction must be marked used, same as an explicitly-assigned one, or it
+    // triggers a false "unused construction" warning and CondFD setup skips it.
+    EXPECT_TRUE(state->dataConstruction->Construct(wall.Construction).IsUsed);
 }
 
 TEST_F(EnergyPlusFixture, ConstructionResolution_SpaceOverridesBuildingWithFallback)
