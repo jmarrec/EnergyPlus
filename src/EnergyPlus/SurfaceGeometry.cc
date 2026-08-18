@@ -2533,18 +2533,6 @@ namespace SurfaceGeometry {
                 laterSideConstrNum = DataHeatBalance::AssignReverseConstructionNumber(state, laterSideConstrNum, SurfError);
             }
 
-            // iz- surfaces (E+-synthesized mirror of an interzone surface the user didn't fully specify)
-            // always need the reverse of whatever their real counterpart resolved to.
-            for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
-                if (resolvedConstrNum[SurfNum] == 0) {
-                    continue;
-                }
-                auto const &surf = state.dataSurface->Surface(SurfNum);
-                if (surf.Name.size() > 3 && surf.Name.substr(0, 3) == "iz-") {
-                    resolvedConstrNum[SurfNum] = DataHeatBalance::AssignReverseConstructionNumber(state, resolvedConstrNum[SurfNum], SurfError);
-                }
-            }
-
             for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
                 if (resolvedConstrNum[SurfNum] == 0) {
                     continue;
