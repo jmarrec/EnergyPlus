@@ -1284,7 +1284,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->weekScheduleMap.find(Alphas(1)) != s_sched->weekScheduleMap.end()) {
+            if (s_sched->weekScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->weekScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -2941,7 +2941,7 @@ namespace Sched {
         // This function returns the internal pointer to Schedule "ScheduleName".
         auto const &s_sched = state.dataSched;
 
-        auto found = s_sched->scheduleMap.find(name);
+        auto found = s_sched->scheduleMap.find(Util::makeUPPER(name));
         if (found == s_sched->scheduleMap.end()) {
             return nullptr;
         }
@@ -2987,7 +2987,7 @@ namespace Sched {
     {
         auto const &s_sched = state.dataSched;
 
-        auto found = s_sched->weekScheduleMap.find(name);
+        auto found = s_sched->weekScheduleMap.find(Util::makeUPPER(name));
         if (found == s_sched->weekScheduleMap.end()) {
             return nullptr;
         }
@@ -3051,7 +3051,7 @@ namespace Sched {
         // This function returns the internal pointer to Schedule "ScheduleName".
         auto const &s_sched = state.dataSched;
 
-        auto found = s_sched->dayScheduleMap.find(name);
+        auto found = s_sched->dayScheduleMap.find(Util::makeUPPER(name));
         if (found == s_sched->dayScheduleMap.end()) {
             return nullptr;
         }
