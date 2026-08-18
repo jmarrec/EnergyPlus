@@ -757,7 +757,7 @@ void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
     int LeapAddPrev = 0;
     int LeapAddCur = 0;
 
-    if (Number < 0 || Number > 366) {
+    if (Number < 1 || Number > 365 + LeapYr) {
         return;
     }
     for (WMonth = 1; WMonth <= 12; ++WMonth) {
