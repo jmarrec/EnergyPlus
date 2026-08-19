@@ -4946,33 +4946,33 @@ Material,
        \units J/kg-K
        \type real
        \minimum 100
-  N5 , \field Thermal Absorptance Outside Face
+  N5 , \field Thermal Absorptance
        \type real
        \minimum> 0
        \default .9
        \maximum 0.99999
-  N6 , \field Solar Absorptance Outside Face
+  N6 , \field Solar Absorptance
        \type real
        \default .7
        \minimum 0
        \maximum 1
-  N7 , \field Visible Absorptance Outside Face
+  N7 , \field Visible Absorptance
        \type real
        \minimum 0
        \default .7
        \maximum 1
   N8 , \field Thermal Absorptance Inside Face
-       \note The default value for this optional parameter is equal to the Outside Face value
+       \note The default value for this optional parameter is equal to the value of the Thermal Absorptance above
        \type real
        \minimum> 0
        \maximum 0.99999
   N9 , \field Solar Absorptance Inside Face
-       \note The default value for this optional parameter is equal to the Outside Face value
+       \note The default value for this optional parameter is equal to the value of the Solar Absorptance above
        \type real
        \minimum 0
        \maximum 1
   N10; \field Visible Absorptance Inside Face
-       \note The default value for this optional parameter is equal to the Outside Face value
+       \note The default value for this optional parameter is equal to the value of the Visible Absorptance above
        \type real
        \minimum 0
        \maximum 1
@@ -4998,33 +4998,33 @@ Material:NoMass,
        \units m2-K/W
        \type real
        \minimum .001
-  N2 , \field Thermal Absorptance Outside Face
+  N2 , \field Thermal Absorptance
        \type real
        \minimum> 0
        \default .9
        \maximum 0.99999
-  N3 , \field Solar Absorptance Outside Face
+  N3 , \field Solar Absorptance
        \type real
        \minimum 0
        \default .7
        \maximum 1
-  N4 , \field Visible Absorptance Outside Face
+  N4 , \field Visible Absorptance
        \type real
        \minimum 0
        \default .7
        \maximum 1
   N5 , \field Thermal Absorptance Inside Face
-       \note The default value for this optional parameter is equal to the Outside Face value
+       \note The default value for this optional parameter is equal to the value of the Thermal Absorptance above
        \type real
        \minimum> 0
        \maximum 0.99999
   N6 , \field Solar Absorptance Inside Face
-       \note The default value for this optional parameter is equal to the Outside Face value
+       \note The default value for this optional parameter is equal to the value of the Solar Absorptance above
        \type real
        \minimum 0
        \maximum 1
   N7 ; \field Visible Absorptance Inside Face
-       \note The default value for this optional parameter is equal to the Outside Face value
+       \note The default value for this optional parameter is equal to the value of the Visible Absorptance above
        \type real
        \minimum 0
        \maximum 1
@@ -7793,7 +7793,7 @@ MaterialProperty:VariableAbsorptance,
        \object-list MaterialName
        \note Regular Material Name to which the additional properties will be added.
        \note this the material name for the basic material properties.
-  A3 , \field Control Signal Outside Face
+  A3 , \field Control Signal
        \required-field
        \type choice
        \key SurfaceTemperature
@@ -7802,15 +7802,15 @@ MaterialProperty:VariableAbsorptance,
        \key Scheduled
        \default SurfaceTemperature
        \note the variable that drives the change in thermal/solar absorptance
-  A4 , \field Thermal Absorptance Function Name Outside Face
+  A4 , \field Thermal Absorptance Function Name
        \note A Curve:* or Table:Lookup object encoding the relationship between
        \note the control signal value and the surface thermal absorptance.
-  A5 , \field Thermal Absorptance Schedule Name Outside Face
+  A5 , \field Thermal Absorptance Schedule Name
        \note only used when Control Signal = "Scheduled"
-  A6 , \field Solar Absorptance Function Name Outside Face
+  A6 , \field Solar Absorptance Function Name
        \note A Curve:* or Table:Lookup object encoding the relationship between
        \note the control signal value and the surface solar absorptance.
-  A7 , \field Solar Absorptance Schedule Name Outside Face
+  A7 , \field Solar Absorptance Schedule Name
        \note only used when Control Signal = "Scheduled"
   A8 , \field Control Signal Inside Face
        \type choice
@@ -7819,17 +7819,17 @@ MaterialProperty:VariableAbsorptance,
        \key SpaceHeatingCoolingMode
        \key Scheduled
        \note the variable that drives the change in thermal/solar absorptance
-       \note when this field is blank the inside face defaults back to the outside face values
+       \note when this field is blank the inside face values are not modified
   A9 , \field Thermal Absorptance Function Name Inside Face
        \note A Curve:* or Table:Lookup object encoding the relationship between
-       \note the control signal value and the surface thermal absorptance.
+       \note the control signal inside face value and the surface thermal absorptance.
   A10, \field Thermal Absorptance Schedule Name Inside Face
-       \note only used when Control Signal = "Scheduled"
+       \note only used when Control Signal Inside Face = "Scheduled"
   A11, \field Solar Absorptance Function Name Inside Face
        \note A Curve:* or Table:Lookup object encoding the relationship between
-       \note the control signal value and the surface solar absorptance.
+       \note the control signal inside face value and the surface solar absorptance.
   A12; \field Solar Absorptance Schedule Name Inside Face
-       \note only used when Control Signal = "Scheduled"
+       \note only used when Control Signal Inside Face = "Scheduled"
 
 MaterialProperty:HeatAndMoistureTransfer:Settings,
     \memo HeatBalanceAlgorithm = CombinedHeatAndMoistureFiniteElement solution algorithm only.
