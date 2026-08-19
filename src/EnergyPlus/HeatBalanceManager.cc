@@ -2378,6 +2378,15 @@ namespace HeatBalanceManager {
                                                 cCurrentModuleObject,
                                                 thisZoneMRT.name,
                                                 thisPeople.name));
+                    ShowContinueError(
+                        state, std::format("Note that if this file has zones with multiple spaces defined and People defined at the zone level,"));
+                    ShowContinueError(
+                        state, std::format("this People object is expanded for each space in the zone, and the People names for each of these"));
+                    ShowContinueError(
+                        state,
+                        std::format("get altered within EnergyPlus to the name of the space followed by the People name from the input file."));
+                    ShowContinueError(
+                        state, std::format("The names provided in the input for the ZoneMRTCalculation object do not match any of those names."));
                     ShowContinueError(state, std::format("Consult the IDF for this run and the naming rules in the Input Output Reference."));
                     errorsFound = true;
                 } else if (state.dataHeatBal->People(thisPeople.peopleIndex).ZonePtr != thisZoneMRT.zoneIndex) {
