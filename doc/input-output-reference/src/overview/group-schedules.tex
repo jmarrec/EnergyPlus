@@ -419,46 +419,48 @@ Schedule:Compact,
 \subsection{Schedule:Year:Rules}\label{scheduleyearrules}
 
 A Schedule:Year:Rules defines a yearly schedule using a default day profile and a prioritized list of override rules (\hyperref[scheduleweekrule]{Schedule:Week:Rule} objects).
-Rules are evaluated in ascending Rule Priority Order; the first matching rule for a given day is used.
+For the ordinary day-of-week types (Sunday through Saturday), rules are evaluated in ascending Rule Priority Order; the first matching rule is used.
 If no rule matches, the Default Day Schedule is used.
+Summer design days, winter design days, holidays, Custom Day 1, and Custom Day 2 use the corresponding day schedules specified in this object instead of a matching weekday rule.
+If one of these special day schedule fields is blank, the Default Day Schedule is used for that day type.
 February 29 is an exception: if no rule date range includes February 29, it inherits the resolved schedule for February 28 instead of using the default day schedule.
 
 \subsubsection{Inputs}\label{inputs-scheduleyearrules}
 
 \paragraph{Field: Name}\label{field-name-scheduleyearrules}
 
-This field should contain a unique (between Schedule:Year, \hyperref[schedulecompact]{Schedule:Compact}, Schedule:Year:Rules, and \hyperref[schedulefile]{Schedule:File}) designation for the schedule.
+This field should contain a name that is unique among all schedules that can be referenced through a Schedule Name field.
 It is referenced by various ``scheduled'' items (e.g.~\hyperref[lights-000]{Lights}, \hyperref[people]{People}, Infiltration) to define the appropriate schedule values.
 It is also referenced by optional \hyperref[scheduleweekrule]{Schedule:Week:Rule} objects.
 
 \paragraph{Field: Schedule Type Limits Name}\label{field-schedule-type-limits-name-scheduleyearrules}
 
-This field contains a reference to the Schedule Type Limits object.
-If found in a list of Schedule Type Limits (see ScheduleTypeLimits object above), then the restrictions from the referenced object will be used to validate the hourly field values (below).
+This field contains a reference to the \hyperref[scheduletypelimits]{ScheduleTypeLimits} object.
+If the referenced object is found, its restrictions are used to validate the values in the day schedules referenced by this object and its associated \hyperref[scheduleweekrule]{Schedule:Week:Rule} objects.
 
 \paragraph{Field: Default Day Schedule Name}\label{field-default-day-schedule-name-scheduleyearrules}
 
-This field is the name of the default day schedule (ref. Schedule:Day:Hourly, Schedule:Day:Interval, Schedule:Day:List objects) that is to be used for days when no schedule rule applies.
+This field is the name of the default day schedule (ref. Schedule:Day:Constant, Schedule:Day:Hourly, Schedule:Day:Interval, and Schedule:Day:List objects) used for ordinary day-of-week types when no schedule rule applies and as the fallback for any blank special day schedule field below.
 
 \paragraph{Field: Summer Design Day Schedule Name}\label{field-summer-design-day-schedule-name-scheduleyearrules}
 
-This field is the name of the summer design day schedule.
+This field is the name of the summer design day schedule. If this field is blank, the Default Day Schedule is used.
 
 \paragraph{Field: Winter Design Day Schedule Name}\label{field-winter-design-day-schedule-name-scheduleyearrules}
 
-This field is the name of the winter design day schedule.
+This field is the name of the winter design day schedule. If this field is blank, the Default Day Schedule is used.
 
 \paragraph{Field: Holiday Schedule Name}\label{field-holiday-schedule-name-scheduleyearrules}
 
-This field is the name of the holiday schedule.
+This field is the name of the holiday schedule. If this field is blank, the Default Day Schedule is used.
 
 \paragraph{Field: Custom Day 1 Schedule Name}\label{field-custom-day-1-schedule-name-scheduleyearrules}
 
-This field is the name of the custom day 1 schedule.
+This field is the name of the Custom Day 1 schedule. If this field is blank, the Default Day Schedule is used.
 
 \paragraph{Field: Custom Day 2 Schedule Name}\label{field-custom-day-2-schedule-name-scheduleyearrules}
 
-This field is the name of the custom day 2 schedule.
+This field is the name of the Custom Day 2 schedule. If this field is blank, the Default Day Schedule is used.
 
 An example of IDF input:
 
@@ -478,13 +480,14 @@ Schedule:Year:Rules,
 
 A Schedule:Week:Rule defines one override rule for a \hyperref[scheduleyearrules]{Schedule:Year:Rules}.
 Rules are evaluated in ascending Rule Priority Order; the first matching rule wins.
-A rule matches a day if: (a) the day falls within the specified date ranges, AND (b) the corresponding Apply <DayOfWeek> field is Yes.
+A rule matches an ordinary day-of-week type when: (a) the date falls within one of the specified date ranges, and (b) the corresponding Apply \textless{}Day of Week\textgreater{} field is Yes.
+The special day schedules in the parent Schedule:Year:Rules object are used for summer design days, winter design days, holidays, Custom Day 1, and Custom Day 2 regardless of matching rules.
 
 \subsubsection{Inputs}\label{inputs-scheduleweekrule}
 
 \paragraph{Field: Name}\label{field-name-scheduleweekrule}
 
-This field should contain a unique (within all RuleSchedules) designation for this schedule.
+This field should contain a name that is unique among all Schedule:Week:Rule objects.
 
 \paragraph{Field: Schedule Year Rules Name}\label{field-schedule-year-rules-name-scheduleweekrule}
 
@@ -492,13 +495,14 @@ This field should reference the appropriate parent \hyperref[scheduleyearrules]{
 
 \paragraph{Field: Rule Priority Order}\label{field-rule-priority-order-scheduleweekrule}
 
-This numeric field determines the ``priority'' for this rule amongst other rules (0 = highest priority).
-For a given schedule year rules object, schedule rules may overlap in terms of their applicable dates; in this case, the rule with the least rule order value is given priority.
-Within a Schedule:Year:Rules, all rule priority order values must be unique.
+This integer field determines the priority of this rule relative to the other rules associated with the same Schedule:Year:Rules object.
+Lower values have higher priority, with 0 representing the highest priority.
+When applicable date ranges overlap, the matching rule with the lowest Rule Priority Order is used for each ordinary day-of-week type.
+Rule Priority Order values must be unique within a Schedule:Year:Rules object; duplicate values are severe input errors.
 
 \paragraph{Field: Day Schedule Name}\label{field-day-schedule-name-scheduleweekrule}
 
-This field is the name of the day schedule (ref. Schedule:Day:Hourly, Schedule:Day:Interval, Schedule:Day:List objects) that is to be used for days when this rule applies.
+This field is the name of the day schedule (ref. Schedule:Day:Constant, Schedule:Day:Hourly, Schedule:Day:Interval, and Schedule:Day:List objects) used when this rule applies.
 
 \paragraph{Field: Apply Sunday}\label{field-apply-sunday-scheduleweekrule}
 
@@ -538,7 +542,8 @@ Default: No.
 \paragraph{Field Set: Start/End Month/Day}
 
 This object is extensible, so sets of the next four numeric fields can be added to the end of this object.
-These fields specify applicable days for this rule.
+Each field set specifies an inclusive date range for this rule.
+If the start date occurs later in the calendar year than the end date, the range wraps across December 31; for example, November 1 through January 31 applies from November 1 through December 31 and from January 1 through January 31.
 For fields of the first set, default values apply; fields for subsequent sets are required to be specified.
 
 \paragraph{Field: Start Month \#}\label{field-start-month-scheduleweekrule}
