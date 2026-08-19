@@ -1546,8 +1546,7 @@ namespace Sched {
             int endPointer = General::OrdinalDay(12, 31, 1);
             WeekSchedule *previousWeekSched = nullptr;
             for (int day = startPointer; day <= endPointer; ++day) {
-                std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules =
-                    GetPrioritizedWeekRuleSchedules(state, Alphas(1), day);
+                std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules = GetPrioritizedWeekRuleSchedules(state, Alphas(1), day);
 
                 // An uncovered leap day inherits Feb 28 after all other days are generated.
                 // Keep generating Feb 29 when a rule explicitly covers it.
