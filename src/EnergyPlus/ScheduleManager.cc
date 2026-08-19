@@ -865,7 +865,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->dayScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->dayScheduleMap.end()) {
+            if (s_sched->dayScheduleMap.find(Alphas(1)) != s_sched->dayScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -920,7 +920,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->dayScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->dayScheduleMap.end()) {
+            if (s_sched->dayScheduleMap.find(Alphas(1)) != s_sched->dayScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -998,7 +998,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->dayScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->dayScheduleMap.end()) {
+            if (s_sched->dayScheduleMap.find(Alphas(1)) != s_sched->dayScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1108,7 +1108,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->weekScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->weekScheduleMap.end()) {
+            if (s_sched->weekScheduleMap.find(Alphas(1)) != s_sched->weekScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1144,14 +1144,14 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->weekRuleScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->weekRuleScheduleMap.end()) {
+            if (s_sched->weekRuleScheduleMap.find(Alphas(1)) != s_sched->weekRuleScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
             }
 
             auto *weekRuleSched = AddWeekRuleSchedule(state, Alphas(1));
-            weekRuleSched->scheduleYearRulesName = Util::makeUPPER(Alphas(2));
+            weekRuleSched->scheduleYearRulesName = Alphas(2);
             weekRuleSched->rulePriorityOrder = Numbers(1);
             auto *daySched = GetDaySchedule(state, Alphas(3));
             if (daySched == nullptr) {
@@ -1284,7 +1284,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->weekScheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->weekScheduleMap.end()) {
+            if (s_sched->weekScheduleMap.find(Alphas(1)) != s_sched->weekScheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1349,7 +1349,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1450,7 +1450,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1459,7 +1459,7 @@ namespace Sched {
             // Validate rule orders, checking for duplicates
             std::vector<Sched::WeekRuleSchedule *> weekRuleSchedules;
             for (Sched::WeekRuleSchedule *weekRuleSchedule : s_sched->weekRuleSchedules) {
-                if (weekRuleSchedule->scheduleYearRulesName == Util::makeUPPER(Alphas(1))) {
+                if (weekRuleSchedule->scheduleYearRulesName == Alphas(1)) {
                     weekRuleSchedules.push_back(weekRuleSchedule);
                 }
             }
@@ -1547,7 +1547,7 @@ namespace Sched {
             WeekSchedule *previousWeekSched = nullptr;
             for (int day = startPointer; day <= endPointer; ++day) {
                 std::vector<Sched::WeekRuleSchedule *> sortedWeekRuleSchedules =
-                    GetPrioritizedWeekRuleSchedules(state, Util::makeUPPER(Alphas(1)), day);
+                    GetPrioritizedWeekRuleSchedules(state, Alphas(1), day);
 
                 // An uncovered leap day inherits Feb 28 after all other days are generated.
                 // Keep generating Feb 29 when a rule explicitly covers it.
@@ -1670,7 +1670,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -1969,7 +1969,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -2354,7 +2354,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -2396,7 +2396,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 ErrorsFound = true;
                 continue;
@@ -2456,7 +2456,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 if (NumExternalInterfaceSchedules >= 1) {
                     ShowContinueError(
@@ -2523,7 +2523,7 @@ namespace Sched {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            if (s_sched->scheduleMap.find(Util::makeUPPER(Alphas(1))) != s_sched->scheduleMap.end()) {
+            if (s_sched->scheduleMap.find(Alphas(1)) != s_sched->scheduleMap.end()) {
                 ShowSevereDuplicateName(state, eoh);
                 if (NumExternalInterfaceSchedules >= 1) {
                     ShowContinueError(
@@ -2941,7 +2941,7 @@ namespace Sched {
         // This function returns the internal pointer to Schedule "ScheduleName".
         auto const &s_sched = state.dataSched;
 
-        auto found = s_sched->scheduleMap.find(Util::makeUPPER(name));
+        auto found = s_sched->scheduleMap.find(name);
         if (found == s_sched->scheduleMap.end()) {
             return nullptr;
         }
@@ -2987,7 +2987,7 @@ namespace Sched {
     {
         auto const &s_sched = state.dataSched;
 
-        auto found = s_sched->weekScheduleMap.find(Util::makeUPPER(name));
+        auto found = s_sched->weekScheduleMap.find(name);
         if (found == s_sched->weekScheduleMap.end()) {
             return nullptr;
         }
@@ -3051,7 +3051,7 @@ namespace Sched {
         // This function returns the internal pointer to Schedule "ScheduleName".
         auto const &s_sched = state.dataSched;
 
-        auto found = s_sched->dayScheduleMap.find(Util::makeUPPER(name));
+        auto found = s_sched->dayScheduleMap.find(name);
         if (found == s_sched->dayScheduleMap.end()) {
             return nullptr;
         }
