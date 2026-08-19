@@ -92,7 +92,7 @@ The thermal absorptance field in the Material input syntax represents the fracti
 
 The solar absorptance field in the Material input syntax represents the fraction of incident solar radiation that is absorbed by the material. This particular field is for the exterior side or outside face. Solar radiation (0.3 to 2.537 $\mu{}m$) includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident solar radiation absorbed by various surfaces and affects the surface heat balances. If solar reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7. This field will also set the solar absorptance at the inside face or interior side of the material when the optional Solar Absorptance Inside Face field below is not set.
 
-\paragraph{Field: Visible Absorptance Outside Face}\label{field-visible-absorptance}
+\paragraph{Field: Visible Absorptance}\label{field-visible-absorptance}
 
 The visible absorptance field in the Material input syntax represents the fraction of incident visible wavelength radiation that is absorbed by the material. This particular field is for the exterior side or outside face. Visible wavelength radiation (0.37 to 0.78 $\mu{}m$ weighted by photopic response) is slightly different than solar radiation in that the visible band of wavelengths is much more narrow while solar radiation includes the visible spectrum as well as infrared and ultraviolet wavelengths. This parameter is used when calculating the amount of incident visible radiation absorbed by various surfaces and affects the surface heat balances as well as the daylighting calculations. If visible reflectance (or reflectivity) data is available, then absorptance is equal to 1.0 minus reflectance (for opaque materials). Values for this field must be between 0.0 and 1.0. The default value for this field is 0.7. This field will also set the visible absorptance at the inside face or interior side of the material when the optional Visible Absorptance Inside Face field below is not set.
 
@@ -118,9 +118,9 @@ Material,
   1.245296,                   !- Conductivity {W/M*K}
   2082.400,                   !- Density {Kg/M**3}
   920.4800,                   !- Specific Heat {J/Kg*K}
-  0.9000000,                  !- Thermal Absorptance Outside Face
-  0.9300000,                  !- Solar Absorptance Outside Face
-  0.9300000;                  !- Visible Absorptance Outside Face
+  0.9000000,                  !- Thermal Absorptance
+  0.9300000,                  !- Solar Absorptance
+  0.9300000;                  !- Visible Absorptance
 \end{lstlisting}
 
 In the example above, because the inside face absorptance values are not specified separately, those values will default to the respective outside face absorptance values entered by the user.
@@ -133,9 +133,9 @@ Material,
   2.5,                         !- Conductivity {W/M*K}
   1500.0,                      !- Density {Kg/M**3}
   888.8,                       !- Specific Heat {J/Kg*K}
-  0.9000000,                   !- Thermal Absorptance Outside Face
-  0.7000000,                   !- Solar Absorptance Outside Face
-  0.7000000,                   !- Visible Absorptance Outside Face
+  0.9000000,                   !- Thermal Absorptance
+  0.7000000,                   !- Solar Absorptance
+  0.7000000,                   !- Visible Absorptance
   0.6000000,                   !- Thermal Absorptance Inside Face
   0.4500000,                   !- Solar Absorptance Inside Face
   0.4500000;                   !- Visible Absorptance Inside Face
@@ -192,9 +192,9 @@ Material:NoMass,
   R13LAYER,      !- Material Name
   Rough,         !- Roughness
   2.290965,      !- Resistance {M**2K/W}
-  0.9000000,     !- Thermal Absorptance Outside Face
-  0.7500000,     !- Solar Absorptance Outside Face
-  0.7500000;     !- Visible Absorptance Outside Face
+  0.9000000,     !- Thermal Absorptance
+  0.7500000,     !- Solar Absorptance
+  0.7500000;     !- Visible Absorptance
 \end{lstlisting}
 
 In the example above, because the inside face absorptance values are not specified separately, those values will default to the respective outside face absorptance values entered by the user.
@@ -204,9 +204,9 @@ Material:NoMass,
   R13LAYER with diff abs, !- Material Name
   Rough,                  !- Roughness
   2.290965,               !- Resistance {M**2K/W}
-  0.9000000,              !- Thermal Absorptance Outside Face
-  0.7500000,              !- Solar Absorptance Outside Face
-  0.7500000,              !- Visible Absorptance Outside Face
+  0.9000000,              !- Thermal Absorptance
+  0.7500000,              !- Solar Absorptance
+  0.7500000,              !- Visible Absorptance
   0.2000000,              !- Thermal Absorptance Inside Face
   0.2000000,              !- Solar Absorptance Inside Face
   0.2000000;              !- Visible Absorptance Inside Face
