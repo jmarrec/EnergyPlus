@@ -1180,7 +1180,7 @@ TEST_F(EnergyPlusFixture, Schedule_NamesAreCaseInsensitive)
     compare_err_stream(expected_error);
 }
 
-TEST_F(EnergyPlusFixture, Schedule_GettersAcceptMixedCaseNames)
+TEST_F(EnergyPlusFixture, Schedule_GettersDoNotAcceptMixedCaseNames)
 {
     auto *constantSchedule = Sched::AddScheduleConstant(*state, "Mixed Constant Schedule", 0.5);
     auto *schedule = Sched::AddScheduleDetailed(*state, "Mixed Schedule");
@@ -1190,23 +1190,31 @@ TEST_F(EnergyPlusFixture, Schedule_GettersAcceptMixedCaseNames)
     auto *scheduleType = new Sched::ScheduleType;
     scheduleType->Name = "Mixed Schedule Type";
     state->dataSched->scheduleTypes.push_back(scheduleType);
-    weekRuleSchedule->scheduleYearRulesName = "MIXED SCHEDULE";
+    weekRuleSchedule->scheduleYearRulesName = "Mixed Rules Schedule";
     weekRuleSchedule->rulePriorityOrder = 0;
     weekRuleSchedule->specificDays = {1};
 
-    EXPECT_EQ(constantSchedule, Sched::GetSchedule(*state, "mixed constant schedule"));
-    EXPECT_EQ(schedule, Sched::GetSchedule(*state, "mixed schedule"));
-    EXPECT_EQ(constantSchedule->Num, Sched::GetScheduleNum(*state, "mixed constant schedule"));
-    EXPECT_EQ(schedule->Num, Sched::GetScheduleNum(*state, "mixed schedule"));
-    EXPECT_EQ(daySchedule, Sched::GetDaySchedule(*state, "mixed day schedule"));
-    EXPECT_EQ(daySchedule->Num, Sched::GetDayScheduleNum(*state, "mixed day schedule"));
-    EXPECT_EQ(weekSchedule, Sched::GetWeekSchedule(*state, "mixed week schedule"));
-    EXPECT_EQ(weekSchedule->Num, Sched::GetWeekScheduleNum(*state, "mixed week schedule"));
-    EXPECT_EQ(Sched::GetScheduleAlwaysOff(*state)->Name, "Constant-0.0");
-    EXPECT_EQ(Sched::GetScheduleAlwaysOn(*state)->Name, "Constant-1.0");
+    EXPECT_EQ(nullptr, Sched::GetSchedule(*state, "mixed constant schedule"));
+    EXPECT_EQ(constantSchedule, Sched::GetSchedule(*state, "MIXED CONSTANT SCHEDULE"));
+    EXPECT_EQ(nullptr, Sched::GetSchedule(*state, "mixed schedule"));
+    EXPECT_EQ(schedule, Sched::GetSchedule(*state, "MIXED SCHEDULE"));
+    EXPECT_EQ(-1, Sched::GetScheduleNum(*state, "mixed constant schedule"));
+    EXPECT_EQ(constantSchedule->Num, Sched::GetScheduleNum(*state, "MIXED CONSTANT SCHEDULE"));
+    EXPECT_EQ(-1, Sched::GetScheduleNum(*state, "mixed schedule"));
+    EXPECT_EQ(schedule->Num, Sched::GetScheduleNum(*state, "MIXED SCHEDULE"));
+    EXPECT_EQ(nullptr, Sched::GetDaySchedule(*state, "mixed day schedule"));
+    EXPECT_EQ(daySchedule, Sched::GetDaySchedule(*state, "MIXED DAY SCHEDULE"));
+    EXPECT_EQ(-1, Sched::GetDayScheduleNum(*state, "mixed day schedule"));
+    EXPECT_EQ(daySchedule->Num, Sched::GetDayScheduleNum(*state, "MIXED DAY SCHEDULE"));
+    EXPECT_EQ(nullptr, Sched::GetWeekSchedule(*state, "mixed week schedule"));
+    EXPECT_EQ(weekSchedule, Sched::GetWeekSchedule(*state, "MIXED WEEK SCHEDULE"));
+    EXPECT_EQ(-1, Sched::GetWeekScheduleNum(*state, "mixed week schedule"));
+    EXPECT_EQ(weekSchedule->Num, Sched::GetWeekScheduleNum(*state, "MIXED WEEK SCHEDULE"));
+    EXPECT_EQ(-1, Sched::GetWeekScheduleNum(*state, "mixed week schedule"));
+    EXPECT_EQ(-1, Sched::GetScheduleTypeNum(*state, "mixed schedule type"));
     EXPECT_EQ(0, Sched::GetScheduleTypeNum(*state, "Mixed Schedule Type"));
-    EXPECT_EQ(1u, Sched::GetPrioritizedWeekRuleSchedules(*state, "MIXED SCHEDULE", 1).size());
-    EXPECT_EQ(weekRuleSchedule->Name, "Mixed Week Rule Schedule");
+    EXPECT_EQ(0u, Sched::GetPrioritizedWeekRuleSchedules(*state, "mixed rules schedule", 1).size());
+    EXPECT_EQ(1u, Sched::GetPrioritizedWeekRuleSchedules(*state, "Mixed Rules Schedule", 1).size());
 }
 
 TEST_F(EnergyPlusFixture, Schedule_GetCurrentScheduleValue_DST_SouthernHemisphere)
