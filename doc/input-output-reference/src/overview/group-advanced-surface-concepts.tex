@@ -2874,11 +2874,13 @@ ZoneProperty:UserViewFactors:BySurfaceName,Lshaped Zone,
 
 \subsection{ZoneMRTCalculation}\label{zonemrtcalculation}
 
-EnergyPlus has the ability to analyze various MRT calculations via the \hyperref[people]{People} statement. In the People input object, the user can select to have the standard MRT calculation impact the thermal comfort model or either a surface weighted or angle factor calculation (see \hyperref[field-mean-radiant-temperature-calculation-type]{Mean Radiant Temperature Calculation Type}) define the MRT for the thermal comfort model(s) chosen. Since it is possible to have multiple People statements per zone and each one can have a different MRT calculation, it might be desirable to have the zone MRT be based on one or more of these People statement defined MRT values. This would impact both the MRT of the zone as well as the operative temperature of the zone and thus would affect how systems that are controlled on either one of these temperatures to function. It is important to note that any of the People objects referenced in the ZoneMRTCalculation input object must select a thermal comfort model in order for the specific MRT calculation type in that People object to activate the calculation type.  Moreover, only a single ZoneMRTCalculation object can be linked to each unique zone.
+EnergyPlus can calculate different mean radiant temperatures (MRTs) for \hyperref[people]{People} objects. The \hyperref[field-mean-radiant-temperature-calculation-type]{Mean Radiant Temperature Calculation Type} field can select the standard enclosure-averaged MRT, a surface-weighted MRT, or an angle-factor MRT. ZoneMRTCalculation combines one or more of these People MRT values to define the MRT for one zone. This changes the zone MRT and zone operative temperature used for reporting and controls; it does not perform a separate space MRT calculation.
 
-The ZoneMRTCalculation input object defines the relative weighting or contribution each people-based MRT contributes to the calculated zone MRT. It contains a zone name that refers to the zone in question and then continues with pairs of parameters that reference a specific people statement and the relative weighting factor that each of these statemnts contributes to the zone MRT. This list is extensible and can be as short as a single pair. All people objects referenced in this extensible list must be in the same zone.
+Only one ZoneMRTCalculation object is allowed for each zone. Each referenced People instance must belong to that zone, although the People object may be assigned directly to the zone or to an explicitly defined space within the zone. Referencing a space-assigned People object uses that People object's MRT calculation as a contribution to the enclosing zone MRT; it does not calculate or store an MRT for the space.
 
-The sum of all weighting factors entered through a single ZoneMRTCalculation instance must be between 0.0 and 1.0. Error messages will be produced when this principle is violated. If the sum of all of the weighting factors is less than 1.0, the remaining portion will be based on the standard zone MRT that is an air-emissivity weighted average of all of the surface temperatures in the zone. A warning message is produced to note the user that the sum of all the weighting factors is less thann 1.0 simply to alert the user in case this was not the intent. The equation for this calculation is as follows:
+The ZoneMRTCalculation input object contains a zone name followed by an extensible list of People names and MRT weighting factors. Each weighting factor is a temperature weighting factor only. Referencing a People object here does not add occupants or duplicate that object's internal heat gains.
+
+The sum of the weighting factors must be from 0.0 through 1.0. If the sum is less than 1.0, the remaining portion uses the standard zone MRT, which is an area-emissivity-weighted average of the zone surface temperatures. EnergyPlus issues a warning when the sum is less than 1.0 to make this fallback explicit. If the sum is greater than 1.0, EnergyPlus issues a severe error and resets all People weighting factors for this object to zero. The calculation is:
 
 \begin{align}
 \begin{split}
@@ -2889,19 +2891,19 @@ ZoneMRT = (fracPeople1)(People1MRT) + (fracPeople2)(People2MRT) + ... \\
 
 \subsubsection{Inputs}\label{inputs-zonemrtcalculation}
 
-This input fields for this object are defined below.
+The input fields for this object are defined below.
 
 \paragraph{Field: Zone Name}\label{field-zonemrtcalculation-zonename}
 
-This field specifies the name of the zone for which the MRT calculation details are being defined.  This must be a valid zone name that is defined elsewhere in this input file.
+This field specifies the zone whose MRT will be calculated. It must name a Zone defined in the input file. Space and SpaceList names are not supported.
 
 \paragraph{Field: Pair \textless{}\#\textgreater{} People Statement Name}\label{field-zonemrtcalculation-peoplenameX}
 
-This field specifies the name of the People statement that will contribute to the zone MRT calculation. In conjunction with the next parameter, it defines a fraction of the MRT calculation value for the zone named in the previous input. Each People statement referenced must be used in the zone referenced in the Zone Name field above.
+This field specifies the People MRT that will contribute to the zone MRT calculation. In conjunction with the next field, it defines a fraction of the MRT for the zone named above. Every referenced People instance must belong to that zone. A People object assigned directly to an explicitly defined space is supported when that space belongs to the named zone, and it retains the name entered in the input file.
 
-The People statement name listed here must match the actual name provided in the People statement referenced by this field. For People objects that reference a specific zone description without spaces or directly reference a space, this is simply the name of a valid People object in the input file. However, in the case where a People statement is defined for a zone that includes multiple spaces, EnergyPlus internally expands the People statement and alters the People name. For example, if a People statement is named Zone X People, is defined in Zone X, and Zone X contains two spaces called Space X1 and Space X2, the People statement internally is expanded to create two new People objects called "Space X1 Zone X People" and "Space X2 Zone X People" for Space X1 and Space X2, respectively. These expanded names are the names that can be referenced in this input field. "Zone X People" is no longer a valid name on its own due to this expansion for spaces.
+When a People object is assigned to a zone that contains multiple spaces, EnergyPlus expands it into one People instance for each applicable space and changes each instance name to \texttt{<Space Name> <People Name>}. For example, a People object named \texttt{Zone X People} assigned to \texttt{Zone X}, which contains \texttt{Space X1} and \texttt{Space X2}, produces instances named \texttt{Space X1 Zone X People} and \texttt{Space X2 Zone X People}. People objects assigned to a ZoneList or SpaceList are expanded in the same way. ZoneMRTCalculation must reference one of these expanded instance names; the original People input name is not supported after expansion. People instances associated with automatically generated remainder spaces are also not supported.
 
-In addition, it is important to note that any People object referenced here MUST include at least one \hyperref[field-thermal-comfort-model-type-up-to-7-allowed]{Thermal Comfort model} selection in the People object.
+Each referenced People object must select at least one \hyperref[field-thermal-comfort-model-type-up-to-7-allowed]{Thermal Comfort Model Type}. The selected model activates calculation of that People object's MRT method. Selecting more than one model does not change the MRT value used by ZoneMRTCalculation.
 
 \paragraph{Field: Pair \textless{}\#\textgreater{} MRT Weighting Factor}\label{field-zonemrtcalculation-weightingfactorX}
 
@@ -2920,9 +2922,9 @@ ZoneMRTCalculation,
   0.2;
 \end{lstlisting}
 
-where each of these People names are different People definitions that are all assigned to the zone named West Wing Zone that does not have any spaces associated with it.
+In this example, each People object is assigned to \texttt{West Wing Zone}, and the zone does not contain multiple spaces.
 
-For the case where West Wing Zone is a zone with a single People object named West Wing People associated with it but contains spaces named Oval Office, Staff Office, and Conference Room, the following object would be valid:
+If \texttt{West Wing People} is assigned to \texttt{West Wing Zone} and EnergyPlus expands it across the explicitly defined spaces \texttt{Oval Office}, \texttt{Staff Office}, and \texttt{Conference Room}, the following object is valid:
 
 \begin{lstlisting}
 ZoneMRTCalculation,

@@ -3408,6 +3408,132 @@ TEST_F(EnergyPlusFixture, ZoneMRTCalculation_GetInputTest)
     EXPECT_NEAR(mrt3.zoneMRTPeople(2).fracMRT, 0.4, tolerance);
 }
 
+TEST_F(EnergyPlusFixture, ZoneMRTCalculation_UnsupportedInputDiagnostics)
+{
+    std::string const idf_objects = delimited_string({
+        "  People,",
+        "    Zone People,",
+        "    Zone One,",
+        "    Always On,",
+        "    People,",
+        "    1.0,",
+        "    ,",
+        "    ,",
+        "    0.3,",
+        "    ,",
+        "    Activity;",
+
+        "  People,",
+        "    Remainder People,",
+        "    Zone Two,",
+        "    Always On,",
+        "    People,",
+        "    1.0,",
+        "    ,",
+        "    ,",
+        "    0.3,",
+        "    ,",
+        "    Activity;",
+
+        "  People,",
+        "    No Comfort People,",
+        "    Zone Three,",
+        "    Always On,",
+        "    People,",
+        "    1.0,",
+        "    ,",
+        "    ,",
+        "    0.3,",
+        "    ,",
+        "    Activity;",
+
+        "  People,",
+        "    Valid People,",
+        "    Space One,",
+        "    Always On,",
+        "    People,",
+        "    1.0,",
+        "    ,",
+        "    ,",
+        "    0.3,",
+        "    ,",
+        "    Activity;",
+
+        "  ZoneMRTCalculation,",
+        "    Zone One,",
+        "    Zone People,",
+        "    1.0;",
+
+        "  ZoneMRTCalculation,",
+        "    Zone Two,",
+        "    Zone Two-Remainder Remainder People,",
+        "    1.0;",
+
+        "  ZoneMRTCalculation,",
+        "    Zone Three,",
+        "    No Comfort People,",
+        "    1.0;",
+
+        "  ZoneMRTCalculation,",
+        "    Zone Four,",
+        "    Valid People,",
+        "    1.0;",
+
+        "  ZoneMRTCalculation,",
+        "    Space One,",
+        "    Valid People,",
+        "    1.0;",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    state->dataGlobal->NumOfZones = 4;
+    state->dataHeatBal->Zone.allocate(4);
+    state->dataHeatBal->Zone(1).Name = "ZONE ONE";
+    state->dataHeatBal->Zone(2).Name = "ZONE TWO";
+    state->dataHeatBal->Zone(3).Name = "ZONE THREE";
+    state->dataHeatBal->Zone(4).Name = "ZONE FOUR";
+
+    state->dataGlobal->numSpaces = 1;
+    state->dataHeatBal->space.allocate(1);
+    state->dataHeatBal->space(1).Name = "ZONE TWO-REMAINDER";
+    state->dataHeatBal->space(1).zoneNum = 2;
+    state->dataHeatBal->space(1).isRemainderSpace = true;
+
+    state->dataHeatBal->TotPeople = 4;
+    state->dataHeatBal->People.allocate(4);
+    state->dataHeatBal->People(1).Name = "SPACE ONE ZONE PEOPLE";
+    state->dataHeatBal->People(1).ZonePtr = 1;
+    state->dataHeatBal->People(1).MRTCalcType = DataHeatBalance::CalcMRT::EnclosureAveraged;
+    state->dataHeatBal->People(2).Name = "ZONE TWO-REMAINDER REMAINDER PEOPLE";
+    state->dataHeatBal->People(2).ZonePtr = 2;
+    state->dataHeatBal->People(2).spaceIndex = 1;
+    state->dataHeatBal->People(2).MRTCalcType = DataHeatBalance::CalcMRT::EnclosureAveraged;
+    state->dataHeatBal->People(3).Name = "NO COMFORT PEOPLE";
+    state->dataHeatBal->People(3).ZonePtr = 3;
+    state->dataHeatBal->People(4).Name = "VALID PEOPLE";
+    state->dataHeatBal->People(4).ZonePtr = 1;
+    state->dataHeatBal->People(4).MRTCalcType = DataHeatBalance::CalcMRT::EnclosureAveraged;
+
+    EXPECT_THROW(HeatBalanceManager::getZoneMRTCalculationData(*state), FatalError);
+
+    EXPECT_TRUE(compare_err_stream_substring(
+        "ZoneMRTCalculation=\"ZONE ONE\" references People=\"ZONE PEOPLE\", but that input object was expanded across multiple Spaces.", false));
+    EXPECT_TRUE(
+        compare_err_stream_substring("The original People input name is not supported after expansion into separate People instances.", false));
+    EXPECT_TRUE(compare_err_stream_substring(
+        "ZoneMRTCalculation=\"ZONE TWO\" references People=\"ZONE TWO-REMAINDER REMAINDER PEOPLE\" in internally generated remainder "
+        "Space=\"ZONE TWO-REMAINDER\".",
+        false));
+    EXPECT_TRUE(compare_err_stream_substring(
+        "ZoneMRTCalculation=\"ZONE THREE\" references People=\"NO COMFORT PEOPLE\", which does not select a Thermal Comfort Model Type.", false));
+    EXPECT_TRUE(compare_err_stream_substring("ZoneMRTCalculation=\"ZONE FOUR\" references People=\"VALID PEOPLE\" in Zone=\"ZONE ONE\".", false));
+    EXPECT_TRUE(compare_err_stream_substring("ZoneMRTCalculation=\"SPACE ONE\" does not reference a Zone defined in this input file.", false));
+    EXPECT_FALSE(compare_err_stream_substring("weighting factors that sum up to less than 1.0", false, false));
+    EXPECT_TRUE(compare_err_stream_substring("The Zone Name field accepts a Zone name only; Space and SpaceList names are not supported."));
+}
+
 TEST_F(EnergyPlusFixture, ZoneMRTCalculation_CalculationTest)
 {
     // Testing of Calculation (calcUserZoneMRT) for Implementation of ZoneMRTCalculation feature (#11392)
