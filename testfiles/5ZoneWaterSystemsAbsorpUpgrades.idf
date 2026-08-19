@@ -2639,7 +2639,6 @@
     CLOTHING_SCH,            !- Clothing Insulation Schedule Name
     AIR_VELO_SCH,            !- Air Velocity Schedule Name
     FANGER;                  !- Thermal Comfort Model 1 Type
-
   Lights,
     SPACE1-1 Lights 1,       !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
@@ -6175,4 +6174,3 @@
   Output:Meter:MeterFileOnly,NaturalGas:Facility,runperiod;
 
   Output:Meter:MeterFileOnly,NaturalGas:Plant,runperiod;
-

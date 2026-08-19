@@ -847,11 +847,11 @@ The name of a Curve or a Table:Lookup object describing the relationship between
 
 \paragraph{Field: Solar Absorptance Schedule Name}\label{field-solar-absorptance-schedule-name}
 
-TThe name of a Schedule object that overwrites the material solar absorptance at the outside face or exterior side. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
+The name of a Schedule object that overwrites the material solar absorptance at the outside face or exterior side. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
 
 \paragraph{Field: Control Signal Inside Face}\label{field-control-signal-inside-face}
 
-For the inside face or interior side of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is "Scheduled", then a schedule needs to be specified in "Thermal Absorptance Schedule Name" or "Solar Absorptance Schedule Name". The schedule value will override the material absorptance value. If the control signal is not "Scheduled", then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in "Thermal Absorptance Function Name" or "Solar Absorptance Function Name". If not specified, the control signal will be assumed to be surface temperature.
+For the inside face or interior side of the material, the control signal can be one of the following: surface temperature, surface received solar radiation, zone heating/cooling mode, or a schedule. If the control signal is "Scheduled", then a schedule needs to be specified in "Thermal Absorptance Schedule Name Inside Face" or "Solar Absorptance Schedule Name Inside Face". The schedule value will override the material absorptance value. If the control signal is not "Scheduled", then the control signal value at the target surface or zone will decide the absorptance, based on the function referenced in "Thermal Absorptance Function Name Inside Face" or "Solar Absorptance Function Name Inside Face". If this field is not specified, the inside-face control signal and its associated functions or schedules default to the outside-face settings.
 
 \paragraph{Field: Thermal Absorptance Function Name Inside Face}\label{field-thermal-absorptance-function-name-inside-face}
 
@@ -867,7 +867,7 @@ The name of a Curve or a Table:Lookup object describing the relationship between
 
 \paragraph{Field: Solar Absorptance Schedule Name Inside Face}\label{field-solar-absorptance-schedule-name-inside-face}
 
-TThe name of a Schedule object that overwrites the material solar absorptance at the inside face or interior side. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
+The name of a Schedule object that overwrites the material solar absorptance at the inside face or interior side. If neither this field or the previous field are defined, then the solar absorptance is assumed to be constant.
 
 Here are two IDF examples of this object:
 
