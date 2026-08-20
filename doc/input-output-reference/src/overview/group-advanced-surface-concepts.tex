@@ -2909,9 +2909,88 @@ Each referenced People object must select at least one \hyperref[field-thermal-c
 
 This decimal fraction defines the contribution of the MRT calculated for the People statement referenced by its input pair in the previous field to the overall zone MRT.  The value of this parameter must be between 0.0 and 1.0.  Note that the sum of all weighting factors for all People statements referenced in these input field pairs must be between 0.0 and 1.0.  When the sum of the weighting factors is less than 1.0, the remaining portion of the MRT calculation comes from the standard area-emissivity weighted calculation of MRT for the zone.
 
-This object is extensible, so additional pairs of these last two fields of this type can be added to the end of this object. An example of this object is:
+This object is extensible, so additional pairs of these last two fields of this type can be added to the end of this object.  Below are several examples of how this input object would work under different scenarios in EnergyPlus.
+
+In this first example, there is a Zone with three People objects associated with it. An example of how the ZoneMRTCalculation object and associated objects might be define is:
 
 \begin{lstlisting}
+Zone,
+  West Wing Zone,          !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  3.4,                     !- Ceiling Height {m}
+  340.0;                   !- Volume {m3}
+  
+People,
+    West Wing Office People, !- Name
+    West Wing Zone,        !- Zone or ZoneList or Space or SpaceList Name
+    OccSched               !- Number of People Schedule Name
+    people,                !- Number of People Calculation Method
+    30,                    !- Number of People
+    ,                      !- People per Floor Area {person/m2}
+    ,                      !- Floor Area per Person {m2/person}
+    0.3,                   !- Fraction Radiant
+    0.55,                  !- Sensible Heat Fraction
+    ActSched,              !- Activity Level Schedule Name
+    3.82E-8,               !- Carbon Dioxide Generation Rate {m3/s-W}
+    ,                      !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged,     !- Mean Radiant Temperature Calculation Type
+    ,                      !- Surface Name/Angle Factor List Name
+    WorkEffSched,          !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                      !- Clothing Insulation Calculation Method Schedule Name
+    ClothingSched,         !- Clothing Insulation Schedule Name
+    AirVelSched,           !- Air Velocity Schedule Name
+    FANGER;                !- Thermal Comfort Model 1 Type
+
+People,
+    West Wing Service Center People, !- Name
+    West Wing Zone,        !- Zone or ZoneList or Space or SpaceList Name
+    OccSched               !- Number of People Schedule Name
+    people,                !- Number of People Calculation Method
+    10,                    !- Number of People
+    ,                      !- People per Floor Area {person/m2}
+    ,                      !- Floor Area per Person {m2/person}
+    0.3,                   !- Fraction Radiant
+    0.55,                  !- Sensible Heat Fraction
+    ActSched,              !- Activity Level Schedule Name
+    3.82E-8,               !- Carbon Dioxide Generation Rate {m3/s-W}
+    ,                      !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged,     !- Mean Radiant Temperature Calculation Type
+    ,                      !- Surface Name/Angle Factor List Name
+    WorkEffSched,          !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                      !- Clothing Insulation Calculation Method Schedule Name
+    ClothingSched,         !- Clothing Insulation Schedule Name
+    AirVelSched,           !- Air Velocity Schedule Name
+    FANGER;                !- Thermal Comfort Model 1 Type
+
+People,
+    West Wing Reception People, !- Name
+    West Wing Zone,        !- Zone or ZoneList or Space or SpaceList Name
+    OccSched               !- Number of People Schedule Name
+    people,                !- Number of People Calculation Method
+    5,                     !- Number of People
+    ,                      !- People per Floor Area {person/m2}
+    ,                      !- Floor Area per Person {m2/person}
+    0.3,                   !- Fraction Radiant
+    0.55,                  !- Sensible Heat Fraction
+    ActSched,              !- Activity Level Schedule Name
+    3.82E-8,               !- Carbon Dioxide Generation Rate {m3/s-W}
+    ,                      !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged,     !- Mean Radiant Temperature Calculation Type
+    ,                      !- Surface Name/Angle Factor List Name
+    WorkEffSched,          !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                      !- Clothing Insulation Calculation Method Schedule Name
+    ClothingSched,         !- Clothing Insulation Schedule Name
+    AirVelSched,           !- Air Velocity Schedule Name
+    FANGER;                !- Thermal Comfort Model 1 Type
+
 ZoneMRTCalculation,
   West Wing Zone,                   !- Zone Name
   West Wing Office People,          !- People 1 Name
@@ -2922,11 +3001,68 @@ ZoneMRTCalculation,
   0.2;
 \end{lstlisting}
 
-In this example, each People object is assigned to \texttt{West Wing Zone}, and the zone does not contain multiple spaces.
+In this example, all three People objects (\texttt{West Wing Office People}, \texttt{West Wing Service Center People}, and \texttt{West Wing Reception People}) are assigned directly to \texttt{West Wing Zone}, and the zone does not contain multiple spaces.
 
-If \texttt{West Wing People} is assigned to \texttt{West Wing Zone} and EnergyPlus expands it across the explicitly defined spaces \texttt{Oval Office}, \texttt{Staff Office}, and \texttt{Conference Room}, the following object is valid:
+If \texttt{West Wing People} is the name of a People statement and is assigned to the Zone named \texttt{West Wing Zone} that contains the explicitly defined spaces \texttt{Oval Office}, \texttt{Staff Office}, and \texttt{Conference Room}, the original \texttt{West Wing People} would be split internally into three new People objects with the names that contain the Space name followed by the original people name.  This means that \texttt{West Wing People} would be replaced inside EnergyPlus by three People objects with the names \texttt{Oval Office West Wing People}, \texttt{Staff Office West Wing People}, and \texttt{Conference Room West Wing People}.  In this case, an example of the input would include the following objects:
 
 \begin{lstlisting}
+Zone,
+  West Wing Zone,          !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  3.4,                     !- Ceiling Height {m}
+  340.0;                   !- Volume {m3}
+  
+Space,
+  Oval Office,             !- Name
+  West Wing Zone,          !- Zone Name
+  autocalculate,           !- Ceiling Height {m}
+  autocalculate,           !- Volume {m3}
+  ,                        !- Floor Area {m2}
+  Office;                  !- Space Type
+
+Space,
+  Staff Office,            !- Name
+  West Wing Zone,          !- Zone Name
+  autocalculate,           !- Ceiling Height {m}
+  autocalculate,           !- Volume {m3}
+  ,                        !- Floor Area {m2}
+  Office;                  !- Space Type
+
+Space,
+  Conference Room,         !- Name
+  West Wing Zone,          !- Zone Name
+  autocalculate,           !- Ceiling Height {m}
+  autocalculate,           !- Volume {m3}
+  ,                        !- Floor Area {m2}
+  Conference;              !- Space Type
+
+People,
+    West Wing People,      !- Name
+    West Wing Zone,        !- Zone or ZoneList or Space or SpaceList Name
+    OccSched               !- Number of People Schedule Name
+    people,                !- Number of People Calculation Method
+    30,                    !- Number of People
+    ,                      !- People per Floor Area {person/m2}
+    ,                      !- Floor Area per Person {m2/person}
+    0.3,                   !- Fraction Radiant
+    0.55,                  !- Sensible Heat Fraction
+    ActSched,              !- Activity Level Schedule Name
+    3.82E-8,               !- Carbon Dioxide Generation Rate {m3/s-W}
+    ,                      !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged,     !- Mean Radiant Temperature Calculation Type
+    ,                      !- Surface Name/Angle Factor List Name
+    WorkEffSched,          !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+    ,                      !- Clothing Insulation Calculation Method Schedule Name
+    ClothingSched,         !- Clothing Insulation Schedule Name
+    AirVelSched,           !- Air Velocity Schedule Name
+    FANGER;                !- Thermal Comfort Model 1 Type
+
 ZoneMRTCalculation,
   West Wing Zone,                   !- Zone Name
   Oval Office West Wing People,     !- People 1 Name
@@ -2934,5 +3070,87 @@ ZoneMRTCalculation,
   Staff Office West Wing People,    !- People 2 Name
   0.4,
   Conference Room West Wing People,  !- People 3 Name
+  0.2;
+\end{lstlisting}
+
+Finally, in a case where a the zone \texttt{West Wing Zone} contains two spaces, \texttt{Staff Office} and \\texttt{Conference Room}, that each have a People statement associated with it, \texttt{Staff Office People} and \texttt{Conference Room People}, respectively, the ZoneMRTCalculation fields would refer directly to these Space level People objects as shown below:
+
+\begin{lstlisting}
+Zone,
+  West Wing Zone,          !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  3.4,                     !- Ceiling Height {m}
+  340.0;                   !- Volume {m3}
+  
+Space,
+  Staff Office,            !- Name
+  West Wing Zone,          !- Zone Name
+  autocalculate,           !- Ceiling Height {m}
+  autocalculate,           !- Volume {m3}
+  ,                        !- Floor Area {m2}
+  Office;                  !- Space Type
+
+Space,
+  Conference Room,         !- Name
+  West Wing Zone,          !- Zone Name
+  autocalculate,           !- Ceiling Height {m}
+  autocalculate,           !- Volume {m3}
+  ,                        !- Floor Area {m2}
+  Conference;              !- Space Type
+  
+People,
+  Staff Office People,   !- Name
+  Staff Office,          !- Zone or ZoneList or Space or SpaceList Name
+  OccSched               !- Number of People Schedule Name
+  people,                !- Number of People Calculation Method
+  20,                    !- Number of People
+  ,                      !- People per Floor Area {person/m2}
+  ,                      !- Floor Area per Person {m2/person}
+  0.3,                   !- Fraction Radiant
+  0.55,                  !- Sensible Heat Fraction
+  ActSched,              !- Activity Level Schedule Name
+  3.82E-8,               !- Carbon Dioxide Generation Rate {m3/s-W}
+  ,                      !- Enable ASHRAE 55 Comfort Warnings
+  EnclosureAveraged,     !- Mean Radiant Temperature Calculation Type
+  ,                      !- Surface Name/Angle Factor List Name
+  WorkEffSched,          !- Work Efficiency Schedule Name
+  ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+  ,                      !- Clothing Insulation Calculation Method Schedule Name
+  ClothingSched,         !- Clothing Insulation Schedule Name
+  AirVelSched,           !- Air Velocity Schedule Name
+  FANGER;                !- Thermal Comfort Model 1 Type
+
+People,
+  Conference Room People, !- Name
+  Conference Room,       !- Zone or ZoneList or Space or SpaceList Name
+  OccSched               !- Number of People Schedule Name
+  people,                !- Number of People Calculation Method
+  10,                    !- Number of People
+  ,                      !- People per Floor Area {person/m2}
+  ,                      !- Floor Area per Person {m2/person}
+  0.3,                   !- Fraction Radiant
+  0.55,                  !- Sensible Heat Fraction
+  ActSched,              !- Activity Level Schedule Name
+  3.82E-8,               !- Carbon Dioxide Generation Rate {m3/s-W}
+  ,                      !- Enable ASHRAE 55 Comfort Warnings
+  EnclosureAveraged,     !- Mean Radiant Temperature Calculation Type
+  ,                      !- Surface Name/Angle Factor List Name
+  WorkEffSched,          !- Work Efficiency Schedule Name
+  ClothingInsulationSchedule,  !- Clothing Insulation Calculation Method
+  ,                      !- Clothing Insulation Calculation Method Schedule Name
+  ClothingSched,         !- Clothing Insulation Schedule Name
+  AirVelSched,           !- Air Velocity Schedule Name
+  FANGER;                !- Thermal Comfort Model 1 Type
+
+ZoneMRTCalculation,
+  West Wing Zone,         !- Zone Name
+  Staff Office People,    !- People 1 Name
+  0.8,
+  Conference Room People, !- People 2 Name
   0.2;
 \end{lstlisting}
