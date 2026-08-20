@@ -2936,6 +2936,8 @@ Zone,Average,Zone Opaque Surface Outside Faces Conduction Heat Loss Rate [W]
 Zone,Sum,Zone Opaque Surface Outside Faces Conduction Heat Gain Energy [J]
 Zone,Sum,Zone Opaque Surface Outside Faces Conduction Heat Loss Energy [J]
 Zone,Average, Surface Inside Face Beam Solar Radiation Heat Gain Rate [W]
+Zone,Average,Surface Thermal Absorptance []
+Zone,Average,Surface Solar Absorptance []
 Zone,Average,Surface Thermal Absorptance Outside Face []
 Zone,Average,Surface Solar Absorptance Outside Face []
 Zone,Average,Surface Thermal Absorptance Inside Face []
@@ -3465,16 +3467,32 @@ These are the power and energy absolute value for the sums of the Opaque Surface
 
 Beam solar radiation from exterior windows absorbed on the inside face of an opaque heat transfer surface. For Solar Distribution = FullInteriorAndExterior, this quantity can be non-zero for both floor and wall surfaces. Otherwise, for Solar Distribution = FullExterior or MinimalShadowing, it can be non-zero only for floor surfaces since in this case all entering beam solar is assumed to fall on the floor. Note that this variable will not be operational (have a real value) unless there are exterior windows in the zone.
 
+\subsubsection{Surface Thermal Absorptance {[}{]}}\label{surface-thermal-absorptance}
+
+The surface thermal absorptance reports the current bulk thermal absorptance for an opaque heat transfer surface. This generic variable is available for a surface when that surface does not use an explicitly defined inside-face thermal absorptance or an active inside-face thermal variable-absorptance control. When the surface uses an inside-face thermal value or control, this generic variable is replaced for that surface by the corresponding Outside Face and Inside Face variables described below.
+
+\subsubsection{Surface Solar Absorptance {[}{]}}\label{surface-solar-absorptance}
+
+The surface solar absorptance reports the current bulk solar absorptance for an opaque heat transfer surface. This generic variable is available for a surface when that surface does not use an explicitly defined inside-face solar absorptance or an active inside-face solar variable-absorptance control. When the surface uses an inside-face solar value or control, this generic variable is replaced for that surface by the corresponding Outside Face and Inside Face variables described below.
+
+The availability of generic or face-specific output variables is determined independently for thermal and solar absorptance. An explicitly entered inside-face value is considered present even when it equals the bulk value. An inside-face value or control defined on a material that is not used as the innermost layer of the surface construction does not change the output variable names for that surface.
+
+The four face-specific variables below are registered as an outside/inside pair for a property only when the surface uses an explicitly defined inside-face value or active inside-face variable-absorptance control for that property.
+
 \subsubsection{Surface Thermal Absorptance Outside Face {[}{]}}\label{surface-thermal-absorptance-outside-face}
+
 The surface thermal absorptance for the outside face reports the actual value of this parameter at the current time for a particular surface.  This value could simply be a constant as defined by the input parameter in the Material description for the outside face of the outermost layer of the construction for this surface.  However, if the user has defined the outermost layer of the construction for this surface to use variable  absorptivity, then this value could change with time as prescribed by the user input.  More information on  absorptivity can be found in the descriptions for \hyperref[material]{Material}, \hyperref[materialnomass]{Material:NoMass}, and \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance}.
 
 \subsubsection{Surface Solar Absorptance Outside Face {[}{]}}\label{surface-solar-absorptance-outside-face}
+
 The surface solar absorptance for the outside face reports the actual value of this parameter at the current time for a particular surface.  This value could simply be a constant as defined by the input parameter in the Material description for the outside face of the outermost of the construction for this surface.  However, if the user has defined the outermost layer of the construction for this surface to use variable  absorptivity, then this value could change with time as prescribed by the user input.  More information on  absorptivity can be found in the descriptions for \hyperref[material]{Material}, \hyperref[materialnomass]{Material:NoMass}, and \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance}.
 
 \subsubsection{Surface Thermal Absorptance Inside Face {[}{]}}\label{surface-thermal-absorptance-inside-face}
+
 The surface thermal absorptance for the inside face reports the actual value of this parameter at the current time for a particular surface.  This value could simply be a constant as defined by the input parameter in the Material description for the inside face of the innermost layer of the construction for this surface.  However, if the user has defined the innermost layer of the construction for this surface to use variable  absorptivity, then this value could change with time as prescribed by the user input.  More information on  absorptivity can be found in the descriptions for \hyperref[material]{Material}, \hyperref[materialnomass]{Material:NoMass}, and \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance}.
 
 \subsubsection{Surface Solar Absorptance Inside Face {[}{]}}\label{surface-solar-absorptance-inside-face}
+
 The surface solar absorptance for the inside face reports the actual value of this parameter at the current time for a particular surface.  This value could simply be a constant as defined by the input parameter in the Material description for the inside face of the innermost layer of the construction for this surface.  However, if the user has defined the innermost layer of the construction for this surface to use variable  absorptivity, then this value could change with time as prescribed by the user input.  More information on  absorptivity can be found in the descriptions for \hyperref[material]{Material}, \hyperref[materialnomass]{Material:NoMass}, and \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance}.
 
 \subsection{Window Output Variables}\label{window-output-variables-1}

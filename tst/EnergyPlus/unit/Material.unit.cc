@@ -502,6 +502,68 @@ TEST_F(EnergyPlusFixture, GetMaterialDataConstructAbsorpTest)
     EXPECT_NEAR(dataCon->Construct(6).InsideAbsorpVis, 0.15, tolerance);
 }
 
+TEST_F(EnergyPlusFixture, GetMaterialDataTracksInsideFaceAbsorptanceInputPresence)
+{
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  Bulk Only,           !- Name",
+        "  Rough,               !- Roughness",
+        "  0.1,                 !- Thickness {m}",
+        "  0.5,                 !- Conductivity {W/m-K}",
+        "  800,                 !- Density {kg/m3}",
+        "  900,                 !- Specific Heat {J/kg-K}",
+        "  0.9,                 !- Thermal Absorptance",
+        "  0.7,                 !- Solar Absorptance",
+        "  0.6;                 !- Visible Absorptance",
+
+        "Material,",
+        "  Equal Thermal,       !- Name",
+        "  Rough,               !- Roughness",
+        "  0.1,                 !- Thickness {m}",
+        "  0.5,                 !- Conductivity {W/m-K}",
+        "  800,                 !- Density {kg/m3}",
+        "  900,                 !- Specific Heat {J/kg-K}",
+        "  0.8,                 !- Thermal Absorptance",
+        "  0.6,                 !- Solar Absorptance",
+        "  0.5,                 !- Visible Absorptance",
+        "  0.8;                 !- Thermal Absorptance Inside Face",
+
+        "Material:NoMass,",
+        "  Equal Solar,         !- Name",
+        "  Rough,               !- Roughness",
+        "  0.5,                 !- Thermal Resistance {m2-K/W}",
+        "  0.85,                !- Thermal Absorptance",
+        "  0.65,                !- Solar Absorptance",
+        "  0.55,                !- Visible Absorptance",
+        "  ,                    !- Thermal Absorptance Inside Face",
+        "  0.65,                !- Solar Absorptance Inside Face",
+        "  0.55;                !- Visible Absorptance Inside Face",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    bool errorsFound = false;
+    Material::GetMaterialData(*state, errorsFound);
+    ASSERT_FALSE(errorsFound);
+
+    auto const *bulkOnly = state->dataMaterial->materials(Material::GetMaterialNum(*state, "BULK ONLY"));
+    EXPECT_FALSE(bulkOnly->hasAbsorpThermalInputIn);
+    EXPECT_FALSE(bulkOnly->hasAbsorpSolarInputIn);
+    EXPECT_FALSE(bulkOnly->hasAbsorpVisibleInputIn);
+
+    auto const *equalThermal = state->dataMaterial->materials(Material::GetMaterialNum(*state, "EQUAL THERMAL"));
+    EXPECT_TRUE(equalThermal->hasAbsorpThermalInputIn);
+    EXPECT_FALSE(equalThermal->hasAbsorpSolarInputIn);
+    EXPECT_FALSE(equalThermal->hasAbsorpVisibleInputIn);
+    EXPECT_DOUBLE_EQ(equalThermal->AbsorpThermalOut, equalThermal->AbsorpThermalIn);
+
+    auto const *equalSolar = state->dataMaterial->materials(Material::GetMaterialNum(*state, "EQUAL SOLAR"));
+    EXPECT_FALSE(equalSolar->hasAbsorpThermalInputIn);
+    EXPECT_TRUE(equalSolar->hasAbsorpSolarInputIn);
+    EXPECT_TRUE(equalSolar->hasAbsorpVisibleInputIn);
+    EXPECT_DOUBLE_EQ(equalSolar->AbsorpSolarOut, equalSolar->AbsorpSolarIn);
+    EXPECT_DOUBLE_EQ(equalSolar->AbsorpVisibleOut, equalSolar->AbsorpVisibleIn);
+}
+
 TEST_F(EnergyPlusFixture, GetMaterialDataWindowShadingFaceAbsorptances)
 {
     std::string const idf_objects = delimited_string({

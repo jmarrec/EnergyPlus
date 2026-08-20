@@ -218,15 +218,18 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             mat->AbsorpSolarInputOut = mat->AbsorpSolarOut;
             mat->AbsorpVisibleOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance");
             mat->AbsorpVisibleInputOut = mat->AbsorpVisibleOut;
-            mat->AbsorpThermalIn = objectFields.contains("thermal_absorptance_inside_face")
+            mat->hasAbsorpThermalInputIn = objectFields.contains("thermal_absorptance_inside_face");
+            mat->AbsorpThermalIn = mat->hasAbsorpThermalInputIn
                                        ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_absorptance_inside_face")
                                        : mat->AbsorpThermalOut;
             mat->AbsorpThermalInputIn = mat->AbsorpThermalIn;
-            mat->AbsorpSolarIn = objectFields.contains("solar_absorptance_inside_face")
+            mat->hasAbsorpSolarInputIn = objectFields.contains("solar_absorptance_inside_face");
+            mat->AbsorpSolarIn = mat->hasAbsorpSolarInputIn
                                      ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "solar_absorptance_inside_face")
                                      : mat->AbsorpSolarOut;
             mat->AbsorpSolarInputIn = mat->AbsorpSolarIn;
-            mat->AbsorpVisibleIn = objectFields.contains("visible_absorptance_inside_face")
+            mat->hasAbsorpVisibleInputIn = objectFields.contains("visible_absorptance_inside_face");
+            mat->AbsorpVisibleIn = mat->hasAbsorpVisibleInputIn
                                        ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance_inside_face")
                                        : mat->AbsorpVisibleOut;
             mat->AbsorpVisibleInputIn = mat->AbsorpVisibleIn;
@@ -311,15 +314,18 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             mat->AbsorpSolarInputOut = mat->AbsorpSolarOut;
             mat->AbsorpVisibleOut = s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance");
             mat->AbsorpVisibleInputOut = mat->AbsorpVisibleOut;
-            mat->AbsorpThermalIn = objectFields.contains("thermal_absorptance_inside_face")
+            mat->hasAbsorpThermalInputIn = objectFields.contains("thermal_absorptance_inside_face");
+            mat->AbsorpThermalIn = mat->hasAbsorpThermalInputIn
                                        ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "thermal_absorptance_inside_face")
                                        : mat->AbsorpThermalOut;
             mat->AbsorpThermalInputIn = mat->AbsorpThermalIn;
-            mat->AbsorpSolarIn = objectFields.contains("solar_absorptance_inside_face")
+            mat->hasAbsorpSolarInputIn = objectFields.contains("solar_absorptance_inside_face");
+            mat->AbsorpSolarIn = mat->hasAbsorpSolarInputIn
                                      ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "solar_absorptance_inside_face")
                                      : mat->AbsorpSolarOut;
             mat->AbsorpSolarInputIn = mat->AbsorpSolarIn;
-            mat->AbsorpVisibleIn = objectFields.contains("visible_absorptance_inside_face")
+            mat->hasAbsorpVisibleInputIn = objectFields.contains("visible_absorptance_inside_face");
+            mat->AbsorpVisibleIn = mat->hasAbsorpVisibleInputIn
                                        ? s_ip->getRealFieldValue(objectFields, objectSchemaProps, "visible_absorptance_inside_face")
                                        : mat->AbsorpVisibleOut;
             mat->AbsorpVisibleInputIn = mat->AbsorpVisibleIn;
