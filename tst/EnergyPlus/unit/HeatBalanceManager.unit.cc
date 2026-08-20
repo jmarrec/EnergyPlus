@@ -710,6 +710,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_GetMaterialRoofVegetation)
         "    0.01,                    !- Residual Volumetric Moisture Content of the Soil Layer",
         "    0.45,                    !- Initial Volumetric Moisture Content of the Soil Layer",
         "    Advanced;                !- Moisture Diffusion Calculation Method",
+
+        "  Construction,",
+        "    EcoRoof Construction,    !- Name",
+        "    ThickSoil;               !- Outside Layer",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -721,10 +725,35 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_GetMaterialRoofVegetation)
     // check the "Material:RoofVegetation" names
     auto const *mat1 = dynamic_cast<Material::MaterialEcoRoof const *>(state->dataMaterial->materials(1));
     EXPECT_EQ(mat1->Name, "THICKSOIL");
+
+    // A roof vegetation material has the same face properties on both sides.
+    EXPECT_DOUBLE_EQ(0.95, mat1->AbsorpThermalOut);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpThermalOut, mat1->AbsorpThermalIn);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpThermalInputOut, mat1->AbsorpThermalInputIn);
+    EXPECT_DOUBLE_EQ(0.8, mat1->AbsorpSolarOut);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpSolarOut, mat1->AbsorpSolarIn);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpSolarInputOut, mat1->AbsorpSolarInputIn);
+    EXPECT_DOUBLE_EQ(0.7, mat1->AbsorpVisibleOut);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpVisibleOut, mat1->AbsorpVisibleIn);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpVisibleInputOut, mat1->AbsorpVisibleInputIn);
+
     // check maximum (saturated) moisture content
     EXPECT_EQ(0.4, mat1->Porosity);
     // check initial moisture Content was reset
     EXPECT_EQ(0.4, mat1->InitMoisture); // reset from 0.45 to 0.4 during get input
+
+    HeatBalanceManager::GetConstructData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+    DataHeatBalance::CheckAndSetConstructionProperties(*state, 1, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    auto const &construction = state->dataConstruction->Construct(1);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpThermalOut, construction.OutsideAbsorpThermal);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpThermalIn, construction.InsideAbsorpThermal);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpSolarOut, construction.OutsideAbsorpSolar);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpSolarIn, construction.InsideAbsorpSolar);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpVisibleOut, construction.OutsideAbsorpVis);
+    EXPECT_DOUBLE_EQ(mat1->AbsorpVisibleIn, construction.InsideAbsorpVis);
 }
 
 TEST_F(EnergyPlusFixture, HeatBalanceManager_WarmUpConvergenceSmallLoadTest)

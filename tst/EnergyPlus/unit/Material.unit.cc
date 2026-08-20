@@ -431,6 +431,8 @@ TEST_F(EnergyPlusFixture, GetMaterialDataConstructAbsorpTest)
     auto &dataMat = state->dataMaterial;
 
     // Test the reading in of the material data
+    EXPECT_EQ("NMMATOUTSET", dataMat->materials(3)->Name);
+    EXPECT_EQ("NMMATOAISET", dataMat->materials(4)->Name);
     EXPECT_NEAR(dataMat->materials(1)->AbsorpThermalOut, 0.9, tolerance);
     EXPECT_NEAR(dataMat->materials(1)->AbsorpSolarOut, 0.8, tolerance);
     EXPECT_NEAR(dataMat->materials(1)->AbsorpVisibleOut, 0.7, tolerance);
@@ -551,4 +553,8 @@ TEST_F(EnergyPlusFixture, GetMaterialDataWindowShadingFaceAbsorptances)
     EXPECT_DOUBLE_EQ(0.6, screen->AbsorpThermalOut);
     EXPECT_DOUBLE_EQ(screen->AbsorpThermalOut, screen->AbsorpThermalIn);
     EXPECT_DOUBLE_EQ(screen->AbsorpThermalInputOut, screen->AbsorpThermalInputIn);
+    EXPECT_DOUBLE_EQ(screen->AbsorpSolarOut, screen->AbsorpSolarIn);
+    EXPECT_DOUBLE_EQ(screen->AbsorpSolarInputOut, screen->AbsorpSolarInputIn);
+    EXPECT_DOUBLE_EQ(screen->AbsorpVisibleOut, screen->AbsorpVisibleIn);
+    EXPECT_DOUBLE_EQ(screen->AbsorpVisibleInputOut, screen->AbsorpVisibleInputIn);
 }
