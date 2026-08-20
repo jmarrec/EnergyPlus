@@ -2139,34 +2139,65 @@ void AllocateSurfaceHeatBalArrays(EnergyPlusData &state)
                                 surface.Name);
         }
         // Set up output variables for absorptances
+        bool useInsideThermalAbsorptance = false;
+        bool useInsideSolarAbsorptance = false;
+        auto const &construction = state.dataConstruction->Construct(surface.Construction);
+        if (construction.TotLayers > 0) {
+            int const insideMaterialNum = construction.LayerPoint(construction.TotLayers);
+            if (insideMaterialNum > 0) {
+                auto const *insideMaterial = state.dataMaterial->materials(insideMaterialNum);
+                bool const insideVariableAbsorptanceAllowed = surface.ExtBoundCond == DataSurfaces::ExternalEnvironment &&
+                                                              insideMaterial->absorpVarCtrlSignalIn != Material::VariableAbsCtrlSignal::Invalid;
+                bool const useInsideThermalVariableAbsorptance =
+                    insideVariableAbsorptanceAllowed && (insideMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Scheduled
+                                                             ? insideMaterial->absorpThermalVarSchedIn != nullptr
+                                                             : insideMaterial->absorpThermalVarCurveIn != nullptr);
+                bool const useInsideSolarVariableAbsorptance =
+                    insideVariableAbsorptanceAllowed && (insideMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Scheduled
+                                                             ? insideMaterial->absorpSolarVarSchedIn != nullptr
+                                                             : insideMaterial->absorpSolarVarCurveIn != nullptr);
+                useInsideThermalAbsorptance = insideMaterial->hasAbsorpThermalInputIn || useInsideThermalVariableAbsorptance;
+                useInsideSolarAbsorptance = insideMaterial->hasAbsorpSolarInputIn || useInsideSolarVariableAbsorptance;
+            }
+        }
+
+        std::string_view const thermalAbsorptanceName =
+            useInsideThermalAbsorptance ? "Surface Thermal Absorptance Outside Face" : "Surface Thermal Absorptance";
         SetupOutputVariable(state,
-                            "Surface Thermal Absorptance Outside Face",
+                            thermalAbsorptanceName,
                             Constant::Units::None,
                             state.dataHeatBalSurf->SurfAbsThermalExt(loop),
                             OutputProcessor::TimeStepType::Zone,
                             OutputProcessor::StoreType::Average,
                             surface.Name);
+        if (useInsideThermalAbsorptance) {
+            SetupOutputVariable(state,
+                                "Surface Thermal Absorptance Inside Face",
+                                Constant::Units::None,
+                                state.dataHeatBalSurf->SurfAbsThermalInt(loop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Average,
+                                surface.Name);
+        }
+
+        std::string_view const solarAbsorptanceName =
+            useInsideSolarAbsorptance ? "Surface Solar Absorptance Outside Face" : "Surface Solar Absorptance";
         SetupOutputVariable(state,
-                            "Surface Solar Absorptance Outside Face",
+                            solarAbsorptanceName,
                             Constant::Units::None,
                             state.dataHeatBalSurf->SurfAbsSolarExt(loop),
                             OutputProcessor::TimeStepType::Zone,
                             OutputProcessor::StoreType::Average,
                             surface.Name);
-        SetupOutputVariable(state,
-                            "Surface Thermal Absorptance Inside Face",
-                            Constant::Units::None,
-                            state.dataHeatBalSurf->SurfAbsThermalInt(loop),
-                            OutputProcessor::TimeStepType::Zone,
-                            OutputProcessor::StoreType::Average,
-                            surface.Name);
-        SetupOutputVariable(state,
-                            "Surface Solar Absorptance Inside Face",
-                            Constant::Units::None,
-                            state.dataHeatBalSurf->SurfAbsSolarInt(loop),
-                            OutputProcessor::TimeStepType::Zone,
-                            OutputProcessor::StoreType::Average,
-                            surface.Name);
+        if (useInsideSolarAbsorptance) {
+            SetupOutputVariable(state,
+                                "Surface Solar Absorptance Inside Face",
+                                Constant::Units::None,
+                                state.dataHeatBalSurf->SurfAbsSolarInt(loop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Average,
+                                surface.Name);
+        }
 
         if (state.dataConstruction->Construct(surface.Construction).SourceSinkPresent) {
             SetupOutputVariable(state,
