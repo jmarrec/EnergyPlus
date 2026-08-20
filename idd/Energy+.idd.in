@@ -76571,8 +76571,8 @@ HeatPump:AirToWater,
         \type real
         \units C
         \default 8
-        \note inlet water temperature corresponding to rated performance
-        \note (heating capacity, COP).
+        \note outlet water temperature corresponding to rated heat pump performance
+        \note (cooling capacity, COP).
    N12 , \field Rated Water Flow Rate in Cooling Mode
         \type real
         \units m3/s
