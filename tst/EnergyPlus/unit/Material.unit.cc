@@ -168,15 +168,16 @@ TEST_F(EnergyPlusFixture, GetMaterialDataReadVarAbsorptance)
     EXPECT_ENUM_EQ(mat3->absorpVarCtrlSignalOut, Material::VariableAbsCtrlSignal::Scheduled);
     EXPECT_NE(mat3->absorpThermalVarSchedOut, nullptr);
     EXPECT_NE(mat3->absorpSolarVarSchedOut, nullptr);
-    // Tests to see if these get written to the Inside when the user does not provide them.
-    EXPECT_ENUM_EQ(mat1->absorpVarCtrlSignalIn, Material::VariableAbsCtrlSignal::SurfaceTemperature);
-    EXPECT_EQ(mat1->absorpThermalVarCurveIn->Num, 1);
-    EXPECT_EQ(mat1->absorpSolarVarCurveIn->Num, 2);
-    EXPECT_ENUM_EQ(mat2->absorpVarCtrlSignalIn, Material::VariableAbsCtrlSignal::SurfaceReceivedSolarRadiation);
-    EXPECT_EQ(mat2->absorpSolarVarCurveOut->Num, 2);
-    EXPECT_ENUM_EQ(mat3->absorpVarCtrlSignalIn, Material::VariableAbsCtrlSignal::Scheduled);
-    EXPECT_NE(mat3->absorpThermalVarSchedIn, nullptr);
-    EXPECT_NE(mat3->absorpSolarVarSchedIn, nullptr);
+    // Blank inside-face fields preserve legacy behavior: only the outside face varies.
+    EXPECT_ENUM_EQ(mat1->absorpVarCtrlSignalIn, Material::VariableAbsCtrlSignal::Invalid);
+    EXPECT_EQ(mat1->absorpThermalVarCurveIn, nullptr);
+    EXPECT_EQ(mat1->absorpSolarVarCurveIn, nullptr);
+    EXPECT_ENUM_EQ(mat2->absorpVarCtrlSignalIn, Material::VariableAbsCtrlSignal::Invalid);
+    EXPECT_EQ(mat2->absorpThermalVarCurveIn, nullptr);
+    EXPECT_EQ(mat2->absorpSolarVarCurveIn, nullptr);
+    EXPECT_ENUM_EQ(mat3->absorpVarCtrlSignalIn, Material::VariableAbsCtrlSignal::Invalid);
+    EXPECT_EQ(mat3->absorpThermalVarSchedIn, nullptr);
+    EXPECT_EQ(mat3->absorpSolarVarSchedIn, nullptr);
     // Tests to see if different things get picked up at the outside and the inside (Case 4)
     EXPECT_ENUM_EQ(mat4->absorpVarCtrlSignalOut, Material::VariableAbsCtrlSignal::Scheduled);
     EXPECT_NE(mat4->absorpThermalVarSchedOut, nullptr);

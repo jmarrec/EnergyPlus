@@ -7819,7 +7819,7 @@ MaterialProperty:VariableAbsorptance,
        \key SpaceHeatingCoolingMode
        \key Scheduled
        \note the variable that drives the change in thermal/solar absorptance
-       \note when this field is blank the inside face defaults to the control signal and associated functions or schedules above
+       \note when this field is blank the inside-face absorptances remain at the constant values defined by the referenced material
   A9 , \field Thermal Absorptance Function Name Inside Face
        \note A Curve:* or Table:Lookup object encoding the relationship between
        \note the control signal inside face value and the surface thermal absorptance.

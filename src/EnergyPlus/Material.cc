@@ -2956,13 +2956,7 @@ void GetVariableAbsorptanceInput(EnergyPlusData &state, bool &errorsFound)
         }
 
         mat->absorpVarCtrlSignalIn = static_cast<VariableAbsCtrlSignal>(getEnumValue(variableAbsCtrlSignalNamesUC, s_ipsc->cAlphaArgs(8)));
-        if (mat->absorpVarCtrlSignalIn == VariableAbsCtrlSignal::Invalid) { // allow user to only specify the exterior surface absorptance variation
-            mat->absorpVarCtrlSignalIn = mat->absorpVarCtrlSignalOut;       // default to the exterior settings when not specified
-            mat->absorpThermalVarCurveIn = mat->absorpThermalVarCurveOut;
-            mat->absorpThermalVarSchedIn = mat->absorpThermalVarSchedOut;
-            mat->absorpSolarVarCurveIn = mat->absorpSolarVarCurveOut;
-            mat->absorpSolarVarSchedIn = mat->absorpSolarVarSchedOut;
-        } else {
+        if (mat->absorpVarCtrlSignalIn != VariableAbsCtrlSignal::Invalid) {
             mat->absorpThermalVarCurveIn = Curve::GetCurve(state, s_ipsc->cAlphaArgs(9));
             mat->absorpThermalVarSchedIn = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(10));
             mat->absorpSolarVarCurveIn = Curve::GetCurve(state, s_ipsc->cAlphaArgs(11));
