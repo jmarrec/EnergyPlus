@@ -292,7 +292,7 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             // Load the material derived type from the input data.
             auto *mat = new MaterialBase;
             mat->group = Group::Regular;
-            mat->Name = key;
+            mat->Name = matNameUC;
 
             s_mat->materials.push_back(mat);
             mat->Num = s_mat->materials.isize();
@@ -1663,8 +1663,12 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         //   Calculate absorptance accounting for the open area in the screen assembly (used only in CreateShadedWindowConstruction)
         matScreen->AbsorpSolarOut = max(0.0, 1.0 - matScreen->Trans - matScreen->ShadeRef);
         matScreen->AbsorpSolarInputOut = matScreen->AbsorpSolarOut;
+        matScreen->AbsorpSolarIn = matScreen->AbsorpSolarOut;
+        matScreen->AbsorpSolarInputIn = matScreen->AbsorpSolarIn;
         matScreen->AbsorpVisibleOut = max(0.0, 1.0 - matScreen->TransVis - matScreen->ShadeRefVis);
         matScreen->AbsorpVisibleInputOut = matScreen->AbsorpVisibleOut;
+        matScreen->AbsorpVisibleIn = matScreen->AbsorpVisibleOut;
+        matScreen->AbsorpVisibleInputIn = matScreen->AbsorpVisibleIn;
         matScreen->AbsorpThermalOut *= (1.0 - matScreen->Trans);
         matScreen->AbsorpThermalInputOut = matScreen->AbsorpThermalOut;
         matScreen->AbsorpThermalIn = matScreen->AbsorpThermalOut;
@@ -2313,6 +2317,9 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
         mat->AbsorpThermalOut = s_ipsc->rNumericArgs(10); // emissivity
         mat->AbsorpSolarOut = s_ipsc->rNumericArgs(11);   // (1 - Albedo)
         mat->AbsorpVisibleOut = s_ipsc->rNumericArgs(12);
+        mat->AbsorpThermalIn = mat->AbsorpThermalOut;
+        mat->AbsorpSolarIn = mat->AbsorpSolarOut;
+        mat->AbsorpVisibleIn = mat->AbsorpVisibleOut;
         mat->Porosity = s_ipsc->rNumericArgs(13);
         mat->MinMoisture = s_ipsc->rNumericArgs(14);
         mat->InitMoisture = s_ipsc->rNumericArgs(15);
