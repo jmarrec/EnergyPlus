@@ -4841,6 +4841,127 @@ Schedule:Constant,
        \type real
        \default 0
 
+Schedule:Year:Rules,
+       \memo A Schedule:Year:Rules defines a yearly schedule using a default day profile and
+       \memo a prioritized list of override rules (Schedule:Week:Rule objects). Rules are evaluated
+       \memo in ascending Rule Priority Order; the first matching rule for a given day is used.
+       \memo If no rule matches, the Default Day Schedule is used.
+       \memo Exception: if no rule date range includes February 29, February 29 inherits February 28.
+       \min-fields 3
+  A1,  \field Name
+       \type alpha
+       \required-field
+       \reference ScheduleNames
+       \reference ScheduleYearRulesNames
+  A2,  \field Schedule Type Limits Name
+       \type object-list
+       \object-list ScheduleTypeLimitsNames
+  A3,  \field Default Day Schedule Name
+       \type object-list
+       \required-field
+       \object-list DayScheduleNames
+  A4,  \field Summer Design Day Schedule Name
+       \note If blank, the Default Day Schedule is used for Summer Design Days.
+       \type object-list
+       \object-list DayScheduleNames
+  A5,  \field Winter Design Day Schedule Name
+       \note If blank, the Default Day Schedule is used for Winter Design Days.
+       \type object-list
+       \object-list DayScheduleNames
+  A6,  \field Holiday Schedule Name
+       \note If blank, the Default Day Schedule is used for Holidays.
+       \type object-list
+       \object-list DayScheduleNames
+  A7,  \field Custom Day 1 Schedule Name
+       \note If blank, the Default Day Schedule is used for Custom Day 1.
+       \type object-list
+       \object-list DayScheduleNames
+  A8;  \field Custom Day 2 Schedule Name
+       \note If blank, the Default Day Schedule is used for Custom Day 2.
+       \type object-list
+       \object-list DayScheduleNames
+
+Schedule:Week:Rule,
+       \memo A Schedule:Week:Rule defines one override rule for a Schedule:Year:Rules.
+       \memo Rules are evaluated in ascending Rule Priority Order; the first matching rule wins.
+       \memo A rule matches a day if: (a) the day falls within the specified date ranges,
+       \memo AND (b) the corresponding Apply <DayOfWeek> field is Yes.
+       \extensible:4 - repeat last four fields (Start Month, Start Day, End Month, End Day)
+       \min-fields 11
+  A1,  \field Name
+       \type alpha
+       \required-field
+       \reference ScheduleWeekRuleNames
+  A2,  \field Schedule Year Rules Name
+       \type object-list
+       \required-field
+       \object-list ScheduleYearRulesNames
+  N1,  \field Rule Priority Order
+       \note Lower values have higher priority. Must be unique within a Schedule:Year:Rules.
+       \type integer
+       \required-field
+       \minimum 0
+  A3,  \field Day Schedule Name
+       \type object-list
+       \required-field
+       \object-list DayScheduleNames
+  A4,  \field Apply Sunday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A5,  \field Apply Monday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A6,  \field Apply Tuesday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A7,  \field Apply Wednesday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A8,  \field Apply Thursday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A9,  \field Apply Friday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  A10, \field Apply Saturday
+       \type choice
+       \default No
+       \key Yes
+       \key No
+  N2 , \field Start Month 1
+       \begin-extensible
+       \type integer
+       \minimum 1
+       \maximum 12
+       \default 1
+  N3 , \field Start Day 1
+       \type integer
+       \minimum 1
+       \maximum 31
+       \default 1
+  N4 , \field End Month 1
+       \type integer
+       \minimum 1
+       \maximum 12
+       \default 12
+  N5 ; \field End Day 1
+       \type integer
+       \minimum 1
+       \maximum 31
+       \default 31
+
 Schedule:File:Shading,
        \min-fields 1
        \memo A Schedule:File:Shading points to a CSV file that has 8760-8784

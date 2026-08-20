@@ -177,6 +177,7 @@ extension_renaming = {
     "ZoneHVAC:HybridUnitaryHVAC": "modes",
     "ShadowCalculation": "shading_zone_groups",
     "Schedule:Year": "schedule_weeks",
+    "Schedule:Week:Rule": "date_ranges",
     "WindowShadingControl": "fenestration_surfaces",
     "PlantEquipmentList": "equipment",
     "CondenserEquipmentList": "equipment",
