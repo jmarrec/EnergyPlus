@@ -54,8 +54,8 @@
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataContaminantBalance.hh>
 #include <EnergyPlus/DataEnvironment.hh>
-#include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
+#include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataWater.hh>
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
@@ -516,7 +516,8 @@ namespace ZoneDehumidifier {
         }
     }
 
-    void InitZoneDehumidifier(EnergyPlusData &state, int const ZoneDehumNum, int const ZoneNum) // Number of the current zone dehumidifier and serving zone
+    void
+    InitZoneDehumidifier(EnergyPlusData &state, int const ZoneDehumNum, int const ZoneNum) // Number of the current zone dehumidifier and serving zone
     {
 
         // SUBROUTINE INFORMATION:

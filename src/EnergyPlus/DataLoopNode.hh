@@ -463,9 +463,9 @@ namespace Node {
         Real64 HumRatSetPoint = SensedNodeFlagValue;         // {}
         // Real64 RHSetPointHum = SensedNodeFlagValue;       // Experimental RH setpoint path, currently unused
         // Real64 RHSetPointDehum = SensedNodeFlagValue;     // Experimental RH setpoint path, currently unused
-        Real64 TempSetPointHi = SensedNodeFlagValue;         // {C}
-        Real64 TempSetPointLo = SensedNodeFlagValue;         // {C}
-        Real64 Height = -1.0;                                // {m}
+        Real64 TempSetPointHi = SensedNodeFlagValue; // {C}
+        Real64 TempSetPointLo = SensedNodeFlagValue; // {C}
+        Real64 Height = -1.0;                        // {m}
 
         //  Following are for Outdoor Air Nodes Scheduled Properties
         bool IsLocalNode = false;
