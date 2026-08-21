@@ -8644,6 +8644,13 @@ TEST_F(EnergyPlusFixture, AllocateSurfaceHeatBalArraysRegistersConditionalAbsorp
     state->dataSurface->TotSurfaces = numSurfaces;
     state->dataSurface->Surface.allocate(numSurfaces);
     state->dataSurface->SurfaceWindow.allocate(numSurfaces);
+    state->dataSurface->SurfOutDryBulbTemp.dimension(numSurfaces, 0.0);
+    state->dataSurface->SurfOutWetBulbTemp.dimension(numSurfaces, 0.0);
+    state->dataSurface->SurfOutWindSpeed.dimension(numSurfaces, 0.0);
+    state->dataSurface->SurfOutWindDir.dimension(numSurfaces, 0.0);
+    state->dataSurface->surfIntConv.allocate(numSurfaces);
+    state->dataSurface->surfExtConv.allocate(numSurfaces);
+    state->dataSurface->SurfTAirRefRpt.allocate(numSurfaces);
     state->dataHeatBal->TotConstructs = numConstructions;
     state->dataConstruction->Construct.allocate(numConstructions);
 
