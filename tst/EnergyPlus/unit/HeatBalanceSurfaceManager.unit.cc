@@ -8639,8 +8639,8 @@ TEST_F(EnergyPlusFixture, AllocateSurfaceHeatBalArraysRegistersConditionalAbsorp
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    constexpr int numSurfaces = 4;
-    constexpr int numConstructions = 3;
+    constexpr int numSurfaces = 5;
+    constexpr int numConstructions = 4;
     state->dataSurface->TotSurfaces = numSurfaces;
     state->dataSurface->Surface.allocate(numSurfaces);
     state->dataSurface->SurfaceWindow.allocate(numSurfaces);
@@ -8680,15 +8680,22 @@ TEST_F(EnergyPlusFixture, AllocateSurfaceHeatBalArraysRegistersConditionalAbsorp
     dynamicSolarMaterial->absorpSolarVarCurveIn = &solarCurve;
     state->dataMaterial->materials.push_back(dynamicSolarMaterial);
 
+    auto *windowMaterial = new Material::MaterialBase;
+    windowMaterial->Name = "WINDOW MATERIAL";
+    windowMaterial->group = Material::Group::Glass;
+    state->dataMaterial->materials.push_back(windowMaterial);
+    state->dataConstruction->Construct(4).TypeIsWindow = true;
+
     std::array<std::string_view, numSurfaces> const surfaceNames = {
-        "BULK SURFACE", "EXPLICIT THERMAL SURFACE", "DYNAMIC SOLAR SURFACE", "INTERIOR DYNAMIC SOLAR SURFACE"};
+        "BULK SURFACE", "EXPLICIT THERMAL SURFACE", "DYNAMIC SOLAR SURFACE", "INTERIOR DYNAMIC SOLAR SURFACE", "WINDOW SURFACE"};
+    std::array<int, numSurfaces> const constructionNumbers = {1, 2, 3, 3, 4};
     for (int surfaceNum = 1; surfaceNum <= numSurfaces; ++surfaceNum) {
         auto &surface = state->dataSurface->Surface(surfaceNum);
         surface.Name = surfaceNames[surfaceNum - 1];
-        surface.Class = DataSurfaces::SurfaceClass::Wall;
+        surface.Class = surfaceNum == numSurfaces ? DataSurfaces::SurfaceClass::Window : DataSurfaces::SurfaceClass::Wall;
         surface.HeatTransSurf = true;
-        surface.Construction = std::min(surfaceNum, numConstructions);
-        surface.ExtBoundCond = surfaceNum == numSurfaces ? 1 : DataSurfaces::ExternalEnvironment;
+        surface.Construction = constructionNumbers[surfaceNum - 1];
+        surface.ExtBoundCond = surfaceNum == numSurfaces - 1 ? 1 : DataSurfaces::ExternalEnvironment;
     }
 
     AllocateSurfaceHeatBalArrays(*state);
@@ -8729,6 +8736,13 @@ TEST_F(EnergyPlusFixture, AllocateSurfaceHeatBalArraysRegistersConditionalAbsorp
     EXPECT_FALSE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Thermal Absorptance Inside Face"));
     EXPECT_FALSE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance Outside Face"));
     EXPECT_FALSE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance Inside Face"));
+
+    EXPECT_FALSE(outputIsRegistered("WINDOW SURFACE", "Surface Thermal Absorptance"));
+    EXPECT_FALSE(outputIsRegistered("WINDOW SURFACE", "Surface Solar Absorptance"));
+    EXPECT_FALSE(outputIsRegistered("WINDOW SURFACE", "Surface Thermal Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("WINDOW SURFACE", "Surface Thermal Absorptance Inside Face"));
+    EXPECT_FALSE(outputIsRegistered("WINDOW SURFACE", "Surface Solar Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("WINDOW SURFACE", "Surface Solar Absorptance Inside Face"));
 }
 
 TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_UpdateThermalHistoriesIZSurfaceCheck)
