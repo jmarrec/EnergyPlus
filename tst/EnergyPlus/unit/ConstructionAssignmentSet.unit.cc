@@ -61,6 +61,7 @@
 #include <EnergyPlus/Material.hh>
 #include <EnergyPlus/SurfaceGeometry.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
+#include <EnergyPlus/WeatherManager.hh>
 
 #include "Fixtures/EnergyPlusFixture.hh"
 
@@ -3315,4 +3316,342 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_GeneratedInterzoneSurfaceIsReve
     ASSERT_EQ(2, generatedWallConstruction.TotLayers);
     EXPECT_EQ(wallAConstruction.LayerPoint(1), generatedWallConstruction.LayerPoint(2));
     EXPECT_EQ(wallAConstruction.LayerPoint(2), generatedWallConstruction.LayerPoint(1));
+}
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_FoundationSourceSinkDeferredUntilResolved)
+{
+    // PR 11755 repro: a Floor with a blank Construction Name and a Foundation Outside Boundary
+    // Condition is resolved (via the Building-level DCS's ground-contact slot) to "Ground Floor
+    // Construction", which has no internal source/sink. GetHTSurfaceData used to run the
+    // source/sink check immediately, against the still-unresolved (zero) construction index,
+    // producing a bogus "construction may not have an internal source/sink" error even though the
+    // construction that will actually apply is perfectly valid. That check must be deferred until
+    // after DCS resolution.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    Floor1,                                 !- Name
+    Floor,                                  !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Foundation,                             !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 0,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 2 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+    0, 10, 0;                               !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+    state->dataWeather->WeatherFileExists = true;
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_NO_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound));
+    EXPECT_FALSE(compare_err_stream_substring("construction may not have an internal source/sink", false, false));
+    ASSERT_FALSE(ErrorsFound);
+
+    int const floorNum = Util::FindItemInList("FLOOR1", state->dataSurface->Surface);
+    ASSERT_GT(floorNum, 0);
+    auto const &floor = state->dataSurface->Surface(floorNum);
+    ASSERT_GT(floor.Construction, 0);
+    EXPECT_EQ("GROUND FLOOR CONSTRUCTION", state->dataConstruction->Construct(floor.Construction).Name);
+}
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_FoundationSourceSinkStillCaughtWhenInherited)
+{
+    // Companion to ConstructionResolution_FoundationSourceSinkDeferredUntilResolved: deferring the
+    // Foundation source/sink check must not turn it into a no-op. Here "Ground Floor Construction"
+    // (the same construction the Building-level DCS would inherit onto the Floor below) genuinely
+    // has an internal source/sink, so the deferred check must still catch it once the construction
+    // is resolved.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  ConstructionProperty:InternalHeatSource,
+    Radiant Source,                         !- Name
+    Ground Floor Construction,              !- Construction Name
+    1,                                      !- Thermal Source Present After Layer Number
+    1,                                      !- Temperature Calculation Requested After Layer Number
+    1,                                      !- Dimensions for the CTF Calculation
+    0.3048;                                 !- Tube Spacing {m}
+
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    Floor1,                                 !- Name
+    Floor,                                  !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Foundation,                             !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 0,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 2 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+    0, 10, 0;                               !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+    state->dataWeather->WeatherFileExists = true;
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound), std::runtime_error);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream_substring(R"(Surface="FLOOR1", construction may not have an internal source/sink)", false));
+}
+
+TEST_F(EnergyPlusFixture, ConstructionResolution_FrameDividerInvalidNameCheckedWhenConstructionPending)
+{
+    // PR 11755 repro: a FixedWindow with a blank Construction Name (pending Building-level DCS
+    // resolution) and a Frame and Divider Name that names a nonexistent WindowProperty:FrameAndDivider
+    // object. The invalid-name check used to be nested entirely inside "if (Construction != 0)", so
+    // it was silently skipped for windows whose construction hadn't been resolved yet - the model
+    // would complete with zero severe errors despite the invalid reference. An explicitly-constructed
+    // window with the same bad Frame and Divider Name would (correctly) fail; blank-construction
+    // windows must not get a free pass.
+    std::string const idf_objects = std::string(idf_dcs_all_types) + R"(
+  Building,
+    Building1,                              !- Name
+    ,                                       !- North Axis {deg}
+    ,                                       !- Terrain
+    ,                                       !- Loads Convergence Tolerance Value {W}
+    ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+    ,                                       !- Solar Distribution
+    ,                                       !- Maximum Number of Warmup Days
+    ,                                       !- Minimum Number of Warmup Days
+    Default Construction Set;               !- Construction Assignment Set Name
+
+  Zone,
+    TestZone,                               !- Name
+    ,                                       !- Direction of Relative North {deg}
+    0, 0, 0,                                !- X,Y,Z Origin {m}
+    ,                                       !- Type
+    1,                                      !- Multiplier
+    ,                                       !- Ceiling Height {m}
+    ,                                       !- Volume {m3}
+    ,                                       !- Floor Area {m2}
+    ,                                       !- Zone Inside Convection Algorithm
+    ,                                       !- Zone Outside Convection Algorithm
+    Yes;                                    !- Part of Total Floor Area
+
+  BuildingSurface:Detailed,
+    Wall1,                                  !- Name
+    Wall,                                   !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    SunExposed,                             !- Sun Exposure
+    WindExposed,                            !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    0, 0, 3,                                !- X,Y,Z Vertex 1 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 3 {m}
+    10, 0, 3;                               !- X,Y,Z Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Floor1,                                 !- Name
+    Floor,                                  !- Surface Type
+    ,                                       !- Construction Name
+    TestZone,                               !- Zone Name
+    ,                                       !- Space Name
+    Outdoors,                               !- Outside Boundary Condition
+    ,                                       !- Outside Boundary Condition Object
+    NoSun,                                  !- Sun Exposure
+    NoWind,                                 !- Wind Exposure
+    ,                                       !- View Factor to Ground
+    ,                                       !- Number of Vertices
+    10, 10, 0,                              !- X,Y,Z Vertex 1 {m}
+    10, 0, 0,                               !- X,Y,Z Vertex 2 {m}
+    0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+    0, 10, 0;                               !- X,Y,Z Vertex 4 {m}
+
+  FenestrationSurface:Detailed,
+    Window1,                                !- Name
+    FixedWindow,                            !- Surface Type
+    ,                                       !- Construction Name
+    Wall1,                                  !- Building Surface Name
+    ,                                       !- Outside Boundary Condition Object
+    ,                                       !- View Factor to Ground
+    Missing Frame,                          !- Frame and Divider Name
+    ,                                       !- Multiplier
+    ,                                       !- Number of Vertices
+    4, 0, 2,                                !- X,Y,Z Vertex 1 {m}
+    4, 0, 1,                                !- X,Y,Z Vertex 2 {m}
+    6, 0, 1,                                !- X,Y,Z Vertex 3 {m}
+    6, 0, 2;                                !- X,Y,Z Vertex 4 {m}
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = 1.0;
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = 0.0;
+    state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
+    state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
+
+    EXPECT_THROW(SurfaceGeometry::GetSurfaceData(*state, ErrorsFound), std::runtime_error);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream_substring(R"(invalid Frame and Divider Name="MISSING FRAME")", false));
+}
+
+TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_WindowConstrInInteriorPartitionField)
+{
+    // Using a window construction for the direct Interior Partition Construction Name field (used
+    // by interior partitions and InternalMass, which require an opaque construction) should produce
+    // an error, just like the grouped SurfaceConstructionAssignments/SubSurfaceConstructionAssignments
+    // fields already do.
+    std::string const idf_objects = std::string(idf_constructions) + R"(
+  ConstructionAssignmentSet,
+    Bad Direct Slot DCS,      !- Name
+    ,                        !- Exterior Surface Construction Assignments Name
+    ,                        !- Interior Surface Construction Assignments Name
+    ,                        !- Ground Contact Surface Construction Assignments Name
+    ,                        !- Exterior SubSurface Construction Assignments Name
+    ,                        !- Interior SubSurface Construction Assignments Name
+    Constr Window,           !- Interior Partition Construction Name
+    ;                        !- Adiabatic Surface Construction Name
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream_substring(
+        R"(ConstructionAssignmentSet="BAD DIRECT SLOT DCS", invalid interior_partition_construction_name="CONSTR WINDOW")", false));
+    EXPECT_TRUE(compare_err_stream_substring(R"(has Window material)", false));
+}
+
+TEST_F(EnergyPlusFixture, ConstructionAssignmentSet_WindowConstrInAdiabaticField)
+{
+    // Same as ConstructionAssignmentSet_WindowConstrInInteriorPartitionField, but for the direct
+    // Adiabatic Surface Construction Name field.
+    std::string const idf_objects = std::string(idf_constructions) + R"(
+  ConstructionAssignmentSet,
+    Bad Adiabatic DCS,       !- Name
+    ,                        !- Exterior Surface Construction Assignments Name
+    ,                        !- Interior Surface Construction Assignments Name
+    ,                        !- Ground Contact Surface Construction Assignments Name
+    ,                        !- Exterior SubSurface Construction Assignments Name
+    ,                        !- Interior SubSurface Construction Assignments Name
+    ,                        !- Interior Partition Construction Name
+    Constr Window;           !- Adiabatic Surface Construction Name
+)";
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    loadConstructions(*state);
+
+    bool ErrorsFound = false;
+    ConstructionAssignments::GetConstructionAssignmentSetData(*state, ErrorsFound);
+    EXPECT_TRUE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream_substring(
+        R"(ConstructionAssignmentSet="BAD ADIABATIC DCS", invalid adiabatic_surface_construction_name="CONSTR WINDOW")", false));
+    EXPECT_TRUE(compare_err_stream_substring(R"(has Window material)", false));
 }
