@@ -2049,11 +2049,11 @@
     OutAbsTherm,            !- Thermal Absorptance Schedule Name
     ,                       !- Solar Absorptance Function Name
     OutAbsSolar,            !- Solar Absorptance Schedule Name
-    Scheduled,              !- Inside Face Control Signal
-    ,                       !- Inside Face Thermal Absorptance Function Name
-    InAbsTherm,             !- Inside Face Thermal Absorptance Schedule Name
-    ,                       !- Inside Face Solar Absorptance Function Name
-    InAbsSolar;             !- Inside Face Solar Absorptance Schedule Name
+    Scheduled,              !- Control Signal Inside Face
+    ,                       !- Thermal Absorptance Function Name Inside Face
+    InAbsTherm,             !- Thermal Absorptance Schedule Name Inside Face
+    ,                       !- Solar Absorptance Function Name Inside Face
+    InAbsSolar;             !- Solar Absorptance Schedule Name Inside Face
 
   Schedule:Compact,
     OutAbsTherm,  !- Name

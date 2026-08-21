@@ -231,11 +231,11 @@
     ,                        !- Thermal Absorptance Schedule Name
     SolarAbsorptanceTemperatureCurve,  !- Solar Absorptance Function Name
     ,                        !- Solar Absorptance Schedule Name
-    SurfaceTemperature,      !- Inside Face Control Signal
-    ThermalAbsorptanceTemperatureTable,  !- Inside Face Thermal Absorptance Function Name
-    ,                        !- Inside Face Thermal Absorptance Schedule Name
-    SolarAbsorptanceTemperatureCurve,  !- Inside Face Solar Absorptance Function Name
-    ;                        !- Inside Face Solar Absorptance Schedule Name
+    SurfaceTemperature,      !- Control Signal Inside Face
+    ThermalAbsorptanceTemperatureTable,  !- Thermal Absorptance Function Name Inside Face
+    ,                        !- Thermal Absorptance Schedule Name Inside Face
+    SolarAbsorptanceTemperatureCurve,  !- Solar Absorptance Function Name Inside Face
+    ;                        !- Solar Absorptance Schedule Name Inside Face
 
   Table:IndependentVariable,
     ThermalAbsorptanceTemperatureTable_IndependentVariable1,  !- Name
