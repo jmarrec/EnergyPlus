@@ -461,6 +461,8 @@ namespace Node {
         Real64 HumRatMin = SensedNodeFlagValue;              // {}
         Real64 HumRatMax = SensedNodeFlagValue;              // {}
         Real64 HumRatSetPoint = SensedNodeFlagValue;         // {}
+        // Real64 RHSetPointHum = SensedNodeFlagValue;       // Experimental RH setpoint path, currently unused
+        // Real64 RHSetPointDehum = SensedNodeFlagValue;     // Experimental RH setpoint path, currently unused
         Real64 TempSetPointHi = SensedNodeFlagValue;         // {C}
         Real64 TempSetPointLo = SensedNodeFlagValue;         // {C}
         Real64 Height = -1.0;                                // {m}

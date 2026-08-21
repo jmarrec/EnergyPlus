@@ -100,6 +100,8 @@
 #include <EnergyPlus/ThermalComfort.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 #include <EnergyPlus/WeatherManager.hh>
+// Disabled while RH setpoints are validated from the serving zone instead.
+// #include <EnergyPlus/ZoneDehumidifier.hh>
 #include <EnergyPlus/ZonePlenum.hh>
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
 
@@ -3558,6 +3560,23 @@ void ZoneSpaceHeatBalanceData::calcPredictedHumidityRatio(EnergyPlusData &state,
         if (humidityControlZone.EMSOverrideDehumidifySetPointOn) {
             ZoneRHDehumidifyingSetPoint = humidityControlZone.EMSOverrideDehumidifySetPointValue;
         }
+
+        // Existing node-RH setpoint propagation retained for possible future use:
+        // auto const &zoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(zoneNum);
+        // auto const &zoneEquipList = state.dataZoneEquip->ZoneEquipList(zoneEquipConfig.EquipListIndex);
+        //
+        // for (int equipNum = 1; equipNum <= zoneEquipList.NumOfEquipTypes; ++equipNum) {
+        //     if (zoneEquipList.EquipType(equipNum) != DataZoneEquipment::ZoneEquipType::DehumidifierDX) {
+        //         continue;
+        //     }
+        //
+        //     int dehumidIndex = zoneEquipList.EquipIndex(equipNum);
+        //     auto &dehumid = state.dataZoneDehumidifier->ZoneDehumid(dehumidIndex);
+        //     auto &outletNode = state.dataLoopNodes->Node(dehumid.AirOutletNodeNum);
+        //
+        //     outletNode.RHSetPointHum = ZoneRHHumidifyingSetPoint;
+        //     outletNode.RHSetPointDehum = ZoneRHDehumidifyingSetPoint;
+        // }
 
         // Apply offsets for faulty humidistats
         if ((state.dataFaultsMgr->NumFaultyHumidistat > 0) && (!state.dataGlobal->WarmupFlag) && (!state.dataGlobal->DoingSizing) &&
