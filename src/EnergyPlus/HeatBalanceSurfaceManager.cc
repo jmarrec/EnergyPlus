@@ -2145,23 +2145,21 @@ void AllocateSurfaceHeatBalArrays(EnergyPlusData &state)
         if (!construction.TypeIsWindow) {
             bool useInsideThermalAbsorptance = false;
             bool useInsideSolarAbsorptance = false;
-            if (construction.TotLayers > 0) {
-                int const insideMaterialNum = construction.LayerPoint(construction.TotLayers);
-                if (insideMaterialNum > 0) {
-                    auto const *insideMaterial = state.dataMaterial->materials(insideMaterialNum);
-                    bool const insideVariableAbsorptanceAllowed = surface.ExtBoundCond == DataSurfaces::ExternalEnvironment &&
-                                                                  insideMaterial->absorpVarCtrlSignalIn != Material::VariableAbsCtrlSignal::Invalid;
-                    bool const useInsideThermalVariableAbsorptance =
-                        insideVariableAbsorptanceAllowed && (insideMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Scheduled
-                                                                 ? insideMaterial->absorpThermalVarSchedIn != nullptr
-                                                                 : insideMaterial->absorpThermalVarCurveIn != nullptr);
-                    bool const useInsideSolarVariableAbsorptance =
-                        insideVariableAbsorptanceAllowed && (insideMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Scheduled
-                                                                 ? insideMaterial->absorpSolarVarSchedIn != nullptr
-                                                                 : insideMaterial->absorpSolarVarCurveIn != nullptr);
-                    useInsideThermalAbsorptance = insideMaterial->hasAbsorpThermalInputIn || useInsideThermalVariableAbsorptance;
-                    useInsideSolarAbsorptance = insideMaterial->hasAbsorpSolarInputIn || useInsideSolarVariableAbsorptance;
-                }
+            int const insideMaterialNum = construction.LayerPoint(construction.TotLayers);
+            if (insideMaterialNum > 0) {
+                auto const *insideMaterial = state.dataMaterial->materials(insideMaterialNum);
+                bool const insideVariableAbsorptanceAllowed = surface.ExtBoundCond == DataSurfaces::ExternalEnvironment &&
+                                                              insideMaterial->absorpVarCtrlSignalIn != Material::VariableAbsCtrlSignal::Invalid;
+                bool const useInsideThermalVariableAbsorptance =
+                    insideVariableAbsorptanceAllowed && (insideMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Scheduled
+                                                             ? insideMaterial->absorpThermalVarSchedIn != nullptr
+                                                             : insideMaterial->absorpThermalVarCurveIn != nullptr);
+                bool const useInsideSolarVariableAbsorptance =
+                    insideVariableAbsorptanceAllowed && (insideMaterial->absorpVarCtrlSignalIn == Material::VariableAbsCtrlSignal::Scheduled
+                                                             ? insideMaterial->absorpSolarVarSchedIn != nullptr
+                                                             : insideMaterial->absorpSolarVarCurveIn != nullptr);
+                useInsideThermalAbsorptance = insideMaterial->hasAbsorpThermalInputIn || useInsideThermalVariableAbsorptance;
+                useInsideSolarAbsorptance = insideMaterial->hasAbsorpSolarInputIn || useInsideSolarVariableAbsorptance;
             }
 
             std::string_view const thermalAbsorptanceName =
