@@ -707,7 +707,7 @@ namespace HeatBalanceManager {
         }
 
         // Construction Assignment Set Name (resolved after ConstructionAssignmentSet data is loaded in GetConstructionAssignmentSetData)
-        state.dataConstructionAssignments->buildingConstructionAssignmentSetName = Util::makeUPPER(AlphaName(4));
+        state.dataConstructionAssignments->buildingConstructionAssignmentSetName = AlphaName(4);
 
         constexpr const char *Format_720(" Building Information,{},{:.3f},{},{:#G},{:#G},{},{},{}\n");
         constexpr const char *Format_721("! <Building Information>, Building Name,North Axis {{deg}},Terrain,  Loads Convergence Tolerance "
@@ -2701,7 +2701,7 @@ namespace HeatBalanceManager {
                     thisSpace.spaceTypeNum = state.dataGlobal->numSpaceTypes;
                 }
 
-                std::string dcsName = Util::makeUPPER(ip->getAlphaFieldValue(objectFields, objectSchemaProps, "construction_assignment_set_name"));
+                std::string dcsName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "construction_assignment_set_name");
                 if (!dcsName.empty()) {
                     auto &dcSets = state.dataConstructionAssignments->constructionAssignmentSets;
                     auto it = std::find_if(dcSets.begin(), dcSets.end(), [&dcsName](const ConstructionAssignments::ConstructionAssignmentSetData &d) {
