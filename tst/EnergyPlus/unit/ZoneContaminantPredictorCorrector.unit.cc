@@ -824,7 +824,8 @@ TEST_F(EnergyPlusFixture, ZoneContaminantPredictorCorrector_MissingGenericContam
 
 TEST_F(EnergyPlusFixture, ZoneContaminantPredictorCorrector_EMSActuatesContaminantSetpointSchedules)
 {
-    // CO2 and generic contaminant setpoint schedules can be actuated through EMS Schedule Value actuators, so EMSOverrideCO2 and EMSOverrideGC are unnecessary.
+    // CO2 and generic contaminant setpoint schedules can be actuated through EMS Schedule Value actuators, so EMSOverrideCO2 and EMSOverrideGC are
+    // unnecessary.
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  Zone1;                                  !- Name",
