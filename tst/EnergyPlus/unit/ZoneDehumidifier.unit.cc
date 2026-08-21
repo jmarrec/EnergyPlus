@@ -64,11 +64,6 @@ using namespace EnergyPlus;
 
 namespace EnergyPlus {
 
-// Unlike desiccant dehumidifiers, which can control to a process-air outlet or control-node HumRatMax setpoint,
-// ZoneHVAC:Dehumidifier:DX is driven by the served zone's remaining dehumidification load. Its inlet node
-// conditions affect performance curves and operating limits, but its outlet node RH setpoint is not part of the
-// control path. Actuating the outlet node setpoint would not change this missing-humidistat validation, so checking
-// the ZoneControl:Humidistat requirement from InitZoneDehumidifier is sufficient.
 TEST_F(EnergyPlusFixture, ZoneDehumidifierDX_MissingHumidistatSevere)
 {
     std::string const idf_objects = delimited_string({

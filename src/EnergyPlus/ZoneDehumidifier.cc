@@ -539,7 +539,7 @@ namespace ZoneDehumidifier {
         static constexpr std::string_view RoutineName("InitZoneDehumidifier");
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int AirInletNode; // Inlet air node number
+        int AirInletNode;      // Inlet air node number
         Real64 RatedAirHumrat; // Humidity ratio (kg/kg) at rated inlet air conditions of 26.6667C, 60% RH
         Real64 RatedAirDBTemp; // Dry-bulb air temperature at rated conditions 26.6667C
         Real64 RatedAirRH;     // Relative humidity of air (0.6 --> 60%) at rated conditions
@@ -582,6 +582,11 @@ namespace ZoneDehumidifier {
             dehumid.MyEnvrnFlag = true;
         }
 
+        // Unlike desiccant dehumidifiers, which can control to a process-air outlet or control-node HumRatMax setpoint,
+        // ZoneHVAC:Dehumidifier:DX is driven by the served zone's remaining dehumidification load. Its inlet node
+        // conditions affect performance curves and operating limits, but its outlet node RH setpoint is not part of the
+        // control path. Actuating the outlet node setpoint would not change this missing-humidistat validation, so checking
+        // the ZoneControl:Humidistat requirement from InitZoneDehumidifier is sufficient.
         if (dehumid.MySetPointCheckFlag && !state.dataGlobal->SysSizingCalc && state.dataHVACGlobal->DoSetPointTest) {
             auto const &zone = state.dataHeatBal->Zone(ZoneNum);
             if (zone.humidityControlZoneIndex == 0) {
