@@ -2491,7 +2491,7 @@ namespace SurfaceGeometry {
             for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
                 auto &surf = state.dataSurface->Surface(SurfNum);
                 if (surf.HeatTransSurf && surf.Construction != 0) {
-                    surf.ConstructionAssignmentSource = static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned);
+                    surf.ConstructionAssignmentSource = ConstructionAssignments::SearchDistanceType::HardAssigned;
                 }
             }
 
@@ -2540,7 +2540,7 @@ namespace SurfaceGeometry {
                 auto &surf = state.dataSurface->Surface(SurfNum);
                 surf.Construction = resolvedConstrNum[SurfNum];
                 surf.ConstructionStoredInputValue = resolvedConstrNum[SurfNum];
-                surf.ConstructionAssignmentSource = static_cast<int>(resolvedSource[SurfNum]);
+                surf.ConstructionAssignmentSource = resolvedSource[SurfNum];
                 state.dataConstruction->Construct(surf.Construction).IsUsed = true;
             }
         }

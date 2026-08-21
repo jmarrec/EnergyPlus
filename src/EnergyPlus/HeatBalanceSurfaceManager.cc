@@ -68,6 +68,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/ChilledCeilingPanelSimple.hh>
 #include <EnergyPlus/Construction.hh>
+#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/ConvectionCoefficients.hh>
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -675,21 +676,15 @@ void InitSurfaceHeatBalance(EnergyPlusData &state)
     state.dataHeatBalSurfMgr->InitSurfaceHeatBalancefirstTime = false;
 }
 
-// Maps SurfaceData::ConstructionAssignmentSource (mirrors ConstructionAssignments::SearchDistanceType, stored as
-// int to avoid a header dependency) to the display string used in the EnvelopeSummary's Construction Assignment
-// Source column.
-std::string_view constructionAssignmentSourceString(int constructionAssignmentSource)
+// Maps SurfaceData::ConstructionAssignmentSource to the display string used in the EnvelopeSummary's
+// Construction Assignment Source column.
+std::string_view constructionAssignmentSourceString(ConstructionAssignments::SearchDistanceType constructionAssignmentSource)
 {
-    switch (constructionAssignmentSource) {
-    case 0:
-        return "Explicit";
-    case 1:
-        return "Space";
-    case 2:
-        return "Building";
-    default:
+    int const index = static_cast<int>(constructionAssignmentSource);
+    if (index < 0 || index >= static_cast<int>(ConstructionAssignments::SearchDistanceType::Num)) {
         return "N/A";
     }
+    return ConstructionAssignments::SearchDistanceTypeNames[index];
 }
 
 void GatherForPredefinedReport(EnergyPlusData &state)

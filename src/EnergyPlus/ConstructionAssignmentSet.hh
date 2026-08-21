@@ -49,7 +49,9 @@
 #define ConstructionAssignmentSet_hh_INCLUDED
 
 // C++ Headers
+#include <array>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 // EnergyPlus Headers
@@ -76,6 +78,13 @@ namespace ConstructionAssignments {
         Building,
         // BuildingSpaceType,
         Num,
+    };
+
+    // Display strings for the EnvelopeSummary report's "Construction Assignment Source" column.
+    constexpr std::array<std::string_view, static_cast<int>(SearchDistanceType::Num)> SearchDistanceTypeNames = {
+        "Explicit", // HardAssigned
+        "Space",
+        "Building",
     };
 
     struct ConstructionWithSearchDistance

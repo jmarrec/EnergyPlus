@@ -61,6 +61,7 @@
 using ObjexxFCL::Vector4;
 
 // EnergyPlus Headers
+#include <EnergyPlus/ConstructionAssignmentSet.hh>
 #include <EnergyPlus/ConvectionConstants.hh>
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataBSDFWindow.hh>
@@ -723,10 +724,8 @@ namespace DataSurfaces {
 
         std::vector<int> ConstituentSurfaceNums; // A vector of surface numbers which reference this surface for representative calculations
         int ConstructionStoredInputValue;        // holds the original value for Construction per surface input
-        // Mirrors ConstructionAssignments::SearchDistanceType, stored as int to avoid a header dependency:
-        // -1 = Invalid/not applicable, 0 = HardAssigned (explicit in input), 1 = Space, 2 = Building.
         // Reported as the "Construction Assignment Source" column in the EnvelopeSummary report.
-        int ConstructionAssignmentSource = -1;
+        ConstructionAssignments::SearchDistanceType ConstructionAssignmentSource = ConstructionAssignments::SearchDistanceType::Invalid;
         SurfaceClass Class;
         SurfaceClass OriginalClass;
 

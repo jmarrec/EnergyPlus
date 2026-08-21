@@ -1771,9 +1771,9 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_BuildingLevelOnly)
     EXPECT_EQ("EXTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
     EXPECT_EQ("EXTERIOR FLOOR CONSTRUCTION", state->dataConstruction->Construct(floor.Construction).Name);
 
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), wall.ConstructionAssignmentSource);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), roof.ConstructionAssignmentSource);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), floor.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, wall.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, roof.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, floor.ConstructionAssignmentSource);
 
     // A DCS-inherited construction must be marked used, same as an explicitly-assigned one, or it
     // triggers a false "unused construction" warning and CondFD setup skips it.
@@ -1903,11 +1903,11 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_SpaceOverridesBuildingWithFallb
 
     // Space-level set has a Wall entry: it wins over the Building-level "Exterior Wall Construction".
     EXPECT_EQ("EXTERIOR WALL CONSTRUCTION - SPACE3", state->dataConstruction->Construct(wall.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Space), wall.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Space, wall.ConstructionAssignmentSource);
 
     // Space-level set has no Roof entry: falls through to the Building-level "Exterior Roof Construction".
     EXPECT_EQ("EXTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), roof.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, roof.ConstructionAssignmentSource);
 }
 
 TEST_F(EnergyPlusFixture, ConstructionResolution_AdiabaticAndInteriorPartition)
@@ -2004,10 +2004,10 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_AdiabaticAndInteriorPartition)
     ASSERT_GT(intMass.Construction, 0);
 
     EXPECT_EQ("ADIABATIC SURFACE CONSTRUCTION", state->dataConstruction->Construct(adiabaticWall.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), adiabaticWall.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, adiabaticWall.ConstructionAssignmentSource);
 
     EXPECT_EQ("INTERIOR PARTITION CONSTRUCTION", state->dataConstruction->Construct(intMass.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), intMass.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, intMass.ConstructionAssignmentSource);
 }
 
 TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitUnaffectedByConstructionAssignmentSet)
@@ -2094,7 +2094,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitUnaffectedByConstructio
     // Kept its own explicit construction, not the DCS's "Exterior Wall Construction" for this
     // Wall/Outdoors combination.
     EXPECT_EQ("INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wall.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned), wall.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, wall.ConstructionAssignmentSource);
 }
 
 TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInheritedInPair)
@@ -2226,7 +2226,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInherited
 
     // WallA is untouched: still its own explicit construction.
     EXPECT_EQ("EXTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wallA.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned), wallA.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, wallA.ConstructionAssignmentSource);
 
     // WallB must NOT have inherited "Interior Wall Construction" from the Building-level DCS -
     // WallA's explicit assignment has higher precedence and governs the pair.
@@ -2374,7 +2374,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInherited
 
     // RoofCeiling is untouched: still its own explicit construction.
     EXPECT_EQ("INTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned), roof.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, roof.ConstructionAssignmentSource);
 
     // The Floor side's reversed-of-the-winner construction should land on the pre-existing
     // "Interior Floor Construction" (an exact layer-order match), not a newly generated one.
@@ -2513,7 +2513,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInherited
 
     // Floor is untouched: still its own explicit construction.
     EXPECT_EQ("INTERIOR FLOOR CONSTRUCTION", state->dataConstruction->Construct(floor.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::HardAssigned), floor.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, floor.ConstructionAssignmentSource);
 
     // The Roof side's reversed-of-the-winner construction should land on the pre-existing
     // "Interior Floor Construction" (an exact layer-order match), not a newly generated one.
@@ -2694,8 +2694,8 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_BothSidesInheritedSameConstruct
     ASSERT_GT(wallB.Construction, 0);
 
     // Both sides were purely inherited (neither hardcoded), both via the Building-level DCS.
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), wallA.ConstructionAssignmentSource);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), wallB.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, wallA.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, wallB.ConstructionAssignmentSource);
 
     // "WallB" > "WallA" alphabetically, so WallB is the one that gets auto-reversed; WallA keeps
     // the construction as originally resolved.
@@ -2855,11 +2855,11 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_SpacePrecedenceOverBuildingInPa
     ASSERT_GT(wallB.Construction, 0);
 
     EXPECT_EQ("SPACE WALL CONSTRUCTION", state->dataConstruction->Construct(wallA.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Space), wallA.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Space, wallA.ConstructionAssignmentSource);
 
     // WallB must not keep its own Building-inherited "Interior Wall Construction" - Space wins the pair.
     EXPECT_NE("INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wallB.Construction).Name);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Space), wallB.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Space, wallB.ConstructionAssignmentSource);
 
     auto const &constrA = state->dataConstruction->Construct(wallA.Construction);
     auto const &constrB = state->dataConstruction->Construct(wallB.Construction);
@@ -3296,8 +3296,8 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_GeneratedInterzoneSurfaceIsReve
     ASSERT_GT(generatedWall.Construction, 0);
 
     // Both were purely inherited (neither hardcoded), both via the Building-level DCS.
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), wallA.ConstructionAssignmentSource);
-    EXPECT_EQ(static_cast<int>(ConstructionAssignments::SearchDistanceType::Building), generatedWall.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, wallA.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Building, generatedWall.ConstructionAssignmentSource);
 
     // "iz-WallA" > "WallA" alphabetically, so the generated side is the one that gets auto-reversed;
     // WallA keeps the construction as originally resolved.
