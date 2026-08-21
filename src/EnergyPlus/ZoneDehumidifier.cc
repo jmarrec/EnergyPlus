@@ -54,11 +54,14 @@
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataContaminantBalance.hh>
 #include <EnergyPlus/DataEnvironment.hh>
+#include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataWater.hh>
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
 #include <EnergyPlus/DataZoneEquipment.hh>
+// Disabled with the commented node-RH setpoint validation path below.
+// #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
@@ -167,7 +170,7 @@ namespace ZoneDehumidifier {
 
         QZnDehumidReq = state.dataZoneEnergyDemand->ZoneSysMoistureDemand(ZoneNum).RemainingOutputReqToDehumidSP; // Negative means dehumidify
 
-        InitZoneDehumidifier(state, ZoneDehumidNum);
+        InitZoneDehumidifier(state, ZoneDehumidNum, ZoneNum);
 
         CalcZoneDehumidifier(state, ZoneDehumidNum, QZnDehumidReq, QSensOut, QLatOut);
 
@@ -513,7 +516,7 @@ namespace ZoneDehumidifier {
         }
     }
 
-    void InitZoneDehumidifier(EnergyPlusData &state, int const ZoneDehumNum) // Number of the current zone dehumidifier being simulated
+    void InitZoneDehumidifier(EnergyPlusData &state, int const ZoneDehumNum, int const ZoneNum) // Number of the current zone dehumidifier and serving zone
     {
 
         // SUBROUTINE INFORMATION:
@@ -537,7 +540,8 @@ namespace ZoneDehumidifier {
         static constexpr std::string_view RoutineName("InitZoneDehumidifier");
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int AirInletNode;      // Inlet air node number
+        int AirInletNode; // Inlet air node number
+        // int AirOutletNode; // Inlet air node number, used by the commented RH setpoint validation below
         Real64 RatedAirHumrat; // Humidity ratio (kg/kg) at rated inlet air conditions of 26.6667C, 60% RH
         Real64 RatedAirDBTemp; // Dry-bulb air temperature at rated conditions 26.6667C
         Real64 RatedAirRH;     // Relative humidity of air (0.6 --> 60%) at rated conditions
@@ -556,6 +560,7 @@ namespace ZoneDehumidifier {
         }
 
         AirInletNode = dehumid.AirInletNodeNum;
+        // AirOutletNode = dehumid.AirOutletNodeNum;
         // Do the Begin Environment initializations
         if (state.dataGlobal->BeginEnvrnFlag && dehumid.MyEnvrnFlag) {
 
@@ -578,6 +583,39 @@ namespace ZoneDehumidifier {
 
         if (!state.dataGlobal->BeginEnvrnFlag) {
             dehumid.MyEnvrnFlag = true;
+        }
+
+        if (!state.dataGlobal->SysSizingCalc && dehumid.MySetPointCheckFlag && state.dataHVACGlobal->DoSetPointTest) {
+            auto const &zone = state.dataHeatBal->Zone(ZoneNum);
+            if (zone.humidityControlZoneIndex == 0) {
+                ShowSevereError(state, "Missing ZoneControl:Humidistat for ");
+                ShowContinueError(state, std::format("ZoneHVAC:Dehumidifier:DX: {}", dehumid.Name));
+                ShowContinueError(state, std::format("Zone: {}", zone.Name));
+                state.dataHVACGlobal->SetPointErrorFlag = true;
+            }
+
+            // Existing node-RH setpoint validation retained for possible future use:
+            // if (state.dataLoopNodes->Node(AirOutletNode).RHSetPointDehum == Node::SensedNodeFlagValue) {
+            //     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
+            //         ShowSevereError(state, "Missing dehumidifying setpoint (RHSetPointDehum) for ");
+            //         ShowContinueError(state, std::format("ZoneHVAC:Dehumidifier:DX: {}", dehumid.Name));
+            //         ShowContinueError(state, std::format("Node Referenced={}", state.dataLoopNodes->NodeID(AirOutletNode)));
+            //         ShowContinueError(state, "use a Humidistat to establish a setpoint at the dehumidifier outlet node.");
+            //         state.dataHVACGlobal->SetPointErrorFlag = true;
+            //     } else {
+            //         EMSManager::CheckIfNodeSetPointManagedByEMS(
+            //             state, AirOutletNode, HVAC::CtrlVarType::MinHumRat, state.dataHVACGlobal->SetPointErrorFlag);
+            //         if (state.dataHVACGlobal->SetPointErrorFlag) {
+            //             ShowSevereError(state, "Missing dehumidifying setpoint (RHSetPointDehum) for ");
+            //             ShowContinueError(state, std::format("ZoneHVAC:Dehumidifier:DX: {}", dehumid.Name));
+            //             ShowContinueError(state, std::format("Node Referenced={}", state.dataLoopNodes->NodeID(AirOutletNode)));
+            //             ShowContinueError(state, "use a Humidistat to establish a setpoint at the dehumidifier outlet node.");
+            //             ShowContinueError(state, "Or use EMS Actuator to establish a setpoint at the dehumidifier outlet node.");
+            //         }
+            //     }
+            // }
+
+            dehumid.MySetPointCheckFlag = false;
         }
 
         // These initializations are done every iteration
