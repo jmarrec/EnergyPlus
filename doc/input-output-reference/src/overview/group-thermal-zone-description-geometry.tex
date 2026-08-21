@@ -316,6 +316,8 @@ In addition to the canned Surface reports (view the Reports section later in thi
 \item
   Zone,Average,Zone Mean Radiant Temperature {[}C{]}
 \item
+  Zone,Average,Zone Standard Mean Radiant Temperature {[}C{]}
+\item
   Zone,Average,Zone Operative Temperature {[}C{]}
 \item
   HVAC,Average,Zone Air Heat Balance Internal Convective Heat Gain Rate {[}W{]}
@@ -395,10 +397,11 @@ This is the dewpoint temperature of the zone calculated from the Zone Mean Air T
 This is the zone air node temperature for the well-mixed room air model, which is the default room air model type (\hyperref[roomairmodeltype]{RoomAirModelType} = Mixing). But for other types of Room Air Model (the RoomAir:TemperaturePattern:* and RoomAirSettings:* objects) the zone thermostat air temperature may depend on the Thermostat Height and Thermostat Offset.
 
 \paragraph{Zone Mean Radiant Temperature {[}C{]}}\label{zone-mean-radiant-temperature-c}
+\paragraph{Zone Standard Mean Radiant Temperature {[}C{]}}\label{zone-standard-mean-radiant-temperature-c}
 \paragraph{Space Mean Radiant Temperature {[}C{]}}\label{space-mean-radiant-temperature-c}
 \paragraph{Enclosure Mean Radiant Temperature {[}C{]}}\label{enclosure-mean-radiant-temperature-c}
 
-The Mean Radiant Temperature (MRT) in degrees Celsius is the surface area $\times$ emissivity weighted average of the \hyperref[surface-inside-face-temperature-c]{Surface Inside Face Temperature}, where emissivity is the Thermal Absorptance of the inside material layer of each surface. Zone Mean Radiant Temperature is based on all surfaces in the zone (regardless of what enclosure each surface is in). Enclosure Mean Radiant Temperature is based on all surfaces in an enclosure (one or more \hyperref[space]{Spaces}, see \hyperref[constructionairboundary]{Construction:AirBoundary}). Space Mean Radiant Temperature is based on all surfaces in the enclosure which contains the space (same as its Enclsoure Mean Radiant Temperature).
+The "Standard" Mean Radiant Temperature (MRT) in degrees Celsius is the surface area $\times$ emissivity weighted average of the \hyperref[surface-inside-face-temperature-c]{Surface Inside Face Temperature}, where emissivity is the Thermal Absorptance of the inside material layer of each surface. Standard Zone Mean Radiant Temperature is based on all surfaces in the zone (regardless of what enclosure each surface is in). Enclosure Mean Radiant Temperature is based on all surfaces in an enclosure (one or more \hyperref[space]{Spaces}, see \hyperref[constructionairboundary]{Construction:AirBoundary}). Space Mean Radiant Temperature is based on all surfaces in the enclosure which contains the space (same as its Enclsoure Mean Radiant Temperature).  The Zone Mean Radiant Temperature is identical to the Standard Mean Radiant temperature except when the user inputs the \hyperref[zonemrtcalculation]{ZoneMRTCalculation} input object which determines how the zone MRT is calculated via People object input. When the ZoneMRTCalculation object is entered, the information entered via this object controls how the zone MRT is calculated and this then impacts any system controlled on either the MRT or the Operative Temperature (see next paragraph).
 
 \paragraph{Zone Operative Temperature {[}C{]}}\label{zone-operative-temperature-c}
 
