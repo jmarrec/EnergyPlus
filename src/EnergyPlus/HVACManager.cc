@@ -1743,9 +1743,6 @@ void SimHVAC(EnergyPlusData &state)
                 for (auto &e : state.dataLoopNodes->Node) {
                     e.TempSetPoint = Node::SensedNodeFlagValue;
                     e.HumRatSetPoint = Node::SensedNodeFlagValue;
-                    // Experimental RH node setpoints are disabled; humidistat presence is checked from the zone instead.
-                    // e.RHSetPointHum = Node::SensedNodeFlagValue;
-                    // e.RHSetPointDehum = Node::SensedNodeFlagValue;
                     e.HumRatMin = Node::SensedNodeFlagValue;
                     e.HumRatMax = Node::SensedNodeFlagValue;
                     e.MassFlowRateSetPoint = Node::SensedNodeFlagValue; // BG 5-26-2009 (being checked in HVACControllers.cc)
@@ -1754,9 +1751,6 @@ void SimHVAC(EnergyPlusData &state)
                 state.dataLoopNodes->DefaultNodeValues.HumRatSetPoint = Node::SensedNodeFlagValue;
                 state.dataLoopNodes->DefaultNodeValues.HumRatMin = Node::SensedNodeFlagValue;
                 state.dataLoopNodes->DefaultNodeValues.HumRatMax = Node::SensedNodeFlagValue;
-                // Experimental RH node setpoints are disabled; humidistat presence is checked from the zone instead.
-                // state.dataLoopNodes->DefaultNodeValues.RHSetPointHum = Node::SensedNodeFlagValue;
-                // state.dataLoopNodes->DefaultNodeValues.RHSetPointDehum = Node::SensedNodeFlagValue;
                 state.dataLoopNodes->DefaultNodeValues.MassFlowRateSetPoint =
                     Node::SensedNodeFlagValue; // BG 5-26-2009 (being checked in HVACControllers.cc)
             }
@@ -2160,9 +2154,6 @@ void ResetNodeData(EnergyPlusData &state)
         e.HumRatMin = state.dataLoopNodes->DefaultNodeValues.HumRatMin;
         e.HumRatMax = state.dataLoopNodes->DefaultNodeValues.HumRatMax;
         e.HumRatSetPoint = state.dataLoopNodes->DefaultNodeValues.HumRatSetPoint;
-        // Experimental RH node setpoints are disabled; humidistat presence is checked from the zone instead.
-        // e.RHSetPointHum = state.dataLoopNodes->DefaultNodeValues.RHSetPointHum;
-        // e.RHSetPointDehum = state.dataLoopNodes->DefaultNodeValues.RHSetPointDehum;
         e.TempSetPointHi = state.dataLoopNodes->DefaultNodeValues.TempSetPointHi;
         e.TempSetPointLo = state.dataLoopNodes->DefaultNodeValues.TempSetPointLo;
     }
