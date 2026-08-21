@@ -466,8 +466,22 @@ namespace ConstructionAssignments {
                     dcs.exteriorSubSurfConstructions = findSubSurfConstr("exterior_subsurface_construction_assignments_name");
                     dcs.interiorSubSurfConstructions = findSubSurfConstr("interior_subsurface_construction_assignments_name");
 
-                    auto lookUpConstrNum = [&](const char *fieldName) {
-                        return getConstrNum(cCurrentModuleObject, dcs.Name, fields, objectSchemaProps, fieldName);
+                    auto lookUpConstrNum = [&](const char *fieldName) -> int {
+                        const int constrNum = getConstrNum(cCurrentModuleObject, dcs.Name, fields, objectSchemaProps, fieldName);
+                        if (constrNum > 0) {
+                            auto const &thisContruct = state.dataConstruction->Construct(constrNum);
+                            if (thisContruct.TypeIsWindow) {
+                                ShowSevereError(state,
+                                                std::format(R"({}{}="{}", invalid {}="{}" - has Window material.)",
+                                                            routineName,
+                                                            cCurrentModuleObject,
+                                                            dcs.Name,
+                                                            fieldName,
+                                                            thisContruct.Name));
+                                ErrorsFound = true;
+                            }
+                        }
+                        return constrNum;
                     };
                     dcs.interiorPartitionConstrNum = lookUpConstrNum("interior_partition_construction_name");
                     dcs.adiabaticSurfConstrNum = lookUpConstrNum("adiabatic_surface_construction_name");

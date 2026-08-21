@@ -2558,6 +2558,19 @@ namespace SurfaceGeometry {
             SurfError = true;
         }
 
+        // Now that every heat-transfer surface has a resolved (non-zero) Construction, re-check the
+        // Foundation-specific source/sink rule for surfaces whose Construction Name was blank at parse
+        // time (deferred from GetHTSurfaceData, which cannot evaluate this against an unresolved
+        // construction).
+        for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
+            auto const &surf = state.dataSurface->Surface(SurfNum);
+            if (surf.HeatTransSurf && surf.ExtBoundCond == DataSurfaces::KivaFoundation && surf.Construction != 0 &&
+                state.dataConstruction->Construct(surf.Construction).SourceSinkPresent) {
+                ShowSevereError(state, std::format("{}Surface=\"{}\", construction may not have an internal source/sink", RoutineName, surf.Name));
+                SurfError = true;
+            }
+        }
+
         // Fatal now: surfaces below assume every heat-transfer surface has a resolved (non-zero) Construction.
         if (SurfError) {
             ErrorsFound = true;
@@ -4253,7 +4266,10 @@ namespace SurfaceGeometry {
                         }
                     }
 
-                    if (state.dataConstruction->Construct(surfTemp.Construction).SourceSinkPresent) {
+                    // A blank Construction Name here is pending ConstructionAssignmentSet inheritance
+                    // (resolved later, in SetupZoneGeometry); this check is deferred for that case rather
+                    // than performed against the still-unresolved (zero) construction index.
+                    if (surfTemp.Construction != 0 && state.dataConstruction->Construct(surfTemp.Construction).SourceSinkPresent) {
                         ShowSevereError(
                             state,
                             std::format("{}=\"{}\", construction may not have an internal source/sink", s_ipsc->cCurrentModuleObject, surfTemp.Name));
@@ -6059,29 +6075,34 @@ namespace SurfaceGeometry {
                                       std::format("will be replaced with FrameAndDivider from Window5 Data File entry {}",
                                                   state.dataConstruction->Construct(surfTemp.Construction).Name));
                 }
+            } // End of check if window has a construction
 
-                if (!s_ipsc->lAlphaFieldBlanks(FrameField) && surfTemp.FrameDivider == 0) {
-                    surfTemp.FrameDivider = Util::FindItemInList(s_ipsc->cAlphaArgs(FrameField), state.dataSurface->FrameDivider);
-                    if (surfTemp.FrameDivider == 0) {
-                        if (!state.dataConstruction->Construct(surfTemp.Construction).WindowTypeEQL) {
-                            ShowSevereError(state,
-                                            std::format("{}=\"{}\", invalid {}=\"{}\"",
-                                                        s_ipsc->cCurrentModuleObject,
-                                                        surfTemp.Name,
-                                                        s_ipsc->cAlphaFieldNames(FrameField),
-                                                        s_ipsc->cAlphaArgs(FrameField)));
-                            ErrorsFound = true;
-                        } else {
-                            ShowSevereError(state,
-                                            std::format("{}=\"{}\", invalid {}=\"{}\"",
-                                                        s_ipsc->cCurrentModuleObject,
-                                                        surfTemp.Name,
-                                                        s_ipsc->cAlphaFieldNames(FrameField),
-                                                        s_ipsc->cAlphaArgs(FrameField)));
-                            ShowContinueError(state, "...Frame/Divider is not supported in Equivalent Layer Window model.");
-                        }
+            // A non-blank Frame and Divider Name must reference an existing WindowProperty:FrameAndDivider
+            // object regardless of whether this window's construction has been resolved yet (it may still be
+            // pending ConstructionAssignmentSet inheritance), so this lookup is not gated on Construction != 0.
+            if (!s_ipsc->lAlphaFieldBlanks(FrameField) && surfTemp.FrameDivider == 0) {
+                surfTemp.FrameDivider = Util::FindItemInList(s_ipsc->cAlphaArgs(FrameField), state.dataSurface->FrameDivider);
+                if (surfTemp.FrameDivider == 0) {
+                    if (surfTemp.Construction == 0 || !state.dataConstruction->Construct(surfTemp.Construction).WindowTypeEQL) {
+                        ShowSevereError(state,
+                                        std::format("{}=\"{}\", invalid {}=\"{}\"",
+                                                    s_ipsc->cCurrentModuleObject,
+                                                    surfTemp.Name,
+                                                    s_ipsc->cAlphaFieldNames(FrameField),
+                                                    s_ipsc->cAlphaArgs(FrameField)));
+                        ErrorsFound = true;
+                    } else {
+                        ShowSevereError(state,
+                                        std::format("{}=\"{}\", invalid {}=\"{}\"",
+                                                    s_ipsc->cCurrentModuleObject,
+                                                    surfTemp.Name,
+                                                    s_ipsc->cAlphaFieldNames(FrameField),
+                                                    s_ipsc->cAlphaArgs(FrameField)));
+                        ShowContinueError(state, "...Frame/Divider is not supported in Equivalent Layer Window model.");
                     }
-                    // Divider not allowed with between-glass shade or blind
+                }
+                // Divider not allowed with between-glass shade or blind
+                if (surfTemp.Construction != 0) {
                     for (int WSCPtr : surfTemp.windowShadingControlList) {
                         if (!ErrorsFound && WSCPtr > 0 && ConstrNumSh > 0) {
                             if (ANY_BETWEENGLASS_SHADE_BLIND(state.dataSurface->WindowShadingControl(WSCPtr).ShadingType)) {
@@ -6105,8 +6126,8 @@ namespace SurfaceGeometry {
                             } // End of check if window has a between-glass shade or blind
                         } // End of check if window has a shaded construction
                     } // end of looping through window shading controls of window
-                } // End of check if window has an associated FrameAndDivider
-            } // End of check if window has a construction
+                }
+            } // End of check if window has an associated FrameAndDivider
         }
 
         if (surfTemp.Construction != 0 && state.dataConstruction->Construct(surfTemp.Construction).WindowTypeEQL) {
