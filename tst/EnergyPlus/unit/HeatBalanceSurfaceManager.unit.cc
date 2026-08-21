@@ -2551,6 +2551,13 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_SurfaceCOnstructionIndexTest
     state->dataSurface->Surface(1).ExtBoundCond = 1;
     state->dataSurface->Surface(1).Construction = 1;
 
+    auto *material = new Material::MaterialBase;
+    material->Name = "TEST MATERIAL";
+    material->group = Material::Group::Regular;
+    state->dataMaterial->materials.push_back(material);
+    state->dataConstruction->Construct(1).TotLayers = 1;
+    state->dataConstruction->Construct(1).LayerPoint(1) = 1;
+
     state->dataConstruction->Construct(1).NumCTFTerms = 2;
     state->dataConstruction->Construct(1).SourceSinkPresent = true;
     state->dataConstruction->Construct(1).NumHistories = 1;

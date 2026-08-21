@@ -2141,6 +2141,7 @@ void AllocateSurfaceHeatBalArrays(EnergyPlusData &state)
         }
         // Set up output variables for absorptances
         auto const &construction = state.dataConstruction->Construct(surface.Construction);
+        assert(construction.TotLayers > 0);
         if (!construction.TypeIsWindow) {
             bool useInsideThermalAbsorptance = false;
             bool useInsideSolarAbsorptance = false;
