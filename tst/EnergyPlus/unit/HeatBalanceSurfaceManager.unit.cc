@@ -8626,6 +8626,104 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptanc
     EXPECT_NEAR(state->dataHeatBalSurf->SurfAbsSolarInt(1), 0.2, 1e-6);
 }
 
+TEST_F(EnergyPlusFixture, AllocateSurfaceHeatBalArraysRegistersConditionalAbsorptanceOutputs)
+{
+    std::string const idf_objects = delimited_string({
+        "Output:Variable,*,Surface Thermal Absorptance,Timestep;",
+        "Output:Variable,*,Surface Solar Absorptance,Timestep;",
+        "Output:Variable,*,Surface Thermal Absorptance Outside Face,Timestep;",
+        "Output:Variable,*,Surface Thermal Absorptance Inside Face,Timestep;",
+        "Output:Variable,*,Surface Solar Absorptance Outside Face,Timestep;",
+        "Output:Variable,*,Surface Solar Absorptance Inside Face,Timestep;",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    constexpr int numSurfaces = 4;
+    constexpr int numConstructions = 3;
+    state->dataSurface->TotSurfaces = numSurfaces;
+    state->dataSurface->Surface.allocate(numSurfaces);
+    state->dataSurface->SurfaceWindow.allocate(numSurfaces);
+    state->dataHeatBal->TotConstructs = numConstructions;
+    state->dataConstruction->Construct.allocate(numConstructions);
+
+    for (int constructionNum = 1; constructionNum <= numConstructions; ++constructionNum) {
+        auto &construction = state->dataConstruction->Construct(constructionNum);
+        construction.TotLayers = 1;
+        construction.LayerPoint.allocate(1);
+        construction.LayerPoint(1) = constructionNum;
+    }
+
+    auto *bulkMaterial = new Material::MaterialBase;
+    bulkMaterial->Name = "BULK MATERIAL";
+    bulkMaterial->group = Material::Group::Regular;
+    state->dataMaterial->materials.push_back(bulkMaterial);
+
+    auto *explicitThermalMaterial = new Material::MaterialBase;
+    explicitThermalMaterial->Name = "EXPLICIT THERMAL MATERIAL";
+    explicitThermalMaterial->group = Material::Group::Regular;
+    explicitThermalMaterial->hasAbsorpThermalInputIn = true;
+    state->dataMaterial->materials.push_back(explicitThermalMaterial);
+
+    Curve::Curve solarCurve;
+    auto *dynamicSolarMaterial = new Material::MaterialBase;
+    dynamicSolarMaterial->Name = "DYNAMIC SOLAR MATERIAL";
+    dynamicSolarMaterial->group = Material::Group::Regular;
+    dynamicSolarMaterial->absorpVarCtrlSignalIn = Material::VariableAbsCtrlSignal::SurfaceTemperature;
+    dynamicSolarMaterial->absorpSolarVarCurveIn = &solarCurve;
+    state->dataMaterial->materials.push_back(dynamicSolarMaterial);
+
+    std::array<std::string_view, numSurfaces> const surfaceNames = {
+        "BULK SURFACE", "EXPLICIT THERMAL SURFACE", "DYNAMIC SOLAR SURFACE", "INTERIOR DYNAMIC SOLAR SURFACE"};
+    for (int surfaceNum = 1; surfaceNum <= numSurfaces; ++surfaceNum) {
+        auto &surface = state->dataSurface->Surface(surfaceNum);
+        surface.Name = surfaceNames[surfaceNum - 1];
+        surface.Class = DataSurfaces::SurfaceClass::Wall;
+        surface.HeatTransSurf = true;
+        surface.Construction = std::min(surfaceNum, numConstructions);
+        surface.ExtBoundCond = surfaceNum == numSurfaces ? 1 : DataSurfaces::ExternalEnvironment;
+    }
+
+    AllocateSurfaceHeatBalArrays(*state);
+
+    auto outputIsRegistered = [this](std::string_view const key, std::string_view const name) {
+        for (auto const *outputVariable : state->dataOutputProcessor->outVars) {
+            if (outputVariable->key == key && outputVariable->name == name) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    EXPECT_TRUE(outputIsRegistered("BULK SURFACE", "Surface Thermal Absorptance"));
+    EXPECT_TRUE(outputIsRegistered("BULK SURFACE", "Surface Solar Absorptance"));
+    EXPECT_FALSE(outputIsRegistered("BULK SURFACE", "Surface Thermal Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("BULK SURFACE", "Surface Thermal Absorptance Inside Face"));
+    EXPECT_FALSE(outputIsRegistered("BULK SURFACE", "Surface Solar Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("BULK SURFACE", "Surface Solar Absorptance Inside Face"));
+
+    EXPECT_FALSE(outputIsRegistered("EXPLICIT THERMAL SURFACE", "Surface Thermal Absorptance"));
+    EXPECT_TRUE(outputIsRegistered("EXPLICIT THERMAL SURFACE", "Surface Thermal Absorptance Outside Face"));
+    EXPECT_TRUE(outputIsRegistered("EXPLICIT THERMAL SURFACE", "Surface Thermal Absorptance Inside Face"));
+    EXPECT_TRUE(outputIsRegistered("EXPLICIT THERMAL SURFACE", "Surface Solar Absorptance"));
+    EXPECT_FALSE(outputIsRegistered("EXPLICIT THERMAL SURFACE", "Surface Solar Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("EXPLICIT THERMAL SURFACE", "Surface Solar Absorptance Inside Face"));
+
+    EXPECT_TRUE(outputIsRegistered("DYNAMIC SOLAR SURFACE", "Surface Thermal Absorptance"));
+    EXPECT_FALSE(outputIsRegistered("DYNAMIC SOLAR SURFACE", "Surface Thermal Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("DYNAMIC SOLAR SURFACE", "Surface Thermal Absorptance Inside Face"));
+    EXPECT_FALSE(outputIsRegistered("DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance"));
+    EXPECT_TRUE(outputIsRegistered("DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance Outside Face"));
+    EXPECT_TRUE(outputIsRegistered("DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance Inside Face"));
+
+    EXPECT_TRUE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Thermal Absorptance"));
+    EXPECT_TRUE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance"));
+    EXPECT_FALSE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Thermal Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Thermal Absorptance Inside Face"));
+    EXPECT_FALSE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance Outside Face"));
+    EXPECT_FALSE(outputIsRegistered("INTERIOR DYNAMIC SOLAR SURFACE", "Surface Solar Absorptance Inside Face"));
+}
+
 TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_UpdateThermalHistoriesIZSurfaceCheck)
 {
     state->dataSurface->TotSurfaces = 2;

@@ -6135,6 +6135,10 @@
 
   Output:Variable,*,Air System Simulation Iteration Count,timestep;
 
+  Output:Variable,*,Surface Thermal Absorptance,timestep;
+
+  Output:Variable,*,Surface Solar Absorptance,timestep;
+
   Output:Variable,*,Surface Thermal Absorptance Outside Face,timestep;
 
   Output:Variable,*,Surface Thermal Absorptance Inside Face,timestep;
