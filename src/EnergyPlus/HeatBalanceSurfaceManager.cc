@@ -103,6 +103,7 @@
 #include <EnergyPlus/HeatBalanceHAMTManager.hh>
 #include <EnergyPlus/HeatBalanceIntRadExchange.hh>
 #include <EnergyPlus/HeatBalanceKivaManager.hh>
+#include <EnergyPlus/HeatBalanceManager.hh>
 #include <EnergyPlus/HeatBalanceSurfaceManager.hh>
 #include <EnergyPlus/HighTempRadiantSystem.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
@@ -5729,6 +5730,7 @@ void CalculateZoneMRT(EnergyPlusData &state,
                 }
             }
         }
+        HeatBalanceManager::getZoneMRTCalculationData(state);
     }
 
     // Zero sumAET for applicable enclosures
@@ -5748,7 +5750,7 @@ void CalculateZoneMRT(EnergyPlusData &state,
             continue;
         }
         auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(ZoneNum);
-        if (state.dataHeatBalSurfMgr->ZoneAESum(ZoneNum) > 0.01) {
+        if (state.dataHeatBalSurfMgr->ZoneAESum(ZoneNum) > 0.01) { // Calculate standard area-emissivity weighted MRT
             Real64 zoneSumAET = 0.0;
             for (int spaceNum : state.dataHeatBal->Zone(ZoneNum).spaceIndexes) {
                 auto const &thisSpace = state.dataHeatBal->space(spaceNum);
@@ -5768,6 +5770,7 @@ void CalculateZoneMRT(EnergyPlusData &state,
             }
             thisZoneHB.MRT = state.dataZoneTempPredictorCorrector->zoneHeatBalance(ZoneNum).MAT;
         }
+        thisZoneHB.stdMRT = thisZoneHB.MRT;
     }
     // Calculate MRT for applicable enclosures
     for (auto &thisEnclosure : state.dataViewFactor->EnclRadInfo) {
@@ -5809,7 +5812,37 @@ void CalculateZoneMRT(EnergyPlusData &state,
         }
     }
 
+    // Adjust the zone MRT based on the current conditions and the user defined split
+    for (int mrtNum = 1; mrtNum <= state.dataHeatBal->totZoneMRT; mrtNum++) { // set up and check zone and people indices
+        auto &thisZoneNum = state.dataHeatBal->zoneMRTCalc(mrtNum).zoneIndex;
+        if (state.dataHeatBal->Zone(thisZoneNum).useZoneMRTCalc) {
+            state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisZoneNum).MRT = calcUserZoneMRT(state, mrtNum);
+        }
+    }
+
     state.dataHeatBalSurfMgr->CalculateZoneMRTfirstTime = false;
+}
+
+Real64 calcUserZoneMRT(EnergyPlusData &state, int mrtNum)
+{
+    // This Real64 calculates the user specified zone MRT based on input parameters and current conditions.
+    auto &thisZoneMRT = state.dataHeatBal->zoneMRTCalc(mrtNum);
+    auto &thisZoneNum = thisZoneMRT.zoneIndex;
+    auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisZoneNum);
+    Real64 sumMRTfracs = 0.0; // Calculate user defined zone MRT
+    Real64 stdMRTfrac = 0.0;
+    state.dataThermalComforts->ZoneNum = thisZoneMRT.zoneIndex;
+    if (thisZoneMRT.zoneIndex > 0) {
+        for (int pNum = 1; pNum <= thisZoneMRT.numPeople; ++pNum) {
+            auto &thisPeople = thisZoneMRT.zoneMRTPeople(pNum);
+            thisPeople.peopleMRT = ThermalComfort::CalcRadTemp(state, thisPeople.peopleIndex);
+            sumMRTfracs += thisPeople.fracMRT * thisPeople.peopleMRT;
+        }
+        stdMRTfrac = thisZoneMRT.fracZoneStdMRT;
+        return sumMRTfracs + stdMRTfrac * thisZoneHB.stdMRT;
+    } else {
+        return thisZoneHB.stdMRT;
+    }
 }
 
 // End of Record Keeping subroutines for the HB Module
