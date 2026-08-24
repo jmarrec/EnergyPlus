@@ -2491,7 +2491,7 @@ namespace SurfaceGeometry {
             for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
                 auto &surf = state.dataSurface->Surface(SurfNum);
                 if (surf.HeatTransSurf && surf.Construction != 0) {
-                    surf.ConstructionAssignmentSource = ConstructionAssignments::SearchDistanceType::HardAssigned;
+                    surf.ConstructionAssignmentSource = ConstructionAssignments::SearchDistanceType::Explicit;
                 }
             }
 

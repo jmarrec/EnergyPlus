@@ -141,7 +141,7 @@ namespace ConstructionAssignments {
     {
 
         if (surface.Construction > 0) {
-            return {.searchDistance = SearchDistanceType::HardAssigned, .constructionNum = surface.Construction};
+            return {.searchDistance = SearchDistanceType::Explicit, .constructionNum = surface.Construction};
         }
         auto &s_dc = state.dataConstructionAssignments;
 

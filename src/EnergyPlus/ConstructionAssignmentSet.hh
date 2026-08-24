@@ -71,7 +71,7 @@ namespace ConstructionAssignments {
     enum class SearchDistanceType
     {
         Invalid = -1,
-        HardAssigned = 0,
+        Explicit = 0,
         Space,
         // SpaceType
         // BuildingStory
@@ -82,7 +82,7 @@ namespace ConstructionAssignments {
 
     // Display strings for the EnvelopeSummary report's "Construction Assignment Source" column.
     constexpr std::array<std::string_view, static_cast<int>(SearchDistanceType::Num)> SearchDistanceTypeNames = {
-        "Explicit", // HardAssigned
+        "Explicit",
         "Space",
         "Building",
     };

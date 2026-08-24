@@ -2094,7 +2094,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitUnaffectedByConstructio
     // Kept its own explicit construction, not the DCS's "Exterior Wall Construction" for this
     // Wall/Outdoors combination.
     EXPECT_EQ("INTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wall.Construction).Name);
-    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, wall.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Explicit, wall.ConstructionAssignmentSource);
 }
 
 TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInheritedInPair)
@@ -2226,7 +2226,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInherited
 
     // WallA is untouched: still its own explicit construction.
     EXPECT_EQ("EXTERIOR WALL CONSTRUCTION", state->dataConstruction->Construct(wallA.Construction).Name);
-    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, wallA.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Explicit, wallA.ConstructionAssignmentSource);
 
     // WallB must NOT have inherited "Interior Wall Construction" from the Building-level DCS -
     // WallA's explicit assignment has higher precedence and governs the pair.
@@ -2374,7 +2374,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInherited
 
     // RoofCeiling is untouched: still its own explicit construction.
     EXPECT_EQ("INTERIOR ROOF CONSTRUCTION", state->dataConstruction->Construct(roof.Construction).Name);
-    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, roof.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Explicit, roof.ConstructionAssignmentSource);
 
     // The Floor side's reversed-of-the-winner construction should land on the pre-existing
     // "Interior Floor Construction" (an exact layer-order match), not a newly generated one.
@@ -2513,7 +2513,7 @@ TEST_F(EnergyPlusFixture, ConstructionResolution_ExplicitPrecedenceOverInherited
 
     // Floor is untouched: still its own explicit construction.
     EXPECT_EQ("INTERIOR FLOOR CONSTRUCTION", state->dataConstruction->Construct(floor.Construction).Name);
-    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::HardAssigned, floor.ConstructionAssignmentSource);
+    EXPECT_ENUM_EQ(ConstructionAssignments::SearchDistanceType::Explicit, floor.ConstructionAssignmentSource);
 
     // The Roof side's reversed-of-the-winner construction should land on the pre-existing
     // "Interior Floor Construction" (an exact layer-order match), not a newly generated one.
