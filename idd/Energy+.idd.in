@@ -5077,10 +5077,28 @@ Material,
        \default .7
        \minimum 0
        \maximum 1
-  N7 ; \field Visible Absorptance
+  N7 , \field Visible Absorptance
        \type real
        \minimum 0
        \default .7
+       \maximum 1
+  N8 , \field Thermal Absorptance Inside Face
+       \note When blank, this value is equal to the Thermal Absorptance field above.
+       \note When entered, the Thermal Absorptance field applies to the outside face and this field applies to the inside face.
+       \type real
+       \minimum> 0
+       \maximum 0.99999
+  N9 , \field Solar Absorptance Inside Face
+       \note When blank, this value is equal to the Solar Absorptance field above.
+       \note When entered, the Solar Absorptance field applies to the outside face and this field applies to the inside face.
+       \type real
+       \minimum 0
+       \maximum 1
+  N10; \field Visible Absorptance Inside Face
+       \note When blank, this value is equal to the Visible Absorptance field above.
+       \note When entered, the Visible Absorptance field applies to the outside face and this field applies to the inside face.
+       \type real
+       \minimum 0
        \maximum 1
 
 Material:NoMass,
@@ -5114,10 +5132,28 @@ Material:NoMass,
        \minimum 0
        \default .7
        \maximum 1
-  N4 ; \field Visible Absorptance
+  N4 , \field Visible Absorptance
        \type real
        \minimum 0
        \default .7
+       \maximum 1
+  N5 , \field Thermal Absorptance Inside Face
+       \note When blank, this value is equal to the Thermal Absorptance field above.
+       \note When entered, the Thermal Absorptance field applies to the outside face and this field applies to the inside face.
+       \type real
+       \minimum> 0
+       \maximum 0.99999
+  N6 , \field Solar Absorptance Inside Face
+       \note When blank, this value is equal to the Solar Absorptance field above.
+       \note When entered, the Solar Absorptance field applies to the outside face and this field applies to the inside face.
+       \type real
+       \minimum 0
+       \maximum 1
+  N7 ; \field Visible Absorptance Inside Face
+       \note When blank, this value is equal to the Visible Absorptance field above.
+       \note When entered, the Visible Absorptance field applies to the outside face and this field applies to the inside face.
+       \type real
+       \minimum 0
        \maximum 1
 
 Material:InfraredTransparent,
@@ -7892,17 +7928,35 @@ MaterialProperty:VariableAbsorptance,
        \key SpaceHeatingCoolingMode
        \key Scheduled
        \default SurfaceTemperature
-       \note the variable that drives the change in thermal/solar absorptance
+       \note the variable that drives the change in outside-face thermal/solar absorptance
   A4 , \field Thermal Absorptance Function Name
        \note A Curve:* or Table:Lookup object encoding the relationship between
-       \note the control signal value and the surface thermal absorptance.
+       \note the control signal value and the outside-face surface thermal absorptance.
   A5 , \field Thermal Absorptance Schedule Name
-       \note only used when Control Signal = "Scheduled"
+       \note only used for the outside face when Control Signal = "Scheduled"
   A6 , \field Solar Absorptance Function Name
        \note A Curve:* or Table:Lookup object encoding the relationship between
-       \note the control signal value and the surface solar absorptance.
-  A7 ; \field Solar Absorptance Schedule Name
-       \note only used when Control Signal = "Scheduled"
+       \note the control signal value and the outside-face surface solar absorptance.
+  A7 , \field Solar Absorptance Schedule Name
+       \note only used for the outside face when Control Signal = "Scheduled"
+  A8 , \field Control Signal Inside Face
+       \type choice
+       \key SurfaceTemperature
+       \key SurfaceReceivedSolarRadiation
+       \key SpaceHeatingCoolingMode
+       \key Scheduled
+       \note the variable that drives the change in thermal/solar absorptance
+       \note when this field is blank the inside-face absorptances remain at the constant values defined by the referenced material
+  A9 , \field Thermal Absorptance Function Name Inside Face
+       \note A Curve:* or Table:Lookup object encoding the relationship between
+       \note the control signal inside face value and the surface thermal absorptance.
+  A10, \field Thermal Absorptance Schedule Name Inside Face
+       \note only used when Control Signal Inside Face = "Scheduled"
+  A11, \field Solar Absorptance Function Name Inside Face
+       \note A Curve:* or Table:Lookup object encoding the relationship between
+       \note the control signal inside face value and the surface solar absorptance.
+  A12; \field Solar Absorptance Schedule Name Inside Face
+       \note only used when Control Signal Inside Face = "Scheduled"
 
 MaterialProperty:HeatAndMoistureTransfer:Settings,
     \memo HeatBalanceAlgorithm = CombinedHeatAndMoistureFiniteElement solution algorithm only.

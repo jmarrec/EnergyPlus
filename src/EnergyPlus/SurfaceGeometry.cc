@@ -13427,17 +13427,19 @@ namespace SurfaceGeometry {
                 // Interior shading device
                 thisConstructNewSh.LayerPoint({1, TotLayersOld}) = state.dataConstruction->Construct(ConstrNum).LayerPoint({1, TotLayersOld});
                 thisConstructNewSh.LayerPoint(TotLayersNew) = ShDevNum;
-                thisConstructNewSh.InsideAbsorpSolar = thisMaterialSh->AbsorpSolar;
+                thisConstructNewSh.InsideAbsorpSolar = thisMaterialSh->AbsorpSolarIn;
+                thisConstructNewSh.InsideAbsorpThermal = thisMaterialSh->AbsorpThermalBack;
                 auto const *thisMaterialShLayer1 = s_mat->materials(state.dataConstruction->Construct(ConstrNewSh).LayerPoint(1));
-                thisConstructNewSh.OutsideAbsorpSolar = thisMaterialShLayer1->AbsorpSolar;
+                thisConstructNewSh.OutsideAbsorpSolar = thisMaterialShLayer1->AbsorpSolarOut;
                 thisConstructNewSh.OutsideAbsorpThermal = thisMaterialShLayer1->AbsorpThermalFront;
             } else {
                 // Exterior shading device
                 thisConstructNewSh.LayerPoint(1) = ShDevNum;
                 thisConstructNewSh.LayerPoint({2, TotLayersNew}) = state.dataConstruction->Construct(ConstrNum).LayerPoint({1, TotLayersOld});
                 auto const *thisMaterialShInside = s_mat->materials(state.dataConstruction->Construct(ConstrNewSh).LayerPoint(TotLayersNew));
-                thisConstructNewSh.InsideAbsorpSolar = thisMaterialShInside->AbsorpSolar;
-                thisConstructNewSh.OutsideAbsorpSolar = thisMaterialSh->AbsorpSolar;
+                thisConstructNewSh.InsideAbsorpSolar = thisMaterialShInside->AbsorpSolarIn;
+                thisConstructNewSh.InsideAbsorpThermal = thisMaterialShInside->AbsorpThermalBack;
+                thisConstructNewSh.OutsideAbsorpSolar = thisMaterialSh->AbsorpSolarOut;
                 thisConstructNewSh.OutsideAbsorpThermal = thisMaterialSh->AbsorpThermalFront;
             }
             // The following InsideAbsorpThermal applies only to inside glass; it is corrected
@@ -13606,9 +13608,12 @@ namespace SurfaceGeometry {
         mat->numGases = 1;
         mat->gases[0] = Material::gases[(int)Material::GasType::Air];
         mat->gasFracts[0] = 1.0;
-        mat->AbsorpSolar = 0.0;
-        mat->AbsorpThermal = 0.0;
-        mat->AbsorpVisible = 0.0;
+        mat->AbsorpSolarOut = 0.0;
+        mat->AbsorpThermalOut = 0.0;
+        mat->AbsorpVisibleOut = 0.0;
+        mat->AbsorpSolarIn = 0.0;
+        mat->AbsorpThermalIn = 0.0;
+        mat->AbsorpVisibleIn = 0.0;
         return mat->Num;
     }
 

@@ -2939,6 +2939,12 @@ Zone,Average,Zone Opaque Surface Outside Faces Conduction Heat Loss Rate [W]
 Zone,Sum,Zone Opaque Surface Outside Faces Conduction Heat Gain Energy [J]
 Zone,Sum,Zone Opaque Surface Outside Faces Conduction Heat Loss Energy [J]
 Zone,Average, Surface Inside Face Beam Solar Radiation Heat Gain Rate [W]
+Zone,Average,Surface Thermal Absorptance []
+Zone,Average,Surface Solar Absorptance []
+Zone,Average,Surface Thermal Absorptance Outside Face []
+Zone,Average,Surface Solar Absorptance Outside Face []
+Zone,Average,Surface Thermal Absorptance Inside Face []
+Zone,Average,Surface Solar Absorptance Inside Face []
 \end{lstlisting}
 
 \subsection{Window Output Variables}\label{window-output-variables}
@@ -3463,6 +3469,34 @@ These are the power and energy absolute value for the sums of the Opaque Surface
 \subsubsection{Surface Inside Face Beam Solar Radiation Heat Gain Rate {[}W{]}}\label{surface-inside-face-beam-solar-radiation-heat-gain-rate-w}
 
 Beam solar radiation from exterior windows absorbed on the inside face of an opaque heat transfer surface. For Solar Distribution = FullInteriorAndExterior, this quantity can be non-zero for both floor and wall surfaces. Otherwise, for Solar Distribution = FullExterior or MinimalShadowing, it can be non-zero only for floor surfaces since in this case all entering beam solar is assumed to fall on the floor. Note that this variable will not be operational (have a real value) unless there are exterior windows in the zone.
+
+\subsubsection{Surface Thermal Absorptance {[}{]}}\label{surface-thermal-absorptance}
+
+This variable reports the current outside-face thermal absorptance under the generic/bulk name. With no outside-face variable control, this is the bulk material value. If an outside-face control is active while no independent inside-face value or control applies, this variable follows the controlled outside-face value. When an explicitly entered inside-face thermal absorptance or an active inside-face thermal control applies, this generic variable is not registered for that surface; the corresponding Outside Face and Inside Face variables are registered instead.
+
+\subsubsection{Surface Solar Absorptance {[}{]}}\label{surface-solar-absorptance}
+
+This variable reports the current outside-face solar absorptance under the generic/bulk name. With no outside-face variable control, this is the bulk material value. If an outside-face control is active while no independent inside-face value or control applies, this variable follows the controlled outside-face value. When an explicitly entered inside-face solar absorptance or an active inside-face solar control applies, this generic variable is not registered for that surface; the corresponding Outside Face and Inside Face variables are registered instead.
+
+Output availability is determined independently for each surface and for thermal and solar absorptance. Therefore, a wildcard Output:Variable request may return generic keys for some surfaces and face-specific keys for others. An explicitly entered inside-face value selects the face-specific pair even when it numerically equals the bulk value. An inside-face value or control on a material that is not the innermost construction layer does not change the output names for that surface. Inside-face variable controls are ignored for non-exterior surfaces.
+
+The four face-specific variables below are registered as an outside/inside pair for a property only when the surface uses an explicitly entered inside-face value or an active inside-face variable-absorptance control for that property. Request both the generic and face-specific names when a single wildcard request must cover surfaces with both input configurations; EnergyPlus reports only the names applicable to each surface key.
+
+\subsubsection{Surface Thermal Absorptance Outside Face {[}{]}}\label{surface-thermal-absorptance-outside-face}
+
+This variable reports the current outside-face thermal absorptance. The value is taken from the outermost construction layer and may be constant or may vary according to an applicable \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance} control. See \hyperref[material]{Material} and \hyperref[materialnomass]{Material:NoMass} for the constant input fields.
+
+\subsubsection{Surface Solar Absorptance Outside Face {[}{]}}\label{surface-solar-absorptance-outside-face}
+
+This variable reports the current outside-face solar absorptance. The value is taken from the outermost construction layer and may be constant or may vary according to an applicable \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance} control. See \hyperref[material]{Material} and \hyperref[materialnomass]{Material:NoMass} for the constant input fields.
+
+\subsubsection{Surface Thermal Absorptance Inside Face {[}{]}}\label{surface-thermal-absorptance-inside-face}
+
+This variable reports the current inside-face thermal absorptance. The value is taken from the innermost construction layer and may be constant or may vary according to an applicable \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance} inside-face control. See \hyperref[material]{Material} and \hyperref[materialnomass]{Material:NoMass} for the constant input fields.
+
+\subsubsection{Surface Solar Absorptance Inside Face {[}{]}}\label{surface-solar-absorptance-inside-face}
+
+This variable reports the current inside-face solar absorptance. The value is taken from the innermost construction layer and may be constant or may vary according to an applicable \hyperref[materialpropertyvariableabsorptance]{MaterialProperty:VariableAbsorptance} inside-face control. See \hyperref[material]{Material} and \hyperref[materialnomass]{Material:NoMass} for the constant input fields.
 
 \subsection{Window Output Variables}\label{window-output-variables-1}
 

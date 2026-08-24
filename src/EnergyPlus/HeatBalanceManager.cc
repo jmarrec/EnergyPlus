@@ -4372,7 +4372,8 @@ namespace HeatBalanceManager {
                     if (mat->Thickness <= 0.0) {
                     }
                     mat->Roughness = Material::SurfaceRoughness::VerySmooth;
-                    mat->AbsorpThermal = mat->AbsorpThermalBack;
+                    mat->AbsorpThermalIn = mat->AbsorpThermalBack;
+                    mat->AbsorpThermalOut = mat->AbsorpThermalFront;
                     if (mat->Thickness <= 0.0) {
                         ShowSevereError(
                             state,
