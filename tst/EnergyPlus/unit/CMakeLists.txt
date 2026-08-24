@@ -289,6 +289,7 @@ set(test_src
     WindowManager.unit.cc
     XingGroundTemperatureModel.unit.cc
     ZoneContaminantPredictorCorrector.unit.cc
+    ZoneDehumidifier.unit.cc
     ZoneEquipmentManager.unit.cc
     ZoneHVACEvaporativeCooler.unit.cc
     ZonePlenum.unit.cc
