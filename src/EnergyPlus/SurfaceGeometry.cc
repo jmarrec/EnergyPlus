@@ -5159,7 +5159,7 @@ namespace SurfaceGeometry {
             }
 
             surfTemp.Name = s_ipsc->cAlphaArgs(1); // Set the Surface Name in the Derived Type
-            ValidChk = Util::FindItemInList(s_ipsc->cAlphaArgs(2), SubSurfCls, 10);
+            ValidChk = Util::FindItemInList(s_ipsc->cAlphaArgs(2), SubSurfCls);
             if (ValidChk == 0) {
                 ShowSevereError(state,
                                 std::format("{}=\"{}\", invalid {}=\"{}",
