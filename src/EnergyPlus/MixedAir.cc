@@ -1035,8 +1035,9 @@ void GetOutsideAirSysInputs(EnergyPlusData &state)
                     // check outlet node is same as next components inlet node
                     if (OASys.ComponentType(CompNum) == "COILSYSTEM:COOLING:WATER" && CompNum < OASys.NumComponents) {
                         if (OASys.compPointer[CompNum] != nullptr) {
-                            int const equipIndex = OASys.compPointer[CompNum]->getEquipIndex();
-                            companionCoilAirInletNodeNum = state.dataUnitarySystems->unitarySys[equipIndex].m_HRcoolCoilAirInNode;
+                            int const equipIndex = OASys.compPointer[CompNum]->getEquipIndex(); // 1-indexed
+                            assert(equipIndex > 0);
+                            companionCoilAirInletNodeNum = state.dataUnitarySystems->unitarySys[equipIndex - 1].m_HRcoolCoilAirInNode;
                         }
                     }
                     if (OASys.ComponentType(CompNum) == "SOLARCOLLECTOR:UNGLAZEDTRANSPIRED") {
