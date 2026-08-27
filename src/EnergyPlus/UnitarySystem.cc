@@ -7441,9 +7441,9 @@ namespace UnitarySystems {
                     ++numCoilSystemDX;
                     thisSys.m_EquipCompNum = numCoilSystemDX;
                     int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
-                    state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
+                    state.dataUnitarySystems->unitarySys[thisSysNum] = std::move(thisSys);
                 } else {
-                    state.dataUnitarySystems->unitarySys[sysNum] = thisSys;
+                    state.dataUnitarySystems->unitarySys[sysNum] = std::move(thisSys);
                 }
             }
         }
@@ -7612,9 +7612,9 @@ namespace UnitarySystems {
                             assert(true);
                         }
                         int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
-                        state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
+                        state.dataUnitarySystems->unitarySys[thisSysNum] = std::move(thisSys);
                     } else {
-                        state.dataUnitarySystems->unitarySys[sysNum] = thisSys;
+                        state.dataUnitarySystems->unitarySys[sysNum] = std::move(thisSys);
                     }
                 }
             }
@@ -7633,10 +7633,8 @@ namespace UnitarySystems {
         int numPackagedHP = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "ZoneHVAC:PackagedTerminalHeatPump");
         int numPackagedWSHP = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "ZoneHVAC:WaterToAirHeatPump");
         int numAllSystemTypes = numUnitarySystems + numCoilSystems + numCoilSystemsWater + numPackagedAC + numPackagedHP + numPackagedWSHP;
-        for (int sysCount = 0; sysCount < numAllSystemTypes; ++sysCount) {
-            UnitarySys thisSys;
-            state.dataUnitarySystems->unitarySys.push_back(thisSys);
-        }
+
+        state.dataUnitarySystems->unitarySys.resize(numAllSystemTypes);
     }
 
     void UnitarySys::getCoilWaterSystemInputData(
@@ -7770,9 +7768,9 @@ namespace UnitarySystems {
                     ++numCoilSystemWater;
                     thisSys.m_EquipCompNum = numCoilSystemWater;
                     int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
-                    state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
+                    state.dataUnitarySystems->unitarySys[thisSysNum] = std::move(thisSys);
                 } else {
-                    state.dataUnitarySystems->unitarySys[sysNum] = thisSys;
+                    state.dataUnitarySystems->unitarySys[sysNum] = std::move(thisSys);
                 }
             }
 
@@ -8013,9 +8011,9 @@ namespace UnitarySystems {
                         thisSys.m_EquipCompNum = airloopUnitaryNum;
                     }
                     int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
-                    state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
+                    state.dataUnitarySystems->unitarySys[thisSysNum] = std::move(thisSys);
                 } else {
-                    state.dataUnitarySystems->unitarySys[sysNum] = thisSys;
+                    state.dataUnitarySystems->unitarySys[sysNum] = std::move(thisSys);
                 }
             }
         }
