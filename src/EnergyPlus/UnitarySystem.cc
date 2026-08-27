@@ -7436,12 +7436,12 @@ namespace UnitarySystems {
                 thisSys.processInputSpec(state, thisSys.input_specs, sysNum, errorsFound, ZoneEquipment, ZoneOAUnitNum);
 
                 if (sysNum == -1) {
-                    int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
-                    state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
                     // zone equipment require a 1-n index for access to zone availability managers
                     // although not zone equipment, use same methodology
                     ++numCoilSystemDX;
                     thisSys.m_EquipCompNum = numCoilSystemDX;
+                    int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
+                    state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
                 } else {
                     state.dataUnitarySystems->unitarySys[sysNum] = thisSys;
                 }
@@ -7765,12 +7765,12 @@ namespace UnitarySystems {
                 thisSys.processInputSpec(state, thisSys.input_specs, sysNum, errorsFound, ZoneEquipment, ZoneOAUnitNum);
 
                 if (sysNum == -1) {
-                    int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
-                    state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
                     // zone equipment require a 1-n index for access to zone availability managers
                     // although not zone equipment, use same methodology
                     ++numCoilSystemWater;
                     thisSys.m_EquipCompNum = numCoilSystemWater;
+                    int thisSysNum = state.dataUnitarySystems->numUnitarySystems - 1;
+                    state.dataUnitarySystems->unitarySys[thisSysNum] = thisSys;
                 } else {
                     state.dataUnitarySystems->unitarySys[sysNum] = thisSys;
                 }
