@@ -2205,17 +2205,23 @@ namespace DataPlant {
                     if (pumpInfo.BranchNum != 1) {
                         continue;
                     }
-                    auto const &pumpComp = this->Branch(pumpInfo.BranchNum).Comp(pumpInfo.CompNum);
+                    auto const &pumpBranch = this->Branch(pumpInfo.BranchNum);
+                    auto const &pumpComp = pumpBranch.Comp(pumpInfo.CompNum);
                     if (pumpComp.Type != DataPlant::PlantEquipmentType::PumpConstantSpeed || pumpComp.CompNum <= 0) {
                         continue;
                     }
                     auto const &pump = state.dataPumps->PumpEquip(pumpComp.CompNum);
-                    if (pump.PumpControl != Pumps::PumpControlType::Intermittent || pump.EMSMassFlowOverrideOn ||
+                    bool const supervisoryOff = (loop.EMSCtrl && loop.EMSValue <= 0.0) || (this->EMSCtrl && this->EMSValue <= 0.0) ||
+                                                (pumpBranch.EMSCtrlOverrideOn && pumpBranch.EMSCtrlOverrideValue <= 0.0) ||
+                                                (pumpComp.EMSLoadOverrideOn && pumpComp.EMSLoadOverrideValue == 0.0);
+                    if (pump.PumpControl != Pumps::PumpControlType::Intermittent || pump.EMSMassFlowOverrideOn || supervisoryOff ||
                         pumpInfo.CurrentMaxAvail <= DataConvergParams::PlantFlowRateToler) {
                         continue;
                     }
                     Real64 const scheduleFraction = (pump.flowRateSched != nullptr) ? std::clamp(pump.flowRateSched->getCurrentVal(), 0.0, 1.0) : 1.0;
-                    intermittentConstantSpeedInletPumpFlow = max(intermittentConstantSpeedInletPumpFlow, pump.MassFlowRateMax * scheduleFraction);
+                    Real64 const scheduledPumpFlow = pump.MassFlowRateMax * scheduleFraction;
+                    Real64 const constrainedPumpFlow = min(scheduledPumpFlow, state.dataLoopNodes->Node(ThisSideInletNode).MassFlowRateMax);
+                    intermittentConstantSpeedInletPumpFlow = max(intermittentConstantSpeedInletPumpFlow, constrainedPumpFlow);
                 }
             }
 
@@ -2229,11 +2235,10 @@ namespace DataPlant {
 
         if (intermittentConstantSpeedInletPumpFlow > DataConvergParams::PlantFlowRateToler) {
             // A constant-speed inlet pump operates at its scheduled fixed flow when on. The bypass path carries the
-            // difference between that fixed flow and the active branch requests.
+            // difference between that fixed flow and the active branch requests. Restore only the maximum availability
+            // so the splitter can propagate the bypass capacity. Raising the minimum would latch the intermittent pump on.
             ThisLoopSideFlow = intermittentConstantSpeedInletPumpFlow;
-            state.dataLoopNodes->Node(ThisSideInletNode).MassFlowRateMinAvail = intermittentConstantSpeedInletPumpFlow;
             state.dataLoopNodes->Node(ThisSideInletNode).MassFlowRateMaxAvail = intermittentConstantSpeedInletPumpFlow;
-            TotalPumpMinAvailFlow = intermittentConstantSpeedInletPumpFlow;
             TotalPumpMaxAvailFlow = intermittentConstantSpeedInletPumpFlow;
         }
 
