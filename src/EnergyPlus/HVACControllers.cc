@@ -177,7 +177,17 @@ constexpr std::array<std::string_view, static_cast<int>(CtrlVarType::Num)> ctrlV
     "INVALID-NONE", "TEMPERATURE", "HUMIDITYRATIO", "TEMPERATUREANDHUMIDITYRATIO", "INVALID-FLOW"};
 constexpr std::array<std::string_view, static_cast<int>(ControllerAction::Num)> actionNamesUC = {"", "REVERSE", "NORMAL"};
 
-std::string ControlVariableTypes(CtrlVarType const &c)
+static bool isWaterCoilAirFlowActive(ControllerPropsType const &controllerProps, Real64 const sensedAirMassFlowRate)
+{
+    if (controllerProps.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterCooling ||
+        controllerProps.WaterCoilType == DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling) {
+        return sensedAirMassFlowRate >= WaterCoils::MinAirMassFlow;
+    }
+
+    return sensedAirMassFlowRate > 0.0;
+}
+
+static std::string ControlVariableTypes(CtrlVarType const &c)
 {
     switch (c) {
     case CtrlVarType::NoControlVariable:
@@ -1259,7 +1269,7 @@ void CalcSimpleController(EnergyPlusData &state,
 
     // Check to see if the component is running; if not converged and return.  This check will be done
     // by looking at the component mass flow rate at the sensed node.
-    if (state.dataLoopNodes->Node(controllerProps.SensedNode).MassFlowRate == 0.0) {
+    if (!isWaterCoilAirFlowActive(controllerProps, state.dataLoopNodes->Node(controllerProps.SensedNode).MassFlowRate)) {
         ExitCalcController(state, ControlNum, DataPrecisionGlobals::constant_zero, ControllerMode::Off, IsConvergedFlag, IsUpToDateFlag);
         return;
     }
@@ -1580,9 +1590,9 @@ void CheckSimpleController(EnergyPlusData &state, int const ControlNum, bool &Is
 
     auto &controllerProps = state.dataHVACControllers->ControllerProps(ControlNum);
 
-    // If there is zero air flow through the sensed node then the controller must be Off with zero actuation to be considered converged.
-    // A warm restart may preserve a previous MaxActive solution which is invalid when air flow has dropped to zero. Reject such stale solutions here.
-    if (state.dataLoopNodes->Node(controllerProps.SensedNode).MassFlowRate == 0.0) {
+    // If there is no active air flow through the sensed node then the controller must be Off with zero actuation to be considered converged.
+    // A warm restart may preserve a previous MaxActive solution which is invalid when air flow has dropped below the coil's operating threshold.
+    if (!isWaterCoilAirFlowActive(controllerProps, state.dataLoopNodes->Node(controllerProps.SensedNode).MassFlowRate)) {
         IsConvergedFlag = (controllerProps.Mode == ControllerMode::Off) && (controllerProps.ActuatedValue == 0.0);
         return;
     }
