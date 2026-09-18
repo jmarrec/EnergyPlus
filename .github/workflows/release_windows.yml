@@ -70,6 +70,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
+      with:
+        fetch-depth: 5
+
+    - name: Soft reset to v26.2.0-RC1
+      shell: bash
+      run: |
+        git reset --soft 4ddddc7fdac5e73ebca64544b83156ad45c5537b
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v7
