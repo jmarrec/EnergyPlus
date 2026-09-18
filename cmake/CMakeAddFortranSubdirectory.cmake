@@ -100,17 +100,17 @@ function(cmake_add_fortran_subdirectory subdir)
     message(FATAL_ERROR "Option NO_EXTERNAL_INSTALL is required (for forward compatibility) " "but was not given.")
   endif()
 
-  # if we are not using MSVC without fortran support
-  # then just use the usual add_subdirectory to build
-  # the fortran library
-  check_language(Fortran)
+  # if we are not using MSVC which doesn't have fortran support, or we are using MSVC and the user told us they use the Intel fortran compiler
+  # then just use the usual add_subdirectory to build the fortran library
   if(NOT (MSVC AND (NOT CMAKE_Fortran_COMPILER)))
+    check_language(Fortran)
     add_subdirectory(${subdir})
     return()
   endif()
 
   # if we have MSVC without Intel fortran then setup
   # external projects to build with mingw fortran
+  message(STATUS "MSVC without fortran support detected, using MinGW gfortran to build ${subdir}")
 
   set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/${subdir}")
   set(project_name "${ARGS_PROJECT}")
