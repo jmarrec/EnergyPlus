@@ -655,7 +655,6 @@ namespace Material {
         struct
         {
         } Df;
-        Real64 Ref = 0.0;
     };
 
     struct ScreenBmTAR
