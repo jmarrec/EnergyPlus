@@ -647,28 +647,6 @@ namespace Material {
         ~MaterialComplexWindowGap() = default;
     };
 
-    struct ScreenBmTraAbsRef
-    {
-        struct
-        {
-        } Bm;
-        struct
-        {
-        } Df;
-    };
-
-    struct ScreenBmTAR
-    {
-        struct
-        {
-            ScreenBmTraAbsRef Ft, Bk;
-        } Sol;
-        struct
-        {
-            ScreenBmTraAbsRef Ft, Bk;
-        } Vis;
-    };
-
     // Screen Beam Transmittance, Absorptance, Reflectance (TAR) properties
     struct ScreenBmTransAbsRef
     {
