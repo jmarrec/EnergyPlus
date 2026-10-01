@@ -38,10 +38,8 @@ TEST( StringFunctionsTest, Predicate )
 	EXPECT_FALSE( hasi( string( "cake" ), 'Z' ) );
 	EXPECT_TRUE( has_prefix( string( "Cat and Dog" ), string( "Cat" ) ) );
 	EXPECT_TRUE( has_prefix( string( "Cat and Dog" ), "Cat" ) );
-	EXPECT_TRUE( has_prefix( string( "Cat and Dog" ), 'C' ) );
 	EXPECT_FALSE( has_prefix( string( "Cat and Dog" ), string( "Bat" ) ) );
 	EXPECT_FALSE( has_prefix( string( "Cat and Dog" ), "Bat" ) );
-	EXPECT_FALSE( has_prefix( string( "Cat and Dog" ), 'B' ) );
 	EXPECT_TRUE( has_prefixi( string( "Cat and Dog" ), "CAT" ) );
 	EXPECT_FALSE( has_prefixi( string( "Cat and Dog" ), "BAT" ) );
 	string const s( "Fish Tank" );

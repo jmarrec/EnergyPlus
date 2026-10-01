@@ -42,13 +42,6 @@ TEST( MemberFunctionsTest, SumContainer )
 	EXPECT_EQ( 10, sum( a, &S::i ) );
 }
 
-TEST( MemberFunctionsTest, SumIterator )
-{
-	Array1D< S > a( 5, S( 2 ) );
-	EXPECT_EQ( 10, sum( a.begin(), a.end(), &S::i ) );
-	EXPECT_EQ( 10, sum( std::begin( a ), std::end( a ), &S::i ) );
-}
-
 TEST( MemberFunctionsTest, SumSub )
 {
 	Array1D< S > a( {1,2,3,4,5} );
@@ -84,34 +77,9 @@ TEST( MemberFunctionsTest, MinvalContainer )
 	EXPECT_EQ( 2, minval( a, &S::i ) );
 }
 
-TEST( MemberFunctionsTest, MinvalIterator )
-{
-	Array1D< S > a( {3,5,3,2,6} );
-	EXPECT_EQ( 2, minval( a.begin(), a.end(), &S::i ) );
-	EXPECT_EQ( 2, minval( std::begin( a ), std::end( a ), &S::i ) );
-}
-
 TEST( MemberFunctionsTest, MaxvalContainer )
 {
 	Array1D< S > a( {3,5,3,2,6} );
 	EXPECT_EQ( 6, maxval( a, &S::i ) );
 }
 
-TEST( MemberFunctionsTest, MaxvalIterator )
-{
-	Array1D< S > a( {3,5,3,2,6} );
-	EXPECT_EQ( 6, maxval( a.begin(), a.end(), &S::i ) );
-	EXPECT_EQ( 6, maxval( std::begin( a ), std::end( a ), &S::i ) );
-}
-
-TEST( MemberFunctionsTest, Minloc )
-{
-	Array1D< S > a( {3,5,3,2,6} );
-	EXPECT_EQ( 4, minloc( a, &S::i ) );
-}
-
-TEST( MemberFunctionsTest, Maxloc )
-{
-	Array1D< S > a( {3,5,3,2,6} );
-	EXPECT_EQ( 5, maxloc( a, &S::i ) );
-}

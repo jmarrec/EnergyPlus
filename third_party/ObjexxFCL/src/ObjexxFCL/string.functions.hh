@@ -91,20 +91,6 @@ has_prefix( std::string_view const s, std::string_view const pre, bool const exa
 	}
 }
 
-// Has a Prefix Case-Optionally?
-constexpr
-bool
-has_prefix( std::string_view const s, char const pre, bool const exact_case = true )
-{
-	if ( s.length() == 0 ) {
-		return false;
-	} else if ( exact_case ) {
-		return ( s[ 0 ] == pre );
-	} else {
-		return equali( s[ 0 ], pre );
-	}
-}
-
 // Has a Prefix Case-Insensitively?
 template< typename S >
 constexpr
@@ -285,30 +271,6 @@ stripped( std::string_view const s );
 // Sized to a Specified Length Copy of a string
 std::string
 sized( std::string_view const s, std::string::size_type const len );
-
-// Concatenation: Non-template to Support Conversions
-inline
-std::string
-operator +( std::string const & s, std::string const & t )
-{
-	return std::string( s ) += t;
-}
-
-// Concatenation: Non-template to Support Conversions
-inline
-std::string
-operator +( char const * const s, std::string const & t )
-{
-	return std::string( s ) += t;
-}
-
-// Concatenation: Non-template to Support Conversions
-inline
-std::string
-operator +( std::string const & s, char const * const t )
-{
-	return s + std::string( t );
-}
 
 // Conversion To std::string
 

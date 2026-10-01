@@ -100,18 +100,6 @@ public: // Creation
 	virtual
 	~ArrayRS() = default;
 
-public: // Predicate
-
-	// Conformable?
-	template< template< typename > class A, typename U >
-	bool
-	conformable( A< U > const & a ) const
-	{
-		if ( Rank != a.rank() ) return false;
-		for ( int i = 1; i <= Rank; ++i ) if ( size( i ) != a.size( i ) ) return false;
-		return true;
-	}
-
 public: // Inspector
 
 	// Rank

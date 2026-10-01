@@ -352,10 +352,6 @@ public: // Predicate
 		return ( contains( i ) && contains( j ) );
 	}
 
-	// Intersects Another IndexRange?
-	bool
-	intersects( IndexRange const & I ) const;
-
 public: // Inspector
 
 	// Lower Index

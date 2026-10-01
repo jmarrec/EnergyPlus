@@ -49,17 +49,6 @@ pow( Array1S< T > const & a, X const & x )
 
 // count /////
 
-inline
-BArray::size_type
-count( Array1S< bool > const & a )
-{
-	BArray::size_type c( 0u );
-	for ( int i = 1, e = a.u(); i <= e; ++i ) {
-		if ( a( i ) ) ++c;
-	}
-	return c;
-}
-
 // size /////
 
 template< typename T >
