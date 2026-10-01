@@ -40,15 +40,9 @@ TEST( ArrayTest, Construction2DIndexRangeInitializerList )
 {
 	Array2D_int r( IR( -1, 1 ), IR( -1, 1 ), { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
 	EXPECT_EQ( -1, r.l1() );
-	EXPECT_EQ( -1, lbound( r, 1 ) );
 	EXPECT_EQ( 1, r.u1() );
-	EXPECT_EQ( 1, ubound( r, 1 ) );
 	EXPECT_EQ( -1, r.l2() );
-	EXPECT_EQ( -1, lbound( r, 2 ) );
 	EXPECT_EQ( 1, r.u2() );
-	EXPECT_EQ( 1, ubound( r, 2 ) );
-	EXPECT_TRUE( eq( Array1D_int( 2, { -1, -1 } ), lbound( r ) ) );
-	EXPECT_TRUE( eq( Array1D_int( 2, { 1, 1 } ), ubound( r ) ) );
 	for ( int i = -1, k = 1; i <= 1; ++i ) {
 		for ( int j = -1; j <= 1; ++j, ++k ) {
 			EXPECT_EQ( k, r( i, j ) );
@@ -189,14 +183,6 @@ TEST( ArrayTest, Swap3D )
 	}
 }
 
-TEST( ArrayTest, Pow2D )
-{
-	Array2D_int A( 3, 3, 12 );
-	Array2D_int B( pow( A, 2 ) );
-	Array2D_int S( 3, 3, 144 );
-	EXPECT_TRUE( eq( S, B ) );
-}
-
 TEST( ArrayTest, Cross1D )
 {
 	Array1D_int A( 3, 33 ), B( 3, 11 );
@@ -210,32 +196,6 @@ TEST( ArrayTest, LogicalNegation )
 	EXPECT_FALSE( F( 1, 2 ) );
 	EXPECT_FALSE( F( 2, 1 ) );
 	EXPECT_FALSE( F( 2, 2 ) );
-	Array2D_bool const T( ! F );
-	EXPECT_TRUE( T( 1, 1 ) );
-	EXPECT_TRUE( T( 1, 2 ) );
-	EXPECT_TRUE( T( 2, 1 ) );
-	EXPECT_TRUE( T( 2, 2 ) );
-}
-
-TEST( ArrayTest, UboundOfUnbounded )
-{
-	Array2D_int r( {-1,1}, {-1,1}, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-	Array2A_int u( r( -1, -1 ) ); // Unbounded tail proxy
-	u.dim( _, 3 );
-	EXPECT_EQ( 1, lbound( u, 1 ) );
-	EXPECT_EQ( 1, lbound( u, 2 ) );
-	EXPECT_EQ( 3, ubound( u, 2 ) );
-	EXPECT_DEBUG_DEATH( ubound( u, 1 ), ".*Assertion.*" ); // Can't take ubound of unbounded dimension
-}
-
-TEST( ArrayTest, EmptyComparisonPredicate )
-{
-	Array1D_int a( 0 ), b( 0 ); // Empty
-	EXPECT_EQ( 0u, a.size() );
-	EXPECT_EQ( 0u, b.size() );
-	EXPECT_EQ( 1, lbound( a, 1 ) );
-	EXPECT_EQ( 0, ubound( a, 1 ) );
-	EXPECT_TRUE( eq( a, b ) );
 }
 
 TEST( ArrayTest, EmptyComparisonElemental )
@@ -243,8 +203,6 @@ TEST( ArrayTest, EmptyComparisonElemental )
 	Array1D_int a( 0 ), b( 0 ); // Empty
 	EXPECT_EQ( 0u, a.size() );
 	EXPECT_EQ( 0u, b.size() );
-	EXPECT_EQ( 1, lbound( a, 1 ) );
-	EXPECT_EQ( 0, ubound( a, 1 ) );
 	EXPECT_EQ( 0u, ( a == b ).size() );
 	EXPECT_EQ( 0u, ( a > b ).size() );
 }

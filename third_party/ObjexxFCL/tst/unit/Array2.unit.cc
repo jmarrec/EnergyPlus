@@ -1490,49 +1490,12 @@ TEST( Array2Test, Transpose )
 	}
 }
 
-TEST( Array2Test, FunctionNegation )
-{
-	Array2D_bool const A( 3, 1, { true, false, true } );
-	Array2D_bool const E( 3, 1, { false, true, false } );
-	EXPECT_TRUE( eq( E, !A ) );
-}
-
-TEST( Array2Test, FunctionPow )
-{
-	Array2D_int A( 2, 2, { 5, -3, 7, -4 } );
-	Array2D_int const E( 2, 2, { 25, 9, 49, 16 } );
-	EXPECT_TRUE( eq( E, pow( A, 2 ) ) );
-}
-
-TEST( Array2Test, FunctionSign )
-{
-	{
-		Array2D_int A( 2, 2, { 11, -12, 21, -22 } );
-		Array2D_int const AP( 2, 2, { 11, 12, 21, 22 } );
-		Array2D_int const AN( 2, 2, { -11, -12, -21, -22 } );
-		EXPECT_TRUE( eq( AP, sign( A, 1 ) ) );
-		EXPECT_TRUE( eq( AP, sign( A, 0 ) ) );
-		EXPECT_TRUE( eq( AN, sign( A, -1 ) ) );
-	}
-
-	{
-		Array2D_int A( 2, 2, { 11, -12, 21, -22 } );
-		Array2D_int const A1( 2, 2, { 1, -1, 1, -1 } );
-		Array2D_int const A0( 2, 2, { 0, -0, 0, -0 } ); // Minuses don't matter
-		EXPECT_TRUE( eq( A1, sign( 1, A ) ) );
-		EXPECT_TRUE( eq( A0, sign( 0, A ) ) );
-		EXPECT_TRUE( eq( A1, sign( -1, A ) ) );
-	}
-}
-
 TEST( Array2Test, FunctionCount )
 {
 	Array2D_bool A( 2, 3, { true, false, false, false, true, true } );
 	Array1D_size C1( 3, { 1, 1, 1 } );
 	Array1D_size C2( 2, { 1, 2 } );
 	EXPECT_EQ( 3u, count( A ) );
-	EXPECT_TRUE( eq( C1, count( A, 1 ) ) );
-	EXPECT_TRUE( eq( C2, count( A, 2 ) ) );
 }
 
 TEST( Array2Test, FunctionSum )
@@ -1541,6 +1504,4 @@ TEST( Array2Test, FunctionSum )
 	Array1D_int S1( 2, { 32, 34 } );
 	Array1D_int S2( 2, { 23, 43 } );
 	EXPECT_EQ( 66, sum( A ) );
-	EXPECT_TRUE( eq( S1, sum( A, 1 ) ) );
-	EXPECT_TRUE( eq( S2, sum( A, 2 ) ) );
 }

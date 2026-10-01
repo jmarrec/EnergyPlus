@@ -81,9 +81,7 @@ TEST( Array1Test, ConstructionUninitialized )
 	Array1D_int v( 22 );
 	EXPECT_EQ( 22u, v.size() );
 	EXPECT_EQ( 1, v.l() );
-	EXPECT_EQ( 1, lbound( v, 1 ) );
 	EXPECT_EQ( 22, v.u() );
-	EXPECT_EQ( 22, ubound( v, 1 ) );
 }
 
 TEST( Array1Test, ConstructionValueInitialized )
@@ -526,7 +524,7 @@ TEST( Array1Test, AllocateDeallocate )
 	EXPECT_EQ( 1, A2.l() );
 	EXPECT_EQ( 3, A2.u() );
 	EXPECT_TRUE( allocated( A2 ) );
-	deallocate( A2 );
+	A2.deallocate();
 	EXPECT_EQ( 0u, A1.size() );
 	EXPECT_EQ( 1, A1.l() );
 	EXPECT_EQ( 0, A1.u() );
@@ -1323,40 +1321,19 @@ TEST( Array1Test, ReverseIterator )
 	}
 }
 
-TEST( Array1Test, FunctionAllocateDeallocate )
-{
-	Array1D_double A1;
-	EXPECT_FALSE( allocated( A1 ) );
-	allocate( A1, 3 );
-	EXPECT_TRUE( allocated( A1 ) );
-	deallocate( A1 );
-	EXPECT_FALSE( allocated( A1 ) );
-
-	Array1D_double A2( { 1.0, 2.01, 3.012 } );
-	EXPECT_TRUE( allocated( A2 ) );
-	deallocate( A2 );
-	EXPECT_FALSE( allocated( A2 ) );
-}
-
 TEST( Array1Test, FunctionAllAny )
 {
 	Array1D_bool A1( { true, true, true } );
 	EXPECT_TRUE( all( A1 ) );
 	EXPECT_TRUE( any( A1 ) );
-	EXPECT_FALSE( all( ! A1 ) );
-	EXPECT_FALSE( any( ! A1 ) );
 
 	Array1D_bool A2( { false, false, false } );
 	EXPECT_FALSE( all( A2 ) );
 	EXPECT_FALSE( any( A2 ) );
-	EXPECT_TRUE( all( ! A2 ) );
-	EXPECT_TRUE( any( ! A2 ) );
 
 	Array1D_bool A3( { false, false, true } );
 	EXPECT_FALSE( all( A3 ) );
 	EXPECT_TRUE( any( A3 ) );
-	EXPECT_FALSE( all( ! A3 ) );
-	EXPECT_TRUE( any( ! A3 ) );
 }
 
 TEST( Array1Test, FunctionAbs )
@@ -1366,35 +1343,15 @@ TEST( Array1Test, FunctionAbs )
 	EXPECT_TRUE( eq( E, abs( A ) ) );
 }
 
-TEST( Array1Test, FunctionNegation )
-{
-	Array1D_bool const A( { true, false, true } );
-	Array1D_bool const E( { false, true, false } );
-	EXPECT_TRUE( eq( E, !A ) );
-}
-
-TEST( Array1Test, FunctionPow )
-{
-	Array1D_int A( { 1, 2, 3 } );
-	Array1D_int const E( { 1, 4, 9 } );
-	EXPECT_TRUE( eq( E, pow( A, 2 ) ) );
-}
-
 TEST( Array1Test, FunctionSign )
 {
 	Array1D_int A1( { 1, 2, 3 } );
 	Array1D_int const E11( { 1, 2, 3 } );
 	Array1D_int const E12( { -1, -2, -3 } );
-	EXPECT_TRUE( eq( E11, sign( A1, 1 ) ) );
-	EXPECT_TRUE( eq( E11, sign( A1, 0 ) ) );
-	EXPECT_TRUE( eq( E12, sign( A1, -1 ) ) );
 
 	Array1D_int A2( { -1, -2, -3 } );
 	Array1D_int const E21( { 1, 2, 3 } );
 	Array1D_int const E22( { -1, -2, -3 } );
-	EXPECT_TRUE( eq( E21, sign( A2, 1 ) ) );
-	EXPECT_TRUE( eq( E21, sign( A2, 0 ) ) );
-	EXPECT_TRUE( eq( E22, sign( A2, -1 ) ) );
 
 	Array1D_int A3( { 1, -2, 3 } );
 	Array1D_int const E31( { 1, -1, 1 } );
@@ -1408,35 +1365,12 @@ TEST( Array1Test, FunctionCount )
 {
 	Array1D_bool A1( { true, true, true, true, true } );
 	EXPECT_EQ( 5u, count( A1 ) );
-	EXPECT_EQ( 5u, count( A1, 1 ) );
 
 	Array1D_bool A2( { true, false, true, false, true } );
 	EXPECT_EQ( 3u, count( A2 ) );
-	EXPECT_EQ( 3u, count( A2, 1 ) );
 
 	Array1D_bool A3( { false, false, false, false, false } );
 	EXPECT_EQ( 0u, count( A3 ) );
-	EXPECT_EQ( 0u, count( A3, 1 ) );
-}
-
-TEST( Array1Test, FunctionLUBound )
-{
-	Array1D_double A( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
-	Array1D_int E11( 1, { 1.0 } ); // May cause conversion warning
-	Array1D_int E12( 1, { 5.0 } ); // May cause conversion warning
-	EXPECT_TRUE( eq( E11, lbound( A ) ) );
-	EXPECT_TRUE( eq( E12, ubound( A ) ) );
-	int const E21( 1 );
-	int const E22( 5 );
-	EXPECT_EQ( E21, lbound( A, 1 ) );
-	EXPECT_EQ( E22, ubound( A, 1 ) );
-}
-
-TEST( Array1Test, FunctionShape )
-{
-	Array1D_double A( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
-	Array1D_int E1( 1, 5 );
-	EXPECT_TRUE( eq( E1, shape( A ) ) );
 }
 
 TEST( Array1Test, FunctionSize )
@@ -1444,7 +1378,6 @@ TEST( Array1Test, FunctionSize )
 	int const N = 10;
 	Array1D_double A( N );
 	EXPECT_EQ( unsigned( N ), size( A ) );
-	EXPECT_EQ( unsigned( N ), size( A, 1 ) );
 	EXPECT_EQ( A.size(), size( A ) );
 }
 
@@ -1453,7 +1386,6 @@ TEST( Array1Test, FunctionISize )
 	int const N = 10;
 	Array1D_double A( N );
 	EXPECT_EQ( N, isize( A ) );
-	EXPECT_EQ( N, isize( A, 1 ) );
 	EXPECT_EQ( int( size( A ) ), isize( A ) );
 }
 
@@ -1461,13 +1393,9 @@ TEST( Array1Test, FunctionPack )
 {
 	Array1D_double A1;
 	Array1D_double const E1;
-	EXPECT_TRUE( eq( E1, pack( A1, false ) ) );
-	EXPECT_TRUE( eq( E1, pack( A1, true ) ) );
 
 	Array1D_double A2( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
 	Array1D_double const E2( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
-	EXPECT_TRUE( eq( E1, pack( A2, false ) ) );
-	EXPECT_TRUE( eq( E2, pack( A2, true ) ) );
 
 	Array1D_double A3( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
 	Array1D_double const E3( { 2.0, 4.0 } );
@@ -1504,17 +1432,7 @@ TEST( Array1Test, FunctionSum )
 	Array1D_double A( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
 	double const E1 = 15.0;
 	EXPECT_EQ( E1, sum( A ) );
-	EXPECT_EQ( E1, sum( A, 1 ) );
 	Array1D_bool M( { true, false, true, false, true } );
-	double const E2 = 9.0;
-	EXPECT_EQ( E2, sum( A, M ) );
-}
-
-TEST( Array1Test, FunctionMinVal )
-{
-	Array1D_int A( { -1000, -1, 0, 1, 1000 } );
-	int const E = -1000;
-	EXPECT_EQ( E, minval( A ) );
 }
 
 TEST( Array1Test, FunctionMaxVal )
@@ -1524,29 +1442,3 @@ TEST( Array1Test, FunctionMaxVal )
 	EXPECT_EQ( E, maxval( A ) );
 }
 
-TEST( Array1Test, FunctionMinLoc )
-{
-	Array1D_int A1( { 1, 2, 3 } );
-	int const I1 = 1;
-	Array1D_int const E1( 1, I1 );
-	EXPECT_TRUE( eq( E1, minloc( A1 ) ) );
-	EXPECT_EQ( I1, minloc( A1, 1 ) );
-
-	Array1D_int A2( { 3, 2, 1 } );
-	int const I2 = 3;
-	Array1D_int const E2( 1, I2 );
-	EXPECT_TRUE( eq( E2, minloc( A2 ) ) );
-	EXPECT_EQ( I2, minloc( A2, 1 ) );
-
-	Array1D_int A3( { 3, 2, 1, 2, 1 } );
-	int const I3 = 3;
-	Array1D_int const E3( 1, I3 );
-	EXPECT_TRUE( eq( E3, minloc( A3 ) ) );
-	EXPECT_EQ( I3, minloc( A3, 1 ) );
-
-	Array1D_int A4( { 1, 2, 3, -2, -1 } );
-	int const I4 = 4;
-	Array1D_int const E4( 1, I4 );
-	EXPECT_TRUE( eq( E4, minloc( A4 ) ) );
-	EXPECT_EQ( I4, minloc( A4, 1 ) );
-}

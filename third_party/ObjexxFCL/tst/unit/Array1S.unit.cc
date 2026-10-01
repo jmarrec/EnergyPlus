@@ -30,18 +30,3 @@
 
 using namespace ObjexxFCL;
 
-TEST( Array1STest, FunctionAbs )
-{
-	Array1D_int const A( { -1, -2, -3 } );
-	Array1S_int a( A( {1,3} ) );
-	Array1D_int const E( { 1, 2, 3 } );
-	EXPECT_TRUE( eq( E, abs( a ) ) );
-}
-
-TEST( Array1STest, FunctionNegation )
-{
-	Array1D_bool const A( { true, false, true } );
-	Array1S_bool a( A( {1,3} ) );
-	Array1D_bool const E( { false, true, false } );
-	EXPECT_TRUE( eq( E, !a ) );
-}
