@@ -133,14 +133,12 @@ using ObjexxFCL::Vector4;
 
 // ObjexxFCL Functions
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/environment.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
 
 using ObjexxFCL::CEILING;
 using ObjexxFCL::equali;
-using ObjexxFCL::get_environment_variable;
 using ObjexxFCL::has;
 using ObjexxFCL::has_prefix;
 using ObjexxFCL::has_prefixi;

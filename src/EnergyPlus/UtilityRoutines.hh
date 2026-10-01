@@ -641,6 +641,9 @@ namespace Util {
         bool operator()(std::string_view a, std::string_view b) const noexcept;
     };
 
+    // Value of an environment variable, or an empty string if it is not set. Trailing spaces are stripped
+    std::string getEnvVar(std::string const &name);
+
     void appendPerfLog(EnergyPlusData &state, std::string const &colHeader, std::string const &colValue, bool finalColumn = false);
 
 } // namespace Util

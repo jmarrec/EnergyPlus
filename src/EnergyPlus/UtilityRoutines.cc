@@ -366,6 +366,17 @@ namespace Util {
         }
     }
 
+    std::string getEnvVar(std::string const &name)
+    {
+        char const *const val = std::getenv(name.c_str());
+        if (val == nullptr) {
+            return "";
+        }
+        std::string s = val;
+        s.erase(s.find_last_not_of(' ') + 1); // strip trailing spaces (npos + 1 == 0 clears an all-space string)
+        return s;
+    }
+
     size_t case_insensitive_hasher::operator()(std::string_view const key) const noexcept
     {
         std::string keyCopy = makeUPPER(key);

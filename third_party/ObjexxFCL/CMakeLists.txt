@@ -62,8 +62,6 @@ set(src
   src/ObjexxFCL/char.functions.hh
   src/ObjexxFCL/DimensionSlice.fwd.hh
   src/ObjexxFCL/DimensionSlice.hh
-  src/ObjexxFCL/environment.cc
-  src/ObjexxFCL/environment.hh
   src/ObjexxFCL/Fmath.hh
   src/ObjexxFCL/Index.cc
   src/ObjexxFCL/Index.fwd.hh
@@ -111,7 +109,6 @@ set( test_src
   tst/unit/CArrayA.unit.cc
   tst/unit/char.functions.unit.cc
   tst/unit/DimensionSlice.unit.cc
-  tst/unit/environment.unit.cc
   tst/unit/Fmath.unit.cc
   tst/unit/Index.unit.cc
   tst/unit/IndexRange.unit.cc
