@@ -28,7 +28,6 @@
 #include <ObjexxFCL/Optional.fwd.hh>
 #include <ObjexxFCL/Print.fwd.hh>
 #include <ObjexxFCL/Read.fwd.hh>
-#include <ObjexxFCL/Reference.fwd.hh>
 #include <ObjexxFCL/Required.fwd.hh>
 #include <ObjexxFCL/SetWrapper.fwd.hh>
 #include <ObjexxFCL/Stream.fwd.hh>

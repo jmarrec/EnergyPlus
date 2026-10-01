@@ -12,7 +12,6 @@ set(src
   src/ObjexxFCL/Array.functions.hh
   src/ObjexxFCL/Array.fwd.hh
   src/ObjexxFCL/Array.hh
-  src/ObjexxFCL/array.iterator.hh
   src/ObjexxFCL/Array1.all.fwd.hh
   src/ObjexxFCL/Array1.all.hh
   src/ObjexxFCL/Array1.fwd.hh
@@ -91,8 +90,6 @@ set(src
   src/ObjexxFCL/ProxySentinel.hh
   src/ObjexxFCL/random.cc
   src/ObjexxFCL/random.hh
-  src/ObjexxFCL/Reference.fwd.hh
-  src/ObjexxFCL/Reference.hh
   src/ObjexxFCL/string.functions.cc
   src/ObjexxFCL/string.functions.hh
   src/ObjexxFCL/time.cc
@@ -131,8 +128,6 @@ set( test_src
   tst/unit/ObjexxFCL.unit.hh
   tst/unit/Optional.unit.cc
   tst/unit/random.unit.cc
-  tst/unit/Reference.Optional.unit.cc
-  tst/unit/Reference.unit.cc
   tst/unit/string.functions.unit.cc
   tst/unit/time.unit.cc
   tst/unit/TypeTraits.unit.cc
