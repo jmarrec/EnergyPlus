@@ -63,13 +63,11 @@ set(src
   src/ObjexxFCL/DimensionSlice.fwd.hh
   src/ObjexxFCL/DimensionSlice.hh
   src/ObjexxFCL/Fmath.hh
-  src/ObjexxFCL/Index.cc
   src/ObjexxFCL/Index.fwd.hh
   src/ObjexxFCL/Index.hh
   src/ObjexxFCL/IndexRange.cc
   src/ObjexxFCL/IndexRange.fwd.hh
   src/ObjexxFCL/IndexRange.hh
-  src/ObjexxFCL/IndexSlice.cc
   src/ObjexxFCL/IndexSlice.fwd.hh
   src/ObjexxFCL/IndexSlice.hh
   src/ObjexxFCL/InitializerSentinel.hh

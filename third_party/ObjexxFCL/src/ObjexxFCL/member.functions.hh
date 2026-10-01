@@ -15,7 +15,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Array1S.hh>
 
 // C++ Headers
 #include <algorithm>
@@ -45,19 +44,6 @@ sum( Iterator const beg, Iterator const end, Member Element::* pmem )
 	Member s( 0 );
 	for ( Iterator i = beg; i != end; ++i ) {
 		s += i->*pmem;
-	}
-	return s;
-}
-
-// Sum of All Members of a 1D Slice Array
-template< typename Element, typename Member >
-inline
-Member
-sum( Array1S< Element > const & a, Member Element::* pmem )
-{
-	Member s( 0 );
-	for ( int i = 1, e = a.isize(); i <= e; ++i ) {
-		s += a( i ).*pmem;
 	}
 	return s;
 }
@@ -156,19 +142,6 @@ minval( Iterator const beg, Iterator const end, Member Element::* pmem )
 	return v;
 }
 
-// Minimum Value of All Members of a 1D Slice Array
-template< typename Element, typename Member >
-inline
-Member
-minval( Array1S< Element > const & a, Member Element::* pmem )
-{
-	Member v( a.empty() ? std::numeric_limits< Member >::max() : a( 1 ).*pmem );
-	for ( int i = 2, e = a.isize(); i <= e; ++i ) {
-		v = std::min( v, a( i ).*pmem );
-	}
-	return v;
-}
-
 // Maximum Value of All Members of a Container
 template< class Container, typename Member >
 inline
@@ -195,19 +168,6 @@ maxval( Iterator const beg, Iterator const end, Member Element::* pmem )
 	return v;
 }
 
-// Maximum Value of All Members of a 1D Slice Array
-template< typename Element, typename Member >
-inline
-Member
-maxval( Array1S< Element > const & a, Member Element::* pmem )
-{
-	Member v( a.empty() ? std::numeric_limits< Member >::lowest() : a( 1 ).*pmem );
-	for ( int i = 2, e = a.isize(); i <= e; ++i ) {
-		v = std::max( v, a( i ).*pmem );
-	}
-	return v;
-}
-
 // Index of Minimum 1D Array Element Member
 template< typename Element, typename Member >
 inline
@@ -225,23 +185,6 @@ minloc( Array1< Element > const & a, Member Element::* pmem )
 	return loc;
 }
 
-// Index of Minimum 1D Slice Array Element Member
-template< typename Element, typename Member >
-inline
-int
-minloc( Array1S< Element > const & a, Member Element::* pmem )
-{
-	int loc( a.empty() ? 0 : 1 );
-	Member v( a.empty() ? std::numeric_limits< Member >::max() : a( 1 ).*pmem );
-	for ( int i = 2, e = a.isize(); i <= e; ++i ) {
-		if ( a( i ).*pmem < v ) {
-			v = a( i ).*pmem;
-			loc = i;
-		}
-	}
-	return loc;
-}
-
 // Index of Maximum 1D Array Element Member
 template< typename Element, typename Member >
 inline
@@ -254,23 +197,6 @@ maxloc( Array1< Element > const & a, Member Element::* pmem )
 		if ( i->*pmem > v ) {
 			v = i->*pmem;
 			loc = l;
-		}
-	}
-	return loc;
-}
-
-// Index of Maximum 1D Slice Array Element Member
-template< typename Element, typename Member >
-inline
-int
-maxloc( Array1S< Element > const & a, Member Element::* pmem )
-{
-	int loc( a.empty() ? 0 : 1 );
-	Member v( a.empty() ? std::numeric_limits< Member >::lowest() : a( 1 ).*pmem );
-	for ( int i = 2, e = a.isize(); i <= e; ++i ) {
-		if ( a( i ).*pmem > v ) {
-			v = a( i ).*pmem;
-			loc = i;
 		}
 	}
 	return loc;

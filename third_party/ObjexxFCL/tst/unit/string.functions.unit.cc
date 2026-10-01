@@ -110,20 +110,12 @@ TEST( StringFunctionsTest, Modifier )
 	uppercase( s );
 	EXPECT_EQ( "BIG DOG", s );
 
-	s = "Dog  ";
-	EXPECT_EQ( "Dog", trim( s ) );
-	s = "aBana";
-	EXPECT_EQ( "B", strip( s, "an" ) );
-	s = "aBana";
-	EXPECT_EQ( "aB", rstrip( s, "an" ) );
 	s = " Dog   ";
 	EXPECT_EQ( "Dog", strip( s ) );
 	s = " Dog   ";
 	EXPECT_EQ( " Dog", rstrip( s ) );
 	s = "Doggy";
 	EXPECT_EQ( "Dog", pare( s, 3u ) );
-	s = "A long story";
-	EXPECT_EQ( "A lo", size( s, 4u ) );
 }
 
 TEST( StringFunctionsTest, Generator )
@@ -132,7 +124,6 @@ TEST( StringFunctionsTest, Generator )
 	EXPECT_EQ( "Dog  ", ljustified( string( "  Dog" ) ) );
 	EXPECT_EQ( "  Dog", rjustified( string( "Dog  " ) ) );
 	EXPECT_EQ( "Dog", trimmed( string( "Dog  " ) ) );
-	EXPECT_EQ( "B", stripped( string( "aBana" ), "an" ) );
 	EXPECT_EQ( "Dog", stripped( string( " Dog   " ) ) );
 	EXPECT_EQ( "A lo", sized( string( "A long story" ), 4u ) );
 }
@@ -152,16 +143,6 @@ TEST( StringFunctionsTest, StripWhitespace )
 {
 	string s( " \0\0\t \t\0\t Fish \t\0 ", 17 );
 	EXPECT_EQ( string( "\0\0\t \t\0\t Fish \t\0", 15 ), stripped( s ) );
-}
-
-TEST( StringFunctionsTest, StripSpecifiedCharacters )
-{
-	string s( "Fish" );
-	EXPECT_EQ( "Fis", stripped( s, "h" ) );
-	EXPECT_EQ( "ish", stripped( s, "F" ) );
-	EXPECT_EQ( "is", stripped( s, "Fh" ) );
-	rstrip( s, "sh" );
-	EXPECT_EQ( "Fi", s );
 }
 
 TEST( StringFunctionsTest, Pare )

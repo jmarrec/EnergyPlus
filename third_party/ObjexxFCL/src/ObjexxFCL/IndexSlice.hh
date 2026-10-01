@@ -21,7 +21,6 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
-#include <iosfwd>
 #include <type_traits>
 #include <utility>
 
@@ -573,18 +572,6 @@ public: // Comparison
 		return !( I == J );
 	}
 
-public: // I/O
-
-	// Stream >> IndexSlice
-	friend
-	std::istream &
-	operator >>( std::istream & stream, IndexSlice & I );
-
-	// Stream << IndexSlice
-	friend
-	std::ostream &
-	operator <<( std::ostream & stream, IndexSlice const & I );
-
 private: // Inspector
 
 	// Computed Size
@@ -619,14 +606,6 @@ operator ==( IndexSlice const & I, IndexSlice const & J );
 // IndexSlice != IndexSlice
 bool
 operator !=( IndexSlice const & I, IndexSlice const & J );
-
-// Stream >> IndexSlice
-std::istream &
-operator >>( std::istream & stream, IndexSlice & I );
-
-// Stream << IndexSlice
-std::ostream &
-operator <<( std::ostream & stream, IndexSlice const & I );
 
 // Swap
 void

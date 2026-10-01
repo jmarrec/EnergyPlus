@@ -243,18 +243,6 @@ scan( std::string_view const s, T const & t, bool const last = false )
 std::string &
 uppercase( std::string & s );
 
-// Trim Trailing Space from a string
-std::string &
-trim( std::string & s );
-
-// Strip Specified Characters from a string's Tails
-std::string &
-strip( std::string & s, std::string const & chars );
-
-// Strip Specified Characters from a string's Right Tail
-std::string &
-rstrip( std::string & s, std::string const & chars );
-
 // Strip Space from a string's Tails
 std::string &
 strip( std::string & s );
@@ -271,10 +259,6 @@ pare( std::string & s, std::string::size_type const len )
 	if ( s.length() > len ) s.erase( len ); // Pare
 	return s;
 }
-
-// Size a string to a Specified Length
-std::string &
-size( std::string & s, std::string::size_type const len );
 
 // Generator /////
 
@@ -293,10 +277,6 @@ rjustified( std::string_view const s );
 // Trailing Space Trimmed Copy of a string
 std::string
 trimmed( std::string_view const s );
-
-// Specified Characters Stripped from a string's Tails Copy of a string
-std::string
-stripped( std::string_view const s, std::string_view const chars );
 
 // Space Stripped from a string's Tails Copy of a string
 std::string

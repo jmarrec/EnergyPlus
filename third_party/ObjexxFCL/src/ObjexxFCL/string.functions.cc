@@ -28,53 +28,6 @@ uppercase( std::string & s )
 	return s;
 }
 
-// Trim Trailing Space from a string
-std::string &
-trim( std::string & s )
-{
-	if ( ! s.empty() ) {
-		std::string::size_type const ie( s.find_last_not_of( ' ' ) );
-		if ( ie == std::string::npos ) { // Blank string: return empty string
-			s.clear();
-		} else if ( ie + 1 < s.length() ) { // Trim tail
-			s.erase( ie + 1 );
-		}
-	}
-	return s;
-}
-
-// Strip Specified Characters from a string's Tails
-std::string &
-strip( std::string & s, std::string const & chars )
-{
-	if ( ! s.empty() ) {
-		std::string::size_type const ib( s.find_first_not_of( chars ) );
-		std::string::size_type const ie( s.find_last_not_of( chars ) );
-		if ( ( ib == std::string::npos ) || ( ie == std::string::npos ) ) { // All of string is from chars
-			s.clear();
-		} else {
-			if ( ie < s.length() - 1 ) s.erase( ie + 1 );
-			if ( ib > 0 ) s.erase( 0, ib );
-		}
-	}
-	return s;
-}
-
-// Strip Specified Characters from a string's Right Tail
-std::string &
-rstrip( std::string & s, std::string const & chars )
-{
-	if ( ! s.empty() ) {
-		std::string::size_type const ie( s.find_last_not_of( chars ) );
-		if ( ie == std::string::npos ) { // All of string is from chars
-			s.clear();
-		} else {
-			if ( ie < s.length() - 1 ) s.erase( ie + 1 );
-		}
-	}
-	return s;
-}
-
 // Strip Space from a string's Tails
 std::string &
 strip( std::string & s )
@@ -103,19 +56,6 @@ rstrip( std::string & s )
 		} else {
 			if ( ie < s.length() - 1 ) s.erase( ie + 1 );
 		}
-	}
-	return s;
-}
-
-// Size a string to a Specified Length
-std::string &
-size( std::string & s, std::string::size_type const len )
-{
-	std::string::size_type const s_len( s.length() );
-	if ( s_len < len ) { // Pad
-		s.append( len - s_len, ' ' );
-	} else if ( s_len > len ) { // Truncate
-		s.erase( len );
 	}
 	return s;
 }
@@ -165,22 +105,6 @@ std::string trimmed(std::string_view const s) {
       return std::string{s.substr(0, ie + 1)};
     } else { // Unchanged
       return std::string{s};
-    }
-  }
-}
-
-// Specified Characters Stripped from a string's Tails Copy of a string
-std::string stripped(std::string_view const s, std::string_view const chars) {
-  if (s.empty()) {
-    return std::string{};
-  } else {
-    std::string::size_type const ib(s.find_first_not_of(chars));
-    std::string::size_type const ie(s.find_last_not_of(chars));
-    if ((ib == std::string::npos) ||
-        (ie == std::string::npos)) { // All of string is from chars
-      return std::string();          // Return empty string
-    } else {
-      return std::string{s.substr(ib, ie - ib + 1)};
     }
   }
 }

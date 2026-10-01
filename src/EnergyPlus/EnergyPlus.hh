@@ -173,7 +173,6 @@ using ObjexxFCL::sized;
 using ObjexxFCL::square;
 using ObjexxFCL::strip;
 using ObjexxFCL::stripped;
-using ObjexxFCL::trim;
 using ObjexxFCL::trimmed;
 using ObjexxFCL::uppercase;
 using ObjexxFCL::uppercased;
