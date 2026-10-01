@@ -515,24 +515,6 @@ public: // Predicate
 		return ( z1_ == z2_ );
 	}
 
-	// Symmetric?
-	bool
-	symmetric() const
-	{
-		Array2 const & A( *this ); // Shorthand name
-		if ( I1_ != I2_ ) { // Unequal index ranges
-			return false;
-		} else { // Equal index ranges
-			for ( int i = l1(), ie = u1(); i <= ie; ++i ) {
-				size_type l( A.index( i, l2() ) );
-				for ( int j = l2(); j < i; ++j, ++l ) {
-					if ( A[ l ] != A( j, i ) ) return false;
-				}
-			}
-			return true;
-		}
-	}
-
 public: // Inspector
 
 	// Rank
@@ -710,19 +692,6 @@ public: // Modifier
 		T const One( T( 1 ) );
 		for ( size_type l = 0, l_inc = z1_ + 1; l < size_; l += l_inc ) {
 			A[ l ] = One;
-		}
-		return *this;
-	}
-
-	// Set to Diagonal Matrix with Uniform Value
-	Array2 &
-	to_diag( T const & d )
-	{
-		assert( square() );
-		Array2 & A( *this ); // Shorthand name
-		A = T( 0 ); // Zero the array
-		for ( size_type l = 0, l_inc = z1_ + 1; l < size_; l += l_inc ) {
-			A[ l ] = d;
 		}
 		return *this;
 	}

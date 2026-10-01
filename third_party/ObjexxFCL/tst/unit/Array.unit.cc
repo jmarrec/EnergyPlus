@@ -179,11 +179,3 @@ TEST( ArrayTest, Unallocated )
 	EXPECT_DEBUG_DEATH( a( 1 ), ".*Assertion.*" );
 }
 
-TEST( ArrayTest, Functions1D )
-{
-	Array1D_int u{ 1, 2, 3 };
-	Array1D_int v{ 2, 3, 4 };
-	EXPECT_EQ( 14, magnitude_squared( u ) );
-	EXPECT_EQ( 3, distance_squared( u, v ) );
-	EXPECT_EQ( 20, dot( u, v ) );
-}

@@ -532,40 +532,6 @@ TEST( Array2Test, ConstructRange )
 			EXPECT_EQ( 31459, A3( i1, i2 ) );
 }
 
-TEST( Array2Test, ConstructDiag )
-{
-	Array2D_int A1( Array2D_int::diag( 3, 31459 ) );
-	EXPECT_EQ( 9u, A1.size() );
-	EXPECT_EQ( 3u, A1.size1() );
-	EXPECT_EQ( 3u, A1.size2() );
-	EXPECT_EQ( 1, A1.l1() );
-	EXPECT_EQ( 3, A1.u1() );
-	EXPECT_EQ( 1, A1.l2() );
-	EXPECT_EQ( 3, A1.u2() );
-	EXPECT_EQ( Array2D_int::IR( 1, 3 ), A1.I1() );
-	EXPECT_EQ( Array2D_int::IR( 1, 3 ), A1.I2() );
-	for ( int i1 = A1.l1(); i1 <= A1.u1(); ++i1 )
-		for ( int i2 = A1.l2(); i2 <= A1.u2(); ++i2 )
-			EXPECT_EQ( ( i1 == i2 ) ? 31459 : 0, A1( i1, i2 ) );
-}
-
-TEST( Array2Test, ConstructIdentity )
-{
-	Array2D_int A1( Array2D_int::identity( 3 ) );
-	EXPECT_EQ( 9u, A1.size() );
-	EXPECT_EQ( 3u, A1.size1() );
-	EXPECT_EQ( 3u, A1.size2() );
-	EXPECT_EQ( 1, A1.l1() );
-	EXPECT_EQ( 3, A1.u1() );
-	EXPECT_EQ( 1, A1.l2() );
-	EXPECT_EQ( 3, A1.u2() );
-	EXPECT_EQ( Array2D_int::IR( 1, 3 ), A1.I1() );
-	EXPECT_EQ( Array2D_int::IR( 1, 3 ), A1.I2() );
-	for ( int i1 = A1.l1(); i1 <= A1.u1(); ++i1 )
-		for ( int i2 = A1.l2(); i2 <= A1.u2(); ++i2 )
-			EXPECT_EQ( ( i1 == i2 ) ? 1 : 0, A1( i1, i2 ) );
-}
-
 TEST( Array2Test, AssignmentCopy )
 {
 	Array2D_double A1( 2, 3, 3.1459 );
@@ -902,30 +868,6 @@ TEST( Array2Test, PredicateIdentity )
 
 	Array2D_int A7( 2, 2, { 1, 0, 0, 1 } );
 	EXPECT_TRUE( A7.is_identity() );
-}
-
-TEST( Array2DTest, PredicateSymmetric )
-{
-	Array2D_int A1;
-	EXPECT_TRUE( A1.symmetric() );
-
-	Array2D_int A2( 1, 1, 1 );
-	EXPECT_TRUE( A2.symmetric() );
-
-	Array2D_int A3( 1, 1, 2 );
-	EXPECT_TRUE( A3.symmetric() );
-
-	Array2D_int A4( 2, 2, 1 );
-	EXPECT_TRUE( A4.symmetric() );
-
-	Array2D_int A5( 2, 2, 2 );
-	EXPECT_TRUE( A5.symmetric() );
-
-	Array2D_int A6( 2, 2, { 1, 2, 3, 1 } );
-	EXPECT_FALSE( A6.symmetric() );
-
-	Array2D_int A7( 2, 2, { 1, 2, 2, 1 } );
-	EXPECT_TRUE( A7.symmetric() );
 }
 
 TEST( Array2Test, Inspectors )
@@ -1281,20 +1223,6 @@ TEST( Array2Test, Diagonals )
 		EXPECT_EQ( 0, A( 3, 1 ) );
 		EXPECT_EQ( 0, A( 3, 2 ) );
 	}
-	{
-		Array2D_int A( {-1,1}, 3, { 11, 12, 13, 21, 22, 23, 31, 32, 33 } );
-		A.to_diag( 9 );
-		EXPECT_EQ( 9, A( -1, 1 ) );
-		EXPECT_EQ( 9, A(  0, 2 ) );
-		EXPECT_EQ( 9, A(  1, 3 ) );
-		EXPECT_EQ( 0, A(  0, 1 ) );
-		EXPECT_EQ( 0, A(  1, 1 ) );
-		EXPECT_EQ( 0, A( -1, 2 ) );
-		EXPECT_EQ( 0, A(  1, 2 ) );
-		EXPECT_EQ( 0, A( -1, 3 ) );
-		EXPECT_EQ( 0, A(  0, 3 ) );
-	}
-
 }
 
 TEST( Array2Test, FunctionCount )

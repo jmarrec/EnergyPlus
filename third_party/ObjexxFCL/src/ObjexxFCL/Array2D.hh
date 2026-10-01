@@ -259,26 +259,6 @@ public: // Creation
 	}
 
 
-	// Diagonal Matrix Named Constructor
-	static
-	Array2D
-	diag( IR const & I, T const & d )
-	{
-		Array2D D( I, I );
-		D.to_diag( d );
-		return D;
-	}
-
-	// Identity Matrix Named Constructor
-	static
-	Array2D
-	identity( IR const & I )
-	{
-		Array2D D( I, I );
-		D.to_diag( T( 1 ) );
-		return D;
-	}
-
 	// Destructor
 	virtual
 	~Array2D() = default;

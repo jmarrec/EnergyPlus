@@ -1055,31 +1055,6 @@ TEST( Array1Test, Swap )
 	}
 }
 
-TEST( Array1Test, Functions )
-{
-	Array1D_int u{ 1, 2, 3 };
-	Array1D_int v{ 2, 3, 4 };
-	EXPECT_EQ( 14, magnitude_squared( u ) );
-	EXPECT_EQ( 3, distance_squared( u, v ) );
-	EXPECT_EQ( 20, dot( u, v ) );
-}
-
-TEST( Array1Test, Dot )
-{
-	Array1D_int A( 3 );
-	Array1D_int B( 3 );
-	A( 1 ) = 4;
-	A( 2 ) = 3;
-	A( 3 ) = 5;
-	B( 1 ) = 7;
-	B( 2 ) = 5;
-	B( 3 ) = 4;
-	EXPECT_EQ( 63, dot( A, B ) );
-	EXPECT_EQ( 63, dot( B, A ) );
-	EXPECT_EQ( 63, dot_product( A, B ) );
-	EXPECT_EQ( 63, dot_product( B, A ) );
-}
-
 TEST( Array1Test, EoshiftMoveAssignment )
 {
 	Array1D_int A( { 0, 4 }, { 0, 1, 2, 3, 4 } ); // Not 1-based

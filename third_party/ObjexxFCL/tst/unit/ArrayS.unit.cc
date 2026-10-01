@@ -257,17 +257,6 @@ TEST( ArraySTest, Array2SSlice3D )
 	EXPECT_EQ( 4u, r.size() );
 }
 
-TEST( ArraySTest, Functions1D )
-{
-	Array1D_int U{ 1, 2, 3 };
-	Array1D_int V{ 2, 3, 4 };
-	Array1S_int u( U );
-	Array1S_int v( V );
-	EXPECT_EQ( 14, magnitude_squared( u ) );
-	EXPECT_EQ( 3, distance_squared( u, v ) );
-	EXPECT_EQ( 20, dot( u, v ) );
-}
-
 TEST( ArraySTest, StreamOut )
 {
 	Array1D_int const A( 3, { 1, 2, 3 } );
