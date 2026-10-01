@@ -1612,11 +1612,17 @@ namespace HeatBalanceIntRadExchange {
             }
         }
 
-        //  Enforce reciprocity by averaging AiFij and AjFji
-        { // Performance Slow way to average with transpose (heap use)
-            Array2D<Real64> const AFt(transpose(AF));
-            std::transform(AF.begin(), AF.end(), AFt.begin(), FixedAF.begin(), [](Real64 lhs, Real64 rhs) { return 0.5 * (lhs + rhs); });
-        }
+        //  Enforce reciprocity by averaging AiFij and AjFji: dst = 0.5 * (src + src^T), also valid in place (src and dst the same matrix)
+        auto const enforceReciprocity = [N](Array2D<Real64> const &src, Array2D<Real64> &dst) {
+            for (int i = 1; i <= N; ++i) {
+                for (int j = i; j <= N; ++j) {
+                    Real64 const avg = 0.5 * (src(i, j) + src(j, i));
+                    dst(i, j) = avg;
+                    dst(j, i) = avg;
+                }
+            }
+        };
+        enforceReciprocity(AF, FixedAF);
 
         AF.deallocate();
 
@@ -1705,11 +1711,7 @@ namespace HeatBalanceIntRadExchange {
             }
 
             //  Enforce reciprocity by averaging AiFij and AjFji
-            {
-                Array2D<Real64> const FixedAFt(transpose(FixedAF));
-                std::transform(
-                    FixedAF.begin(), FixedAF.end(), FixedAFt.begin(), FixedAF.begin(), [](Real64 lhs, Real64 rhs) { return 0.5 * (lhs + rhs); });
-            }
+            enforceReciprocity(FixedAF, FixedAF);
 
             //  Form FixedF matrix
             for (int i = 1; i <= N; ++i) {
@@ -1729,11 +1731,7 @@ namespace HeatBalanceIntRadExchange {
             ConvrgOld = ConvrgNew;
             if (NumIterations > 400) { //  If everything goes bad,enforce reciprocity and go home.
                 //  Enforce reciprocity by averaging AiFij and AjFji
-                {
-                    Array2D<Real64> const FixedAFt(transpose(FixedAF));
-                    std::transform(
-                        FixedAF.begin(), FixedAF.end(), FixedAFt.begin(), FixedAF.begin(), [](Real64 lhs, Real64 rhs) { return 0.5 * (lhs + rhs); });
-                }
+                enforceReciprocity(FixedAF, FixedAF);
 
                 //  Form FixedF matrix
                 for (int i = 1; i <= N; ++i) {

@@ -727,21 +727,6 @@ public: // Modifier
 		return *this;
 	}
 
-	// Transpose
-	Array2 &
-	transpose()
-	{
-		using std::swap; // Allows std::swap to be used if no T version
-		assert( square() ); // So dimensions aren't changed
-		Array2 & A( *this ); // Shorthand name
-		for ( size_type i = 0; i < z2_; ++i ) {
-			for ( size_type j = 0, l = i * z2_, lT = i; j < i; ++j, ++l, lT += z2_ ) {
-				swap( A[ lT ], A[ l ] );
-			}
-		}
-		return *this;
-	}
-
 
 protected: // Functions
 
