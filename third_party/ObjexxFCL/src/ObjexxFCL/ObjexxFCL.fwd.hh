@@ -20,7 +20,6 @@
 #include <ObjexxFCL/CArray.fwd.hh>
 #include <ObjexxFCL/CArrayP.fwd.hh>
 #include <ObjexxFCL/ChunkVector.fwd.hh>
-#include <ObjexxFCL/Cstring.fwd.hh>
 #include <ObjexxFCL/Index.fwd.hh>
 #include <ObjexxFCL/IndexRange.fwd.hh>
 #include <ObjexxFCL/IndexSlice.fwd.hh>
