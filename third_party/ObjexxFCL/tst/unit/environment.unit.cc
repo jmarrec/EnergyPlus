@@ -17,55 +17,28 @@
 #include <ObjexxFCL/environment.hh>
 #include "ObjexxFCL.unit.hh"
 
+// C++ Headers
+#include <cstdlib>
+
 using namespace ObjexxFCL;
+
+namespace {
+
+bool set_env( char const * name, char const * value )
+{
+#ifdef _WIN32
+	return ( _putenv_s( name, value ) == 0 );
+#else
+	return ( setenv( name, value, 1 ) == 0 );
+#endif
+}
+
+}
 
 TEST( EnvironmentTest, GetEnvironmentVariable )
 {
-	{
-		EXPECT_TRUE( SETENV( "ObjexxFPL_Test_Env_Var", "GET_ENVIRONMENT_VARIABLE" ) );
-		std::string val;
-		GET_ENVIRONMENT_VARIABLE( "ObjexxFPL_Test_Env_Var", val );
-		EXPECT_EQ( "GET_ENVIRONMENT_VARIABLE", val );
-	}
-
-	{
-		EXPECT_TRUE( SETENV( "ObjexxFCL_Test_Env_Var", "get_environment_variable" ) );
-		std::string val;
-		get_environment_variable( "ObjexxFCL_Test_Env_Var", val );
-		EXPECT_EQ( "get_environment_variable", val );
-	}
-}
-
-TEST( EnvironmentTest, Getenv )
-{
-	EXPECT_TRUE( SETENV( "ObjexxFCL_Test_Env_Var", "GETENV" ) );
+	EXPECT_TRUE( set_env( "ObjexxFCL_Test_Env_Var", "get_environment_variable" ) );
 	std::string val;
-	GETENV( "ObjexxFCL_Test_Env_Var", val );
-	EXPECT_EQ( "GETENV", val );
-}
-
-TEST( EnvironmentTest, Getenvqq )
-{
-	EXPECT_TRUE( SETENV( "ObjexxFCL_Test_Env_Var", "GETENVQQ" ) );
-	std::string val;
-	EXPECT_EQ( 8u, GETENVQQ( "ObjexxFCL_Test_Env_Var", val ) );
-	EXPECT_EQ( "GETENVQQ", val );
-}
-
-TEST( EnvironmentTest, GetEnvVar )
-{
-	EXPECT_TRUE( SETENV( "ObjexxFCL_Test_Env_Var", "GETENVQQ" ) );
-	EXPECT_EQ( "GETENVQQ", GET_ENV_VAR( "ObjexxFCL_Test_Env_Var" ) );
-}
-
-TEST( EnvironmentTest, Setenv )
-{
-	EXPECT_TRUE( SETENV( "ObjexxFCL_Test_Env_Var", "SETENV" ) );
-	EXPECT_EQ( "SETENV", GET_ENV_VAR( "ObjexxFCL_Test_Env_Var" ) );
-}
-
-TEST( EnvironmentTest, Setenvqq )
-{
-	EXPECT_TRUE( SETENVQQ( "ObjexxFCL_Test_Env_Var=SETENVQQ" ) );
-	EXPECT_EQ( "SETENVQQ", GET_ENV_VAR( "ObjexxFCL_Test_Env_Var" ) );
+	get_environment_variable( "ObjexxFCL_Test_Env_Var", val );
+	EXPECT_EQ( "get_environment_variable", val );
 }

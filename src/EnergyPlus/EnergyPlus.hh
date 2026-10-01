@@ -175,7 +175,6 @@ using ObjexxFCL::sized;
 using ObjexxFCL::square;
 using ObjexxFCL::strip;
 using ObjexxFCL::stripped;
-using ObjexxFCL::SYSTEM_CLOCK;
 using ObjexxFCL::trim;
 using ObjexxFCL::trimmed;
 using ObjexxFCL::uppercase;
