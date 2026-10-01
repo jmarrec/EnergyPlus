@@ -934,71 +934,12 @@ public: // std::vector-like API
 		return *this;
 	}
 
-	// Remove Last Value
-	Array1D &
-	pop_back()
-	{
-		if ( size_ > 0u ) {
-			I_.shrink();
-			Base::do_pop_back();
-		}
-		return *this;
-	}
-
 	// Insert Value by Copy
 	iterator
 	insert( const_iterator pos, T const & t )
 	{
 		I_.grow();
 		return Base::do_insert_copy( pos, t );
-	}
-
-	// Insert Value by Move
-	template< typename U = T, class = typename std::enable_if< std::is_move_assignable< U >::value >::type >
-	iterator
-	insert( const_iterator pos, T && t )
-	{
-		I_.grow();
-		return Base::do_insert_move( pos, std::move( t ) );
-	}
-
-	// Insert Multiple Copies of a Value
-	iterator
-	insert( const_iterator pos, size_type n, T const & t )
-	{
-		I_.grow( static_cast< int >( n ) );
-		return Base::do_insert_n( pos, n, t );
-	}
-
-	// Insert Iterator Range
-	template< typename Iterator, class = typename std::enable_if<
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::input_iterator_tag >::value ||
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::forward_iterator_tag >::value ||
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::bidirectional_iterator_tag >::value ||
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::random_access_iterator_tag >::value
-	 >::type >
-	iterator
-	insert( const_iterator pos, Iterator first, Iterator last )
-	{
-		I_.grow( static_cast< int >( std::distance( first, last ) ) );
-		return Base::do_insert_iterator( pos, first, last );
-	}
-
-	// Insert Initializer List
-	iterator
-	insert( const_iterator pos, std::initializer_list< T > il )
-	{
-		I_.grow( static_cast< int >( il.size() ) );
-		return Base::do_insert_initializer_list( pos, il );
-	}
-
-	// Insert Value Constructed in Place
-	template< typename... Args >
-	iterator
-	emplace( const_iterator pos, Args &&... args )
-	{
-		I_.grow();
-		return Base::do_emplace( pos, std::forward< Args >( args )... );
 	}
 
 	// Append Value Constructed in Place
@@ -1017,14 +958,6 @@ public: // std::vector-like API
 	{
 		I_.shrink();
 		return Base::do_erase( pos );
-	}
-
-	// Erase Iterator Range
-	iterator
-	erase( const_iterator first, const_iterator last )
-	{
-		I_.shrink( static_cast< int >( std::distance( first, last ) ) );
-		return Base::do_erase_iterator( first, last );
 	}
 
 	// Reserve Capacity
@@ -1136,144 +1069,6 @@ swap( Array1D< T > & a, Array1D< T > & b )
 }
 
 // Comparison: Elemental
-
-// Array == Array
-template< typename T >
-inline
-Array1D< bool >
-operator ==( Array1< T > const & a, Array1< T > const & b )
-{
-	assert( conformable( a, b ) );
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	eq_elemental( a, b, r );
-	return r;
-}
-
-// Array != Array
-template< typename T >
-inline
-Array1D< bool >
-operator !=( Array1< T > const & a, Array1< T > const & b )
-{
-	assert( conformable( a, b ) );
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	ne_elemental( a, b, r );
-	return r;
-}
-
-// Array < Array
-template< typename T >
-inline
-Array1D< bool >
-operator <( Array1< T > const & a, Array1< T > const & b )
-{
-	assert( conformable( a, b ) );
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	lt_elemental( a, b, r );
-	return r;
-}
-
-// Array <= Array
-template< typename T >
-inline
-Array1D< bool >
-operator <=( Array1< T > const & a, Array1< T > const & b )
-{
-	assert( conformable( a, b ) );
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	le_elemental( a, b, r );
-	return r;
-}
-
-// Array > Array
-template< typename T >
-inline
-Array1D< bool >
-operator >( Array1< T > const & a, Array1< T > const & b )
-{
-	assert( conformable( a, b ) );
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	gt_elemental( a, b, r );
-	return r;
-}
-
-// Array >= Array
-template< typename T >
-inline
-Array1D< bool >
-operator >=( Array1< T > const & a, Array1< T > const & b )
-{
-	assert( conformable( a, b ) );
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	ge_elemental( a, b, r );
-	return r;
-}
-
-// Array == Value
-template< typename T >
-inline
-Array1D< bool >
-operator ==( Array1< T > const & a, T const & t )
-{
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	eq_elemental( a, t, r );
-	return r;
-}
-
-// Array != Value
-template< typename T >
-inline
-Array1D< bool >
-operator !=( Array1< T > const & a, T const & t )
-{
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	ne_elemental( a, t, r );
-	return r;
-}
-
-// Array < Value
-template< typename T >
-inline
-Array1D< bool >
-operator <( Array1< T > const & a, T const & t )
-{
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	lt_elemental( a, t, r );
-	return r;
-}
-
-// Array <= Value
-template< typename T >
-inline
-Array1D< bool >
-operator <=( Array1< T > const & a, T const & t )
-{
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	le_elemental( a, t, r );
-	return r;
-}
-
-// Array > Value
-template< typename T >
-inline
-Array1D< bool >
-operator >( Array1< T > const & a, T const & t )
-{
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	gt_elemental( a, t, r );
-	return r;
-}
-
-// Array >= Value
-template< typename T >
-inline
-Array1D< bool >
-operator >=( Array1< T > const & a, T const & t )
-{
-	Array1D< bool > r( Array1D< bool >::shape( a ) );
-	ge_elemental( a, t, r );
-	return r;
-}
 
 // Value == Array
 template< typename T >

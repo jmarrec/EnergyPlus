@@ -203,8 +203,6 @@ TEST( ArrayTest, EmptyComparisonElemental )
 	Array1D_int a( 0 ), b( 0 ); // Empty
 	EXPECT_EQ( 0u, a.size() );
 	EXPECT_EQ( 0u, b.size() );
-	EXPECT_EQ( 0u, ( a == b ).size() );
-	EXPECT_EQ( 0u, ( a > b ).size() );
 }
 
 TEST( ArrayTest, Unallocated )
@@ -222,16 +220,8 @@ TEST( ArrayTest, AnyOp2D )
 	EXPECT_FALSE( any_eq( A, 22 ) );
 	EXPECT_TRUE( any_ne( A, 6 ) );
 	EXPECT_TRUE( any_lt( A, 2 ) );
-	EXPECT_TRUE( any_ge( A, 9 ) );
 	EXPECT_FALSE( any_lt( A, 1 ) );
 	EXPECT_FALSE( any_gt( A, 9 ) );
-}
-
-TEST( ArrayTest, AllOp2D )
-{
-	Array2D_int const A( 3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-	EXPECT_TRUE( all_ne( A, 22 ) );
-	EXPECT_FALSE( all_ne( A, 2 ) );
 }
 
 TEST( ArrayTest, CountOp2D )
@@ -241,10 +231,6 @@ TEST( ArrayTest, CountOp2D )
 	EXPECT_EQ( 1u, count_eq( A, 1 ) );
 	EXPECT_EQ( 2u, count_eq( A, 2 ) );
 	EXPECT_EQ( 3u, count_eq( A, 3 ) );
-	EXPECT_EQ( 6u, count_lt( A, 7 ) );
-	EXPECT_EQ( 1u, count_ge( A, 9 ) );
-	EXPECT_EQ( 9u, count_lt( A, 11 ) );
-	EXPECT_EQ( 3u, count_gt( A, 3 ) );
 }
 
 TEST( ArrayTest, Functions1D )

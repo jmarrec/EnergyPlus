@@ -958,14 +958,6 @@ TEST( Array1Test, Push_Back_SelfRef )
 	EXPECT_EQ( 1, A( 2 ) );
 }
 
-TEST( Array1Test, Pop_Back )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	EXPECT_EQ( 5, A.back() );
-	A.pop_back();
-	EXPECT_EQ( 4u, A.size() );
-}
-
 TEST( Array1Test, Insert_Copy )
 {
 	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
@@ -1012,131 +1004,6 @@ TEST( Array1Test, Insert_Copy )
 	EXPECT_EQ( 9, A( 11 ) );
 }
 
-TEST( Array1Test, Insert_Move )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	A.insert( A.end(), 6 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 6, A.u() );
-	EXPECT_EQ( 6u, A.size() );
-	EXPECT_EQ( 10u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 6, A( 6 ) );
-	A.insert( A.end(), 7 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 7, A.u() );
-	EXPECT_EQ( 7u, A.size() );
-	EXPECT_EQ( 10u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 6, A( 6 ) );
-	EXPECT_EQ( 7, A( 7 ) );
-	A.insert( A.begin(), 0 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 8, A.u() );
-	EXPECT_EQ( 8u, A.size() );
-	EXPECT_EQ( 10u, A.capacity() );
-	EXPECT_EQ( 0, A[ 0 ] );
-	EXPECT_EQ( 1, A[ 1 ] );
-	EXPECT_EQ( 6, A[ 6 ] );
-	EXPECT_EQ( 7, A[ 7 ] );
-	A.insert( A.begin() + 3, 3u, 3 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 11, A.u() );
-	EXPECT_EQ( 11u, A.size() );
-	EXPECT_EQ( 20u, A.capacity() );
-	EXPECT_EQ( 0, A[ 0 ] );
-	EXPECT_EQ( 1, A[ 1 ] );
-	EXPECT_EQ( 2, A[ 2 ] );
-	EXPECT_EQ( 3, A[ 3 ] );
-	EXPECT_EQ( 3, A[ 4 ] );
-	EXPECT_EQ( 3, A[ 5 ] );
-	EXPECT_EQ( 3, A[ 6 ] );
-	EXPECT_EQ( 4, A[ 7 ] );
-	EXPECT_EQ( 5, A[ 8 ] );
-	EXPECT_EQ( 6, A[ 9 ] );
-	EXPECT_EQ( 7, A[ 10 ] );
-}
-
-TEST( Array1Test, Insert_Multiples )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	A.insert( A.end(), 3u, 6 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 8, A.u() );
-	EXPECT_EQ( 8u, A.size() );
-	EXPECT_EQ( 10u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 6, A( 6 ) );
-	EXPECT_EQ( 6, A( 7 ) );
-	EXPECT_EQ( 6, A( 8 ) );
-	A.insert( A.begin() + 3, 3u, 3 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 11, A.u() );
-	EXPECT_EQ( 11u, A.size() );
-	EXPECT_EQ( 20u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 2, A( 2 ) );
-	EXPECT_EQ( 3, A( 3 ) );
-	EXPECT_EQ( 3, A( 4 ) );
-	EXPECT_EQ( 3, A( 5 ) );
-	EXPECT_EQ( 3, A( 6 ) );
-	EXPECT_EQ( 4, A( 7 ) );
-	EXPECT_EQ( 5, A( 8 ) );
-	EXPECT_EQ( 6, A( 9 ) );
-	EXPECT_EQ( 6, A( 10 ) );
-	EXPECT_EQ( 6, A( 11 ) );
-	A.insert( A.begin(), 2u, A( 7 ) );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 13, A.u() );
-	EXPECT_EQ( 13u, A.size() );
-	EXPECT_EQ( 20u, A.capacity() );
-	EXPECT_EQ( 4, A( 1 ) );
-	EXPECT_EQ( 4, A( 2 ) );
-	EXPECT_EQ( 1, A( 3 ) );
-	EXPECT_EQ( 2, A( 4 ) );
-	EXPECT_EQ( 5, A( 10 ) );
-	EXPECT_EQ( 6, A( 11 ) );
-	EXPECT_EQ( 6, A( 12 ) );
-	EXPECT_EQ( 6, A( 13 ) );
-}
-
-TEST( Array1Test, Insert_Iterator )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	std::vector< int > const v( { 6, 7, 8 } );
-	A.insert( A.end(), v.begin(), v.end() );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 8, A.u() );
-	EXPECT_EQ( 8u, A.size() );
-	EXPECT_EQ( 10u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 2, A( 2 ) );
-	EXPECT_EQ( 3, A( 3 ) );
-	EXPECT_EQ( 4, A( 4 ) );
-	EXPECT_EQ( 5, A( 5 ) );
-	EXPECT_EQ( 6, A( 6 ) );
-	EXPECT_EQ( 7, A( 7 ) );
-	EXPECT_EQ( 8, A( 8 ) );
-}
-
-TEST( Array1Test, Insert_Initializer_List )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	A.insert( A.end(), { 6, 7, 8 } );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 8, A.u() );
-	EXPECT_EQ( 8u, A.size() );
-	EXPECT_EQ( 10u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 2, A( 2 ) );
-	EXPECT_EQ( 3, A( 3 ) );
-	EXPECT_EQ( 4, A( 4 ) );
-	EXPECT_EQ( 5, A( 5 ) );
-	EXPECT_EQ( 6, A( 6 ) );
-	EXPECT_EQ( 7, A( 7 ) );
-	EXPECT_EQ( 8, A( 8 ) );
-}
-
 TEST( Array1Test, Emplace )
 {
 	Array1D_int A( { 1 } );
@@ -1176,17 +1043,6 @@ TEST( Array1Test, Erase )
 	EXPECT_EQ( 2u, A.size() );
 	EXPECT_EQ( 2, A( 1 ) );
 	EXPECT_EQ( 3, A( 2 ) );
-}
-
-TEST( Array1Test, Erase_Iterator )
-{
-	Array1D_int A( { 1, 2, 3, 4, 5, 6 } );
-	A.erase( A.begin() + 1, A.begin() + 3 );
-	EXPECT_EQ( 4u, A.size() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 4, A( 2 ) );
-	EXPECT_EQ( 5, A( 3 ) );
-	EXPECT_EQ( 6, A( 4 ) );
 }
 
 TEST( Array1Test, Reserve )

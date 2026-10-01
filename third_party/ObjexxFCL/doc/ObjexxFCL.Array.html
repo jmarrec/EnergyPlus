@@ -63,7 +63,7 @@
 				<li>Linear index subscripting for fast inner loop operations.</li>
 				<li>Dynamic (run-time) sizing.</li>
 				<li>Iterator access.</li>
-				<li><span class="source">std::vector</span>-like API with grow/shrink-friendly operations like push_back, emplace, and reserve.</li>
+				<li><span class="source">std::vector</span>-like API with grow/shrink-friendly operations like push_back, emplace_back, and reserve.</li>
 			</ul>
 			<p class="body">The Arrays are not intended to be a complete numerical matrix class library. A number of general purpose matrix libraries are available for C++ and Objexx Engineering can provide interfacing to those libraries. Objexx Engineering can also provide linear algebra functions and solvers for the Array classes to meet project requirements.</p>
 			<p class="body">There are a few types of Arrays:</p>
@@ -263,7 +263,7 @@ C.redimension( B ); // C is now 5 x 5 with 3 x 3 portion preserved</pre></td>
 
 			<h3 class="h4">Array1D Vector-Like Interface</h3>
 			<p class="body">Array1D has an additional <span class="source">std::vector</span>-like personality for more natural use as a general purpose C++ container with the performance capabilities of <span class="source">std::vector</span>.</p>
-			<p class="body">The methods in this API are shown below. Array1D has the same overloads of these that <span class="source">std::vector</span> provides.</p>
+			<p class="body">The methods in this API are shown below. Array1D provides only the overloads of these that are used by client code, so it does not have every overload that <span class="source">std::vector</span> provides.</p>
 			<table border="1" cellspacing="0" cellpadding="6" bordercolor="#CABEDC">
 				<tr class="table_text">
 					<td><b>Method Name</b></td>
@@ -282,16 +282,8 @@ C.redimension( B ); // C is now 5 x 5 with 3 x 3 portion preserved</pre></td>
 					<td>Add an element at the end</td>
 				</tr>
 				<tr class="table_text">
-					<td class="source">pop_back</td>
-					<td>Remove the last element</td>
-				</tr>
-				<tr class="table_text">
 					<td class="source">insert</td>
-					<td>Add an element or elements at a specified position</td>
-				</tr>
-				<tr class="table_text">
-					<td class="source">emplace</td>
-					<td>Add an in-place constructed element at a specified position</td>
+					<td>Add a copy of an element at a specified position</td>
 				</tr>
 				<tr class="table_text">
 					<td class="source">emplace_back</td>
@@ -299,7 +291,7 @@ C.redimension( B ); // C is now 5 x 5 with 3 x 3 portion preserved</pre></td>
 				</tr>
 				<tr class="table_text">
 					<td class="source">erase</td>
-					<td>Remove an element or elements at a specified position</td>
+					<td>Remove the element at a specified position</td>
 				</tr>
 				<tr class="table_text">
 					<td class="source">reserve</td>

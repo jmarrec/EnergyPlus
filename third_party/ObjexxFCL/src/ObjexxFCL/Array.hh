@@ -359,7 +359,6 @@ protected: // Creation
 		assert( a.contiguous() );
 	}
 
-
 	// Value Proxy Constructor
 	Array( T const & t, ProxySentinel ) :
 	 owner_( false ),
@@ -503,7 +502,6 @@ public: // Assignment: Value
 		if ( data_ ) std::fill_n( data_, size_, t );
 		return *this;
 	}
-
 
 public: // Subscript
 
@@ -762,7 +760,6 @@ public: // Modifier
 		return *this;
 	}
 
-
 public: // Comparison: Predicate
 
 	// Array == Value
@@ -785,7 +782,6 @@ public: // Comparison: Predicate
 	{
 		return eq( a, t );
 	}
-
 
 public: // Comparison: Predicate: Any
 
@@ -852,32 +848,6 @@ public: // Comparison: Predicate: Any
 		return false;
 	}
 
-	// Any Array <= Value
-	friend
-	bool
-	any_le( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return false;
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] <= t ) return true;
-		}
-		return false;
-	}
-
-	// Any Value <= Array
-	friend
-	bool
-	any_le( T const & t, Array const & a )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return false;
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( t <= a[ i ] ) return true;
-		}
-		return false;
-	}
-
 	// Any Array > Value
 	friend
 	bool
@@ -894,71 +864,7 @@ public: // Comparison: Predicate: Any
 		return any_lt( a, t );
 	}
 
-	// Any Array >= Value
-	friend
-	bool
-	any_ge( Array const & a, T const & t )
-	{
-		return any_le( t, a );
-	}
-
-	// Any Value >= Array
-	friend
-	bool
-	any_ge( T const & t, Array const & a )
-	{
-		return any_le( a, t );
-	}
-
 public: // Comparison: Predicate: All
-
-	// All Array != Value
-	friend
-	bool
-	all_ne( Array const & a, T const & t )
-	{
-		return ! any_eq( a, t );
-	}
-
-	// All Value != Array
-	friend
-	bool
-	all_ne( T const & t, Array const & a )
-	{
-		return ! any_eq( a, t );
-	}
-
-	// All Array <= Value
-	friend
-	bool
-	all_le( Array const & a, T const & t )
-	{
-		return le( a, t );
-	}
-
-	// All Value <= Array
-	friend
-	bool
-	all_le( T const & t, Array const & a )
-	{
-		return le( t, a );
-	}
-
-	// All Value > Array
-	friend
-	bool
-	all_gt( T const & t, Array const & a )
-	{
-		return gt( t, a );
-	}
-
-	// All Value >= Array
-	friend
-	bool
-	all_ge( T const & t, Array const & a )
-	{
-		return ge( t, a );
-	}
 
 public: // Comparison: Count
 
@@ -984,116 +890,6 @@ public: // Comparison: Count
 		return count_eq( a, t );
 	}
 
-	// Count Array != Value
-	friend
-	size_type
-	count_ne( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return 0;
-		size_type n( 0u );
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] != t ) ++n;
-		}
-		return n;
-	}
-
-	// Count Value != Array
-	friend
-	size_type
-	count_ne( T const & t, Array const & a )
-	{
-		return count_ne( a, t );
-	}
-
-	// Count Array < Value
-	friend
-	size_type
-	count_lt( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return 0;
-		size_type n( 0u );
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] < t ) ++n;
-		}
-		return n;
-	}
-
-	// Count Value < Array
-	friend
-	size_type
-	count_lt( T const & t, Array const & a )
-	{
-		return count_gt( a, t );
-	}
-
-	// Count Array <= Value
-	friend
-	size_type
-	count_le( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return 0;
-		size_type n( 0u );
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] <= t ) ++n;
-		}
-		return n;
-	}
-
-	// Count Value <= Array
-	friend
-	size_type
-	count_le( T const & t, Array const & a )
-	{
-		return count_ge( a, t );
-	}
-
-	// Count Array > Value
-	friend
-	size_type
-	count_gt( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return 0;
-		size_type n( 0u );
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] > t ) ++n;
-		}
-		return n;
-	}
-
-	// Count Value > Array
-	friend
-	size_type
-	count_gt( T const & t, Array const & a )
-	{
-		return count_lt( a, t );
-	}
-
-	// Count Array >= Value
-	friend
-	size_type
-	count_ge( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return 0;
-		size_type n( 0u );
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] >= t ) ++n;
-		}
-		return n;
-	}
-
-	// Count Value >= Array
-	friend
-	size_type
-	count_ge( T const & t, Array const & a )
-	{
-		return count_le( a, t );
-	}
-
 protected: // Comparison: Predicate
 
 	// Array == Array
@@ -1110,212 +906,7 @@ protected: // Comparison: Predicate
 		return true;
 	}
 
-
 protected: // Comparison: Elemental
-
-	// Array == Array
-	friend
-	void
-	eq_elemental( Array const & a, Array const & b, Array< bool > & r )
-	{
-		assert( a.size() == b.size() );
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] == b[ i ] );
-		}
-	}
-
-	// Array != Array
-	friend
-	void
-	ne_elemental( Array const & a, Array const & b, Array< bool > & r )
-	{
-		assert( a.size() == b.size() );
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] != b[ i ] );
-		}
-	}
-
-	// Array < Array
-	friend
-	void
-	lt_elemental( Array const & a, Array const & b, Array< bool > & r )
-	{
-		assert( a.size() == b.size() );
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] < b[ i ] );
-		}
-	}
-
-	// Array <= Array
-	friend
-	void
-	le_elemental( Array const & a, Array const & b, Array< bool > & r )
-	{
-		assert( a.size() == b.size() );
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] <= b[ i ] );
-		}
-	}
-
-	// Array > Array
-	friend
-	void
-	gt_elemental( Array const & a, Array const & b, Array< bool > & r )
-	{
-		assert( a.size() == b.size() );
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] > b[ i ] );
-		}
-	}
-
-	// Array >= Array
-	friend
-	void
-	ge_elemental( Array const & a, Array const & b, Array< bool > & r )
-	{
-		assert( a.size() == b.size() );
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] >= b[ i ] );
-		}
-	}
-
-	// Array == Value
-	friend
-	void
-	eq_elemental( Array const & a, T const & t, Array< bool > & r )
-	{
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] == t );
-		}
-	}
-
-	// Array != Value
-	friend
-	void
-	ne_elemental( Array const & a, T const & t, Array< bool > & r )
-	{
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] != t );
-		}
-	}
-
-	// Array < Value
-	friend
-	void
-	lt_elemental( Array const & a, T const & t, Array< bool > & r )
-	{
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] < t );
-		}
-	}
-
-	// Array <= Value
-	friend
-	void
-	le_elemental( Array const & a, T const & t, Array< bool > & r )
-	{
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] <= t );
-		}
-	}
-
-	// Array > Value
-	friend
-	void
-	gt_elemental( Array const & a, T const & t, Array< bool > & r )
-	{
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] > t );
-		}
-	}
-
-	// Array >= Value
-	friend
-	void
-	ge_elemental( Array const & a, T const & t, Array< bool > & r )
-	{
-		assert( a.size() == r.size() );
-		for ( size_type i = 0, e = a.size(); i < e; ++i ) {
-			r[ i ] = ( a[ i ] >= t );
-		}
-	}
-
-	// Value == Array
-	friend
-	void
-	eq_elemental( T const & t, Array const & b, Array< bool > & r )
-	{
-		assert( b.size() == r.size() );
-		for ( size_type i = 0, e = b.size(); i < e; ++i ) {
-			r[ i ] = ( t == b[ i ] );
-		}
-	}
-
-	// Value != Array
-	friend
-	void
-	ne_elemental( T const & t, Array const & b, Array< bool > & r )
-	{
-		assert( b.size() == r.size() );
-		for ( size_type i = 0, e = b.size(); i < e; ++i ) {
-			r[ i ] = ( t != b[ i ] );
-		}
-	}
-
-	// Value < Array
-	friend
-	void
-	lt_elemental( T const & t, Array const & b, Array< bool > & r )
-	{
-		assert( b.size() == r.size() );
-		for ( size_type i = 0, e = b.size(); i < e; ++i ) {
-			r[ i ] = ( t < b[ i ] );
-		}
-	}
-
-	// Value <= Array
-	friend
-	void
-	le_elemental( T const & t, Array const & b, Array< bool > & r )
-	{
-		assert( b.size() == r.size() );
-		for ( size_type i = 0, e = b.size(); i < e; ++i ) {
-			r[ i ] = ( t <= b[ i ] );
-		}
-	}
-
-	// Value > Array
-	friend
-	void
-	gt_elemental( T const & t, Array const & b, Array< bool > & r )
-	{
-		assert( b.size() == r.size() );
-		for ( size_type i = 0, e = b.size(); i < e; ++i ) {
-			r[ i ] = ( t > b[ i ] );
-		}
-	}
-
-	// Value >= Array
-	friend
-	void
-	ge_elemental( T const & t, Array const & b, Array< bool > & r )
-	{
-		assert( b.size() == r.size() );
-		for ( size_type i = 0, e = b.size(); i < e; ++i ) {
-			r[ i ] = ( t >= b[ i ] );
-		}
-	}
 
 protected: // Methods
 
@@ -1384,23 +975,6 @@ protected: // Methods
 		}
 	}
 
-	// Shrink Capacity to Size in a Real Array
-	void
-	shrink_capacity()
-	{
-		assert( owner_ );
-		if ( capacity_ > size_ ) {
-			void * new_mem = Aligned::allocate_zero( size_ );
-			T * new_data = Aligned::data( new_mem );
-			if ( size_ > 0u ) uninitialized_move_or_copy( data_, data_ + size_, new_data );
-			destroy();
-			capacity_ = size_;
-			mem_ = new_mem;
-			data_ = new_data;
-			sdata_ = data_ - shift_;
-		}
-	}
-
 	// Append Value by Copy in a Real Array
 	void
 	do_push_back_copy( T const & t )
@@ -1449,16 +1023,6 @@ protected: // Methods
 		size_ = new_size;
 	}
 
-	// Append Value by Move in a Real Array
-	void
-	do_pop_back()
-	{
-		if ( size_ > 0u ) {
-			--size_;
-			data_[ size_ ].~T();
-		}
-	}
-
 	// Insert Value by Copy in a Real Array
 	iterator
 	do_insert_copy( const_iterator pos, T const & t )
@@ -1493,220 +1057,6 @@ protected: // Methods
 				uninitialized_move_or_copy( old_end - 1, old_end, old_end );
 				if ( size_ > 1u ) move_or_copy_backward( old_pos, old_end - 1, old_end );
 				*old_pos = tt;
-			}
-			size_ = new_size;
-			return old_pos;
-		}
-	}
-
-	// Insert Value by Move in a Real Array
-	iterator
-	do_insert_move( const_iterator pos, T && t )
-	{
-		assert( owner_ );
-		assert( size_ < npos - 1 );
-		assert( data_ <= pos );
-		assert( pos <= end() );
-		size_type const new_size( size_ + 1 );
-		assert( new_size <= max_size );
-		iterator const old_pos( data_ + ( pos - data_ ) );
-		iterator const old_end( end() );
-		if ( capacity_ < new_size ) {
-			capacity_ = std::min( std::max( capacity_ << 1, new_size ), max_size );
-			void * const new_mem = Aligned::allocate_zero( capacity_ );
-			T * const new_data = Aligned::data( new_mem );
-			iterator const new_pos( new_data + ( pos - data_ ) );
-			new ( &*new_pos ) T( std::move( t ) );
-			if ( data_ < pos ) uninitialized_move_or_copy( data_, old_pos, new_data );
-			if ( pos < old_end ) uninitialized_move_or_copy( old_pos, old_end, new_pos + 1 );
-			destroy();
-			size_ = new_size;
-			mem_ = new_mem;
-			data_ = new_data;
-			sdata_ = data_ - shift_;
-			return new_pos;
-		} else {
-			if ( pos == old_end ) {
-				new ( &*old_end ) T( std::move( t ) );
-			} else {
-				uninitialized_move_or_copy( old_end - 1, old_end, old_end );
-				if ( size_ > 1u ) move_or_copy_backward( old_pos, old_end - 1, old_end );
-				*old_pos = std::move( t );
-			}
-			size_ = new_size;
-			return old_pos;
-		}
-	}
-
-	// Insert Multiples of a Value by Copy in a Real Array
-	iterator
-	do_insert_n( const_iterator pos, size_type n, T const & t )
-	{
-		assert( owner_ );
-		assert( size_ < npos - n );
-		assert( data_ <= pos );
-		assert( pos <= end() );
-		size_type const new_size( size_ + n );
-		assert( new_size <= max_size );
-		iterator const old_pos( data_ + ( pos - data_ ) );
-		iterator const old_end( end() );
-		if ( capacity_ < new_size ) {
-			capacity_ = std::min( std::max( capacity_ << 1, new_size ), max_size );
-			void * const new_mem = Aligned::allocate_zero( capacity_ );
-			T * const new_data = Aligned::data( new_mem );
-			iterator const new_pos( new_data + ( pos - data_ ) );
-			std::uninitialized_fill_n( new_pos, n, t );
-			if ( data_ < pos ) uninitialized_move_or_copy( data_, old_pos, new_data );
-			if ( pos < old_end ) uninitialized_move_or_copy( old_pos, old_end, new_pos + n );
-			destroy();
-			size_ = new_size;
-			mem_ = new_mem;
-			data_ = new_data;
-			sdata_ = data_ - shift_;
-			return new_pos;
-		} else {
-			if ( pos == old_end ) {
-				std::uninitialized_fill_n( old_end, n, t );
-			} else {
-				T const tt( t );
-				iterator const k( old_pos + n < old_end ? old_end - n : old_pos );
-				uninitialized_move_or_copy( k, old_end, k + n );
-				move_or_copy_backward( old_pos, k, old_end );
-				size_type const ni( std::min( n, static_cast< size_type >( old_end - old_pos ) ) );
-				std::fill_n( old_pos, ni, tt );
-				if ( ni < n ) std::uninitialized_fill_n( old_end, n - ni, tt );
-			}
-			size_ = new_size;
-			return old_pos;
-		}
-	}
-
-	// Insert Iterator Range in a Real Array
-	template< typename Iterator, class = typename std::enable_if<
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::input_iterator_tag >::value ||
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::forward_iterator_tag >::value ||
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::bidirectional_iterator_tag >::value ||
-	 std::is_same< typename std::iterator_traits< Iterator >::iterator_category, std::random_access_iterator_tag >::value
-	 >::type >
-	iterator
-	do_insert_iterator( const_iterator pos, Iterator first, Iterator last ) // Like std containers first and last may not be iterators to this Array
-	{
-		assert( owner_ );
-		size_type const n( std::distance( first, last ) );
-		assert( size_ < npos - n );
-		assert( data_ <= pos );
-		assert( pos <= end() );
-		size_type const new_size( size_ + n );
-		assert( new_size <= max_size );
-		iterator const old_pos( data_ + ( pos - data_ ) );
-		iterator const old_end( end() );
-		if ( capacity_ < new_size ) {
-			capacity_ = std::min( std::max( capacity_ << 1, new_size ), max_size );
-			void * const new_mem = Aligned::allocate_zero( capacity_ );
-			T * const new_data = Aligned::data( new_mem );
-			iterator const new_pos( new_data + ( pos - data_ ) );
-			std::copy( first, last, new_pos );
-			if ( data_ < pos ) uninitialized_move_or_copy( data_, old_pos, new_data );
-			if ( pos < old_end ) uninitialized_move_or_copy( old_pos, old_end, new_pos + n );
-			destroy();
-			size_ = new_size;
-			mem_ = new_mem;
-			data_ = new_data;
-			sdata_ = data_ - shift_;
-			return new_pos;
-		} else {
-			if ( pos == old_end ) {
-				std::uninitialized_copy( first, last, old_pos );
-			} else {
-				iterator const k( old_pos + n < old_end ? old_end - n : old_pos );
-				uninitialized_move_or_copy( k, old_end, k + n );
-				move_or_copy_backward( old_pos, k, old_end );
-				size_type const ni( std::min( n, static_cast< size_type >( old_end - old_pos ) ) );
-				std::copy( first, first + ni, old_pos );
-				if ( ni < n ) std::uninitialized_copy( first + ni, last, old_pos + ni );
-			}
-			size_ = new_size;
-			return old_pos;
-		}
-	}
-
-	// Insert Initializer List in a Real Array
-	iterator
-	do_insert_initializer_list( const_iterator pos, std::initializer_list< T > il )
-	{
-		assert( owner_ );
-		size_type const n( il.size() );
-		assert( size_ < npos - n );
-		assert( data_ <= pos );
-		assert( pos <= end() );
-		size_type const new_size( size_ + n );
-		assert( new_size <= max_size );
-		iterator const old_pos( data_ + ( pos - data_ ) );
-		iterator const old_end( end() );
-		if ( capacity_ < new_size ) {
-			capacity_ = std::min( std::max( capacity_ << 1, new_size ), max_size );
-			void * const new_mem = Aligned::allocate_zero( capacity_ );
-			T * const new_data = Aligned::data( new_mem );
-			iterator const new_pos( new_data + ( pos - data_ ) );
-			std::copy( il.begin(), il.end(), new_pos );
-			if ( data_ < pos ) uninitialized_move_or_copy( data_, old_pos, new_data );
-			if ( pos < old_end ) uninitialized_move_or_copy( old_pos, old_end, new_pos + n );
-			destroy();
-			size_ = new_size;
-			mem_ = new_mem;
-			data_ = new_data;
-			sdata_ = data_ - shift_;
-			return new_pos;
-		} else {
-			if ( pos == old_end ) {
-				std::uninitialized_copy( il.begin(), il.end(), old_pos );
-			} else {
-				iterator const k( old_pos + n < old_end ? old_end - n : old_pos );
-				uninitialized_move_or_copy( k, old_end, k + n );
-				move_or_copy_backward( old_pos, k, old_end );
-				size_type const ni( std::min( n, static_cast< size_type >( old_end - old_pos ) ) );
-				std::copy( il.begin(), il.begin() + ni, old_pos );
-				if ( ni < n ) std::uninitialized_copy( il.begin() + ni, il.end(), old_pos + ni );
-			}
-			size_ = new_size;
-			return old_pos;
-		}
-	}
-
-	// Insert Value Constructed in Place in a Real Array
-	template< typename... Args >
-	iterator
-	do_emplace( const_iterator pos, Args &&... args )
-	{
-		assert( owner_ );
-		assert( size_ < npos - 1 );
-		assert( data_ <= pos );
-		assert( pos <= end() );
-		size_type const new_size( size_ + 1 );
-		assert( new_size <= max_size );
-		iterator const old_pos( data_ + ( pos - data_ ) );
-		iterator const old_end( end() );
-		if ( capacity_ < new_size ) {
-			capacity_ = std::min( std::max( capacity_ << 1, new_size ), max_size );
-			void * const new_mem = Aligned::allocate_zero( capacity_ );
-			T * const new_data = Aligned::data( new_mem );
-			iterator const new_pos( new_data + ( pos - data_ ) );
-			new ( &*new_pos ) T( std::forward< Args >( args )... );
-			if ( data_ < pos ) uninitialized_move_or_copy( data_, old_pos, new_data );
-			if ( pos < old_end ) uninitialized_move_or_copy( old_pos, old_end, new_pos + 1 );
-			destroy();
-			size_ = new_size;
-			mem_ = new_mem;
-			data_ = new_data;
-			sdata_ = data_ - shift_;
-			return new_pos;
-		} else {
-			if ( pos == old_end ) {
-				new ( &*pos ) T( std::forward< Args >( args )... );
-			} else {
-				new ( &data_[ size_ ] ) T( data_[ size_ - 1 ] );
-				move_or_copy_backward( old_pos, old_end - 1, old_end );
-				*pos = T( std::forward< Args >( args )... );
 			}
 			size_ = new_size;
 			return old_pos;
@@ -1752,27 +1102,6 @@ protected: // Methods
 		--size_;
 		return old_pos;
 	}
-
-	// Erase Iterator Range in a Real Array
-	iterator
-	do_erase_iterator( const_iterator first, const_iterator last )
-	{
-		assert( owner_ );
-		assert( ( data_ <= first ) || ( first == last ) );
-		assert( ( first <= last ) || ( first == last ) );
-		assert( ( last <= end() ) || ( first == last ) );
-		size_type const n( std::distance( first, last ) );
-		iterator const start( data_ + ( first - data_ ) );
-		if ( n > 0u ) {
-			iterator const stop( data_ + ( last - data_ ) );
-			iterator const old_end( end() );
-			move_or_copy( stop, old_end, start );
-			for ( auto i = stop; i != old_end; ++i ) i->~T();
-			size_ -= n;
-		}
-		return start;
-	}
-
 
 	// Swap
 	void
@@ -2170,28 +1499,6 @@ operator <<( std::ostream & stream, Array< T > const & a )
 	}
 	return stream;
 }
-
-
-namespace fmt {
-
-// List-Directed Format: Array
-template< typename T >
-inline
-std::string
-LD( Array< T > const & a )
-{
-	std::string s;
-	std::size_t const n( a.size() );
-	if ( n > 0u ) {
-		s.reserve( n * TypeTraits< T >::width );
-		for ( std::size_t i = 0; i < n; ++i ) {
-			s.append( fmt::LD( a[ i ] ) );
-		}
-	}
-	return s;
-}
-
-} // fmt
 
 } // ObjexxFCL
 

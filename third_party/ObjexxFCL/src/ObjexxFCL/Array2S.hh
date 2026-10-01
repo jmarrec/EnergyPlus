@@ -217,7 +217,6 @@ public: // Assignment: Array
 		return *this;
 	}
 
-
 public: // Assignment: Value
 
 	// = Value
@@ -498,7 +497,6 @@ public: // Inspector
 	{
 		return u2_ + 1;
 	}
-
 
 public: // Comparison: Predicate
 
@@ -1277,7 +1275,6 @@ public: // Comparison: Count
 		return count_le( a, t );
 	}
 
-
 private: // Methods
 
 	// Contiguous?
@@ -1361,29 +1358,6 @@ operator <<( std::ostream & stream, Array2S< T > const & a )
 	}
 	return stream;
 }
-
-namespace fmt {
-
-// List-Directed Format: Array2S
-template< typename T >
-inline
-std::string
-LD( Array2S< T > const & a )
-{
-	std::string s;
-	std::size_t const n( a.size() );
-	if ( n > 0u ) {
-		s.reserve( n * TypeTraits< T >::width );
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				s.append( fmt::LD( a( i1, i2 ) ) );
-			}
-		}
-	}
-	return s;
-}
-
-} // fmt
 
 } // ObjexxFCL
 

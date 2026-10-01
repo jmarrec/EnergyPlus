@@ -491,7 +491,6 @@ public:
 		return false;
 	}
 
-
 private: // Methods
 
 	// Contiguous?
@@ -894,27 +893,6 @@ operator <<( std::ostream & stream, Array1S< T > const & a )
 	}
 	return stream;
 }
-
-namespace fmt {
-
-// List-Directed Format: Array1S
-template< typename T >
-inline
-std::string
-LD( Array1S< T > const & a )
-{
-	std::string s;
-	std::size_t const n( a.size() );
-	if ( n > 0u ) {
-		s.reserve( n * TypeTraits< T >::width );
-		for ( int i = 1, e = a.u(); i <= e; ++i ) {
-			s.append( fmt::LD( a( i ) ) );
-		}
-	}
-	return s;
-}
-
-} // fmt
 
 } // ObjexxFCL
 
