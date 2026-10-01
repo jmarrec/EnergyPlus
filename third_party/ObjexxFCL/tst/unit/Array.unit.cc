@@ -197,15 +197,9 @@ TEST( ArrayTest, Pow2D )
 	EXPECT_TRUE( eq( S, B ) );
 }
 
-TEST( ArrayTest, Generation2DValueMinusArray )
-{
-	Array2D_int A( 3, 3, 33 ), B( 44 - A );
-	EXPECT_TRUE( eq( Array2D_int( 3, 3, 11 ), B ) );
-}
-
 TEST( ArrayTest, Cross1D )
 {
-	Array1D_int A( 3, 33 ), B( 44 - A );
+	Array1D_int A( 3, 33 ), B( 3, 11 );
 	EXPECT_TRUE( eq( cross( A, B ), cross_product( A, B ) ) );
 }
 

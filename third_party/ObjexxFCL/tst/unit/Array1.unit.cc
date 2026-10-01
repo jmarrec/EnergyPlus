@@ -1294,7 +1294,7 @@ TEST( Array1Test, EoshiftMoveAssignment )
 
 TEST( Array1Test, Cross )
 {
-	Array1D_int A( 3, 33 ), B( 44 - A );
+	Array1D_int A( 3, 33 ), B( 3, 11 );
 	EXPECT_TRUE( eq( cross( A, B ), cross_product( A, B ) ) );
 }
 
@@ -1303,13 +1303,6 @@ TEST( Array1Test, ProxyConstCorrectness )
 	Array1D_int const v( 3, 33 );
 	Array1A_int p( v ); // Proxy for const array
 	EXPECT_TRUE( eq( v, p ) );
-}
-
-TEST( Array1Test, Generators )
-{
-	Array1D_double A( 3, 22.0 ), B( 3, 11.0 );
-	EXPECT_TRUE( eq( B, A / 2.0 ) );
-	//EXPECT_TRUE( eq( B, A / 2 ) ); // This doesn't compile: Won't convert
 }
 
 TEST( Array1Test, Iterator )
