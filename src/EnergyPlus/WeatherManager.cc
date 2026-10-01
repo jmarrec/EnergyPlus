@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdio>
@@ -1286,7 +1287,7 @@ namespace Weather {
             }
         }
 
-        if (any_eq(WeekDays, 0)) {
+        if (std::ranges::any_of(WeekDays, [&](auto const &elem) { return elem == 0; })) {
             // need to start at StMon and go backwards.
             // EndDayOfMonth is also "days" in month.  (without leap year day in February)
             CurWeekDay = StWeekDay;
@@ -1386,7 +1387,7 @@ namespace Weather {
                 }
             }
 
-            if (any_eq(WeekDays, 0)) {
+            if (std::ranges::any_of(WeekDays, [&](auto const &elem) { return elem == 0; })) {
                 // need to start at StMon and go backwards.
                 // EndDayOfMonth is also "days" in month.  (without leap year day in February)
                 CurWeekDay = WeekDays(StartMonth);
@@ -1483,7 +1484,7 @@ namespace Weather {
                     }
                 }
 
-                if (any_eq(WeekDays, 0)) {
+                if (std::ranges::any_of(WeekDays, [&](auto const &elem) { return elem == 0; })) {
                     // need to start at StMon and go backwards.
                     // EndDayOfMonth is also "days" in month.  (without leap year day in February)
                     CurWeekDay = WeekDays(StartMonth);

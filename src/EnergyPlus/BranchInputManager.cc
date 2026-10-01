@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <format>
 #include <string>
 
@@ -1859,7 +1860,8 @@ namespace BranchInputManager {
             TestName = state.dataBranchInputManager->Splitters(Count).InletBranchName;
             std::string BranchListName = std::string();
             for (Loop1 = 1; Loop1 <= (int)state.dataBranchInputManager->BranchList.size(); ++Loop1) {
-                if (any_eq(state.dataBranchInputManager->BranchList(Loop1).BranchNames, TestName)) {
+                if (std::ranges::any_of(state.dataBranchInputManager->BranchList(Loop1).BranchNames,
+                                        [&](auto const &elem) { return elem == TestName; })) {
                     BranchListName = state.dataBranchInputManager->BranchList(Loop1).Name;
                     break;
                 }
@@ -1894,7 +1896,8 @@ namespace BranchInputManager {
                 TestName = state.dataBranchInputManager->Splitters(Count).OutletBranchNames(Loop);
                 BranchListName = std::string();
                 for (Loop1 = 1; Loop1 <= (int)state.dataBranchInputManager->BranchList.size(); ++Loop1) {
-                    if (any_eq(state.dataBranchInputManager->BranchList(Loop1).BranchNames, TestName)) {
+                    if (std::ranges::any_of(state.dataBranchInputManager->BranchList(Loop1).BranchNames,
+                                            [&](auto const &elem) { return elem == TestName; })) {
                         BranchListName = state.dataBranchInputManager->BranchList(Loop1).Name;
                         break;
                     }
@@ -2114,7 +2117,8 @@ namespace BranchInputManager {
             TestName = state.dataBranchInputManager->Mixers(Count).OutletBranchName;
             std::string BranchListName = std::string();
             for (Loop1 = 1; Loop1 <= (int)state.dataBranchInputManager->BranchList.size(); ++Loop1) {
-                if (any_eq(state.dataBranchInputManager->BranchList(Loop1).BranchNames, TestName)) {
+                if (std::ranges::any_of(state.dataBranchInputManager->BranchList(Loop1).BranchNames,
+                                        [&](auto const &elem) { return elem == TestName; })) {
                     BranchListName = state.dataBranchInputManager->BranchList(Loop1).Name;
                     break;
                 }
@@ -2149,7 +2153,8 @@ namespace BranchInputManager {
                 TestName = state.dataBranchInputManager->Mixers(Count).InletBranchNames(Loop);
                 BranchListName = std::string();
                 for (Loop1 = 1; Loop1 <= (int)state.dataBranchInputManager->BranchList.size(); ++Loop1) {
-                    if (any_eq(state.dataBranchInputManager->BranchList(Loop1).BranchNames, TestName)) {
+                    if (std::ranges::any_of(state.dataBranchInputManager->BranchList(Loop1).BranchNames,
+                                            [&](auto const &elem) { return elem == TestName; })) {
                         BranchListName = state.dataBranchInputManager->BranchList(Loop1).Name;
                         break;
                     }

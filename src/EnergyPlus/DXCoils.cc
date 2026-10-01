@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <cmath>
 #include <format>
 #include <string>
@@ -10263,7 +10264,7 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
 
         // Calculate basin heater power
         if (thisDXCoil.coilType == HVAC::CoilType::CoolingDXTwoStageWHumControl) {
-            if (any_eq(thisDXCoil.CondenserType, DataHeatBalance::RefrigCondenserType::Evap)) {
+            if (std::ranges::any_of(thisDXCoil.CondenserType, [&](auto const &elem) { return elem == DataHeatBalance::RefrigCondenserType::Evap; })) {
                 CalcBasinHeaterPower(state,
                                      thisDXCoil.BasinHeaterPowerFTempDiff,
                                      thisDXCoil.basinHeaterSched,
@@ -14630,7 +14631,7 @@ void ReportDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the c
         } else {
             thisDXCoil.FuelConsumed = thisDXCoil.FuelUsed * ReportingConstant;
         }
-        if (any_eq(thisDXCoil.CondenserType, DataHeatBalance::RefrigCondenserType::Evap)) {
+        if (std::ranges::any_of(thisDXCoil.CondenserType, [&](auto const &elem) { return elem == DataHeatBalance::RefrigCondenserType::Evap; })) {
             thisDXCoil.BasinHeaterConsumption = thisDXCoil.BasinHeaterPower * ReportingConstant;
         }
     } break;
@@ -14658,7 +14659,7 @@ void ReportDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the c
         state.dataHVACGlobal->DXElecCoolingPower = thisDXCoil.ElecCoolingPower;
         thisDXCoil.EvapCondPumpElecConsumption = thisDXCoil.EvapCondPumpElecPower * ReportingConstant;
         thisDXCoil.EvapWaterConsump = thisDXCoil.EvapWaterConsumpRate * ReportingConstant;
-        if (any_eq(thisDXCoil.CondenserType, DataHeatBalance::RefrigCondenserType::Evap)) {
+        if (std::ranges::any_of(thisDXCoil.CondenserType, [&](auto const &elem) { return elem == DataHeatBalance::RefrigCondenserType::Evap; })) {
             thisDXCoil.BasinHeaterConsumption = thisDXCoil.BasinHeaterPower * ReportingConstant;
         }
     } break;

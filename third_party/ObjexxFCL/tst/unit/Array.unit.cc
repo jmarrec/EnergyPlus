@@ -216,8 +216,6 @@ TEST( ArrayTest, Unallocated )
 TEST( ArrayTest, AnyOp2D )
 {
 	Array2D_int const A( 3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-	EXPECT_TRUE( any_eq( A, 6 ) );
-	EXPECT_FALSE( any_eq( A, 22 ) );
 	EXPECT_TRUE( any_ne( A, 6 ) );
 }
 

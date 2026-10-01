@@ -785,27 +785,6 @@ public: // Comparison: Predicate
 
 public: // Comparison: Predicate: Any
 
-	// Any Array == Value
-	friend
-	bool
-	any_eq( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return false;
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] == t ) return true;
-		}
-		return false;
-	}
-
-	// Any Value == Array
-	friend
-	bool
-	any_eq( T const & t, Array const & a )
-	{
-		return any_eq( a, t );
-	}
-
 	// Any Array != Value
 	friend
 	bool

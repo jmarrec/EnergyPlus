@@ -714,16 +714,6 @@ public: // Comparison: Predicate
 
 public: // Comparison: Predicate: Any
 
-	// Array1 == Array1
-	friend
-	bool
-	any_eq( Array1 const & a, Array1 const & b )
-	{
-		assert( a.size_bounded() );
-		assert( a.conformable( b ) );
-		return any_eq( static_cast< Super const & >( a ), static_cast< Super const & >( b ) );
-	}
-
 
 public: // Comparison: Predicate: Slice
 

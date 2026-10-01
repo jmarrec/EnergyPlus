@@ -697,22 +697,6 @@ public: // Comparison: Predicate
 
 public: // Comparison: Predicate: Any
 
-	// Any Slice == Slice
-	friend
-	bool
-	any_eq( Array2S const & a, Array2S const & b )
-	{
-		assert( a.conformable( b ) );
-		if ( a.empty() ) return false;
-		if ( &a == &b ) return true;
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				if ( a( i1, i2 ) == b( i1, i2 ) ) return true;
-			}
-		}
-		return false;
-	}
-
 	// Any Slice != Slice
 	friend
 	bool
@@ -745,20 +729,6 @@ public: // Comparison: Predicate: Any
 		return any_le( b, a );
 	}
 
-	// Any Slice == Value
-	friend
-	bool
-	any_eq( Array2S const & a, T const & t )
-	{
-		if ( a.empty() ) return false;
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				if ( a( i1, i2 ) == t ) return true;
-			}
-		}
-		return false;
-	}
-
 	// Any Slice != Value
 	friend
 	bool
@@ -787,14 +757,6 @@ public: // Comparison: Predicate: Any
 	any_ge( Array2S const & a, T const & t )
 	{
 		return any_le( t, a );
-	}
-
-	// Any Value == Slice
-	friend
-	bool
-	any_eq( T const & t, Array2S const & a )
-	{
-		return any_eq( a, t );
 	}
 
 	// Any Value != Slice
@@ -837,14 +799,6 @@ public: // Comparison: Predicate: All
 		return eq( a, b );
 	}
 
-	// All Slice != Slice
-	friend
-	bool
-	all_ne( Array2S const & a, Array2S const & b )
-	{
-		return ! any_eq( a, b );
-	}
-
 	// All Slice < Slice
 	friend
 	bool
@@ -875,14 +829,6 @@ public: // Comparison: Predicate: All
 	all_ge( Array2S const & a, Array2S const & b )
 	{
 		return ge( a, b );
-	}
-
-	// All Slice != Value
-	friend
-	bool
-	all_ne( Array2S const & a, T const & t )
-	{
-		return ! any_eq( a, t );
 	}
 
 	// All Slice < Value
@@ -923,14 +869,6 @@ public: // Comparison: Predicate: All
 	all_eq( T const & t, Array2S const & a )
 	{
 		return eq( t, a );
-	}
-
-	// All Value != Slice
-	friend
-	bool
-	all_ne( T const & t, Array2S const & a )
-	{
-		return ! any_eq( t, a );
 	}
 
 	// All Value < Slice

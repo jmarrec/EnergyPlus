@@ -50,6 +50,7 @@
 #include <cassert>
 #include <cmath>
 #include <format>
+#include <ranges>
 #include <string>
 
 // ObjexxFCL Headers
@@ -11601,14 +11602,14 @@ namespace SurfaceGeometry {
                 }
             }
 
-            if (s_ipsc->rNumericArgs(1) > 0.0 && !any_ne(s_ipsc->rNumericArgs({3, 7}), 0.0) &&
-                (!state.dataSurface->OSC(OSCNum).SinusoidalConstTempCoef)) {
+            bool const allCoefficientsZero = std::ranges::all_of(std::views::iota(3, 8), [&](int const i) { return s_ipsc->rNumericArgs(i) == 0.0; });
+
+            if (s_ipsc->rNumericArgs(1) > 0.0 && allCoefficientsZero && (!state.dataSurface->OSC(OSCNum).SinusoidalConstTempCoef)) {
                 ShowSevereError(state, std::format("{}=\"{}\" has zeros for all coefficients.", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "...The outdoor air temperature for surfaces using this OtherSideCoefficients object will always be 0C.");
             }
 
-            if (s_ipsc->rNumericArgs(1) <= 0.0 && !any_ne(s_ipsc->rNumericArgs({3, 7}), 0.0) &&
-                (!state.dataSurface->OSC(OSCNum).SinusoidalConstTempCoef)) {
+            if (s_ipsc->rNumericArgs(1) <= 0.0 && allCoefficientsZero && (!state.dataSurface->OSC(OSCNum).SinusoidalConstTempCoef)) {
                 ShowSevereError(state, std::format("{}=\"{}\" has zeros for all coefficients.", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state,
                                   "...The outside surface temperature for surfaces using this OtherSideCoefficients object will always be 0C.");

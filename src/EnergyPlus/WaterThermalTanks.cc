@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <format>
 
 // ObjexxFCL Headers
@@ -11138,7 +11139,8 @@ void WaterThermalTankData::MinePlantStructForInfo(EnergyPlusData &state)
         }
         // Is this wh Use side plumbed in series (default) or are there other branches in parallel?
         if (this->UseSidePlantLoc.side->Splitter.Exists) {
-            if (any_eq(this->UseSidePlantLoc.side->Splitter.NodeNumOut, this->UseInletNode)) { // this wh is on the splitter
+            if (std::ranges::any_of(this->UseSidePlantLoc.side->Splitter.NodeNumOut,
+                                    [&](auto const &elem) { return elem == this->UseInletNode; })) { // this wh is on the splitter
                 if (this->UseSidePlantLoc.side->Splitter.TotalOutletNodes > 1) {
                     this->UseSideSeries = false;
                 }
@@ -11158,7 +11160,8 @@ void WaterThermalTankData::MinePlantStructForInfo(EnergyPlusData &state)
         }
         // Is this wh Source side plumbed in series (default) or are there other branches in parallel?
         if (this->SrcSidePlantLoc.side->Splitter.Exists) {
-            if (any_eq(this->SrcSidePlantLoc.side->Splitter.NodeNumOut, this->SourceInletNode)) { // this wh is on the splitter
+            if (std::ranges::any_of(this->SrcSidePlantLoc.side->Splitter.NodeNumOut,
+                                    [&](auto const &elem) { return elem == this->SourceInletNode; })) { // this wh is on the splitter
                 if (this->SrcSidePlantLoc.side->Splitter.TotalOutletNodes > 1) {
                     this->SourceSideSeries = false;
                 }

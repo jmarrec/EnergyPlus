@@ -263,8 +263,6 @@ TEST( ArraySTest, AnyOp2D )
 {
 	Array2D_int const A( 3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
 	Array2S_int S( A );
-	EXPECT_TRUE( any_eq( S, 6 ) );
-	EXPECT_FALSE( any_eq( S, 22 ) );
 	EXPECT_TRUE( any_ne( S, 6 ) );
 	EXPECT_TRUE( any_ge( S, 9 ) );
 }
@@ -273,8 +271,6 @@ TEST( ArraySTest, AllOp2D )
 {
 	Array2D_int const A( 3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
 	Array2S_int S( A );
-	EXPECT_TRUE( all_ne( S, 22 ) );
-	EXPECT_FALSE( all_ne( S, 2 ) );
 	EXPECT_FALSE( all_lt( S, 2 ) );
 	EXPECT_FALSE( all_ge( S, 9 ) );
 	EXPECT_TRUE( all_lt( S, 11 ) );
