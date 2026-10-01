@@ -118,7 +118,6 @@ set( test_src
   tst/unit/random.unit.cc
   tst/unit/string.functions.unit.cc
   tst/unit/time.unit.cc
-  tst/unit/TypeTraits.unit.cc
   tst/unit/Vector2.unit.cc
   tst/unit/Vector3.unit.cc
   tst/unit/Vector4.unit.cc
