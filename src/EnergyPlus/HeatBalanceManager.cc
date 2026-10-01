@@ -3952,6 +3952,17 @@ namespace HeatBalanceManager {
         Array1D<Real64> RbvisTemp(Window::numPhis + 1); // Back visible reflectance vs inc. angle
         std::array<Real64, Window::numPhis> Rbvis;
 
+        auto const outsideUnitInterval = [](Real64 const v) { return v < 0.0 || v > 1.0; };
+        // Is any absorptance of this glass layer outside [0,1]?
+        auto const anyAbsSolOutsideUnitInterval = [&](int const iGlass) {
+            for (int iPhi = 1; iPhi <= Window::numPhis + 1; ++iPhi) {
+                if (outsideUnitInterval(AbsSolTemp(iGlass, iPhi))) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
         std::array<Real64, Window::numPhis> tsolFit;  // Fitted solar transmittance vs incidence angle
         std::array<Real64, Window::numPhis> tvisFit;  // Fitted visible transmittance vs incidence angle
         std::array<Real64, Window::numPhis> rfsolFit; // Fitted solar front reflectance vs incidence angle
@@ -4620,7 +4631,7 @@ namespace HeatBalanceManager {
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(TsolTemp, 0.0) || any_gt(TsolTemp, 1.0)) {
+                } else if (std::ranges::any_of(TsolTemp, outsideUnitInterval)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of TSol values. (out of range [0,1])");
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
@@ -4636,7 +4647,7 @@ namespace HeatBalanceManager {
                         ShowContinueError(state,
                                           std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
                         ErrorsFound = true;
-                    } else if (any_lt(AbsSolTemp(IGlass, _), 0.0) || any_gt(AbsSolTemp(IGlass, _), 1.0)) {
+                    } else if (anyAbsSolOutsideUnitInterval(IGlass)) {
                         ShowSevereError(
                             state,
                             std::format(
@@ -4657,7 +4668,7 @@ namespace HeatBalanceManager {
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 1, DataLine(1).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(RfsolTemp, 0.0) || any_gt(RfsolTemp, 1.0)) {
+                } else if (std::ranges::any_of(RfsolTemp, outsideUnitInterval)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of RfSol values. (out of range [0,1])");
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 1, DataLine(1).substr(0, 100)));
@@ -4669,7 +4680,7 @@ namespace HeatBalanceManager {
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 2, DataLine(2).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(RbsolTemp, 0.0) || any_gt(RbsolTemp, 1.0)) {
+                } else if (std::ranges::any_of(RbsolTemp, outsideUnitInterval)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of RbSol values. (out of range [0,1])");
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 2, DataLine(2).substr(0, 100)));
@@ -4680,7 +4691,7 @@ namespace HeatBalanceManager {
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 3, DataLine(3).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(TvisTemp, 0.0) || any_gt(TvisTemp, 1.0)) {
+                } else if (std::ranges::any_of(TvisTemp, outsideUnitInterval)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Tvis values. (out of range [0,1])");
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 3, DataLine(3).substr(0, 100)));
@@ -4691,7 +4702,7 @@ namespace HeatBalanceManager {
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 4, DataLine(4).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(RfvisTemp, 0.0) || any_gt(RfvisTemp, 1.0)) {
+                } else if (std::ranges::any_of(RfvisTemp, outsideUnitInterval)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Rfvis values. (out of range [0,1])");
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 4, DataLine(4).substr(0, 100)));
@@ -4702,7 +4713,7 @@ namespace HeatBalanceManager {
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 5, DataLine(5).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(RbvisTemp, 0.0) || any_gt(RbvisTemp, 1.0)) {
+                } else if (std::ranges::any_of(RbvisTemp, outsideUnitInterval)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Rbvis values. (out of range [0,1])");
                     ShowContinueError(state,
                                       std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 5, DataLine(5).substr(0, 100)));

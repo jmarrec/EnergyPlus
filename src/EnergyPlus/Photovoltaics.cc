@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <format>
@@ -1246,7 +1247,7 @@ namespace Photovoltaics {
             state.dataPhotovoltaic->PVarray(PVnum).TRNSYSPVcalc.TimeElapsed = TimeElapsed;
         }
 
-        if (any_gt(state.dataHeatBal->SurfQRadSWOutIncident, 0.0)) {
+        if (std::ranges::any_of(state.dataHeatBal->SurfQRadSWOutIncident, [](Real64 const v) { return v > 0.0; })) {
             //  Determine the amount of radiation incident on each PV
             state.dataPhotovoltaic->PVarray(PVnum).TRNSYSPVcalc.Insolation =
                 state.dataHeatBal->SurfQRadSWOutIncident(state.dataPhotovoltaic->PVarray(PVnum).SurfacePtr); //[W/m2]

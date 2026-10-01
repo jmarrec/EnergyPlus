@@ -822,48 +822,6 @@ public: // Comparison: Predicate: Any
 		return ! eq( a, t );
 	}
 
-	// Any Array < Value
-	friend
-	bool
-	any_lt( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return false;
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] < t ) return true;
-		}
-		return false;
-	}
-
-	// Any Value < Array
-	friend
-	bool
-	any_lt( T const & t, Array const & a )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return false;
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( t < a[ i ] ) return true;
-		}
-		return false;
-	}
-
-	// Any Array > Value
-	friend
-	bool
-	any_gt( Array const & a, T const & t )
-	{
-		return any_lt( t, a );
-	}
-
-	// Any Value > Array
-	friend
-	bool
-	any_gt( T const & t, Array const & a )
-	{
-		return any_lt( a, t );
-	}
-
 public: // Comparison: Predicate: All
 
 public: // Comparison: Count

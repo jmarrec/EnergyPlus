@@ -459,38 +459,6 @@ public:
 		return ! eq( a, t );
 	}
 
-	// Any Slice < Value
-	friend
-	bool
-	any_lt( Array1S const & a, T const & t )
-	{
-		if ( a.empty() ) return false;
-		for ( int i = 1, e = a.u(); i <= e; ++i ) {
-			if ( a( i ) < t ) return true;
-		}
-		return false;
-	}
-
-	// Any Slice > Value
-	friend
-	bool
-	any_gt( Array1S const & a, T const & t )
-	{
-		return any_lt( t, a );
-	}
-
-	// Any Value < Slice
-	friend
-	bool
-	any_lt( T const & t, Array1S const & a )
-	{
-		if ( a.empty() ) return false;
-		for ( int i = 1, e = a.u(); i <= e; ++i ) {
-			if ( t < a( i ) ) return true;
-		}
-		return false;
-	}
-
 private: // Methods
 
 	// Contiguous?

@@ -219,9 +219,6 @@ TEST( ArrayTest, AnyOp2D )
 	EXPECT_TRUE( any_eq( A, 6 ) );
 	EXPECT_FALSE( any_eq( A, 22 ) );
 	EXPECT_TRUE( any_ne( A, 6 ) );
-	EXPECT_TRUE( any_lt( A, 2 ) );
-	EXPECT_FALSE( any_lt( A, 1 ) );
-	EXPECT_FALSE( any_gt( A, 9 ) );
 }
 
 TEST( ArrayTest, CountOp2D )

@@ -721,22 +721,6 @@ public: // Comparison: Predicate: Any
 		return ! eq( a, b );
 	}
 
-	// Any Slice < Slice
-	friend
-	bool
-	any_lt( Array2S const & a, Array2S const & b )
-	{
-		assert( a.conformable( b ) );
-		if ( a.empty() ) return false;
-		if ( &a == &b ) return false;
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				if ( a( i1, i2 ) < b( i1, i2 ) ) return true;
-			}
-		}
-		return false;
-	}
-
 	// Any Slice <= Slice
 	friend
 	bool
@@ -751,14 +735,6 @@ public: // Comparison: Predicate: Any
 			}
 		}
 		return false;
-	}
-
-	// Any Slice > Slice
-	friend
-	bool
-	any_gt( Array2S const & a, Array2S const & b )
-	{
-		return any_lt( b, a );
 	}
 
 	// Any Slice >= Slice
@@ -791,20 +767,6 @@ public: // Comparison: Predicate: Any
 		return ! eq( a, t );
 	}
 
-	// Any Slice < Value
-	friend
-	bool
-	any_lt( Array2S const & a, T const & t )
-	{
-		if ( a.empty() ) return false;
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				if ( a( i1, i2 ) < t ) return true;
-			}
-		}
-		return false;
-	}
-
 	// Any Slice <= Value
 	friend
 	bool
@@ -817,14 +779,6 @@ public: // Comparison: Predicate: Any
 			}
 		}
 		return false;
-	}
-
-	// Any Slice > Value
-	friend
-	bool
-	any_gt( Array2S const & a, T const & t )
-	{
-		return any_lt( t, a );
 	}
 
 	// Any Slice >= Value
@@ -851,20 +805,6 @@ public: // Comparison: Predicate: Any
 		return ! eq( a, t );
 	}
 
-	// Any Value < Slice
-	friend
-	bool
-	any_lt( T const & t, Array2S const & a )
-	{
-		if ( a.empty() ) return false;
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				if ( t < a( i1, i2 ) ) return true;
-			}
-		}
-		return false;
-	}
-
 	// Any Value <= Slice
 	friend
 	bool
@@ -877,14 +817,6 @@ public: // Comparison: Predicate: Any
 			}
 		}
 		return false;
-	}
-
-	// Any Value > Slice
-	friend
-	bool
-	any_gt( T const & t, Array2S const & a )
-	{
-		return any_lt( a, t );
 	}
 
 	// Any Value >= Slice

@@ -266,10 +266,7 @@ TEST( ArraySTest, AnyOp2D )
 	EXPECT_TRUE( any_eq( S, 6 ) );
 	EXPECT_FALSE( any_eq( S, 22 ) );
 	EXPECT_TRUE( any_ne( S, 6 ) );
-	EXPECT_TRUE( any_lt( S, 2 ) );
 	EXPECT_TRUE( any_ge( S, 9 ) );
-	EXPECT_FALSE( any_lt( S, 1 ) );
-	EXPECT_FALSE( any_gt( S, 9 ) );
 }
 
 TEST( ArraySTest, AllOp2D )
