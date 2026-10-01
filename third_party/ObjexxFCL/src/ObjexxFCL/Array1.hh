@@ -17,7 +17,6 @@
 #include <ObjexxFCL/Array1.fwd.hh>
 #include <ObjexxFCL/Array.hh>
 #include <ObjexxFCL/Array1S.hh>
-#include <ObjexxFCL/MArray1.hh>
 
 // C++ Headers
 #include <cmath>
@@ -132,14 +131,6 @@ protected: // Creation
 	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
 	explicit
 	Array1( Array1S< U > const & a ) :
-	 Super( a ),
-	 I_( a.u() )
-	{}
-
-	// MArray Constructor Template
-	template< class A, typename M >
-	explicit
-	Array1( MArray1< A, M > const & a ) :
 	 Super( a ),
 	 I_( a.u() )
 	{}
@@ -706,28 +697,6 @@ public: // Modifier
 			data_[ i ] /= length_;
 		}
 		return *this;
-	}
-
-public: // MArray Generators
-
-	// Template Helpers
-	template< typename U > class Wrapper {};
-	typedef  typename std::conditional< std::is_class< T >::value, T, Wrapper< T > >::type  ClassT;
-
-	// MArray Generator
-	template< typename M >
-	MArray1< Array1 const, M >
-	ma( M ClassT::* pmem ) const
-	{
-		return MArray1< Array1 const, M >( *this, pmem );
-	}
-
-	// MArray Generator
-	template< typename M >
-	MArray1< Array1, M >
-	ma( M ClassT::* pmem )
-	{
-		return MArray1< Array1, M >( *this, pmem );
 	}
 
 public: // Comparison: Predicate

@@ -20,7 +20,6 @@
 #include <ObjexxFCL/ArrayS.hh>
 #include <ObjexxFCL/CArrayA.hh>
 #include <ObjexxFCL/InitializerSentinel.hh>
-#include <ObjexxFCL/MArray.hh>
 #include <ObjexxFCL/ProxySentinel.hh>
 #include <ObjexxFCL/TypeTraits.hh>
 #include <ObjexxFCL/Vector2.hh>
@@ -166,19 +165,6 @@ protected: // Creation
 	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
 	explicit
 	Array( ArrayS< U > const & a ) :
-	 owner_( true ),
-	 capacity_( size_of( a.size() ) ),
-	 size_( capacity_ ),
-	 mem_( Aligned::allocate_zero( capacity_ ) ),
-	 data_( Aligned::data( mem_ ) ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{}
-
-	// MArray Constructor Template
-	template< class A, typename M >
-	explicit
-	Array( MArray< A, M > const & a ) :
 	 owner_( true ),
 	 capacity_( size_of( a.size() ) ),
 	 size_( capacity_ ),

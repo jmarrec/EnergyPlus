@@ -25,7 +25,6 @@
 #include <ObjexxFCL/IndexRange.fwd.hh>
 #include <ObjexxFCL/IndexSlice.fwd.hh>
 #include <ObjexxFCL/IOFlags.fwd.hh>
-#include <ObjexxFCL/MArray.all.fwd.hh>
 #include <ObjexxFCL/Optional.fwd.hh>
 #include <ObjexxFCL/Print.fwd.hh>
 #include <ObjexxFCL/Read.fwd.hh>

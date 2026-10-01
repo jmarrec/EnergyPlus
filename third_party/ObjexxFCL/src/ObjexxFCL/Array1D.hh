@@ -148,19 +148,6 @@ public: // Creation
 		}
 	}
 
-	// MArray Constructor Template
-	template< class A, typename M >
-	explicit
-	Array1D( MArray1< A, M > const & a ) :
-	 Super( a )
-	{
-		setup_real();
-		size_type l( 0u );
-		for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-			initialize( l, a( i ) );
-		}
-	}
-
 	// IndexRange Constructor
 	explicit
 	Array1D( IR const & I ) :

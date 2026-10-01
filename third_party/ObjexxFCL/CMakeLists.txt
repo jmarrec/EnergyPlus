@@ -81,13 +81,6 @@ set(src
   src/ObjexxFCL/IndexSlice.fwd.hh
   src/ObjexxFCL/IndexSlice.hh
   src/ObjexxFCL/InitializerSentinel.hh
-  src/ObjexxFCL/MArray.all.fwd.hh
-  src/ObjexxFCL/MArray.fwd.hh
-  src/ObjexxFCL/MArray.hh
-  src/ObjexxFCL/MArray1.fwd.hh
-  src/ObjexxFCL/MArray1.hh
-  src/ObjexxFCL/MArrayR.fwd.hh
-  src/ObjexxFCL/MArrayR.hh
   src/ObjexxFCL/member.functions.hh
   src/ObjexxFCL/numeric.cc
   src/ObjexxFCL/numeric.hh
@@ -137,7 +130,6 @@ set( test_src
   tst/unit/IndexRange.unit.cc
   tst/unit/IndexSlice.unit.cc
   tst/unit/main.cc
-  tst/unit/MArray.unit.cc
   tst/unit/member.functions.unit.cc
   tst/unit/numeric.unit.cc
   tst/unit/ObjexxFCL.unit.hh
