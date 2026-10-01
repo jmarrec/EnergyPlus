@@ -88,7 +88,6 @@ typedef std::int64_t Int64;
 #include <ObjexxFCL/Array2S.fwd.hh>
 #include <ObjexxFCL/Array3D.fwd.hh>
 #include <ObjexxFCL/Array4D.fwd.hh>
-#include <ObjexxFCL/MArray1.fwd.hh>
 #include <ObjexxFCL/Omit.hh>
 #include <ObjexxFCL/Reference.fwd.hh>
 #include <ObjexxFCL/Vector2.fwd.hh>
@@ -129,7 +128,6 @@ using ObjexxFCL::Array3D_bool;
 using ObjexxFCL::Array3D_int;
 using ObjexxFCL::Array4D;
 using ObjexxFCL::Array4D_int;
-using ObjexxFCL::MArray1;
 using ObjexxFCL::Reference;
 using ObjexxFCL::Vector2;
 using ObjexxFCL::Vector3;

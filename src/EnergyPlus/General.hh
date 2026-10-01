@@ -168,11 +168,6 @@ namespace General {
 
     int FindNumberInList(int WhichNumber, Array1A_int ListOfItems, int NumItems);
 
-    template <typename A> inline int FindNumberInList(int const WhichNumber, MArray1<A, int> const &ListOfItems, int const NumItems)
-    {
-        return FindNumberInList(WhichNumber, Array1D_int(ListOfItems), NumItems);
-    }
-
     template <typename Container,
               class = typename std::enable_if<
                   !std::is_same<typename Container::value_type, std::string>::value>::type> // Container needs isize() and operator(i) and value_type

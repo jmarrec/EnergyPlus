@@ -436,21 +436,6 @@ namespace Util {
         return Util::FindItemInList(String, ListOfItems, ListOfItems.isize());
     }
 
-    template <typename A> inline int FindItemInList(std::string_view const String, MArray1<A, std::string> const &ListOfItems, int const NumItems)
-    {
-        for (int Count = 1; Count <= NumItems; ++Count) {
-            if (String == ListOfItems(Count)) {
-                return Count;
-            }
-        }
-        return 0; // Not found
-    }
-
-    template <typename A> inline int FindItemInList(std::string_view const String, MArray1<A, std::string> const &ListOfItems)
-    {
-        return Util::FindItemInList(String, ListOfItems, ListOfItems.isize());
-    }
-
     template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>
     // Container needs and operator[i] and elements need Name
     inline int FindItemInList(std::string_view const String, Container const &ListOfItems, int const NumItems)
@@ -545,25 +530,6 @@ namespace Util {
     int FindItem(std::string_view const String, Array1S_string const ListOfItems, int const NumItems);
 
     inline int FindItem(std::string_view const String, Array1S_string const ListOfItems)
-    {
-        return FindItem(String, ListOfItems, ListOfItems.isize());
-    }
-
-    template <typename A> inline int FindItem(std::string_view const String, MArray1<A, std::string> const &ListOfItems, int const NumItems)
-    {
-        int const item_number(Util::FindItemInList(String, ListOfItems, NumItems));
-        if (item_number != 0) {
-            return item_number;
-        }
-        for (int Count = 1; Count <= NumItems; ++Count) {
-            if (equali(String, ListOfItems(Count))) {
-                return Count;
-            }
-        }
-        return 0; // Not found
-    }
-
-    template <typename A> inline int FindItem(std::string_view const String, MArray1<A, std::string> const &ListOfItems)
     {
         return FindItem(String, ListOfItems, ListOfItems.isize());
     }
