@@ -1312,7 +1312,6 @@ struct OutputReportTabularData : BaseGlobalStruct
     bool initAdjFenDone = false;
     int numPeopleAdaptive = 0;
 
-    Real64 BigNum = 0.0;
     int ErrCount1 = 0;
     Array1D<OutputProcessor::VariableType> MonthlyColumnsTypeOfVar;
     Array1D<OutputProcessor::TimeStepType> MonthlyColumnsStepType;
@@ -1387,7 +1386,6 @@ struct OutputReportTabularData : BaseGlobalStruct
     int indexUnitConvWCS = 0;
     Real64 curValueSIWCS = 0.0;
     Real64 curValueWCS = 0.0;
-    Real64 BigNumRMG = 0.0;
     int foundGsui = 0;
     int iUnitGsui = 0;
     int foundGsum = 0;
@@ -1581,7 +1579,6 @@ struct OutputReportTabularData : BaseGlobalStruct
         this->initAdjFenDone = false;
         this->numPeopleAdaptive = 0;
 
-        this->BigNum = 0.0;
         this->ErrCount1 = 0;
         this->MonthlyColumnsTypeOfVar.clear();
         this->MonthlyColumnsStepType.clear();
@@ -1658,7 +1655,6 @@ struct OutputReportTabularData : BaseGlobalStruct
         this->indexUnitConvWCS = 0;
         this->curValueSIWCS = 0.0;
         this->curValueWCS = 0.0;
-        this->BigNumRMG = 0.0;
         this->foundGsui = 0;
         this->iUnitGsui = 0;
         this->foundGsum = 0;

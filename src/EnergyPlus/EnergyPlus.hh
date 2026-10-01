@@ -134,7 +134,6 @@ using ObjexxFCL::Vector4;
 // ObjexxFCL Functions
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/environment.hh>
-#include <ObjexxFCL/numeric.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
@@ -147,7 +146,6 @@ using ObjexxFCL::has_any_of;
 using ObjexxFCL::has_prefix;
 using ObjexxFCL::has_prefixi;
 using ObjexxFCL::hasi;
-using ObjexxFCL::HUGE_;
 using ObjexxFCL::index;
 using ObjexxFCL::is_any_of;
 using ObjexxFCL::is_blank;
@@ -180,7 +178,6 @@ using ObjexxFCL::square;
 using ObjexxFCL::strip;
 using ObjexxFCL::stripped;
 using ObjexxFCL::SYSTEM_CLOCK;
-using ObjexxFCL::TINY;
 using ObjexxFCL::trim;
 using ObjexxFCL::trimmed;
 using ObjexxFCL::uppercase;

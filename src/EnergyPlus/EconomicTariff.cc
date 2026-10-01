@@ -49,11 +49,11 @@
 #include <algorithm>
 #include <cassert>
 #include <format>
+#include <limits>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Fmath.hh>
-#include <ObjexxFCL/numeric.hh>
 #include <ObjexxFCL/string.functions.hh>
 
 // EnergyPlus Headers
@@ -762,7 +762,7 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
         if (len(s_ipsc->cAlphaArgs(9)) > 0) {
             tariff.minMonthChgVal = Util::ProcessNumber(s_ipsc->cAlphaArgs(9), isNotNumeric);
         } else {
-            tariff.minMonthChgVal = -HUGE_(-1.0); // set to a very negative value
+            tariff.minMonthChgVal = std::numeric_limits<Real64>::lowest(); // set to a very negative value
         }
         tariff.minMonthChgPt =
             AssignVariablePt(state, s_ipsc->cAlphaArgs(9), isNotNumeric, varIsArgument, varNotYetDefined, ObjType::Invalid, 0, iInObj);
@@ -1020,14 +1020,13 @@ void GetInputEconomicsChargeBlock(EnergyPlusData &state, bool &ErrorsFound) // t
     int NumNums;   // Number of elements in the numeric array
     int IOStat;    // IO Status when calling get input subroutine
     bool isNotNumeric;
-    int alphaOffset;        // offset used in blocks for alpha array
-    Real64 hugeNumber(0.0); // Autodesk Value not used but suppresses warning about HUGE_() call
+    int alphaOffset; // offset used in blocks for alpha array
 
     auto &s_econ = state.dataEconTariff;
     auto &s_ipsc = state.dataIPShortCut;
     s_ipsc->cCurrentModuleObject = "UtilityCost:Charge:Block";
 
-    hugeNumber = HUGE_(hugeNumber);
+    Real64 const hugeNumber = std::numeric_limits<Real64>::max();
     s_econ->numChargeBlock = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject);
     s_econ->chargeBlock.allocate(s_econ->numChargeBlock);
     for (int iInObj = 1; iInObj <= s_econ->numChargeBlock; ++iInObj) {
@@ -2683,7 +2682,7 @@ void ComputeTariff(EnergyPlusData &state)
         return;
     }
 
-    Real64 hugeValue = HUGE_(Real64());
+    Real64 hugeValue = std::numeric_limits<Real64>::max();
     //  Clear the isEvaluated flags for all economics variables.
     for (int nVar = 1; nVar <= s_econ->numEconVar; ++nVar) {
         s_econ->econVar(nVar).isEvaluated = false;
@@ -3428,7 +3427,7 @@ void evaluateRatchet(EnergyPlusData &state, int const usingVariable)
     if (isMonthly) {
         adjSeasonal = adjustmentVals;
     } else {
-        Real64 maximumVal = -HUGE_(Real64());
+        Real64 maximumVal = std::numeric_limits<Real64>::lowest();
         for (int iMonth = 1; iMonth <= NumMonths; ++iMonth) {
             if (seasonFromMask(iMonth) == 1) {
                 if (adjustmentVals(iMonth) > maximumVal) {
@@ -3672,9 +3671,7 @@ void setNativeVariables(EnergyPlusData &state)
     auto &s_econ = state.dataEconTariff;
 
     Array1D<Real64> monthVal(NumMonths);
-    Real64 bigNumber(0.0); // Autodesk Value not used but suppresses warning about HUGE_() call
-
-    bigNumber = HUGE_(bigNumber);
+    Real64 const bigNumber = std::numeric_limits<Real64>::max();
     for (int iTariff = 1; iTariff <= s_econ->numTariff; ++iTariff) {
         auto &tariff = s_econ->tariff(iTariff);
         // nativeTotalEnergy
@@ -4522,13 +4519,12 @@ void getMaxAndSum(EnergyPlusData const &state, int const varPointer, Real64 &sum
 
     //    Get the annual maximum and sum for the econVariable.
 
-    Real64 maximumVal(0.0); // Autodesk Value not used but suppresses warning about HUGE_() call
+    Real64 maximumVal = std::numeric_limits<Real64>::lowest();
 
     auto const &s_econ = state.dataEconTariff;
     auto const &econVar = s_econ->econVar(varPointer);
 
     Real64 sumVal = 0.0;
-    maximumVal = -HUGE_(maximumVal);
     for (int jMonth = 1; jMonth <= 12; ++jMonth) { // note not all months get printed out if more than 12 are used.- need to fix this later
         Real64 curVal = econVar.values(jMonth);
         sumVal += curVal;

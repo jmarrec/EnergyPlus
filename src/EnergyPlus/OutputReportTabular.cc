@@ -52,6 +52,7 @@
 #include <cmath>
 #include <format>
 #include <iomanip>
+#include <limits>
 #include <map>
 #include <string_view>
 #include <unordered_map>
@@ -63,7 +64,6 @@
 #include <ObjexxFCL/ArrayS.functions.hh>
 #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/member.functions.hh>
-#include <ObjexxFCL/numeric.hh>
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
 
@@ -877,11 +877,11 @@ void InitializeTabularMonthly(EnergyPlusData &state)
                         ort->MonthlyColumns(mColumn).duration = 0.0;
                     } break;
                     case AggType::Maximum: {
-                        ort->MonthlyColumns(mColumn).reslt = -HUGE_(state.dataOutRptTab->BigNum);
+                        ort->MonthlyColumns(mColumn).reslt = std::numeric_limits<Real64>::lowest();
                         ort->MonthlyColumns(mColumn).timeStamp = 0;
                     } break;
                     case AggType::Minimum: {
-                        ort->MonthlyColumns(mColumn).reslt = HUGE_(state.dataOutRptTab->BigNum);
+                        ort->MonthlyColumns(mColumn).reslt = std::numeric_limits<Real64>::max();
                         ort->MonthlyColumns(mColumn).timeStamp = 0;
                     } break;
                     case AggType::ValueWhenMaxMin: {
@@ -910,11 +910,11 @@ void InitializeTabularMonthly(EnergyPlusData &state)
                         ort->MonthlyColumns(mColumn).duration = 0.0;
                     } break;
                     case AggType::MaximumDuringHoursShown: {
-                        ort->MonthlyColumns(mColumn).reslt = -HUGE_(state.dataOutRptTab->BigNum);
+                        ort->MonthlyColumns(mColumn).reslt = std::numeric_limits<Real64>::lowest();
                         ort->MonthlyColumns(mColumn).timeStamp = 0;
                     } break;
                     case AggType::MinimumDuringHoursShown: {
-                        ort->MonthlyColumns(mColumn).reslt = HUGE_(state.dataOutRptTab->BigNum);
+                        ort->MonthlyColumns(mColumn).reslt = std::numeric_limits<Real64>::max();
                         ort->MonthlyColumns(mColumn).timeStamp = 0;
                     } break;
                     default:
@@ -1046,13 +1046,12 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
     // na
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int NumParams = 0;            // Number of elements combined
-    int NumAlphas = 0;            // Number of elements in the alpha array
-    int NumNums = 0;              // Number of elements in the numeric array
-    Array1D_string AlphArray;     // character string data
-    Array1D<Real64> NumArray;     // numeric data
-    int IOStat = -1;              // IO Status when calling get input subroutine
-    Real64 constexpr bigVal(0.0); // used with HUGE: Value doesn't matter, only type: Initialize so compiler doesn't warn about use uninitialized
+    int NumParams = 0;        // Number of elements combined
+    int NumAlphas = 0;        // Number of elements in the alpha array
+    int NumNums = 0;          // Number of elements in the numeric array
+    Array1D_string AlphArray; // character string data
+    Array1D<Real64> NumArray; // numeric data
+    int IOStat = -1;          // IO Status when calling get input subroutine
 
     Array1D_int objVarIDs;
     Array1D_string objNames;
@@ -1222,8 +1221,8 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
 
     // initialize statistics counters
     for (auto &e : ort->BinStatistics) {
-        e.minimum = HUGE_(bigVal);
-        e.maximum = -HUGE_(bigVal);
+        e.minimum = std::numeric_limits<Real64>::max();
+        e.maximum = std::numeric_limits<Real64>::lowest();
         e.n = 0;
         e.sum = 0.0;
         e.sum2 = 0.0;
@@ -18211,10 +18210,10 @@ void ResetMonthlyGathering(EnergyPlusData &state)
                 ort->MonthlyColumns(curCol).duration = 0.0;
                 if (ort->MonthlyColumns(curCol).aggType == AggType::Maximum ||
                     ort->MonthlyColumns(curCol).aggType == AggType::MaximumDuringHoursShown) {
-                    ort->MonthlyColumns(curCol).reslt = -HUGE_(state.dataOutRptTab->BigNumRMG);
+                    ort->MonthlyColumns(curCol).reslt = std::numeric_limits<Real64>::lowest();
                 } else if (ort->MonthlyColumns(curCol).aggType == AggType::Minimum ||
                            ort->MonthlyColumns(curCol).aggType == AggType::MinimumDuringHoursShown) {
-                    ort->MonthlyColumns(curCol).reslt = HUGE_(state.dataOutRptTab->BigNumRMG);
+                    ort->MonthlyColumns(curCol).reslt = std::numeric_limits<Real64>::max();
                 } else {
                     ort->MonthlyColumns(curCol).reslt = 0.0;
                 }
@@ -18228,7 +18227,6 @@ void ResetBinGathering(EnergyPlusData const &state)
     // Jason Glazer - October 2015
     // Reset all timebins gathering arrays to zero for multi-year simulations
     // so that only last year is reported in tabular reports
-    Real64 constexpr bigVal(0.0); // used with HUGE: Value doesn't matter, only type: Initialize so compiler doesn't warn about use uninitialized
     auto const &ort = state.dataOutRptTab;
 
     // clear the binning arrays to zeros
@@ -18247,8 +18245,8 @@ void ResetBinGathering(EnergyPlusData const &state)
 
     // re-initialize statistics counters
     for (auto &e : ort->BinStatistics) {
-        e.minimum = HUGE_(bigVal);
-        e.maximum = -HUGE_(bigVal);
+        e.minimum = std::numeric_limits<Real64>::max();
+        e.maximum = std::numeric_limits<Real64>::lowest();
         e.n = 0;
         e.sum = 0.0;
         e.sum2 = 0.0;
@@ -18427,8 +18425,6 @@ void ResetRemainingPredefinedEntries(EnergyPlusData &state)
     // Reset all entries that are added to the predefined reports in the FillRemainingPredefinedEntries() function to zero for multi-year
     // simulations so that only last year is reported in tabular reports
 
-    Real64 constexpr bigVal(0.0); // used with HUGE: Value doesn't matter, only type: Initialize so compiler doesn't warn about use uninitialized
-
     for (int iLight = 1; iLight <= state.dataHeatBal->TotLights; ++iLight) {
         state.dataHeatBal->Lights(iLight).SumTimeNotZeroCons = 0.;
         state.dataHeatBal->Lights(iLight).SumConsumption = 0.;
@@ -18443,16 +18439,16 @@ void ResetRemainingPredefinedEntries(EnergyPlusData &state)
 
                 thisZonePreDefRep.MechVentVolTotalOcc = 0.;
                 thisZonePreDefRep.MechVentVolTotalOccStdDen = 0.;
-                thisZonePreDefRep.MechVentVolMin = HUGE_(bigVal);
+                thisZonePreDefRep.MechVentVolMin = std::numeric_limits<Real64>::max();
                 thisZonePreDefRep.InfilVolTotalOcc = 0.;
                 thisZonePreDefRep.InfilVolTotalOccStdDen = 0.;
-                thisZonePreDefRep.InfilVolMin = HUGE_(bigVal);
+                thisZonePreDefRep.InfilVolMin = std::numeric_limits<Real64>::max();
                 thisZonePreDefRep.AFNInfilVolTotalOcc = 0.;
                 thisZonePreDefRep.AFNInfilVolTotalOccStdDen = 0.;
-                thisZonePreDefRep.AFNInfilVolMin = HUGE_(bigVal);
+                thisZonePreDefRep.AFNInfilVolMin = std::numeric_limits<Real64>::max();
                 thisZonePreDefRep.SimpVentVolTotalOcc = 0.;
                 thisZonePreDefRep.SimpVentVolTotalOccStdDen = 0.;
-                thisZonePreDefRep.SimpVentVolMin = HUGE_(bigVal);
+                thisZonePreDefRep.SimpVentVolMin = std::numeric_limits<Real64>::max();
                 thisZonePreDefRep.AFNVentVolTotalOccStdDen = 0.;
                 thisZonePreDefRep.TotTimeOcc = 0.;
             }

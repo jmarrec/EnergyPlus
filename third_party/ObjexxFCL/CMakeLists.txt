@@ -76,8 +76,6 @@ set(src
   src/ObjexxFCL/IndexSlice.hh
   src/ObjexxFCL/InitializerSentinel.hh
   src/ObjexxFCL/member.functions.hh
-  src/ObjexxFCL/numeric.cc
-  src/ObjexxFCL/numeric.hh
   src/ObjexxFCL/ObjexxFCL.fwd.hh
   src/ObjexxFCL/ObjexxFCL.hh
   src/ObjexxFCL/ObjexxFCL.Project.hh
@@ -120,7 +118,6 @@ set( test_src
   tst/unit/IndexSlice.unit.cc
   tst/unit/main.cc
   tst/unit/member.functions.unit.cc
-  tst/unit/numeric.unit.cc
   tst/unit/ObjexxFCL.unit.hh
   tst/unit/Optional.unit.cc
   tst/unit/random.unit.cc
