@@ -215,24 +215,6 @@ public: // Creation
 		initialize( a );
 	}
 
-	// Array Range Named Constructor Template
-	template< typename U >
-	static
-	Array3D
-	range( Array3< U > const & a )
-	{
-		return Array3D( a.I1_, a.I2_, a.I3_ );
-	}
-
-	// Array Range + Initializer Value Named Constructor Template
-	template< typename U >
-	static
-	Array3D
-	range( Array3< U > const & a, T const & t )
-	{
-		return Array3D( a.I1_, a.I2_, a.I3_, t );
-	}
-
 
 
 	// Destructor

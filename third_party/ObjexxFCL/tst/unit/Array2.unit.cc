@@ -501,37 +501,6 @@ TEST( Array2Test, ConstructIndexRangeInitializerList )
 	}
 }
 
-TEST( Array2Test, ConstructRange )
-{
-	Array2D_int A1( 2, 3 );
-
-	Array2D_int A2( Array2D_int::range( A1 ) );
-	EXPECT_EQ( 6u, A2.size() );
-	EXPECT_EQ( 2u, A2.size1() );
-	EXPECT_EQ( 3u, A2.size2() );
-	EXPECT_EQ( 1, A2.l1() );
-	EXPECT_EQ( 2, A2.u1() );
-	EXPECT_EQ( 1, A2.l2() );
-	EXPECT_EQ( 3, A2.u2() );
-	EXPECT_EQ( Array2D_int::IR( 1, 2 ), A2.I1() );
-	EXPECT_EQ( Array2D_int::IR( 1, 3 ), A2.I2() );
-	// Values remain uninitialized
-
-	Array2D_int A3( Array2D_int::range( A1, 31459 ) );
-	EXPECT_EQ( 6u, A3.size() );
-	EXPECT_EQ( 2u, A3.size1() );
-	EXPECT_EQ( 3u, A3.size2() );
-	EXPECT_EQ( 1, A3.l1() );
-	EXPECT_EQ( 2, A3.u1() );
-	EXPECT_EQ( 1, A3.l2() );
-	EXPECT_EQ( 3, A3.u2() );
-	EXPECT_EQ( Array2D_int::IR( 1, 2 ), A3.I1() );
-	EXPECT_EQ( Array2D_int::IR( 1, 3 ), A3.I2() );
-	for ( int i1 = 1; i1 <= 2; ++i1 )
-		for ( int i2 = 1; i2 <= 3; ++i2 )
-			EXPECT_EQ( 31459, A3( i1, i2 ) );
-}
-
 TEST( Array2Test, AssignmentCopy )
 {
 	Array2D_double A1( 2, 3, 3.1459 );

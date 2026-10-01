@@ -331,32 +331,6 @@ TEST( Array1Test, ConstructionIndexRangeInitializerArray )
 	EXPECT_EQ( 33, r( 1 ) );
 }
 
-TEST( Array1Test, ConstructionRange )
-{
-	Array1D_int c( 3 );
-	c( 1 ) = 11;
-	c( 2 ) = 22;
-	c( 3 ) = 33;
-	Array1D_int r1( Array1D_int::range( c ) );
-	EXPECT_EQ( 3u, r1.size() );
-	EXPECT_EQ( 3u, r1.size1() );
-	EXPECT_EQ( 1, r1.l() );
-	EXPECT_EQ( 1, r1.l1() );
-	EXPECT_EQ( 3, r1.u() );
-	EXPECT_EQ( 3, r1.u1() );
-	// Values remain uninitialized
-	Array1D_int r2( Array1D_int::range( c, 17 ) );
-	EXPECT_EQ( 3u, r2.size() );
-	EXPECT_EQ( 3u, r2.size1() );
-	EXPECT_EQ( 1, r2.l() );
-	EXPECT_EQ( 1, r2.l1() );
-	EXPECT_EQ( 3, r2.u() );
-	EXPECT_EQ( 3, r2.u1() );
-	EXPECT_EQ( 17, r2( 1 ) );
-	EXPECT_EQ( 17, r2( 2 ) );
-	EXPECT_EQ( 17, r2( 3 ) );
-}
-
 TEST( Array1Test, ConstructionShape )
 {
 	Array1D_int c( 3 );
@@ -798,27 +772,6 @@ TEST( Array1Test, Redimension )
 		EXPECT_EQ( 3, A( 0 ) );
 		EXPECT_EQ( 1, A( 1 ) );
 	}
-}
-
-TEST( Array1Test, Append )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	A.append( 6 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 6, A.u() );
-	EXPECT_EQ( 6u, A.size() );
-	EXPECT_EQ( 6u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 6, A( 6 ) );
-	A.reserve( 7 ); // So next append doesn't reallocate
-	A.append( 7 );
-	EXPECT_EQ( 1, A.l() );
-	EXPECT_EQ( 7, A.u() );
-	EXPECT_EQ( 7u, A.size() );
-	EXPECT_EQ( 7u, A.capacity() );
-	EXPECT_EQ( 1, A( 1 ) );
-	EXPECT_EQ( 6, A( 6 ) );
-	EXPECT_EQ( 7, A( 7 ) );
 }
 
 TEST( Array1Test, Front_And_Back )

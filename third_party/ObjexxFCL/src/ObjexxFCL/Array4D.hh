@@ -221,24 +221,6 @@ public: // Creation
 		initialize( a );
 	}
 
-	// Array Range Named Constructor Template
-	template< typename U >
-	static
-	Array4D
-	range( Array4< U > const & a )
-	{
-		return Array4D( a.I1_, a.I2_, a.I3_, a.I4_ );
-	}
-
-	// Array Range + Initializer Value Named Constructor Template
-	template< typename U >
-	static
-	Array4D
-	range( Array4< U > const & a, T const & t )
-	{
-		return Array4D( a.I1_, a.I2_, a.I3_, a.I4_, t );
-	}
-
 	// Destructor
 	virtual
 	~Array4D() = default;
