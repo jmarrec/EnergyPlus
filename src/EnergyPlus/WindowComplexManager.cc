@@ -119,7 +119,7 @@ namespace WindowComplexManager {
         int NumStates;          // Local variable for the number of states
         Array1D<Real64> Thetas; // temp array holding theta values
         Array1D_int NPhis;      // temp array holding number of phis for a given theta
-        Array1D<Real64> V(3);   // vector array
+        Vector V;               // vector
         Real64 VLen;            // Length of vector array
         int NHold;              // No. values in the Temporary array
 
@@ -1266,7 +1266,7 @@ namespace WindowComplexManager {
         Real64 Phi;                  // Basis phi angle
         Real64 HitDsq;               // Squared distance to current hit pt
         Real64 LeastHitDsq = 0.0;    // Squared distance to closest hit pt
-        Array1D<Real64> V(3);        // vector array
+        Vector V;                    // vector
         Array1D_int TmpRfSfInd;      // Temporary RefSurfIndex
         Array1D_int TmpRfRyNH;       // Temporary RefRayNHits
         Array2D_int TmpHSurfNo;      // Temporary HitSurfNo
