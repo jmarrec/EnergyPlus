@@ -15,26 +15,11 @@
 
 // C++ Headers
 #include <string>
+#include <string_view>
 
 namespace ObjexxFCL {
 
 // Predicate /////
-
-// char is Blank?
-constexpr
-bool
-is_blank( char const c )
-{
-	return ( c == ' ' );
-}
-
-// char is Not Blank?
-constexpr
-bool
-not_blank( char const c )
-{
-	return ( c != ' ' );
-}
 
 // char is in a string?
 constexpr
@@ -63,14 +48,6 @@ bool
 equali( char const c, char const d )
 {
 	return ( to_lower( c ) == to_lower( d ) );
-}
-
-// char < char Case-Insensitively?
-constexpr
-bool
-lessthani( char const c, char const d )
-{
-	return ( to_lower( c ) < to_lower( d ) );
 }
 
 // Modifier /////

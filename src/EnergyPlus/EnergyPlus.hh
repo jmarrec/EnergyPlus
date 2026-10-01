@@ -142,7 +142,6 @@ using ObjexxFCL::CEILING;
 using ObjexxFCL::equali;
 using ObjexxFCL::get_environment_variable;
 using ObjexxFCL::has;
-using ObjexxFCL::has_any_of;
 using ObjexxFCL::has_prefix;
 using ObjexxFCL::has_prefixi;
 using ObjexxFCL::hasi;
