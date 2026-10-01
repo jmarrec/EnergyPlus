@@ -15,8 +15,9 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array3.fwd.hh>
+#include <ObjexxFCL/Array1S.hh>
+#include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/Array.hh>
-#include <ObjexxFCL/Array3S.hh>
 
 namespace ObjexxFCL {
 
@@ -136,19 +137,6 @@ protected: // Creation
 	 z3_( a.z3_ )
 	{}
 
-	// Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	explicit
-	Array3( Array3S< U > const & a ) :
-	 Super( a ),
-	 I1_( a.u1() ),
-	 I2_( a.u2() ),
-	 I3_( a.u3() ),
-	 z1_( I1_.size() ),
-	 z2_( I2_.size() ),
-	 z3_( I3_.size() )
-	{}
-
 	// IndexRange Constructor
 	Array3( IR const & I1, IR const & I2, IR const & I3 ) :
 	 Super( size_of( I1, I2, I3 ) ),
@@ -221,71 +209,6 @@ public: // Assignment: Array
 		return *this;
 	}
 
-	// Slice Assignment
-	Array3 &
-	operator =( Array3S< T > const & a )
-	{
-		size_type l( 0u );
-		if ( ( conformable( a ) ) || ( ! dimension_assign( a.I1(), a.I2(), a.I3() ) ) ) {
-			if ( overlap( a ) ) { // Overlap-safe
-				CArrayA< T > c( a.size() );
-				for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-					for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-						for ( int i3 = 1, e3 = a.u3(); i3 <= e3; ++i3, ++l ) {
-							c[ l ] = a( i1, i2, i3 );
-						}
-					}
-				}
-				for ( size_type i = 0; i < c.size(); ++i ) {
-					data_[ i ] = c[ i ];
-				}
-			} else { // Not overlap-safe
-				for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-					for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-						for ( int i3 = 1, e3 = a.u3(); i3 <= e3; ++i3, ++l ) {
-							data_[ l ] = a( i1, i2, i3 );
-						}
-					}
-				}
-			}
-		} else {
-			for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-				for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-					for ( int i3 = 1, e3 = a.u3(); i3 <= e3; ++i3, ++l ) {
-						new ( data_ + l ) T( a( i1, i2, i3 ) );
-					}
-				}
-			}
-		}
-		return *this;
-	}
-
-	// Slice Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array3 &
-	operator =( Array3S< U > const & a )
-	{
-		size_type l( 0u );
-		if ( ( conformable( a ) ) || ( ! dimension_assign( a.I1(), a.I2(), a.I3() ) ) ) {
-			for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-				for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-					for ( int i3 = 1, e3 = a.u3(); i3 <= e3; ++i3, ++l ) {
-						data_[ l ] = a( i1, i2, i3 );
-					}
-				}
-			}
-		} else {
-			for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-				for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-					for ( int i3 = 1, e3 = a.u3(); i3 <= e3; ++i3, ++l ) {
-						new ( data_ + l ) T( a( i1, i2, i3 ) );
-					}
-				}
-			}
-		}
-		return *this;
-	}
-
 	// Initializer List Assignment Template
 	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
 	Array3 &
@@ -332,16 +255,6 @@ public: // Subscript
 	}
 
 public: // Slice Proxy Generators
-
-	// array( s1, s2, s3 ) const
-	Array3S< T >
-	operator ()( IS const & s1, IS const & s2, IS const & s3 ) const
-	{
-		DS const d1( I1_, s1, z2_ * z3_ );
-		DS const d2( I2_, s2, z3_ );
-		DS const d3( I3_, s3 );
-		return Array3S< T >( data_, -shift_, d1, d2, d3 );
-	}
 
 	// array( i1, s2, s3 ) const
 	Array2S< T >
@@ -407,16 +320,6 @@ public: // Slice Proxy Generators
 		k += slice_k( I2_, i2, z3_ );
 		DS const d3( I3_, s3 );
 		return Array1S< T >( data_, k, d3 );
-	}
-
-	// array( s1, s2, s3 )
-	Array3S< T >
-	operator ()( IS const & s1, IS const & s2, IS const & s3 )
-	{
-		DS const d1( I1_, s1, z2_ * z3_ );
-		DS const d2( I2_, s2, z3_ );
-		DS const d3( I3_, s3 );
-		return Array3S< T >( data_, -shift_, d1, d2, d3 );
 	}
 
 	// array( i1, s2, s3 )
@@ -502,28 +405,12 @@ public: // Predicate
 		return ( ( z1_ == a.z1_ ) && ( z2_ == a.z2_ ) && ( z3_ == a.z3_ ) );
 	}
 
-	// Conformable?
-	template< typename U >
-	bool
-	conformable( Array3S< U > const & a ) const
-	{
-		return ( ( z1_ == a.size1() ) && ( z2_ == a.size2() ) && ( z3_ == a.size3() ) );
-	}
-
 	// Equal Dimensions?
 	template< typename U >
 	bool
 	equal_dimensions( Array3< U > const & a ) const
 	{
 		return ( ( I1_ == a.I1_ ) && ( I2_ == a.I2_ ) && ( I3_ == a.I3_ ) );
-	}
-
-	// Equal Dimensions?
-	template< typename U >
-	bool
-	equal_dimensions( Array3S< U > const & a ) const
-	{
-		return ( ( l1() == 1 ) && ( u1() == a.u1() ) && ( l2() == 1 ) && ( u2() == a.u2() ) && ( l3() == 1 ) && ( u3() == a.u3() ) );
 	}
 
 public: // Inspector
@@ -789,24 +676,6 @@ bool
 conformable( Array3< U > const & a, Array3< V > const & b )
 {
 	return a.conformable( b );
-}
-
-// Conformable?
-template< typename U, typename V >
-inline
-bool
-conformable( Array3< U > const & a, Array3S< V > const & b )
-{
-	return a.conformable( b );
-}
-
-// Conformable?
-template< typename U, typename V >
-inline
-bool
-conformable( Array3S< U > const & a, Array3< V > const & b )
-{
-	return b.conformable( a );
 }
 
 // Equal Dimensions?

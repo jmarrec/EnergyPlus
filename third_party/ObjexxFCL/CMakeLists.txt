@@ -37,15 +37,11 @@ set(src
   src/ObjexxFCL/Array3.hh
   src/ObjexxFCL/Array3D.fwd.hh
   src/ObjexxFCL/Array3D.hh
-  src/ObjexxFCL/Array3S.fwd.hh
-  src/ObjexxFCL/Array3S.hh
   src/ObjexxFCL/Array4.all.fwd.hh
   src/ObjexxFCL/Array4.fwd.hh
   src/ObjexxFCL/Array4.hh
   src/ObjexxFCL/Array4D.fwd.hh
   src/ObjexxFCL/Array4D.hh
-  src/ObjexxFCL/Array4S.fwd.hh
-  src/ObjexxFCL/Array4S.hh
   src/ObjexxFCL/ArrayRS.fwd.hh
   src/ObjexxFCL/ArrayRS.hh
   src/ObjexxFCL/ArrayS.all.fwd.hh

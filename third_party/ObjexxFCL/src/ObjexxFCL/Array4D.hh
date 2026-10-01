@@ -148,25 +148,6 @@ public: // Creation
 	 Super( a )
 	{}
 
-	// Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	explicit
-	Array4D( Array4S< U > const & a ) :
-	 Super( a )
-	{
-		setup_real();
-		size_type l( 0u );
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				for ( int i3 = 1, e3 = a.u3(); i3 <= e3; ++i3 ) {
-					for ( int i4 = 1, e4 = a.u4(); i4 <= e4; ++i4, ++l ) {
-						initialize( l, a( i1, i2, i3, i4 ) );
-					}
-				}
-			}
-		}
-	}
-
 
 	// IndexRange Constructor
 	Array4D( IR const & I1, IR const & I2, IR const & I3, IR const & I4 ) :
@@ -208,25 +189,6 @@ public: // Creation
 		assert( conformable( a ) );
 		setup_real();
 		initialize( a );
-	}
-
-	// IndexRange + Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array4D( IR const & I1, IR const & I2, IR const & I3, IR const & I4, Array4S< U > const & a ) :
-	 Super( I1, I2, I3, I4, InitializerSentinel{} )
-	{
-		assert( conformable( a ) );
-		setup_real();
-		size_type l( 0u );
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2 ) {
-				for ( int i3 = 1, e3 = a.u3(); i3 <= e3; ++i3 ) {
-					for ( int i4 = 1, e4 = a.u4(); i4 <= e4; ++i4, ++l ) {
-						initialize( l, a( i1, i2, i3, i4 ) );
-					}
-				}
-			}
-		}
 	}
 
 	// Super + IndexRange Constructor Template
@@ -284,15 +246,6 @@ public: // Creation
 	one_based( Array4< U > const & a )
 	{
 		return Array4D( a, a.isize1(), a.isize2(), a.isize3(), a.isize4() );
-	}
-
-	// One-Based Slice Named Constructor Template
-	template< typename U >
-	static
-	Array4D
-	one_based( Array4S< U > const & a )
-	{
-		return Array4D( a.isize1(), a.isize2(), a.isize3(), a.isize4(), a );
 	}
 
 	// Destructor
@@ -370,15 +323,6 @@ public: // Assignment: Array
 		} else {
 			Base::initialize( a );
 		}
-		return *this;
-	}
-
-	// Slice Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array4D &
-	operator =( Array4S< U > const & a )
-	{
-		Super::operator =( a );
 		return *this;
 	}
 

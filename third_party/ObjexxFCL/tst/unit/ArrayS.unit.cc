@@ -206,27 +206,6 @@ TEST( ArraySTest, Array2SWholeArraySlice )
 	EXPECT_EQ( 9, s( 3, 3 ) );
 }
 
-TEST( ArraySTest, Array3SWholeArraySlice )
-{
-	Array3D_int a( {-1,0}, {1,2}, {0,1}, { 1, 2, 3, 4, 5, 6, 7, 8 } );
-	Array3S<int> s( a );
-	EXPECT_EQ( 8u, s.size() );
-	EXPECT_EQ( 1, s.l1() );
-	EXPECT_EQ( 1, s.l2() );
-	EXPECT_EQ( 1, s.l3() );
-	EXPECT_EQ( 2, s.u1() );
-	EXPECT_EQ( 2, s.u2() );
-	EXPECT_EQ( 2, s.u3() );
-	EXPECT_EQ( 1, s( 1, 1, 1 ) );
-	EXPECT_EQ( 2, s( 1, 1, 2 ) );
-	EXPECT_EQ( 3, s( 1, 2, 1 ) );
-	EXPECT_EQ( 4, s( 1, 2, 2 ) );
-	EXPECT_EQ( 5, s( 2, 1, 1 ) );
-	EXPECT_EQ( 6, s( 2, 1, 2 ) );
-	EXPECT_EQ( 7, s( 2, 2, 1 ) );
-	EXPECT_EQ( 8, s( 2, 2, 2 ) );
-}
-
 TEST( ArraySTest, Array2SSlice3D )
 {
 // Expected results from this Fortran program
