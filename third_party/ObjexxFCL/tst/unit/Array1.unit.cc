@@ -383,40 +383,6 @@ TEST( Array1Test, ConstructionShape )
 	EXPECT_EQ( 17, r2( 3 ) );
 }
 
-TEST( Array1Test, ConstructionOneBased )
-{
-	Array1D_int c( 3 );
-	c( 1 ) = 11;
-	c( 2 ) = 22;
-	c( 3 ) = 33;
-	Array1D_int r1( Array1D_int::one_based( c ) );
-	EXPECT_EQ( 3u, r1.size() );
-	EXPECT_EQ( 3u, r1.size1() );
-	EXPECT_EQ( 1, r1.l() );
-	EXPECT_EQ( 1, r1.l1() );
-	EXPECT_EQ( 3, r1.u() );
-	EXPECT_EQ( 3, r1.u1() );
-	// Values remain uninitialized
-}
-
-TEST( Array1Test, ConstructionOneBasedInitializerList )
-{
-	Array1D_int c( 3 );
-	c( 1 ) = 11;
-	c( 2 ) = 22;
-	c( 3 ) = 33;
-	Array1D_int r( Array1D_int::one_based( { 11, 22, 33 } ) );
-	EXPECT_EQ( 3u, r.size() );
-	EXPECT_EQ( 3u, r.size1() );
-	EXPECT_EQ( 1, r.l() );
-	EXPECT_EQ( 1, r.l1() );
-	EXPECT_EQ( 3, r.u() );
-	EXPECT_EQ( 3, r.u1() );
-	EXPECT_EQ( 11, r( 1 ) );
-	EXPECT_EQ( 22, r( 2 ) );
-	EXPECT_EQ( 33, r( 3 ) );
-}
-
 TEST( Array1Test, AssignmentCopy )
 {
 	Array1D_double v( 22, 55.5 );

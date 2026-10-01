@@ -213,21 +213,6 @@ TEST( ArrayTest, Unallocated )
 	EXPECT_DEBUG_DEATH( a( 1 ), ".*Assertion.*" );
 }
 
-TEST( ArrayTest, AnyOp2D )
-{
-	Array2D_int const A( 3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-	EXPECT_TRUE( any_ne( A, 6 ) );
-}
-
-TEST( ArrayTest, CountOp2D )
-{
-	Array2D_int const A( 3, 3, { 1, 2, 2, 3, 3, 3, 7, 8, 9 } );
-	EXPECT_EQ( 0u, count_eq( A, 0 ) );
-	EXPECT_EQ( 1u, count_eq( A, 1 ) );
-	EXPECT_EQ( 2u, count_eq( A, 2 ) );
-	EXPECT_EQ( 3u, count_eq( A, 3 ) );
-}
-
 TEST( ArrayTest, Functions1D )
 {
 	Array1D_int u{ 1, 2, 3 };

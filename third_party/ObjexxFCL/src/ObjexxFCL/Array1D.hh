@@ -411,33 +411,6 @@ public: // Creation
 		return Array1D( a.isize(), t );
 	}
 
-	// One-Based Copy Named Constructor Template
-	template< typename U >
-	static
-	Array1D
-	one_based( Array1< U > const & a )
-	{
-		return Array1D( a.isize(), a );
-	}
-
-	// One-Based Slice Named Constructor Template
-	template< typename U >
-	static
-	Array1D
-	one_based( Array1S< U > const & a )
-	{
-		return Array1D( a.isize(), a );
-	}
-
-	// Initializer List One-Based Named Constructor Template
-	template< typename U >
-	static
-	Array1D
-	one_based( std::initializer_list< U > const l )
-	{
-		return Array1D( static_cast< int >( l.size() ), l );
-	}
-
 	// Destructor
 	virtual
 	~Array1D() = default;

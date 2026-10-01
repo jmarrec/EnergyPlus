@@ -239,15 +239,6 @@ public: // Creation
 		return Array4D( a.I1_, a.I2_, a.I3_, a.I4_, t );
 	}
 
-	// One-Based Copy Named Constructor Template
-	template< typename U >
-	static
-	Array4D
-	one_based( Array4< U > const & a )
-	{
-		return Array4D( a, a.isize1(), a.isize2(), a.isize3(), a.isize4() );
-	}
-
 	// Destructor
 	virtual
 	~Array4D() = default;

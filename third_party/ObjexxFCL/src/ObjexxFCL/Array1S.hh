@@ -439,26 +439,6 @@ public: // Inspector
 
 public:
 
-	// Slice == Value
-	friend
-	bool
-	eq( Array1S const & a, T const & t )
-	{
-		if ( a.empty() ) return true;
-		for ( int i = 1, e = a.u(); i <= e; ++i ) {
-			if ( ! ( a( i ) == t ) ) return false;
-		}
-		return true;
-	}
-
-	// Any Slice != Value
-	friend
-	bool
-	any_ne( Array1S const & a, T const & t )
-	{
-		return ! eq( a, t );
-	}
-
 private: // Methods
 
 	// Contiguous?

@@ -785,47 +785,9 @@ public: // Comparison: Predicate
 
 public: // Comparison: Predicate: Any
 
-	// Any Array != Value
-	friend
-	bool
-	any_ne( Array const & a, T const & t )
-	{
-		return ! eq( a, t );
-	}
-
-	// Any Value != Array
-	friend
-	bool
-	any_ne( T const & t, Array const & a )
-	{
-		return ! eq( a, t );
-	}
-
 public: // Comparison: Predicate: All
 
 public: // Comparison: Count
-
-	// Count Array == Value
-	friend
-	size_type
-	count_eq( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return 0;
-		size_type n( 0u );
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( a[ i ] == t ) ++n;
-		}
-		return n;
-	}
-
-	// Count Value == Array
-	friend
-	size_type
-	count_eq( T const & t, Array const & a )
-	{
-		return count_eq( a, t );
-	}
 
 protected: // Comparison: Predicate
 

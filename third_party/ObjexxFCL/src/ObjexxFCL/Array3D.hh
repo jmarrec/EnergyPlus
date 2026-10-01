@@ -235,15 +235,6 @@ public: // Creation
 
 
 
-	// One-Based Copy Named Constructor Template
-	template< typename U >
-	static
-	Array3D
-	one_based( Array3< U > const & a )
-	{
-		return Array3D( a, a.isize1(), a.isize2(), a.isize3() );
-	}
-
 	// Destructor
 	virtual
 	~Array3D() = default;

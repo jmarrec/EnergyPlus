@@ -581,22 +581,6 @@ TEST( Array2Test, ConstructRange )
 			EXPECT_EQ( 31459, A3( i1, i2 ) );
 }
 
-TEST( Array2Test, ConstructOneBased )
-{
-	Array2D_int A1( 2, 3 );
-	Array2D_int A2( Array2D_int::one_based( A1 ) );
-	EXPECT_EQ( 6u, A2.size() );
-	EXPECT_EQ( 2u, A2.size1() );
-	EXPECT_EQ( 3u, A2.size2() );
-	EXPECT_EQ( 1, A2.l1() );
-	EXPECT_EQ( 2, A2.u1() );
-	EXPECT_EQ( 1, A2.l2() );
-	EXPECT_EQ( 3, A2.u2() );
-	EXPECT_EQ( Array2D_int::IR( 1, 2 ), A2.I1() );
-	EXPECT_EQ( Array2D_int::IR( 1, 3 ), A2.I2() );
-	// Values remain uninitialized
-}
-
 TEST( Array2Test, ConstructDiag )
 {
 	Array2D_int A1( Array2D_int::diag( 3, 31459 ) );

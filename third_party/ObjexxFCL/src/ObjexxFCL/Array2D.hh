@@ -259,24 +259,6 @@ public: // Creation
 	}
 
 
-	// One-Based Copy Named Constructor Template
-	template< typename U >
-	static
-	Array2D
-	one_based( Array2< U > const & a )
-	{
-		return Array2D( a, a.isize1(), a.isize2() );
-	}
-
-	// One-Based Slice Named Constructor Template
-	template< typename U >
-	static
-	Array2D
-	one_based( Array2S< U > const & a )
-	{
-		return Array2D( a.isize1(), a.isize2(), a );
-	}
-
 	// Diagonal Matrix Named Constructor
 	static
 	Array2D

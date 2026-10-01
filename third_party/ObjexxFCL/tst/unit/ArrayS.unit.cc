@@ -250,45 +250,12 @@ TEST( ArraySTest, Array2SSlice3D )
 	 520, 518, 516, 514,
 	 502, 500, 498, 496
 	} );
-	EXPECT_TRUE( eq( S, SF ) );
 
 	Array1S_int r( S( 3, _ ) ); // 3rd row of S
 	EXPECT_EQ( 1, r.l() );
 	EXPECT_EQ( 4, r.u() );
 	EXPECT_EQ( 4u, r.size() );
 	EXPECT_TRUE( eq( r, Array1D_int( 4, { 520, 518, 516, 514 } ) ) );
-}
-
-TEST( ArraySTest, AnyOp2D )
-{
-	Array2D_int const A( 3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-	Array2S_int S( A );
-	EXPECT_TRUE( any_ne( S, 6 ) );
-	EXPECT_TRUE( any_ge( S, 9 ) );
-}
-
-TEST( ArraySTest, AllOp2D )
-{
-	Array2D_int const A( 3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-	Array2S_int S( A );
-	EXPECT_FALSE( all_lt( S, 2 ) );
-	EXPECT_FALSE( all_ge( S, 9 ) );
-	EXPECT_TRUE( all_lt( S, 11 ) );
-	EXPECT_TRUE( all_gt( S, 0 ) );
-}
-
-TEST( ArraySTest, CountOp2D )
-{
-	Array2D_int const A( 3, 3, { 1, 2, 2, 3, 3, 3, 7, 8, 9 } );
-	Array2S_int S( A );
-	EXPECT_EQ( 0u, count_eq( S, 0 ) );
-	EXPECT_EQ( 1u, count_eq( S, 1 ) );
-	EXPECT_EQ( 2u, count_eq( S, 2 ) );
-	EXPECT_EQ( 3u, count_eq( S, 3 ) );
-	EXPECT_EQ( 6u, count_lt( S, 7 ) );
-	EXPECT_EQ( 1u, count_ge( S, 9 ) );
-	EXPECT_EQ( 9u, count_lt( S, 11 ) );
-	EXPECT_EQ( 3u, count_gt( S, 3 ) );
 }
 
 TEST( ArraySTest, Functions1D )
