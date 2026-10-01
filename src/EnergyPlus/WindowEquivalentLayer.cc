@@ -652,7 +652,10 @@ void CalcEQLWindowOpticalProperty(EnergyPlusData &state,
         ASHWAT_Solar(FS.NL, SWP_ON, state.dataWindowEquivLayer->SWP_ROOMBLK, 1.0, 0.0, 0.0, Abs1(1, {1, FS.NL + 1}), Abs1(2, {1, FS.NL + 1}));
     } else {
         // diffuse
-        Array1D<CFSSWP> const SWP_EL(FS.L.ma(&CFSLAYER::SWP_EL)); // Autodesk:F2C++ Can't slice a member array so we create a temporary: Inefficient
+        Array1D<CFSSWP> SWP_EL(FS.L.isize());
+        for (int I = 1; I <= FS.L.isize(); ++I) {
+            SWP_EL(I) = FS.L(I).SWP_EL;
+        }
         ASHWAT_Solar(FS.NL, SWP_EL, state.dataWindowEquivLayer->SWP_ROOMBLK, 0.0, 1.0, 0.0, Abs1(1, {1, FS.NL + 1}));
         ASHWAT_Solar(FS.NL, SWP_EL, state.dataWindowEquivLayer->SWP_ROOMBLK, 0.0, 0.0, 1.0, Abs1(2, {1, FS.NL + 1}));
         // CFSFenProp = LOK1 .AND. LOK2
@@ -6246,7 +6249,7 @@ bool CFSUFactor(EnergyPlusData &state,
 }
 
 void ASHWAT_Solar(int const NL,                                 // # of layers
-                  Array1S<CFSSWP> const LSWP_ON,                // layer SW (solar) properties (off-normal adjusted)
+                  Array1D<CFSSWP> const &LSWP_ON,               // layer SW (solar) properties (off-normal adjusted)
                   CFSSWP const &SWP_ROOM,                       // effective SW (solar) properties of room
                   Real64 const IBEAM,                           // incident beam insolation (W/m2 aperture)
                   Real64 const IDIFF,                           // incident diffuse insolation (W/m2 aperture)
@@ -6401,12 +6404,12 @@ void ASHWAT_Solar(int const NL,                                 // # of layers
     }
 }
 
-void NETRAD(int const NL,                  // # of layers, 1=outside .. NL=inside
-            Array1S<CFSSWP> const LSWP_ON, // layer SW (solar) properties (off-normal adjusted)
-            Real64 const RHO_room,         // effective solar reflectance of room (at inside)
-            Real64 const ISOL,             // incident flux (W/m2)
-            Array1D<Real64> &QPLUS,        // returned: see Edwards paper
-            Array1D<Real64> &QMINUS        // returned: see Edwards paper
+void NETRAD(int const NL,                   // # of layers, 1=outside .. NL=inside
+            Array1D<CFSSWP> const &LSWP_ON, // layer SW (solar) properties (off-normal adjusted)
+            Real64 const RHO_room,          // effective solar reflectance of room (at inside)
+            Real64 const ISOL,              // incident flux (W/m2)
+            Array1D<Real64> &QPLUS,         // returned: see Edwards paper
+            Array1D<Real64> &QMINUS         // returned: see Edwards paper
 )
 {
     // SUBROUTINE INFORMATION:

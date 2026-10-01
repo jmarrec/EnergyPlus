@@ -580,7 +580,7 @@ namespace WindowEquivalentLayer {
     );
 
     void ASHWAT_Solar(int const NL,                                     // # of layers
-                      Array1S<CFSSWP> const LSWP_ON,                    // layer SW (solar) properties (off-normal adjusted)
+                      Array1D<CFSSWP> const &LSWP_ON,                   // layer SW (solar) properties (off-normal adjusted)
                       CFSSWP const &SWP_ROOM,                           // effective SW (solar) properties of room
                       Real64 const IBEAM,                               // incident beam insolation (W/m2 aperture)
                       Real64 const IDIFF,                               // incident diffuse insolation (W/m2 aperture)
@@ -589,12 +589,12 @@ namespace WindowEquivalentLayer {
                       ObjexxFCL::Optional<Array1S<Real64>> SourceBD = _ // returned: layer-by-layer flux of absorbed
     );
 
-    void NETRAD(int const NL,                  // # of layers, 1=outside .. NL=inside
-                Array1S<CFSSWP> const LSWP_ON, // layer SW (solar) properties (off-normal adjusted)
-                Real64 const RHO_room,         // effective solar reflectance of room (at inside)
-                Real64 const ISOL,             // incident flux (W/m2)
-                Array1D<Real64> &QPLUS,        // returned: see Edwards paper
-                Array1D<Real64> &QMINUS        // returned: see Edwards paper
+    void NETRAD(int const NL,                   // # of layers, 1=outside .. NL=inside
+                Array1D<CFSSWP> const &LSWP_ON, // layer SW (solar) properties (off-normal adjusted)
+                Real64 const RHO_room,          // effective solar reflectance of room (at inside)
+                Real64 const ISOL,              // incident flux (W/m2)
+                Array1D<Real64> &QPLUS,         // returned: see Edwards paper
+                Array1D<Real64> &QMINUS         // returned: see Edwards paper
     );
 
     void TDMA_R(
