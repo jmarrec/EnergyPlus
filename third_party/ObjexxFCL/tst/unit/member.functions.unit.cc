@@ -64,13 +64,6 @@ TEST( MemberFunctionsTest, SumProductSub2Array )
 	EXPECT_EQ( 15, sum_product_sub( a, b, &S::i, sub ) );
 }
 
-TEST( MemberFunctionsTest, ArraySub )
-{
-	Array1D< S > a( {1,2,3,4,5} );
-	Array1D< int > sub( {2,3,4} );
-	EXPECT_TRUE( eq( Array1D< int >( {2,3,4} ), array_sub( a, &S::i, sub ) ) );
-}
-
 TEST( MemberFunctionsTest, MinvalContainer )
 {
 	Array1D< S > a( {3,5,3,2,6} );

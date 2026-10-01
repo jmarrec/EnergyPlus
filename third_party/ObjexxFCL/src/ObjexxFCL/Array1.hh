@@ -701,44 +701,11 @@ public: // Modifier
 
 public: // Comparison: Predicate
 
-	// Array1 == Array1
-	friend
-	bool
-	eq( Array1 const & a, Array1 const & b )
-	{
-		assert( a.size_bounded() );
-		assert( a.conformable( b ) );
-		return eq( static_cast< Super const & >( a ), static_cast< Super const & >( b ) );
-	}
-
 
 public: // Comparison: Predicate: Any
 
 
 public: // Comparison: Predicate: Slice
-
-	// Array1 == Array1S
-	friend
-	bool
-	eq( Array1 const & a, Array1S< T > const & b )
-	{
-		assert( a.size_bounded() );
-		assert( a.conformable( b ) );
-		if ( a.empty() ) return true;
-		size_type l( 0u );
-		for ( int i = 1, e = b.u(); i <= e; ++i, ++l ) {
-			if ( ! ( a[ l ] == b( i ) ) ) return false;
-		}
-		return true;
-	}
-
-	// Array1S == Array1
-	friend
-	bool
-	eq( Array1S< T > const & a, Array1 const & b )
-	{
-		return eq( b, a );
-	}
 
 protected: // Functions
 

@@ -762,27 +762,6 @@ public: // Modifier
 
 public: // Comparison: Predicate
 
-	// Array == Value
-	friend
-	bool
-	eq( Array const & a, T const & t )
-	{
-		assert( a.size_bounded() );
-		if ( a.empty() ) return true;
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( ! ( a[ i ] == t ) ) return false;
-		}
-		return true;
-	}
-
-	// Value == Array
-	friend
-	bool
-	eq( T const & t, Array const & a )
-	{
-		return eq( a, t );
-	}
-
 public: // Comparison: Predicate: Any
 
 public: // Comparison: Predicate: All
@@ -790,20 +769,6 @@ public: // Comparison: Predicate: All
 public: // Comparison: Count
 
 protected: // Comparison: Predicate
-
-	// Array == Array
-	friend
-	bool
-	eq( Array const & a, Array const & b )
-	{
-		assert( a.size_bounded() );
-		assert( a.size_ == b.size_ );
-		if ( ( &a == &b ) || a.empty() ) return true;
-		for ( size_type i = 0, e = a.size_; i < e; ++i ) {
-			if ( ! ( a[ i ] == b[ i ] ) ) return false;
-		}
-		return true;
-	}
 
 protected: // Comparison: Elemental
 

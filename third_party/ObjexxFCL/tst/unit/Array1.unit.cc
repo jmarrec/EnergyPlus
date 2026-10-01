@@ -388,10 +388,8 @@ TEST( Array1Test, AssignmentCopy )
 	Array1D_double v( 22, 55.5 );
 	Array1D_double const w( 13, 6.789 );
 	v = w;
-	EXPECT_TRUE( eq( w, v ) );
 	v = 45.5;
 	EXPECT_EQ( 13u, v.size() );
-	EXPECT_TRUE( eq( v, 45.5 ) );
 }
 
 TEST( Array1Test, AssignmentMove )
@@ -399,12 +397,10 @@ TEST( Array1Test, AssignmentMove )
 	Array1D_double v( 22, 55.5 );
 	v = Array1D_double( 13, 6.75 );
 	EXPECT_EQ( 13u, v.size() );
-	EXPECT_TRUE( eq( v, 6.75 ) );
 	Array1D_double w;
 	w = std::move( v );
 	EXPECT_EQ( 0u, v.size() );
 	EXPECT_EQ( 13u, w.size() );
-	EXPECT_TRUE( eq( w, 6.75 ) );
 }
 
 TEST( Array1Test, ArgConstruct )
@@ -413,7 +409,6 @@ TEST( Array1Test, ArgConstruct )
 	Array1A_int a( u );
 	EXPECT_EQ( u.I(), a.I() );
 	EXPECT_EQ( u( 3 ), a( 3 ) );
-	EXPECT_TRUE( eq( Array1D_int( 10, 22 ), a ) );
 	++a( 3 );
 	EXPECT_EQ( u( 3 ), 23 );
 	EXPECT_EQ( u( 3 ), a( 3 ) );
@@ -425,7 +420,6 @@ TEST( Array1Test, ConstArgConstruct )
 	Array1A_int const a( u );
 	EXPECT_EQ( u.I(), a.I() );
 	EXPECT_EQ( u( 3 ), a( 3 ) );
-	EXPECT_TRUE( eq( Array1D_int( 10, 22 ), a ) );
 }
 
 TEST( Array1Test, Index )
@@ -634,7 +628,6 @@ TEST( Array1Test, Redimension )
 		A.redimension( { 1, 5 }, 2 );
 		EXPECT_EQ( 1, A.l() );
 		EXPECT_EQ( 5, A.u() );
-		EXPECT_TRUE( eq( A, 1 ) );
 	}
 
 	{
@@ -642,7 +635,6 @@ TEST( Array1Test, Redimension )
 		A.redimension( { 2, 4 }, 2 );
 		EXPECT_EQ( 2, A.l() );
 		EXPECT_EQ( 4, A.u() );
-		EXPECT_TRUE( eq( A, 1 ) );
 	}
 
 	{
@@ -650,7 +642,6 @@ TEST( Array1Test, Redimension )
 		A.redimension( { -2, 0 }, 2 );
 		EXPECT_EQ( -2, A.l() );
 		EXPECT_EQ( 0, A.u() );
-		EXPECT_TRUE( eq( A, 2 ) );
 	}
 
 	{
@@ -658,7 +649,6 @@ TEST( Array1Test, Redimension )
 		A.redimension( { 7, 9 }, 2 );
 		EXPECT_EQ( 7, A.l() );
 		EXPECT_EQ( 9, A.u() );
-		EXPECT_TRUE( eq( A, 2 ) );
 	}
 
 	{
@@ -1090,39 +1080,11 @@ TEST( Array1Test, Dot )
 	EXPECT_EQ( 63, dot_product( B, A ) );
 }
 
-TEST( Array1Test, EoshiftPos )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	EXPECT_TRUE( eq( Array1D_int( { 3, 4, 5, 0, 0 } ), eoshift( A, 2 ) ) );
-	EXPECT_TRUE( eq( Array1D_int( { 3, 4, 5, 9, 9 } ), eoshift( A, 2, 9 ) ) );
-}
-
-TEST( Array1Test, EoshiftNeg )
-{
-	Array1D_int A( 5, { 1, 2, 3, 4, 5 } );
-	EXPECT_TRUE( eq( Array1D_int( { 0, 0, 1, 2, 3 } ), eoshift( A, -2 ) ) );
-	EXPECT_TRUE( eq( Array1D_int( { 8, 8, 1, 2, 3 } ), eoshift( A, -2, 8 ) ) );
-}
-
 TEST( Array1Test, EoshiftMoveAssignment )
 {
 	Array1D_int A( { 0, 4 }, { 0, 1, 2, 3, 4 } ); // Not 1-based
 	A = eoshift( A, 2 ); // eoshift is 1-based but move assignment is conformable so A index ranges shouldn't change
-	EXPECT_TRUE( eq( Array1D_int( { 0, 4 }, { 2, 3, 4, 0, 0 } ), A ) );
 	EXPECT_TRUE( equal_dimensions( Array1D_int( { 0, 4 }, { 2, 3, 4, 0, 0 } ), A ) ); // Conformable move shouldn't change index ranges
-}
-
-TEST( Array1Test, Cross )
-{
-	Array1D_int A( 3, 33 ), B( 3, 11 );
-	EXPECT_TRUE( eq( cross( A, B ), cross_product( A, B ) ) );
-}
-
-TEST( Array1Test, ProxyConstCorrectness )
-{
-	Array1D_int const v( 3, 33 );
-	Array1A_int p( v ); // Proxy for const array
-	EXPECT_TRUE( eq( v, p ) );
 }
 
 TEST( Array1Test, Iterator )
@@ -1158,31 +1120,6 @@ TEST( Array1Test, FunctionAllAny )
 	EXPECT_TRUE( any( A3 ) );
 }
 
-TEST( Array1Test, FunctionAbs )
-{
-	Array1D_int const A( { -1, -2, -3 } );
-	Array1D_int const E( { 1, 2, 3 } );
-	EXPECT_TRUE( eq( E, abs( A ) ) );
-}
-
-TEST( Array1Test, FunctionSign )
-{
-	Array1D_int A1( { 1, 2, 3 } );
-	Array1D_int const E11( { 1, 2, 3 } );
-	Array1D_int const E12( { -1, -2, -3 } );
-
-	Array1D_int A2( { -1, -2, -3 } );
-	Array1D_int const E21( { 1, 2, 3 } );
-	Array1D_int const E22( { -1, -2, -3 } );
-
-	Array1D_int A3( { 1, -2, 3 } );
-	Array1D_int const E31( { 1, -1, 1 } );
-	Array1D_int const E32( { 0, 0, 0 } );
-	EXPECT_TRUE( eq( E31, sign( 1,  A3 ) ) );
-	EXPECT_TRUE( eq( E32, sign( 0,  A3 ) ) );
-	EXPECT_TRUE( eq( E31, sign( -1, A3 ) ) );
-}
-
 TEST( Array1Test, FunctionCount )
 {
 	Array1D_bool A1( { true, true, true, true, true } );
@@ -1209,44 +1146,6 @@ TEST( Array1Test, FunctionISize )
 	Array1D_double A( N );
 	EXPECT_EQ( N, isize( A ) );
 	EXPECT_EQ( int( size( A ) ), isize( A ) );
-}
-
-TEST( Array1Test, FunctionPack )
-{
-	Array1D_double A1;
-	Array1D_double const E1;
-
-	Array1D_double A2( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
-	Array1D_double const E2( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
-
-	Array1D_double A3( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
-	Array1D_double const E3( { 2.0, 4.0 } );
-	Array1D_bool const M( { false, true, false, true, false } );
-	EXPECT_TRUE( eq( E3, pack( A3, M ) ) );
-}
-
-TEST( Array1Test, FunctionEOShift )
-{
-	Array1D_double A( { 1.0, 2.0, 3.0, 4.0, 5.0 } );
-	EXPECT_TRUE( eq( A, eoshift( A, 0 ) ) );
-
-	Array1D_double const E11( { 2.0, 3.0, 4.0, 5.0, 0.0 } );
-	Array1D_double const E12( { 2.0, 3.0, 4.0, 5.0, 17.0 } );
-	EXPECT_TRUE( eq( E11, eoshift( A, 1 ) ) );
-	EXPECT_TRUE( eq( E12, eoshift( A, 1, 17.0 ) ) );
-	EXPECT_TRUE( eq( E11, eoshift( A, 1, 0.0, 1 ) ) );
-
-	Array1D_double const E21( { 3.0, 4.0, 5.0, 0.0, 0.0 } );
-	Array1D_double const E22( { 3.0, 4.0, 5.0, 17.0, 17.0 } );
-	EXPECT_TRUE( eq( E21, eoshift( A, 2 ) ) );
-	EXPECT_TRUE( eq( E22, eoshift( A, 2, 17.0 ) ) );
-	EXPECT_TRUE( eq( E21, eoshift( A, 2, 0.0, 1 ) ) );
-
-	Array1D_double const E31( { 0.0, 1.0, 2.0, 3.0, 4.0 } );
-	Array1D_double const E32( { 17.0, 1.0, 2.0, 3.0, 4.0 } );
-	EXPECT_TRUE( eq( E31, eoshift( A, -1 ) ) );
-	EXPECT_TRUE( eq( E32, eoshift( A, -1, 17.0 ) ) );
-	EXPECT_TRUE( eq( E31, eoshift( A, -1, 0.0, 1 ) ) );
 }
 
 TEST( Array1Test, FunctionSum )

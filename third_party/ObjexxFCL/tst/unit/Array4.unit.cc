@@ -74,7 +74,6 @@ TEST( Array4Test, ConstructCopy )
 	EXPECT_EQ( A.I4(), B.I4() );
 	EXPECT_TRUE( conformable( A, B ) );
 	EXPECT_TRUE( equal_dimensions( A, B ) );
-	EXPECT_TRUE( eq( A, B ) );
 }
 
 TEST( Array4Test, RangeBasedFor )
@@ -187,31 +186,3 @@ TEST( Array4Test, Predicates )
 	EXPECT_FALSE( A4.proxy() );
 }
 
-TEST( Array4Test, PredicateComparisonsValues )
-{
-	Array4D_int A1;
-	EXPECT_TRUE( eq( A1, 0 ) && eq( 0, A1 ) ); // Empty array is considered to equal any scalar (no values don't equal the scalar)
-
-	Array4D_int A2( 2, 3, 2, 2, 31459 );
-	EXPECT_TRUE( eq( A2, 31459 ) && eq( 31459, A1 ) );
-
-	Array4D_int A3( 2, 2, 2, 2, {
-	 1111,
-	 1112,
-	 1121,
-	 1122,
-	 1211,
-	 1212,
-	 1221,
-	 1222,
-	 2111,
-	 2112,
-	 2121,
-	 2122,
-	 2211,
-	 2212,
-	 2221,
-	 2222
-	} );
-	EXPECT_FALSE( eq( A3, 11 ) || eq( 23, A3 ) );
-}

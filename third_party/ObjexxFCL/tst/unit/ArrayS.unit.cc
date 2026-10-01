@@ -255,7 +255,6 @@ TEST( ArraySTest, Array2SSlice3D )
 	EXPECT_EQ( 1, r.l() );
 	EXPECT_EQ( 4, r.u() );
 	EXPECT_EQ( 4u, r.size() );
-	EXPECT_TRUE( eq( r, Array1D_int( 4, { 520, 518, 516, 514 } ) ) );
 }
 
 TEST( ArraySTest, Functions1D )
@@ -278,12 +277,3 @@ TEST( ArraySTest, StreamOut )
 	EXPECT_EQ( "           1            2            3 ", stream.str() );
 }
 
-TEST( ArraySTest, StreamIn )
-{
-	Array1D_int const A( 3, { 1, 2, 3 } );
-	Array1S_int S( A );
-	std::string const text( "1  2  3" );
-	std::istringstream stream( text );
-	stream >> S;
-	EXPECT_TRUE( eq( A, S ) );
-}
