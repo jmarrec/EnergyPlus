@@ -136,7 +136,6 @@ using ObjexxFCL::Vector4;
 // ObjexxFCL Functions
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/environment.hh>
-#include <ObjexxFCL/floops.hh>
 #include <ObjexxFCL/numeric.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
@@ -144,7 +143,6 @@ using ObjexxFCL::Vector4;
 
 using ObjexxFCL::CEILING;
 using ObjexxFCL::equali;
-using ObjexxFCL::floop_end;
 using ObjexxFCL::get_environment_variable;
 using ObjexxFCL::has;
 using ObjexxFCL::has_any_of;

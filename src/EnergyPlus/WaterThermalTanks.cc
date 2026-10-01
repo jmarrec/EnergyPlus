@@ -50,7 +50,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/floops.hh>
 #include <ObjexxFCL/member.functions.hh>
 
 // EnergyPlus Headers
@@ -8685,8 +8684,8 @@ void WaterThermalTankData::CalcNodeMassFlowsWithDirection(
             } else {
                 Step = 1;
             }
-            Real64 MinDeltaTemp = 1.0e6; // Some big number
-            int const NodeNum_stop(floop_end(useInletStratNod, useOutletStratNode, Step));
+            Real64 MinDeltaTemp = 1.0e6;                        // Some big number
+            int const NodeNum_stop = useOutletStratNode + Step; // one past the outlet node, so the outlet node is included
             for (int NodeNum = useInletStratNod; NodeNum != NodeNum_stop; NodeNum += Step) {
                 Real64 DeltaTemp = std::abs(this->Node(NodeNum).Temp - this->UseInletTemp);
                 if (DeltaTemp < MinDeltaTemp) {
@@ -8704,8 +8703,8 @@ void WaterThermalTankData::CalcNodeMassFlowsWithDirection(
             } else {
                 Step = 1;
             }
-            Real64 MinDeltaTemp = 1.0e6; // Some big number
-            int const NodeNum_stop(floop_end(sourceInletStratNode, sourceOutletStratNode, Step));
+            Real64 MinDeltaTemp = 1.0e6;                           // Some big number
+            int const NodeNum_stop = sourceOutletStratNode + Step; // one past the outlet node, so the outlet node is included
             for (int NodeNum = sourceInletStratNode; NodeNum != NodeNum_stop; NodeNum += Step) {
                 Real64 DeltaTemp = std::abs(this->Node(NodeNum).Temp - this->SourceInletTemp);
                 if (DeltaTemp < MinDeltaTemp) {
@@ -8824,8 +8823,8 @@ void WaterThermalTankData::CalcNodeMassFlows(InletPositionMode inletMode)
             } else {
                 Step = 1;
             }
-            Real64 MinDeltaTemp = 1.0e6; // Some big number
-            int const NodeNum_stop(floop_end(useInletStratNod, useOutletStratNode, Step));
+            Real64 MinDeltaTemp = 1.0e6;                        // Some big number
+            int const NodeNum_stop = useOutletStratNode + Step; // one past the outlet node, so the outlet node is included
             for (int NodeNum = useInletStratNod; NodeNum != NodeNum_stop; NodeNum += Step) {
                 Real64 DeltaTemp = std::abs(this->Node(NodeNum).Temp - this->UseInletTemp);
                 if (DeltaTemp < MinDeltaTemp) {
@@ -8843,8 +8842,8 @@ void WaterThermalTankData::CalcNodeMassFlows(InletPositionMode inletMode)
             } else {
                 Step = 1;
             }
-            Real64 MinDeltaTemp = 1.0e6; // Some big number
-            int const NodeNum_stop(floop_end(sourceInletStratNode, sourceOutletStratNode, Step));
+            Real64 MinDeltaTemp = 1.0e6;                           // Some big number
+            int const NodeNum_stop = sourceOutletStratNode + Step; // one past the outlet node, so the outlet node is included
             for (int NodeNum = sourceInletStratNode; NodeNum != NodeNum_stop; NodeNum += Step) {
                 Real64 DeltaTemp = std::abs(this->Node(NodeNum).Temp - this->SourceInletTemp);
                 if (DeltaTemp < MinDeltaTemp) {

@@ -124,7 +124,6 @@ set( test_src
   tst/unit/Cstring.unit.cc
   tst/unit/DimensionSlice.unit.cc
   tst/unit/environment.unit.cc
-  tst/unit/floops.unit.cc
   tst/unit/Fmath.unit.cc
   tst/unit/Index.unit.cc
   tst/unit/IndexRange.unit.cc
