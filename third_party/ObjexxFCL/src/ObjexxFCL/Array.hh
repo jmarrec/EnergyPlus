@@ -242,23 +242,6 @@ protected: // Creation
 		}
 	}
 
-	// Iterator Range Constructor Template
-	template< class Iterator, typename = decltype( *std::declval< Iterator & >(), void(), ++std::declval< Iterator & >(), void() ) >
-	Array( Iterator const beg, Iterator const end ) :
-	 owner_( true ),
-	 capacity_( end - beg ),
-	 size_( capacity_ ),
-	 mem_( Aligned::allocate_zero( capacity_ ) ),
-	 data_( Aligned::data( mem_ ) ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{
-		size_type i( 0u );
-		for ( Iterator ii = beg; ii != end; ++ii, ++i ) {
-			new ( data_ + i ) T( *ii );
-		}
-	}
-
 	// Default Proxy Constructor
 	Array( ProxySentinel ) :
 	 owner_( false ),

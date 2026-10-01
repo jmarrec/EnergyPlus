@@ -171,13 +171,6 @@ protected: // Creation
 	 I_( static_cast< int >( s ) )
 	{}
 
-	// Iterator Range Constructor Template
-	template< class Iterator, typename = decltype( *std::declval< Iterator & >(), void(), ++std::declval< Iterator & >(), void() ) >
-	Array1( Iterator const beg, Iterator const end ) :
-	 Super( beg, end ),
-	 I_( static_cast< int >( size_ ) )
-	{}
-
 	// Default Proxy Constructor
 	Array1( ProxySentinel proxy ) :
 	 Super( proxy )
