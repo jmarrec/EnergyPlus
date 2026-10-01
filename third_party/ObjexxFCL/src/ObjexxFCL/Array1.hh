@@ -171,34 +171,6 @@ protected: // Creation
 	 I_( static_cast< int >( s ) )
 	{}
 
-	// std::vector Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array1( std::vector< U > const & v ) :
-	 Super( v ),
-	 I_( static_cast< int >( v.size() ) )
-	{}
-
-	// Vector2 Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array1( Vector2< U > const & v ) :
-	 Super( v ),
-	 I_( 2 )
-	{}
-
-	// Vector3 Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array1( Vector3< U > const & v ) :
-	 Super( v ),
-	 I_( 3 )
-	{}
-
-	// Vector4 Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array1( Vector4< U > const & v ) :
-	 Super( v ),
-	 I_( 4 )
-	{}
-
 	// Iterator Range Constructor Template
 	template< class Iterator, typename = decltype( *std::declval< Iterator & >(), void(), ++std::declval< Iterator & >(), void() ) >
 	Array1( Iterator const beg, Iterator const end ) :
@@ -355,42 +327,6 @@ public: // Assignment: Array
 	operator =( std::array< U, s > const & a )
 	{
 		Super::operator =( a );
-		return *this;
-	}
-
-	// std::vector Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1 &
-	operator =( std::vector< U > const & v )
-	{
-		Super::operator =( v );
-		return *this;
-	}
-
-	// Vector2 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1 &
-	operator =( Vector2< U > const & v )
-	{
-		Super::operator =( v );
-		return *this;
-	}
-
-	// Vector3 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1 &
-	operator =( Vector3< U > const & v )
-	{
-		Super::operator =( v );
-		return *this;
-	}
-
-	// Vector4 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1 &
-	operator =( Vector4< U > const & v )
-	{
-		Super::operator =( v );
 		return *this;
 	}
 

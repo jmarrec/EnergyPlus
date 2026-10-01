@@ -164,49 +164,6 @@ TEST( Array1Test, ConstructionStdArray )
 	EXPECT_EQ( 33, v( 3 ) );
 }
 
-TEST( Array1Test, ConstructionStdVector )
-{
-	Array1D_int v( std::vector< int >{ 11, 22, 33 } );
-	EXPECT_EQ( 3u, v.size() );
-	EXPECT_EQ( 3u, v.size1() );
-	EXPECT_EQ( 1, v.l() );
-	EXPECT_EQ( 1, v.l1() );
-	EXPECT_EQ( 3, v.u() );
-	EXPECT_EQ( 3, v.u1() );
-	EXPECT_EQ( Array1D_int::IR( 1, 3 ), v.I() );
-	EXPECT_EQ( Array1D_int::IR( 1, 3 ), v.I1() );
-	EXPECT_EQ( 11, v( 1 ) );
-	EXPECT_EQ( 22, v( 2 ) );
-	EXPECT_EQ( 33, v( 3 ) );
-}
-
-TEST( Array1Test, ConstructionVector2 )
-{
-	Array1D_int v( Vector2<int>{ { 11, 22 } } );
-	EXPECT_EQ( 2u, v.size() );
-	EXPECT_EQ( 2u, v.size1() );
-	EXPECT_EQ( 1, v.l() );
-	EXPECT_EQ( 1, v.l1() );
-	EXPECT_EQ( 2, v.u() );
-	EXPECT_EQ( 2, v.u1() );
-	EXPECT_EQ( 11, v( 1 ) );
-	EXPECT_EQ( 22, v( 2 ) );
-}
-
-TEST( Array1Test, ConstructionVector3 )
-{
-	Array1D_int v( Vector3<int>{ { 11, 22, 33 } } );
-	EXPECT_EQ( 3u, v.size() );
-	EXPECT_EQ( 3u, v.size1() );
-	EXPECT_EQ( 1, v.l() );
-	EXPECT_EQ( 1, v.l1() );
-	EXPECT_EQ( 3, v.u() );
-	EXPECT_EQ( 3, v.u1() );
-	EXPECT_EQ( 11, v( 1 ) );
-	EXPECT_EQ( 22, v( 2 ) );
-	EXPECT_EQ( 33, v( 3 ) );
-}
-
 TEST( Array1Test, ConstructionIterator )
 {
 	std::vector< int > v{ { 11, 22, 33 } };

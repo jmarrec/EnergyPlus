@@ -242,71 +242,6 @@ protected: // Creation
 		}
 	}
 
-	// std::vector Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array( std::vector< U > const & v ) :
-	 owner_( true ),
-	 capacity_( v.size() ),
-	 size_( capacity_ ),
-	 mem_( Aligned::allocate_zero( capacity_ ) ),
-	 data_( Aligned::data( mem_ ) ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{
-		auto iv( v.begin() );
-		for ( size_type i = 0; i < size_; ++i, ++iv ) {
-			new ( data_ + i ) T( *iv );
-		}
-	}
-
-	// Vector2 Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array( Vector2< U > const & v ) :
-	 owner_( true ),
-	 capacity_( 2u ),
-	 size_( capacity_ ),
-	 mem_( Aligned::allocate_zero( capacity_ ) ),
-	 data_( Aligned::data( mem_ ) ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{
-		new ( &data_[ 0 ] ) T( v.x );
-		new ( &data_[ 1 ] ) T( v.y );
-	}
-
-	// Vector3 Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array( Vector3< U > const & v ) :
-	 owner_( true ),
-	 capacity_( 3u ),
-	 size_( capacity_ ),
-	 mem_( Aligned::allocate_zero( capacity_ ) ),
-	 data_( Aligned::data( mem_ ) ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{
-		new ( &data_[ 0 ] ) T( v.x );
-		new ( &data_[ 1 ] ) T( v.y );
-		new ( &data_[ 2 ] ) T( v.z );
-	}
-
-	// Vector4 Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array( Vector4< U > const & v ) :
-	 owner_( true ),
-	 capacity_( 4u ),
-	 size_( capacity_ ),
-	 mem_( Aligned::allocate_zero( capacity_ ) ),
-	 data_( Aligned::data( mem_ ) ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{
-		new ( &data_[ 0 ] ) T( v.x );
-		new ( &data_[ 1 ] ) T( v.y );
-		new ( &data_[ 2 ] ) T( v.z );
-		new ( &data_[ 3 ] ) T( v.w );
-	}
-
 	// Iterator Range Constructor Template
 	template< class Iterator, typename = decltype( *std::declval< Iterator & >(), void(), ++std::declval< Iterator & >(), void() ) >
 	Array( Iterator const beg, Iterator const end ) :
@@ -448,48 +383,6 @@ protected: // Assignment: Array
 	{
 		assert( size_ == s );
 		std::copy( a.begin(), a.end(), data_ );
-	}
-
-	// std::vector Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	void
-	operator =( std::vector< U > const & v )
-	{
-		assert( size_ == v.size() );
-		std::copy( v.begin(), v.end(), data_ );
-	}
-
-	// Vector2 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	void
-	operator =( Vector2< U > const & v )
-	{
-		assert( size_ == 2u );
-		operator []( 0 ) = v.x;
-		operator []( 1 ) = v.y;
-	}
-
-	// Vector3 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	void
-	operator =( Vector3< U > const & v )
-	{
-		assert( size_ == 3u );
-		operator []( 0 ) = v.x;
-		operator []( 1 ) = v.y;
-		operator []( 2 ) = v.z;
-	}
-
-	// Vector4 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	void
-	operator =( Vector4< U > const & v )
-	{
-		assert( size_ == 4u );
-		operator []( 0 ) = v.x;
-		operator []( 1 ) = v.y;
-		operator []( 2 ) = v.z;
-		operator []( 3 ) = v.w;
 	}
 
 public: // Assignment: Value
