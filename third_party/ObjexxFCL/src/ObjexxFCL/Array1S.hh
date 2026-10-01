@@ -149,10 +149,10 @@ public: // Assignment: Array
 			if ( overlap( a ) ) { // Overlap-safe
 				CArray< T > c( size_ );
 				for ( int i = 1; i <= u_; ++i ) {
-					c( i ) = a( i );
+					c[ i - 1 ] = a( i );
 				}
 				for ( int i = 1; i <= u_; ++i ) {
-					operator ()( i ) = c( i );
+					operator ()( i ) = c[ i - 1 ];
 				}
 			} else { // Not overlap-safe
 				for ( int i = 1; i <= u_; ++i ) {
