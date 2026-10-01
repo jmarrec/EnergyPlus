@@ -194,26 +194,6 @@ pack( Array1< T > const & a, Array1< bool > const & mask )
 	return r;
 }
 
-// eoshift /////
-
-template< typename T >
-inline
-Array1D< T >
-eoshift( Array1< T > const & a, int const shift, T const bdy = TypeTraits< T >::initial_value(), int const dim = 1 )
-{
-	assert( a.size_bounded() );
-	assert( dim == 1 );
-#ifdef NDEBUG
-	static_cast< void >( dim ); // Suppress unused warning
-#endif
-	Array1D< T > o( Array1D< T >::shape( a, bdy ) );
-	int const b( a.l() + std::max( shift, 0 ) ), e( a.u() + std::min( shift, 0 ) );
-	for ( int i = b, j = std::max( 1 - shift, 1 ); i <= e; ++i, ++j ) {
-		o( j ) = a( i );
-	}
-	return o;
-}
-
 // sum /////
 
 template< typename T >

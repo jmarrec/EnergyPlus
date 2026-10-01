@@ -357,42 +357,6 @@ public: // Creation
 		setup_real();
 	}
 
-	// Array Shape Named Constructor Template
-	template< typename U >
-	static
-	Array1D
-	shape( Array1< U > const & a )
-	{
-		return Array1D( a.isize() );
-	}
-
-	// Array Shape + Initializer Value Named Constructor Template
-	template< typename U >
-	static
-	Array1D
-	shape( Array1< U > const & a, T const & t )
-	{
-		return Array1D( a.isize(), t );
-	}
-
-	// Slice Shape Named Constructor Template
-	template< typename U >
-	static
-	Array1D
-	shape( Array1S< U > const & a )
-	{
-		return Array1D( a.isize() );
-	}
-
-	// Slice Shape + Initializer Value Named Constructor Template
-	template< typename U >
-	static
-	Array1D
-	shape( Array1S< U > const & a, T const & t )
-	{
-		return Array1D( a.isize(), t );
-	}
-
 	// Destructor
 	virtual
 	~Array1D() = default;

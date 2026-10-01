@@ -331,32 +331,6 @@ TEST( Array1Test, ConstructionIndexRangeInitializerArray )
 	EXPECT_EQ( 33, r( 1 ) );
 }
 
-TEST( Array1Test, ConstructionShape )
-{
-	Array1D_int c( 3 );
-	c( 1 ) = 11;
-	c( 2 ) = 22;
-	c( 3 ) = 33;
-	Array1D_int r1( Array1D_int::shape( c ) );
-	EXPECT_EQ( 3u, r1.size() );
-	EXPECT_EQ( 3u, r1.size1() );
-	EXPECT_EQ( 1, r1.l() );
-	EXPECT_EQ( 1, r1.l1() );
-	EXPECT_EQ( 3, r1.u() );
-	EXPECT_EQ( 3, r1.u1() );
-	// Values remain uninitialized
-	Array1D_int r2( Array1D_int::shape( c, 17 ) );
-	EXPECT_EQ( 3u, r2.size() );
-	EXPECT_EQ( 3u, r2.size1() );
-	EXPECT_EQ( 1, r2.l() );
-	EXPECT_EQ( 1, r2.l1() );
-	EXPECT_EQ( 3, r2.u() );
-	EXPECT_EQ( 3, r2.u1() );
-	EXPECT_EQ( 17, r2( 1 ) );
-	EXPECT_EQ( 17, r2( 2 ) );
-	EXPECT_EQ( 17, r2( 3 ) );
-}
-
 TEST( Array1Test, AssignmentCopy )
 {
 	Array1D_double v( 22, 55.5 );
@@ -1006,13 +980,6 @@ TEST( Array1Test, Swap )
 	for ( int i = A.l(); i <= A.u(); ++i ) {
 		EXPECT_EQ( 22, A( i ) );
 	}
-}
-
-TEST( Array1Test, EoshiftMoveAssignment )
-{
-	Array1D_int A( { 0, 4 }, { 0, 1, 2, 3, 4 } ); // Not 1-based
-	A = eoshift( A, 2 ); // eoshift is 1-based but move assignment is conformable so A index ranges shouldn't change
-	EXPECT_TRUE( equal_dimensions( Array1D_int( { 0, 4 }, { 2, 3, 4, 0, 0 } ), A ) ); // Conformable move shouldn't change index ranges
 }
 
 TEST( Array1Test, Iterator )
