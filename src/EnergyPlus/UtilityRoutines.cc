@@ -53,7 +53,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array1S.hh>
-#include <ObjexxFCL/char.functions.hh>
 #include <ObjexxFCL/string.functions.hh>
 
 // Third Party Headers
@@ -772,7 +771,7 @@ bool env_var_on(std::string const &env_var_str)
     // PURPOSE OF THIS FUNCTION:
     // Test if a boolean environment variable value is "on" (has value starting with Y or T)
 
-    return ((!env_var_str.empty()) && is_any_of(env_var_str[0], "YyTt"));
+    return ((!env_var_str.empty()) && std::string_view("YyTt").find(env_var_str[0]) != std::string_view::npos);
 }
 
 void emitErrorMessage(EnergyPlusData &state, [[maybe_unused]] ErrorMessageCategory category, std::string const &msg, bool shouldFatal)

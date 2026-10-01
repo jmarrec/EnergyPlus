@@ -19,13 +19,6 @@
 
 using namespace ObjexxFCL;
 
-TEST( charFunctionsTest, Predicate )
-{
-	EXPECT_TRUE( is_any_of( 'x', "xyz" ) );
-	EXPECT_TRUE( is_any_of( 'x', std::string( "xyz" ) ) );
-	EXPECT_FALSE( is_any_of( 'b', "xyz" ) );
-}
-
 TEST( charFunctionsTest, Comparison )
 {
 	EXPECT_TRUE( equali( 'a', 'A' ) );

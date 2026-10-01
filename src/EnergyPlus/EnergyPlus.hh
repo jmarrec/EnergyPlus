@@ -146,7 +146,6 @@ using ObjexxFCL::has_prefix;
 using ObjexxFCL::has_prefixi;
 using ObjexxFCL::hasi;
 using ObjexxFCL::index;
-using ObjexxFCL::is_any_of;
 using ObjexxFCL::is_blank;
 using ObjexxFCL::len;
 using ObjexxFCL::len_trim;

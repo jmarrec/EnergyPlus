@@ -54,7 +54,6 @@
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/ArrayS.functions.hh>
-#include <ObjexxFCL/char.functions.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
@@ -1141,7 +1140,7 @@ void ParseExpression(EnergyPlusData &state,
         PeriodFound = false;
         ErrorFlag = false;
         LastED = false;
-        if (is_any_of(NextChar, "0123456789.")) {
+        if (std::string_view("0123456789.").find(NextChar) != std::string_view::npos) {
             // Parse a number literal token
             ++Pos;
             StringToken += NextChar;
@@ -1155,7 +1154,7 @@ void ParseExpression(EnergyPlusData &state,
 
             while (Pos < LastPos) {
                 NextChar = String[Pos];
-                if (is_any_of(NextChar, "0123456789.eEdD")) {
+                if (std::string_view("0123456789.eEdD").find(NextChar) != std::string_view::npos) {
                     ++Pos;
                     if (NextChar == '.') {
                         if (PeriodFound) {
@@ -1170,7 +1169,7 @@ void ParseExpression(EnergyPlusData &state,
                         }
                         PeriodFound = true;
                     }
-                    if (is_any_of(NextChar, "eEdD")) {
+                    if (std::string_view("eEdD").find(NextChar) != std::string_view::npos) {
                         StringToken += NextChar;
                         if (LastED) {
                             ShowSevereError(state, std::format("EMS Parse Expression, for \"{}\".", state.dataRuntimeLang->ErlStack(StackNum).Name));
@@ -1187,7 +1186,7 @@ void ParseExpression(EnergyPlusData &state,
                     } else {
                         StringToken += NextChar;
                     }
-                } else if (is_any_of(NextChar, "+-")) { // +/- following an ED is okay.
+                } else if (std::string_view("+-").find(NextChar) != std::string_view::npos) { // +/- following an ED is okay.
                     if (LastED) {
                         StringToken += NextChar;
                         ++Pos;
@@ -1196,8 +1195,8 @@ void ParseExpression(EnergyPlusData &state,
                         // +/- will be processed on next pass, nothing needs to be done after a numeral
                         break;
                     }
-                } else if (is_any_of(NextChar, " +-*/^=<>)")) { // Any binary operator is okay
-                    break;                                      // End of token
+                } else if (std::string_view(" +-*/^=<>)").find(NextChar) != std::string_view::npos) { // Any binary operator is okay
+                    break;                                                                            // End of token
                 } else {
                     // Error: strange sequence of characters:  return TokenString//NextChar   e.g.,  234.44a or 234.44%
                     StringToken += NextChar;
@@ -1230,7 +1229,7 @@ void ParseExpression(EnergyPlusData &state,
                 }
             }
 
-        } else if (is_any_of(NextChar, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")) {
+        } else if (std::string_view("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").find(NextChar) != std::string_view::npos) {
             // Parse an undetermined string token (could be a variable, subroutine, or named operator)
             ++Pos;
             StringToken += NextChar;
@@ -1240,10 +1239,10 @@ void ParseExpression(EnergyPlusData &state,
 
             while (Pos < LastPos) {
                 NextChar = String[Pos];
-                if (is_any_of(NextChar, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789")) {
+                if (std::string_view("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789").find(NextChar) != std::string_view::npos) {
                     ++Pos;
                     StringToken += NextChar;
-                } else if (is_any_of(NextChar, " +-*/^=<>()")) {
+                } else if (std::string_view(" +-*/^=<>()").find(NextChar) != std::string_view::npos) {
                     break; // End of token
                 } else {
                     // Error: bad syntax:  return TokenString//NextChar   e.g.,  var1$ or b%
@@ -1259,7 +1258,7 @@ void ParseExpression(EnergyPlusData &state,
             }
             state.dataRuntimeLangProcessor->PEToken(NumTokens).Variable = NewEMSVariable(state, StringToken, StackNum);
 
-        } else if (is_any_of(NextChar, "+-*/^=<>@|&")) {
+        } else if (std::string_view("+-*/^=<>@|&").find(NextChar) != std::string_view::npos) {
             // Parse an operator token
             if (NextChar == '-') {
                 StringToken = "-";
@@ -1428,7 +1427,7 @@ void ParseExpression(EnergyPlusData &state,
 
             ++Pos;
 
-        } else if (is_any_of(NextChar, "()")) {
+        } else if (std::string_view("()").find(NextChar) != std::string_view::npos) {
             // Parse a parenthesis token
             ++Pos;
             StringToken = NextChar;
@@ -1445,7 +1444,7 @@ void ParseExpression(EnergyPlusData &state,
                 state.dataRuntimeLangProcessor->PEToken(NumTokens).Parenthesis = Token::ParenthesisRight;
             }
 
-        } else if (is_any_of(NextChar, "\"")) {
+        } else if (std::string_view("\"").find(NextChar) != std::string_view::npos) {
             // Parse a string literal token
             if (state.dataSysVars->DeveloperFlag) {
                 print(state.files.debug, "{}\n", "LITERAL STRING");

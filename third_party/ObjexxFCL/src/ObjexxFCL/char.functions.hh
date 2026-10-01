@@ -13,22 +13,7 @@
 // Use of this source code or any derivative of it is restricted by license.
 // Licensing is available from Objexx Engineering, Inc.:  http://objexx.com
 
-// C++ Headers
-#include <string>
-#include <string_view>
-
 namespace ObjexxFCL {
-
-// Predicate /////
-
-// char is in a string?
-constexpr
-bool
-is_any_of( char const c, std::string_view const s )
-{
-	return ( s.find( c ) != std::string::npos );
-}
-
 
 // Comparison /////
 
