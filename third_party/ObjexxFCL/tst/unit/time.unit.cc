@@ -15,10 +15,10 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/time.hh>
-#include <ObjexxFCL/char.functions.hh>
 #include "ObjexxFCL.unit.hh"
 
 // C++ Headers
+#include <cctype>
 #include <chrono>
 
 using namespace ObjexxFCL;
@@ -86,28 +86,28 @@ TEST( TimeTest, Time )
 	std::string ts;
 	TIME( ts );
 	EXPECT_EQ( ts.length(), 8u );
-	EXPECT_TRUE( is_digit( ts[ 0 ] ) );
-	EXPECT_TRUE( is_digit( ts[ 1 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 0 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 1 ] ) );
 	EXPECT_EQ( ts[ 2 ], ':' );
-	EXPECT_TRUE( is_digit( ts[ 3 ] ) );
-	EXPECT_TRUE( is_digit( ts[ 4 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 3 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 4 ] ) );
 	EXPECT_EQ( ts[ 5 ], ':' );
-	EXPECT_TRUE( is_digit( ts[ 6 ] ) );
-	EXPECT_TRUE( is_digit( ts[ 7 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 6 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 7 ] ) );
 }
 
 TEST( TimeTest, Clock )
 {
 	std::string ts( CLOCK() );
 	EXPECT_EQ( ts.length(), 8u );
-	EXPECT_TRUE( is_digit( ts[ 0 ] ) );
-	EXPECT_TRUE( is_digit( ts[ 1 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 0 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 1 ] ) );
 	EXPECT_EQ( ts[ 2 ], ':' );
-	EXPECT_TRUE( is_digit( ts[ 3 ] ) );
-	EXPECT_TRUE( is_digit( ts[ 4 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 3 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 4 ] ) );
 	EXPECT_EQ( ts[ 5 ], ':' );
-	EXPECT_TRUE( is_digit( ts[ 6 ] ) );
-	EXPECT_TRUE( is_digit( ts[ 7 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 6 ] ) );
+	EXPECT_TRUE( std::isdigit( ts[ 7 ] ) );
 }
 
 TEST( TimeTest, CpuTime )
@@ -214,7 +214,7 @@ TEST( TimeTest, Jdate )
 	std::string const j( JDATE() );
 	EXPECT_EQ( j.length(), 5u );
 	for ( int i = 0; i < 5; ++i ) {
-		EXPECT_TRUE( is_digit( j[ i ] ) );
+		EXPECT_TRUE( std::isdigit( j[ i ] ) );
 	}
 }
 
@@ -259,29 +259,29 @@ TEST( TimeTest, Date )
 	{
 		std::string const d( DATE() );
 		EXPECT_EQ( d.length(), 8u );
-		EXPECT_TRUE( is_digit( d[ 0 ] ) );
-		EXPECT_TRUE( is_digit( d[ 1 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 0 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 1 ] ) );
 		EXPECT_EQ( d[ 2 ], '/' );
-		EXPECT_TRUE( is_digit( d[ 3 ] ) );
-		EXPECT_TRUE( is_digit( d[ 4 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 3 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 4 ] ) );
 		EXPECT_EQ( d[ 5 ], '/' );
-		EXPECT_TRUE( is_digit( d[ 6 ] ) );
-		EXPECT_TRUE( is_digit( d[ 7 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 6 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 7 ] ) );
 	}
 
 	{
 		std::string d;
 		DATE( d );
 		EXPECT_EQ( d.length(), 9u );
-		EXPECT_TRUE( is_digit( d[ 0 ] ) );
-		EXPECT_TRUE( is_digit( d[ 1 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 0 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 1 ] ) );
 		EXPECT_EQ( d[ 2 ], '-' );
-		EXPECT_TRUE( is_alpha( d[ 3 ] ) );
-		EXPECT_TRUE( is_alpha( d[ 4 ] ) );
-		EXPECT_TRUE( is_alpha( d[ 5 ] ) );
+		EXPECT_TRUE( std::isalpha( d[ 3 ] ) );
+		EXPECT_TRUE( std::isalpha( d[ 4 ] ) );
+		EXPECT_TRUE( std::isalpha( d[ 5 ] ) );
 		EXPECT_EQ( d[ 6 ], '-' );
-		EXPECT_TRUE( is_digit( d[ 7 ] ) );
-		EXPECT_TRUE( is_digit( d[ 8 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 7 ] ) );
+		EXPECT_TRUE( std::isdigit( d[ 8 ] ) );
 	}
 }
 
@@ -290,17 +290,17 @@ TEST( TimeTest, Date4 )
 	std::string d;
 	DATE4( d );
 	EXPECT_EQ( d.length(), 11u );
-	EXPECT_TRUE( is_digit( d[ 0 ] ) );
-	EXPECT_TRUE( is_digit( d[ 1 ] ) );
+	EXPECT_TRUE( std::isdigit( d[ 0 ] ) );
+	EXPECT_TRUE( std::isdigit( d[ 1 ] ) );
 	EXPECT_EQ( d[ 2 ], '-' );
-	EXPECT_TRUE( is_alpha( d[ 3 ] ) );
-	EXPECT_TRUE( is_alpha( d[ 4 ] ) );
-	EXPECT_TRUE( is_alpha( d[ 5 ] ) );
+	EXPECT_TRUE( std::isalpha( d[ 3 ] ) );
+	EXPECT_TRUE( std::isalpha( d[ 4 ] ) );
+	EXPECT_TRUE( std::isalpha( d[ 5 ] ) );
 	EXPECT_EQ( d[ 6 ], '-' );
-	EXPECT_TRUE( is_digit( d[ 7 ] ) );
-	EXPECT_TRUE( is_digit( d[ 8 ] ) );
-	EXPECT_TRUE( is_digit( d[ 9 ] ) );
-	EXPECT_TRUE( is_digit( d[ 10 ] ) );
+	EXPECT_TRUE( std::isdigit( d[ 7 ] ) );
+	EXPECT_TRUE( std::isdigit( d[ 8 ] ) );
+	EXPECT_TRUE( std::isdigit( d[ 9 ] ) );
+	EXPECT_TRUE( std::isdigit( d[ 10 ] ) );
 }
 
 TEST( TimeTest, DateAndTime )
@@ -310,25 +310,25 @@ TEST( TimeTest, DateAndTime )
 	date_and_time( d, t, z, v );
 	EXPECT_EQ( d.length(), 8u );
 	for ( int i = 0; i < 8; ++i ) {
-		EXPECT_TRUE( is_digit( d[ i ] ) );
+		EXPECT_TRUE( std::isdigit( d[ i ] ) );
 	}
 	EXPECT_EQ( t.length(), 10u );
-	EXPECT_TRUE( is_digit( t[ 0 ] ) );
-	EXPECT_TRUE( is_digit( t[ 1 ] ) );
-	EXPECT_TRUE( is_digit( t[ 2 ] ) );
-	EXPECT_TRUE( is_digit( t[ 3 ] ) );
-	EXPECT_TRUE( is_digit( t[ 4 ] ) );
-	EXPECT_TRUE( is_digit( t[ 5 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 0 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 1 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 2 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 3 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 4 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 5 ] ) );
 	EXPECT_EQ( t[ 6 ], '.' );
-	EXPECT_TRUE( is_digit( t[ 7 ] ) );
-	EXPECT_TRUE( is_digit( t[ 8 ] ) );
-	EXPECT_TRUE( is_digit( t[ 9 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 7 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 8 ] ) );
+	EXPECT_TRUE( std::isdigit( t[ 9 ] ) );
 	EXPECT_EQ( z.length(), 5u );
 	EXPECT_TRUE( ( z[ 0 ] == '+' ) || ( z[ 0 ] == '-' ) );
-	EXPECT_TRUE( is_digit( z[ 1 ] ) );
-	EXPECT_TRUE( is_digit( z[ 2 ] ) );
-	EXPECT_TRUE( is_digit( z[ 3 ] ) );
-	EXPECT_TRUE( is_digit( z[ 4 ] ) );
+	EXPECT_TRUE( std::isdigit( z[ 1 ] ) );
+	EXPECT_TRUE( std::isdigit( z[ 2 ] ) );
+	EXPECT_TRUE( std::isdigit( z[ 3 ] ) );
+	EXPECT_TRUE( std::isdigit( z[ 4 ] ) );
 	EXPECT_TRUE( 2000 <= v( 1 ) );
 	EXPECT_TRUE( v( 1 ) <= 9999 );
 	EXPECT_TRUE( 1 <= v( 2 ) );
