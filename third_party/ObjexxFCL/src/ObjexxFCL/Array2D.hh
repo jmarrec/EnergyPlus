@@ -220,26 +220,6 @@ public: // Creation
 		initialize( a );
 	}
 
-	// IndexRange + Base Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array2D( IR const & I1, IR const & I2, Array< U > const & a ) :
-	 Super( I1, I2, InitializerSentinel{} )
-	{
-		assert( size_ == a.size() );
-		setup_real();
-		initialize( a );
-	}
-
-	// Base + IndexRange Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array2D( Array< U > const & a, IR const & I1, IR const & I2 ) :
-	 Super( I1, I2, InitializerSentinel{} )
-	{
-		assert( size_ == a.size() );
-		setup_real();
-		initialize( a );
-	}
-
 
 	// Destructor
 	virtual

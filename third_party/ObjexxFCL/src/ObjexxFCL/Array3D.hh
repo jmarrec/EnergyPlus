@@ -195,26 +195,6 @@ public: // Creation
 		initialize( a );
 	}
 
-	// IndexRange + Base Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array3D( IR const & I1, IR const & I2, IR const & I3, Array< U > const & a ) :
-	 Super( I1, I2, I3, InitializerSentinel{} )
-	{
-		assert( size_ == a.size() );
-		setup_real();
-		initialize( a );
-	}
-
-	// Base + IndexRange Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array3D( Array< U > const & a, IR const & I1, IR const & I2, IR const & I3 ) :
-	 Super( I1, I2, I3, InitializerSentinel{} )
-	{
-		assert( size_ == a.size() );
-		setup_real();
-		initialize( a );
-	}
-
 
 
 	// Destructor
