@@ -56,9 +56,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/Vector4.fwd.hh>
-
-using ObjexxFCL::Vector4;
 
 // EnergyPlus Headers
 #include <EnergyPlus/ConstructionAssignmentSet.hh>
@@ -69,6 +66,7 @@ using ObjexxFCL::Vector4;
 #include <EnergyPlus/DataVectorTypes.hh>
 #include <EnergyPlus/DataWindowEquivalentLayer.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/Geometry/Plane.hh>
 #include <EnergyPlus/Material.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/Shape.hh>
@@ -691,7 +689,6 @@ namespace DataSurfaces {
 
         // Types
         using Vertices = Array1D<Vector>;
-        using Plane = Vector4<Real64>;
 
         // Members
         std::string Name; // User supplied name of the surface (must be unique)
