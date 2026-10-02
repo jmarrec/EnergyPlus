@@ -216,55 +216,11 @@ TEST( Vector4Test, Dot )
 	EXPECT_EQ( 0.0, x.dot( y ) );
 }
 
-TEST( Vector4Test, Center )
-{
-	Vector4 x( 4.0, 0.0, 77.0, 42.0 );
-	Vector4 y( 0.0, 4.0, 77.0, 42.0 );
-	EXPECT_EQ( Vector4( 2.0, 2.0, 77.0, 42.0 ), cen( x, y ) );
-}
-
-TEST( Vector4Test, Angle )
-{
-	double const Pi( std::acos( -1.0 ) );
-	double const Pi_2( std::asin( 1.0 ) );
-	{
-		Vector4 a( 4.0, 0.0, 0.0, 0.0 );
-		Vector4 b( 0.0, 4.0, 0.0, 0.0 );
-		EXPECT_DOUBLE_EQ( Pi_2, angle( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, cos( a, b ) );
-		EXPECT_DOUBLE_EQ( 1.0, sin( a, b ) );
-	}
-	{
-		Vector4 a( 4.0, 0.0, 0.0, 0.0 );
-		Vector4 b( 0.0, 0.0, -6.0, 0.0 );
-		EXPECT_DOUBLE_EQ( Pi_2, angle( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, cos( a, b ) );
-		EXPECT_DOUBLE_EQ( 1.0, sin( a, b ) );
-	}
-	{
-		Vector4 a( 0.0, 4.0, 0.0, 0.0 );
-		Vector4 b( 0.0, -1.0, 0.0, 0.0 );
-		EXPECT_DOUBLE_EQ( Pi, angle( a, b ) );
-		EXPECT_DOUBLE_EQ( -1.0, cos( a, b ) );
-		EXPECT_NEAR( 0.0, sin( a, b ), 1.0E-15 ); // EXPECT_DOUBLE_EQ tolerance is too small
-	}
-}
-
 TEST( Vector4Test, BinaryOperations )
 {
 	Vector4 v( 1.0, 2.0, 3.0, 4.0 );
 	Vector4 w( 1.0, 2.0, 3.0, 4.0 );
-	Vector4 const original( v );
 
 	// Check dot product of equal vectors
 	EXPECT_DOUBLE_EQ( v.length_squared(), v.dot( w ) ); // v == w here
-
-	// Tweak the vectors
-	v += 1.0; w -= 1.0;
-
-	// Check midpoint (should match original vector)
-	Vector4 const midpoint( mid( v, w ) );
-	EXPECT_DOUBLE_EQ( original.x, midpoint.x );
-	EXPECT_DOUBLE_EQ( original.y, midpoint.y );
-	EXPECT_DOUBLE_EQ( original.z, midpoint.z );
 }

@@ -14,13 +14,10 @@
 #include <ObjexxFCL/Vector4.hh>
 
 // C++ Headers
-#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <string>
+#include <ostream>
 
 namespace ObjexxFCL {
 
@@ -377,73 +374,15 @@ Vector4 operator/(double t, Vector4 const& v) {
   return {t / v.x, t / v.y, t / v.z, t / v.w};
 }
 
-// Midpoint of Two Vector4s
-Vector4 mid(Vector4 const& a, Vector4 const& b) {
-  return {0.5 * (a.x + b.x), 0.5 * (a.y + b.y), 0.5 * (a.z + b.z), 0.5 * (a.w + b.w)};
-}
-
-// Center of Two Vector4s
-Vector4 cen(Vector4 const& a, Vector4 const& b) {
-  return {0.5 * (a.x + b.x), 0.5 * (a.y + b.y), 0.5 * (a.z + b.z), 0.5 * (a.w + b.w)};
-}
-
-// Center of Three Vector4s
-Vector4 cen(Vector4 const& a, Vector4 const& b, Vector4 const& c) {
-  constexpr double third(1.0 / 3.0);
-  return {third * (a.x + b.x + c.x), third * (a.y + b.y + c.y), third * (a.z + b.z + c.z),
-                 third * (a.w + b.w + c.w)};
-}
-
-// Center of Four Vector4s
-Vector4 cen(Vector4 const& a, Vector4 const& b, Vector4 const& c, Vector4 const& d) {
-  return {0.25 * (a.x + b.x + c.x + d.x), 0.25 * (a.y + b.y + c.y + d.y), 0.25 * (a.z + b.z + c.z + d.z),
-                 0.25 * (a.w + b.w + c.w + d.w)};
-}
-
-// Angle Between Two Vector4s (in Radians on [0,pi])
-double angle(Vector4 const& a, Vector4 const& b) {
-  double const mag(std::sqrt(a.length_squared() * b.length_squared()));
-  return (mag > 0.0 ? std::acos(std::clamp(a.dot(b) / mag, -1.0, 1.0)) : 0.0);
-}
-
-// Angle abc Formed by Three Vector4s (in Radians on [0,pi])
-double angle(Vector4 const& a, Vector4 const& b, Vector4 const& c) {
-  return angle(a - b, c - b);
-}
-
-// Cosine of Angle Between Two Vector4s
-double cos(Vector4 const& a, Vector4 const& b) {
-  double const mag(std::sqrt(a.length_squared() * b.length_squared()));
-  return (mag > 0.0 ? std::clamp(a.dot(b) / mag, -1.0, 1.0) : 1.0);
-}
-
-// Cosine of Angle abc Formed by Three Vector4s
-double cos(Vector4 const& a, Vector4 const& b, Vector4 const& c) {
-  return cos(a - b, c - b);
-}
-
-// Sine of Angle Between Two Vector4s
-double sin(Vector4 const& a, Vector4 const& b) {
-  return std::sin(angle(a, b));
-}
-
-// Sine of Angle abc Formed by Three Vector4s
-double sin(Vector4 const& a, Vector4 const& b, Vector4 const& c) {
-  return sin(a - b, c - b);
-}
-
 // Stream << Vector4 output operator
 std::ostream& operator<<(std::ostream& stream, Vector4 const& v) {
-  // Types
-  typedef TypeTraits<double> Traits;
-
   // Save current stream state and set persistent state
   std::ios_base::fmtflags const old_flags(stream.flags());
-  std::streamsize const old_precision(stream.precision(Traits::precision));
+  std::streamsize const old_precision(stream.precision(Vector4::Traits::precision));
   stream << std::right << std::showpoint << std::uppercase;
 
   // Output Vector4
-  std::size_t const w(Traits::width);
+  std::size_t const w(Vector4::Traits::width);
   stream << std::setw(w) << v.x << ' ' << std::setw(w) << v.y << ' ' << std::setw(w) << v.z << ' ' << std::setw(w) << v.w;
 
   // Restore previous stream state

@@ -280,36 +280,6 @@ Vector4 operator-(double t, Vector4 const& v);
 Vector4 operator*(double t, Vector4 const& v);
 Vector4 operator/(double t, Vector4 const& v);
 
-// Midpoint of Two Vector4s
-Vector4 mid(Vector4 const& a, Vector4 const& b);
-
-// Center of Two Vector4s
-Vector4 cen(Vector4 const& a, Vector4 const& b);
-
-// Center of Three Vector4s
-Vector4 cen(Vector4 const& a, Vector4 const& b, Vector4 const& c);
-
-// Center of Four Vector4s
-Vector4 cen(Vector4 const& a, Vector4 const& b, Vector4 const& c, Vector4 const& d);
-
-// Angle Between Two Vector4s (in Radians on [0,pi])
-double angle(Vector4 const& a, Vector4 const& b);
-
-// Angle abc Formed by Three Vector4s (in Radians on [0,pi])
-double angle(Vector4 const& a, Vector4 const& b, Vector4 const& c);
-
-// Cosine of Angle Between Two Vector4s
-double cos(Vector4 const& a, Vector4 const& b);
-
-// Cosine of Angle abc Formed by Three Vector4s
-double cos(Vector4 const& a, Vector4 const& b, Vector4 const& c);
-
-// Sine of Angle Between Two Vector4s
-double sin(Vector4 const& a, Vector4 const& b);
-
-// Sine of Angle abc Formed by Three Vector4s
-double sin(Vector4 const& a, Vector4 const& b, Vector4 const& c);
-
 // Stream << Vector4 output operator
 std::ostream& operator<<(std::ostream& stream, Vector4 const& v);
 
