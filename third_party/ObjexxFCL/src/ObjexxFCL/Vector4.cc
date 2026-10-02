@@ -101,7 +101,7 @@ Vector4& Vector4::operator*=(double t) {
 }
 
 // /= Value
-Vector4& Vector4::operator/=(double const u) {
+Vector4& Vector4::operator/=(double u) {
   assert(u != 0.0);
   double const inv_u(1.0 / u);
   x *= inv_u;
@@ -112,13 +112,13 @@ Vector4& Vector4::operator/=(double const u) {
 }
 
 // Vector4[ i ] const: 0-Based Index
-double Vector4::operator[](size_type const i) const {
+double Vector4::operator[](size_type i) const {
   assert(i <= 3);
   return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
 }
 
 // Vector4[ i ]: 0-Based Index
-double& Vector4::operator[](size_type const i) {
+double& Vector4::operator[](size_type i) {
   assert(i <= 3);
   return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
 }
@@ -339,7 +339,7 @@ Vector4 operator/(Vector4 const& a, Vector4 const& b) {
 }
 
 // Vector4 / Value
-Vector4 operator/(Vector4 const& v, double const u) {
+Vector4 operator/(Vector4 const& v, double u) {
   assert(u != 0.0);
   double const inv_u(1.0 / u);
   return {v.x * inv_u, v.y * inv_u, v.z * inv_u, v.w * inv_u};
