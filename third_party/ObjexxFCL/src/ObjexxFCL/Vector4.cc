@@ -111,15 +111,6 @@ Vector4& Vector4::operator/=(double const u) {
   return *this;
 }
 
-// Value Assignment
-Vector4& Vector4::assign(double x_, double y_, double z_, double w_) {
-  x = x_;
-  y = y_;
-  z = z_;
-  w = w_;
-  return *this;
-}
-
 // Vector4[ i ] const: 0-Based Index
 double Vector4::operator[](size_type const i) const {
   assert(i <= 3);
