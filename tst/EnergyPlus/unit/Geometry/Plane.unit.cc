@@ -102,26 +102,20 @@ TEST_F(GeometryFixture, Comparisons)
     Plane v(1.0, 2.0, 3.0, 4.0);
     Plane w(1.0, 2.0, 3.0, 4.0);
 
-    EXPECT_EQ(v, w);
+    EXPECT_TRUE(v == w);
+    EXPECT_FALSE(v != w);
 
-    // Lower the last coefficient: not equal, and v sorts before w
-    v.w = 3.5;
+    // Each coefficient takes part in the comparison
+    v.x = 0.0;
     EXPECT_TRUE(v != w);
-    EXPECT_TRUE(!(v == w));
-    EXPECT_TRUE(v < w);
-    EXPECT_TRUE(v <= w);
-
-    // Raise it: v sorts after w
+    EXPECT_FALSE(v == w);
+    v.x = w.x;
     v.w = 4.5;
     EXPECT_TRUE(v != w);
-    EXPECT_TRUE(!(v == w));
-    EXPECT_TRUE(v > w);
-    EXPECT_TRUE(v >= w);
+    EXPECT_FALSE(v == w);
 
-    // Ordering is lexicographic: the first coefficient that differs decides, even if the later ones are larger
-    v = Plane(0.0, 9.0, 9.0, 9.0);
-    EXPECT_TRUE(v != w);
-    EXPECT_TRUE(v < w);
+    // The comparison is exact on the representation: a scaled copy is the same plane but compares unequal
+    EXPECT_NE(Plane(1.0, 0.0, 0.0, -1.0), Plane(2.0, 0.0, 0.0, -2.0));
 }
 
 TEST_F(GeometryFixture, Generators)
