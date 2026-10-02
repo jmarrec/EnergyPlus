@@ -54,6 +54,7 @@
 #include <iosfwd>
 
 // ObjexxFCL Headers
+#include <ObjexxFCL/Array1D.fwd.hh>
 #include <ObjexxFCL/Vector3.fwd.hh>
 
 // EnergyPlus Headers
@@ -85,6 +86,15 @@ public: // Creation
     // Value Constructor
     Plane(double x_, double y_, double z_, double w_);
 
+    // Plane of a polygon by Newell's method (robust for nonplanar and nonconvex polygons)
+    //  . Normal (x, y, z) = Newell area vector: oriented by the vertex order (counterclockwise seen from the front),
+    //    with a length of twice the polygon area, so the plane is not normalized
+    //  . w is set so the plane passes through the vertex average (not the area centroid)
+    //  . A degenerate polygon (e.g. collinear vertices) gives a zero normal: check normal() before calling
+    //    normalize(), normalized() or signedDistance(), which assert on it
+    //  . Requires at least 3 vertices
+    static Plane fromVertices(ObjexxFCL::Array1D<ObjexxFCL::Vector3<Real64>> const &vertices);
+
 public: // Subscript
     // Plane[ i ] const: 0-Based Index
     double operator[](size_type i) const;
@@ -111,6 +121,13 @@ public: // Generators
     // Outward Normal vector (x, y, z)
     // not unit length unless the plane was normalized
     ObjexxFCL::Vector3<Real64> normal() const;
+
+public: // Queries
+    // Signed distance from a point to the plane: (a*x + b*y + c*z + d) / |(a, b, c)|
+    //  . Positive on the side the normal points to (outside), negative behind it, zero on the plane
+    //  . A true distance whether or not the plane is normalized (it divides by the normal's length)
+    //  . The plane must not be degenerate: its normal must be nonzero
+    double signedDistance(ObjexxFCL::Vector3<Real64> const &point) const;
 
 public: // Comparison
     // Exact comparison of the four coefficients (also provides !=). Compares the representation: (1, 0, 0, 0) and

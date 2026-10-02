@@ -54,6 +54,7 @@
 #include <EnergyPlus/Geometry/Plane.hh>
 
 // ObjexxFCL Headers
+#include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Vector3.hh>
 
 // C++ Headers
@@ -267,4 +268,93 @@ TEST_F(GeometryFixture, Equal_Tolerance)
     EXPECT_FALSE(p.equal(tilted(3.0))); // cos(3 deg) = 0.99863
     EXPECT_TRUE(p.reverseEqual(tilted(2.0).reversedPlane()));
     EXPECT_FALSE(p.reverseEqual(tilted(3.0).reversedPlane()));
+}
+
+TEST_F(GeometryFixture, SignedDistance)
+{
+    using Point = ObjexxFCL::Vector3<Real64>;
+
+    // x = 10 facing +x: positive in front (x > 10), negative behind, zero on the plane
+    Plane const x10(1.0, 0.0, 0.0, -10.0);
+    EXPECT_DOUBLE_EQ(2.0, x10.signedDistance(Point(12.0, 5.0, 7.0)));
+    EXPECT_DOUBLE_EQ(-3.0, x10.signedDistance(Point(7.0, -1.0, 4.0)));
+    EXPECT_DOUBLE_EQ(0.0, x10.signedDistance(Point(10.0, 3.0, -8.0)));
+
+    // Reversing the plane flips the sign
+    EXPECT_DOUBLE_EQ(-2.0, x10.reversedPlane().signedDistance(Point(12.0, 5.0, 7.0)));
+
+    // A true distance even when the plane is not normalized: the same plane scaled by 2 (Newell of a 1 m^2 surface)
+    // and by 1e-4 (a tiny surface) gives the same distances
+    Plane const scaled(2.0, 0.0, 0.0, -20.0);
+    Plane const tiny(1.0e-4, 0.0, 0.0, -1.0e-3);
+    EXPECT_DOUBLE_EQ(2.0, scaled.signedDistance(Point(12.0, 5.0, 7.0)));
+    EXPECT_DOUBLE_EQ(2.0, tiny.signedDistance(Point(12.0, 5.0, 7.0)));
+
+    // Tilted plane 3x + 4z + 10 = 0: |normal| = 5, so the origin is 10 / 5 = 2 in front
+    Plane const tilted(3.0, 0.0, 4.0, 10.0);
+    EXPECT_DOUBLE_EQ(2.0, tilted.signedDistance(Point(0.0, 0.0, 0.0)));
+    EXPECT_DOUBLE_EQ(0.0, tilted.signedDistance(Point(-2.0, 0.0, -1.0))); // 3*(-2) + 4*(-1) + 10 = 0
+    EXPECT_DOUBLE_EQ(2.0, tilted.normalized().signedDistance(Point(0.0, 0.0, 0.0)));
+
+    // Moving along the unit normal by s changes the signed distance by s
+    Point const onPlane(-2.0, 7.0, -1.0);
+    Point const unitNormal(tilted.normalized().normal());
+    EXPECT_DOUBLE_EQ(1.5, tilted.signedDistance(onPlane + 1.5 * unitNormal));
+    EXPECT_DOUBLE_EQ(-0.25, tilted.signedDistance(onPlane - 0.25 * unitNormal));
+}
+
+TEST_F(GeometryFixture, FromVertices)
+{
+    using Point = ObjexxFCL::Vector3<Real64>;
+    using Vertices = ObjexxFCL::Array1D<Point>;
+
+    {
+        // 1 m x 1 m square at z = 0, counterclockwise seen from above: normal +z, length 2 * area = 2
+        Vertices const v({Point(0.0, 0.0, 0.0), Point(1.0, 0.0, 0.0), Point(1.0, 1.0, 0.0), Point(0.0, 1.0, 0.0)});
+        Plane const p(Plane::fromVertices(v));
+        EXPECT_EQ(Plane(0.0, 0.0, 2.0, 0.0), p);
+        EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, 0.0)));
+    }
+    {
+        // Same square, clockwise: the normal flips
+        Vertices const v({Point(0.0, 1.0, 0.0), Point(1.0, 1.0, 0.0), Point(1.0, 0.0, 0.0), Point(0.0, 0.0, 0.0)});
+        Plane const p(Plane::fromVertices(v));
+        EXPECT_EQ(Plane(0.0, 0.0, -2.0, 0.0), p);
+        EXPECT_TRUE(p.reverseEqual(Plane(0.0, 0.0, 1.0, 0.0)));
+    }
+    {
+        // 2 m x 3 m rectangle at z = 2: |normal| = 12, plane z = 2
+        Vertices const v({Point(0.0, 0.0, 2.0), Point(2.0, 0.0, 2.0), Point(2.0, 3.0, 2.0), Point(0.0, 3.0, 2.0)});
+        Plane const p(Plane::fromVertices(v));
+        EXPECT_EQ(Plane(0.0, 0.0, 12.0, -24.0), p);
+        EXPECT_DOUBLE_EQ(5.0, p.signedDistance(Point(1.0, 1.0, 7.0)));
+    }
+    {
+        // Wall at x = 10 facing +x (counterclockwise seen from +x)
+        Vertices const v({Point(10.0, 0.0, 1.0), Point(10.0, 0.0, 0.0), Point(10.0, 1.0, 0.0), Point(10.0, 1.0, 1.0)});
+        Plane const p(Plane::fromVertices(v));
+        EXPECT_TRUE(p.equal(Plane(1.0, 0.0, 0.0, -10.0)));
+        for (Point const &vertex : v) {
+            EXPECT_DOUBLE_EQ(0.0, p.signedDistance(vertex));
+        }
+    }
+    {
+        // Same triangles and expected (raw Newell) coefficients as SurfaceTest_Plane in DataSurfaces.unit.cc
+        EXPECT_EQ(Plane(-1.0, 3.0, 2.0, -4.0), Plane::fromVertices(Vertices({Point(1, 1, 1), Point(-1, 1, 0), Point(2, 0, 3)})));
+        EXPECT_EQ(Plane(-7.0, 5.0, 1.0, 10.0), Plane::fromVertices(Vertices({Point(2, 1, -1), Point(0, -2, 0), Point(1, -1, 2)})));
+    }
+    {
+        // Small surface: 1 cm x 1 cm square at z = 0
+        Vertices const v({Point(0.0, 0.0, 0.0), Point(0.01, 0.0, 0.0), Point(0.01, 0.01, 0.0), Point(0.0, 0.01, 0.0)});
+        Plane const p(Plane::fromVertices(v));
+        EXPECT_DOUBLE_EQ(2.0e-4, p.z);
+        EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, 0.0)));
+        EXPECT_DOUBLE_EQ(0.0, p.signedDistance(Point(10.0, 10.0, 0.0))); // Far point on the same plane
+    }
+    {
+        // Degenerate: collinear vertices give a zero normal
+        Vertices const v({Point(0.0, 0.0, 0.0), Point(1.0, 0.0, 0.0), Point(2.0, 0.0, 0.0)});
+        Plane const p(Plane::fromVertices(v));
+        EXPECT_EQ(0.0, p.normal().length());
+    }
 }

@@ -48,10 +48,12 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <iomanip>
 #include <ostream>
 
 // ObjexxFCL Headers
+#include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Vector3.hh>
 
 // EnergyPlus Headers
@@ -62,6 +64,26 @@ namespace EnergyPlus {
 // Value Constructor
 Plane::Plane(double x_, double y_, double z_, double w_) : x(x_), y(y_), z(z_), w(w_)
 {
+}
+
+// Plane of a polygon by Newell's method
+Plane Plane::fromVertices(ObjexxFCL::Array1D<ObjexxFCL::Vector3<Real64>> const &vertices)
+{
+    using Vector = ObjexxFCL::Vector3<Real64>;
+    std::size_t const n(vertices.size());
+    assert(n >= 3);
+    Vector center(0.0);                    // Center (vertex average) point (not mass centroid)
+    double a(0.0), b(0.0), c(0.0), d(0.0); // Plane coefficients
+    for (std::size_t i = 0; i < n; ++i) {  // Newell's method for robustness (not speed)
+        Vector const &v(vertices[i]);
+        Vector const &w(vertices[(i + 1) % n]);
+        a += (v.y - w.y) * (v.z + w.z);
+        b += (v.z - w.z) * (v.x + w.x);
+        c += (v.x - w.x) * (v.y + w.y);
+        center += v;
+    }
+    d = -(center.dot(Vector(a, b, c)) / n); // center/n is the center point
+    return {a, b, c, d};                    // a*x + b*y + c*z + d = 0
 }
 
 // Plane[ i ] const: 0-Based Index
@@ -119,6 +141,14 @@ Plane Plane::normalized() const
 ObjexxFCL::Vector3<Real64> Plane::normal() const
 {
     return ObjexxFCL::Vector3<Real64>(x, y, z);
+}
+
+// Signed distance from a point to the plane: positive on the side the normal points to
+double Plane::signedDistance(ObjexxFCL::Vector3<Real64> const &point) const
+{
+    double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+    assert(normal_length != 0.0);
+    return ((x * point.x) + (y * point.y) + (z * point.z) + w) / normal_length;
 }
 
 bool Plane::equal(const Plane &other, double tol) const
