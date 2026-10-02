@@ -143,6 +143,12 @@ ObjexxFCL::Vector3<Real64> Plane::normal() const
     return ObjexxFCL::Vector3<Real64>(x, y, z);
 }
 
+// Degenerate plane: zero normal
+bool Plane::isDegenerate() const
+{
+    return (x * x) + (y * y) + (z * z) == 0.0; // Same test as the normal_length != 0.0 asserts
+}
+
 // Signed distance from a point to the plane: positive on the side the normal points to
 double Plane::signedDistance(ObjexxFCL::Vector3<Real64> const &point) const
 {

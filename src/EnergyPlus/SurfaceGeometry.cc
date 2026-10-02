@@ -78,6 +78,7 @@
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/General.hh>
+#include <EnergyPlus/Geometry/Plane.hh>
 #include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/HeatBalanceManager.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
@@ -12919,7 +12920,6 @@ namespace SurfaceGeometry {
         Real64 OutOfLine;
 
         // Object Data
-        Vectors::PlaneEq BasePlane;
         Vector TVect;
         Vector CoordinateTransVector;
 
@@ -13057,16 +13057,16 @@ namespace SurfaceGeometry {
             }
 
             // Setting relative coordinates for shadowing calculations for subsurfaces
-            bool SError; // Bool used for return value of calls to PlaneEquation
             switch (ThisShape) {
             case DataSurfaces::SurfaceShape::RectangularDoorWindow: { // Rectangular heat transfer subsurface
-                Vectors::PlaneEquation(
-                    state.dataSurface->Surface(surf.BaseSurf).Vertex, state.dataSurface->Surface(surf.BaseSurf).Sides, BasePlane, SError);
-                if (SError) {
+                Plane const basePlane(Plane::fromVertices(state.dataSurface->Surface(surf.BaseSurf).Vertex));
+                if (basePlane.isDegenerate()) {
                     ShowSevereError(state, std::format("{}Degenerate surface (likely two vertices equal):\"{}\".", RoutineName, surf.Name));
                     ErrorInSurface = true;
+                    ThisReveal = 0.0;
+                } else {
+                    ThisReveal = -basePlane.signedDistance(surf.Vertex(2));
                 }
-                ThisReveal = -Vectors::Pt2Plane(surf.Vertex(2), BasePlane);
                 if (std::abs(ThisReveal) < 0.0002) {
                     ThisReveal = 0.0;
                 }
@@ -13214,13 +13214,14 @@ namespace SurfaceGeometry {
             } break;
             case DataSurfaces::SurfaceShape::TriangularWindow:
             case DataSurfaces::SurfaceShape::TriangularDoor: {
-                Vectors::PlaneEquation(
-                    state.dataSurface->Surface(surf.BaseSurf).Vertex, state.dataSurface->Surface(surf.BaseSurf).Sides, BasePlane, SError);
-                if (SError) {
+                Plane const basePlane(Plane::fromVertices(state.dataSurface->Surface(surf.BaseSurf).Vertex));
+                if (basePlane.isDegenerate()) {
                     ShowSevereError(state, std::format("{}Degenerate surface (likely two vertices equal):\"{}\".", RoutineName, surf.Name));
                     ErrorInSurface = true;
+                    ThisReveal = 0.0;
+                } else {
+                    ThisReveal = -basePlane.signedDistance(surf.Vertex(2));
                 }
-                ThisReveal = -Vectors::Pt2Plane(surf.Vertex(2), BasePlane);
                 if (std::abs(ThisReveal) < 0.0002) {
                     ThisReveal = 0.0;
                 }

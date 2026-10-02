@@ -519,18 +519,6 @@ namespace DataVectorTypes {
     //
     //    };
 
-    struct PlaneEq // This is used to specify a plane based on vectors in that plane
-    {
-        // Members
-        Real64 x{};
-        Real64 y{};
-        Real64 z{};
-        Real64 w{};
-
-        // Default Constructor
-        PlaneEq() = default;
-    };
-
     struct Face // Used to specify the face of a polyhedron
     {
         // Members

@@ -51,6 +51,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataGlobals.hh>
+#include <EnergyPlus/Geometry/Plane.hh>
 #include <EnergyPlus/Vectors.hh>
 
 namespace EnergyPlus::Vectors {
@@ -284,66 +285,6 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
     Tilt = tlt;
 }
 
-void PlaneEquation(Array1D<Vector> &verts, // Structure of the surface
-                   int const nverts,       // Number of vertices in the surface
-                   PlaneEq &plane,         // Equation of plane from inputs
-                   bool &error             // returns true for degenerate surface
-)
-{
-
-    // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine calculates the plane equation for a given surface (which should be planar).
-
-    // REFERENCE:
-    // Graphic Gems
-
-    // Argument array dimensioning
-    EP_SIZE_CHECK(verts, nverts);
-
-    Vector normal = Vector(0.0, 0.0, 0.0);
-    Vector refpt = Vector(0.0, 0.0, 0.0);
-    for (int i = 0; i <= nverts - 1; ++i) {
-        Vector const &u(verts[i]);
-        Vector const &v(i < nverts - 1 ? verts[i + 1] : verts[0]);
-        normal.x += (u.y - v.y) * (u.z + v.z);
-        normal.y += (u.z - v.z) * (u.x + v.x);
-        normal.z += (u.x - v.x) * (u.y + v.y);
-        refpt += u;
-    }
-    // normalize the polygon normal to obtain the first
-    //  three coefficients of the plane equation
-    Real64 lenvec = VecLength(normal);
-    error = false;
-    if (lenvec != 0.0) { // should this be >0
-        plane.x = normal.x / lenvec;
-        plane.y = normal.y / lenvec;
-        plane.z = normal.z / lenvec;
-        // compute the last coefficient of the plane equation
-        lenvec *= nverts;
-        plane.w = -dot(refpt, normal) / lenvec;
-    } else {
-        error = true;
-    }
-}
-
-Real64 Pt2Plane(Vector const &pt,   // Point for determining the distance
-                PlaneEq const &pleq // Equation of the plane
-)
-{
-
-    // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine calculates the distance from a point to the plane (of a surface).  Used to determine the reveal of a heat transfer subsurface.
-
-    // REFERENCE:
-    // Graphic Gems
-
-    Real64 PtDist; // Distance of the point to the plane
-
-    PtDist = (pleq.x * pt.x) + (pleq.y * pt.y) + (pleq.z * pt.z) + pleq.w;
-
-    return PtDist;
-}
-
 void CreateNewellAreaVector(Array1D<Vector> const &VList, int const NSides, Vector &OutNewellAreaVector)
 {
 
@@ -462,18 +403,22 @@ void CalcCoPlanarNess(Array1D<Vector> &Surf, int const NSides, bool &IsCoPlanar,
     // Argument array dimensioning
     EP_SIZE_CHECK(Surf, NSides);
 
-    bool plerror;
-    PlaneEq NewellPlane;
+    assert(Surf.size() == static_cast<std::size_t>(NSides)); // Plane::fromVertices uses all the vertices
 
     IsCoPlanar = true;
     MaxDist = 0.0;
     ErrorVertex = 0;
 
-    // Use first three to determine plane
-    PlaneEquation(Surf, NSides, NewellPlane, plerror);
+    if (NSides < 3) {
+        return; // No plane to compare against
+    }
+    Plane const NewellPlane(Plane::fromVertices(Surf));
+    if (NewellPlane.isDegenerate()) {
+        return; // No plane to compare against: degenerate surfaces are reported elsewhere
+    }
 
     for (int vert = 1; vert <= NSides; ++vert) {
-        Real64 dist = Pt2Plane(Surf(vert), NewellPlane);
+        Real64 dist = NewellPlane.signedDistance(Surf(vert));
         if (std::abs(dist) > MaxDist) {
             MaxDist = std::abs(dist);
             ErrorVertex = vert;
@@ -488,13 +433,18 @@ void CalcCoPlanarNess(Array1D<Vector> &Surf, int const NSides, bool &IsCoPlanar,
 std::vector<int>
 PointsInPlane(Array1D<Vector> &BaseSurf, int const BaseSides, Array1D<Vector> const &QuerySurf, int const QuerySides, bool &ErrorFound)
 {
+    assert(BaseSurf.size() == static_cast<std::size_t>(BaseSides)); // Plane::fromVertices uses all the vertices
     std::vector<int> pointIndices;
 
-    PlaneEq NewellPlane;
-    PlaneEquation(BaseSurf, BaseSides, NewellPlane, ErrorFound);
+    // Note: ErrorFound is assigned, not or'ed, as it was with the former PlaneEquation
+    Plane const NewellPlane(BaseSides >= 3 ? Plane::fromVertices(BaseSurf) : Plane());
+    ErrorFound = NewellPlane.isDegenerate();
+    if (ErrorFound) {
+        return pointIndices;
+    }
 
     for (int vert = 1; vert <= QuerySides; ++vert) {
-        Real64 dist = Pt2Plane(QuerySurf(vert), NewellPlane);
+        Real64 dist = NewellPlane.signedDistance(QuerySurf(vert));
         if (std::abs(dist) < Constant::SmallDistance) { // point on query surface is co-planar with base surface
             pointIndices.push_back(vert);
         }
