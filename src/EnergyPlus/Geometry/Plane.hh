@@ -135,6 +135,7 @@ public: // Modifiers
 public: // Generators
     // -Plane (Negated)
     Plane operator-() const;
+    Plane reversedPlane() const;
 
     // Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
     Plane normalized() const;
