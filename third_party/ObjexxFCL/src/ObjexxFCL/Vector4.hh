@@ -13,12 +13,9 @@
 // Use of this source code or any derivative of it is restricted by license.
 // Licensing is available from Objexx Engineering, Inc.:  http://objexx.com
 
-// ObjexxFCL Headers
-#include <ObjexxFCL/TypeTraits.hh>
-#include <ObjexxFCL/Vector4.fwd.hh>
-
 // C++ Headers
 #include <cassert>
+#include <compare>
 #include <cstddef>
 #include <iosfwd>
 #include <type_traits>
@@ -42,8 +39,6 @@ class Vector4
 {
 
  public:  // Types
-  using Traits = TypeTraits<double>;
-
   using value_type = double;
   using reference = double&;
   using const_reference = double const&;

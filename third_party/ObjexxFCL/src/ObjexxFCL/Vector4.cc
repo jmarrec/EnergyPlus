@@ -365,14 +365,16 @@ Vector4 operator/(double t, Vector4 const& v) {
 
 // Stream << Vector4 output operator
 std::ostream& operator<<(std::ostream& stream, Vector4 const& v) {
+  constexpr std::streamsize precision = 16;  // Significant digits
+  constexpr int width = 23;                  // Field width
+
   // Save current stream state and set persistent state
   std::ios_base::fmtflags const old_flags(stream.flags());
-  std::streamsize const old_precision(stream.precision(Vector4::Traits::precision));
+  std::streamsize const old_precision(stream.precision(precision));
   stream << std::right << std::showpoint << std::uppercase;
 
   // Output Vector4
-  std::size_t const w(Vector4::Traits::width);
-  stream << std::setw(w) << v.x << ' ' << std::setw(w) << v.y << ' ' << std::setw(w) << v.z << ' ' << std::setw(w) << v.w;
+  stream << std::setw(width) << v.x << ' ' << std::setw(width) << v.y << ' ' << std::setw(width) << v.z << ' ' << std::setw(width) << v.w;
 
   // Restore previous stream state
   stream.precision(old_precision);
