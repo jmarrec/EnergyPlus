@@ -66,7 +66,8 @@ concept Array4Like = requires(A const &a) {
     a[0];
 } && std::is_assignable_v<double &, typename A::value_type>;
 
-// Plane: Fast 4-Element Vector
+// Plane: an infinite plane in 3D space.  The equation of a plane is
+//  a*x + b*y + c*z + d = 0, any point that satisfies this equation is on the plane.
 // . Heap-free and loop-free for speed
 // . Provides direct element access via .x style lookup
 // . Use std::array< double, 4 > instead in array/vectorization context
@@ -93,31 +94,17 @@ public: // Creation
     Plane(double x_, double y_, double z_, double w_);
 
 public: // Assignment
-    // = Value
-    Plane &operator=(double t);
-
-    // += Plane
+    // Plane op= Plane
     Plane &operator+=(Plane const &v);
-
-    // -= Plane
     Plane &operator-=(Plane const &v);
-
-    // *= Plane
     Plane &operator*=(Plane const &v);
-
-    // /= Plane
     Plane &operator/=(Plane const &v);
 
-    // += Value
+    // Plane op= Value
+    Plane &operator=(double t);
     Plane &operator+=(double t);
-
-    // -= Value
     Plane &operator-=(double t);
-
-    // *= Value
     Plane &operator*=(double t);
-
-    // /= Value
     Plane &operator/=(double u);
 
 public: // Array Interface
