@@ -86,14 +86,6 @@ public: // Creation
 	 z( v.z )
 	{}
 
-	// Copy Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Vector3( Vector3< U > const & v ) :
-	 x( v.x ),
-	 y( v.y ),
-	 z( v.z )
-	{}
-
 	// Uniform Value Constructor
 	explicit
 	Vector3( Tc t ) :
@@ -151,17 +143,6 @@ public: // Assignment
 		return *this;
 	}
 
-	// Copy Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator =( Vector3< U > const & v )
-	{
-		x = v.x;
-		y = v.y;
-		z = v.z;
-		return *this;
-	}
-
 	// Initializer List Assignment Template
 	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
 	Vector3 &
@@ -198,173 +179,11 @@ public: // Assignment
 		return *this;
 	}
 
-	// -= Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator -=( Vector3< U > const & v )
-	{
-		x -= v.x;
-		y -= v.y;
-		z -= v.z;
-		return *this;
-	}
-
-	// *= Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator *=( Vector3< U > const & v )
-	{
-		x *= v.x;
-		y *= v.y;
-		z *= v.z;
-		return *this;
-	}
-
-	// /= Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator /=( Vector3< U > const & v )
-	{
-		assert( v.x != T( 0 ) );
-		assert( v.y != T( 0 ) );
-		assert( v.z != T( 0 ) );
-		x /= v.x;
-		y /= v.y;
-		z /= v.z;
-		return *this;
-	}
-
-	// += Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator +=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 3 );
-		auto i( l.begin() );
-		x += *i;
-		y += *(++i);
-		z += *(++i);
-		return *this;
-	}
-
-	// -= Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator -=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 3 );
-		auto i( l.begin() );
-		x -= *i;
-		y -= *(++i);
-		z -= *(++i);
-		return *this;
-	}
-
-	// *= Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator *=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 3 );
-		auto i( l.begin() );
-		x *= *i;
-		y *= *(++i);
-		z *= *(++i);
-		return *this;
-	}
-
-	// /= Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	operator /=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 3 );
-		auto i( l.begin() );
-		assert( *i != T( 0 ) );
-		assert( *(i+1) != T( 0 ) );
-		assert( *(i+2) != T( 0 ) );
-		x /= *i;
-		y /= *(++i);
-		z /= *(++i);
-		return *this;
-	}
-
-	// += Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< T&, typename A::value_type >::value >::type >
-	Vector3 &
-	operator +=( A const & a )
-	{
-		assert( a.size() == 3 );
-		x += a[ 0 ];
-		y += a[ 1 ];
-		z += a[ 2 ];
-		return *this;
-	}
-
-	// -= Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< T&, typename A::value_type >::value >::type >
-	Vector3 &
-	operator -=( A const & a )
-	{
-		assert( a.size() == 3 );
-		x -= a[ 0 ];
-		y -= a[ 1 ];
-		z -= a[ 2 ];
-		return *this;
-	}
-
-	// *= Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< T&, typename A::value_type >::value >::type >
-	Vector3 &
-	operator *=( A const & a )
-	{
-		assert( a.size() == 3 );
-		x *= a[ 0 ];
-		y *= a[ 1 ];
-		z *= a[ 2 ];
-		return *this;
-	}
-
-	// /= Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< T&, typename A::value_type >::value >::type >
-	Vector3 &
-	operator /=( A const & a )
-	{
-		assert( a.size() == 3 );
-		assert( a[ 0 ] != T( 0 ) );
-		assert( a[ 1 ] != T( 0 ) );
-		assert( a[ 2 ] != T( 0 ) );
-		x /= a[ 0 ];
-		y /= a[ 1 ];
-		z /= a[ 2 ];
-		return *this;
-	}
-
 	// = Value
 	Vector3 &
 	operator =( Tc t )
 	{
 		x = y = z = t;
-		return *this;
-	}
-
-	// += Value
-	Vector3 &
-	operator +=( Tc t )
-	{
-		x += t;
-		y += t;
-		z += t;
-		return *this;
-	}
-
-	// -= Value
-	Vector3 &
-	operator -=( Tc t )
-	{
-		x -= t;
-		y -= t;
-		z -= t;
 		return *this;
 	}
 
@@ -429,14 +248,6 @@ public: // Subscript
 		return ( i == 0 ? x : ( i == 1 ? y : z ) );
 	}
 
-	// Vector3[ i ]: 0-Based Index
-	T &
-	operator []( size_type const i )
-	{
-		assert( i <= 2 );
-		return ( i == 0 ? x : ( i == 1 ? y : z ) );
-	}
-
 	// Vector3( i ) const: 1-Based Index
 	Tr
 	operator ()( size_type const i ) const
@@ -490,20 +301,6 @@ public: // Properties: General
 	mag_squared() const
 	{
 		return ( x * x ) + ( y * y ) + ( z * z );
-	}
-
-	// Distance to a Vector3
-	T
-	distance( Vector3 const & v ) const
-	{
-		return std::sqrt( square( x - v.x ) + square( y - v.y ) + square( z - v.z ) );
-	}
-
-	// Distance Squared to a Vector3
-	T
-	distance_squared( Vector3 const & v ) const
-	{
-		return square( x - v.x ) + square( y - v.y ) + square( z - v.z );
 	}
 
 	// Dot Product with a Vector3
@@ -591,16 +388,6 @@ public: // Modifiers
 		return *this;
 	}
 
-	// Subtract a Vector3
-	Vector3 &
-	sub( Vector3 const & v )
-	{
-		x -= v.x;
-		y -= v.y;
-		z -= v.z;
-		return *this;
-	}
-
 public: // Generators
 
 	// -Vector3 (Negated)
@@ -626,15 +413,6 @@ public: // Data
 
 }; // Vector3
 
-// Length
-template< typename T >
-inline
-T
-length( Vector3< T > const & v )
-{
-	return v.length();
-}
-
 // Magnitude
 template< typename T >
 inline
@@ -653,15 +431,6 @@ magnitude_squared( Vector3< T > const & v )
 	return v.magnitude_squared();
 }
 
-// Magnitude Squared
-template< typename T >
-inline
-T
-mag_squared( Vector3< T > const & v )
-{
-	return v.mag_squared();
-}
-
 // Vector3 == Vector3
 template< typename T >
 inline
@@ -669,183 +438,6 @@ bool
 operator ==( Vector3< T > const & a, Vector3< T > const & b )
 {
 	return ( a.x == b.x ) && ( a.y == b.y ) && ( a.z == b.z );
-}
-
-// Vector3 != Vector3
-template< typename T >
-inline
-bool
-operator !=( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return ( a.x != b.x ) || ( a.y != b.y ) || ( a.z != b.z );
-}
-
-// Vector3 < Vector3: Lexicographic
-template< typename T >
-inline
-bool
-operator <( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return (
-	 ( a.x < b.x ? true :
-	 ( b.x < a.x ? false : // a.x == b.x
-	 ( a.y < b.y ? true :
-	 ( b.y < a.y ? false : // a.y == b.y
-	 ( a.z < b.z ) ) ) ) )
-	);
-}
-
-// Vector3 <= Vector3: Lexicographic
-template< typename T >
-inline
-bool
-operator <=( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return (
-	 ( a.x < b.x ? true :
-	 ( b.x < a.x ? false : // a.x == b.x
-	 ( a.y < b.y ? true :
-	 ( b.y < a.y ? false : // a.y == b.y
-	 ( a.z <= b.z ) ) ) ) )
-	);
-}
-
-// Vector3 >= Vector3: Lexicographic
-template< typename T >
-inline
-bool
-operator >=( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return (
-	 ( a.x > b.x ? true :
-	 ( b.x > a.x ? false : // a.x == b.x
-	 ( a.y > b.y ? true :
-	 ( b.y > a.y ? false : // a.y == b.y
-	 ( a.z >= b.z ) ) ) ) )
-	);
-}
-
-// Vector3 > Vector3: Lexicographic
-template< typename T >
-inline
-bool
-operator >( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return (
-	 ( a.x > b.x ? true :
-	 ( b.x > a.x ? false : // a.x == b.x
-	 ( a.y > b.y ? true :
-	 ( b.y > a.y ? false : // a.y == b.y
-	 ( a.z > b.z ) ) ) ) )
-	);
-}
-
-// Vector3 == Value
-template< typename T >
-inline
-bool
-operator ==( Vector3< T > const & v, typename Vector3< T >::Tc t )
-{
-	return ( v.x == t ) && ( v.y == t ) && ( v.z == t );
-}
-
-// Vector3 != Value
-template< typename T >
-inline
-bool
-operator !=( Vector3< T > const & v, typename Vector3< T >::Tc t )
-{
-	return ( v.x != t ) || ( v.y != t ) || ( v.z != t );
-}
-
-// Vector3 < Value
-template< typename T >
-inline
-bool
-operator <( Vector3< T > const & v, typename Vector3< T >::Tc t )
-{
-	return ( v.x < t ) && ( v.y < t ) && ( v.z < t );
-}
-
-// Vector3 <= Value
-template< typename T >
-inline
-bool
-operator <=( Vector3< T > const & v, typename Vector3< T >::Tc t )
-{
-	return ( v.x <= t ) && ( v.y <= t ) && ( v.z <= t );
-}
-
-// Vector3 >= Value
-template< typename T >
-inline
-bool
-operator >=( Vector3< T > const & v, typename Vector3< T >::Tc t )
-{
-	return ( v.x >= t ) && ( v.y >= t ) && ( v.z >= t );
-}
-
-// Vector3 > Value
-template< typename T >
-inline
-bool
-operator >( Vector3< T > const & v, typename Vector3< T >::Tc t )
-{
-	return ( v.x > t ) && ( v.y > t ) && ( v.z > t );
-}
-
-// Value == Vector3
-template< typename T >
-inline
-bool
-operator ==( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return ( t == v.x ) && ( t == v.y ) && ( t == v.z );
-}
-
-// Value != Vector3
-template< typename T >
-inline
-bool
-operator !=( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return ( t != v.x ) || ( t != v.y ) || ( t != v.z );
-}
-
-// Value < Vector3
-template< typename T >
-inline
-bool
-operator <( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return ( t < v.x ) && ( t < v.y ) && ( t < v.z );
-}
-
-// Value <= Vector3
-template< typename T >
-inline
-bool
-operator <=( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return ( t <= v.x ) && ( t <= v.y ) && ( t <= v.z );
-}
-
-// Value >= Vector3
-template< typename T >
-inline
-bool
-operator >=( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return ( t >= v.x ) && ( t >= v.y ) && ( t >= v.z );
-}
-
-// Value > Vector3
-template< typename T >
-inline
-bool
-operator >( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return ( t > v.x ) && ( t > v.y ) && ( t > v.z );
 }
 
 // Vector3 + Vector3
@@ -866,15 +458,6 @@ operator +( Vector3< T > const & v, typename Vector3< T >::Tc t )
 	return Vector3< T >( v.x + t, v.y + t, v.z + t );
 }
 
-// Value + Vector3
-template< typename T >
-inline
-Vector3< T >
-operator +( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return Vector3< T >( t + v.x, t + v.y, t + v.z );
-}
-
 // Vector3 - Vector3
 template< typename T >
 inline
@@ -891,24 +474,6 @@ Vector3< T >
 operator -( Vector3< T > const & v, typename Vector3< T >::Tc t )
 {
 	return Vector3< T >( v.x - t, v.y - t, v.z - t );
-}
-
-// Value - Vector3
-template< typename T >
-inline
-Vector3< T >
-operator -( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	return Vector3< T >( t - v.x, t - v.y, t - v.z );
-}
-
-// Vector3 * Vector3
-template< typename T >
-inline
-Vector3< T >
-operator *( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return Vector3< T >( a.x * b.x, a.y * b.y, a.z * b.z );
 }
 
 // Vector3 * Value
@@ -929,18 +494,6 @@ operator *( typename Vector3< T >::Tc t, Vector3< T > const & v )
 	return Vector3< T >( t * v.x, t * v.y, t * v.z );
 }
 
-// Vector3 / Vector3
-template< typename T >
-inline
-Vector3< T >
-operator /( Vector3< T > const & a, Vector3< T > const & b )
-{
-	assert( b.x != T( 0 ) );
-	assert( b.y != T( 0 ) );
-	assert( b.z != T( 0 ) );
-	return Vector3< T >( a.x / b.x, a.y / b.y, a.z / b.z );
-}
-
 // Vector3 / Value
 template< typename T, typename U, class = typename std::enable_if< std::is_floating_point< U >::value && std::is_assignable< T&, U >::value >::type >
 inline
@@ -950,115 +503,6 @@ operator /( Vector3< T > const & v, U const & u )
 	assert( u != U( 0 ) );
 	U const inv_u( U ( 1 ) / u );
 	return Vector3< T >( v.x * inv_u, v.y * inv_u, v.z * inv_u );
-}
-
-// Vector3 / Value
-template< typename T, typename U, class = typename std::enable_if< ! std::is_floating_point< U >::value && std::is_assignable< T&, U >::value >::type, typename = void >
-inline
-Vector3< T >
-operator /( Vector3< T > const & v, U const & u )
-{
-	assert( u != U( 0 ) );
-	return Vector3< T >( v.x / u, v.y / u, v.z / u );
-}
-
-// Value / Vector3
-template< typename T >
-inline
-Vector3< T >
-operator /( typename Vector3< T >::Tc t, Vector3< T > const & v )
-{
-	assert( v.x != T( 0 ) );
-	assert( v.y != T( 0 ) );
-	assert( v.z != T( 0 ) );
-	return Vector3< T >( t / v.x, t / v.y, t / v.z );
-}
-
-// Minimum of Two Vector3s
-template< typename T >
-inline
-Vector3< T >
-min( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return Vector3< T >(
-	 ( a.x <= b.x ? a.x : b.x ),
-	 ( a.y <= b.y ? a.y : b.y ),
-	 ( a.z <= b.z ? a.z : b.z )
-	);
-}
-
-// Minimum of Three Vector3s
-template< typename T >
-inline
-Vector3< T >
-min( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c )
-{
-	return Vector3< T >(
-	 ObjexxFCL::min( a.x, b.x, c.x ),
-	 ObjexxFCL::min( a.y, b.y, c.y ),
-	 ObjexxFCL::min( a.z, b.z, c.z )
-	);
-}
-
-// Minimum of Four Vector3s
-template< typename T >
-inline
-Vector3< T >
-min( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c, Vector3< T > const & d )
-{
-	return Vector3< T >(
-	 ObjexxFCL::min( a.x, b.x, c.x, d.x ),
-	 ObjexxFCL::min( a.y, b.y, c.y, d.y ),
-	 ObjexxFCL::min( a.z, b.z, c.z, d.z )
-	);
-}
-
-// Maximum of Two Vector3s
-template< typename T >
-inline
-Vector3< T >
-max( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return Vector3< T >(
-	 ( a.x >= b.x ? a.x : b.x ),
-	 ( a.y >= b.y ? a.y : b.y ),
-	 ( a.z >= b.z ? a.z : b.z )
-	);
-}
-
-// Maximum of Three Vector3s
-template< typename T >
-inline
-Vector3< T >
-max( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c )
-{
-	return Vector3< T >(
-	 ObjexxFCL::max( a.x, b.x, c.x ),
-	 ObjexxFCL::max( a.y, b.y, c.y ),
-	 ObjexxFCL::max( a.z, b.z, c.z )
-	);
-}
-
-// Maximum of Four Vector3s
-template< typename T >
-inline
-Vector3< T >
-max( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c, Vector3< T > const & d )
-{
-	return Vector3< T >(
-	 ObjexxFCL::max( a.x, b.x, c.x, d.x ),
-	 ObjexxFCL::max( a.y, b.y, c.y, d.y ),
-	 ObjexxFCL::max( a.z, b.z, c.z, d.z )
-	);
-}
-
-// Subtract of Two Vector3s
-template< typename T >
-inline
-Vector3< T >
-sub( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return Vector3< T >( a.x - b.x, a.y - b.y, a.z - b.z );
 }
 
 // Midpoint of Two Vector3s
@@ -1098,19 +542,6 @@ cen( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c )
 	 T( third * ( a.x + b.x + c.x ) ),
 	 T( third * ( a.y + b.y + c.y ) ),
 	 T( third * ( a.z + b.z + c.z ) )
-	);
-}
-
-// Center of Four Vector3s
-template< typename T >
-inline
-Vector3< T >
-cen( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c, Vector3< T > const & d )
-{
-	return Vector3< T >(
-	 T( 0.25 * ( a.x + b.x + c.x + d.x ) ),
-	 T( 0.25 * ( a.y + b.y + c.y + d.y ) ),
-	 T( 0.25 * ( a.z + b.z + c.z + d.z ) )
 	);
 }
 

@@ -57,7 +57,7 @@
 			<p class="body">The Vectors are class templates. Shorthand (typedef) names are provided for the common value types in their forward declaration headers so, for example, we use <span class="source">Vector2_double</span> instead of <span class="source">Vector2&lt; double &gt;</span> on this page.</p>
 
 			<h2 class="h3">Named Elements</h2>
-			<p class="body">Vector elements can be accessed by name with a few common variants:</p>
+			<p class="body">Vector elements can be accessed by name:</p>
 			<table border="1" cellspacing="0" cellpadding="12">
 				<tr>
 					<td bgcolor="#F7F4F7">
@@ -66,28 +66,6 @@
 v.x = 7.0; // Element 1 is x
 v.y = 8.0; // Element 2 is y
 v.z = 9.0; // Element 3 is z</pre></td>
-				</tr>
-			</table>
-			<br>
-			<table border="1" cellspacing="0" cellpadding="12">
-				<tr>
-					<td bgcolor="#F7F4F7">
-					<pre>Vector3_double v( { 1.0, 2.0, 3.0 } );
-...
-v.x1 = 7.0; // Element 1 is x1
-v.x2 = 8.0; // Element 2 is x2
-v.x3 = 9.0; // Element 3 is x3</pre></td>
-				</tr>
-			</table>
-			<br>
-			<table border="1" cellspacing="0" cellpadding="12">
-				<tr>
-					<td bgcolor="#F7F4F7">
-					<pre>Vector3_double v( { 1.0, 2.0, 3.0 } );
-...
-v.x_1 = 7.0; // Element 1 is x_1
-v.x_2 = 8.0; // Element 2 is x_2
-v.x_3 = 9.0; // Element 3 is x_3</pre></td>
 				</tr>
 			</table>
 
@@ -104,7 +82,7 @@ v( 2 ) = 12.0; // () operations use 1-based indexing
 			</table>
 
 			<h2 class="h3">Assignment</h2>
-			<p class="body">The Vectors support whole-vector element-wise assignment with the operators {=, +=, -=, *=, /=}:</p>
+			<p class="body">The Vectors support whole-vector element-wise assignment with the operators {=, +=}:</p>
 			<table border="1" cellspacing="0" cellpadding="12">
 			<tr>
 				<td bgcolor="#F7F4F7"><pre>Vector3_double v( { 1.0, 2.0, 3.0 } );
@@ -114,28 +92,26 @@ v += u;</pre></td>
 			</tr>
 			</table>
 			<p class="body">Assignment of <span class="source">std::array</span>, <span class="source">std::vector</span>, <span class="source">std::initializer_list</span>, brace-enclosed composite initializers, and Arrays are also supported.</p>
-			<p class="body">Uniform whole-array assignment of any scalar value that is assignment-compatible with the Vector's value type with the operators {=, +=, -=, *=, /=}:</p>
+			<p class="body">Uniform whole-array assignment of any scalar value that is assignment-compatible with the Vector's value type with the operators {=, *=, /=}:</p>
 			<table border="1" cellspacing="0" cellpadding="12">
 			<tr>
 				<td bgcolor="#F7F4F7"><pre>Vector3_double v( { 1.0, 2.0, 3.0 } );
 
 ...
-v += 10.0; // Now elements are { 11.0, 12.0, 13.0 }</pre></td>
+v *= 10.0; // Now elements are { 10.0, 20.0, 30.0 }</pre></td>
 			</tr>
 			</table>
 
 			<h2 class="h3">Comparison</h2>
-			<p class="body">The Vectors provide lexical-order comparison operations:</p>
+			<p class="body">The Vectors provide equality comparison operations:</p>
 			<table border="1" cellspacing="0" cellpadding="12">
 			<tr>
 				<td bgcolor="#F7F4F7"><pre>Vector3_double v( { 1.0, 2.0, 3.0 } );
 Vector3_double u( { 4.0, 5.0, 6.0 } );
 ...
-v < u; // Inequalities use lexical order to provide a complete ordering</pre></td>
+v == u; // Element-wise equality (and !=)</pre></td>
 			</tr>
 			</table>
-			<p>Inequalities comparisons use lexical order to provide a complete ordering so that Vectors can be stored in containers like <span class="source">std::set</span>.</p>
-
 			<h2 class="h3">Additional Functions</h2>
 			<p class="body">The Vectors provide a number of additional functions:</p>
 			<table border="1" cellspacing="0" cellpadding="12">
@@ -145,8 +121,6 @@ Vector3_double u( { 4.0, 5.0, 6.0 } );
 
 v + u // Add vectors
 mid( v, u ) // Vector with midpoint of each element pair
-min( v, u ) // Vector with min of each element pair
-max( v, u ) // Vector with max of each element pair
 
 dot( v, u ) // Dot product
 v.dot( u ) // Same thing
@@ -154,7 +128,6 @@ v.dot( u ) // Same thing
 cross( v, u ) // Cross product
 v.cross( u ) // Cross product
 
-v.zero() // Set all elements to zero
 
 v.normalize() // Scale to unit length
 v.normalize( h ) // Scale to specified length
