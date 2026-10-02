@@ -87,25 +87,8 @@ public: // Creation
     // Default Constructor: Zero-Initializes All Elements
     Plane() = default;
 
-    // Uniform Value Constructor
-    explicit Plane(double t);
-
     // Value Constructor
     Plane(double x_, double y_, double z_, double w_);
-
-public: // Assignment
-    // Plane op= Plane
-    Plane &operator+=(Plane const &v);
-    Plane &operator-=(Plane const &v);
-    Plane &operator*=(Plane const &v);
-    Plane &operator/=(Plane const &v);
-
-    // Plane op= Value
-    Plane &operator=(double t);
-    Plane &operator+=(double t);
-    Plane &operator-=(double t);
-    Plane &operator*=(double t);
-    Plane &operator/=(double u);
 
 public: // Array Interface
     // Any type with operator[] and size() == 4 (e.g. std::array< double, 4 >)
@@ -124,54 +107,6 @@ public: // Array Interface
         y = a[1];
         z = a[2];
         w = a[3];
-        return *this;
-    }
-
-    // += Array
-    template <Array4Like A> Plane &operator+=(A const &a)
-    {
-        assert(a.size() == 4);
-        x += a[0];
-        y += a[1];
-        z += a[2];
-        w += a[3];
-        return *this;
-    }
-
-    // -= Array
-    template <Array4Like A> Plane &operator-=(A const &a)
-    {
-        assert(a.size() == 4);
-        x -= a[0];
-        y -= a[1];
-        z -= a[2];
-        w -= a[3];
-        return *this;
-    }
-
-    // *= Array
-    template <Array4Like A> Plane &operator*=(A const &a)
-    {
-        assert(a.size() == 4);
-        x *= a[0];
-        y *= a[1];
-        z *= a[2];
-        w *= a[3];
-        return *this;
-    }
-
-    // /= Array
-    template <Array4Like A> Plane &operator/=(A const &a)
-    {
-        assert(a.size() == 4);
-        assert(a[0] != 0.0);
-        assert(a[1] != 0.0);
-        assert(a[2] != 0.0);
-        assert(a[3] != 0.0);
-        x /= a[0];
-        y /= a[1];
-        z /= a[2];
-        w /= a[3];
         return *this;
     }
 
@@ -214,36 +149,6 @@ public: // Data Elements
     double z = 0.0;
     double w = 0.0;
 }; // Plane
-
-// Plane op Plane
-Plane operator+(Plane const &a, Plane const &b);
-Plane operator-(Plane const &a, Plane const &b);
-Plane operator*(Plane const &a, Plane const &b);
-Plane operator/(Plane const &a, Plane const &b);
-
-// Plane op Value
-bool operator==(Plane const &v, double t);
-bool operator!=(Plane const &v, double t);
-bool operator<(Plane const &v, double t);
-bool operator<=(Plane const &v, double t);
-bool operator>=(Plane const &v, double t);
-bool operator>(Plane const &v, double t);
-Plane operator+(Plane const &v, double t);
-Plane operator-(Plane const &v, double t);
-Plane operator*(Plane const &v, double t);
-Plane operator/(Plane const &v, double t);
-
-// Value op Plane
-bool operator==(double t, Plane const &v);
-bool operator!=(double t, Plane const &v);
-bool operator<(double t, Plane const &v);
-bool operator<=(double t, Plane const &v);
-bool operator>=(double t, Plane const &v);
-bool operator>(double t, Plane const &v);
-Plane operator+(double t, Plane const &v);
-Plane operator-(double t, Plane const &v);
-Plane operator*(double t, Plane const &v);
-Plane operator/(double t, Plane const &v);
 
 // Stream << Plane output operator
 std::ostream &operator<<(std::ostream &stream, Plane const &v);
