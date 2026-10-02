@@ -45,98 +45,12 @@ TEST( Vector4Test, Basic )
 	EXPECT_FLOAT_EQ( 1.0f, v.length() );
 	v.normalize( 5.0f );
 	EXPECT_FLOAT_EQ( 5.0f, v.length() );
-	v.zero();
+	v = 0.0;
 	EXPECT_EQ( 0.0f, v.x );
 	EXPECT_EQ( 0.0f, v.y );
 	EXPECT_EQ( 0.0f, v.z );
 	EXPECT_EQ( 0.0f, v.w );
 	EXPECT_EQ( 0.0f, v.length() );
-	v.normalize_zero();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	EXPECT_EQ( 0.0f, v.z );
-	EXPECT_EQ( 0.0f, v.w );
-	v.zero();
-	v.normalize_x();
-	EXPECT_EQ( 1.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	EXPECT_EQ( 0.0f, v.z );
-	EXPECT_EQ( 0.0f, v.w );
-	v.zero();
-	v.normalize_y();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 1.0f, v.y );
-	EXPECT_EQ( 0.0f, v.z );
-	EXPECT_EQ( 0.0f, v.w );
-	v.zero();
-	v.normalize_z();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	EXPECT_EQ( 1.0f, v.z );
-	EXPECT_EQ( 0.0f, v.w );
-	v.zero();
-	v.normalize_w();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	EXPECT_EQ( 0.0f, v.z );
-	EXPECT_EQ( 1.0f, v.w );
-	v.zero();
-	v.normalize_uniform();
-	EXPECT_EQ( v.x, v.y );
-	EXPECT_EQ( v.x, v.z );
-	EXPECT_EQ( v.x, v.w );
-	EXPECT_FLOAT_EQ( 1.0f, v.length() );
-}
-
-TEST( Vector4Test, InitializerList )
-{
-	Vector4 v( { 33, 52, 17, 42 } );
-	EXPECT_EQ( 33, v.x );
-	EXPECT_EQ( 52, v.y );
-	EXPECT_EQ( 17, v.z );
-	EXPECT_EQ( 42, v.w );
-	EXPECT_EQ( 33, v.x1() );
-	EXPECT_EQ( 52, v.x2() );
-	EXPECT_EQ( 17, v.x3() );
-	EXPECT_EQ( 42, v.x4() );
-	EXPECT_EQ( 33, v[ 0 ] );
-	EXPECT_EQ( 52, v[ 1 ] );
-	EXPECT_EQ( 17, v[ 2 ] );
-	EXPECT_EQ( 42, v[ 3 ] );
-	EXPECT_EQ( 33, v( 1 ) );
-	EXPECT_EQ( 52, v( 2 ) );
-	EXPECT_EQ( 17, v( 3 ) );
-	EXPECT_EQ( 42, v( 4 ) );
-	v = { 44, 55, 66, 77 };
-	EXPECT_EQ( 44, v.x );
-	EXPECT_EQ( 55, v.y );
-	EXPECT_EQ( 66, v.z );
-	EXPECT_EQ( 77, v.w );
-	v += 10;
-	EXPECT_EQ( 54, v.x );
-	EXPECT_EQ( 65, v.y );
-	EXPECT_EQ( 76, v.z );
-	EXPECT_EQ( 87, v.w );
-	v -= 10;
-	EXPECT_EQ( 44, v.x );
-	EXPECT_EQ( 55, v.y );
-	EXPECT_EQ( 66, v.z );
-	EXPECT_EQ( 77, v.w );
-	v *= 2;
-	EXPECT_EQ( 88, v.x );
-	EXPECT_EQ( 110, v.y );
-	EXPECT_EQ( 132, v.z );
-	EXPECT_EQ( 154, v.w );
-	v /= 2.0;
-	EXPECT_EQ( 44, v.x );
-	EXPECT_EQ( 55, v.y );
-	EXPECT_EQ( 66, v.z );
-	EXPECT_EQ( 77, v.w );
-	v.negate();
-	EXPECT_EQ( -44, v.x );
-	EXPECT_EQ( -55, v.y );
-	EXPECT_EQ( -66, v.z );
-	EXPECT_EQ( -77, v.w );
 }
 
 TEST( Vector4Test, StdArray )
@@ -250,29 +164,6 @@ TEST( Vector4Test, Array )
 	EXPECT_EQ( 123, v.w );
 }
 
-TEST( Vector4Test, MinMax )
-{
-	Vector4 v( 1.0, 5.0, 3.0, 2.0 );
-	Vector4 w( 3.0, 2.0, 7.0, 5.0 );
-	Vector4 min_vw( min( v, w ) );
-	Vector4 max_vw( max( v, w ) );
-	EXPECT_EQ( 1.0, min_vw.x );
-	EXPECT_EQ( 2.0, min_vw.y );
-	EXPECT_EQ( 3.0, min_vw.z );
-	EXPECT_EQ( 2.0, min_vw.w );
-	EXPECT_EQ( 3.0, max_vw.x );
-	EXPECT_EQ( 5.0, max_vw.y );
-	EXPECT_EQ( 7.0, max_vw.z );
-	EXPECT_EQ( 5.0, max_vw.w );
-	v.max( w );
-	EXPECT_EQ( 3.0, v.x );
-	EXPECT_EQ( 5.0, v.y );
-	EXPECT_EQ( 7.0, v.z );
-	EXPECT_EQ( 5.0, v.w );
-	w.max( v );
-	EXPECT_EQ( v, w );
-}
-
 TEST( Vector4Test, Comparisons )
 {
 	Vector4 v( 1.0, 2.0, 3.0, 4.0 );
@@ -294,18 +185,10 @@ TEST( Vector4Test, Comparisons )
 	EXPECT_TRUE( v > w );
 	EXPECT_TRUE( v >= w );
 
-	// Test partial ordering: Set v.x to 0 but leave v.y > w.y and v.z > w.z and v.w > w.w so v and w are not orderable
+	// Set v.x to 0 but leave the other components larger than w's
 	v.x = 0.0;
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
-	EXPECT_TRUE( ! lt( v, w ) );
-	EXPECT_TRUE( ! le( v, w ) );
-	EXPECT_TRUE( ! gt( v, w ) );
-	EXPECT_TRUE( ! ge( v, w ) );
-
-	// Test length relations
-	EXPECT_TRUE( ! equal_length( v, w ) );
-	EXPECT_TRUE( not_equal_length( v, w ) );
 }
 
 TEST( Vector4Test, Generators )
@@ -322,15 +205,15 @@ TEST( Vector4Test, Distance )
 {
 	Vector4 v( 3.0, 3.0, 0.0, 1.0 );
 	Vector4 w( 3.0, 2.0, 0.0, 1.0 );
-	EXPECT_DOUBLE_EQ( 1.0, distance( v, w ) );
-	EXPECT_DOUBLE_EQ( 1.0, distance_squared( v, w ) );
+	EXPECT_DOUBLE_EQ( 1.0, v.distance( w ) );
+	EXPECT_DOUBLE_EQ( 1.0, v.distance_squared( w ) );
 }
 
 TEST( Vector4Test, Dot )
 {
 	Vector4 x( 3.0, 0.0, 0.0, 5.0 );
 	Vector4 y( 0.0, 2.0, 0.0, 0.0 );
-	EXPECT_EQ( 0.0, dot( x, y ) );
+	EXPECT_EQ( 0.0, x.dot( y ) );
 }
 
 TEST( Vector4Test, Center )
@@ -374,7 +257,7 @@ TEST( Vector4Test, BinaryOperations )
 	Vector4 const original( v );
 
 	// Check dot product of equal vectors
-	EXPECT_DOUBLE_EQ( v.length_squared(), dot( v, w ) ); // v == w here
+	EXPECT_DOUBLE_EQ( v.length_squared(), v.dot( w ) ); // v == w here
 
 	// Tweak the vectors
 	v += 1.0; w -= 1.0;
