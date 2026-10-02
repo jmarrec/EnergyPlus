@@ -133,7 +133,7 @@ double& Vector4::operator[](size_type const i) {
 }
 
 // Size
-Vector4::Size Vector4::size() const {
+Vector4::size_type Vector4::size() const {
   return 4u;
 }
 
