@@ -125,17 +125,16 @@ v += 10.0; // Now elements are { 11.0, 12.0, 13.0 }</pre></td>
 			</table>
 
 			<h2 class="h3">Comparison</h2>
-			<p class="body">The Vectors provide two kinds of comparison operations:</p>
+			<p class="body">The Vectors provide lexical-order comparison operations:</p>
 			<table border="1" cellspacing="0" cellpadding="12">
 			<tr>
 				<td bgcolor="#F7F4F7"><pre>Vector3_double v( { 1.0, 2.0, 3.0 } );
 Vector3_double u( { 4.0, 5.0, 6.0 } );
 ...
-v < u; // Inequalities use lexical order to provide a complete ordering
-lt( v, u ); // Named comparison functions use strict (partial) ordering</pre></td>
+v < u; // Inequalities use lexical order to provide a complete ordering</pre></td>
 			</tr>
 			</table>
-			<p>Inequalities comparisons use lexical order to provide a complete ordering so that Vectors can be stored in containers like <span class="source">std::set</span>. Named comparison functions like lt and ge use strict ordering of all elements and thus provide only a partial ordering.</p>
+			<p>Inequalities comparisons use lexical order to provide a complete ordering so that Vectors can be stored in containers like <span class="source">std::set</span>.</p>
 
 			<h2 class="h3">Additional Functions</h2>
 			<p class="body">The Vectors provide a number of additional functions:</p>
@@ -148,7 +147,6 @@ v + u // Add vectors
 mid( v, u ) // Vector with midpoint of each element pair
 min( v, u ) // Vector with min of each element pair
 max( v, u ) // Vector with max of each element pair
-angle( v, u ) // Angle formed by two vectors
 
 dot( v, u ) // Dot product
 v.dot( u ) // Same thing
@@ -157,12 +155,9 @@ cross( v, u ) // Cross product
 v.cross( u ) // Cross product
 
 v.zero() // Set all elements to zero
-v.is_zero() // Are all elements zero?
 
 v.normalize() // Scale to unit length
 v.normalize( h ) // Scale to specified length
-v.normalize_zero() // Normalize but return zero vector if current length is zero
-v.normalize_x() // Normalize but return unit x-vector if current length is zero
 
 std::cout &lt;&lt; v // Output vector to std::cout
 std::cin &gt;&gt; v // Input vector from cin</pre></td>
