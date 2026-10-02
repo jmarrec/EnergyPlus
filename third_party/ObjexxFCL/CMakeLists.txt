@@ -58,6 +58,7 @@ set(src
   src/ObjexxFCL/Vector2.hh
   src/ObjexxFCL/Vector3.fwd.hh
   src/ObjexxFCL/Vector3.hh
+  src/ObjexxFCL/Vector4.cc
   src/ObjexxFCL/Vector4.fwd.hh
   src/ObjexxFCL/Vector4.hh
   src/ObjexxFCL/vectorize.hh
