@@ -356,5 +356,8 @@ TEST_F(GeometryFixture, FromVertices)
         Vertices const v({Point(0.0, 0.0, 0.0), Point(1.0, 0.0, 0.0), Point(2.0, 0.0, 0.0)});
         Plane const p(Plane::fromVertices(v));
         EXPECT_EQ(0.0, p.normal().length());
+        EXPECT_TRUE(p.isDegenerate());
+        EXPECT_FALSE(Plane::fromVertices(Vertices({Point(0.0, 0.0, 0.0), Point(1.0, 0.0, 0.0), Point(1.0, 1.0, 0.0)})).isDegenerate());
+        EXPECT_TRUE(Plane().isDegenerate()); // Default (zero) plane
     }
 }

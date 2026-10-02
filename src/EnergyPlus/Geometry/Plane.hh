@@ -123,6 +123,10 @@ public: // Generators
     ObjexxFCL::Vector3<Real64> normal() const;
 
 public: // Queries
+    // Degenerate plane: zero normal (e.g. fromVertices() of collinear or coincident vertices)
+    //  normalize(), normalized() and signedDistance() must not be called on a degenerate plane
+    bool isDegenerate() const;
+
     // Signed distance from a point to the plane: (a*x + b*y + c*z + d) / |(a, b, c)|
     //  . Positive on the side the normal points to (outside), negative behind it, zero on the plane
     //  . A true distance whether or not the plane is normalized (it divides by the normal's length)
