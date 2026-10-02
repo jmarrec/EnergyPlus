@@ -51,6 +51,9 @@
 #include <iomanip>
 #include <ostream>
 
+// ObjexxFCL Headers
+#include <ObjexxFCL/Vector3.hh>
+
 // EnergyPlus Headers
 #include <EnergyPlus/Geometry/Plane.hh>
 
@@ -110,6 +113,12 @@ Plane Plane::normalized() const
     double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
     assert(normal_length != 0.0);
     return {x / normal_length, y / normal_length, z / normal_length, w / normal_length};
+}
+
+// Outward Normal vector (x, y, z): not unit length unless the plane was normalized
+ObjexxFCL::Vector3<Real64> Plane::normal() const
+{
+    return ObjexxFCL::Vector3<Real64>(x, y, z);
 }
 
 bool Plane::equal(const Plane &other, double tol) const

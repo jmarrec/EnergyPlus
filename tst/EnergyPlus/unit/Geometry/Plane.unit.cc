@@ -53,6 +53,9 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Geometry/Plane.hh>
 
+// ObjexxFCL Headers
+#include <ObjexxFCL/Vector3.hh>
+
 // C++ Headers
 #include <cmath>
 #include <sstream>
@@ -157,4 +160,111 @@ TEST_F(GeometryFixture, StreamOutputRestoresStreamState)
     os.str("");
     os << 3.14159265;
     EXPECT_EQ("3.142", os.str()); // Fixed with precision 3, as set before streaming the Plane
+}
+
+// The planes below are written as a*x + b*y + c*z + d = 0 with d = -(normal . point_on_plane).
+// Where a test says "Newell", the coefficients are what SurfaceData::computed_plane() would produce for that polygon:
+// the normal's length is twice the polygon area, so these planes are not normalized.
+
+TEST_F(GeometryFixture, Normal)
+{
+    Plane const p(3.0, 0.0, 4.0, 10.0);
+    ObjexxFCL::Vector3<Real64> const n(p.normal());
+    EXPECT_EQ(3.0, n.x);
+    EXPECT_EQ(0.0, n.y);
+    EXPECT_EQ(4.0, n.z);
+
+    // Not unit length unless the plane is normalized
+    ObjexxFCL::Vector3<Real64> const u(p.normalized().normal());
+    EXPECT_DOUBLE_EQ(0.6, u.x);
+    EXPECT_DOUBLE_EQ(0.0, u.y);
+    EXPECT_DOUBLE_EQ(0.8, u.z);
+    EXPECT_DOUBLE_EQ(1.0, u.length());
+}
+
+TEST_F(GeometryFixture, ReversedPlane)
+{
+    Plane const p(1.0, -2.0, 3.0, -4.0);
+    Plane const r(p.reversedPlane());
+    EXPECT_EQ(Plane(-1.0, 2.0, -3.0, 4.0), r);
+    EXPECT_EQ(-p, r);                   // Same as unary minus
+    EXPECT_EQ(p, r.reversedPlane());    // Reversing twice gives the original back
+    EXPECT_EQ(-p.normal(), r.normal()); // The normal flips
+}
+
+TEST_F(GeometryFixture, Equal_SamePlaneDifferentScale)
+{
+    // z = 0 facing +z, as a unit plane and as the Newell plane of a 1 m x 1 m counterclockwise square
+    Plane const unit(0.0, 0.0, 1.0, 0.0);
+    Plane const newell(0.0, 0.0, 2.0, 0.0);
+    EXPECT_NE(unit, newell);         // Different representation...
+    EXPECT_TRUE(unit.equal(newell)); // ...same plane
+    EXPECT_TRUE(newell.equal(unit));
+    EXPECT_FALSE(unit.reverseEqual(newell));
+
+    // z = 2 facing +z, scaled by 7
+    EXPECT_TRUE(Plane(0.0, 0.0, 1.0, -2.0).equal(Plane(0.0, 0.0, 7.0, -14.0)));
+}
+
+TEST_F(GeometryFixture, Equal_SmallSurface)
+{
+    // Newell plane of a 1 cm x 1 cm square at z = 0: the normal is only 2e-4 long, normalizing must still work
+    Plane const small(0.0, 0.0, 2.0e-4, 0.0);
+    EXPECT_TRUE(small.equal(Plane(0.0, 0.0, 1.0, 0.0)));
+}
+
+TEST_F(GeometryFixture, Equal_ParallelOffset)
+{
+    // z = 0 and z = 1, both facing +z: parallel, but neither equal nor reverse equal
+    Plane const p1(0.0, 0.0, 1.0, 0.0);
+    Plane const p2(0.0, 0.0, 1.0, -1.0);
+    EXPECT_FALSE(p1.equal(p2));
+    EXPECT_FALSE(p1.reverseEqual(p2));
+
+    // x = 10 and x = 20, both facing +x
+    Plane const x10(1.0, 0.0, 0.0, -10.0);
+    Plane const x20(1.0, 0.0, 0.0, -20.0);
+    EXPECT_FALSE(x10.equal(x20));
+    EXPECT_FALSE(x10.reverseEqual(x20));
+}
+
+TEST_F(GeometryFixture, ReverseEqual)
+{
+    // z = 2 facing +z, and the same plane facing -z (the other side of the same wall)
+    Plane const up(0.0, 0.0, 1.0, -2.0);
+    Plane const down(0.0, 0.0, -1.0, 2.0);
+    EXPECT_FALSE(up.equal(down));
+    EXPECT_TRUE(up.reverseEqual(down));
+    EXPECT_TRUE(down.reverseEqual(up));
+    EXPECT_TRUE(up.reverseEqual(up.reversedPlane()));
+
+    // Scaling does not matter: Newell planes of the two sides of a 2 m x 3 m surface (|normal| = 2 * area = 12)
+    EXPECT_TRUE(Plane(0.0, 0.0, 12.0, -24.0).reverseEqual(Plane(0.0, 0.0, -12.0, 24.0)));
+
+    // Opposite normals but different planes: x = 10 facing +x and x = -10 facing -x
+    Plane const x10(1.0, 0.0, 0.0, -10.0);
+    Plane const xm10(-1.0, 0.0, 0.0, -10.0);
+    EXPECT_FALSE(x10.equal(xm10));
+    EXPECT_FALSE(x10.reverseEqual(xm10));
+}
+
+TEST_F(GeometryFixture, Equal_Tolerance)
+{
+    // Default tol = 0.001
+    Plane const p(0.0, 0.0, 1.0, 0.0);
+
+    // Distance: tol is in length units
+    EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, -0.0005)));      // 0.5 mm away
+    EXPECT_FALSE(p.equal(Plane(0.0, 0.0, 1.0, -0.002)));      // 2 mm away
+    EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, -0.002), 0.01)); // ...unless a larger tol is passed
+
+    // Angle: tol is on the cosine of the angle between the normals (0.001 is about 2.6 degrees)
+    auto tilted = [](double const degrees) {
+        double const theta(degrees * std::acos(-1.0) / 180.0);
+        return Plane(std::sin(theta), 0.0, std::cos(theta), 0.0); // Through the origin, normal tilted about y
+    };
+    EXPECT_TRUE(p.equal(tilted(2.0)));  // cos(2 deg) = 0.99939
+    EXPECT_FALSE(p.equal(tilted(3.0))); // cos(3 deg) = 0.99863
+    EXPECT_TRUE(p.reverseEqual(tilted(2.0).reversedPlane()));
+    EXPECT_FALSE(p.reverseEqual(tilted(3.0).reversedPlane()));
 }
