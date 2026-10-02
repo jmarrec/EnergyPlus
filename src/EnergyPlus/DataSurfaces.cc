@@ -395,20 +395,7 @@ ShapeCat SurfaceData::computed_shapeCat() const
 // Computed Plane
 Plane SurfaceData::computed_plane() const
 {
-    Vertices::size_type const n(Vertex.size());
-    assert(n >= 3);
-    Vector center(0.0);                           // Center (vertex average) point (not mass centroid)
-    Real64 a(0.0), b(0.0), c(0.0), d(0.0);        // Plane coefficients
-    for (Vertices::size_type i = 0; i < n; ++i) { // Newell's method for robustness (not speed)
-        Vector const &v(Vertex[i]);
-        Vector const &w(Vertex[(i + 1) % n]);
-        a += (v.y - w.y) * (v.z + w.z);
-        b += (v.z - w.z) * (v.x + w.x);
-        c += (v.x - w.x) * (v.y + w.y);
-        center += v;
-    }
-    d = -(dot(center, Vector(a, b, c)) / n); // center/n is the center point
-    return Plane(a, b, c, d);                // a*x + b*y + c*z + d = 0
+    return Plane::fromVertices(Vertex);
 }
 
 // Computed axis-projected 2D surface
