@@ -53,23 +53,9 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Geometry/Plane.hh>
 
-#ifdef _MSC_VER
-#    pragma warning(push)
-#    pragma warning(disable : 4244) // Suppress conversion warnings: Intentional narrowing assignments present
-#endif
-
-// ObjexxFCL Headers
-#include <ObjexxFCL/Array1D.hh>
-
 // C++ Headers
-#include <array>
 #include <cmath>
 #include <sstream>
-#include <vector>
-
-#ifdef _MSC_VER
-#    pragma warning(pop)
-#endif
 
 using namespace EnergyPlus;
 
@@ -109,54 +95,6 @@ TEST_F(GeometryFixture, Normalize)
     EXPECT_DOUBLE_EQ(0.0, s.y);
     EXPECT_DOUBLE_EQ(0.0, s.z);
     EXPECT_DOUBLE_EQ(-3.0, s.w);
-}
-
-TEST_F(GeometryFixture, StdArray)
-{
-    std::array<int, 4> arr = {{33, 52, 17, 42}};
-    Plane v(arr);
-    EXPECT_EQ(33.0, v.x);
-    EXPECT_EQ(52.0, v.y);
-    EXPECT_EQ(17.0, v.z);
-    EXPECT_EQ(42.0, v.w);
-    arr = {{133, 152, 117, 123}};
-    v = arr;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
-}
-
-TEST_F(GeometryFixture, StdVector)
-{
-    std::vector<int> vec({33, 52, 17, 42});
-    Plane v(vec);
-    EXPECT_EQ(33.0, v.x);
-    EXPECT_EQ(52.0, v.y);
-    EXPECT_EQ(17.0, v.z);
-    EXPECT_EQ(42.0, v.w);
-    vec = {133, 152, 117, 123};
-    v = vec;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
-}
-
-TEST_F(GeometryFixture, Array)
-{
-    Array1D<int> a(4, {33, 52, 17, 42});
-    Plane v(a);
-    EXPECT_EQ(33.0, v.x);
-    EXPECT_EQ(52.0, v.y);
-    EXPECT_EQ(17.0, v.z);
-    EXPECT_EQ(42.0, v.w);
-    a = {133, 152, 117, 123};
-    v = a;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
 }
 
 TEST_F(GeometryFixture, Comparisons)

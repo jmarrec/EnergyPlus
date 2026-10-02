@@ -53,18 +53,8 @@
 #include <compare>
 #include <cstddef>
 #include <iosfwd>
-#include <type_traits>
 
 namespace EnergyPlus {
-
-// Array-like type usable with Plane's array interface: has a value_type convertible to double, operator[] and size()
-// (e.g. std::array< double, 4 >, std::vector< double >)
-template <typename A>
-concept Array4Like = requires(A const &a) {
-    typename A::value_type;
-    a.size();
-    a[0];
-} && std::is_assignable_v<double &, typename A::value_type>;
 
 // Plane: an infinite plane in 3D space.  The equation of a plane is
 //  a*x + b*y + c*z + d = 0, any point that satisfies this equation is on the plane.
@@ -89,33 +79,6 @@ public: // Creation
 
     // Value Constructor
     Plane(double x_, double y_, double z_, double w_);
-
-public: // Array Interface
-    // Any type with operator[] and size() == 4 (e.g. std::array< double, 4 >)
-
-    // Array Constructor Template
-    template <Array4Like A> Plane(A const &a) : x(a[0]), y(a[1]), z(a[2]), w(a[3])
-    {
-        assert(a.size() == 4);
-    }
-
-    // = Array
-    template <Array4Like A> Plane &operator=(A const &a)
-    {
-        assert(a.size() == 4);
-        x = a[0];
-        y = a[1];
-        z = a[2];
-        w = a[3];
-        return *this;
-    }
-
-    // Dot Product with an Array
-    template <Array4Like A> double dot(A const &a) const
-    {
-        assert(a.size() == 4);
-        return (x * a[0]) + (y * a[1]) + (z * a[2]) + (w * a[3]);
-    }
 
 public: // Subscript
     // Plane[ i ] const: 0-Based Index
