@@ -75,16 +75,16 @@ using namespace EnergyPlus;
 
 TEST_F(GeometryFixture, Basic)
 {
-    Plane v(15.0); // Uniform value construction
-    EXPECT_EQ(15.0, v.x);
-    EXPECT_EQ(15.0, v.y);
-    EXPECT_EQ(15.0, v.z);
-    EXPECT_EQ(15.0, v.w);
-    v = 0.0;
+    Plane v; // Default construction zero-initializes
     EXPECT_EQ(0.0, v.x);
     EXPECT_EQ(0.0, v.y);
     EXPECT_EQ(0.0, v.z);
     EXPECT_EQ(0.0, v.w);
+    v = Plane(1.0, 2.0, 3.0, 4.0); // Value construction
+    EXPECT_EQ(1.0, v.x);
+    EXPECT_EQ(2.0, v.y);
+    EXPECT_EQ(3.0, v.z);
+    EXPECT_EQ(4.0, v.w);
 }
 
 TEST_F(GeometryFixture, Normalize)
@@ -125,27 +125,6 @@ TEST_F(GeometryFixture, StdArray)
     EXPECT_EQ(152.0, v.y);
     EXPECT_EQ(117.0, v.z);
     EXPECT_EQ(123.0, v.w);
-    v += arr;
-    EXPECT_EQ(266.0, v.x);
-    EXPECT_EQ(304.0, v.y);
-    EXPECT_EQ(234.0, v.z);
-    EXPECT_EQ(246.0, v.w);
-    v -= arr;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
-    arr = {{3, 2, 2, 3}};
-    v *= arr;
-    EXPECT_EQ(399.0, v.x);
-    EXPECT_EQ(304.0, v.y);
-    EXPECT_EQ(234.0, v.z);
-    EXPECT_EQ(369.0, v.w);
-    v /= arr;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
 }
 
 TEST_F(GeometryFixture, StdVector)
@@ -158,27 +137,6 @@ TEST_F(GeometryFixture, StdVector)
     EXPECT_EQ(42.0, v.w);
     vec = {133, 152, 117, 123};
     v = vec;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
-    v += vec;
-    EXPECT_EQ(266.0, v.x);
-    EXPECT_EQ(304.0, v.y);
-    EXPECT_EQ(234.0, v.z);
-    EXPECT_EQ(246.0, v.w);
-    v -= vec;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
-    vec = {3, 2, 2, 3};
-    v *= vec;
-    EXPECT_EQ(399.0, v.x);
-    EXPECT_EQ(304.0, v.y);
-    EXPECT_EQ(234.0, v.z);
-    EXPECT_EQ(369.0, v.w);
-    v /= vec;
     EXPECT_EQ(133.0, v.x);
     EXPECT_EQ(152.0, v.y);
     EXPECT_EQ(117.0, v.z);
@@ -199,27 +157,6 @@ TEST_F(GeometryFixture, Array)
     EXPECT_EQ(152.0, v.y);
     EXPECT_EQ(117.0, v.z);
     EXPECT_EQ(123.0, v.w);
-    v += a;
-    EXPECT_EQ(266.0, v.x);
-    EXPECT_EQ(304.0, v.y);
-    EXPECT_EQ(234.0, v.z);
-    EXPECT_EQ(246.0, v.w);
-    v -= a;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
-    a = {3, 2, 2, 3};
-    v *= a;
-    EXPECT_EQ(399.0, v.x);
-    EXPECT_EQ(304.0, v.y);
-    EXPECT_EQ(234.0, v.z);
-    EXPECT_EQ(369.0, v.w);
-    v /= a;
-    EXPECT_EQ(133.0, v.x);
-    EXPECT_EQ(152.0, v.y);
-    EXPECT_EQ(117.0, v.z);
-    EXPECT_EQ(123.0, v.w);
 }
 
 TEST_F(GeometryFixture, Comparisons)
@@ -229,34 +166,30 @@ TEST_F(GeometryFixture, Comparisons)
 
     EXPECT_EQ(v, w);
 
-    // Reduce v and test inequality
-    v -= 0.5;
+    // Lower the last coefficient: not equal, and v sorts before w
+    v.w = 3.5;
     EXPECT_TRUE(v != w);
     EXPECT_TRUE(!(v == w));
     EXPECT_TRUE(v < w);
     EXPECT_TRUE(v <= w);
 
-    // Increase v and test inequality
-    v += 1.0;
+    // Raise it: v sorts after w
+    v.w = 4.5;
     EXPECT_TRUE(v != w);
     EXPECT_TRUE(!(v == w));
     EXPECT_TRUE(v > w);
     EXPECT_TRUE(v >= w);
 
-    // Set v.x to 0 but leave the other components larger than w's
-    v.x = 0.0;
+    // Ordering is lexicographic: the first coefficient that differs decides, even if the later ones are larger
+    v = Plane(0.0, 9.0, 9.0, 9.0);
     EXPECT_TRUE(v != w);
-    EXPECT_TRUE(!(v == w));
+    EXPECT_TRUE(v < w);
 }
 
 TEST_F(GeometryFixture, Generators)
 {
     Plane v(1.0, 12.0, 21.0, 18.0);
-    Plane w(2.0, 6.0, 7.0, 9.0);
-    EXPECT_EQ(Plane(3.0, 18.0, 28.0, 27.0), v + w);
-    EXPECT_EQ(Plane(-1.0, 6.0, 14.0, 9.0), v - w);
-    EXPECT_EQ(Plane(2.0, 72.0, 147.0, 162.0), v * w);
-    EXPECT_EQ(Plane(0.5, 2.0, 3.0, 2.0), v / w);
+    EXPECT_EQ(Plane(-1.0, -12.0, -21.0, -18.0), -v); // Negation flips the plane's orientation
 }
 
 TEST_F(GeometryFixture, StreamOutput)
@@ -274,7 +207,7 @@ TEST_F(GeometryFixture, StreamOutput)
     }
     {
         std::ostringstream os;
-        os << Plane(1.0 / 3.0);
+        os << Plane(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0);
         EXPECT_EQ("     0.3333333333333333      0.3333333333333333      0.3333333333333333      0.3333333333333333", os.str());
     }
 }
