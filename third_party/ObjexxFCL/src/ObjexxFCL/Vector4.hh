@@ -85,9 +85,6 @@ class Vector4
   // /= Value
   Vector4& operator/=(double const u);
 
-  // Value Assignment
-  Vector4& assign(double x_, double y_, double z_, double w_);
-
  public:  // Array Interface
   // Any type with operator[] and size() == 4 (e.g. std::array< double, 4 >)
 
