@@ -283,12 +283,6 @@ Vector4 operator/(double t, Vector4 const& v);
 // Stream << Vector4 output operator
 std::ostream& operator<<(std::ostream& stream, Vector4 const& v);
 
-// Stream >> Vector4 input operator
-//  Supports whitespace-separated values with optional commas between values as long as whitespace is also present
-//  String or char values containing whitespace or commas or enclosed in quotes are not supported
-//  Vector can optionally be enclosed in parentheses () or square brackets []
-std::istream& operator>>(std::istream& stream, Vector4& v);
-
 }  // namespace ObjexxFCL
 
 #endif  // ObjexxFCL_Vector4_hh_INCLUDED
