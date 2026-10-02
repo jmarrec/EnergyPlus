@@ -125,46 +125,6 @@ public: // Creation
 		assert( a.size() == 2 );
 	}
 
-	// Default Vector Named Constructor
-	static
-	Vector2
-	default_vector()
-	{
-		return Vector2( T() );
-	}
-
-	// Zero Vector Named Constructor
-	static
-	Vector2
-	zero_vector()
-	{
-		return Vector2( T( 0 ) );
-	}
-
-	// x Vector of Specified Length Named Constructor
-	static
-	Vector2
-	x_vector( Tc tar_length = T( 1 ) )
-	{
-		return Vector2( tar_length, T( 0 ) );
-	}
-
-	// y Vector of Specified Length Named Constructor
-	static
-	Vector2
-	y_vector( Tc tar_length = T( 1 ) )
-	{
-		return Vector2( T( 0 ), tar_length );
-	}
-
-	// Uniform Vector of Specified Length Named Constructor
-	static
-	Vector2
-	uniform_vector( Tc tar_length = T( 1 ) )
-	{
-		return Vector2( tar_length / std::sqrt( T( 2 ) ) );
-	}
-
 	// Destructor
 	~Vector2()
 	{}
@@ -425,59 +385,6 @@ public: // Assignment
 
 public: // Assignment: Scaled
 
-	// Assign Value * Vector2
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector2 &
-	scaled_assign( Tc t, Vector2< U > const & v )
-	{
-		x = t * v.x;
-		y = t * v.y;
-		return *this;
-	}
-
-	// Add Value * Vector2
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector2 &
-	scaled_add( Tc t, Vector2< U > const & v )
-	{
-		x += t * v.x;
-		y += t * v.y;
-		return *this;
-	}
-
-	// Subtract Value * Vector2
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector2 &
-	scaled_sub( Tc t, Vector2< U > const & v )
-	{
-		x -= t * v.x;
-		y -= t * v.y;
-		return *this;
-	}
-
-	// Multiply by Value * Vector2
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector2 &
-	scaled_mul( Tc t, Vector2< U > const & v )
-	{
-		x *= t * v.x;
-		y *= t * v.y;
-		return *this;
-	}
-
-	// Divide by Value * Vector2
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector2 &
-	scaled_div( Tc t, Vector2< U > const & v )
-	{
-		assert( t != T( 0 ) );
-		assert( v.x != T( 0 ) );
-		assert( v.y != T( 0 ) );
-		x /= t * v.x;
-		y /= t * v.y;
-		return *this;
-	}
-
 public: // Subscript
 
 	// Vector2[ i ] const: 0-Based Index
@@ -514,21 +421,6 @@ public: // Subscript
 
 public: // Properties: Predicates
 
-	// Is Zero Vector?
-	bool
-	is_zero() const
-	{
-		static T const ZERO( 0 );
-		return ( x == ZERO ) && ( y == ZERO );
-	}
-
-	// Is Unit Vector?
-	bool
-	is_unit() const
-	{
-		return ( length_squared() == T( 1 ) );
-	}
-
 public: // Properties: General
 
 	// Size
@@ -545,23 +437,9 @@ public: // Properties: General
 		return std::sqrt( ( x * x ) + ( y * y ) );
 	}
 
-	// Length Squared
-	T
-	length_squared() const
-	{
-		return ( x * x ) + ( y * y );
-	}
-
 	// Magnitude
 	T
 	magnitude() const
-	{
-		return std::sqrt( ( x * x ) + ( y * y ) );
-	}
-
-	// Magnitude
-	T
-	mag() const
 	{
 		return std::sqrt( ( x * x ) + ( y * y ) );
 	}
@@ -578,27 +456,6 @@ public: // Properties: General
 	mag_squared() const
 	{
 		return ( x * x ) + ( y * y );
-	}
-
-	// L1 Norm
-	T
-	norm_L1() const
-	{
-		return std::abs( x ) + std::abs( y );
-	}
-
-	// L2 Norm
-	T
-	norm_L2() const
-	{
-		return std::sqrt( ( x * x ) + ( y * y ) );
-	}
-
-	// L-infinity Norm
-	T
-	norm_Linf() const
-	{
-		return std::max( std::abs( x ), std::abs( y ) );
 	}
 
 	// Distance to a Vector2
@@ -647,43 +504,7 @@ public: // Properties: General
 		return ( x * a[ 1 ] ) - ( y * a[ 0 ] );
 	}
 
-	// Alias for Element 1
-	Tr
-	x1() const
-	{
-		return x;
-	}
-
-	// Alias for Element 1
-	T &
-	x1()
-	{
-		return x;
-	}
-
-	// Alias for Element 2
-	Tr
-	x2() const
-	{
-		return y;
-	}
-
-	// Alias for Element 2
-	T &
-	x2()
-	{
-		return y;
-	}
-
 public: // Modifiers
-
-	// Zero
-	Vector2 &
-	zero()
-	{
-		x = y = T( 0 );
-		return *this;
-	}
 
 	// Negate
 	Vector2 &
@@ -706,68 +527,6 @@ public: // Modifiers
 		return *this;
 	}
 
-	// Normalize to a Length: Zero Vector2 if Length is Zero
-	Vector2 &
-	normalize_zero( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-		} else { // Set zero vector
-			x = y = T( 0 );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: Uniform Vector2 if Length is Zero
-	Vector2 &
-	normalize_uniform( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-		} else { // Set uniform vector
-			operator =( uniform_vector( tar_length ) );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: x Vector2 if Length is Zero
-	Vector2 &
-	normalize_x( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-		} else { // Set x vector
-			x = tar_length;
-			y = T( 0 );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: y Vector2 if Length is Zero
-	Vector2 &
-	normalize_y( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-		} else { // Set y vector
-			y = tar_length;
-			x = T( 0 );
-		}
-		return *this;
-	}
-
 	// Minimum Coordinates with a Vector2
 	Vector2 &
 	min( Vector2 const & v )
@@ -786,61 +545,12 @@ public: // Modifiers
 		return *this;
 	}
 
-	// Add a Vector2
-	Vector2 &
-	add( Vector2 const & v )
-	{
-		x += v.x;
-		y += v.y;
-		return *this;
-	}
-
-	// Sum a Vector2
-	Vector2 &
-	sum( Vector2 const & v )
-	{
-		x += v.x;
-		y += v.y;
-		return *this;
-	}
-
 	// Subtract a Vector2
 	Vector2 &
 	sub( Vector2 const & v )
 	{
 		x -= v.x;
 		y -= v.y;
-		return *this;
-	}
-
-	// Subtract a Vector2
-	Vector2 &
-	subtract( Vector2 const & v )
-	{
-		x -= v.x;
-		y -= v.y;
-		return *this;
-	}
-
-	// Project Normal to a Vector2
-	Vector2 &
-	project_normal( Vector2 const & v )
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		x -= c * v.x;
-		y -= c * v.y;
-		return *this;
-	}
-
-	// Project onto a Vector2
-	Vector2 &
-	project_parallel( Vector2 const & v )
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		x = c * v.x;
-		y = c * v.y;
 		return *this;
 	}
 
@@ -853,108 +563,6 @@ public: // Generators
 		return Vector2( -x, -y );
 	}
 
-	// Negated
-	Vector2
-	negated() const
-	{
-		return Vector2( -x, -y );
-	}
-
-	// Normalized to a Length
-	Vector2
-	normalized( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		assert( cur_length != T ( 0 ) );
-		T const dilation( tar_length / cur_length );
-		return Vector2(
-		 x * dilation,
-		 y * dilation
-		);
-	}
-
-	// Normalized to a Length: Zero Vector2 if Length is Zero
-	Vector2
-	normalized_zero( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector2(
-			 x * dilation,
-			 y * dilation
-			);
-		} else { // Return zero vector
-			return Vector2( T( 0 ) );
-		}
-	}
-
-	// Normalized to a Length: Uniform Vector2 if Length is Zero
-	Vector2
-	normalized_uniform( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector2(
-			 x * dilation,
-			 y * dilation
-			);
-		} else { // Return uniform vector
-			return uniform_vector( tar_length );
-		}
-	}
-
-	// Normalized to a Length: x Vector2 if Length is Zero
-	Vector2
-	normalized_x( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector2(
-			 x * dilation,
-			 y * dilation
-			);
-		} else { // Return x vector
-			return Vector2( tar_length, T( 0 ), T( 0 ) );
-		}
-	}
-
-	// Normalized to a Length: y Vector2 if Length is Zero
-	Vector2
-	normalized_y( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector2(
-			 x * dilation,
-			 y * dilation
-			);
-		} else { // Return y vector
-			return Vector2( T( 0 ), tar_length, T( 0 ) );
-		}
-	}
-
-	// Projected Normal to a Vector2
-	Vector2
-	projected_normal( Vector2 const & v ) const
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		return Vector2( x - ( c * v.x ), y - ( c * v.y ) );
-	}
-
-	// Projected onto a Vector2
-	Vector2
-	projected_parallel( Vector2 const & v ) const
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		return Vector2( c * v.x, c * v.y );
-	}
-
 public: // Static Methods
 
 	// Square of a value
@@ -963,23 +571,6 @@ public: // Static Methods
 	square( Tc t )
 	{
 		return t * t;
-	}
-
-	// Value Clipped to [-1,1]
-	static
-	T
-	sin_cos_range( Tc t )
-	{
-		return std::min( std::max( t, T( -1 ) ), T( 1 ) );
-	}
-
-	// Add 2*Pi to a Negative Value
-	static
-	T
-	bump_up_angle( Tc t )
-	{
-		static T const Two_Pi( T( 2 ) * std::acos( -1.0 ) );
-		return ( t >= T( 0 ) ? t : Two_Pi + t );
 	}
 
 public: // Data
@@ -997,15 +588,6 @@ length( Vector2< T > const & v )
 	return v.length();
 }
 
-// Length Squared
-template< typename T >
-inline
-T
-length_squared( Vector2< T > const & v )
-{
-	return v.length_squared();
-}
-
 // Magnitude
 template< typename T >
 inline
@@ -1013,15 +595,6 @@ T
 magnitude( Vector2< T > const & v )
 {
 	return v.magnitude();
-}
-
-// Magnitude
-template< typename T >
-inline
-T
-mag( Vector2< T > const & v )
-{
-	return v.mag();
 }
 
 // Magnitude Squared
@@ -1110,42 +683,6 @@ operator >( Vector2< T > const & a, Vector2< T > const & b )
 	 ( b.x > a.x ? false : // a.x == b.x
 	 ( a.y > b.y ) ) )
 	);
-}
-
-// Vector2 < Vector2: Element-wise
-template< typename T >
-inline
-bool
-lt( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return ( a.x < b.x ) && ( a.y < b.y );
-}
-
-// Vector2 <= Vector2: Element-wise
-template< typename T >
-inline
-bool
-le( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return ( a.x <= b.x ) && ( a.y <= b.y );
-}
-
-// Vector2 >= Vector2: Element-wise
-template< typename T >
-inline
-bool
-ge( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return ( a.x >= b.x ) && ( a.y >= b.y );
-}
-
-// Vector2 > Vector2: Element-wise
-template< typename T >
-inline
-bool
-gt( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return ( a.x > b.x ) && ( a.y > b.y );
 }
 
 // Vector2 == Value
@@ -1254,24 +791,6 @@ bool
 operator >( typename Vector2< T >::Tc t, Vector2< T > const & v )
 {
 	return ( t > v.x ) && ( t > v.y );
-}
-
-// Equal Length?
-template< typename T >
-inline
-bool
-equal_length( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return ( a.length_squared() == b.length_squared() );
-}
-
-// Not Equal Length?
-template< typename T >
-inline
-bool
-not_equal_length( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return ( a.length_squared() != b.length_squared() );
 }
 
 // Vector2 + Vector2
@@ -1470,47 +989,11 @@ max( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c, Vec
 	);
 }
 
-// Sum of Two Vector2s
-template< typename T >
-inline
-Vector2< T >
-sum( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return Vector2< T >( a.x + b.x, a.y + b.y );
-}
-
-// Sum of Three Vector2s
-template< typename T >
-inline
-Vector2< T >
-sum( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c )
-{
-	return Vector2< T >( a.x + b.x + c.x, a.y + b.y + c.y );
-}
-
-// Sum of Four Vector2s
-template< typename T >
-inline
-Vector2< T >
-sum( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c, Vector2< T > const & d )
-{
-	return Vector2< T >( a.x + b.x + c.x + d.x, a.y + b.y + c.y + d.y );
-}
-
 // Subtract of Two Vector2s
 template< typename T >
 inline
 Vector2< T >
 sub( Vector2< T > const & a, Vector2< T > const & b )
-{
-	return Vector2< T >( a.x - b.x, a.y - b.y );
-}
-
-// Subtract of Two Vector2s
-template< typename T >
-inline
-Vector2< T >
-subtract( Vector2< T > const & a, Vector2< T > const & b )
 {
 	return Vector2< T >( a.x - b.x, a.y - b.y );
 }
@@ -1598,122 +1081,6 @@ T
 cross( Vector2< T > const & a, Vector2< T > const & b )
 {
 	return ( a.x * b.y ) - ( a.y * b.x );
-}
-
-// Angle Between Two Vector2s (in Radians on [0,pi])
-template< typename T >
-inline
-T
-angle( Vector2< T > const & a, Vector2< T > const & b )
-{
-	T const axb( std::abs( a.cross( b ) ) );
-	T const adb( a.dot( b ) );
-	return ( ( axb != T( 0 ) ) || ( adb != T( 0 ) ) ? Vector2< T >::bump_up_angle( std::atan2( axb, adb ) ) : T( 0 ) ); // More accurate than dot-based for angles near 0 and Pi
-}
-
-// Angle abc Formed by Three Vector2s (in Radians on [0,pi])
-template< typename T >
-inline
-T
-angle( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c )
-{
-	return angle( a - b, c - b );
-}
-
-// Cosine of Angle Between Two Vector2s
-template< typename T >
-inline
-T
-cos( Vector2< T > const & a, Vector2< T > const & b )
-{
-	T const mag( std::sqrt( a.length_squared() * b.length_squared() ) );
-	return ( mag > T( 0 ) ? Vector2< T >::sin_cos_range( a.dot( b ) / mag ) : T( 1 ) );
-}
-
-// Cosine of Angle abc Formed by Three Vector2s
-template< typename T >
-inline
-T
-cos( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c )
-{
-	return cos( a - b, c - b );
-}
-
-// Sine of Angle Between Two Vector2s
-template< typename T >
-inline
-T
-sin( Vector2< T > const & a, Vector2< T > const & b )
-{
-	T const mag( std::sqrt( a.length_squared() * b.length_squared() ) );
-	return ( mag > T( 0 ) ? std::abs( Vector2< T >::sin_cos_range( a.cross( b ) / mag ) ) : T( 0 ) );
-}
-
-// Sine of Angle abc Formed by Three Vector2s
-template< typename T >
-inline
-T
-sin( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c )
-{
-	return sin( a - b, c - b );
-}
-
-// Directed Angle Between Two Vector2s (in Radians on [0,2*pi])
-template< typename T >
-inline
-T
-dir_angle( Vector2< T > const & a, Vector2< T > const & b )
-{
-	T const axb( a.cross( b ) );
-	T const adb( a.dot( b ) );
-	return ( ( axb != T( 0 ) ) || ( adb != T( 0 ) ) ? Vector2< T >::bump_up_angle( std::atan2( axb, adb ) ) : T( 0 ) );
-}
-
-// Directed Angle abc Formed by Three Vector2s (in Radians on [0,2*pi])
-template< typename T >
-inline
-T
-dir_angle( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c )
-{
-	return dir_angle( a - b, c - b );
-}
-
-// Cosine of Directed Angle Between Two Vector2s
-template< typename T >
-inline
-T
-dir_cos( Vector2< T > const & a, Vector2< T > const & b )
-{
-	T const mag( std::sqrt( a.length_squared() * b.length_squared() ) );
-	return ( mag > T( 0 ) ? Vector2< T >::sin_cos_range( a.dot( b ) / mag ) : T( 1 ) );
-}
-
-// Cosine of Directed Angle abc Formed by Three Vector2s
-template< typename T >
-inline
-T
-dir_cos( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c )
-{
-	return dir_cos( a - b, c - b );
-}
-
-// Sine of Directed Angle Between Two Vector2s
-template< typename T >
-inline
-T
-dir_sin( Vector2< T > const & a, Vector2< T > const & b )
-{
-	T const mag( std::sqrt( a.length_squared() * b.length_squared() ) );
-	return ( mag > T( 0 ) ? Vector2< T >::sin_cos_range( a.cross( b ) / mag ) : T( 0 ) );
-}
-
-// Sine of Directed Angle abc Formed by Three Vector2s
-template< typename T >
-inline
-T
-dir_sin( Vector2< T > const & a, Vector2< T > const & b, Vector2< T > const & c )
-{
-	return dir_sin( a - b, c - b );
 }
 
 // Stream << Vector2 output operator

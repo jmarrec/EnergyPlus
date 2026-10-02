@@ -44,25 +44,6 @@ TEST( Vector2Test, Basic )
 	EXPECT_FLOAT_EQ( 1.0f, v.length() );
 	v.normalize( 5.0f );
 	EXPECT_FLOAT_EQ( 5.0f, v.length() );
-	v.zero();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	EXPECT_EQ( 0.0f, v.length() );
-	v.normalize_zero();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	v.zero();
-	v.normalize_x();
-	EXPECT_EQ( 1.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	v.zero();
-	v.normalize_y();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 1.0f, v.y );
-	v.zero();
-	v.normalize_uniform();
-	EXPECT_EQ( v.x, v.y );
-	EXPECT_FLOAT_EQ( 1.0f, v.length() );
 }
 
 TEST( Vector2Test, InitializerList )
@@ -70,8 +51,6 @@ TEST( Vector2Test, InitializerList )
 	Vector2<int> v( { 33, 52 } );
 	EXPECT_EQ( 33, v.x );
 	EXPECT_EQ( 52, v.y );
-	EXPECT_EQ( 33, v.x1() );
-	EXPECT_EQ( 52, v.x2() );
 	EXPECT_EQ( 33, v[ 0 ] );
 	EXPECT_EQ( 52, v[ 1 ] );
 	EXPECT_EQ( 33, v( 1 ) );
@@ -213,14 +192,8 @@ TEST( Vector2Test, Comparisons )
 	v.x = 0.0;
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
-	EXPECT_TRUE( ! lt( v, w ) );
-	EXPECT_TRUE( ! le( v, w ) );
-	EXPECT_TRUE( ! gt( v, w ) );
-	EXPECT_TRUE( ! ge( v, w ) );
 
 	// Test length relations
-	EXPECT_TRUE( ! equal_length( v, w ) );
-	EXPECT_TRUE( not_equal_length( v, w ) );
 }
 
 TEST( Vector2Test, Generators )
@@ -262,42 +235,6 @@ TEST( Vector2Test, Center )
 	EXPECT_EQ( Vector2<double>( 2.0, 2.0 ), cen( x, y ) );
 }
 
-TEST( Vector2Test, Angle )
-{
-	double const Pi( std::acos( -1.0 ) );
-	double const Pi_2( std::asin( 1.0 ) );
-	{
-		Vector2<double> a( 4.0, 0.0 );
-		Vector2<double> b( 0.0, 4.0 );
-		EXPECT_DOUBLE_EQ( Pi_2, angle( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, cos( a, b ) );
-		EXPECT_DOUBLE_EQ( 1.0, sin( a, b ) );
-		EXPECT_DOUBLE_EQ( Pi_2, dir_angle( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, dir_cos( a, b ) );
-		EXPECT_DOUBLE_EQ( 1.0, dir_sin( a, b ) );
-	}
-	{
-		Vector2<double> a( 4.0, 0.0 );
-		Vector2<double> b( 0.0, -4.0 );
-		EXPECT_DOUBLE_EQ( Pi_2, angle( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, cos( a, b ) );
-		EXPECT_DOUBLE_EQ( 1.0, sin( a, b ) );
-		EXPECT_DOUBLE_EQ( 3.0 * Pi_2, dir_angle( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, dir_cos( a, b ) );
-		EXPECT_DOUBLE_EQ( -1.0, dir_sin( a, b ) );
-	}
-	{
-		Vector2<double> a( 4.0, 0.0 );
-		Vector2<double> b( -1.0, 0.0 );
-		EXPECT_DOUBLE_EQ( Pi, angle( a, b ) );
-		EXPECT_DOUBLE_EQ( -1.0, cos( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, sin( a, b ) );
-		EXPECT_DOUBLE_EQ( Pi, dir_angle( a, b ) );
-		EXPECT_DOUBLE_EQ( -1.0, dir_cos( a, b ) );
-		EXPECT_DOUBLE_EQ( 0.0, dir_sin( a, b ) );
-	}
-}
-
 TEST( Vector2Test, BinaryOperations )
 {
 	Vector2<double> v( 1.0, 2.0 );
@@ -305,7 +242,6 @@ TEST( Vector2Test, BinaryOperations )
 	Vector2<double> const original( v );
 
 	// Check dot product of equal vectors
-	EXPECT_DOUBLE_EQ( v.length_squared(), dot( v, w ) ); // v == w here
 
 	// Check midpoint (should match original vector)
 	v += 1.0; w -= 1.0;

@@ -133,54 +133,6 @@ public: // Creation
 		assert( a.size() == 3 );
 	}
 
-	// Default Vector Named Constructor
-	static
-	Vector3
-	default_vector()
-	{
-		return Vector3( T() );
-	}
-
-	// Zero Vector Named Constructor
-	static
-	Vector3
-	zero_vector()
-	{
-		return Vector3( T( 0 ) );
-	}
-
-	// x Vector of Specified Length Named Constructor
-	static
-	Vector3
-	x_vector( Tc tar_length = T( 1 ) )
-	{
-		return Vector3( tar_length, T( 0 ), T( 0 ) );
-	}
-
-	// y Vector of Specified Length Named Constructor
-	static
-	Vector3
-	y_vector( Tc tar_length = T( 1 ) )
-	{
-		return Vector3( T( 0 ), tar_length, T( 0 ) );
-	}
-
-	// z Vector of Specified Length Named Constructor
-	static
-	Vector3
-	z_vector( Tc tar_length = T( 1 ) )
-	{
-		return Vector3( T( 0 ), T( 0 ), tar_length );
-	}
-
-	// Uniform Vector of Specified Length Named Constructor
-	static
-	Vector3
-	uniform_vector( Tc tar_length = T( 1 ) )
-	{
-		return Vector3( tar_length / std::sqrt( T( 3 ) ) );
-	}
-
 	// Destructor
 	~Vector3()
 	{}
@@ -467,65 +419,6 @@ public: // Assignment
 
 public: // Assignment: Scaled
 
-	// Assign Value * Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	scaled_assign( Tc t, Vector3< U > const & v )
-	{
-		x = t * v.x;
-		y = t * v.y;
-		z = t * v.z;
-		return *this;
-	}
-
-	// Add Value * Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	scaled_add( Tc t, Vector3< U > const & v )
-	{
-		x += t * v.x;
-		y += t * v.y;
-		z += t * v.z;
-		return *this;
-	}
-
-	// Subtract Value * Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	scaled_sub( Tc t, Vector3< U > const & v )
-	{
-		x -= t * v.x;
-		y -= t * v.y;
-		z -= t * v.z;
-		return *this;
-	}
-
-	// Multiply by Value * Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	scaled_mul( Tc t, Vector3< U > const & v )
-	{
-		x *= t * v.x;
-		y *= t * v.y;
-		z *= t * v.z;
-		return *this;
-	}
-
-	// Divide by Value * Vector3
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Vector3 &
-	scaled_div( Tc t, Vector3< U > const & v )
-	{
-		assert( t != T( 0 ) );
-		assert( v.x != T( 0 ) );
-		assert( v.y != T( 0 ) );
-		assert( v.z != T( 0 ) );
-		x /= t * v.x;
-		y /= t * v.y;
-		z /= t * v.z;
-		return *this;
-	}
-
 public: // Subscript
 
 	// Vector3[ i ] const: 0-Based Index
@@ -562,21 +455,6 @@ public: // Subscript
 
 public: // Properties: Predicates
 
-	// Is Zero Vector?
-	bool
-	is_zero() const
-	{
-		static T const ZERO( 0 );
-		return ( x == ZERO ) && ( y == ZERO ) && ( z == ZERO );
-	}
-
-	// Is Unit Vector?
-	bool
-	is_unit() const
-	{
-		return ( length_squared() == T( 1 ) );
-	}
-
 public: // Properties: General
 
 	// Size
@@ -593,23 +471,9 @@ public: // Properties: General
 		return std::sqrt( ( x * x ) + ( y * y ) + ( z * z ) );
 	}
 
-	// Length Squared
-	T
-	length_squared() const
-	{
-		return ( x * x ) + ( y * y ) + ( z * z );
-	}
-
 	// Magnitude
 	T
 	magnitude() const
-	{
-		return std::sqrt( ( x * x ) + ( y * y ) + ( z * z ) );
-	}
-
-	// Magnitude
-	T
-	mag() const
 	{
 		return std::sqrt( ( x * x ) + ( y * y ) + ( z * z ) );
 	}
@@ -626,27 +490,6 @@ public: // Properties: General
 	mag_squared() const
 	{
 		return ( x * x ) + ( y * y ) + ( z * z );
-	}
-
-	// L1 Norm
-	T
-	norm_L1() const
-	{
-		return std::abs( x ) + std::abs( y ) + std::abs( z );
-	}
-
-	// L2 Norm
-	T
-	norm_L2() const
-	{
-		return std::sqrt( ( x * x ) + ( y * y ) + ( z * z ) );
-	}
-
-	// L-infinity Norm
-	T
-	norm_Linf() const
-	{
-		return ObjexxFCL::max( std::abs( x ), std::abs( y ), std::abs( z ) );
 	}
 
 	// Distance to a Vector3
@@ -703,57 +546,7 @@ public: // Properties: General
 		);
 	}
 
-	// Alias for Element 1
-	Tr
-	x1() const
-	{
-		return x;
-	}
-
-	// Alias for Element 1
-	T &
-	x1()
-	{
-		return x;
-	}
-
-	// Alias for Element 2
-	Tr
-	x2() const
-	{
-		return y;
-	}
-
-	// Alias for Element 2
-	T &
-	x2()
-	{
-		return y;
-	}
-
-	// Alias for Element 3
-	Tr
-	x3() const
-	{
-		return z;
-	}
-
-	// Alias for Element 3
-	T &
-	x3()
-	{
-		return z;
-	}
-
 public: // Modifiers
-
-	// Zero
-	Vector3 &
-	zero()
-	{
-		x = y = z = T( 0 );
-		return *this;
-	}
 
 	// Negate
 	Vector3 &
@@ -778,89 +571,6 @@ public: // Modifiers
 		return *this;
 	}
 
-	// Normalize to a Length: Zero Vector3 if Length is Zero
-	Vector3 &
-	normalize_zero( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-			z *= dilation;
-		} else { // Set zero vector
-			x = y = z = T( 0 );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: Uniform Vector3 if Length is Zero
-	Vector3 &
-	normalize_uniform( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-			z *= dilation;
-		} else { // Set uniform vector
-			operator =( uniform_vector( tar_length ) );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: x Vector3 if Length is Zero
-	Vector3 &
-	normalize_x( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-			z *= dilation;
-		} else { // Set x vector
-			x = tar_length;
-			y = z = T( 0 );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: y Vector3 if Length is Zero
-	Vector3 &
-	normalize_y( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-			z *= dilation;
-		} else { // Set y vector
-			y = tar_length;
-			x = z = T( 0 );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: z Vector3 if Length is Zero
-	Vector3 &
-	normalize_z( Tc tar_length = T( 1 ) )
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-			z *= dilation;
-		} else { // Set z vector
-			z = tar_length;
-			x = y = T( 0 );
-		}
-		return *this;
-	}
-
 	// Minimum Coordinates with a Vector3
 	Vector3 &
 	min( Vector3 const & v )
@@ -881,26 +591,6 @@ public: // Modifiers
 		return *this;
 	}
 
-	// Add a Vector3
-	Vector3 &
-	add( Vector3 const & v )
-	{
-		x += v.x;
-		y += v.y;
-		z += v.z;
-		return *this;
-	}
-
-	// Sum a Vector3
-	Vector3 &
-	sum( Vector3 const & v )
-	{
-		x += v.x;
-		y += v.y;
-		z += v.z;
-		return *this;
-	}
-
 	// Subtract a Vector3
 	Vector3 &
 	sub( Vector3 const & v )
@@ -908,40 +598,6 @@ public: // Modifiers
 		x -= v.x;
 		y -= v.y;
 		z -= v.z;
-		return *this;
-	}
-
-	// Subtract a Vector3
-	Vector3 &
-	subtract( Vector3 const & v )
-	{
-		x -= v.x;
-		y -= v.y;
-		z -= v.z;
-		return *this;
-	}
-
-	// Project Normal to a Vector3
-	Vector3 &
-	project_normal( Vector3 const & v )
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		x -= c * v.x;
-		y -= c * v.y;
-		z -= c * v.z;
-		return *this;
-	}
-
-	// Project onto a Vector3
-	Vector3 &
-	project_parallel( Vector3 const & v )
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		x = c * v.x;
-		y = c * v.y;
-		z = c * v.z;
 		return *this;
 	}
 
@@ -954,130 +610,6 @@ public: // Generators
 		return Vector3( -x, -y, -z );
 	}
 
-	// Negated
-	Vector3
-	negated() const
-	{
-		return Vector3( -x, -y, -z );
-	}
-
-	// Normalized to a Length
-	Vector3
-	normalized( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		assert( cur_length != T ( 0 ) );
-		T const dilation( tar_length / cur_length );
-		return Vector3(
-		 x * dilation,
-		 y * dilation,
-		 z * dilation
-		);
-	}
-
-	// Normalized to a Length: Zero Vector3 if Length is Zero
-	Vector3
-	normalized_zero( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector3(
-			 x * dilation,
-			 y * dilation,
-			 z * dilation
-			);
-		} else { // Return zero vector
-			return Vector3( T( 0 ) );
-		}
-	}
-
-	// Normalized to a Length: Uniform Vector3 if Length is Zero
-	Vector3
-	normalized_uniform( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector3(
-			 x * dilation,
-			 y * dilation,
-			 z * dilation
-			);
-		} else { // Return uniform vector
-			return uniform_vector( tar_length );
-		}
-	}
-
-	// Normalized to a Length: x Vector3 if Length is Zero
-	Vector3
-	normalized_x( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector3(
-			 x * dilation,
-			 y * dilation,
-			 z * dilation
-			);
-		} else { // Return x vector
-			return Vector3( tar_length, T( 0 ), T( 0 ) );
-		}
-	}
-
-	// Normalized to a Length: y Vector3 if Length is Zero
-	Vector3
-	normalized_y( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector3(
-			 x * dilation,
-			 y * dilation,
-			 z * dilation
-			);
-		} else { // Return y vector
-			return Vector3( T( 0 ), tar_length, T( 0 ) );
-		}
-	}
-
-	// Normalized to a Length: z Vector3 if Length is Zero
-	Vector3
-	normalized_z( Tc tar_length = T( 1 ) ) const
-	{
-		T const cur_length( length() );
-		if ( cur_length > T( 0 ) ) {
-			T const dilation( tar_length / cur_length );
-			return Vector3(
-			 x * dilation,
-			 y * dilation,
-			 z * dilation
-			);
-		} else { // Return z vector
-			return Vector3( tar_length, T( 0 ), T( 0 ), tar_length );
-		}
-	}
-
-	// Projected Normal to a Vector3
-	Vector3
-	projected_normal( Vector3 const & v ) const
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		return Vector3( x - ( c * v.x ), y - ( c * v.y ), z - ( c * v.z ) );
-	}
-
-	// Projected onto a Vector3
-	Vector3
-	projected_parallel( Vector3 const & v ) const
-	{
-		assert( v.length_squared() != T( 0 ) );
-		T const c( dot( v ) / v.length_squared() );
-		return Vector3( c * v.x, c * v.y, c * v.z );
-	}
-
 public: // Static Methods
 
 	// Square of a value
@@ -1086,23 +618,6 @@ public: // Static Methods
 	square( Tc t )
 	{
 		return t * t;
-	}
-
-	// Value Clipped to [-1,1]
-	static
-	T
-	sin_cos_range( Tc t )
-	{
-		return std::min( std::max( t, T( -1 ) ), T( 1 ) );
-	}
-
-	// Add 2*Pi to a Negative Value
-	static
-	T
-	bump_up_angle( Tc t )
-	{
-		static T const Two_Pi( T( 2 ) * std::acos( -1.0 ) );
-		return ( t >= T( 0 ) ? t : Two_Pi + t );
 	}
 
 public: // Data
@@ -1120,15 +635,6 @@ length( Vector3< T > const & v )
 	return v.length();
 }
 
-// Length Squared
-template< typename T >
-inline
-T
-length_squared( Vector3< T > const & v )
-{
-	return v.length_squared();
-}
-
 // Magnitude
 template< typename T >
 inline
@@ -1136,15 +642,6 @@ T
 magnitude( Vector3< T > const & v )
 {
 	return v.magnitude();
-}
-
-// Magnitude
-template< typename T >
-inline
-T
-mag( Vector3< T > const & v )
-{
-	return v.mag();
 }
 
 // Magnitude Squared
@@ -1241,42 +738,6 @@ operator >( Vector3< T > const & a, Vector3< T > const & b )
 	 ( b.y > a.y ? false : // a.y == b.y
 	 ( a.z > b.z ) ) ) ) )
 	);
-}
-
-// Vector3 < Vector3: Element-wise
-template< typename T >
-inline
-bool
-lt( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return ( a.x < b.x ) && ( a.y < b.y ) && ( a.z < b.z );
-}
-
-// Vector3 <= Vector3: Element-wise
-template< typename T >
-inline
-bool
-le( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return ( a.x <= b.x ) && ( a.y <= b.y ) && ( a.z <= b.z );
-}
-
-// Vector3 >= Vector3: Element-wise
-template< typename T >
-inline
-bool
-ge( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return ( a.x >= b.x ) && ( a.y >= b.y ) && ( a.z >= b.z );
-}
-
-// Vector3 > Vector3: Element-wise
-template< typename T >
-inline
-bool
-gt( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return ( a.x > b.x ) && ( a.y > b.y ) && ( a.z > b.z );
 }
 
 // Vector3 == Value
@@ -1385,24 +846,6 @@ bool
 operator >( typename Vector3< T >::Tc t, Vector3< T > const & v )
 {
 	return ( t > v.x ) && ( t > v.y ) && ( t > v.z );
-}
-
-// Equal Length?
-template< typename T >
-inline
-bool
-equal_length( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return ( a.length_squared() == b.length_squared() );
-}
-
-// Not Equal Length?
-template< typename T >
-inline
-bool
-not_equal_length( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return ( a.length_squared() != b.length_squared() );
 }
 
 // Vector3 + Vector3
@@ -1609,47 +1052,11 @@ max( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c, Vec
 	);
 }
 
-// Sum of Two Vector3s
-template< typename T >
-inline
-Vector3< T >
-sum( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return Vector3< T >( a.x + b.x, a.y + b.y, a.z + b.z );
-}
-
-// Sum of Three Vector3s
-template< typename T >
-inline
-Vector3< T >
-sum( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c )
-{
-	return Vector3< T >( a.x + b.x + c.x, a.y + b.y + c.y, a.z + b.z + c.z );
-}
-
-// Sum of Four Vector3s
-template< typename T >
-inline
-Vector3< T >
-sum( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c, Vector3< T > const & d )
-{
-	return Vector3< T >( a.x + b.x + c.x + d.x, a.y + b.y + c.y + d.y, a.z + b.z + c.z + d.z );
-}
-
 // Subtract of Two Vector3s
 template< typename T >
 inline
 Vector3< T >
 sub( Vector3< T > const & a, Vector3< T > const & b )
-{
-	return Vector3< T >( a.x - b.x, a.y - b.y, a.z - b.z );
-}
-
-// Subtract of Two Vector3s
-template< typename T >
-inline
-Vector3< T >
-subtract( Vector3< T > const & a, Vector3< T > const & b )
 {
 	return Vector3< T >( a.x - b.x, a.y - b.y, a.z - b.z );
 }
@@ -1745,64 +1152,6 @@ cross( Vector3< T > const & a, Vector3< T > const & b )
 	 ( a.z * b.x ) - ( a.x * b.z ),
 	 ( a.x * b.y ) - ( a.y * b.x )
 	);
-}
-
-// Angle Between Two Vector3s (in Radians on [0,pi])
-template< typename T >
-inline
-T
-angle( Vector3< T > const & a, Vector3< T > const & b )
-{
-	T const axb( a.cross( b ).magnitude() );
-	T const adb( a.dot( b ) );
-	return ( ( axb != T( 0 ) ) || ( adb != T( 0 ) ) ? Vector3< T >::bump_up_angle( std::atan2( axb, adb ) ) : T( 0 ) ); // More accurate than dot-based for angles near 0 and Pi
-}
-
-// Angle abc Formed by Three Vector3s (in Radians on [0,pi])
-template< typename T >
-inline
-T
-angle( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c )
-{
-	return angle( a - b, c - b );
-}
-
-// Cosine of Angle Between Two Vector3s
-template< typename T >
-inline
-T
-cos( Vector3< T > const & a, Vector3< T > const & b )
-{
-	T const mag( std::sqrt( a.length_squared() * b.length_squared() ) );
-	return ( mag > T( 0 ) ? Vector3< T >::sin_cos_range( a.dot( b ) / mag ) : T( 1 ) );
-}
-
-// Cosine of Angle abc Formed by Three Vector3s
-template< typename T >
-inline
-T
-cos( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c )
-{
-	return cos( a - b, c - b );
-}
-
-// Sine of Angle Between Two Vector3s
-template< typename T >
-inline
-T
-sin( Vector3< T > const & a, Vector3< T > const & b )
-{
-	T const mag( std::sqrt( a.length_squared() * b.length_squared() ) );
-	return ( mag > T( 0 ) ? std::abs( Vector3< T >::sin_cos_range( a.cross( b ).magnitude() / mag ) ) : T( 0 ) );
-}
-
-// Sine of Angle abc Formed by Three Vector3s
-template< typename T >
-inline
-T
-sin( Vector3< T > const & a, Vector3< T > const & b, Vector3< T > const & c )
-{
-	return sin( a - b, c - b );
 }
 
 // Stream << Vector3 output operator
