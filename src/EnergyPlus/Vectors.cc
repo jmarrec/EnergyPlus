@@ -286,7 +286,7 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
 
 void PlaneEquation(Array1D<Vector> &verts, // Structure of the surface
                    int const nverts,       // Number of vertices in the surface
-                   PlaneEq &plane,         // Equation of plane from inputs
+                   Plane &plane,           // Equation of plane from inputs
                    bool &error             // returns true for degenerate surface
 )
 {
@@ -326,8 +326,8 @@ void PlaneEquation(Array1D<Vector> &verts, // Structure of the surface
     }
 }
 
-Real64 Pt2Plane(Vector const &pt,   // Point for determining the distance
-                PlaneEq const &pleq // Equation of the plane
+Real64 Pt2Plane(Vector const &pt, // Point for determining the distance
+                Plane const &pleq // Equation of the plane
 )
 {
 
@@ -463,7 +463,7 @@ void CalcCoPlanarNess(Array1D<Vector> &Surf, int const NSides, bool &IsCoPlanar,
     EP_SIZE_CHECK(Surf, NSides);
 
     bool plerror;
-    PlaneEq NewellPlane;
+    Plane NewellPlane;
 
     IsCoPlanar = true;
     MaxDist = 0.0;
@@ -490,7 +490,7 @@ PointsInPlane(Array1D<Vector> &BaseSurf, int const BaseSides, Array1D<Vector> co
 {
     std::vector<int> pointIndices;
 
-    PlaneEq NewellPlane;
+    Plane NewellPlane;
     PlaneEquation(BaseSurf, BaseSides, NewellPlane, ErrorFound);
 
     for (int vert = 1; vert <= QuerySides; ++vert) {

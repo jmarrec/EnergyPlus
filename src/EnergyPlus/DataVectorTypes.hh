@@ -51,6 +51,7 @@
 // C++ Headers
 #include <cassert>
 #include <cmath>
+#include <compare>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
@@ -543,7 +544,7 @@ namespace DataVectorTypes {
     //
     //    };
 
-    struct PlaneEq // This is used to specify a plane based on vectors in that plane
+    struct Plane // This is used to specify a plane based on vectors in that plane: x*X + y*Y + z*Z + w = 0
     {
         // Members
         Real64 x{};
@@ -552,7 +553,15 @@ namespace DataVectorTypes {
         Real64 w{};
 
         // Default Constructor
-        PlaneEq() = default;
+        Plane() = default;
+
+        // Coefficient Constructor
+        Plane(Real64 const a, Real64 const b, Real64 const c, Real64 const d) : x(a), y(b), z(c), w(d)
+        {
+        }
+
+        // Comparison (also provides ==)
+        auto operator<=>(Plane const &) const = default;
     };
 
     struct Face // Used to specify the face of a polyhedron

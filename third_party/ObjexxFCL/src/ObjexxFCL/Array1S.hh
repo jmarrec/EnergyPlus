@@ -19,7 +19,6 @@
 #include <ObjexxFCL/CArray.hh>
 #include <ObjexxFCL/Vector2.hh>
 #include <ObjexxFCL/Vector3.hh>
-#include <ObjexxFCL/Vector4.hh>
 
 // C++ Headers
 #include <array>

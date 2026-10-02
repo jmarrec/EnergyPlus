@@ -226,33 +226,6 @@ public: // Assignment: Array
 		return *this;
 	}
 
-	// Vector2 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1A &
-	operator =( Vector2< U > const & v )
-	{
-		Base::operator =( v );
-		return *this;
-	}
-
-	// Vector3 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1A &
-	operator =( Vector3< U > const & v )
-	{
-		Base::operator =( v );
-		return *this;
-	}
-
-	// Vector4 Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1A &
-	operator =( Vector4< U > const & v )
-	{
-		Base::operator =( v );
-		return *this;
-	}
-
 public: // Assignment: Value
 
 	// = Value
