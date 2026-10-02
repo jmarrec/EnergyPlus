@@ -53,6 +53,12 @@
 #include <cstddef>
 #include <iosfwd>
 
+// ObjexxFCL Headers
+#include <ObjexxFCL/Vector3.fwd.hh>
+
+// EnergyPlus Headers
+#include <EnergyPlus/api/TypeDefs.h>
+
 namespace EnergyPlus {
 
 // Plane: an infinite plane in 3D space.  The equation of a plane is
@@ -101,6 +107,10 @@ public: // Generators
 
     // Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
     Plane normalized() const;
+
+    // Outward Normal vector (x, y, z)
+    // not unit length unless the plane was normalized
+    ObjexxFCL::Vector3<Real64> normal() const;
 
 public: // Comparison
     // Exact comparison of the four coefficients (also provides !=). Compares the representation: (1, 0, 0, 0) and
