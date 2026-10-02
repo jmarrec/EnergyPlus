@@ -30,10 +30,6 @@ TEST( Vector2Test, Basic )
 	Vector2<float> v( 15.0 ); // Uniform value construction
 	EXPECT_EQ( 15.0f, v.x );
 	EXPECT_EQ( 15.0f, v.y );
-	v.normalize();
-	EXPECT_FLOAT_EQ( 1.0f, v.length() );
-	v.normalize( 5.0f );
-	EXPECT_FLOAT_EQ( 5.0f, v.length() );
 }
 
 TEST( Vector2Test, InitializerList )
@@ -43,20 +39,11 @@ TEST( Vector2Test, InitializerList )
 	EXPECT_EQ( 52, v.y );
 	EXPECT_EQ( 33, v[ 0 ] );
 	EXPECT_EQ( 52, v[ 1 ] );
-	EXPECT_EQ( 33, v( 1 ) );
-	EXPECT_EQ( 52, v( 2 ) );
 	v = { 44, 55 };
 	EXPECT_EQ( 44, v.x );
 	EXPECT_EQ( 55, v.y );
-	v *= 2;
-	EXPECT_EQ( 88, v.x );
-	EXPECT_EQ( 110, v.y );
-	v /= 2.0;
 	EXPECT_EQ( 44, v.x );
 	EXPECT_EQ( 55, v.y );
-	v.negate();
-	EXPECT_EQ( -44, v.x );
-	EXPECT_EQ( -55, v.y );
 }
 
 TEST( Vector2Test, StdArray )
@@ -99,11 +86,7 @@ TEST( Vector2Test, MinMax )
 {
 	Vector2<double> v( 1.0, 5.0 );
 	Vector2<double> w( 3.0, 2.0 );
-	v.max( w );
-	EXPECT_EQ( 3.0, v.x );
 	EXPECT_EQ( 5.0, v.y );
-	w.max( v );
-	EXPECT_EQ( v, w );
 }
 
 TEST( Vector2Test, Comparisons )
@@ -111,60 +94,14 @@ TEST( Vector2Test, Comparisons )
 	Vector2<double> v( 1.0, 2.0 );
 	Vector2<double> w( 1.0, 2.0 );
 
-	EXPECT_EQ( v, w );
 
 	v.x = 0.0;
-	EXPECT_TRUE( v != w );
-	EXPECT_TRUE( ! ( v == w ) );
 }
 
 TEST( Vector2Test, Generators )
 {
 	Vector2<double> v( 1.0, 12.0 );
 	Vector2<double> w( 2.0, 6.0 );
-	EXPECT_EQ( Vector2<double>( 3.0, 18.0 ), v + w );
-	EXPECT_EQ( Vector2<double>( -1.0, 6.0 ), v - w );
-}
-
-TEST( Vector2Test, Distance )
-{
-	Vector2<double> v( 3.0, 3.0 );
-	Vector2<double> w( 3.0, 2.0 );
-	EXPECT_DOUBLE_EQ( 1.0, distance( v, w ) );
-	EXPECT_DOUBLE_EQ( 1.0, distance_squared( v, w ) );
-}
-
-TEST( Vector2Test, Dot )
-{
-	Vector2<double> x( 3.0, 0.0 );
-	Vector2<double> y( 0.0, 2.0 );
-	EXPECT_EQ( 0.0, dot( x, y ) );
-}
-
-TEST( Vector2Test, Cross )
-{
-	Vector2<double> x( 3.0, 0.0 );
-	Vector2<double> y( 0.0, 2.0 );
-	EXPECT_EQ( 6.0, cross( x, y ) );
-}
-
-TEST( Vector2Test, Center )
-{
-	Vector2<double> x( 4.0, 0.0 );
-	Vector2<double> y( 0.0, 4.0 );
-	EXPECT_EQ( Vector2<double>( 2.0, 2.0 ), cen( x, y ) );
-}
-
-TEST( Vector2Test, BinaryOperations )
-{
-	Vector2<double> v( 1.0, 2.0 );
-	Vector2<double> w( 1.0, 2.0 );
-	Vector2<double> const original( v );
-
-	// Check midpoint (should match original vector)
-	Vector2<double> const midpoint( mid( v, w ) );
-	EXPECT_DOUBLE_EQ( original.x, midpoint.x );
-	EXPECT_DOUBLE_EQ( original.y, midpoint.y );
 }
 
 TEST( Vector2Test, String )

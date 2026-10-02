@@ -80,7 +80,7 @@ TEST_F(EnergyPlusFixture, VectorTest_Basic)
         EXPECT_EQ(0.0, v.mag_squared());
         EXPECT_EQ(0.0, magnitude(v));
         EXPECT_EQ(0.0, magnitude_squared(v));
-        v += 2.0;
+        v += Vector(2.0);
         EXPECT_EQ(2.0, v.x);
         EXPECT_EQ(2.0, v.y);
         EXPECT_EQ(2.0, v.z);
@@ -92,7 +92,7 @@ TEST_F(EnergyPlusFixture, VectorTest_Basic)
         EXPECT_EQ(1.0, v.z);
         EXPECT_EQ(3.0, v.mag_squared());
         EXPECT_EQ(3.0, magnitude_squared(v));
-        v -= 1.0;
+        v += Vector(-1.0);
         EXPECT_EQ(0.0, v.x);
         EXPECT_EQ(0.0, v.y);
         EXPECT_EQ(0.0, v.z);
