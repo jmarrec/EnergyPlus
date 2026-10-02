@@ -64,7 +64,7 @@ struct EnergyPlusData;
 namespace Vectors {
 
     // Using/Aliasing
-    using DataVectorTypes::PlaneEq;
+    using DataVectorTypes::Plane;
     using DataVectorTypes::Polyhedron;
     using DataVectorTypes::Vector;
     using DataVectorTypes::Vector_2d;
@@ -100,12 +100,12 @@ namespace Vectors {
 
     void PlaneEquation(Array1D<Vector> &verts, // Structure of the surface
                        int const nverts,       // Number of vertices in the surface
-                       PlaneEq &plane,         // Equation of plane from inputs
+                       Plane &plane,           // Equation of plane from inputs
                        bool &error             // returns true for degenerate surface
     );
 
-    Real64 Pt2Plane(Vector const &pt,   // Point for determining the distance
-                    PlaneEq const &pleq // Equation of the plane
+    Real64 Pt2Plane(Vector const &pt, // Point for determining the distance
+                    Plane const &pleq // Equation of the plane
     );
 
     void CreateNewellAreaVector(Array1D<Vector> const &VList, int const NSides, Vector &OutNewellAreaVector);

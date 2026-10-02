@@ -12919,7 +12919,7 @@ namespace SurfaceGeometry {
         Real64 OutOfLine;
 
         // Object Data
-        Vectors::PlaneEq BasePlane;
+        Vectors::Plane BasePlane;
         Vector TVect;
         Vector CoordinateTransVector;
 
