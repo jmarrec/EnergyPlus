@@ -107,6 +107,18 @@ public: // Comparison
     // (2, 0, 0, 0) describe the same plane but compare unequal.
     bool operator==(Plane const &) const = default;
 
+    /// Is this plane equal to the other plane (same position and same orientation)?
+    /// Both planes are normalized before comparing, so any scaling of the coefficients is accepted.
+    /// tol is used for two separate tests, and both must pass:
+    ///  . Angle:    dot product of the unit normals >= (1 - tol)
+    ///              (tol is on the cosine, not in radians: 0.001 allows about 2.6 degrees of tilt)
+    ///  . Distance: abs(w1 - w2) <= tol, the difference in distance to the origin
+    ///              (in length units: 0.001 is 1 mm when working in meters)
+    bool equal(const Plane &other, double tol = 0.001) const;
+
+    /// is this plane reverse equal to the other plane
+    bool reverseEqual(const Plane &other, double tol = 0.001) const;
+
 public: // Data Elements
     double x = 0.0;
     double y = 0.0;

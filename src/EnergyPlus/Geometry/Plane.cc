@@ -112,6 +112,20 @@ Plane Plane::normalized() const
     return {x / normal_length, y / normal_length, z / normal_length, w / normal_length};
 }
 
+bool Plane::equal(const Plane &other, double tol) const
+{
+    Plane const p = normalized();
+    Plane const q = other.normalized();
+    const double dot = (p.x * q.x) + (p.y * q.y) + (p.z * q.z);
+    const double dist = p.w - q.w;
+    return (dot >= 1.0 - tol) && (std::fabs(dist) <= tol);
+}
+
+bool Plane::reverseEqual(const Plane &other, double tol) const
+{
+    return equal(-other, tol);
+}
+
 // Stream << Plane output operator
 std::ostream &operator<<(std::ostream &stream, Plane const &v)
 {
