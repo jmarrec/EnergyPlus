@@ -83,7 +83,7 @@ class Vector4
   Vector4& operator*=(double t);
 
   // /= Value
-  Vector4& operator/=(double const u);
+  Vector4& operator/=(double u);
 
  public:  // Array Interface
   // Any type with operator[] and size() == 4 (e.g. std::array< double, 4 >)
@@ -162,10 +162,10 @@ class Vector4
 
  public:  // Subscript
   // Vector4[ i ] const: 0-Based Index
-  double operator[](size_type const i) const;
+  double operator[](size_type i) const;
 
   // Vector4[ i ]: 0-Based Index
-  double& operator[](size_type const i);
+  double& operator[](size_type i);
 
  public:  // Properties: General
   // Size
