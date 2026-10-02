@@ -58,9 +58,6 @@ class Vector4
   // Default Constructor
   Vector4();
 
-  // Copy Constructor
-  Vector4(Vector4 const& v);
-
   // Uniform Value Constructor
   explicit Vector4(double t);
 
@@ -100,12 +97,8 @@ class Vector4
   // Uniform Vector of Specified Length Named Constructor
   static Vector4 uniform_vector(double tar_length = 1.0);
 
-  // Destructor
-  ~Vector4();
 
  public:  // Assignment
-  // Copy Assignment
-  Vector4& operator=(Vector4 const& v);
 
   // Initializer List Assignment Template
   template <typename U, class = typename std::enable_if<std::is_assignable<double&, U>::value>::type>

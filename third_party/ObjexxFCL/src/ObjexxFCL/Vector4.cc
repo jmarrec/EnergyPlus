@@ -37,9 +37,6 @@ Vector4::Vector4()
 {
 }
 
-// Copy Constructor
-Vector4::Vector4(Vector4 const& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
-
 // Uniform Value Constructor
 Vector4::Vector4(double t) : x(t), y(t), z(t), w(t) {}
 
@@ -79,20 +76,6 @@ Vector4 Vector4::W_vector(double tar_length) {
 // Uniform Vector of Specified Length Named Constructor
 Vector4 Vector4::uniform_vector(double tar_length) {
   return Vector4(tar_length / double(2));
-}
-
-// Destructor
-Vector4::~Vector4() {}
-
-// Copy Assignment
-Vector4& Vector4::operator=(Vector4 const& v) {
-  if (this != &v) {
-    x = v.x;
-    y = v.y;
-    z = v.z;
-    w = v.w;
-  }
-  return *this;
 }
 
 // += Vector4
