@@ -191,7 +191,7 @@ void SurfaceData::set_computed_geometry()
 {
     if (Vertex.size() >= 3) { // Skip no-vertex "surfaces"
         shapeCat = computed_shapeCat();
-        plane = computed_plane();
+        plane = Plane::fromVertices(Vertex);
         surface2d = computed_surface2d();
     }
 }
@@ -392,19 +392,13 @@ ShapeCat SurfaceData::computed_shapeCat() const
     }
 }
 
-// Computed Plane
-Plane SurfaceData::computed_plane() const
-{
-    return Plane::fromVertices(Vertex);
-}
-
 // Computed axis-projected 2D surface
 Surface2D SurfaceData::computed_surface2d() const
 {
     // Project along axis of min surface range for 2D intersection use
     Vertices::size_type const n(Vertex.size());
     assert(n >= 3);
-    assert(plane == computed_plane()); // Set plane first
+    assert(plane == Plane::fromVertices(Vertex)); // Set plane first
     using Vertex2D = ObjexxFCL::Vector2<Real64>;
     using Vertices2D = ObjexxFCL::Array1D<Vertex2D>;
 
