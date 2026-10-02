@@ -146,18 +146,6 @@ double& Vector4::operator[](size_type const i) {
   return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
 }
 
-// Vector4( i ) const: 1-Based Index
-double Vector4::operator()(size_type const i) const {
-  assert((1 <= i) && (i <= 4));
-  return (i <= 2 ? (i == 1 ? x : y) : (i == 3 ? z : w));
-}
-
-// Vector4( i ): 1-Based Index
-double& Vector4::operator()(size_type const i) {
-  assert((1 <= i) && (i <= 4));
-  return (i <= 2 ? (i == 1 ? x : y) : (i == 3 ? z : w));
-}
-
 // Size
 Vector4::Size Vector4::size() const {
   return 4u;

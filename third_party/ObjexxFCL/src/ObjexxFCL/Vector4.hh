@@ -190,12 +190,6 @@ class Vector4
   // Vector4[ i ]: 0-Based Index
   double& operator[](size_type const i);
 
-  // Vector4( i ) const: 1-Based Index
-  double operator()(size_type const i) const;
-
-  // Vector4( i ): 1-Based Index
-  double& operator()(size_type const i);
-
  public:  // Properties: General
   // Size
   Size size() const;
