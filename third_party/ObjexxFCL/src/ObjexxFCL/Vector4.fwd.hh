@@ -21,7 +21,7 @@
 namespace ObjexxFCL {
 
 // Forward
-template< typename > class Vector4;
+class Vector4;
 
 // Types
 

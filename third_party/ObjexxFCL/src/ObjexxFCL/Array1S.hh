@@ -19,7 +19,6 @@
 #include <ObjexxFCL/CArray.hh>
 #include <ObjexxFCL/Vector2.hh>
 #include <ObjexxFCL/Vector3.hh>
-#include <ObjexxFCL/Vector4.hh>
 
 // C++ Headers
 #include <array>
@@ -28,493 +27,382 @@
 namespace ObjexxFCL {
 
 // Array1S: 1D Slice Array Proxy
-template< typename T >
-class Array1S : public ArrayRS< T, 1 >
+template <typename T>
+class Array1S : public ArrayRS<T, 1>
 {
 
-private: // Types
+ private:  // Types
+  typedef ArrayRS<T, 1> Super;
 
-	typedef  ArrayRS< T, 1 >  Super;
+ private:  // Friend
+  template <typename>
+  friend class Array1S;
 
-private: // Friend
+ public:  // Types
+  typedef typename Super::Base Base;
+  typedef typename Super::Traits Traits;
+  typedef typename Super::IR IR;
+  typedef typename Super::IS IS;
+  typedef typename Super::DS DS;
 
-	template< typename > friend class Array1S;
+  // STL Style
+  typedef typename Super::value_type value_type;
+  typedef typename Super::reference reference;
+  typedef typename Super::const_reference const_reference;
+  typedef typename Super::pointer pointer;
+  typedef typename Super::const_pointer const_pointer;
+  typedef typename Super::size_type size_type;
+  typedef typename Super::difference_type difference_type;
 
-public: // Types
+  // C++ Style
+  typedef typename Super::Value Value;
+  typedef typename Super::Reference Reference;
+  typedef typename Super::ConstReference ConstReference;
+  typedef typename Super::Pointer Pointer;
+  typedef typename Super::ConstPointer ConstPointer;
+  typedef typename Super::Size Size;
+  typedef typename Super::Difference Difference;
 
-	typedef  typename Super::Base  Base;
-	typedef  typename Super::Traits  Traits;
-	typedef  typename Super::IR  IR;
-	typedef  typename Super::IS  IS;
-	typedef  typename Super::DS  DS;
+  using Super::isize;
+  using Super::overlap;
+  using Super::size;
 
-	// STL Style
-	typedef  typename Super::value_type  value_type;
-	typedef  typename Super::reference  reference;
-	typedef  typename Super::const_reference  const_reference;
-	typedef  typename Super::pointer  pointer;
-	typedef  typename Super::const_pointer  const_pointer;
-	typedef  typename Super::size_type  size_type;
-	typedef  typename Super::difference_type  difference_type;
+ protected:  // Types
+  using Super::in_range;
+  using Super::slice_k;
 
-	// C++ Style
-	typedef  typename Super::Value  Value;
-	typedef  typename Super::Reference  Reference;
-	typedef  typename Super::ConstReference  ConstReference;
-	typedef  typename Super::Pointer  Pointer;
-	typedef  typename Super::ConstPointer  ConstPointer;
-	typedef  typename Super::Size  Size;
-	typedef  typename Super::Difference  Difference;
+  using Super::contiguous_;
+  using Super::data_;
+  using Super::data_beg_;
+  using Super::data_end_;
+  using Super::size_;
 
-	using Super::isize;
-	using Super::overlap;
-	using Super::size;
+ public:  // Creation
+  // Default Constructor
+  Array1S() : m_(1), k_(0), u_(0) {}
 
-protected: // Types
+  // Copy Constructor
+  Array1S(Array1S const& a) : Super(a), m_(a.m_), k_(a.k_), u_(a.u_) {
+    data_set();
+  }
 
-	using Super::in_range;
-	using Super::slice_k;
+  // Data Constructor
+  Array1S(T const* data, std::int64_t const k, DS const& d) : Super(data, d.z()), m_(d.m()), k_(k + d.k()), u_(d.u()) {
+    contiguous_ = computed_contiguous();
+    data_set();
+  }
 
-	using Super::contiguous_;
-	using Super::data_;
-	using Super::data_beg_;
-	using Super::data_end_;
-	using Super::size_;
+  // Non-Const Data Constructor
+  Array1S(T* data, std::int64_t const k, DS const& d) : Super(data, d.z()), m_(d.m()), k_(k + d.k()), u_(d.u()) {
+    contiguous_ = computed_contiguous();
+    data_set();
+  }
 
-public: // Creation
+  // Array Constructor
+  template <template <typename> class A>
+  Array1S(A<T> const& a) : Super(a.data(), a.size()), m_(1), k_(-m_), u_(a.isize()) {
+    contiguous_ = true;
+    data_set();
+  }
 
-	// Default Constructor
-	Array1S() :
-	 m_( 1 ),
-	 k_( 0 ),
-	 u_( 0 )
-	{}
+  // Destructor
+  virtual ~Array1S() = default;
 
-	// Copy Constructor
-	Array1S( Array1S const & a ) :
-	 Super( a ),
-	 m_( a.m_ ),
-	 k_( a.k_ ),
-	 u_( a.u_ )
-	{
-		data_set();
-	}
+ public:  // Assignment: Array
+  // Copy Assignment
+  Array1S& operator=(Array1S const& a) {
+    if (this != &a) {
+      assert(conformable(a));
+      if (overlap(a)) {  // Overlap-safe
+        CArray<T> c(size_);
+        for (int i = 1; i <= u_; ++i) {
+          c[i - 1] = a(i);
+        }
+        for (int i = 1; i <= u_; ++i) {
+          operator()(i) = c[i - 1];
+        }
+      } else {  // Not overlap-safe
+        for (int i = 1; i <= u_; ++i) {
+          operator()(i) = a(i);
+        }
+      }
+    }
+    return *this;
+  }
 
-	// Data Constructor
-	Array1S( T const * data, std::int64_t const k, DS const & d ) :
-	 Super( data, d.z() ),
-	 m_( d.m() ),
-	 k_( k + d.k() ),
-	 u_( d.u() )
-	{
-		contiguous_ = computed_contiguous();
-		data_set();
-	}
+ public:  // Assignment: Value
+  template <typename U, Size s, class = typename std::enable_if<std::is_assignable<T&, U>::value>::type>
+  Array1S& operator=(std::array<U, s> const& a) {
+    assert(size_ == s);
+    auto r(a.begin());
+    for (int i = 1; i <= u_; ++i, ++r) {
+      operator()(i) = *r;
+    }
+    return *this;
+  }
 
-	// Non-Const Data Constructor
-	Array1S( T * data, std::int64_t const k, DS const & d ) :
-	 Super( data, d.z() ),
-	 m_( d.m() ),
-	 k_( k + d.k() ),
-	 u_( d.u() )
-	{
-		contiguous_ = computed_contiguous();
-		data_set();
-	}
+  // Initializer List Assignment Template
+  template <typename U, class = typename std::enable_if<std::is_assignable<T&, U>::value>::type>
+  Array1S& operator=(std::initializer_list<U> const l) {
+    assert(size_ == l.size());
+    auto r(l.begin());
+    for (int i = 1; i <= u_; ++i, ++r) {
+      operator()(i) = *r;
+    }
+    return *this;
+  }
 
-	// Array Constructor
-	template< template< typename > class A >
-	Array1S( A< T > const & a ) :
-	 Super( a.data(), a.size() ),
-	 m_( 1 ),
-	 k_( -m_ ),
-	 u_( a.isize() )
-	{
-		contiguous_ = true;
-		data_set();
-	}
+  // = Value
+  Array1S& operator=(T const& t) {
+    for (int i = 1; i <= u_; ++i) {
+      operator()(i) = t;
+    }
+    return *this;
+  }
 
-	// Destructor
-	virtual
-	~Array1S() = default;
+ public:  // Subscript
+  // array( i ) const
+  T const& operator()(int const i) const {
+    assert(contains(i));
+    return data_[k_ + (m_ * i)];
+  }
 
-public: // Assignment: Array
+  // array( i )
+  T& operator()(int const i) {
+    assert(contains(i));
+    return data_[k_ + (m_ * i)];
+  }
 
-	// Copy Assignment
-	Array1S &
-	operator =( Array1S const & a )
-	{
-		if ( this != &a ) {
-			assert( conformable( a ) );
-			if ( overlap( a ) ) { // Overlap-safe
-				CArray< T > c( size_ );
-				for ( int i = 1; i <= u_; ++i ) {
-					c[ i - 1 ] = a( i );
-				}
-				for ( int i = 1; i <= u_; ++i ) {
-					operator ()( i ) = c[ i - 1 ];
-				}
-			} else { // Not overlap-safe
-				for ( int i = 1; i <= u_; ++i ) {
-					operator ()( i ) = a( i );
-				}
-			}
-		}
-		return *this;
-	}
+  // Linear Index
+  size_type index(int const i) const {
+    return k_ + (m_ * i);
+  }
 
-public: // Assignment: Value
+  // array[ i ] const: 0-Based Subscript
+  T const& operator[](size_type const i) const {
+    assert(i < std::numeric_limits<size_type>::max());
+    assert(contains(static_cast<int>(i + 1)));
+    return data_[k_ + (m_ * (i + 1))];
+  }
 
-	template< typename U, Size s, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1S &
-	operator =( std::array< U, s > const & a )
-	{
-		assert( size_ == s );
-		auto r( a.begin() );
-		for ( int i = 1; i <= u_; ++i, ++r ) {
-			operator ()( i ) = *r;
-		}
-		return *this;
-	}
+  // array[ i ]: 0-Based Subscript
+  T& operator[](size_type const i) {
+    assert(i < std::numeric_limits<int>::max());
+    assert(contains(static_cast<int>(i + 1)));
+    return data_[k_ + (m_ * (i + 1))];
+  }
 
-	// Initializer List Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1S &
-	operator =( std::initializer_list< U > const l )
-	{
-		assert( size_ == l.size() );
-		auto r( l.begin() );
-		for ( int i = 1; i <= u_; ++i, ++r ) {
-			operator ()( i ) = *r;
-		}
-		return *this;
-	}
+ public:  // Slice Proxy Generators
+  // array( s ) const
+  Array1S operator()(IS const& s) const {
+    DS const d(u_, s, m_);
+    return Array1S(data_, k_, d);
+  }
 
-	// = Value
-	Array1S &operator=(T const &t) {
-		for (int i = 1; i <= u_; ++i) {
-			operator()(i) = t;
-		}
-		return *this;
-	}
+  // array( s )
+  Array1S operator()(IS const& s) {
+    DS const d(u_, s, m_);
+    return Array1S(data_, k_, d);
+  }
 
-public: // Subscript
+  // array( {s} ) const
+  template <typename U, class = typename std::enable_if<std::is_constructible<int, U>::value>::type>
+  Array1S operator()(std::initializer_list<U> const l) const {
+    IS const s(l);
+    DS const d(u_, s, m_);
+    return Array1S(data_, k_, d);
+  }
 
-	// array( i ) const
-	T const &
-	operator ()( int const i ) const
-	{
-		assert( contains( i ) );
-		return data_[ k_ + ( m_ * i ) ];
-	}
+  // array( {s} )
+  template <typename U, class = typename std::enable_if<std::is_constructible<int, U>::value>::type>
+  Array1S operator()(std::initializer_list<U> const l) {
+    IS const s(l);
+    DS const d(u_, s, m_);
+    return Array1S(data_, k_, d);
+  }
 
-	// array( i )
-	T &
-	operator ()( int const i )
-	{
-		assert( contains( i ) );
-		return data_[ k_ + ( m_ * i ) ];
-	}
+ public:  // Predicate
+  // Contains Indexed Element?
+  bool contains(int const i) const {
+    return in_range(u_, i);
+  }
 
-	// Linear Index
-	size_type
-	index( int const i ) const
-	{
-		return k_ + ( m_ * i );
-	}
+  // Conformable?
+  template <typename U>
+  bool conformable(Array1S<U> const& a) const {
+    return (u_ == a.u_);
+  }
 
-	// array[ i ] const: 0-Based Subscript
-	T const &
-	operator []( size_type const i ) const
-	{
-		assert( i < std::numeric_limits< size_type >::max() );
-		assert( contains( static_cast< int >( i + 1 ) ) );
-		return data_[ k_ + ( m_ * ( i + 1 ) ) ];
-	}
+  // Conformable?
+  template <class A>
+  bool conformable(A const& a) const {
+    return ((a.rank() == 1) && (size_ == a.size()));
+  }
 
-	// array[ i ]: 0-Based Subscript
-	T &
-	operator []( size_type const i )
-	{
-		assert( i < std::numeric_limits< int >::max() );
-		assert( contains( static_cast< int >( i + 1 ) ) );
-		return data_[ k_ + ( m_ * ( i + 1 ) ) ];
-	}
+  // Equal Dimensions?
+  template <typename U>
+  bool equal_dimensions(Array1S<U> const& a) const {
+    return conformable(a);
+  }
 
-public: // Slice Proxy Generators
+  // Equal Dimensions?
+  template <class A>
+  bool equal_dimensions(A const& a) const {
+    return conformable(a);
+  }
 
-	// array( s ) const
-	Array1S
-	operator ()( IS const & s ) const
-	{
-		DS const d( u_, s, m_ );
-		return Array1S( data_, k_, d );
-	}
+ public:  // Inspector
+  // IndexRange of a Dimension
+  IR I(int const d) const {
+    switch (d) {
+      case 1:
+        return I1();
+      default:
+        assert(false);
+        return I1();
+    }
+  }
 
-	// array( s )
-	Array1S
-	operator ()( IS const & s )
-	{
-		DS const d( u_, s, m_ );
-		return Array1S( data_, k_, d );
-	}
+  // Upper Index of a Dimension
+  int u(int const d) const {
+    switch (d) {
+      case 1:
+        return u_;
+      default:
+        assert(false);
+        return u_;
+    }
+  }
 
-	// array( {s} ) const
-	template< typename U, class = typename std::enable_if< std::is_constructible< int, U >::value >::type >
-	Array1S
-	operator ()( std::initializer_list< U > const l ) const
-	{
-		IS const s( l );
-		DS const d( u_, s, m_ );
-		return Array1S( data_, k_, d );
-	}
+  // Size of a Dimension
+  size_type size(int const d) const {
+    switch (d) {
+      case 1:
+        return u_;
+      default:
+        assert(false);
+        return u_;
+    }
+  }
 
-	// array( {s} )
-	template< typename U, class = typename std::enable_if< std::is_constructible< int, U >::value >::type >
-	Array1S
-	operator ()( std::initializer_list< U > const l )
-	{
-		IS const s( l );
-		DS const d( u_, s, m_ );
-		return Array1S( data_, k_, d );
-	}
+  // Size of a Dimension
+  int isize(int const d) const {
+    switch (d) {
+      case 1:
+        return u_;
+      default:
+        assert(false);
+        return u_;
+    }
+  }
 
-public: // Predicate
+  // IndexRange
+  IR I() const {
+    return IR(1, u_);
+  }
 
-	// Contains Indexed Element?
-	bool
-	contains( int const i ) const
-	{
-		return in_range( u_, i );
-	}
+  // Lower Index
+  int l() const {
+    return 1;
+  }
 
-	// Conformable?
-	template< typename U >
-	bool
-	conformable( Array1S< U > const & a ) const
-	{
-		return ( u_ == a.u_ );
-	}
+  // Upper Index
+  int u() const {
+    return u_;
+  }
 
-	// Conformable?
-	template< class A >
-	bool
-	conformable( A const & a ) const
-	{
-		return ( ( a.rank() == 1 ) && ( size_ == a.size() ) );
-	}
+  // IndexRange of Dimension 1
+  IR I1() const {
+    return IR(1, u_);
+  }
 
-	// Equal Dimensions?
-	template< typename U >
-	bool
-	equal_dimensions( Array1S< U > const & a ) const
-	{
-		return conformable( a );
-	}
+  // Lower Index of Dimension 1
+  int l1() const {
+    return 1;
+  }
 
-	// Equal Dimensions?
-	template< class A >
-	bool
-	equal_dimensions( A const & a ) const
-	{
-		return conformable( a );
-	}
+  // Upper Index of Dimension 1
+  int u1() const {
+    return u_;
+  }
 
-public: // Inspector
+  // Size of Dimension 1
+  size_type size1() const {
+    return u_;
+  }
 
-	// IndexRange of a Dimension
-	IR
-	I( int const d ) const
-	{
-		switch ( d ) {
-		case 1:
-			return I1();
-		default:
-			assert( false );
-			return I1();
-		}
-	}
+  // Size of Dimension 1
+  int isize1() const {
+    return u_;
+  }
 
-	// Upper Index of a Dimension
-	int
-	u( int const d ) const
-	{
-		switch ( d ) {
-		case 1:
-			return u_;
-		default:
-			assert( false );
-			return u_;
-		}
-	}
+  // Shift for Proxy
+  std::ptrdiff_t shift() const {
+    return 1;
+  }
 
-	// Size of a Dimension
-	size_type
-	size( int const d ) const
-	{
-		switch ( d ) {
-		case 1:
-			return u_;
-		default:
-			assert( false );
-			return u_;
-		}
-	}
+ public:
+ private:  // Methods
+  // Contiguous?
+  bool computed_contiguous() const {
+    return m_ == 1;
+  }
 
-	// Size of a Dimension
-	int
-	isize( int const d ) const
-	{
-		switch ( d ) {
-		case 1:
-			return u_;
-		default:
-			assert( false );
-			return u_;
-		}
-	}
+  // Memory Range Set
+  void data_set() {
+    if (size_ > 0u) {  // Non-empty slice
+      data_beg_ = data_end_ = data_ + k_;
+      data_beg_ += m_ * (m_ >= 0 ? 1 : u_);
+      data_end_ += m_ * (m_ <= 0 ? 1 : u_);
+    } else {
+      data_ = data_beg_ = data_end_ = nullptr;
+    }
+  }
 
-	// IndexRange
-	IR
-	I() const
-	{
-		return IR( 1, u_ );
-	}
+ private:                 // Data
+  std::int64_t const m_;  // Multiplier
+  std::int64_t const k_;  // Constant
+  int const u_;           // Upper index
 
-	// Lower Index
-	int
-	l() const
-	{
-		return 1;
-	}
-
-	// Upper Index
-	int
-	u() const
-	{
-		return u_;
-	}
-
-	// IndexRange of Dimension 1
-	IR
-	I1() const
-	{
-		return IR( 1, u_ );
-	}
-
-	// Lower Index of Dimension 1
-	int
-	l1() const
-	{
-		return 1;
-	}
-
-	// Upper Index of Dimension 1
-	int
-	u1() const
-	{
-		return u_;
-	}
-
-	// Size of Dimension 1
-	size_type
-	size1() const
-	{
-		return u_;
-	}
-
-	// Size of Dimension 1
-	int
-	isize1() const
-	{
-		return u_;
-	}
-
-	// Shift for Proxy
-	std::ptrdiff_t
-	shift() const
-	{
-		return 1;
-	}
-
-public:
-
-private: // Methods
-
-	// Contiguous?
-	bool
-	computed_contiguous() const
-	{
-		return m_ == 1;
-	}
-
-	// Memory Range Set
-	void
-	data_set()
-	{
-		if ( size_ > 0u ) { // Non-empty slice
-			data_beg_ = data_end_ = data_ + k_;
-			data_beg_ += m_ * ( m_ >= 0 ? 1 : u_ );
-			data_end_ += m_ * ( m_ <= 0 ? 1 : u_ );
-		} else {
-			data_ = data_beg_ = data_end_ = nullptr;
-		}
-	}
-
-private: // Data
-
-	std::int64_t const m_; // Multiplier
-	std::int64_t const k_; // Constant
-	int const u_; // Upper index
-
-}; // Array1S
+};  // Array1S
 
 // Conformable?
-template< typename U, typename V >
-inline
-bool
-conformable( Array1S< U > const & a, Array1S< V > const & b )
-{
-	return a.conformable( b );
+template <typename U, typename V>
+inline bool conformable(Array1S<U> const& a, Array1S<V> const& b) {
+  return a.conformable(b);
 }
 
 // Stream >> Array1S
-template< typename T >
-inline
-std::istream &
-operator >>( std::istream & stream, Array1S< T > & a )
-{
-	if ( stream && ( a.size() > 0u ) ) {
-		for ( int i = 1, e = a.u(); i <= e; ++i ) {
-			stream >> a( i );
-			if ( ! stream ) break;
-		}
-	}
-	return stream;
+template <typename T>
+inline std::istream& operator>>(std::istream& stream, Array1S<T>& a) {
+  if (stream && (a.size() > 0u)) {
+    for (int i = 1, e = a.u(); i <= e; ++i) {
+      stream >> a(i);
+      if (!stream) break;
+    }
+  }
+  return stream;
 }
 
 // Stream << Array1S
-template< typename T >
-inline
-std::ostream &
-operator <<( std::ostream & stream, Array1S< T > const & a )
-{
-	typedef  TypeTraits< T >  Traits;
-	if ( stream && ( a.size() > 0u ) ) {
-		std::ios_base::fmtflags const old_flags( stream.flags() );
-		std::streamsize const old_precision( stream.precision( Traits::precision ) );
-		stream << std::right << std::showpoint << std::uppercase;
-		int const w( Traits::iwidth );
-		for ( int i = 1, e = a.u(); i <= e; ++i ) {
-			stream << std::setw( w ) << a( i ) << ' ';
-			if ( ! stream ) break;
-		}
-		stream.precision( old_precision );
-		stream.flags( old_flags );
-	}
-	return stream;
+template <typename T>
+inline std::ostream& operator<<(std::ostream& stream, Array1S<T> const& a) {
+  typedef TypeTraits<T> Traits;
+  if (stream && (a.size() > 0u)) {
+    std::ios_base::fmtflags const old_flags(stream.flags());
+    std::streamsize const old_precision(stream.precision(Traits::precision));
+    stream << std::right << std::showpoint << std::uppercase;
+    int const w(Traits::iwidth);
+    for (int i = 1, e = a.u(); i <= e; ++i) {
+      stream << std::setw(w) << a(i) << ' ';
+      if (!stream) break;
+    }
+    stream.precision(old_precision);
+    stream.flags(old_flags);
+  }
+  return stream;
 }
 
-} // ObjexxFCL
+}  // namespace ObjexxFCL
 
-#endif // ObjexxFCL_Array1S_hh_INCLUDED
+#endif  // ObjexxFCL_Array1S_hh_INCLUDED
