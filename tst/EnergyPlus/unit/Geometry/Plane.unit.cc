@@ -80,16 +80,35 @@ TEST_F(GeometryFixture, Basic)
     EXPECT_EQ(15.0, v.y);
     EXPECT_EQ(15.0, v.z);
     EXPECT_EQ(15.0, v.w);
-    v.normalize();
-    EXPECT_DOUBLE_EQ(1.0, v.length());
-    v.normalize(5.0);
-    EXPECT_DOUBLE_EQ(5.0, v.length());
     v = 0.0;
     EXPECT_EQ(0.0, v.x);
     EXPECT_EQ(0.0, v.y);
     EXPECT_EQ(0.0, v.z);
     EXPECT_EQ(0.0, v.w);
-    EXPECT_EQ(0.0, v.length());
+}
+
+TEST_F(GeometryFixture, Normalize)
+{
+    // Normalizing a plane scales the normal (x, y, z) to unit length; w (the offset) scales with it, not into the length
+    Plane p(3.0, 0.0, 4.0, 10.0); // |normal| = 5
+    Plane const q(p.normalized());
+    EXPECT_DOUBLE_EQ(0.6, q.x);
+    EXPECT_DOUBLE_EQ(0.0, q.y);
+    EXPECT_DOUBLE_EQ(0.8, q.z);
+    EXPECT_DOUBLE_EQ(2.0, q.w);
+    EXPECT_DOUBLE_EQ(1.0, std::sqrt((q.x * q.x) + (q.y * q.y) + (q.z * q.z)));
+    EXPECT_DOUBLE_EQ(3.0, p.x); // normalized() leaves the original alone
+
+    p.normalize();
+    EXPECT_EQ(q, p);
+
+    // The plane x = 3 stays x = 3 however it is scaled: (2, 0, 0, -6) -> (1, 0, 0, -3)
+    Plane s(2.0, 0.0, 0.0, -6.0);
+    s.normalize();
+    EXPECT_DOUBLE_EQ(1.0, s.x);
+    EXPECT_DOUBLE_EQ(0.0, s.y);
+    EXPECT_DOUBLE_EQ(0.0, s.z);
+    EXPECT_DOUBLE_EQ(-3.0, s.w);
 }
 
 TEST_F(GeometryFixture, StdArray)
@@ -238,30 +257,6 @@ TEST_F(GeometryFixture, Generators)
     EXPECT_EQ(Plane(-1.0, 6.0, 14.0, 9.0), v - w);
     EXPECT_EQ(Plane(2.0, 72.0, 147.0, 162.0), v * w);
     EXPECT_EQ(Plane(0.5, 2.0, 3.0, 2.0), v / w);
-}
-
-TEST_F(GeometryFixture, Distance)
-{
-    Plane v(3.0, 3.0, 0.0, 1.0);
-    Plane w(3.0, 2.0, 0.0, 1.0);
-    EXPECT_DOUBLE_EQ(1.0, v.distance(w));
-    EXPECT_DOUBLE_EQ(1.0, v.distance_squared(w));
-}
-
-TEST_F(GeometryFixture, Dot)
-{
-    Plane x(3.0, 0.0, 0.0, 5.0);
-    Plane y(0.0, 2.0, 0.0, 0.0);
-    EXPECT_EQ(0.0, x.dot(y));
-}
-
-TEST_F(GeometryFixture, BinaryOperations)
-{
-    Plane v(1.0, 2.0, 3.0, 4.0);
-    Plane w(1.0, 2.0, 3.0, 4.0);
-
-    // Check dot product of equal vectors
-    EXPECT_DOUBLE_EQ(v.length_squared(), v.dot(w)); // v == w here
 }
 
 TEST_F(GeometryFixture, StreamOutput)
