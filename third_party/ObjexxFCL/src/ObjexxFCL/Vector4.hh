@@ -25,6 +25,15 @@
 
 namespace ObjexxFCL {
 
+// Array-like type usable with Vector4's array interface: has a value_type convertible to double, operator[] and size()
+// (e.g. std::array< double, 4 >, std::vector< double >)
+template <typename A>
+concept Array4Like = requires(A const& a) {
+  typename A::value_type;
+  a.size();
+  a[0];
+} && std::is_assignable_v<double&, typename A::value_type>;
+
 // Vector4: Fast 4-Element Vector
 // . Heap-free and loop-free for speed
 // . Provides direct element access via .x style lookup
@@ -98,18 +107,14 @@ class Vector4
   // Any type with operator[] and size() == 4 (e.g. std::array< double, 4 >)
 
   // Array Constructor Template
-  template <typename A>
-  Vector4(A const& a)
-    requires std::is_constructible_v<double, typename A::value_type>
-    : x(a[0]), y(a[1]), z(a[2]), w(a[3]) {
+  template <Array4Like A>
+  Vector4(A const& a) : x(a[0]), y(a[1]), z(a[2]), w(a[3]) {
     assert(a.size() == 4);
   }
 
   // = Array
-  template <typename A>
-  Vector4& operator=(A const& a)
-    requires std::is_assignable_v<double&, typename A::value_type>
-  {
+  template <Array4Like A>
+  Vector4& operator=(A const& a) {
     assert(a.size() == 4);
     x = a[0];
     y = a[1];
@@ -119,10 +124,8 @@ class Vector4
   }
 
   // += Array
-  template <typename A>
-  Vector4& operator+=(A const& a)
-    requires std::is_assignable_v<double&, typename A::value_type>
-  {
+  template <Array4Like A>
+  Vector4& operator+=(A const& a) {
     assert(a.size() == 4);
     x += a[0];
     y += a[1];
@@ -132,10 +135,8 @@ class Vector4
   }
 
   // -= Array
-  template <typename A>
-  Vector4& operator-=(A const& a)
-    requires std::is_assignable_v<double&, typename A::value_type>
-  {
+  template <Array4Like A>
+  Vector4& operator-=(A const& a) {
     assert(a.size() == 4);
     x -= a[0];
     y -= a[1];
@@ -145,10 +146,8 @@ class Vector4
   }
 
   // *= Array
-  template <typename A>
-  Vector4& operator*=(A const& a)
-    requires std::is_assignable_v<double&, typename A::value_type>
-  {
+  template <Array4Like A>
+  Vector4& operator*=(A const& a) {
     assert(a.size() == 4);
     x *= a[0];
     y *= a[1];
@@ -158,10 +157,8 @@ class Vector4
   }
 
   // /= Array
-  template <typename A>
-  Vector4& operator/=(A const& a)
-    requires std::is_assignable_v<double&, typename A::value_type>
-  {
+  template <Array4Like A>
+  Vector4& operator/=(A const& a) {
     assert(a.size() == 4);
     assert(a[0] != 0.0);
     assert(a[1] != 0.0);
@@ -175,10 +172,8 @@ class Vector4
   }
 
   // Dot Product with an Array
-  template <typename A>
-  double dot(A const& a) const
-    requires std::is_assignable_v<double&, typename A::value_type>
-  {
+  template <Array4Like A>
+  double dot(A const& a) const {
     assert(a.size() == 4);
     return (x * a[0]) + (y * a[1]) + (z * a[2]) + (w * a[3]);
   }
