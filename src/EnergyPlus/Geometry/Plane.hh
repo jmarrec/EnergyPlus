@@ -50,7 +50,6 @@
 
 // C++ Headers
 #include <cassert>
-#include <compare>
 #include <cstddef>
 #include <iosfwd>
 
@@ -104,8 +103,9 @@ public: // Generators
     Plane normalized() const;
 
 public: // Comparison
-    // Lexicographic on (x, y, z, w)
-    auto operator<=>(Plane const &) const = default;
+    // Exact comparison of the four coefficients (also provides !=). Compares the representation: (1, 0, 0, 0) and
+    // (2, 0, 0, 0) describe the same plane but compare unequal.
+    bool operator==(Plane const &) const = default;
 
 public: // Data Elements
     double x = 0.0;
