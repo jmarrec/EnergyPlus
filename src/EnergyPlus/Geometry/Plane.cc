@@ -99,6 +99,11 @@ Plane Plane::operator-() const
     return {-x, -y, -z, -w};
 }
 
+Plane Plane::reversedPlane() const
+{
+    return {-x, -y, -z, -w};
+}
+
 // Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
 Plane Plane::normalized() const
 {
