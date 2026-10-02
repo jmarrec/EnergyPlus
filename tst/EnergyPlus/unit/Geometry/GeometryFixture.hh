@@ -45,114 +45,33 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef EnergyPlus_hh_INCLUDED
-#define EnergyPlus_hh_INCLUDED
+#ifndef GeometryFixture_hh_INCLUDED
+#define GeometryFixture_hh_INCLUDED
 
-// EnergyPlus Project-Wide Header File
-//
-// Language: C++
-
-// C++ Headers
-#include <cassert>
-#include <cstdint> // C++11
-#include <stdexcept>
-
-#include <EnergyPlus/api/TypeDefs.h>
+// Google Test Headers
+#include <gtest/gtest.h>
 
 namespace EnergyPlus {
-class FatalError : public std::runtime_error
+
+class GeometryFixture : public testing::Test
 {
-public:
-    FatalError(std::string const &msg) : runtime_error(msg)
+protected:
+    static void SetUpTestCase()
+    {
+    }
+    static void TearDownTestCase()
+    {
+    }
+
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
     {
     }
 };
+
 } // namespace EnergyPlus
 
-// macro to guarantee array sizing in debug builds
-#define EP_SIZE_CHECK(array, min_size)                                                                                                               \
-    assert(min_size >= 0);                                                                                                                           \
-    assert(array.size() >= (size_t)min_size)
-
-typedef std::int32_t Int32;
-typedef std::int64_t Int64;
-
-// ObjexxFCL
-#include <ObjexxFCL/Array1.fwd.hh>
-#include <ObjexxFCL/Array1D.fwd.hh>
-#include <ObjexxFCL/Array2.fwd.hh>
-#include <ObjexxFCL/Array2D.fwd.hh>
-#include <ObjexxFCL/Array3D.fwd.hh>
-#include <ObjexxFCL/Omit.hh>
-#include <ObjexxFCL/Vector2.fwd.hh>
-#include <ObjexxFCL/Vector3.fwd.hh>
-
-using ObjexxFCL::_;
-
-using ObjexxFCL::Array1;
-using ObjexxFCL::Array1_int;
-using ObjexxFCL::Array1_string;
-using ObjexxFCL::Array1D;
-using ObjexxFCL::Array1D_bool;
-using ObjexxFCL::Array1D_double;
-using ObjexxFCL::Array1D_int;
-using ObjexxFCL::Array1D_string;
-using ObjexxFCL::Array2;
-using ObjexxFCL::Array2_int;
-using ObjexxFCL::Array2D;
-using ObjexxFCL::Array2D_bool;
-using ObjexxFCL::Array2D_int;
-using ObjexxFCL::Array2D_string;
-using ObjexxFCL::Array3D;
-using ObjexxFCL::Array3D_bool;
-using ObjexxFCL::Array3D_int;
-using ObjexxFCL::Vector2;
-using ObjexxFCL::Vector3;
-
-// ObjexxFCL Functions
-#include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/random.hh>
-#include <ObjexxFCL/string.functions.hh>
-#include <ObjexxFCL/time.hh>
-
-using ObjexxFCL::CEILING;
-using ObjexxFCL::equali;
-using ObjexxFCL::has;
-using ObjexxFCL::has_prefix;
-using ObjexxFCL::has_prefixi;
-using ObjexxFCL::hasi;
-using ObjexxFCL::index;
-using ObjexxFCL::is_blank;
-using ObjexxFCL::len;
-using ObjexxFCL::len_trim;
-using ObjexxFCL::lessthani;
-using ObjexxFCL::ljustified;
-using ObjexxFCL::max;
-using ObjexxFCL::min;
-using ObjexxFCL::mod;
-using ObjexxFCL::nint;
-using ObjexxFCL::nint64;
-using ObjexxFCL::not_blank;
-using ObjexxFCL::pare;
-using ObjexxFCL::pow_2;
-using ObjexxFCL::pow_3;
-using ObjexxFCL::pow_4;
-using ObjexxFCL::pow_5;
-using ObjexxFCL::pow_6;
-using ObjexxFCL::pow_7;
-using ObjexxFCL::RANDOM_NUMBER;
-using ObjexxFCL::RANDOM_SEED;
-using ObjexxFCL::rjustified;
-using ObjexxFCL::root_4;
-using ObjexxFCL::rstrip;
-using ObjexxFCL::scan;
-using ObjexxFCL::sign;
-using ObjexxFCL::sized;
-using ObjexxFCL::square;
-using ObjexxFCL::strip;
-using ObjexxFCL::stripped;
-using ObjexxFCL::trimmed;
-using ObjexxFCL::uppercase;
-using ObjexxFCL::uppercased;
-
-#endif
+#endif // GeometryFixture_hh_INCLUDED

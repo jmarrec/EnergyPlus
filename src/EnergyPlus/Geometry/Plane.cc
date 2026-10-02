@@ -1,0 +1,467 @@
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
+// The Regents of the University of California, through Lawrence Berkeley National Laboratory
+// (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
+// contributors. All rights reserved.
+//
+// NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
+// U.S. Government consequently retains certain rights. As such, the U.S. Government has been
+// granted for itself and others acting on its behalf a paid-up, nonexclusive, irrevocable,
+// worldwide license in the Software to reproduce, distribute copies to the public, prepare
+// derivative works, and perform publicly and display publicly, and to permit others to do so.
+//
+// Redistribution and use in source and binary forms, with or without modification, are permitted
+// provided that the following conditions are met:
+//
+// (1) Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//
+// (2) Redistributions in binary form must reproduce the above copyright notice, this list of
+//     conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//
+// (3) Neither the name of the University of California, Lawrence Berkeley National Laboratory,
+//     the University of Illinois, U.S. Dept. of Energy nor the names of its contributors may be
+//     used to endorse or promote products derived from this software without specific prior
+//     written permission.
+//
+// (4) Use of EnergyPlus(TM) Name. If Licensee (i) distributes the software in stand-alone form
+//     without changes from the version obtained under this License, or (ii) Licensee makes a
+//     reference solely to the software portion of its product, Licensee must refer to the
+//     software as "EnergyPlus version X" software, where "X" is the version number Licensee
+//     obtained under this License and may not use a different name for the software. Except as
+//     specifically required in this Section (4), Licensee shall not use in a company name, a
+//     product name, in advertising, publicity, or other promotional activities any name, trade
+//     name, trademark, logo, or other designation of "EnergyPlus", "E+", "e+" or confusingly
+//     similar designation, without the U.S. Department of Energy's prior written consent.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+// AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
+
+// C++ Headers
+#include <cassert>
+#include <cmath>
+#include <iomanip>
+#include <ostream>
+
+// EnergyPlus Headers
+#include <EnergyPlus/Geometry/Plane.hh>
+
+namespace EnergyPlus {
+
+// Uniform Value Constructor
+Plane::Plane(double t) : x(t), y(t), z(t), w(t)
+{
+}
+
+// Value Constructor
+Plane::Plane(double x_, double y_, double z_, double w_) : x(x_), y(y_), z(z_), w(w_)
+{
+}
+
+// += Plane
+Plane &Plane::operator+=(Plane const &v)
+{
+    x += v.x;
+    y += v.y;
+    z += v.z;
+    w += v.w;
+    return *this;
+}
+
+// -= Plane
+Plane &Plane::operator-=(Plane const &v)
+{
+    x -= v.x;
+    y -= v.y;
+    z -= v.z;
+    w -= v.w;
+    return *this;
+}
+
+// *= Plane
+Plane &Plane::operator*=(Plane const &v)
+{
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
+    w *= v.w;
+    return *this;
+}
+
+// /= Plane
+Plane &Plane::operator/=(Plane const &v)
+{
+    assert(v.x != 0.0);
+    assert(v.y != 0.0);
+    assert(v.z != 0.0);
+    assert(v.w != 0.0);
+    x /= v.x;
+    y /= v.y;
+    z /= v.z;
+    w /= v.w;
+    return *this;
+}
+
+// = Value
+Plane &Plane::operator=(double t)
+{
+    x = y = z = w = t;
+    return *this;
+}
+
+// += Value
+Plane &Plane::operator+=(double t)
+{
+    x += t;
+    y += t;
+    z += t;
+    w += t;
+    return *this;
+}
+
+// -= Value
+Plane &Plane::operator-=(double t)
+{
+    x -= t;
+    y -= t;
+    z -= t;
+    w -= t;
+    return *this;
+}
+
+// *= Value
+Plane &Plane::operator*=(double t)
+{
+    x *= t;
+    y *= t;
+    z *= t;
+    w *= t;
+    return *this;
+}
+
+// /= Value
+Plane &Plane::operator/=(double u)
+{
+    assert(u != 0.0);
+    double const inv_u(1.0 / u);
+    x *= inv_u;
+    y *= inv_u;
+    z *= inv_u;
+    w *= inv_u;
+    return *this;
+}
+
+// Plane[ i ] const: 0-Based Index
+double Plane::operator[](size_type i) const
+{
+    assert(i <= 3);
+    return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
+}
+
+// Plane[ i ]: 0-Based Index
+double &Plane::operator[](size_type i)
+{
+    assert(i <= 3);
+    return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
+}
+
+// Size
+Plane::size_type Plane::size() const
+{
+    return 4u;
+}
+
+// Length (L2 norm)
+double Plane::length() const
+{
+    return std::sqrt((x * x) + (y * y) + (z * z) + (w * w));
+}
+
+// Length Squared
+double Plane::length_squared() const
+{
+    return (x * x) + (y * y) + (z * z) + (w * w);
+}
+
+// L1 Norm
+double Plane::norm_L1() const
+{
+    return std::abs(x) + std::abs(y) + std::abs(z) + std::abs(w);
+}
+
+// Distance to a Plane
+double Plane::distance(Plane const &v) const
+{
+    return std::sqrt(square(x - v.x) + square(y - v.y) + square(z - v.z) + square(w - v.w));
+}
+
+// Distance Squared to a Plane
+double Plane::distance_squared(Plane const &v) const
+{
+    return square(x - v.x) + square(y - v.y) + square(z - v.z) + square(w - v.w);
+}
+
+// Dot Product with a Plane
+double Plane::dot(Plane const &v) const
+{
+    return (x * v.x) + (y * v.y) + (z * v.z) + (w * v.w);
+}
+
+// Normalize to a Length
+Plane &Plane::normalize(double tar_length)
+{
+    double const cur_length(length());
+    assert(cur_length != 0.0);
+    double const dilation(tar_length / cur_length);
+    x *= dilation;
+    y *= dilation;
+    z *= dilation;
+    w *= dilation;
+    return *this;
+}
+
+// Project Normal to a Plane
+Plane &Plane::project_normal(Plane const &v)
+{
+    assert(v.length_squared() != 0.0);
+    double const c(dot(v) / v.length_squared());
+    x -= c * v.x;
+    y -= c * v.y;
+    z -= c * v.z;
+    w -= c * v.w;
+    return *this;
+}
+
+// Project onto a Plane
+Plane &Plane::project_parallel(Plane const &v)
+{
+    assert(v.length_squared() != 0.0);
+    double const c(dot(v) / v.length_squared());
+    x = c * v.x;
+    y = c * v.y;
+    z = c * v.z;
+    w = c * v.w;
+    return *this;
+}
+
+// -Plane (Negated)
+Plane Plane::operator-() const
+{
+    return {-x, -y, -z, -w};
+}
+
+// Normalized to a Length
+Plane Plane::normalized(double tar_length) const
+{
+    double const cur_length(length());
+    assert(cur_length != 0.0);
+    double const dilation(tar_length / cur_length);
+    return {x * dilation, y * dilation, z * dilation, w * dilation};
+}
+
+// Projected Normal to a Plane
+Plane Plane::projected_normal(Plane const &v) const
+{
+    assert(v.length_squared() != 0.0);
+    double const c(dot(v) / v.length_squared());
+    return {x - (c * v.x), y - (c * v.y), z - (c * v.z), w - (c * v.w)};
+}
+
+// Projected onto a Plane
+Plane Plane::projected_parallel(Plane const &v) const
+{
+    assert(v.length_squared() != 0.0);
+    double const c(dot(v) / v.length_squared());
+    return {c * v.x, c * v.y, c * v.z, c * v.w};
+}
+
+// Square of a value
+double Plane::square(double t)
+{
+    return t * t;
+}
+
+// Plane == Value
+bool operator==(Plane const &v, double t)
+{
+    return (v.x == t) && (v.y == t) && (v.z == t) && (v.w == t);
+}
+
+// Plane != Value
+bool operator!=(Plane const &v, double t)
+{
+    return (v.x != t) || (v.y != t) || (v.z != t) || (v.w != t);
+}
+
+// Plane < Value
+bool operator<(Plane const &v, double t)
+{
+    return (v.x < t) && (v.y < t) && (v.z < t) && (v.w < t);
+}
+
+// Plane <= Value
+bool operator<=(Plane const &v, double t)
+{
+    return (v.x <= t) && (v.y <= t) && (v.z <= t) && (v.w <= t);
+}
+
+// Plane >= Value
+bool operator>=(Plane const &v, double t)
+{
+    return (v.x >= t) && (v.y >= t) && (v.z >= t) && (v.w >= t);
+}
+
+// Plane > Value
+bool operator>(Plane const &v, double t)
+{
+    return (v.x > t) && (v.y > t) && (v.z > t) && (v.w > t);
+}
+
+// Value == Plane
+bool operator==(double t, Plane const &v)
+{
+    return (t == v.x) && (t == v.y) && (t == v.z) && (t == v.w);
+}
+
+// Value != Plane
+bool operator!=(double t, Plane const &v)
+{
+    return (t != v.x) || (t != v.y) || (t != v.z) || (t != v.w);
+}
+
+// Value < Plane
+bool operator<(double t, Plane const &v)
+{
+    return (t < v.x) && (t < v.y) && (t < v.z) && (t < v.w);
+}
+
+// Value <= Plane
+bool operator<=(double t, Plane const &v)
+{
+    return (t <= v.x) && (t <= v.y) && (t <= v.z) && (t <= v.w);
+}
+
+// Value >= Plane
+bool operator>=(double t, Plane const &v)
+{
+    return (t >= v.x) && (t >= v.y) && (t >= v.z) && (t >= v.w);
+}
+
+// Value > Plane
+bool operator>(double t, Plane const &v)
+{
+    return (t > v.x) && (t > v.y) && (t > v.z) && (t > v.w);
+}
+
+// Plane + Plane
+Plane operator+(Plane const &a, Plane const &b)
+{
+    return {a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
+}
+
+// Plane + Value
+Plane operator+(Plane const &v, double t)
+{
+    return {v.x + t, v.y + t, v.z + t, v.w + t};
+}
+
+// Value + Plane
+Plane operator+(double t, Plane const &v)
+{
+    return {t + v.x, t + v.y, t + v.z, t + v.w};
+}
+
+// Plane - Plane
+Plane operator-(Plane const &a, Plane const &b)
+{
+    return {a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
+}
+
+// Plane - Value
+Plane operator-(Plane const &v, double t)
+{
+    return {v.x - t, v.y - t, v.z - t, v.w - t};
+}
+
+// Value - Plane
+Plane operator-(double t, Plane const &v)
+{
+    return {t - v.x, t - v.y, t - v.z, t - v.w};
+}
+
+// Plane * Plane
+Plane operator*(Plane const &a, Plane const &b)
+{
+    return {a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
+// Plane * Value
+Plane operator*(Plane const &v, double t)
+{
+    return {v.x * t, v.y * t, v.z * t, v.w * t};
+}
+
+// Value * Plane
+Plane operator*(double t, Plane const &v)
+{
+    return {t * v.x, t * v.y, t * v.z, t * v.w};
+}
+
+// Plane / Plane
+Plane operator/(Plane const &a, Plane const &b)
+{
+    assert(b.x != 0.0);
+    assert(b.y != 0.0);
+    assert(b.z != 0.0);
+    assert(b.w != 0.0);
+    return {a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
+}
+
+// Plane / Value
+Plane operator/(Plane const &v, double u)
+{
+    assert(u != 0.0);
+    double const inv_u(1.0 / u);
+    return {v.x * inv_u, v.y * inv_u, v.z * inv_u, v.w * inv_u};
+}
+
+// Value / Plane
+Plane operator/(double t, Plane const &v)
+{
+    assert(v.x != 0.0);
+    assert(v.y != 0.0);
+    assert(v.z != 0.0);
+    assert(v.w != 0.0);
+    return {t / v.x, t / v.y, t / v.z, t / v.w};
+}
+
+// Stream << Plane output operator
+std::ostream &operator<<(std::ostream &stream, Plane const &v)
+{
+    constexpr std::streamsize precision = 16; // Significant digits
+    constexpr int width = 23;                 // Field width
+
+    // Save current stream state and set persistent state
+    std::ios_base::fmtflags const old_flags(stream.flags());
+    std::streamsize const old_precision(stream.precision(precision));
+    stream << std::right << std::showpoint << std::uppercase;
+
+    // Output Plane
+    stream << std::setw(width) << v.x << ' ' << std::setw(width) << v.y << ' ' << std::setw(width) << v.z << ' ' << std::setw(width) << v.w;
+
+    // Restore previous stream state
+    stream.precision(old_precision);
+    stream.flags(old_flags);
+
+    return stream;
+}
+
+} // namespace EnergyPlus

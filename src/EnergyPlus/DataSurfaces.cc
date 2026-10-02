@@ -393,7 +393,7 @@ ShapeCat SurfaceData::computed_shapeCat() const
 }
 
 // Computed Plane
-SurfaceData::Plane SurfaceData::computed_plane() const
+Plane SurfaceData::computed_plane() const
 {
     Vertices::size_type const n(Vertex.size());
     assert(n >= 3);
