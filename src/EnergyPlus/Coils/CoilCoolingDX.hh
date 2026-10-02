@@ -94,7 +94,7 @@ struct CoilCoolingDX
                   HVAC::FanOp const fanOp,
                   bool singleMode,
                   Real64 LoadSHR = -1.0);
-    void setData(int fanIndex, HVAC::FanType fanType, std::string const &fanName, int airLoopNum);
+    void setData(int fanIndex, HVAC::FanType fanType, std::string const &fanName);
     void getFixedData(int &evapInletNodeIndex,
                       int &evapOutletNodeIndex,
                       int &condInletNodeIndex,

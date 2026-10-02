@@ -603,7 +603,7 @@ int CoilCoolingDX::getOpModeCapFTIndex(HVAC::CoilMode const mode)
     return this->performance->indexCapFT(mode);
 }
 
-void CoilCoolingDX::setData(int fanIndex, HVAC::FanType fanType, std::string const &fanName, [[maybe_unused]] int airLoopNum)
+void CoilCoolingDX::setData(int fanIndex, HVAC::FanType fanType, std::string const &fanName)
 {
     this->supplyFanIndex = fanIndex;
     this->supplyFanName = fanName;
