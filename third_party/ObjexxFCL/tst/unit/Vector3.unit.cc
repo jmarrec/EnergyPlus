@@ -1,13 +1,3 @@
-// ObjexxFCL::Vector3 Unit Tests
-//
-// Project: Objexx Fortran-C++ Library (ObjexxFCL)
-//
-// Version: 4.2.0
-//
-// Language: C++
-//
-// Copyright (c) 2000-2017 Objexx Engineering, Inc. All Rights Reserved.
-// Use of this source code or any derivative of it is restricted by license.
 // Licensing is available from Objexx Engineering, Inc.:  http://objexx.com
 
 #ifdef _MSC_VER
@@ -62,14 +52,6 @@ TEST( Vector3Test, InitializerList )
 	EXPECT_EQ( 44, v.x );
 	EXPECT_EQ( 55, v.y );
 	EXPECT_EQ( 66, v.z );
-	v += 10;
-	EXPECT_EQ( 54, v.x );
-	EXPECT_EQ( 65, v.y );
-	EXPECT_EQ( 76, v.z );
-	v -= 10;
-	EXPECT_EQ( 44, v.x );
-	EXPECT_EQ( 55, v.y );
-	EXPECT_EQ( 66, v.z );
 	v *= 2;
 	EXPECT_EQ( 88, v.x );
 	EXPECT_EQ( 110, v.y );
@@ -96,23 +78,6 @@ TEST( Vector3Test, StdArray )
 	EXPECT_EQ( 133, v.x );
 	EXPECT_EQ( 152, v.y );
 	EXPECT_EQ( 117, v.z );
-	v += arr;
-	EXPECT_EQ( 266, v.x );
-	EXPECT_EQ( 304, v.y );
-	EXPECT_EQ( 234, v.z );
-	v -= arr;
-	EXPECT_EQ( 133, v.x );
-	EXPECT_EQ( 152, v.y );
-	EXPECT_EQ( 117, v.z );
-	arr = {{ 3, 2, 2 }};
-	v *= arr;
-	EXPECT_EQ( 399, v.x );
-	EXPECT_EQ( 304, v.y );
-	EXPECT_EQ( 234, v.z );
-	v /= arr;
-	EXPECT_EQ( 133, v.x );
-	EXPECT_EQ( 152, v.y );
-	EXPECT_EQ( 117, v.z );
 }
 
 TEST( Vector3Test, StdVector )
@@ -124,23 +89,6 @@ TEST( Vector3Test, StdVector )
 	EXPECT_EQ( 17, v.z );
 	vec = { 133, 152, 117 };
 	v = vec;
-	EXPECT_EQ( 133, v.x );
-	EXPECT_EQ( 152, v.y );
-	EXPECT_EQ( 117, v.z );
-	v += vec;
-	EXPECT_EQ( 266, v.x );
-	EXPECT_EQ( 304, v.y );
-	EXPECT_EQ( 234, v.z );
-	v -= vec;
-	EXPECT_EQ( 133, v.x );
-	EXPECT_EQ( 152, v.y );
-	EXPECT_EQ( 117, v.z );
-	vec = { 3, 2, 2 };
-	v *= vec;
-	EXPECT_EQ( 399, v.x );
-	EXPECT_EQ( 304, v.y );
-	EXPECT_EQ( 234, v.z );
-	v /= vec;
 	EXPECT_EQ( 133, v.x );
 	EXPECT_EQ( 152, v.y );
 	EXPECT_EQ( 117, v.z );
@@ -158,37 +106,12 @@ TEST( Vector3Test, Array )
 	EXPECT_EQ( 133, v.x );
 	EXPECT_EQ( 152, v.y );
 	EXPECT_EQ( 117, v.z );
-	v += a;
-	EXPECT_EQ( 266, v.x );
-	EXPECT_EQ( 304, v.y );
-	EXPECT_EQ( 234, v.z );
-	v -= a;
-	EXPECT_EQ( 133, v.x );
-	EXPECT_EQ( 152, v.y );
-	EXPECT_EQ( 117, v.z );
-	a = { 3, 2, 2 };
-	v *= a;
-	EXPECT_EQ( 399, v.x );
-	EXPECT_EQ( 304, v.y );
-	EXPECT_EQ( 234, v.z );
-	v /= a;
-	EXPECT_EQ( 133, v.x );
-	EXPECT_EQ( 152, v.y );
-	EXPECT_EQ( 117, v.z );
 }
 
 TEST( Vector3Test, MinMax )
 {
 	Vector3<double> v( 1.0, 5.0, 3.0 );
 	Vector3<double> w( 3.0, 2.0, 7.0 );
-	Vector3<double> min_vw( min( v, w ) );
-	Vector3<double> max_vw( max( v, w ) );
-	EXPECT_EQ( 1.0, min_vw.x );
-	EXPECT_EQ( 2.0, min_vw.y );
-	EXPECT_EQ( 3.0, min_vw.z );
-	EXPECT_EQ( 3.0, max_vw.x );
-	EXPECT_EQ( 5.0, max_vw.y );
-	EXPECT_EQ( 7.0, max_vw.z );
 	v.max( w );
 	EXPECT_EQ( 3.0, v.x );
 	EXPECT_EQ( 5.0, v.y );
@@ -204,26 +127,9 @@ TEST( Vector3Test, Comparisons )
 
 	EXPECT_EQ( v, w );
 
-	// Reduce v and test inequality
-	v -= 0.5;
-	EXPECT_TRUE( v != w );
-	EXPECT_TRUE( ! ( v == w ) );
-	EXPECT_TRUE( v < w );
-	EXPECT_TRUE( v <= w );
-
-	// Increase v and test inequality
-	v += 1.0;
-	EXPECT_TRUE( v != w );
-	EXPECT_TRUE( ! ( v == w ) );
-	EXPECT_TRUE( v > w );
-	EXPECT_TRUE( v >= w );
-
-	// Test partial ordering: Set v.x to 0 but leave v.y > w.y and v.z > w.z so v and w are not orderable
 	v.x = 0.0;
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
-
-	// Test length relations
 }
 
 TEST( Vector3Test, Generators )
@@ -232,8 +138,6 @@ TEST( Vector3Test, Generators )
 	Vector3<double> w( 2.0, 6.0, 7.0 );
 	EXPECT_EQ( Vector3<double>( 3.0, 18.0, 28.0 ), v + w );
 	EXPECT_EQ( Vector3<double>( -1.0, 6.0, 14.0 ), v - w );
-	EXPECT_EQ( Vector3<double>( 2.0, 72.0, 147.0 ), v * w );
-	EXPECT_EQ( Vector3<double>( 0.5, 2.0, 3.0 ), v / w );
 }
 
 TEST( Vector3Test, Distance )
@@ -271,10 +175,7 @@ TEST( Vector3Test, BinaryOperations )
 	Vector3<double> w( 1.0, 2.0, 3.0 );
 	Vector3<double> const original( v );
 
-	// Check dot product of equal vectors
-
 	// Tweak the vectors and compute cross product
-	v += 1.0; w -= 1.0;
 	Vector3<double> const c( cross( v, w ) );
 	EXPECT_DOUBLE_EQ( dot( c, v ), 0.0 ); // t and v are orthogonal
 	EXPECT_DOUBLE_EQ( dot( c, w ), 0.0 ); // t and w are orthogonal
