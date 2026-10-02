@@ -26,6 +26,7 @@
 // C++ Headers
 #include <array>
 #include <cmath>
+#include <sstream>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -223,4 +224,39 @@ TEST( Vector4Test, BinaryOperations )
 
 	// Check dot product of equal vectors
 	EXPECT_DOUBLE_EQ( v.length_squared(), v.dot( w ) ); // v == w here
+}
+
+TEST( Vector4Test, StreamOutput )
+{
+	// Pins the current output format: right-aligned fixed-width fields, 16 significant digits, showpoint, uppercase exponent
+	{
+		std::ostringstream os;
+		os << Vector4( 1.0, -2.5, 1234567.891, 1.0e-7 );
+		EXPECT_EQ( "      1.000000000000000      -2.500000000000000       1234567.891000000   1.000000000000000E-07", os.str() );
+	}
+	{
+		std::ostringstream os;
+		os << Vector4();
+		EXPECT_EQ( "      0.000000000000000       0.000000000000000       0.000000000000000       0.000000000000000", os.str() );
+	}
+	{
+		std::ostringstream os;
+		os << Vector4( 1.0 / 3.0 );
+		EXPECT_EQ( "     0.3333333333333333      0.3333333333333333      0.3333333333333333      0.3333333333333333", os.str() );
+	}
+}
+
+TEST( Vector4Test, StreamOutputRestoresStreamState )
+{
+	std::ostringstream os;
+	os.precision( 3 );
+	os << std::fixed;
+	std::ios_base::fmtflags const flags( os.flags() );
+	std::streamsize const precision( os.precision() );
+	os << Vector4( 1.0, 2.0, 3.0, 4.0 );
+	EXPECT_EQ( flags, os.flags() );
+	EXPECT_EQ( precision, os.precision() );
+	os.str( "" );
+	os << 3.14159265;
+	EXPECT_EQ( "3.142", os.str() ); // Fixed with precision 3, as set before streaming the Vector4
 }
