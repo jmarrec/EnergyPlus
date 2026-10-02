@@ -54,8 +54,8 @@ class Vector4
   using Difference = std::ptrdiff_t;
 
  public:  // Creation
-  // Default Constructor
-  Vector4();
+  // Default Constructor: Zero-Initializes All Elements
+  Vector4() = default;
 
   // Uniform Value Constructor
   explicit Vector4(double t);
@@ -244,10 +244,10 @@ class Vector4
   auto operator<=>(Vector4 const&) const = default;
 
  public:  // Data Elements
-  double x;
-  double y;
-  double z;
-  double w;
+  double x = 0.0;
+  double y = 0.0;
+  double z = 0.0;
+  double w = 0.0;
 };  // Vector4
 
 // Vector4 op Vector4

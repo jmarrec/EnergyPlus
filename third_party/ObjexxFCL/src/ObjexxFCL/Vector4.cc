@@ -21,17 +21,6 @@
 
 namespace ObjexxFCL {
 
-// Default Constructor
-Vector4::Vector4()
-#if defined(OBJEXXFCL_ARRAY_INIT) || defined(OBJEXXFCL_ARRAY_INIT_DEBUG)
-  : x(Traits::initial_array_value()),
-    y(Traits::initial_array_value()),
-    z(Traits::initial_array_value()),
-    w(Traits::initial_array_value())
-#endif
-{
-}
-
 // Uniform Value Constructor
 Vector4::Vector4(double t) : x(t), y(t), z(t), w(t) {}
 
