@@ -193,50 +193,16 @@ public: // Properties: General
     // Size
     size_type size() const;
 
-    // Length (the L2 norm, i.e. the Euclidean norm: sqrt(x^2 + y^2 + z^2 + w^2))
-    double length() const;
-
-    // Length Squared
-    double length_squared() const;
-
-    // L1 Norm (Manhattan norm or taxicab norm)
-    double norm_L1() const;
-
-    // Distance to a Plane
-    double distance(Plane const &v) const;
-
-    // Distance Squared to a Plane
-    double distance_squared(Plane const &v) const;
-
-    // Dot Product with a Plane
-    double dot(Plane const &v) const;
-
 public: // Modifiers
-    // Normalize to a Length
-    Plane &normalize(double tar_length = 1.0);
-
-    // Project Normal to a Plane
-    Plane &project_normal(Plane const &v);
-
-    // Project onto a Plane
-    Plane &project_parallel(Plane const &v);
+    // Normalize: Scale All Four Coefficients So the Normal (x, y, z) Has Unit Length (w Then Is the Distance to the Origin)
+    Plane &normalize();
 
 public: // Generators
     // -Plane (Negated)
     Plane operator-() const;
 
-    // Normalized to a Length
-    Plane normalized(double tar_length = 1.0) const;
-
-    // Projected Normal to a Plane
-    Plane projected_normal(Plane const &v) const;
-
-    // Projected onto a Plane
-    Plane projected_parallel(Plane const &v) const;
-
-public: // Static Methods
-    // Square of a value
-    static double square(double t);
+    // Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
+    Plane normalized() const;
 
 public: // Comparison
     // Lexicographic on (x, y, z, w)

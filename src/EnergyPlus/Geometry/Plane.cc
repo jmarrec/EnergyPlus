@@ -56,6 +56,11 @@
 
 namespace EnergyPlus {
 
+static constexpr double square(double t)
+{
+    return t * t;
+}
+
 // Uniform Value Constructor
 Plane::Plane(double t) : x(t), y(t), z(t), w(t)
 {
@@ -179,76 +184,15 @@ Plane::size_type Plane::size() const
     return 4u;
 }
 
-// Length (L2 norm)
-double Plane::length() const
+// Normalize: Scale All Four Coefficients So the Normal (x, y, z) Has Unit Length
+Plane &Plane::normalize()
 {
-    return std::sqrt((x * x) + (y * y) + (z * z) + (w * w));
-}
-
-// Length Squared
-double Plane::length_squared() const
-{
-    return (x * x) + (y * y) + (z * z) + (w * w);
-}
-
-// L1 Norm
-double Plane::norm_L1() const
-{
-    return std::abs(x) + std::abs(y) + std::abs(z) + std::abs(w);
-}
-
-// Distance to a Plane
-double Plane::distance(Plane const &v) const
-{
-    return std::sqrt(square(x - v.x) + square(y - v.y) + square(z - v.z) + square(w - v.w));
-}
-
-// Distance Squared to a Plane
-double Plane::distance_squared(Plane const &v) const
-{
-    return square(x - v.x) + square(y - v.y) + square(z - v.z) + square(w - v.w);
-}
-
-// Dot Product with a Plane
-double Plane::dot(Plane const &v) const
-{
-    return (x * v.x) + (y * v.y) + (z * v.z) + (w * v.w);
-}
-
-// Normalize to a Length
-Plane &Plane::normalize(double tar_length)
-{
-    double const cur_length(length());
-    assert(cur_length != 0.0);
-    double const dilation(tar_length / cur_length);
-    x *= dilation;
-    y *= dilation;
-    z *= dilation;
-    w *= dilation;
-    return *this;
-}
-
-// Project Normal to a Plane
-Plane &Plane::project_normal(Plane const &v)
-{
-    assert(v.length_squared() != 0.0);
-    double const c(dot(v) / v.length_squared());
-    x -= c * v.x;
-    y -= c * v.y;
-    z -= c * v.z;
-    w -= c * v.w;
-    return *this;
-}
-
-// Project onto a Plane
-Plane &Plane::project_parallel(Plane const &v)
-{
-    assert(v.length_squared() != 0.0);
-    double const c(dot(v) / v.length_squared());
-    x = c * v.x;
-    y = c * v.y;
-    z = c * v.z;
-    w = c * v.w;
+    double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+    assert(normal_length != 0.0);
+    x /= normal_length;
+    y /= normal_length;
+    z /= normal_length;
+    w /= normal_length;
     return *this;
 }
 
@@ -258,29 +202,12 @@ Plane Plane::operator-() const
     return {-x, -y, -z, -w};
 }
 
-// Normalized to a Length
-Plane Plane::normalized(double tar_length) const
+// Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
+Plane Plane::normalized() const
 {
-    double const cur_length(length());
-    assert(cur_length != 0.0);
-    double const dilation(tar_length / cur_length);
-    return {x * dilation, y * dilation, z * dilation, w * dilation};
-}
-
-// Projected Normal to a Plane
-Plane Plane::projected_normal(Plane const &v) const
-{
-    assert(v.length_squared() != 0.0);
-    double const c(dot(v) / v.length_squared());
-    return {x - (c * v.x), y - (c * v.y), z - (c * v.z), w - (c * v.w)};
-}
-
-// Projected onto a Plane
-Plane Plane::projected_parallel(Plane const &v) const
-{
-    assert(v.length_squared() != 0.0);
-    double const c(dot(v) / v.length_squared());
-    return {c * v.x, c * v.y, c * v.z, c * v.w};
+    double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+    assert(normal_length != 0.0);
+    return {x / normal_length, y / normal_length, z / normal_length, w / normal_length};
 }
 
 // Square of a value
