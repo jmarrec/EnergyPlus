@@ -44,7 +44,6 @@ class Vector4
  public:  // Types
   using Traits = TypeTraits<double>;
 
-  // STL Style
   using value_type = double;
   using reference = double&;
   using const_reference = double const&;
@@ -52,15 +51,6 @@ class Vector4
   using const_pointer = double const*;
   using size_type = std::size_t;
   using difference_type = std::ptrdiff_t;
-
-  // C++ Style
-  using Value = double;
-  using Reference = double&;
-  using ConstReference = double const&;
-  using Pointer = double*;
-  using ConstPointer = double const*;
-  using Size = std::size_t;
-  using Difference = std::ptrdiff_t;
 
  public:  // Creation
   // Default Constructor: Zero-Initializes All Elements
@@ -187,7 +177,7 @@ class Vector4
 
  public:  // Properties: General
   // Size
-  Size size() const;
+  size_type size() const;
 
   // Length (the L2 norm, i.e. the Euclidean norm: sqrt(x^2 + y^2 + z^2 + w^2))
   double length() const;
