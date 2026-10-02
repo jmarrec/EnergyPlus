@@ -164,7 +164,7 @@ TEST_F(GeometryFixture, StreamOutputRestoresStreamState)
 }
 
 // The planes below are written as a*x + b*y + c*z + d = 0 with d = -(normal . point_on_plane).
-// Where a test says "Newell", the coefficients are what SurfaceData::computed_plane() would produce for that polygon:
+// Where a test says "Newell", the coefficients are what Plane::fromVertices() produces (and SurfaceData::plane holds) for that polygon:
 // the normal's length is twice the polygon area, so these planes are not normalized.
 
 TEST_F(GeometryFixture, Normal)

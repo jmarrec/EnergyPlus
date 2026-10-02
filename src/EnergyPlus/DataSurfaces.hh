@@ -871,9 +871,6 @@ namespace DataSurfaces {
              // Computed Shape Category
         ShapeCat computed_shapeCat() const;
 
-        // Computed Plane
-        Plane computed_plane() const;
-
         // Computed axis-projected 2D surface
         Surface2D computed_surface2d() const;
     };
