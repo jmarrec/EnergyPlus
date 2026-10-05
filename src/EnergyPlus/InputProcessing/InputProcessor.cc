@@ -825,9 +825,9 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
             if (field_value.is_string()) {
                 auto const value = getObjectItemValue(field_value.get<std::string>(), schema_field_obj); // (AUTO_OK_OBJ)
 
-                Alphas(alpha_index) = value.first;
+                Alphas[alpha_index] = value.first;
                 if (is_AlphaBlank) {
-                    AlphaBlank()(alpha_index) = value.second;
+                    AlphaBlank()[alpha_index] = value.second;
                 }
 
             } else {
@@ -836,63 +836,63 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
                 } else {
                     dtoa(field_value.get<double>(), s);
                 }
-                Alphas(alpha_index) = s;
+                Alphas[alpha_index] = s;
                 if (is_AlphaBlank) {
-                    AlphaBlank()(alpha_index) = false;
+                    AlphaBlank()[alpha_index] = false;
                 }
             }
         } else if (field_type == "n") {
             // process numeric value
             if (field_value.is_number()) {
                 if (field_value.is_number_integer()) {
-                    Numbers(numeric_index) = field_value.get<std::int64_t>();
+                    Numbers[numeric_index] = field_value.get<std::int64_t>();
                 } else {
-                    Numbers(numeric_index) = field_value.get<double>();
+                    Numbers[numeric_index] = field_value.get<double>();
                 }
                 if (is_NumBlank) {
-                    NumBlank()(numeric_index) = false;
+                    NumBlank()[numeric_index] = false;
                 }
             } else {
                 bool is_empty = field_value.get<std::string>().empty();
                 if (is_empty) {
-                    findDefault(Numbers(numeric_index), schema_field_obj);
+                    findDefault(Numbers[numeric_index], schema_field_obj);
                 } else {
-                    Numbers(numeric_index) = Constant::AutoCalculate; // autosize and autocalculate
+                    Numbers[numeric_index] = Constant::AutoCalculate; // autosize and autocalculate
                 }
                 if (is_NumBlank) {
-                    NumBlank()(numeric_index) = is_empty;
+                    NumBlank()[numeric_index] = is_empty;
                 }
             }
         }
     } else {
         if (field_type == "a") {
-            if (!(findDefault(Alphas(alpha_index), schema_field_obj))) {
-                Alphas(alpha_index) = "";
+            if (!(findDefault(Alphas[alpha_index], schema_field_obj))) {
+                Alphas[alpha_index] = "";
             }
             if (is_AlphaBlank) {
-                AlphaBlank()(alpha_index) = true;
+                AlphaBlank()[alpha_index] = true;
             }
         } else if (field_type == "n") {
-            findDefault(Numbers(numeric_index), schema_field_obj);
+            findDefault(Numbers[numeric_index], schema_field_obj);
             if (is_NumBlank) {
-                NumBlank()(numeric_index) = true;
+                NumBlank()[numeric_index] = true;
             }
         }
     }
     if (field_type == "a") {
         if (within_max_fields) {
-            NumAlphas = alpha_index;
+            NumAlphas = alpha_index + 1;
         }
         if (is_AlphaFieldNames) {
-            AlphaFieldNames()(alpha_index) = (state.dataGlobal->isEpJSON) ? field : legacy_field_info.at("field_name").get<std::string>();
+            AlphaFieldNames()[alpha_index] = (state.dataGlobal->isEpJSON) ? field : legacy_field_info.at("field_name").get<std::string>();
         }
         alpha_index++;
     } else if (field_type == "n") {
         if (within_max_fields) {
-            NumNumbers = numeric_index;
+            NumNumbers = numeric_index + 1;
         }
         if (is_NumericFieldNames) {
-            NumericFieldNames()(numeric_index) = (state.dataGlobal->isEpJSON) ? field : legacy_field_info.at("field_name").get<std::string>();
+            NumericFieldNames()[numeric_index] = (state.dataGlobal->isEpJSON) ? field : legacy_field_info.at("field_name").get<std::string>();
         }
         numeric_index++;
     }
@@ -1009,8 +1009,10 @@ void InputProcessor::getObjectItem(EnergyPlusData &state,
     auto const &obj_val = obj.value();
     objectInfo.objectName = obj.key();
 
-    int alpha_index = 1;
-    int numeric_index = 1;
+    // Output arrays are filled positionally from their first element, regardless of their lower bound
+    // (e.g. an Array1D declared {0, N} receives the first field at index 0), so we index them with operator[]
+    int alpha_index = 0;
+    int numeric_index = 0;
     InputProcessor::MaxFields maxFields = findMaxFields(state, obj_val, extension_key, legacy_idd, min_fields);
 
     Alphas = "";
@@ -1046,15 +1048,15 @@ void InputProcessor::getObjectItem(EnergyPlusData &state,
         if (has_idd_name_field && field == "name") {
             auto const &name_iter = schema_name_field.value();
             if (name_iter.find("retaincase") != name_iter.end()) {
-                Alphas(alpha_index) = objectInfo.objectName;
+                Alphas[alpha_index] = objectInfo.objectName;
             } else {
-                Alphas(alpha_index) = Util::makeUPPER(objectInfo.objectName);
+                Alphas[alpha_index] = Util::makeUPPER(objectInfo.objectName);
             }
             if (is_AlphaBlank) {
-                AlphaBlank()(alpha_index) = objectInfo.objectName.empty();
+                AlphaBlank()[alpha_index] = objectInfo.objectName.empty();
             }
             if (is_AlphaFieldNames) {
-                AlphaFieldNames()(alpha_index) = (state.dataGlobal->isEpJSON) ? field : field_info_val.at("field_name").get<std::string>();
+                AlphaFieldNames()[alpha_index] = (state.dataGlobal->isEpJSON) ? field : field_info_val.at("field_name").get<std::string>();
             }
             NumAlphas++;
             alpha_index++;

@@ -140,6 +140,8 @@ public:
 
     const json &getJSONObjectItem(EnergyPlusData &state, std::string_view ObjType, std::string_view ObjName);
 
+    // Output arrays are filled positionally from their first element, regardless of their lower bound
+    // (e.g. an Array1D declared {0, N} receives the first field at index 0)
     void getObjectItem(EnergyPlusData &state,
                        std::string_view Object,
                        int const Number,
@@ -254,8 +256,8 @@ private:
                             json const &ep_schema_object,
                             std::string const &field,
                             json const &legacy_field_info,
-                            int &alpha_index,
-                            int &numeric_index,
+                            int &alpha_index,   // 0-index, always, for operator[]
+                            int &numeric_index, // 0-index, always, for operator[]
                             bool within_max_fields,
                             Array1D_string &Alphas,
                             int &NumAlphas,
