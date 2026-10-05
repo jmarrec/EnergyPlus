@@ -83,7 +83,6 @@ typedef std::int64_t Int64;
 #include <ObjexxFCL/Array1S.fwd.hh>
 #include <ObjexxFCL/Array2.fwd.hh>
 #include <ObjexxFCL/Array2D.fwd.hh>
-#include <ObjexxFCL/Array2S.fwd.hh>
 #include <ObjexxFCL/Array3D.fwd.hh>
 #include <ObjexxFCL/Array4D.fwd.hh>
 #include <ObjexxFCL/Omit.hh>
@@ -111,10 +110,6 @@ using ObjexxFCL::Array2D;
 using ObjexxFCL::Array2D_bool;
 using ObjexxFCL::Array2D_int;
 using ObjexxFCL::Array2D_string;
-using ObjexxFCL::Array2S;
-using ObjexxFCL::Array2S_bool;
-using ObjexxFCL::Array2S_int;
-using ObjexxFCL::Array2S_string;
 using ObjexxFCL::Array3D;
 using ObjexxFCL::Array3D_bool;
 using ObjexxFCL::Array3D_int;

@@ -54,7 +54,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1S.hh>
 #include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/Array3D.hh>
 #include <ObjexxFCL/Optional.hh>
 
@@ -451,7 +450,7 @@ namespace WindowEquivalentLayer {
     );
 
     void SOLMATS(int const N,          // # of active rows in A
-                 Array2S<Real64> A,    // matrix, minimum required dimensions: A( N, N+2)
+                 Array2D<Real64> &A,   // matrix, minimum required dimensions: A( N, N+2)
                  Array1D<Real64> &XSOL // returned: solution vector, min req dimension: XSOL( N)
     );
 

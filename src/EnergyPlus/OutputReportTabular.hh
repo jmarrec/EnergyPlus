@@ -56,7 +56,6 @@
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array1S.hh>
 #include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/Array3D.hh>
 #include <ObjexxFCL/Optional.hh>
 
@@ -960,7 +959,7 @@ namespace OutputReportTabular {
     void WriteTextLine(EnergyPlusData &state, std::string const &lineOfText, bool const useBold = false);
 
     void WriteTable(EnergyPlusData &state,
-                    Array2S_string const body, // row,column
+                    Array2D_string const &body, // row,column
                     const Array1D_string &rowLabels,
                     const Array1D_string &columnLabels,
                     Array1D_int &widthColumn,

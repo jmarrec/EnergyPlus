@@ -17434,7 +17434,7 @@ void WriteTextLine(EnergyPlusData &state, std::string const &lineOfText, bool co
 }
 
 void WriteTable(EnergyPlusData &state,
-                Array2S_string const body, // row,column
+                Array2D_string const &body, // row,column
                 const Array1D_string &rowLabels,
                 const Array1D_string &columnLabels,
                 Array1D_int &widthColumn,
@@ -17490,8 +17490,8 @@ void WriteTable(EnergyPlusData &state,
 
     // create blank string
     // get sizes of arrays
-    int rowsBody = isize(body, 2);
-    int colsBody = isize(body, 1);
+    int rowsBody = body.isize2();
+    int colsBody = body.isize1();
     int rowsRowLabels = isize(rowLabels);
     int colsColumnLabels = isize(columnLabels);
     int const colsWidthColumn = isize(widthColumn);

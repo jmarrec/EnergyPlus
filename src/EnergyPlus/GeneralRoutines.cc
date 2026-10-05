@@ -1191,7 +1191,7 @@ void TestSupplyAirPathIntegrity(EnergyPlusData &state, bool &ErrFound)
     }
 }
 
-void TestReturnAirPathIntegrity(EnergyPlusData &state, bool &ErrFound, Array2S_int ValRetAPaths)
+void TestReturnAirPathIntegrity(EnergyPlusData &state, bool &ErrFound, Array2D_int &ValRetAPaths)
 {
 
     // SUBROUTINE INFORMATION:

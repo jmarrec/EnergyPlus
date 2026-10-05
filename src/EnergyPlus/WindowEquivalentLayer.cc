@@ -4122,7 +4122,7 @@ void VB_SOL6(EnergyPlusData const &state,
 }
 
 void SOLMATS(int const N,          // # of active rows in A
-             Array2S<Real64> A,    // matrix, minimum required dimensions: A( N, N+2)
+             Array2D<Real64> &A,   // matrix, minimum required dimensions: A( N, N+2)
              Array1D<Real64> &XSOL // returned: solution vector, min req dimension: XSOL( N)
 )
 {

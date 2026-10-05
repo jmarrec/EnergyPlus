@@ -15,8 +15,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array4.fwd.hh>
-#include <ObjexxFCL/Array1S.hh>
-#include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/Array.hh>
 
 namespace ObjexxFCL {
@@ -239,9 +237,6 @@ public: // Subscript
 	{
 		return ( ( ( ( ( ( i1 * z2_ ) + i2 ) * z3_ ) + i3 ) * z4_ ) + i4 ) - shift_;
 	}
-
-
-public: // Slice Proxy Generators
 
 public: // Predicate
 
