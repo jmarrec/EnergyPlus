@@ -390,7 +390,11 @@ void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrN
     // Calculate layers diffuse absorptance and system diffuse transmittance
     CalcEQLWindowOpticalProperty(state, CFS(EQLNum), SolarArrays::DIFF, SysAbs1, 0.0, 0.0, 0.0);
     state.dataConstruction->Construct(ConstrNum).TransDiffFrontEQL = SysAbs1(1, CFS(EQLNum).NL + 1);
-    state.dataWindowEquivalentLayer->CFSDiffAbsTrans(_, _, EQLNum) = SysAbs1;
+    for (int i = 1; i <= 2; ++i) {
+        for (int j = 1; j <= CFSMAXNL + 1; ++j) {
+            state.dataWindowEquivalentLayer->CFSDiffAbsTrans(i, j, EQLNum) = SysAbs1(i, j);
+        }
+    }
     for (int i = 1; i <= CFSMAXNL; ++i) {
         state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL(i) = SysAbs1(1, i);
     }
