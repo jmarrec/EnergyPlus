@@ -288,61 +288,6 @@ public: // Assignment: Array
 		return *this;
 	}
 
-	// Slice Assignment
-	Array2 &
-	operator =( Array2S< T > const & a )
-	{
-		size_type l( 0u );
-		if ( ( conformable( a ) ) || ( ! dimension_assign( a.I1(), a.I2() ) ) ) {
-			if ( overlap( a ) ) { // Overlap-safe
-				CArrayA< T > c( a.size() );
-				for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-					for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2, ++l ) {
-						c[ l ] = a( i1, i2 );
-					}
-				}
-				for ( size_type i = 0; i < c.size(); ++i ) {
-					data_[ i ] = c[ i ];
-				}
-			} else { // Not overlap-safe
-				for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-					for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2, ++l ) {
-						data_[ l ] = a( i1, i2 );
-					}
-				}
-			}
-		} else {
-			for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-				for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2, ++l ) {
-					new ( data_ + l ) T( a( i1, i2 ) );
-				}
-			}
-		}
-		return *this;
-	}
-
-	// Slice Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array2 &
-	operator =( Array2S< U > const & a )
-	{
-		size_type l( 0u );
-		if ( ( conformable( a ) ) || ( ! dimension_assign( a.I1(), a.I2() ) ) ) {
-			for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-				for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2, ++l ) {
-					data_[ l ] = a( i1, i2 );
-				}
-			}
-		} else {
-			for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-				for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2, ++l ) {
-					new ( data_ + l ) T( a( i1, i2 ) );
-				}
-			}
-		}
-		return *this;
-	}
-
 	// Initializer List Assignment Template
 	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
 	Array2 &

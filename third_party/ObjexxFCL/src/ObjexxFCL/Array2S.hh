@@ -145,34 +145,7 @@ public: // Assignment: Array
 
 	// Copy Assignment
 	Array2S &
-	operator =( Array2S const & a )
-	{
-		if ( this != &a ) {
-			assert( conformable( a ) );
-			if ( overlap( a ) ) { // Overlap-safe
-				CArray< T > c( size_ );
-				size_type l( 0u );
-				for ( int i1 = 1; i1 <= u1_; ++i1 ) {
-					for ( int i2 = 1; i2 <= u2_; ++i2, ++l ) {
-						c[ l ] = a( i1, i2 );
-					}
-				}
-				l = 0;
-				for ( int i1 = 1; i1 <= u1_; ++i1 ) {
-					for ( int i2 = 1; i2 <= u2_; ++i2, ++l ) {
-						operator ()( i1, i2 ) = c[ l ];
-					}
-				}
-			} else { // Not overlap-safe
-				for ( int i1 = 1; i1 <= u1_; ++i1 ) {
-					for ( int i2 = 1; i2 <= u2_; ++i2 ) {
-						operator ()( i1, i2 ) = a( i1, i2 );
-					}
-				}
-			}
-		}
-		return *this;
-	}
+	operator =( Array2S const & ) = delete;
 
 	// Copy Assignment Template
 	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >

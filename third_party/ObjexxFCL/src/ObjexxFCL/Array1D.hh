@@ -369,15 +369,6 @@ public: // Assignment: Array
 		return *this;
 	}
 
-	// Slice Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1D &
-	operator =( Array1S< U > const & a )
-	{
-		Super::operator =( a );
-		return *this;
-	}
-
 	// Initializer List Assignment Template
 	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
 	Array1D &

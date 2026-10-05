@@ -259,52 +259,6 @@ public: // Assignment: Array
 		return *this;
 	}
 
-	// Slice Assignment
-	Array1 &
-	operator =( Array1S< T > const & a )
-	{
-		size_type l( 0u );
-		if ( ( conformable( a ) ) || ( ! dimension_assign( a.I() ) ) ) {
-			if ( overlap( a ) ) { // Overlap-safe
-				CArrayA< T > c( a.size() );
-				for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-					c[ l ] = a( i );
-				}
-				for ( size_type i = 0; i < c.size(); ++i ) {
-					data_[ i ] = c[ i ];
-				}
-			} else { // Not overlap-safe
-				for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-					data_[ l ] = a( i );
-				}
-			}
-		} else {
-			for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-				new ( data_ + l ) T( a( i ) );
-			}
-		}
-		return *this;
-	}
-
-	// Slice Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
-	Array1 &
-	operator =( Array1S< U > const & a )
-	{
-		size_type l( 0u );
-		if ( ( conformable( a ) ) || ( ! dimension_assign( a.I() ) ) ) {
-			for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-				data_[ l ] = a( i );
-			}
-		} else {
-			for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-				new ( data_ + l ) T( a( i ) );
-			}
-		}
-		return *this;
-	}
-
-
 	// Initializer List Assignment Template
 	template< typename U, class = typename std::enable_if< std::is_assignable< T&, U >::value >::type >
 	Array1 &

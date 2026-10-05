@@ -16,7 +16,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1S.fwd.hh>
 #include <ObjexxFCL/ArrayRS.hh>
-#include <ObjexxFCL/CArray.hh>
 #include <ObjexxFCL/Vector2.hh>
 #include <ObjexxFCL/Vector3.hh>
 #include <ObjexxFCL/Vector4.hh>
@@ -142,26 +141,7 @@ public: // Assignment: Array
 
 	// Copy Assignment
 	Array1S &
-	operator =( Array1S const & a )
-	{
-		if ( this != &a ) {
-			assert( conformable( a ) );
-			if ( overlap( a ) ) { // Overlap-safe
-				CArray< T > c( size_ );
-				for ( int i = 1; i <= u_; ++i ) {
-					c[ i - 1 ] = a( i );
-				}
-				for ( int i = 1; i <= u_; ++i ) {
-					operator ()( i ) = c[ i - 1 ];
-				}
-			} else { // Not overlap-safe
-				for ( int i = 1; i <= u_; ++i ) {
-					operator ()( i ) = a( i );
-				}
-			}
-		}
-		return *this;
-	}
+	operator =( Array1S const & ) = delete;
 
 public: // Assignment: Value
 

@@ -17,7 +17,6 @@
 #include <ObjexxFCL/Array.all.fwd.hh>
 #include <ObjexxFCL/ArrayS.all.fwd.hh>
 #include <ObjexxFCL/byte.fwd.hh>
-#include <ObjexxFCL/CArray.fwd.hh>
 #include <ObjexxFCL/CArrayP.fwd.hh>
 #include <ObjexxFCL/ChunkVector.fwd.hh>
 #include <ObjexxFCL/Index.fwd.hh>
