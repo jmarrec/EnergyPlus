@@ -10716,15 +10716,18 @@ void SkyDifSolarShading(EnergyPlusData &state)
 
     if (state.dataSysVars->DetailedSkyDiffuseAlgorithm && s_surf->ShadingTransmittanceVaries &&
         state.dataHeatBal->SolarDistribution != DataHeatBalance::Shadowing::Minimal) {
-        for (int SurfNum = 1; SurfNum <= s_surf->TotSurfaces; ++SurfNum) {
-            for (int iTimeStep = 1; iTimeStep <= state.dataGlobal->TimeStepsInHour; ++iTimeStep) {
-                for (int iHour = 1; iHour <= 24; ++iHour) {
+        // SurfNum is the last (fastest varying) index of the row-major HRTS arrays, so keep it innermost
+        for (int iTimeStep = 1; iTimeStep <= state.dataGlobal->TimeStepsInHour; ++iTimeStep) {
+            for (int iHour = 1; iHour <= 24; ++iHour) {
+                for (int SurfNum = 1; SurfNum <= s_surf->TotSurfaces; ++SurfNum) {
                     state.dataSolarShading->SurfDifShdgRatioIsoSkyHRTS(iTimeStep, iHour, SurfNum) =
                         state.dataSolarShading->SurfDifShdgRatioIsoSky(SurfNum);
                 }
             }
-            for (int iTimeStep = 1; iTimeStep <= state.dataGlobal->TimeStepsInHour; ++iTimeStep) {
-                for (int iHour = 1; iHour <= 24; ++iHour) {
+        }
+        for (int iTimeStep = 1; iTimeStep <= state.dataGlobal->TimeStepsInHour; ++iTimeStep) {
+            for (int iHour = 1; iHour <= 24; ++iHour) {
+                for (int SurfNum = 1; SurfNum <= s_surf->TotSurfaces; ++SurfNum) {
                     state.dataSolarShading->SurfDifShdgRatioHorizHRTS(iTimeStep, iHour, SurfNum) =
                         state.dataSolarShading->SurfDifShdgRatioHoriz(SurfNum);
                 }
