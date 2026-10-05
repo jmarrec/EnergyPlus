@@ -166,57 +166,6 @@ TEST( ArraySTest, Array2SWholeArraySlice )
 	EXPECT_EQ( 9, s( 3, 3 ) );
 }
 
-TEST( ArraySTest, Array2SSlice3D )
-{
-// Expected results from this Fortran program
-//PROGRAM main
-//  INTEGER :: M(9,9,9)
-//  INTEGER :: S(4,4)
-//  INTEGER :: V(4)
-//  i = 0
-//  DO i1 = 1, UBOUND( M, 1 )
-//    DO i2 = 1, UBOUND( M, 2 )
-//      DO i3 = 1, UBOUND( M, 3 )
-//        M(i1,i2,i3) = i ! Memory offset values
-//        i = i + 1
-//      END DO
-//    END DO
-//  END DO
-//  S = M(7,8:2:-2,8:2:-2)
-//  PRINT *
-//  DO i1 = 1, UBOUND( S, 1 )
-//    PRINT *, S(i1,:)
-//  END DO
-//  V = S(3,:)
-//  PRINT *
-//  PRINT *, V
-//END PROGRAM
-
-	Array3D_int M( 9, 9, 9 );
-	for ( BArray::size_type i = 0; i < 9*9*9; ++i ) M[ i ] = static_cast< int >( i ); // Memory offset values
-
-	Array2S_int S( M( 7, {8,2,-2}, {8,2,-2} ) );
-	EXPECT_EQ( 1, S.l1() );
-	EXPECT_EQ( 4, S.u1() );
-	EXPECT_EQ( 4u, S.size1() );
-	EXPECT_EQ( 1, S.l2() );
-	EXPECT_EQ( 4, S.u2() );
-	EXPECT_EQ( 4u, S.size2() );
-	EXPECT_EQ( 16u, S.size() );
-
-	Array2D_int const SF( 4, 4, { // Output from Fortran program
-	 556, 554, 552, 550,
-	 538, 536, 534, 532,
-	 520, 518, 516, 514,
-	 502, 500, 498, 496
-	} );
-
-	Array1S_int r( S( 3, _ ) ); // 3rd row of S
-	EXPECT_EQ( 1, r.l() );
-	EXPECT_EQ( 4, r.u() );
-	EXPECT_EQ( 4u, r.size() );
-}
-
 TEST( ArraySTest, StreamOut )
 {
 	Array1D_int const A( 3, { 1, 2, 3 } );

@@ -16,7 +16,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array3.fwd.hh>
 #include <ObjexxFCL/Array1S.hh>
-#include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/Array.hh>
 
 namespace ObjexxFCL {
@@ -256,39 +255,6 @@ public: // Subscript
 
 public: // Slice Proxy Generators
 
-	// array( i1, s2, s3 ) const
-	Array2S< T >
-	operator ()( int const i1, IS const & s2, IS const & s3 ) const
-	{
-		std::int64_t k( -shift_ );
-		k += slice_k( I1_, i1, z2_ * z3_ );
-		DS const d2( I2_, s2, z3_ );
-		DS const d3( I3_, s3 );
-		return Array2S< T >( data_, k, d2, d3 );
-	}
-
-	// array( s1, i2, s3 ) const
-	Array2S< T >
-	operator ()( IS const & s1, int const i2, IS const & s3 ) const
-	{
-		std::int64_t k( -shift_ );
-		DS const d1( I1_, s1, z2_ * z3_ );
-		k += slice_k( I2_, i2, z3_ );
-		DS const d3( I3_, s3 );
-		return Array2S< T >( data_, k, d1, d3 );
-	}
-
-	// array( s1, s2, i3 ) const
-	Array2S< T >
-	operator ()( IS const & s1, IS const & s2, int const i3 ) const
-	{
-		std::int64_t k( -shift_ );
-		DS const d1( I1_, s1, z2_ * z3_ );
-		DS const d2( I2_, s2, z3_ );
-		k += slice_k( I3_, i3 );
-		return Array2S< T >( data_, k, d1, d2 );
-	}
-
 	// array( s1, i2, i3 ) const
 	Array1S< T >
 	operator ()( IS const & s1, int const i2, int const i3 ) const
@@ -320,39 +286,6 @@ public: // Slice Proxy Generators
 		k += slice_k( I2_, i2, z3_ );
 		DS const d3( I3_, s3 );
 		return Array1S< T >( data_, k, d3 );
-	}
-
-	// array( i1, s2, s3 )
-	Array2S< T >
-	operator ()( int const i1, IS const & s2, IS const & s3 )
-	{
-		std::int64_t k( -shift_ );
-		k += slice_k( I1_, i1, z2_ * z3_ );
-		DS const d2( I2_, s2, z3_ );
-		DS const d3( I3_, s3 );
-		return Array2S< T >( data_, k, d2, d3 );
-	}
-
-	// array( s1, i2, s3 )
-	Array2S< T >
-	operator ()( IS const & s1, int const i2, IS const & s3 )
-	{
-		std::int64_t k( -shift_ );
-		DS const d1( I1_, s1, z2_ * z3_ );
-		k += slice_k( I2_, i2, z3_ );
-		DS const d3( I3_, s3 );
-		return Array2S< T >( data_, k, d1, d3 );
-	}
-
-	// array( s1, s2, i3 )
-	Array2S< T >
-	operator ()( IS const & s1, IS const & s2, int const i3 )
-	{
-		std::int64_t k( -shift_ );
-		DS const d1( I1_, s1, z2_ * z3_ );
-		DS const d2( I2_, s2, z3_ );
-		k += slice_k( I3_, i3 );
-		return Array2S< T >( data_, k, d1, d2 );
 	}
 
 	// array( s1, i2, i3 )
