@@ -29,11 +29,6 @@ set(src
   src/ObjexxFCL/Array3.hh
   src/ObjexxFCL/Array3D.fwd.hh
   src/ObjexxFCL/Array3D.hh
-  src/ObjexxFCL/Array4.all.fwd.hh
-  src/ObjexxFCL/Array4.fwd.hh
-  src/ObjexxFCL/Array4.hh
-  src/ObjexxFCL/Array4D.fwd.hh
-  src/ObjexxFCL/Array4D.hh
   src/ObjexxFCL/BArray.fwd.hh
   src/ObjexxFCL/BArray.hh
   src/ObjexxFCL/char.functions.hh
@@ -73,7 +68,6 @@ set( test_src
   tst/unit/Array1.unit.cc
   tst/unit/Array2.unit.cc
   tst/unit/Array3.unit.cc
-  tst/unit/Array4.unit.cc
   tst/unit/char.functions.unit.cc
   tst/unit/Fmath.unit.cc
   tst/unit/Index.unit.cc
