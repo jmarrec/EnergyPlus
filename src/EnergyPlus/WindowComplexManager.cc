@@ -764,10 +764,14 @@ namespace WindowComplexManager {
 
         IBm = Geom.SolBmIndex(Hour, TS);
         if (IBm <= 0.0) { // Beam cannot be incident on window for this Hour, TS
-            State.WinToSurfBmTrans(Hour, TS, {1, Window.NBkSurf}) = 0.0;
+            for (int iBkSurf = 1; iBkSurf <= Window.NBkSurf; ++iBkSurf) {
+                State.WinToSurfBmTrans(Hour, TS, iBkSurf) = 0.0;
+            }
             State.WinDirHemiTrans(Hour, TS) = 0.0;
             State.WinDirSpecTrans(Hour, TS) = 0.0;
-            State.WinBmFtAbs(Hour, TS, {1, State.NLayers}) = 0.0;
+            for (int iLayer = 1; iLayer <= State.NLayers; ++iLayer) {
+                State.WinBmFtAbs(Hour, TS, iLayer) = 0.0;
+            }
         } else {
             for (int I = 1; I <= Window.NBkSurf; ++I) { // Back surface loop
                 Sum1 = 0.0;
