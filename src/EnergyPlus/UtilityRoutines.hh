@@ -55,7 +55,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Array1S.fwd.hh>
 #include <ObjexxFCL/string.functions.hh>
 
 // EnergyPlus Headers

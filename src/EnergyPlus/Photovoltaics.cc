@@ -410,11 +410,12 @@ namespace Photovoltaics {
             case CellIntegration::SurfaceOutsideFace:
             case CellIntegration::TranspiredCollector:
             case CellIntegration::ExteriorVentedCavity: {
-                dupPtr = Util::FindItemInList(state.dataPhotovoltaic->PVarray(PVnum).SurfaceName,
-                                              state.dataPhotovoltaic->PVarray({PVnum + 1, state.dataPhotovoltaic->NumPVs}),
-                                              &PVArrayStruct::SurfaceName);
-                if (dupPtr != 0) {
-                    dupPtr += PVnum; // to correct for shortened array in find item
+                dupPtr = 0;
+                for (int iPV = PVnum + 1; iPV <= state.dataPhotovoltaic->NumPVs; ++iPV) {
+                    if (state.dataPhotovoltaic->PVarray(iPV).SurfaceName == state.dataPhotovoltaic->PVarray(PVnum).SurfaceName) {
+                        dupPtr = iPV;
+                        break;
+                    }
                 }
                 if (dupPtr != 0) {
                     auto &thisPVarray = state.dataPhotovoltaic->PVarray(dupPtr);

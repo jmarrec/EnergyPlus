@@ -50,9 +50,9 @@
 
 // C++ Headers
 #include <functional>
+#include <span>
 
 // ObjexxFCL Headers
-#include <ObjexxFCL/Array1S.hh>
 #include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/Array3D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -461,16 +461,16 @@ namespace WindowEquivalentLayer {
                             Real64 const HCIN,  // indoor convective heat transfer
                             Real64 const HCOUT, // outdoor convective heat transfer
                             Real64 const TRMOUT,
-                            Real64 const TRMIN,           // indoor / outdoor mean radiant temp, K
-                            Array1S<Real64> const SOURCE, // absorbed solar by layer,  W/m2
-                            Real64 const TOL,             // convergence tolerance, usually
-                            Array1D<Real64> &QOCF,        // returned: heat flux to layer i from gaps i-1 and i
-                            Real64 &QOCFRoom,             // returned: open channel heat gain to room, W/m2
-                            Array1D<Real64> &T,           // returned: layer temperatures, 1=outside-most layer, K
-                            Array1D<Real64> &Q,           // returned: heat flux at ith gap (betw layers i and i+1), W/m2
-                            Array1D<Real64> &JF,          // returned: front (outside facing) radiosity of surfaces, W/m2
-                            Array1D<Real64> &JB,          // returned: back (inside facing) radiosity, W/m2
-                            Array1D<Real64> &HC           // returned: gap convective heat transfer coefficient, W/m2K
+                            Real64 const TRMIN,            // indoor / outdoor mean radiant temp, K
+                            Array1D<Real64> const &SOURCE, // absorbed solar by layer,  W/m2
+                            Real64 const TOL,              // convergence tolerance, usually
+                            Array1D<Real64> &QOCF,         // returned: heat flux to layer i from gaps i-1 and i
+                            Real64 &QOCFRoom,              // returned: open channel heat gain to room, W/m2
+                            Array1D<Real64> &T,            // returned: layer temperatures, 1=outside-most layer, K
+                            Array1D<Real64> &Q,            // returned: heat flux at ith gap (betw layers i and i+1), W/m2
+                            Array1D<Real64> &JF,           // returned: front (outside facing) radiosity of surfaces, W/m2
+                            Array1D<Real64> &JB,           // returned: back (inside facing) radiosity, W/m2
+                            Array1D<Real64> &HC            // returned: gap convective heat transfer coefficient, W/m2K
     );
 
     bool ASHWAT_ThermalRatings(EnergyPlusData &state,
@@ -480,20 +480,20 @@ namespace WindowEquivalentLayer {
                                Real64 const HCIN,  // indoor convective heat transfer
                                Real64 const HCOUT, // outdoor convective heat transfer
                                Real64 const TRMOUT,
-                               Real64 const TRMIN,           // indoor / outdoor mean radiant temp, K
-                               Real64 const ISOL,            // total incident solar, W/m2 (values used for SOURCE derivation)
-                               Array1S<Real64> const SOURCE, // absorbed solar by layer,  W/m2
-                               Real64 const TOL,             // convergence tolerance, usually
-                               Array1D<Real64> &QOCF,        // returned: heat flux to layer i from gaps i-1 and i
-                               Real64 &QOCFRoom,             // returned: open channel heat gain to room, W/m2
-                               Array1D<Real64> &T,           // returned: layer temperatures, 1=outside-most layer, K
-                               Array1D<Real64> &Q,           // returned: heat flux at ith gap (betw layers i and i+1), W/m2
-                               Array1D<Real64> &JF,          // returned: front (outside facing) radiosity of surfaces, W/m2
-                               Array1D<Real64> &JB,          // returned: back (inside facing) radiosity, W/m2
-                               Array1D<Real64> &HC,          // returned: gap convective heat transfer coefficient, W/m2K
-                               Real64 &UCG,                  // returned: center-glass U-factor, W/m2-K
-                               Real64 &SHGC,                 // returned: center-glass SHGC (Solar Heat Gain Coefficient)
-                               bool const HCInFlag           // If true uses ISO Std 150099 routine for HCIn calc
+                               Real64 const TRMIN,            // indoor / outdoor mean radiant temp, K
+                               Real64 const ISOL,             // total incident solar, W/m2 (values used for SOURCE derivation)
+                               Array1D<Real64> const &SOURCE, // absorbed solar by layer,  W/m2
+                               Real64 const TOL,              // convergence tolerance, usually
+                               Array1D<Real64> &QOCF,         // returned: heat flux to layer i from gaps i-1 and i
+                               Real64 &QOCFRoom,              // returned: open channel heat gain to room, W/m2
+                               Array1D<Real64> &T,            // returned: layer temperatures, 1=outside-most layer, K
+                               Array1D<Real64> &Q,            // returned: heat flux at ith gap (betw layers i and i+1), W/m2
+                               Array1D<Real64> &JF,           // returned: front (outside facing) radiosity of surfaces, W/m2
+                               Array1D<Real64> &JB,           // returned: back (inside facing) radiosity, W/m2
+                               Array1D<Real64> &HC,           // returned: gap convective heat transfer coefficient, W/m2K
+                               Real64 &UCG,                   // returned: center-glass U-factor, W/m2-K
+                               Real64 &SHGC,                  // returned: center-glass SHGC (Solar Heat Gain Coefficient)
+                               bool const HCInFlag            // If true uses ISO Std 150099 routine for HCIn calc
     );
 
     void DL_RES_r2(Real64 const Tg,    // mean glass layer temperature, {K}
@@ -578,14 +578,14 @@ namespace WindowEquivalentLayer {
                     Real64 &U           // returned: U factor, W/m2-K
     );
 
-    void ASHWAT_Solar(int const NL,                                     // # of layers
-                      Array1D<CFSSWP> const &LSWP_ON,                   // layer SW (solar) properties (off-normal adjusted)
-                      CFSSWP const &SWP_ROOM,                           // effective SW (solar) properties of room
-                      Real64 const IBEAM,                               // incident beam insolation (W/m2 aperture)
-                      Real64 const IDIFF,                               // incident diffuse insolation (W/m2 aperture)
-                      Real64 const ILIGHTS,                             // incident diffuse insolation (W/m2 aperture)
-                      Array1S<Real64> SOURCE,                           // returned: layer-by-layer flux of absorbed
-                      ObjexxFCL::Optional<Array1S<Real64>> SourceBD = _ // returned: layer-by-layer flux of absorbed
+    void ASHWAT_Solar(int const NL,                   // # of layers
+                      Array1D<CFSSWP> const &LSWP_ON, // layer SW (solar) properties (off-normal adjusted)
+                      CFSSWP const &SWP_ROOM,         // effective SW (solar) properties of room
+                      Real64 const IBEAM,             // incident beam insolation (W/m2 aperture)
+                      Real64 const IDIFF,             // incident diffuse insolation (W/m2 aperture)
+                      Real64 const ILIGHTS,           // incident diffuse insolation (W/m2 aperture)
+                      std::span<Real64> SOURCE,       // returned: layer-by-layer flux of absorbed
+                      std::span<Real64> SourceBD = {} // returned (optional, empty if not wanted): layer-by-layer flux of absorbed
     );
 
     void NETRAD(int const NL,                   // # of layers, 1=outside .. NL=inside

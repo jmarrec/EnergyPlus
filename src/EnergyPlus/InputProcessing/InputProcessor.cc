@@ -54,9 +54,6 @@
 #include <memory>
 #include <unordered_set>
 
-// ObjexxFCL Headers
-#include <ObjexxFCL/Array1S.hh>
-
 // Third Party Headers
 #include <embedded/EmbeddedEpJSONSchema.hh>
 #include <milo/dtoa.h>
@@ -804,7 +801,7 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
                                         int &alpha_index,
                                         int &numeric_index,
                                         bool within_max_fields,
-                                        Array1S_string Alphas,
+                                        Array1D_string &Alphas,
                                         int &NumAlphas,
                                         Array1D<Real64> &Numbers,
                                         int &NumNumbers,
@@ -940,7 +937,7 @@ const json &InputProcessor::getJSONObjectItem(EnergyPlusData &state, std::string
 void InputProcessor::getObjectItem(EnergyPlusData &state,
                                    std::string_view Object,
                                    int const Number,
-                                   Array1S_string Alphas,
+                                   Array1D_string &Alphas,
                                    int &NumAlphas,
                                    Array1D<Real64> &Numbers,
                                    int &NumNumbers,

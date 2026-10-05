@@ -16,6 +16,7 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array2.fwd.hh>
 #include <ObjexxFCL/Array.hh>
+#include <ObjexxFCL/Array1S.hh>
 
 namespace ObjexxFCL {
 

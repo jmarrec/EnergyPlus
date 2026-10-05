@@ -48,9 +48,6 @@
 #ifndef SurfaceGeometry_hh_INCLUDED
 #define SurfaceGeometry_hh_INCLUDED
 
-// ObjexxFCL Headers
-#include <ObjexxFCL/Array1S.hh>
-
 // EnergyPlus Headers
 #include <EnergyPlus/DataSurfaces.hh>
 #include <EnergyPlus/DataVectorTypes.hh>

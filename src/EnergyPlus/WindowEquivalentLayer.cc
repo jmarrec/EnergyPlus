@@ -581,7 +581,8 @@ void CalcEQLWindowSHGCAndTransNormal(EnergyPlusData &state,
     for (I = 1; I <= NL; ++I) {
         ASHWAT_OffNormalProperties(state, FS.L(I), IncA, VProfA, HProfA, SWP_ON(I));
     }
-    ASHWAT_Solar(FS.NL, SWP_ON, state.dataWindowEquivLayer->SWP_ROOMBLK, 1.0, 0.0, 0.0, Abs1(1, {1, FS.NL + 1}), Abs1(2, {1, FS.NL + 1}));
+    ASHWAT_Solar(
+        FS.NL, SWP_ON, state.dataWindowEquivLayer->SWP_ROOMBLK, 1.0, 0.0, 0.0, std::span(&Abs1(1, 1), FS.NL + 1), std::span(&Abs1(2, 1), FS.NL + 1));
     TransNormal = Abs1(1, NL + 1);
 
     // Calculate SHGC using net radiation method (ASHWAT Model)
@@ -654,15 +655,22 @@ void CalcEQLWindowOpticalProperty(EnergyPlusData &state,
         for (int I = 1; I <= NL; ++I) {
             ASHWAT_OffNormalProperties(state, FS.L(I), IncA, VProfA, HProfA, SWP_ON(I));
         }
-        ASHWAT_Solar(FS.NL, SWP_ON, state.dataWindowEquivLayer->SWP_ROOMBLK, 1.0, 0.0, 0.0, Abs1(1, {1, FS.NL + 1}), Abs1(2, {1, FS.NL + 1}));
+        ASHWAT_Solar(FS.NL,
+                     SWP_ON,
+                     state.dataWindowEquivLayer->SWP_ROOMBLK,
+                     1.0,
+                     0.0,
+                     0.0,
+                     std::span(&Abs1(1, 1), FS.NL + 1),
+                     std::span(&Abs1(2, 1), FS.NL + 1));
     } else {
         // diffuse
         Array1D<CFSSWP> SWP_EL(FS.L.isize());
         for (int I = 1; I <= FS.L.isize(); ++I) {
             SWP_EL(I) = FS.L(I).SWP_EL;
         }
-        ASHWAT_Solar(FS.NL, SWP_EL, state.dataWindowEquivLayer->SWP_ROOMBLK, 0.0, 1.0, 0.0, Abs1(1, {1, FS.NL + 1}));
-        ASHWAT_Solar(FS.NL, SWP_EL, state.dataWindowEquivLayer->SWP_ROOMBLK, 0.0, 0.0, 1.0, Abs1(2, {1, FS.NL + 1}));
+        ASHWAT_Solar(FS.NL, SWP_EL, state.dataWindowEquivLayer->SWP_ROOMBLK, 0.0, 1.0, 0.0, std::span(&Abs1(1, 1), FS.NL + 1));
+        ASHWAT_Solar(FS.NL, SWP_EL, state.dataWindowEquivLayer->SWP_ROOMBLK, 0.0, 0.0, 1.0, std::span(&Abs1(2, 1), FS.NL + 1));
         // CFSFenProp = LOK1 .AND. LOK2
     }
 }
@@ -803,23 +811,8 @@ void EQLWindowSurfaceHeatBalance(EnergyPlusData &state,
     }
     //  Solve energy balance(s) for temperature at each node/layer and
     //  heat flux, including components, between each pair of nodes/layers
-    ASHWAT_ThermalCalc(state,
-                       state.dataWindowEquivLayer->CFS(EQLNum),
-                       TIN,
-                       Tout,
-                       HcIn,
-                       HcOut,
-                       TRMOUT,
-                       TRMIN,
-                       QAllSWwinAbs({1, NL + 1}),
-                       TOL,
-                       QOCF,
-                       QOCFRoom,
-                       T,
-                       Q,
-                       JF,
-                       JB,
-                       H);
+    ASHWAT_ThermalCalc(
+        state, state.dataWindowEquivLayer->CFS(EQLNum), TIN, Tout, HcIn, HcOut, TRMOUT, TRMIN, QAllSWwinAbs, TOL, QOCF, QOCFRoom, T, Q, JF, JB, H);
 
     // effective surface temperature is set to surface temperature calculated
     // by the fenestration layers temperature solver
@@ -4208,16 +4201,16 @@ void ASHWAT_ThermalCalc(EnergyPlusData &state,
                         Real64 const HCIN, // indoor / outdoor convective heat transfer
                         Real64 const HCOUT,
                         Real64 const TRMOUT,
-                        Real64 const TRMIN,           // indoor / outdoor mean radiant temp, K
-                        Array1S<Real64> const SOURCE, // absorbed solar by layer, W/m2
-                        Real64 const TOL,             // convergence tolerance, usually
-                        Array1D<Real64> &QOCF,        // returned: heat flux to layer i from gaps i-1 and i
-                        Real64 &QOCFRoom,             // returned: open channel heat gain to room, W/m2
-                        Array1D<Real64> &T,           // returned: layer temperatures, 1=outside-most layer, K
-                        Array1D<Real64> &Q,           // returned: heat flux at ith gap (betw layers i and i+1), W/m2
-                        Array1D<Real64> &JF,          // returned: front (outside facing) radiosity of surfaces, W/m2
-                        Array1D<Real64> &JB,          // returned: back (inside facing) radiosity, W/m2
-                        Array1D<Real64> &HC           // returned: gap convective heat transfer coefficient, W/m2K
+                        Real64 const TRMIN,            // indoor / outdoor mean radiant temp, K
+                        Array1D<Real64> const &SOURCE, // absorbed solar by layer, W/m2
+                        Real64 const TOL,              // convergence tolerance, usually
+                        Array1D<Real64> &QOCF,         // returned: heat flux to layer i from gaps i-1 and i
+                        Real64 &QOCFRoom,              // returned: open channel heat gain to room, W/m2
+                        Array1D<Real64> &T,            // returned: layer temperatures, 1=outside-most layer, K
+                        Array1D<Real64> &Q,            // returned: heat flux at ith gap (betw layers i and i+1), W/m2
+                        Array1D<Real64> &JF,           // returned: front (outside facing) radiosity of surfaces, W/m2
+                        Array1D<Real64> &JB,           // returned: back (inside facing) radiosity, W/m2
+                        Array1D<Real64> &HC            // returned: gap convective heat transfer coefficient, W/m2K
 )
 {
     // SUBROUTINE INFORMATION:
@@ -4664,20 +4657,20 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
                            Real64 const HCIN, // indoor / outdoor convective heat transfer
                            Real64 const HCOUT,
                            Real64 const TRMOUT,
-                           Real64 const TRMIN,           // indoor / outdoor mean radiant temp, K
-                           Real64 const ISOL,            // total incident solar, W/m2 (values used for SOURCE derivation)
-                           Array1S<Real64> const SOURCE, // absorbed solar by layer, W/m2
-                           Real64 const TOL,             // convergence tolerance, usually
-                           Array1D<Real64> &QOCF,        // returned: heat flux to layer i from gaps i-1 and i
-                           Real64 &QOCFRoom,             // returned: open channel heat gain to room, W/m2
-                           Array1D<Real64> &T,           // returned: layer temperatures, 1=outside-most layer, K
-                           Array1D<Real64> &Q,           // returned: heat flux at ith gap (betw layers i and i+1), W/m2
-                           Array1D<Real64> &JF,          // returned: front (outside facing) radiosity of surfaces, W/m2
-                           Array1D<Real64> &JB,          // returned: back (inside facing) radiosity, W/m2
-                           Array1D<Real64> &HC,          // returned: gap convective heat transfer coefficient, W/m2K
-                           Real64 &UCG,                  // returned: center-glass U-factor, W/m2-K
-                           Real64 &SHGC,                 // returned: center-glass SHGC (Solar Heat Gain Coefficient)
-                           bool const HCInFlag           // If true uses ISO Std 150099 routine for HCIn calc
+                           Real64 const TRMIN,            // indoor / outdoor mean radiant temp, K
+                           Real64 const ISOL,             // total incident solar, W/m2 (values used for SOURCE derivation)
+                           Array1D<Real64> const &SOURCE, // absorbed solar by layer, W/m2
+                           Real64 const TOL,              // convergence tolerance, usually
+                           Array1D<Real64> &QOCF,         // returned: heat flux to layer i from gaps i-1 and i
+                           Real64 &QOCFRoom,              // returned: open channel heat gain to room, W/m2
+                           Array1D<Real64> &T,            // returned: layer temperatures, 1=outside-most layer, K
+                           Array1D<Real64> &Q,            // returned: heat flux at ith gap (betw layers i and i+1), W/m2
+                           Array1D<Real64> &JF,           // returned: front (outside facing) radiosity of surfaces, W/m2
+                           Array1D<Real64> &JB,           // returned: back (inside facing) radiosity, W/m2
+                           Array1D<Real64> &HC,           // returned: gap convective heat transfer coefficient, W/m2K
+                           Real64 &UCG,                   // returned: center-glass U-factor, W/m2-K
+                           Real64 &SHGC,                  // returned: center-glass SHGC (Solar Heat Gain Coefficient)
+                           bool const HCInFlag            // If true uses ISO Std 150099 routine for HCIn calc
 )
 {
     // SUBROUTINE INFORMATION:
@@ -6246,20 +6239,20 @@ bool CFSUFactor(EnergyPlusData &state,
     ISOL = 0.0; // no solar winter condition
     SOURCE = 0.0;
 
-    CFSUFactor = ASHWAT_ThermalRatings(
-        state, FS, TIABS, TOABS, HCIN, HCOUT, TRMOUT, TRMIN, ISOL, SOURCE({1, NL + 1}), TOL, QOCF, QOCFRoom, T, Q, JF, JB, H, U, SHGC, true);
+    CFSUFactor =
+        ASHWAT_ThermalRatings(state, FS, TIABS, TOABS, HCIN, HCOUT, TRMOUT, TRMIN, ISOL, SOURCE, TOL, QOCF, QOCFRoom, T, Q, JF, JB, H, U, SHGC, true);
 
     return CFSUFactor;
 }
 
-void ASHWAT_Solar(int const NL,                                 // # of layers
-                  Array1D<CFSSWP> const &LSWP_ON,               // layer SW (solar) properties (off-normal adjusted)
-                  CFSSWP const &SWP_ROOM,                       // effective SW (solar) properties of room
-                  Real64 const IBEAM,                           // incident beam insolation (W/m2 aperture)
-                  Real64 const IDIFF,                           // incident diffuse insolation (W/m2 aperture)
-                  Real64 const ILIGHTS,                         // incident diffuse insolation (W/m2 aperture)
-                  Array1S<Real64> SOURCE,                       // returned: layer-by-layer flux of absorbed
-                  ObjexxFCL::Optional<Array1S<Real64>> SourceBD // returned: layer-by-layer flux of absorbed
+void ASHWAT_Solar(int const NL,                   // # of layers
+                  Array1D<CFSSWP> const &LSWP_ON, // layer SW (solar) properties (off-normal adjusted)
+                  CFSSWP const &SWP_ROOM,         // effective SW (solar) properties of room
+                  Real64 const IBEAM,             // incident beam insolation (W/m2 aperture)
+                  Real64 const IDIFF,             // incident diffuse insolation (W/m2 aperture)
+                  Real64 const ILIGHTS,           // incident diffuse insolation (W/m2 aperture)
+                  std::span<Real64> SOURCE,       // returned: layer-by-layer flux of absorbed
+                  std::span<Real64> SourceBD      // returned (optional, empty if not wanted): layer-by-layer flux of absorbed
 )
 {
     // SUBROUTINE INFORMATION:
@@ -6374,8 +6367,8 @@ void ASHWAT_Solar(int const NL,                                 // # of layers
     DPLUS(0) = LSWP_ON(1).RHOSFDD * DMINUS(0) + LSWP_ON(1).TAUS_DD * DPLUS(1) + CPLUS(0);
 
     //  STEP FOUR: ABSORBED SOLAR RADIATION AT EACH LAYER/NODE
-    SOURCE = 0.0;
-    SOURCE(NL + 1) = BMINUS(NL) - BPLUS(NL) + DMINUS(NL) - DPLUS(NL) + ILIGHTS; // SOLAR FLUX | TRANSMITTED TO | ROOM
+    std::ranges::fill(SOURCE, 0.0);
+    SOURCE[NL] = BMINUS(NL) - BPLUS(NL) + DMINUS(NL) - DPLUS(NL) + ILIGHTS; // SOLAR FLUX | TRANSMITTED TO | ROOM
 
     //  NOTE:  In calculating SOURCE(room) there is a trick included in the
     //         previous line:  ILIGHTS is added because it is included
@@ -6393,20 +6386,20 @@ void ASHWAT_Solar(int const NL,                                 // # of layers
     BeamDiffuseAbs = 0.0;
     BeamDiffuseAbs(NL + 1) = DMINUS(NL) - DPLUS(NL); // beam-diffuse transmitted to the room
     for (I = 1; I <= NL; ++I) {
-        SOURCE(I) = BPLUS(I) - BMINUS(I) - BPLUS(I - 1) + BMINUS(I - 1) + DPLUS(I) - DMINUS(I) - DPLUS(I - 1) + DMINUS(I - 1);
+        SOURCE[I - 1] = BPLUS(I) - BMINUS(I) - BPLUS(I - 1) + BMINUS(I - 1) + DPLUS(I) - DMINUS(I) - DPLUS(I - 1) + DMINUS(I - 1);
         // Added by BAN June 7, 2013
         BeamDiffuseAbs(I) = 0.0;
     }
 
-    if (present(SourceBD)) {
+    if (!SourceBD.empty()) {
         for (int i = 1; i <= BeamDiffuseAbs.u(); ++i) {
-            SourceBD()(i) = BeamDiffuseAbs(i);
+            SourceBD[i - 1] = BeamDiffuseAbs(i);
         }
     }
     //  CHECKSUM - ALL INCOMING SOLAR FLUX MUST GO SOMEWHERE, SHOULD EQUAL ZERO
     CHKSUM = IBEAM + IDIFF + ILIGHTS - BPLUS(0) - DPLUS(0);
     for (I = 1; I <= NL + 1; ++I) {
-        CHKSUM -= SOURCE(I);
+        CHKSUM -= SOURCE[I - 1];
     }
 }
 

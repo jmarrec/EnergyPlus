@@ -53,7 +53,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/Array1S.hh>
 #include <ObjexxFCL/ArrayS.functions.hh>
 #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/string.functions.hh>
@@ -3939,7 +3938,7 @@ namespace HeatBalanceManager {
         Array1D<Real64> TVisCenter(2);                 // Center of glass visible transmittance for glazing system
         Array1D<Real64> TsolTemp(Window::numPhis + 1); // Solar transmittance vs incidence angle; diffuse trans.
         std::array<Real64, Window::numPhis> Tsol;
-        Array2D<Real64> AbsSolTemp(Window::maxGlassLayers, Window::numPhis + 1);     // Solar absorptance vs inc. angle in each glass layer
+        Array1D<Array1D<Real64>> AbsSolTemp(Window::maxGlassLayers);                 // Solar absorptance vs inc. angle in each glass layer
         Array1D<std::array<Real64, Window::numPhis>> AbsSol(Window::maxGlassLayers); // Solar absorptance vs inc. angle in each glass layer
         Array1D<Real64> RfsolTemp(Window::numPhis + 1);                              // Front solar reflectance vs inc. angle
         std::array<Real64, Window::numPhis> Rfsol;
@@ -3952,16 +3951,11 @@ namespace HeatBalanceManager {
         Array1D<Real64> RbvisTemp(Window::numPhis + 1); // Back visible reflectance vs inc. angle
         std::array<Real64, Window::numPhis> Rbvis;
 
+        for (int iGlass = 1; iGlass <= Window::maxGlassLayers; ++iGlass) {
+            AbsSolTemp(iGlass).allocate(Window::numPhis + 1);
+        }
+
         auto const outsideUnitInterval = [](Real64 const v) { return v < 0.0 || v > 1.0; };
-        // Is any absorptance of this glass layer outside [0,1]?
-        auto const anyAbsSolOutsideUnitInterval = [&](int const iGlass) {
-            for (int iPhi = 1; iPhi <= Window::numPhis + 1; ++iPhi) {
-                if (outsideUnitInterval(AbsSolTemp(iGlass, iPhi))) {
-                    return true;
-                }
-            }
-            return false;
-        };
 
         std::array<Real64, Window::numPhis> tsolFit;  // Fitted solar transmittance vs incidence angle
         std::array<Real64, Window::numPhis> tvisFit;  // Fitted visible transmittance vs incidence angle
@@ -4641,13 +4635,13 @@ namespace HeatBalanceManager {
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
                     NextLine = W5DataFile.readLine();
                     ++FileLineCount;
-                    if (!readItem(NextLine.data.substr(5), AbsSolTemp(IGlass, _))) {
+                    if (!readItem(NextLine.data.substr(5), AbsSolTemp(IGlass))) {
                         ShowSevereError(
                             state, std::format("HeatBalanceManager: SearchWindow5DataFile: Error in Read of AbsSol values. For Glass={}", IGlass));
                         ShowContinueError(state,
                                           std::format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
                         ErrorsFound = true;
-                    } else if (anyAbsSolOutsideUnitInterval(IGlass)) {
+                    } else if (std::ranges::any_of(AbsSolTemp(IGlass), outsideUnitInterval)) {
                         ShowSevereError(
                             state,
                             std::format(
@@ -4740,7 +4734,7 @@ namespace HeatBalanceManager {
 
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
                     for (int iPhi = 0; iPhi < Window::numPhis; ++iPhi) {
-                        AbsSol(IGlass)[iPhi] = AbsSolTemp(IGlass, iPhi + 1);
+                        AbsSol(IGlass)[iPhi] = AbsSolTemp(IGlass)(iPhi + 1);
                     }
                 }
 

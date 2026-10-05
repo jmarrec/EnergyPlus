@@ -2322,7 +2322,7 @@ namespace WindowComplexManager {
             }
             // So here Theta > 0
             // Note the table searches always go to the limit point, which is not itself a basis element
-            IThUp = SearchAscTable(Theta, Basis.NThetas + 1, Basis.Thetas);
+            IThUp = SearchAscTable(Theta, Basis.Thetas);
             IThDn = IThUp - 1;
             // Determine which of the theta basis points is closer to the Theta value
             if (Theta <= Basis.Grid(Basis.BasisIndex(1, IThDn)).UpprTheta) {
@@ -2338,7 +2338,7 @@ namespace WindowComplexManager {
                 RayIndex = Basis.BasisIndex(1, ITheta);
                 return RayIndex;
             }
-            IPhUp = SearchAscTable(Phi, Basis.NPhis(ITheta) + 1, Basis.Phis(ITheta, _));
+            IPhUp = SearchAscTable(Phi, std::span(&Basis.Phis(ITheta, 1), Basis.NPhis(ITheta) + 1));
             IPhDn = IPhUp - 1;
             if (Phi <= Basis.Grid(Basis.BasisIndex(IPhDn, ITheta)).UpprPhi) {
                 IPhi = IPhDn;
@@ -2363,7 +2363,7 @@ namespace WindowComplexManager {
             }
             // So here Theta > 0
             // Note the table searches always go to the limit point, which is not itself a basis element
-            IThUp = SearchAscTable(Theta, Basis.NThetas + 1, Basis.Thetas);
+            IThUp = SearchAscTable(Theta, Basis.Thetas);
             IThDn = IThUp - 1;
             // Determine which of the theta basis points is closer to the Theta value
             if (Theta <= Basis.Grid(Basis.BasisIndex(1, IThDn)).UpprTheta) {
@@ -3492,9 +3492,8 @@ namespace WindowComplexManager {
         indexNumber = counter;
     }
 
-    int SearchAscTable(Real64 const y,            // Value to be found in the table
-                       int const n,               // Number of values in the table
-                       Array1S<Real64> const ytab // Table of values, monotonic, ascending order
+    int SearchAscTable(Real64 const y,                    // Value to be found in the table
+                       std::span<const Real64> const ytab // Table of values, monotonic, ascending order
     )
     {
 
@@ -3505,8 +3504,8 @@ namespace WindowComplexManager {
         //       RE-ENGINEERED  na
 
         // PURPOSE OF THIS FUNCTION:
-        // Given an ascending monotonic table with n entries, find  an index i
-        // such that ytab(i-1) < y <= ytab(i)
+        // Given an ascending monotonic table with n entries (n = ytab.size()), find  an index i
+        // such that ytab(i-1) < y <= ytab(i), using the 1-based indexes of the table (ytab[i-1] here)
 
         // METHODOLOGY EMPLOYED:
         // binary search
@@ -3518,8 +3517,9 @@ namespace WindowComplexManager {
         Real64 Yl; // Table value for lower end of interval
         Real64 Ym; // Table value for midpoint of interval
 
-        Yh = ytab(n);
-        Yl = ytab(1);
+        int const n = static_cast<int>(ytab.size()); // Number of values in the table
+        Yh = ytab[n - 1];
+        Yl = ytab[0];
         int Ih = n; // Index for upper end of interval
         int Il = 1; // Index for lower end of interval
         if (y < Yl) {
@@ -3536,7 +3536,7 @@ namespace WindowComplexManager {
             }
             // Midpoint index
             int Im = (Ih + Il) / 2;
-            Ym = ytab(Im);
+            Ym = ytab[Im - 1];
             if (y <= Ym) {
                 Yh = Ym;
                 Ih = Im;
