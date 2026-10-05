@@ -601,7 +601,7 @@ void CalcEQLWindowSHGCAndTransNormal(EnergyPlusData &state,
 void CalcEQLWindowOpticalProperty(EnergyPlusData &state,
                                   CFSTY &FS,                      // fenestration system
                                   SolarArrays const DiffBeamFlag, // isDIFF: calc diffuse properties
-                                  Array2A<Real64> Abs1,
+                                  Array2D<Real64> &Abs1,
                                   Real64 const IncA,   // angle of incidence, radians
                                   Real64 const VProfA, // inc solar vertical profile angle, radians
                                   Real64 const HProfA  // inc solar horizontal profile angle, radians
@@ -617,9 +617,6 @@ void CalcEQLWindowOpticalProperty(EnergyPlusData &state,
 
     // METHODOLOGY EMPLOYED:
     // uses routine developed for ASHRAE RP-1311 (ASHWAT Model). Uses net radiation method.
-
-    // Argument array dimensioning
-    Abs1.dim(2, CFSMAXNL + 1);
 
     // Locals
     // SUBROUTINE ARGUMENT DEFINITIONS:
@@ -5724,7 +5721,7 @@ void DL_RES_r2(Real64 const Tg,    // mean glass layer temperature, {K}
             Epsm * Epsdb * FSm_db * Constant::StefanBoltzmann * (Td + Tm) * (Td_2 + Tm_2);
 }
 
-void SETUP4x4_A(Real64 const rhog, Real64 const rhodf, Real64 const rhodb, Real64 const taud, Real64 const rhom, Array2A<Real64> A)
+void SETUP4x4_A(Real64 const rhog, Real64 const rhodf, Real64 const rhodb, Real64 const taud, Real64 const rhom, Array2D<Real64> &A)
 {
     // SUBROUTINE INFORMATION:
     //       AUTHOR         John L. Wright, University of Waterloo,
@@ -5734,9 +5731,6 @@ void SETUP4x4_A(Real64 const rhog, Real64 const rhodf, Real64 const rhodb, Real6
     //  Returns the 4 X 4 matrix for DL_RES_r2 routine:
     // METHODOLOGY EMPLOYED:
     //  fills in the matrix coefficients
-
-    // Argument array dimensioning
-    A.dim(22, 20);
 
     A = 0.0;
     A(1, 1) = 1.0;
@@ -6782,7 +6776,6 @@ Real64 Specular_F(EnergyPlusData const &state,
     // Return value
     Real64 Specular_F;
 
-    // Argument array dimensioning
     // EP_SIZE_CHECK(P, hipDIM);
 
     // FUNCTION ARGUMENT DEFINITIONS:
@@ -7898,7 +7891,7 @@ Real64 TRadC(Real64 const J,    // radiosity, W/m2
 void CalcEQLOpticalProperty(EnergyPlusData &state,
                             int const SurfNum,
                             SolarArrays const BeamDIffFlag, // identifier index of diffuse and beam SW radiation
-                            Array2A<Real64> CFSAbs          // absorbed beam solar radiation by layers fraction
+                            Array2D<Real64> &CFSAbs         // absorbed beam solar radiation by layers fraction
 )
 {
 
@@ -7914,9 +7907,6 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
     // METHODOLOGY EMPLOYED:
     // Uses the net radiation method developed for ASHWAT fenestration
     // model (ASHRAE RP-1311) by John Wright, the University of WaterLoo
-
-    // Argument array dimensioning
-    CFSAbs.dim(2, CFSMAXNL + 1);
 
     Array2D<Real64> Abs1(2, CFSMAXNL + 1);
 

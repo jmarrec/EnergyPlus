@@ -53,7 +53,7 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1S.hh>
-#include <ObjexxFCL/Array2A.hh>
+#include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/Array3D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -92,7 +92,7 @@ namespace WindowEquivalentLayer {
     void CalcEQLWindowOpticalProperty(EnergyPlusData &state,
                                       CFSTY &FS,                      // fenestration system
                                       SolarArrays const DiffBeamFlag, // isDIFF: calc diffuse properties
-                                      Array2A<Real64> Abs1,
+                                      Array2D<Real64> &Abs1,
                                       Real64 const IncA,   // angle of incidence, radians
                                       Real64 const VProfA, // inc solar vertical profile angle, radians
                                       Real64 const HProfA  // inc solar horizontal profile angle, radians
@@ -510,7 +510,7 @@ namespace WindowEquivalentLayer {
                    Real64 &hr_md       // heat transfer coefficient between right and middle surface {W/m2K}
     );
 
-    void SETUP4x4_A(Real64 const rhog, Real64 const rhodf, Real64 const rhodb, Real64 const taud, Real64 const rhom, Array2A<Real64> A);
+    void SETUP4x4_A(Real64 const rhog, Real64 const rhodf, Real64 const rhodb, Real64 const taud, Real64 const rhom, Array2D<Real64> &A);
 
     Real64 FRA(Real64 const TM, // mean gas temp, K
                Real64 const T,  // gas layer thickness, m
@@ -773,7 +773,7 @@ namespace WindowEquivalentLayer {
     void CalcEQLOpticalProperty(EnergyPlusData &state,
                                 int const SurfNum,
                                 SolarArrays const BeamDIffFlag, // identifier index of diffuse and beam SW radiation
-                                Array2A<Real64> CFSAbs          // absorbed beam solar radiation by layers fraction
+                                Array2D<Real64> &CFSAbs         // absorbed beam solar radiation by layers fraction
     );
 
     void CalcEQLWindowStandardRatings(EnergyPlusData &state, int const ConstrNum); // construction index

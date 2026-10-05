@@ -1110,7 +1110,7 @@ namespace HeatBalanceIntRadExchange {
     void GetInputViewFactors(EnergyPlusData &state,
                              std::string const &ZoneName,              // Needed to check for user input view factors.
                              int const N,                              // NUMBER OF SURFACES
-                             Array2A<Real64> F,                        // USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
+                             Array2D<Real64> &F,                       // USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
                              [[maybe_unused]] const Array1D_int &SPtr, // pointer to actual surface number
                              bool &NoUserInputF,                       // Flag signifying no input F's for this
                              bool &ErrorsFound                         // True when errors are found in number of fields vs max args
@@ -1125,8 +1125,6 @@ namespace HeatBalanceIntRadExchange {
         // PURPOSE OF THIS SUBROUTINE:
         // This routine gets the user view factor info.
 
-        // Argument array dimensioning
-        F.dim(N, N);
         // EP_SIZE_CHECK(SPtr, N);
 
         NoUserInputF = true;
@@ -1315,7 +1313,7 @@ namespace HeatBalanceIntRadExchange {
     void GetInputViewFactorsbyName(EnergyPlusData &state,
                                    std::string const &EnclosureName, // Needed to check for user input view factors.
                                    int const N,                      // NUMBER OF SURFACES
-                                   Array2A<Real64> F,                // USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
+                                   Array2D<Real64> &F,               // USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
                                    const Array1D_int &SPtr,          // pointer to actual surface number
                                    bool &NoUserInputF,               // Flag signifying no input F's for this
                                    bool &ErrorsFound                 // True when errors are found in number of fields vs max args
@@ -1331,7 +1329,6 @@ namespace HeatBalanceIntRadExchange {
         // This routine gets the user view factor info for an enclosure which could be a zone or a group of zones
 
         // Argument array dimensioning
-        F.dim(N, N);
         EP_SIZE_CHECK(SPtr, N);
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -1407,7 +1404,7 @@ namespace HeatBalanceIntRadExchange {
                                     const Array1D<Real64> &A,       // AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
                                     const Array1D<Real64> &Azimuth, // Facing angle of the surface (in degrees)
                                     const Array1D<Real64> &Tilt,    // Tilt angle of the surface (in degrees)
-                                    Array2A<Real64> F,              // APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
+                                    Array2D<Real64> &F,             // APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
                                     const Array1D_int &SPtr         // pointer to REAL(r64) surface number (for error message)
     )
     {
@@ -1437,7 +1434,6 @@ namespace HeatBalanceIntRadExchange {
         EP_SIZE_CHECK(A, N);
         EP_SIZE_CHECK(Azimuth, N);
         EP_SIZE_CHECK(Tilt, N);
-        F.dim(N, N);
         EP_SIZE_CHECK(SPtr, N);
 
         // SUBROUTINE PARAMETER DEFINITIONS:
@@ -1520,7 +1516,7 @@ namespace HeatBalanceIntRadExchange {
     void FixViewFactors(EnergyPlusData &state,
                         int const N,                       // NUMBER OF SURFACES
                         const Array1D<Real64> &A,          // AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
-                        Array2A<Real64> F,                 // APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
+                        Array2D<Real64> &F,                // APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
                         std::string &enclName,             // Name of Enclosure being fixed
                         std::vector<int> const &spaceNums, // Zones which are part of this enclosure
                         Real64 &OriginalCheckValue,        // check of SUM(F) - N
@@ -1557,7 +1553,6 @@ namespace HeatBalanceIntRadExchange {
 
         // Argument array dimensioning
         EP_SIZE_CHECK(A, N);
-        F.dim(N, N);
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         Real64 constexpr PrimaryConvergence(0.001);
@@ -1820,9 +1815,9 @@ namespace HeatBalanceIntRadExchange {
     void CalcScriptF(EnergyPlusData &state,
                      int const N,              // Number of surfaces
                      Array1D<Real64> const &A, // AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
-                     Array2<Real64> const &F,  // DIRECT VIEW FACTOR MATRIX (N X N)
+                     Array2D<Real64> const &F, // DIRECT VIEW FACTOR MATRIX (N X N)
                      Array1D<Real64> &EMISS,   // VECTOR OF SURFACE EMISSIVITIES
-                     Array2<Real64> &ScriptF   // MATRIX OF SCRIPT F FACTORS (N X N) //Tuned Transposed
+                     Array2D<Real64> &ScriptF  // MATRIX OF SCRIPT F FACTORS (N X N) //Tuned Transposed
     )
     {
 
@@ -1916,8 +1911,8 @@ namespace HeatBalanceIntRadExchange {
         }
     }
 
-    void CalcMatrixInverse(Array2<Real64> &A, // Matrix: Gets reduced to L\U form
-                           Array2<Real64> &I  // Returned as inverse matrix
+    void CalcMatrixInverse(Array2D<Real64> &A, // Matrix: Gets reduced to L\U form
+                           Array2D<Real64> &I  // Returned as inverse matrix
     )
     {
         // SUBROUTINE INFORMATION:

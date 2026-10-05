@@ -1055,12 +1055,11 @@ namespace ThermalChimney {
         } // ... end of zone loads report variable update loop.
     }
 
-    void GaussElimination(Array2A<Real64> EquaCoef, Array1D<Real64> &EquaConst, Array1D<Real64> &ThermChimSubTemp, int const NTC)
+    void GaussElimination(Array2D<Real64> &EquaCoef, Array1D<Real64> &EquaConst, Array1D<Real64> &ThermChimSubTemp, int const NTC)
     {
         // PURPOSE OF THIS SUBROUTINE:
         // This subroutine solves linear algebraic equations using Gauss Elimination Method.
 
-        EquaCoef.dim(NTC, NTC);
         EP_SIZE_CHECK(EquaConst, NTC);
         EP_SIZE_CHECK(ThermChimSubTemp, NTC);
 
