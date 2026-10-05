@@ -1022,50 +1022,6 @@ protected: // Static Methods
 		return size_of( I1.size(), I2.size(), I3.size(), I4.size(), I5.size(), I6.size() );
 	}
 
-	// Slice Constant for a Scalar Index
-	static
-	std::int64_t
-	slice_k( IR const & range, int const i, std::int64_t const multiplier = 1 )
-	{
-		assert( range.contains( i ) );
-		assert( multiplier <= std::numeric_limits< std::int64_t >::max() / std::abs( i ) );
-		(void)range; // Suppress unused warning in release builds
-		return i * multiplier;
-	}
-
-	// Slice Constant for a Scalar Index
-	static
-	std::int64_t
-	slice_k( IR const & range, int const i, size_type const multiplier )
-	{
-		assert( range.contains( i ) );
-		assert( multiplier <= size_type( std::numeric_limits< std::int64_t >::max() / std::abs( i ) ) );
-		(void)range; // Suppress unused warning in release builds
-		return i * multiplier;
-	}
-
-	// Slice Constant for a Scalar Index
-	static
-	std::int64_t
-	slice_k( int const u, int const i, std::int64_t const multiplier = 1 )
-	{
-		assert( ( 1 <= i ) && ( i <= u ) );
-		assert( multiplier <= std::numeric_limits< std::int64_t >::max() / std::abs( i ) );
-		(void)u; // Suppress unused warning in release builds
-		return i * multiplier;
-	}
-
-	// Slice Constant for a Scalar Index
-	static
-	std::int64_t
-	slice_k( int const u, int const i, size_type const multiplier )
-	{
-		assert( ( 1 <= i ) && ( i <= u ) );
-		assert( multiplier <= size_type( std::numeric_limits< std::int64_t >::max() / std::abs( i ) ) );
-		(void)u; // Suppress unused warning in release builds
-		return i * multiplier;
-	}
-
 	// Move if Movable: Movable Overload
 	template< typename U, class = typename std::enable_if< std::is_move_assignable< U >::value >::type >
 	static

@@ -17,7 +17,6 @@
 #include <ObjexxFCL/Array.all.fwd.hh>
 #include <ObjexxFCL/Index.fwd.hh>
 #include <ObjexxFCL/IndexRange.fwd.hh>
-#include <ObjexxFCL/IndexSlice.fwd.hh>
 #include <ObjexxFCL/Optional.fwd.hh>
 
 #endif // ObjexxFCL_ObjexxFCL_fwd_hh_INCLUDED

@@ -37,16 +37,12 @@ set(src
   src/ObjexxFCL/BArray.fwd.hh
   src/ObjexxFCL/BArray.hh
   src/ObjexxFCL/char.functions.hh
-  src/ObjexxFCL/DimensionSlice.fwd.hh
-  src/ObjexxFCL/DimensionSlice.hh
   src/ObjexxFCL/Fmath.hh
   src/ObjexxFCL/Index.fwd.hh
   src/ObjexxFCL/Index.hh
   src/ObjexxFCL/IndexRange.cc
   src/ObjexxFCL/IndexRange.fwd.hh
   src/ObjexxFCL/IndexRange.hh
-  src/ObjexxFCL/IndexSlice.fwd.hh
-  src/ObjexxFCL/IndexSlice.hh
   src/ObjexxFCL/InitializerSentinel.hh
   src/ObjexxFCL/member.functions.hh
   src/ObjexxFCL/ObjexxFCL.fwd.hh
@@ -79,11 +75,9 @@ set( test_src
   tst/unit/Array3.unit.cc
   tst/unit/Array4.unit.cc
   tst/unit/char.functions.unit.cc
-  tst/unit/DimensionSlice.unit.cc
   tst/unit/Fmath.unit.cc
   tst/unit/Index.unit.cc
   tst/unit/IndexRange.unit.cc
-  tst/unit/IndexSlice.unit.cc
   tst/unit/main.cc
   tst/unit/member.functions.unit.cc
   tst/unit/ObjexxFCL.unit.hh

@@ -48,8 +48,6 @@ public: // Types
 
 	typedef  typename Super::Base  Base;
 	typedef  typename Super::IR  IR;
-	typedef  typename Super::IS  IS;
-	typedef  typename Super::DS  DS;
 
 	// STL Style
 	typedef  typename Super::value_type  value_type;
@@ -88,7 +86,6 @@ protected: // Types
 
 	using Super::shift_set;
 	using Super::size_of;
-	using Super::slice_k;
 	using Super::swapB;
 
 	using Super::capacity_;
