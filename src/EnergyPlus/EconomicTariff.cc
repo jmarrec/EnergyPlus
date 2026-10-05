@@ -3053,7 +3053,7 @@ void ComputeTariff(EnergyPlusData &state)
     LEEDtariffReporting(state);
 }
 
-void pushStack(EnergyPlusData &state, Array1A<Real64> const monthlyArray, int const variablePointer)
+void pushStack(EnergyPlusData &state, Array1D<Real64> const &monthlyArray, int const variablePointer)
 {
     //    AUTHOR         Jason Glazer of GARD Analytics, Inc.
     //    DATE WRITTEN   July 2004
@@ -3064,8 +3064,6 @@ void pushStack(EnergyPlusData &state, Array1A<Real64> const monthlyArray, int co
     //    first out basis. The stack consists of both a pointer
     //    to the variable and the twelve monthly values.
     //    This routine puts an item on the top of the stack.
-
-    monthlyArray.dim(NumMonths);
 
     Array1D<Real64> curMonthlyArray(NumMonths);
     int constexpr sizeIncrement(50);
@@ -3140,7 +3138,7 @@ void pushStack(EnergyPlusData &state, Array1A<Real64> const monthlyArray, int co
     stack(s_econ->topOfStack).values = curMonthlyArray;
 }
 
-void popStack(EnergyPlusData &state, Array1A<Real64> monthlyArray, int &variablePointer)
+void popStack(EnergyPlusData &state, Array1D<Real64> &monthlyArray, int &variablePointer)
 {
     //    AUTHOR         Jason Glazer of GARD Analytics, Inc.
     //    DATE WRITTEN   July 2004
@@ -3152,8 +3150,6 @@ void popStack(EnergyPlusData &state, Array1A<Real64> monthlyArray, int &variable
     //    to the variable and the twelve monthly values.
     //    This routine returns the item on the top of the stack
     //    and removes it from the stack.
-
-    monthlyArray.dim(NumMonths);
 
     auto &s_econ = state.dataEconTariff;
     auto const &stack = s_econ->stack;
@@ -4860,17 +4856,14 @@ void selectTariff(EnergyPlusData &state)
     MinTariffIndex.deallocate();
 }
 
-void GetMonthlyCostForResource(EnergyPlusData const &state, Constant::eResource const inResourceNumber, Array1A<Real64> outMonthlyCosts)
+void GetMonthlyCostForResource(EnergyPlusData const &state, Constant::eResource const inResourceNumber, Array1D<Real64> &outMonthlyCosts)
 {
     //       AUTHOR         Jason Glazer
     //       DATE WRITTEN   May 2010
 
     //  Return the total annual cost for a given resource number.
 
-    // Argument array dimensioning
     auto const &s_econ = state.dataEconTariff;
-
-    outMonthlyCosts.dim(12);
 
     outMonthlyCosts = 0.0;
     for (int iTariff = 1; iTariff <= s_econ->numTariff; ++iTariff) {

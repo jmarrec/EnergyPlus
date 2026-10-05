@@ -4805,8 +4805,7 @@ void SizeSysOutdoorAir(EnergyPlusData &state)
                     }
                     auto &termUnitSizing = state.dataSize->TermUnitSizing(TermUnitSizingIndex);
                     auto &termUnitFinalZoneSizing = state.dataSize->TermUnitFinalZoneSizing(TermUnitSizingIndex);
-                    int MatchingCooledZoneNum =
-                        General::FindNumberInList(TermUnitSizingIndex, airToZoneNodeInfo.TermUnitCoolSizingIndex, NumZonesCooled);
+                    int MatchingCooledZoneNum = General::FindNumberInList(TermUnitSizingIndex, airToZoneNodeInfo.TermUnitCoolSizingIndex);
                     if (MatchingCooledZoneNum == 0) {
                         if (SysSizNum > 0) {
                             ZoneOAUnc = termUnitFinalZoneSizing.TotalOAFromPeople +
@@ -5812,8 +5811,8 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
                         if (numZonesHeated > 0) {
                             for (int ZonesHeatedNum = 1; ZonesHeatedNum <= numZonesHeated; ++ZonesHeatedNum) {
                                 int TermUnitSizingIndex = state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum).TermUnitHeatSizingIndex(ZonesHeatedNum);
-                                MatchingCooledZoneNum = FindNumberInList(
-                                    TermUnitSizingIndex, state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum).TermUnitCoolSizingIndex, NumZonesCooled);
+                                MatchingCooledZoneNum =
+                                    FindNumberInList(TermUnitSizingIndex, state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum).TermUnitCoolSizingIndex);
                                 if (MatchingCooledZoneNum == 0) {
                                     // Zone air secondary recirculation fraction
                                     state.dataSimAirServingZones->Er =
@@ -6129,8 +6128,8 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
                         if (numZonesHeated > 0) {
                             for (int ZonesHeatedNum = 1; ZonesHeatedNum <= numZonesHeated; ++ZonesHeatedNum) {
                                 int TermUnitSizingIndex = state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum).TermUnitHeatSizingIndex(ZonesHeatedNum);
-                                MatchingCooledZoneNum = FindNumberInList(
-                                    TermUnitSizingIndex, state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum).TermUnitCoolSizingIndex, NumZonesCooled);
+                                MatchingCooledZoneNum =
+                                    FindNumberInList(TermUnitSizingIndex, state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum).TermUnitCoolSizingIndex);
                                 if (MatchingCooledZoneNum == 0) {
                                     // Zone air secondary recirculation fraction
                                     state.dataSimAirServingZones->Er =

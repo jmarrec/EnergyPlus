@@ -278,7 +278,7 @@ void FigureSurfMapPattern(EnergyPlusData &state, int const PattrnID, int const Z
 
     for (int i = 1; i <= patternZoneInfo.totNumSurfs; ++i) {
         // cycle through zone surfaces and look for match
-        int found = FindNumberInList(patternZoneInfo.Surf(i).SurfID, pattern.MapPatrn.SurfID, pattern.MapPatrn.NumSurfs);
+        int found = FindNumberInList(patternZoneInfo.Surf(i).SurfID, pattern.MapPatrn.SurfID);
         if (found != 0) { // if surf is in map then assign, else give it MAT
             patternZoneInfo.Surf(i).TadjacentAir = pattern.MapPatrn.DeltaTai(found) + Tmean;
         } else {
