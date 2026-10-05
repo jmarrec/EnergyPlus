@@ -25,7 +25,6 @@ namespace ObjexxFCL {
 
 // Forward
 template< typename > class Array1D;
-template< typename > class Array1A;
 
 // Array1: 1D Array Abstract Base Class
 template< typename T >
@@ -40,7 +39,6 @@ private: // Friend
 
 	template< typename > friend class Array1;
 	template< typename > friend class Array1D;
-	template< typename > friend class Array1A;
 
 protected: // Types
 

@@ -212,11 +212,6 @@ TEST( Array1Test, ConstructionIndexRange )
 		EXPECT_EQ( 33, r( i ) );
 		EXPECT_EQ( 33, r[ i - 1 ] );
 	}
-	Array1A_int a( r, IR( 1, 3 ) );
-	EXPECT_EQ( 1, a.l() );
-	EXPECT_EQ( 3, a.u() );
-	EXPECT_EQ( 33, a[ 0 ] );
-	EXPECT_EQ( 33, a[ 2 ] );
 }
 
 TEST( Array1Test, ConstructionIndexRangeList )
@@ -289,25 +284,6 @@ TEST( Array1Test, AssignmentMove )
 	w = std::move( v );
 	EXPECT_EQ( 0u, v.size() );
 	EXPECT_EQ( 13u, w.size() );
-}
-
-TEST( Array1Test, ArgConstruct )
-{
-	Array1D_int u( 10, 22 );
-	Array1A_int a( u );
-	EXPECT_EQ( u.I(), a.I() );
-	EXPECT_EQ( u( 3 ), a( 3 ) );
-	++a( 3 );
-	EXPECT_EQ( u( 3 ), 23 );
-	EXPECT_EQ( u( 3 ), a( 3 ) );
-}
-
-TEST( Array1Test, ConstArgConstruct )
-{
-	Array1D_int const u( 10, 22 );
-	Array1A_int const a( u );
-	EXPECT_EQ( u.I(), a.I() );
-	EXPECT_EQ( u( 3 ), a( 3 ) );
 }
 
 TEST( Array1Test, Index )

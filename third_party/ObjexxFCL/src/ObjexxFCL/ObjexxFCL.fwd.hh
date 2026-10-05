@@ -16,19 +16,9 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.all.fwd.hh>
 #include <ObjexxFCL/ArrayS.all.fwd.hh>
-#include <ObjexxFCL/byte.fwd.hh>
-#include <ObjexxFCL/CArrayP.fwd.hh>
-#include <ObjexxFCL/ChunkVector.fwd.hh>
 #include <ObjexxFCL/Index.fwd.hh>
 #include <ObjexxFCL/IndexRange.fwd.hh>
 #include <ObjexxFCL/IndexSlice.fwd.hh>
-#include <ObjexxFCL/IOFlags.fwd.hh>
 #include <ObjexxFCL/Optional.fwd.hh>
-#include <ObjexxFCL/Print.fwd.hh>
-#include <ObjexxFCL/Read.fwd.hh>
-#include <ObjexxFCL/Required.fwd.hh>
-#include <ObjexxFCL/SetWrapper.fwd.hh>
-#include <ObjexxFCL/Stream.fwd.hh>
-#include <ObjexxFCL/Write.fwd.hh>
 
 #endif // ObjexxFCL_ObjexxFCL_fwd_hh_INCLUDED

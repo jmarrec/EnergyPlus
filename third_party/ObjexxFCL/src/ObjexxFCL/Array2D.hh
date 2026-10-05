@@ -35,7 +35,6 @@ private: // Types
 private: // Friend
 
 	template< typename > friend class Array2D;
-	friend class Array2A< T >;
 
 public: // Types
 

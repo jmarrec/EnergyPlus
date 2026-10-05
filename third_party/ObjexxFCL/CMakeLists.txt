@@ -16,8 +16,6 @@ set(src
   src/ObjexxFCL/Array1.all.hh
   src/ObjexxFCL/Array1.fwd.hh
   src/ObjexxFCL/Array1.hh
-  src/ObjexxFCL/Array1A.fwd.hh
-  src/ObjexxFCL/Array1A.hh
   src/ObjexxFCL/Array1D.fwd.hh
   src/ObjexxFCL/Array1D.hh
   src/ObjexxFCL/Array1S.fwd.hh
@@ -26,8 +24,6 @@ set(src
   src/ObjexxFCL/Array2.all.hh
   src/ObjexxFCL/Array2.fwd.hh
   src/ObjexxFCL/Array2.hh
-  src/ObjexxFCL/Array2A.fwd.hh
-  src/ObjexxFCL/Array2A.hh
   src/ObjexxFCL/Array2D.fwd.hh
   src/ObjexxFCL/Array2D.hh
   src/ObjexxFCL/Array2S.fwd.hh

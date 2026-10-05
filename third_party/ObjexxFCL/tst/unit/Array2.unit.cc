@@ -118,76 +118,6 @@ TEST( Array2Test, ConstructOtherData )
 
 }
 
-TEST( Array2Test, ConstructArgument )
-{
-	Array2D_int A1( 2, 3, 31459 );
-	Array2A_int A2( A1 );
-	Array2D_int A3( A2 );
-	EXPECT_EQ( A2.size(), A3.size() );
-	EXPECT_EQ( A2.size1(), A3.size1() );
-	EXPECT_EQ( A2.size2(), A3.size2() );
-	EXPECT_EQ( A2.I1(), A3.I1() );
-	EXPECT_EQ( A2.I2(), A3.I2() );
-	EXPECT_EQ( A2.l1(), A3.l1() );
-	EXPECT_EQ( A2.u1(), A3.u1() );
-	EXPECT_EQ( A2.l2(), A3.l2() );
-	EXPECT_EQ( A2.u2(), A3.u2() );
-	EXPECT_TRUE( conformable( A1, A3 ) );
-	EXPECT_TRUE( equal_dimensions( A1, A3 ) );
-
-	Array2D_int const C1( 2, 3, 31459 );
-	Array2A_int const C2( C1 );
-	Array2D_int const C3( C2 );
-	EXPECT_EQ( C2.size(), C3.size() );
-	EXPECT_EQ( C2.size1(), C3.size1() );
-	EXPECT_EQ( C2.size2(), C3.size2() );
-	EXPECT_EQ( C2.l1(), C3.l1() );
-	EXPECT_EQ( C2.l2(), C3.l2() );
-	EXPECT_EQ( C2.u1(), C3.u1() );
-	EXPECT_EQ( C2.u2(), C3.u2() );
-	EXPECT_TRUE( conformable( C1, C3 ) );
-	EXPECT_TRUE( equal_dimensions( C1, C3 ) );
-
-	Array2D_int E1( 2, 3, 31459 );
-	Array2A_int E2( E1( 2, 2 ) );
-	EXPECT_EQ( Array2A_int::npos, E2.size() );
-	EXPECT_EQ( Array2A_int::npos, E2.size1() );
-	EXPECT_EQ( 1u, E2.size2() );
-	EXPECT_EQ( 1, E2.l1() );
-	EXPECT_EQ( -1, E2.u1() );
-	EXPECT_EQ( 1, E2.l2() );
-	EXPECT_EQ( 1, E2.u2() );
-	EXPECT_EQ( 31459, E2( 1, 1 ) );
-	EXPECT_EQ( 31459, E2( 2, 1 ) );
-	E2.dim( _, 1 );
-	EXPECT_EQ( 1u, E2.size2() );
-	EXPECT_EQ( 1, E2.l1() );
-	EXPECT_EQ( -1, E2.u1() );
-	EXPECT_EQ( 1, E2.l2() );
-	EXPECT_EQ( 1, E2.u2() );
-	EXPECT_EQ( 31459, E2( 1, 1 ) );
-	EXPECT_EQ( 31459, E2( 2, 1 ) );
-	E2.dim( 1, 2 );
-	EXPECT_EQ( 2u, E2.size2() );
-	EXPECT_EQ( 1, E2.l1() );
-	EXPECT_EQ( 1, E2.u1() );
-	EXPECT_EQ( 1, E2.l2() );
-	EXPECT_EQ( 2, E2.u2() );
-	EXPECT_EQ( 31459, E2( 1, 1 ) );
-	EXPECT_EQ( 31459, E2( 1, 2 ) );
-	EXPECT_DEBUG_DEATH( E2.dim( 1, _ ), ".*Assertion.*" );
-
-	Array2D_int F1( 3, 3, 31459 );
-	Array2A_int F2( F1( 2, 2 ), 2, 2 );
-	EXPECT_EQ( 4u, F2.size() );
-	EXPECT_EQ( 2u, F2.size1() );
-	EXPECT_EQ( 2u, F2.size2() );
-	EXPECT_EQ( 1, F2.l1() );
-	EXPECT_EQ( 2, F2.u1() );
-	EXPECT_EQ( 1, F2.l2() );
-	EXPECT_EQ( 2, F2.u2() );
-}
-
 TEST( Array2Test, ConstructIndexes )
 {
 	Array2D_int A1( 8, 10 );
@@ -589,25 +519,6 @@ TEST( Array2Test, AssignmentOtherDataType )
 
 }
 
-TEST( Array2Test, AssignmentArgument )
-{
-	Array2D_int A1( 2, 3, 31459 );
-	Array2A_int A2( A1 );
-	Array2D_int A3( 2, 3, 2718 );
-	for ( int i1 = A1.l1(); i1 <= A1.u1(); ++i1 ) {
-		for ( int i2 = A1.l2(); i2 <= A1.u2(); ++i2 ) {
-			EXPECT_EQ( 31459, A1( i1, i2 ) );
-		}
-	}
-
-	A3 = A2;
-	for ( int i1 = A3.l1(); i1 <= A3.u1(); ++i1 ) {
-		for ( int i2 = A3.l2(); i2 <= A3.u2(); ++i2 ) {
-			EXPECT_EQ( 31459, A3( i1, i2 ) );
-		}
-	}
-}
-
 TEST( Array2Test, RangeBasedFor )
 {
 	Array2D_int A( 2, 3, { 1, 2, 3, 4, 5, 6 } );
@@ -768,18 +679,14 @@ TEST( Array2Test, PredicateConformableOtherData )
 TEST( Array2Test, PredicateConformableOtherArray )
 {
 	Array2D_int A1( 2, 3 );
-	Array2A_int A2( A1 );
 	Array2D_int A3( 2, 3 );
 
-	EXPECT_TRUE( A1.conformable( A2 ) && A2.conformable( A1 ) );
-	EXPECT_TRUE( A2.conformable( A3 ) && A3.conformable( A2 ) );
+	EXPECT_TRUE( A1.conformable( A3 ) && A3.conformable( A1 ) );
 
 	Array2D_int const C1( 2, 3 );
-	Array2A_int const C2( C1 );
 	Array2D_int const C3( 2, 3 );
 
-	EXPECT_TRUE( C1.conformable( C2 ) && C2.conformable( C1 ) );
-	EXPECT_TRUE( C2.conformable( C3 ) && C3.conformable( C2 ) );
+	EXPECT_TRUE( C1.conformable( C3 ) && C3.conformable( C1 ) );
 }
 
 TEST( Array2Test, PredicateEqualDimensions )

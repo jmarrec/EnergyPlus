@@ -15,8 +15,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/ArrayS.all.hh>
-#include <ObjexxFCL/Array1A.hh>
-#include <ObjexxFCL/Array2A.hh>
 #include <ObjexxFCL/Array.functions.hh>
 #include "ObjexxFCL.unit.hh"
 
@@ -68,20 +66,6 @@ TEST( ArraySTest, Array1SEmptySliceOfEmptyArray )
 	EXPECT_EQ( 1, s.l() );
 	EXPECT_EQ( 0, s.u() );
 	EXPECT_EQ( 0u, s.size() );
-}
-
-TEST( ArraySTest, Array1SSliceOfUnboundedArray )
-{
-	Array1D_int a( 5, { 1, 2, 3, 4, 5 } );
-	Array1A_int u( a( 2 ) );
-	//u.dim( {1,_} ); // This is the default behavior
-	Array1S_int s( u( {2,4} ) );
-	EXPECT_EQ( 3u, s.size() );
-	EXPECT_EQ( 1, s.l() );
-	EXPECT_EQ( 3, s.u() );
-	EXPECT_EQ( 3, s( 1 ) );
-	EXPECT_EQ( 4, s( 2 ) );
-	EXPECT_EQ( 5, s( 3 ) );
 }
 
 TEST( ArraySTest, Array2SSingleIndexSlice )
@@ -136,30 +120,6 @@ TEST( ArraySTest, Array2D2SSlice )
 	EXPECT_EQ( 21, S( 2, 1 ) );
 	EXPECT_EQ( 22, S( 2, 2 ) );
 	EXPECT_EQ( 23, S( 2, 3 ) );
-	Array2A_int P( S ); // OK because slice is contiguous
-	EXPECT_EQ( 1, P.l1() );
-	EXPECT_EQ( 2, P.u1() );
-	EXPECT_EQ( 1, P.l2() );
-	EXPECT_EQ( 3, P.u2() );
-	EXPECT_EQ( 11, P( 1, 1 ) );
-	EXPECT_EQ( 12, P( 1, 2 ) );
-	EXPECT_EQ( 13, P( 1, 3 ) );
-	EXPECT_EQ( 21, P( 2, 1 ) );
-	EXPECT_EQ( 22, P( 2, 2 ) );
-	EXPECT_EQ( 23, P( 2, 3 ) );
-	EXPECT_DEBUG_DEATH( Array2A_int( A( {1,3,2}, _ ) ), ".*Assertion.*" ); // Can't make arg array from non-contiguous slice
-	Array2S_int S2( A( {2,3}, _ ) );
-	Array2A_int P2( S2 ); // OK because slice is contiguous
-	EXPECT_EQ( 1, P2.l1() );
-	EXPECT_EQ( 2, P2.u1() );
-	EXPECT_EQ( 1, P2.l2() );
-	EXPECT_EQ( 3, P2.u2() );
-	EXPECT_EQ( 21, P2( 1, 1 ) );
-	EXPECT_EQ( 22, P2( 1, 2 ) );
-	EXPECT_EQ( 23, P2( 1, 3 ) );
-	EXPECT_EQ( 31, P2( 2, 1 ) );
-	EXPECT_EQ( 32, P2( 2, 2 ) );
-	EXPECT_EQ( 33, P2( 2, 3 ) );
 }
 
 TEST( ArraySTest, Array2D1DOTFSlice )

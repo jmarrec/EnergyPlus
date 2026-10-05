@@ -304,18 +304,8 @@ protected: // Assignment: Array
 	{
 		assert( size_bounded() );
 		assert( size_ == a.size_ );
-		if ( overlap( a ) ) { // Overlap-safe
-			std::vector< T > c( size_ );
-			for ( size_type i = 0; i < size_; ++i ) {
-				c[ i ] = a[ i ];
-			}
-			for ( size_type i = 0; i < size_; ++i ) {
-				data_[ i ] = c[ i ];
-			}
-		} else { // Not overlap-safe
-			for ( size_type i = 0; i < size_; ++i ) {
-				data_[ i ] = a[ i ];
-			}
+		for ( size_type i = 0; i < size_; ++i ) {
+			data_[ i ] = a[ i ];
 		}
 	}
 

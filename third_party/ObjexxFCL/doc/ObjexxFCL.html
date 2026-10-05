@@ -92,8 +92,6 @@
 			<p>In addition to the Fortran intrinsic support there are numeric, string, and character functions that extend and fill holes in the C++ standard library.</p>
 			<h3>ChunkVector: Very Large Vectors</h3>
 			<p>ChunkVector is similar in interface to std::vector but uses multiple contiguous &quot;chunks&quot; of user-specified size to avoid allocation failures for very large vectors in a fragmented memory environment and to greatly reduce the performance cost of resizing operations. In typical use there is no performance degradation for ChunkVector element access compared to std::vector.</p>
-			<h3>CArray &amp; Cstring: Safe C-Style Array and String Wrappers</h3>
-			<p>These are lightweight wrappers around C-style arrays and strings that catch memory errors such as leaks and buffer overflows. This allows the safe use of functions requiring those C-style types.</p>
 		</td>
 		<td></td>
 		<td width="100%" valign="top">
