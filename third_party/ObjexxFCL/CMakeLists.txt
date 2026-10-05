@@ -51,8 +51,6 @@ set(src
   src/ObjexxFCL/ArrayS.hh
   src/ObjexxFCL/BArray.fwd.hh
   src/ObjexxFCL/BArray.hh
-  src/ObjexxFCL/CArrayA.fwd.hh
-  src/ObjexxFCL/CArrayA.hh
   src/ObjexxFCL/char.functions.hh
   src/ObjexxFCL/DimensionSlice.fwd.hh
   src/ObjexxFCL/DimensionSlice.hh
@@ -97,7 +95,6 @@ set( test_src
   tst/unit/Array3.unit.cc
   tst/unit/Array4.unit.cc
   tst/unit/ArrayS.unit.cc
-  tst/unit/CArrayA.unit.cc
   tst/unit/char.functions.unit.cc
   tst/unit/DimensionSlice.unit.cc
   tst/unit/Fmath.unit.cc

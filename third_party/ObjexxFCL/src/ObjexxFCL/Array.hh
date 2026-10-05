@@ -18,7 +18,6 @@
 #include <ObjexxFCL/BArray.hh>
 #include <ObjexxFCL/AlignedAllocator.hh>
 #include <ObjexxFCL/ArrayS.hh>
-#include <ObjexxFCL/CArrayA.hh>
 #include <ObjexxFCL/InitializerSentinel.hh>
 #include <ObjexxFCL/ProxySentinel.hh>
 #include <ObjexxFCL/TypeTraits.hh>
@@ -306,7 +305,7 @@ protected: // Assignment: Array
 		assert( size_bounded() );
 		assert( size_ == a.size_ );
 		if ( overlap( a ) ) { // Overlap-safe
-			CArrayA< T > c( size_ );
+			std::vector< T > c( size_ );
 			for ( size_type i = 0; i < size_; ++i ) {
 				c[ i ] = a[ i ];
 			}
