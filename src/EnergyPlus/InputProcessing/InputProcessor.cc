@@ -1780,7 +1780,7 @@ bool InputProcessor::preProcessorCheck(EnergyPlusData &state) // Returns true if
         std::string Multiples;
 
         getObjectDefMaxArgs(state, state.dataIPShortCut->cCurrentModuleObject, NumParams, NumAlphas, NumNumbers);
-        state.dataIPShortCut->cAlphaArgs({1, NumAlphas}) = BlankString;
+        std::fill_n(state.dataIPShortCut->cAlphaArgs.begin(), NumAlphas, BlankString);
         for (int CountP = 1; CountP <= NumPrePM; ++CountP) {
             getObjectItem(state,
                           state.dataIPShortCut->cCurrentModuleObject,

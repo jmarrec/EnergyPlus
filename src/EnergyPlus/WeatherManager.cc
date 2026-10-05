@@ -1615,10 +1615,16 @@ namespace Weather {
         int JDay = General::OrdinalDay(ActStartMonth, ActStartDay, state.dataWeather->LeapYearAdd);
         int JDay1 = General::OrdinalDay(ActEndMonth, ActEndDay, state.dataWeather->LeapYearAdd);
         if (JDay1 >= JDay) {
-            DSTIdx({JDay, JDay1}) = 1;
+            for (int Day = JDay; Day <= JDay1; ++Day) {
+                DSTIdx(Day) = 1;
+            }
         } else {
-            DSTIdx({JDay, 366}) = 1;
-            DSTIdx({1, JDay1}) = 1;
+            for (int Day = JDay; Day <= 366; ++Day) {
+                DSTIdx(Day) = 1;
+            }
+            for (int Day = 1; Day <= JDay1; ++Day) {
+                DSTIdx(Day) = 1;
+            }
         }
     }
 

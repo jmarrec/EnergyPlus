@@ -13771,7 +13771,7 @@ namespace SurfaceGeometry {
             thisConstruct.setArraysBasedOnMaxSolidWinLayers(state);
 
             int TotLayersOld = state.dataConstruction->Construct(oldConstruction).TotLayers;
-            thisConstruct.LayerPoint({1, Construction::MaxLayersInConstruct}) = 0;
+            thisConstruct.LayerPoint = 0; // sized to Construction::MaxLayersInConstruct
             thisConstruct.LayerPoint(1) = stormMaterial;
             thisConstruct.LayerPoint(2) = gapMaterial;
             for (int i = 3; i <= TotLayersOld + 2; ++i) {

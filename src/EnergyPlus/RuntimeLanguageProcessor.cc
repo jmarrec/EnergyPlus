@@ -341,8 +341,8 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
 
     // reinitialize trend variables so old data are purged
     for (int TrendVarNum = 1; TrendVarNum <= state.dataRuntimeLang->NumErlTrendVariables; ++TrendVarNum) {
-        int TrendDepth = state.dataRuntimeLang->TrendVariable(TrendVarNum).LogDepth;
-        state.dataRuntimeLang->TrendVariable(TrendVarNum).TrendValARR({1, TrendDepth}) = 0.0;
+        // TrendValARR is allocated to LogDepth
+        state.dataRuntimeLang->TrendVariable(TrendVarNum).TrendValARR = 0.0;
     }
 
     // reinitialize sensors

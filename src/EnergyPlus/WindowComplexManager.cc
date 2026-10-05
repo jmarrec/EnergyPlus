@@ -1559,7 +1559,7 @@ namespace WindowComplexManager {
                 Geom.SolSkyWt(I) /= WtSum;
             }
         } else {
-            Geom.SolSkyWt({1, NSky}) = 0.0;
+            Geom.SolSkyWt = 0.0;
         }
         // SkyGround Weights
         Geom.SolSkyGndWt.allocate(NGnd);
@@ -1572,7 +1572,7 @@ namespace WindowComplexManager {
                 Geom.SolSkyGndWt(I) /= WtSum;
             }
         } else {
-            Geom.SolSkyGndWt({1, NGnd}) = 0.0;
+            Geom.SolSkyGndWt = 0.0;
         }
         //  Weights for beam reflected from ground are calculated after shading
         //  interval is determined
