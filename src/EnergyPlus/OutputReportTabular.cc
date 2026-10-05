@@ -54,6 +54,7 @@
 #include <iomanip>
 #include <limits>
 #include <map>
+#include <numeric>
 #include <string_view>
 #include <unordered_map>
 #include <utility>
@@ -61,7 +62,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/ArrayS.functions.hh>
 #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/member.functions.hh>
 #include <ObjexxFCL/string.functions.hh>
@@ -9919,7 +9919,10 @@ void writeBEPSEndUseBySubCatOrSpaceType(EnergyPlusData &state,
                 tableBodyTemp(col - 1, row) = tableBody(col, row);
             }
         }
-        Array1D_string columnHeadTemp(columnHead({2, _, _}));
+        Array1D_string columnHeadTemp(columnHead.u() - 1);
+        for (int col = 2; col <= columnHead.u(); ++col) {
+            columnHeadTemp(col - 1) = columnHead(col);
+        }
         if (style.produceSQLite) {
             if (state.dataSQLiteProcedures->sqlite) {
                 state.dataSQLiteProcedures->sqlite->createSQLiteTabularDataRecords(
@@ -10751,7 +10754,10 @@ void WriteDemandEndUseSummary(EnergyPlusData &state)
                 tableBodyTemp(col - 1, row) = tableBody(col, row);
             }
         }
-        Array1D_string columnHeadTemp(columnHead({2, _, _}));
+        Array1D_string columnHeadTemp(columnHead.u() - 1);
+        for (int col = 2; col <= columnHead.u(); ++col) {
+            columnHeadTemp(col - 1) = columnHead(col);
+        }
 
         if (currentStyle.produceSQLite) {
             if (state.dataSQLiteProcedures->sqlite) {
@@ -10942,7 +10948,7 @@ void WriteCompCostTable(EnergyPlusData &state)
         }
 
         // holds interim value for construction component costs: reference bldg.
-        Real64 const RefBldgConstCost = sum(TableBodyData(1, {1, 3}));
+        Real64 const RefBldgConstCost = TableBodyData(1, 1) + TableBodyData(1, 2) + TableBodyData(1, 3);
 
         tableBody(1, 3) = RealToStr(currentStyle.formatReals, TableBodyData(1, 3), 2);
         TableBodyData(1, 4) = RefBldgConstCost * state.dataCostEstimateManager->RefrncBldg.DesignFeeFrac;
@@ -10955,7 +10961,10 @@ void WriteCompCostTable(EnergyPlusData &state)
         tableBody(1, 7) = RealToStr(currentStyle.formatReals, TableBodyData(1, 7), 2);
         TableBodyData(1, 8) = RefBldgConstCost * state.dataCostEstimateManager->RefrncBldg.CommissioningFrac;
         tableBody(1, 8) = RealToStr(currentStyle.formatReals, TableBodyData(1, 8), 2);
-        state.dataCostEstimateManager->RefrncBldg.GrandTotal = sum(TableBodyData(1, {1, 8}));
+        state.dataCostEstimateManager->RefrncBldg.GrandTotal = 0.0;
+        for (int col = 1; col <= 8; ++col) {
+            state.dataCostEstimateManager->RefrncBldg.GrandTotal += TableBodyData(1, col);
+        }
         TableBodyData(1, 9) = state.dataCostEstimateManager->RefrncBldg.GrandTotal;
         tableBody(1, 9) = RealToStr(currentStyle.formatReals, TableBodyData(1, 9), 2);
         if (ort->buildingConditionedFloorArea > 0.0) {
@@ -10977,7 +10986,7 @@ void WriteCompCostTable(EnergyPlusData &state)
         tableBody(2, 3) = RealToStr(currentStyle.formatReals, TableBodyData(2, 3), 2);
 
         // holds interim value for construction component costs: current bldg.
-        Real64 const CurntBldgConstCost = sum(TableBodyData(2, {1, 3}));
+        Real64 const CurntBldgConstCost = TableBodyData(2, 1) + TableBodyData(2, 2) + TableBodyData(2, 3);
 
         TableBodyData(2, 4) = CurntBldgConstCost * state.dataCostEstimateManager->CurntBldg.DesignFeeFrac;
         tableBody(2, 4) = RealToStr(currentStyle.formatReals, TableBodyData(2, 4), 2);
@@ -10991,7 +11000,10 @@ void WriteCompCostTable(EnergyPlusData &state)
         TableBodyData(2, 8) = CurntBldgConstCost * state.dataCostEstimateManager->CurntBldg.CommissioningFrac;
         tableBody(2, 8) = RealToStr(currentStyle.formatReals, TableBodyData(2, 8), 2);
 
-        state.dataCostEstimateManager->CurntBldg.GrandTotal = sum(TableBodyData(2, {1, 8}));
+        state.dataCostEstimateManager->CurntBldg.GrandTotal = 0.0;
+        for (int col = 1; col <= 8; ++col) {
+            state.dataCostEstimateManager->CurntBldg.GrandTotal += TableBodyData(2, col);
+        }
         TableBodyData(2, 9) = state.dataCostEstimateManager->CurntBldg.GrandTotal;
         tableBody(2, 9) = RealToStr(currentStyle.formatReals, TableBodyData(2, 9), 2);
         if (ort->buildingConditionedFloorArea > 0) {

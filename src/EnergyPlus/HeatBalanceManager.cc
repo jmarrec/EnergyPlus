@@ -53,7 +53,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/ArrayS.functions.hh>
 #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/string.functions.hh>
 
@@ -3509,27 +3508,29 @@ namespace HeatBalanceManager {
             }
 
             for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
-                AverageZoneTemp = sum(state.dataHeatBalMgr->TempZoneRpt(ZoneNum, {1, state.dataHeatBalMgr->CountWarmupDayPoints})) /
-                                  double(state.dataHeatBalMgr->CountWarmupDayPoints);
+                Real64 SumZoneTemp = 0.0;
+                Real64 SumZoneLoad = 0.0;
                 for (int Num = 1; Num <= state.dataHeatBalMgr->CountWarmupDayPoints; ++Num) {
+                    SumZoneTemp += state.dataHeatBalMgr->TempZoneRpt(ZoneNum, Num);
                     if (state.dataHeatBalMgr->MaxLoadZoneRpt(ZoneNum, Num) > 1.e-4) {
                         state.dataHeatBalMgr->LoadZoneRpt(ZoneNum, Num) /= state.dataHeatBalMgr->MaxLoadZoneRpt(ZoneNum, Num);
                     } else {
                         state.dataHeatBalMgr->LoadZoneRpt(ZoneNum, Num) = 0.0;
                     }
+                    SumZoneLoad += state.dataHeatBalMgr->LoadZoneRpt(ZoneNum, Num);
                 }
-                AverageZoneLoad = sum(state.dataHeatBalMgr->LoadZoneRpt(ZoneNum, {1, state.dataHeatBalMgr->CountWarmupDayPoints})) /
-                                  double(state.dataHeatBalMgr->CountWarmupDayPoints);
+                AverageZoneTemp = SumZoneTemp / double(state.dataHeatBalMgr->CountWarmupDayPoints);
+                AverageZoneLoad = SumZoneLoad / double(state.dataHeatBalMgr->CountWarmupDayPoints);
                 StdDevZoneTemp = 0.0;
                 StdDevZoneLoad = 0.0;
                 for (int Num = 1; Num <= state.dataHeatBalMgr->CountWarmupDayPoints; ++Num) {
                     state.dataHeatBalMgr->TempZoneRptStdDev(Num) = pow_2(state.dataHeatBalMgr->TempZoneRpt(ZoneNum, Num) - AverageZoneTemp);
                     state.dataHeatBalMgr->LoadZoneRptStdDev(Num) = pow_2(state.dataHeatBalMgr->LoadZoneRpt(ZoneNum, Num) - AverageZoneLoad);
+                    StdDevZoneTemp += state.dataHeatBalMgr->TempZoneRptStdDev(Num);
+                    StdDevZoneLoad += state.dataHeatBalMgr->LoadZoneRptStdDev(Num);
                 }
-                StdDevZoneTemp = std::sqrt(sum(state.dataHeatBalMgr->TempZoneRptStdDev({1, state.dataHeatBalMgr->CountWarmupDayPoints})) /
-                                           double(state.dataHeatBalMgr->CountWarmupDayPoints));
-                StdDevZoneLoad = std::sqrt(sum(state.dataHeatBalMgr->LoadZoneRptStdDev({1, state.dataHeatBalMgr->CountWarmupDayPoints})) /
-                                           double(state.dataHeatBalMgr->CountWarmupDayPoints));
+                StdDevZoneTemp = std::sqrt(StdDevZoneTemp / double(state.dataHeatBalMgr->CountWarmupDayPoints));
+                StdDevZoneLoad = std::sqrt(StdDevZoneLoad / double(state.dataHeatBalMgr->CountWarmupDayPoints));
 
                 constexpr const char *Format_731(" Warmup Convergence Information,{},{},{:.10G},{:.10G},{},{},{:.10G},{:.10G},{},{}\n");
                 print(state.files.eio,

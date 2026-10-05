@@ -46,13 +46,13 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstdint>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/ArrayS.functions.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Construction.hh>
@@ -1023,6 +1023,7 @@ namespace WindowComplexManager {
                 Thetas(1) = 0.0;                          // By convention, the first basis point is at the center (theta=0,phi=0)
                 Thetas(NThetas + 1) = 0.5 * Constant::Pi; // and there is an N+1st point (not a basis element) at Pi/2
                 NPhis(1) = 1;
+                int MaxNPhis = NPhis(1); // Max no of NPhis for any theta
                 NumElem = 1;
                 for (I = 2; I <= NThetas; ++I) {
                     Thetas(I) = state.dataConstruction->Construct(IConst).BSDFInput.BasisMat(1, I) * Constant::DegToRad;
@@ -1031,8 +1032,8 @@ namespace WindowComplexManager {
                         ShowFatalError(state, "WindowComplexManager: incorrect input, no. phis must be positive.");
                     }
                     NumElem += NPhis(I);
+                    MaxNPhis = std::max(MaxNPhis, NPhis(I));
                 }
-                int MaxNPhis = maxval(NPhis({1, NThetas}));     // Max no of NPhis for any theta
                 Basis.Phis.allocate(NThetas + 1, MaxNPhis + 1); // N+1st Phi point (not basis element) at 2Pi
                 Basis.BasisIndex.allocate(MaxNPhis, NThetas + 1);
                 Basis.Phis = 0.0;                                                            // Initialize so undefined elements will contain zero
@@ -1553,7 +1554,7 @@ namespace WindowComplexManager {
             J = Geom.SkyIndex(I);
             Geom.SolSkyWt(I) = SkyWeight(Geom.sInc(J));
         }
-        WtSum = sum(Geom.SolSkyWt({1, NSky}));
+        WtSum = sum(Geom.SolSkyWt);
         if (WtSum > Constant::rTinyValue) {
             for (I = 1; I <= NSky; ++I) {
                 Geom.SolSkyWt(I) /= WtSum;
@@ -1566,7 +1567,7 @@ namespace WindowComplexManager {
         for (I = 1; I <= NGnd; ++I) {
             Geom.SolSkyGndWt(I) = SkyGndWeight(Geom.GndPt(I));
         }
-        WtSum = sum(Geom.SolSkyGndWt({1, NGnd}));
+        WtSum = sum(Geom.SolSkyGndWt);
         if (WtSum > Constant::rTinyValue) {
             for (I = 1; I <= NGnd; ++I) {
                 Geom.SolSkyGndWt(I) /= WtSum;

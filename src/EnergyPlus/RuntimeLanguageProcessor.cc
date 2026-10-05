@@ -53,7 +53,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/ArrayS.functions.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
@@ -172,7 +171,7 @@ void InitializeRuntimeLanguage(EnergyPlusData &state)
             // datevalues(1)+datevalues(2)+datevalues(3)+  &
             // datevalues(5)+datevalues(6)+datevalues(7)+datevalues(8)
             state.dataRuntimeLang->ErlVariable(state.dataRuntimeLangProcessor->ActualTimeNum).Value =
-                SetErlValueNumber(double(sum(datevalues({5, 8}))));
+                SetErlValueNumber(double(datevalues(5) + datevalues(6) + datevalues(7) + datevalues(8)));
             // datevalues(5)+datevalues(6)+datevalues(7)+datevalues(8)
             //    ELSE
             //      ErlVariable(ActualDateAndTimeNum)%Value  = SetErlValueNumber(REAL(RANDOM_NUMBER(X=509),r64))
@@ -2368,7 +2367,12 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     if (thisIndex >= 1) {
                         if (thisIndex <= state.dataRuntimeLang->TrendVariable(thisTrend).LogDepth) {
                             // calculate average
-                            thisAverage = sum(state.dataRuntimeLang->TrendVariable(thisTrend).TrendValARR({1, thisIndex})) / double(thisIndex);
+                            auto const &thisTrendVar = state.dataRuntimeLang->TrendVariable(thisTrend);
+                            Real64 sumTrendVal = 0.0;
+                            for (int i = 1; i <= thisIndex; ++i) {
+                                sumTrendVal += thisTrendVar.TrendValARR(i);
+                            }
+                            thisAverage = sumTrendVal / double(thisIndex);
                             ReturnValue = SetErlValueNumber(thisAverage, Operand(1));
                         } else {
                             ReturnValue.Type = Value::Error;
@@ -2464,14 +2468,17 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                         if (thisIndex <= state.dataRuntimeLang->TrendVariable(thisTrend).LogDepth) {
                             // closed form solution for slope of linear least squares fit
                             auto &thisTrendVar = state.dataRuntimeLang->TrendVariable(thisTrend);
+                            Real64 sumTime = 0.0;
+                            Real64 sumTrendVal = 0.0;
+                            Real64 sumTimeSq = 0.0;
                             Real64 dotTimeTrendVal = 0.0;
                             for (int i = 1; i <= thisIndex; ++i) {
+                                sumTime += thisTrendVar.TimeARR(i);
+                                sumTrendVal += thisTrendVar.TrendValARR(i);
+                                sumTimeSq += pow_2(thisTrendVar.TimeARR(i));
                                 dotTimeTrendVal += thisTrendVar.TimeARR(i) * thisTrendVar.TrendValARR(i);
                             }
-                            thisSlope =
-                                (sum(thisTrendVar.TimeARR({1, thisIndex})) * sum(thisTrendVar.TrendValARR({1, thisIndex})) -
-                                 thisIndex * dotTimeTrendVal) /
-                                (pow_2(sum(thisTrendVar.TimeARR({1, thisIndex}))) - thisIndex * sum(pow(thisTrendVar.TimeARR({1, thisIndex}), 2)));
+                            thisSlope = (sumTime * sumTrendVal - thisIndex * dotTimeTrendVal) / (pow_2(sumTime) - thisIndex * sumTimeSq);
                             ReturnValue = SetErlValueNumber(thisSlope, Operand(1)); // rate of change per hour
                         } else {
                             ReturnValue.Type = Value::Error;
@@ -2495,8 +2502,12 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     thisIndex = std::floor(Operand(2).Number);
                     if (thisIndex >= 1) {
                         if (thisIndex <= state.dataRuntimeLang->TrendVariable(thisTrend).LogDepth) {
-                            ReturnValue =
-                                SetErlValueNumber(sum(state.dataRuntimeLang->TrendVariable(thisTrend).TrendValARR({1, thisIndex})), Operand(1));
+                            auto const &thisTrendVar = state.dataRuntimeLang->TrendVariable(thisTrend);
+                            Real64 sumTrendVal = 0.0;
+                            for (int i = 1; i <= thisIndex; ++i) {
+                                sumTrendVal += thisTrendVar.TrendValARR(i);
+                            }
+                            ReturnValue = SetErlValueNumber(sumTrendVal, Operand(1));
                         } else {
                             ReturnValue.Type = Value::Error;
                             ReturnValue.Error = "Built-in trend function called with index larger than what is being logged";

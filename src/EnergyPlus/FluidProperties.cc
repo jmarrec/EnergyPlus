@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <format>
@@ -582,7 +583,9 @@ namespace Fluid {
         waterRaw->CpConcs.allocate(waterRaw->NumCpConcPoints);
         waterRaw->CpConcs = 0.0;
         waterRaw->CpValues.allocate(waterRaw->NumCpConcPoints, waterRaw->NumCpTempPoints);
-        waterRaw->CpValues(1, {1, waterRaw->NumCpTempPoints}) = DefaultWaterCpData;
+        for (int j = 1; j <= waterRaw->NumCpTempPoints; ++j) {
+            waterRaw->CpValues(1, j) = DefaultWaterCpData[j - 1];
+        }
 
         waterRaw->RhoDataPresent = true;
         waterRaw->NumRhoConcPoints = 1;
@@ -592,7 +595,9 @@ namespace Fluid {
         waterRaw->RhoConcs.allocate(waterRaw->NumRhoConcPoints);
         waterRaw->RhoConcs = 0.0;
         waterRaw->RhoValues.allocate(waterRaw->NumRhoConcPoints, waterRaw->NumRhoTempPoints);
-        waterRaw->RhoValues(1, {1, waterRaw->NumRhoTempPoints}) = DefaultWaterRhoData;
+        for (int j = 1; j <= waterRaw->NumRhoTempPoints; ++j) {
+            waterRaw->RhoValues(1, j) = DefaultWaterRhoData[j - 1];
+        }
 
         waterRaw->CondDataPresent = true;
         waterRaw->NumCondConcPoints = 1;
@@ -602,7 +607,9 @@ namespace Fluid {
         waterRaw->CondConcs.allocate(waterRaw->NumCondConcPoints);
         waterRaw->CondConcs = 0.0;
         waterRaw->CondValues.allocate(waterRaw->NumCondConcPoints, waterRaw->NumCondTempPoints);
-        waterRaw->CondValues(1, {1, waterRaw->NumCondTempPoints}) = DefaultWaterCondData;
+        for (int j = 1; j <= waterRaw->NumCondTempPoints; ++j) {
+            waterRaw->CondValues(1, j) = DefaultWaterCondData[j - 1];
+        }
 
         waterRaw->ViscDataPresent = true;
         waterRaw->NumViscConcPoints = 1;
@@ -612,7 +619,9 @@ namespace Fluid {
         waterRaw->ViscConcs.allocate(waterRaw->NumViscConcPoints);
         waterRaw->ViscConcs = 0.0;
         waterRaw->ViscValues.allocate(waterRaw->NumViscConcPoints, waterRaw->NumViscTempPoints);
-        waterRaw->ViscValues(1, {1, waterRaw->NumViscTempPoints}) = DefaultWaterViscData;
+        for (int j = 1; j <= waterRaw->NumViscTempPoints; ++j) {
+            waterRaw->ViscValues(1, j) = DefaultWaterViscData[j - 1];
+        }
 
         // Water is always available
         auto *water = GetGlycol(state, "WATER");
@@ -1266,7 +1275,9 @@ namespace Fluid {
 
         ethylene->CpValues.allocate(ethylene->NumCpConcPoints, ethylene->NumCpTempPoints); // Specific heat data values
         for (int i = 1; i <= ethylene->NumCpConcPoints; ++i) {
-            ethylene->CpValues(i, {1, ethylene->NumCpTempPoints}) = DefaultEthGlyCpData[i - 1];
+            for (int j = 1; j <= ethylene->NumCpTempPoints; ++j) {
+                ethylene->CpValues(i, j) = DefaultEthGlyCpData[i - 1][j - 1];
+            }
         }
 
         // Density
@@ -1282,7 +1293,9 @@ namespace Fluid {
 
         ethylene->RhoValues.allocate(ethylene->NumRhoConcPoints, ethylene->NumRhoTempPoints); // Density data values
         for (int i = 1; i <= ethylene->NumRhoConcPoints; ++i) {
-            ethylene->RhoValues(i, {1, ethylene->NumRhoTempPoints}) = DefaultEthGlyRhoData[i - 1];
+            for (int j = 1; j <= ethylene->NumRhoTempPoints; ++j) {
+                ethylene->RhoValues(i, j) = DefaultEthGlyRhoData[i - 1][j - 1];
+            }
         }
 
         // Conductivity
@@ -1298,7 +1311,9 @@ namespace Fluid {
 
         ethylene->CondValues.allocate(ethylene->NumCondConcPoints, ethylene->NumCondTempPoints); // Density data values
         for (int i = 1; i <= ethylene->NumCondConcPoints; ++i) {
-            ethylene->CondValues(i, {1, ethylene->NumCondTempPoints}) = DefaultEthGlyCondData[i - 1];
+            for (int j = 1; j <= ethylene->NumCondTempPoints; ++j) {
+                ethylene->CondValues(i, j) = DefaultEthGlyCondData[i - 1][j - 1];
+            }
         }
 
         // Viscosity
@@ -1314,7 +1329,9 @@ namespace Fluid {
 
         ethylene->ViscValues.allocate(ethylene->NumViscConcPoints, ethylene->NumViscTempPoints); // Density data values
         for (int i = 1; i <= ethylene->NumViscConcPoints; ++i) {
-            ethylene->ViscValues(i, {1, ethylene->NumViscTempPoints}) = DefaultEthGlyViscData[i - 1];
+            for (int j = 1; j <= ethylene->NumViscTempPoints; ++j) {
+                ethylene->ViscValues(i, j) = DefaultEthGlyViscData[i - 1][j - 1];
+            }
         }
 
         // Propylene
@@ -1331,7 +1348,6 @@ namespace Fluid {
         propylene->NumCpTempPoints = DefaultNumGlyTemps; // Number of temperature points for specific heat
         propylene->NumCpConcPoints = DefaultNumGlyConcs; // Number of concentration points for specific heat
 
-        // No ObjexxFCL templates for assigning std::array to Array1S, Probably want to covert these Array1D and 2D to std::vector eventually anyway
         propylene->CpTemps.allocate(propylene->NumCpTempPoints); // Temperatures for specific heat of glycol
         propylene->CpTemps = DefaultGlycolTemps;
 
@@ -1340,7 +1356,9 @@ namespace Fluid {
 
         propylene->CpValues.allocate(propylene->NumCpConcPoints, propylene->NumCpTempPoints); // Specific heat data values
         for (int i = 1; i <= propylene->NumCpConcPoints; ++i) {
-            propylene->CpValues(i, {1, propylene->NumCpTempPoints}) = DefaultPropGlyCpData[i - 1];
+            for (int j = 1; j <= propylene->NumCpTempPoints; ++j) {
+                propylene->CpValues(i, j) = DefaultPropGlyCpData[i - 1][j - 1];
+            }
         }
 
         // Density
@@ -1356,7 +1374,9 @@ namespace Fluid {
 
         propylene->RhoValues.allocate(propylene->NumRhoConcPoints, propylene->NumRhoTempPoints); // Density data values
         for (int i = 1; i <= propylene->NumRhoConcPoints; ++i) {
-            propylene->RhoValues(i, {1, propylene->NumRhoTempPoints}) = DefaultPropGlyRhoData[i - 1];
+            for (int j = 1; j <= propylene->NumRhoTempPoints; ++j) {
+                propylene->RhoValues(i, j) = DefaultPropGlyRhoData[i - 1][j - 1];
+            }
         }
 
         // Conductivity
@@ -1372,7 +1392,9 @@ namespace Fluid {
 
         propylene->CondValues.allocate(propylene->NumCondConcPoints, propylene->NumCondTempPoints); // Density data values
         for (int i = 1; i <= propylene->NumCondConcPoints; ++i) {
-            propylene->CondValues(i, {1, propylene->NumCondTempPoints}) = DefaultPropGlyCondData[i - 1];
+            for (int j = 1; j <= propylene->NumCondTempPoints; ++j) {
+                propylene->CondValues(i, j) = DefaultPropGlyCondData[i - 1][j - 1];
+            }
         }
 
         // Viscosity
@@ -1388,7 +1410,9 @@ namespace Fluid {
 
         propylene->ViscValues.allocate(propylene->NumViscConcPoints, propylene->NumViscTempPoints); // Density data values
         for (int i = 1; i <= propylene->NumViscConcPoints; ++i) {
-            propylene->ViscValues(i, {1, propylene->NumViscTempPoints}) = DefaultPropGlyViscData[i - 1];
+            for (int j = 1; j <= propylene->NumViscTempPoints; ++j) {
+                propylene->ViscValues(i, j) = DefaultPropGlyViscData[i - 1][j - 1];
+            }
         }
 
         // *************** RAW GLYCOLS ***************
