@@ -9912,8 +9912,13 @@ void writeBEPSEndUseBySubCatOrSpaceType(EnergyPlusData &state,
             rowHeadTemp(i) = rowHeadTemp(i) + ":" + tableBody(1, i);
         }
 
-        // Erase the SubCategory (first column), using slicing
-        Array2D_string tableBodyTemp(tableBody({2, _, _}, {_, _, _}));
+        // Erase the SubCategory (first column)
+        Array2D_string tableBodyTemp(tableBody.u1() - 1, tableBody.u2());
+        for (int col = 2; col <= tableBody.u1(); ++col) {
+            for (int row = 1; row <= tableBody.u2(); ++row) {
+                tableBodyTemp(col - 1, row) = tableBody(col, row);
+            }
+        }
         Array1D_string columnHeadTemp(columnHead({2, _, _}));
         if (style.produceSQLite) {
             if (state.dataSQLiteProcedures->sqlite) {
@@ -10739,8 +10744,13 @@ void WriteDemandEndUseSummary(EnergyPlusData &state)
             rowHeadTemp(i) = rowHeadTemp(i) + ":" + tableBody(1, i);
         }
 
-        // Erase the SubCategory (first column), using slicing
-        Array2D_string tableBodyTemp(tableBody({2, _, _}, {_, _, _}));
+        // Erase the SubCategory (first column)
+        Array2D_string tableBodyTemp(tableBody.u1() - 1, tableBody.u2());
+        for (int col = 2; col <= tableBody.u1(); ++col) {
+            for (int row = 1; row <= tableBody.u2(); ++row) {
+                tableBodyTemp(col - 1, row) = tableBody(col, row);
+            }
+        }
         Array1D_string columnHeadTemp(columnHead({2, _, _}));
 
         if (currentStyle.produceSQLite) {

@@ -136,21 +136,6 @@ public: // Creation
 	 Super( a )
 	{}
 
-	// Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	explicit
-	Array2D( Array2S< U > const & a ) :
-	 Super( a )
-	{
-		setup_real();
-		size_type l( 0u );
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2, ++l ) {
-				initialize( l, a( i1, i2 ) );
-			}
-		}
-	}
-
 	// IndexRange Constructor
 	Array2D( IR const & I1, IR const & I2 ) :
 	 Super( I1, I2 )
@@ -192,21 +177,6 @@ public: // Creation
 		assert( conformable( a ) );
 		setup_real();
 		initialize( a );
-	}
-
-	// IndexRange + Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array2D( IR const & I1, IR const & I2, Array2S< U > const & a ) :
-	 Super( I1, I2, InitializerSentinel{} )
-	{
-		assert( conformable( a ) );
-		setup_real();
-		size_type l( 0u );
-		for ( int i1 = 1, e1 = a.u1(); i1 <= e1; ++i1 ) {
-			for ( int i2 = 1, e2 = a.u2(); i2 <= e2; ++i2, ++l ) {
-				initialize( l, a( i1, i2 ) );
-			}
-		}
 	}
 
 	// Super + IndexRange Constructor Template

@@ -15,7 +15,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1S.hh>
-#include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/ArrayS.functions.hh>
 
 #endif // ObjexxFCL_ArrayS_all_hh_INCLUDED

@@ -15,7 +15,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1S.hh>
-#include <ObjexxFCL/Array2S.hh>
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/Array3D.hh>
@@ -50,22 +49,6 @@ pow( Array1S< T > const & a, X const & x )
 // count /////
 
 // size /////
-
-template< typename T >
-inline
-BArray::size_type
-size( Array2S< T > const & a, int const dim )
-{
-	switch ( dim ) {
-	case 1:
-		return a.size1();
-	case 2:
-		return a.size2();
-	default:
-		assert( false );
-		return 0;
-	}
-}
 
 template< template< typename > class A, typename T, class = typename std::enable_if< std::is_base_of< ArrayS< T >, A< T > >::value >::type >
 inline

@@ -16,7 +16,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array2.fwd.hh>
 #include <ObjexxFCL/Array.hh>
-#include <ObjexxFCL/Array2S.hh>
 
 namespace ObjexxFCL {
 
@@ -131,17 +130,6 @@ protected: // Creation
 	 z2_( a.z2_ )
 	{}
 
-	// Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	explicit
-	Array2( Array2S< U > const & a ) :
-	 Super( a ),
-	 I1_( a.u1() ),
-	 I2_( a.u2() ),
-	 z1_( I1_.size() ),
-	 z2_( I2_.size() )
-	{}
-
 	// IndexRange Constructor
 	Array2( IR const & I1, IR const & I2 ) :
 	 Super( size_of( I1, I2 ) ),
@@ -188,15 +176,6 @@ protected: // Creation
 	 z2_( a.z2_ )
 	{}
 
-	// Slice Proxy Constructor
-	Array2( Array2S< T > const & a, ProxySentinel proxy ) :
-	 Super( a, proxy ),
-	 I1_( a.u1() ),
-	 I2_( a.u2() ),
-	 z1_( I1_.size() ),
-	 z2_( I2_.size() )
-	{}
-
 	// Base Proxy Constructor
 	Array2( Base const & a, ProxySentinel proxy ) :
 	 Super( a, proxy ),
@@ -217,15 +196,6 @@ protected: // Creation
 
 	// Copy + IndexRange Proxy Constructor
 	Array2( Array2 const & a, IR const & I1, IR const & I2, ProxySentinel proxy ) :
-	 Super( a, proxy ),
-	 I1_( I1 ),
-	 I2_( I2 ),
-	 z1_( I1_.size() ),
-	 z2_( I2_.size() )
-	{}
-
-	// Slice + IndexRange Proxy Constructor
-	Array2( Array2S< T > const & a, IR const & I1, IR const & I2, ProxySentinel proxy ) :
 	 Super( a, proxy ),
 	 I1_( I1 ),
 	 I2_( I2 ),
@@ -332,15 +302,6 @@ public: // Subscript
 
 public: // Slice Proxy Generators
 
-	// array( s1, s2 ) const
-	Array2S< T >
-	operator ()( IS const & s1, IS const & s2 ) const
-	{
-		DS const d1( I1_, s1, z2_ );
-		DS const d2( I2_, s2 );
-		return Array2S< T >( data_, -shift_, d1, d2 );
-	}
-
 	// array( i1, s2 ) const
 	Array1S< T >
 	operator ()( int const i1, IS const & s2 ) const
@@ -359,15 +320,6 @@ public: // Slice Proxy Generators
 		DS const d1( I1_, s1, z2_ );
 		k += slice_k( I2_, i2 );
 		return Array1S< T >( data_, k, d1 );
-	}
-
-	// array( s1, s2 )
-	Array2S< T >
-	operator ()( IS const & s1, IS const & s2 )
-	{
-		DS const d1( I1_, s1, z2_ );
-		DS const d2( I2_, s2 );
-		return Array2S< T >( data_, -shift_, d1, d2 );
 	}
 
 	// array( i1, s2 )
@@ -407,28 +359,12 @@ public: // Predicate
 		return ( ( z1_ == a.z1_ ) && ( z2_ == a.z2_ ) );
 	}
 
-	// Conformable?
-	template< typename U >
-	bool
-	conformable( Array2S< U > const & a ) const
-	{
-		return ( ( z1_ == a.size1() ) && ( z2_ == a.size2() ) );
-	}
-
 	// Equal Dimensions?
 	template< typename U >
 	bool
 	equal_dimensions( Array2< U > const & a ) const
 	{
 		return ( ( I1_ == a.I1_ ) && ( I2_ == a.I2_ ) );
-	}
-
-	// Equal Dimensions?
-	template< typename U >
-	bool
-	equal_dimensions( Array2S< U > const & a ) const
-	{
-		return ( ( l1() == 1 ) && ( u1() == a.u1() ) && ( l2() == 1 ) && ( u2() == a.u2() ) );
 	}
 
 	// Is Identity?
@@ -684,24 +620,6 @@ bool
 conformable( Array2< U > const & a, Array2< V > const & b )
 {
 	return a.conformable( b );
-}
-
-// Conformable?
-template< typename U, typename V >
-inline
-bool
-conformable( Array2< U > const & a, Array2S< V > const & b )
-{
-	return a.conformable( b );
-}
-
-// Conformable?
-template< typename U, typename V >
-inline
-bool
-conformable( Array2S< U > const & a, Array2< V > const & b )
-{
-	return b.conformable( a );
 }
 
 // Equal Dimensions?
