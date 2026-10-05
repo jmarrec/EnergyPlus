@@ -3649,7 +3649,7 @@ namespace SurfaceGeometry {
                     }
                 }
                 surfTemp.Vertex.allocate(surfTemp.Sides);
-                GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs({2, _}));
+                GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs, 2);
                 CheckConvexity(state, SurfNum, surfTemp.Sides);
                 if (state.dataReportFlag->MakeMirroredDetachedShading) {
                     MakeMirrorSurface(state, SurfNum);
@@ -4417,7 +4417,7 @@ namespace SurfaceGeometry {
                 }
                 surfTemp.Vertex.allocate(surfTemp.Sides);
                 surfTemp.NewVertex.allocate(surfTemp.Sides);
-                GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs({3, _}));
+                GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs, 3);
                 if (surfTemp.Area <= 0.0) {
                     ShowSevereError(
                         state,
@@ -5402,7 +5402,7 @@ namespace SurfaceGeometry {
                 surfTemp.Multiplier = 1.0;
             }
 
-            GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs({4, _}));
+            GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs, 4);
 
             CheckConvexity(state, SurfNum, surfTemp.Sides);
             surfTemp.windowShadingControlList.clear();
@@ -6577,7 +6577,7 @@ namespace SurfaceGeometry {
                 surfTemp.Sides = s_ipsc->rNumericArgs(1);
             }
             surfTemp.Vertex.allocate(surfTemp.Sides);
-            GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs({2, _}));
+            GetVertices(state, SurfNum, surfTemp.Sides, s_ipsc->rNumericArgs, 2);
             CheckConvexity(state, SurfNum, surfTemp.Sides);
             //    IF (SurfaceTmp(SurfNum)%Sides == 3) THEN
             //      CALL ShowWarningError(state, TRIM(s_ipsc->cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
@@ -9220,9 +9220,10 @@ namespace SurfaceGeometry {
     }
 
     void GetVertices(EnergyPlusData &state,
-                     int const SurfNum,             // Current surface number
-                     int const NSides,              // Number of sides to figure
-                     Array1S<Real64> const Vertices // Vertices, in specified order
+                     int const SurfNum,              // Current surface number
+                     int const NSides,               // Number of sides to figure
+                     Array1D<Real64> const &Numbers, // Numeric input fields, vertices in specified order
+                     int const firstVertexIndex      // Index in Numbers of the first vertex coordinate
     )
     {
 
@@ -9266,13 +9267,13 @@ namespace SurfaceGeometry {
         if (NSides > state.dataSurface->MaxVerticesPerSurface) {
             state.dataSurface->MaxVerticesPerSurface = NSides;
         }
-        int Ptr = 1;
+        int Ptr = firstVertexIndex;
         for (n = 1; n <= NSides; ++n) {
-            surfTemp.Vertex(n).x = Vertices(Ptr);
+            surfTemp.Vertex(n).x = Numbers(Ptr);
             ++Ptr;
-            surfTemp.Vertex(n).y = Vertices(Ptr);
+            surfTemp.Vertex(n).y = Numbers(Ptr);
             ++Ptr;
-            surfTemp.Vertex(n).z = Vertices(Ptr);
+            surfTemp.Vertex(n).z = Numbers(Ptr);
             ++Ptr;
         }
 

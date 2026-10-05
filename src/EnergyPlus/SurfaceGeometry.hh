@@ -275,9 +275,10 @@ namespace SurfaceGeometry {
     };
 
     void GetVertices(EnergyPlusData &state,
-                     int const SurfNum,             // Current surface number
-                     int const NSides,              // Number of sides to figure
-                     Array1S<Real64> const Vertices // Vertices, in specified order
+                     int const SurfNum,              // Current surface number
+                     int const NSides,               // Number of sides to figure
+                     Array1D<Real64> const &Numbers, // Numeric input fields, vertices in specified order
+                     int const firstVertexIndex      // Index in Numbers of the first vertex coordinate
     );
 
     void ReverseAndRecalculate(EnergyPlusData &state,
