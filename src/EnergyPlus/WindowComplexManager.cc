@@ -1497,12 +1497,12 @@ namespace WindowComplexManager {
         Geom.NGnd = NGnd;
         Geom.NReflSurf = NReflSurf;
         Geom.SkyIndex.allocate(NSky);
-        Geom.SkyIndex = TmpSkyInd({1, NSky});
+        std::copy_n(TmpSkyInd.begin(), NSky, Geom.SkyIndex.begin());
         TmpSkyInd.deallocate();
         Geom.GndIndex.allocate(NGnd);
         Geom.GndPt.allocate(NGnd);
-        Geom.GndIndex = TmpGndInd({1, NGnd});
-        Geom.GndPt = TmpGndPt({1, NGnd});
+        std::copy_n(TmpGndInd.begin(), NGnd, Geom.GndIndex.begin());
+        std::copy_n(TmpGndPt.begin(), NGnd, Geom.GndPt.begin());
         TmpGndInd.deallocate();
         TmpGndPt.deallocate();
         MaxHits = maxval(TmpRfRyNH);
@@ -1511,16 +1511,22 @@ namespace WindowComplexManager {
         Geom.HitSurfNo.allocate(MaxHits, NReflSurf);
         Geom.HitSurfDSq.allocate(MaxHits, NReflSurf);
         Geom.HitPt.allocate(MaxHits, NReflSurf);
-        Geom.RefSurfIndex = TmpRfSfInd({1, NReflSurf});
-        Geom.RefRayNHits = TmpRfRyNH({1, NReflSurf});
+        std::copy_n(TmpRfSfInd.begin(), NReflSurf, Geom.RefSurfIndex.begin());
+        std::copy_n(TmpRfRyNH.begin(), NReflSurf, Geom.RefRayNHits.begin());
         Geom.HitSurfNo = 0;
         Geom.HitSurfDSq = 0.0;
         Geom.HitPt = Vector(0.0, 0.0, 0.0);
         for (I = 1; I <= NReflSurf; ++I) {
             TotHits = TmpRfRyNH(I);
-            Geom.HitSurfNo({1, TotHits}, I) = TmpHSurfNo({1, TotHits}, I);
-            Geom.HitSurfDSq({1, TotHits}, I) = TmpHSurfDSq({1, TotHits}, I);
-            Geom.HitPt({1, TotHits}, I) = TmpHitPt({1, TotHits}, I);
+            for (int i = 1; i <= TotHits; ++i) {
+                Geom.HitSurfNo(i, I) = TmpHSurfNo(i, I);
+            }
+            for (int i = 1; i <= TotHits; ++i) {
+                Geom.HitSurfDSq(i, I) = TmpHSurfDSq(i, I);
+            }
+            for (int i = 1; i <= TotHits; ++i) {
+                Geom.HitPt(i, I) = TmpHitPt(i, I);
+            }
         }
         TmpRfRyNH.deallocate();
         TmpRfSfInd.deallocate();
@@ -1635,8 +1641,12 @@ namespace WindowComplexManager {
         Geom.SjdotN.allocate(MaxInt, Window.NBkSurf);
         Geom.SurfInt = 0;
         for (I = 1; I <= Window.NBkSurf; ++I) {
-            Geom.SurfInt({1, Geom.NSurfInt(I)}, I) = TmpSurfInt({1, Geom.NSurfInt(I)}, I);
-            Geom.SjdotN({1, Geom.NSurfInt(I)}, I) = TmpSjdotN({1, Geom.NSurfInt(I)}, I);
+            for (int i = 1; i <= Geom.NSurfInt(I); ++i) {
+                Geom.SurfInt(i, I) = TmpSurfInt(i, I);
+            }
+            for (int i = 1; i <= Geom.NSurfInt(I); ++i) {
+                Geom.SjdotN(i, I) = TmpSjdotN(i, I);
+            }
         }
 
         TmpSurfInt.deallocate();

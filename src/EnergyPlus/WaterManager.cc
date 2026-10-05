@@ -1295,14 +1295,18 @@ namespace WaterManager {
                 oldSupplyCompNames = state.dataWaterData->WaterStorage(TankIndex).SupplyCompNames;
                 state.dataWaterData->WaterStorage(TankIndex).SupplyCompNames.deallocate();
                 state.dataWaterData->WaterStorage(TankIndex).SupplyCompNames.allocate(oldNumSupply + 1);
-                state.dataWaterData->WaterStorage(TankIndex).SupplyCompNames({1, oldNumSupply}) = oldSupplyCompNames; // array assignment
+                for (int i = 1; i <= oldNumSupply; ++i) {
+                    state.dataWaterData->WaterStorage(TankIndex).SupplyCompNames(i) = oldSupplyCompNames(i);
+                }
                 state.dataWaterData->WaterStorage(TankIndex).SupplyCompNames(oldNumSupply + 1) = CompName;
             }
             if (allocated(state.dataWaterData->WaterStorage(TankIndex).SupplyCompTypes)) {
                 oldSupplyCompTypes = state.dataWaterData->WaterStorage(TankIndex).SupplyCompTypes;
                 state.dataWaterData->WaterStorage(TankIndex).SupplyCompTypes.deallocate();
                 state.dataWaterData->WaterStorage(TankIndex).SupplyCompTypes.allocate(oldNumSupply + 1);
-                state.dataWaterData->WaterStorage(TankIndex).SupplyCompTypes({1, oldNumSupply}) = oldSupplyCompTypes; // array assignment
+                for (int i = 1; i <= oldNumSupply; ++i) {
+                    state.dataWaterData->WaterStorage(TankIndex).SupplyCompTypes(i) = oldSupplyCompTypes(i);
+                }
                 state.dataWaterData->WaterStorage(TankIndex).SupplyCompTypes(oldNumSupply + 1) = CompType;
             }
             state.dataWaterData->WaterStorage(TankIndex).VdotAvailSupply.deallocate();
@@ -1409,14 +1413,18 @@ namespace WaterManager {
                 oldDemandCompNames = state.dataWaterData->WaterStorage(TankIndex).DemandCompNames;
                 state.dataWaterData->WaterStorage(TankIndex).DemandCompNames.deallocate();
                 state.dataWaterData->WaterStorage(TankIndex).DemandCompNames.allocate(oldNumDemand + 1);
-                state.dataWaterData->WaterStorage(TankIndex).DemandCompNames({1, oldNumDemand}) = oldDemandCompNames; // array assignment
+                for (int i = 1; i <= oldNumDemand; ++i) {
+                    state.dataWaterData->WaterStorage(TankIndex).DemandCompNames(i) = oldDemandCompNames(i);
+                }
                 state.dataWaterData->WaterStorage(TankIndex).DemandCompNames(oldNumDemand + 1) = CompName;
             }
             if (allocated(state.dataWaterData->WaterStorage(TankIndex).DemandCompTypes)) {
                 oldDemandCompTypes = state.dataWaterData->WaterStorage(TankIndex).DemandCompTypes;
                 state.dataWaterData->WaterStorage(TankIndex).DemandCompTypes.deallocate();
                 state.dataWaterData->WaterStorage(TankIndex).DemandCompTypes.allocate(oldNumDemand + 1);
-                state.dataWaterData->WaterStorage(TankIndex).DemandCompTypes({1, oldNumDemand}) = oldDemandCompTypes; // array assignment
+                for (int i = 1; i <= oldNumDemand; ++i) {
+                    state.dataWaterData->WaterStorage(TankIndex).DemandCompTypes(i) = oldDemandCompTypes(i);
+                }
                 state.dataWaterData->WaterStorage(TankIndex).DemandCompTypes(oldNumDemand + 1) = CompType;
             }
 

@@ -1085,11 +1085,17 @@ namespace ThermalChimney {
             }
 
             if (pivot != ThermChimLoop1) {
-                tempor({ThermChimLoop1, NTC}) = EquaCoef({ThermChimLoop1, NTC}, ThermChimLoop1);
+                for (int i = ThermChimLoop1; i <= NTC; ++i) {
+                    tempor(i) = EquaCoef(i, ThermChimLoop1);
+                }
                 tempb = EquaConst(ThermChimLoop1);
-                EquaCoef({ThermChimLoop1, NTC}, ThermChimLoop1) = EquaCoef({ThermChimLoop1, NTC}, pivot);
+                for (int i = ThermChimLoop1; i <= NTC; ++i) {
+                    EquaCoef(i, ThermChimLoop1) = EquaCoef(i, pivot);
+                }
                 EquaConst(ThermChimLoop1) = EquaConst(pivot);
-                EquaCoef({ThermChimLoop1, NTC}, pivot) = tempor({ThermChimLoop1, NTC});
+                for (int i = ThermChimLoop1; i <= NTC; ++i) {
+                    EquaCoef(i, pivot) = tempor(i);
+                }
                 EquaConst(pivot) = tempb;
             }
 

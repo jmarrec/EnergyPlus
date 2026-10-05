@@ -6956,7 +6956,7 @@ namespace Weather {
                 }
 
                 // Assign the ground reflectances to the variable
-                state.dataWeather->GroundReflectances({1, 12}) = GndProps({1, 12});
+                state.dataWeather->GroundReflectances = GndProps;
 
             } else {
                 ShowSevereError(state, std::format("{}: Too many objects entered. Only one allowed.", ipsc->cCurrentModuleObject));

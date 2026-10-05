@@ -16129,7 +16129,7 @@ void ComputeTableBodyUsingMovingAvg(EnergyPlusData &state,
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::Latent, LoadCompRow::People) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::Latent, LoadCompRow::People) = true;
-        AvgData = peopleDelaySeq(_);
+        AvgData = peopleDelaySeq;
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensDelay, LoadCompRow::People) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensDelay, LoadCompRow::People) = true;
@@ -16147,7 +16147,7 @@ void ComputeTableBodyUsingMovingAvg(EnergyPlusData &state,
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensRA, LoadCompRow::Lights) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensRA, LoadCompRow::Lights) = true;
-        AvgData = lightDelaySeq(_);
+        AvgData = lightDelaySeq;
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensDelay, LoadCompRow::Lights) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensDelay, LoadCompRow::Lights) = true;
@@ -16165,7 +16165,7 @@ void ComputeTableBodyUsingMovingAvg(EnergyPlusData &state,
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::Latent, LoadCompRow::Equip) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::Latent, LoadCompRow::Equip) = true;
-        AvgData = equipDelaySeq(_);
+        AvgData = equipDelaySeq;
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensDelay, LoadCompRow::Equip) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensDelay, LoadCompRow::Equip) = true;
@@ -16211,7 +16211,7 @@ void ComputeTableBodyUsingMovingAvg(EnergyPlusData &state,
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensInst, LoadCompRow::HvacLoss) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensInst, LoadCompRow::HvacLoss) = true;
-        AvgData = hvacLossDelaySeq(_);
+        AvgData = hvacLossDelaySeq;
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensDelay, LoadCompRow::HvacLoss) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensDelay, LoadCompRow::HvacLoss) = true;
@@ -16223,7 +16223,7 @@ void ComputeTableBodyUsingMovingAvg(EnergyPlusData &state,
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensInst, LoadCompRow::PowerGen) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensInst, LoadCompRow::PowerGen) = true;
-        AvgData = powerGenDelaySeq(_);
+        AvgData = powerGenDelaySeq;
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensDelay, LoadCompRow::PowerGen) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensDelay, LoadCompRow::PowerGen) = true;
@@ -16288,7 +16288,7 @@ void ComputeTableBodyUsingMovingAvg(EnergyPlusData &state,
         resCellsUsd(LoadCompCol::SensInst, LoadCompRow::FeneCond) = true;
 
         // FENESTRATION SOLAR
-        AvgData = feneSolarDelaySeq(_);
+        AvgData = feneSolarDelaySeq;
         General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
         resultCells(LoadCompCol::SensDelay, LoadCompRow::FeneSolr) = AvgData(timeOfMax);
         resCellsUsd(LoadCompCol::SensDelay, LoadCompRow::FeneSolr) = true;
@@ -16307,7 +16307,9 @@ void ComputeTableBodyUsingMovingAvg(EnergyPlusData &state,
                         curExtBoundCond = DataSurfaces::Ground;
                     }
                 }
-                AvgData = surfDelaySeq(_, kSurf);
+                for (int iTS = 1; iTS <= numTSinDay; ++iTS) {
+                    AvgData(iTS) = surfDelaySeq(iTS, kSurf);
+                }
                 General::MovingAvg(AvgData, state.dataSize->NumTimeStepsInAvg);
                 Real64 singleSurfDelay = AvgData(timeOfMax);
                 switch (state.dataSurface->Surface(kSurf).Class) {

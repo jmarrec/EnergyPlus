@@ -127,7 +127,9 @@ void GetNodeNums(EnergyPlusData &state,
         int ThisOne = Util::FindItemInList(Name, state.dataNodeInputMgr->NodeLists);
         if (ThisOne != 0) {
             NumNodes = state.dataNodeInputMgr->NodeLists(ThisOne).NumOfNodesInList;
-            NodeNumbers({1, NumNodes}) = state.dataNodeInputMgr->NodeLists(ThisOne).NodeNumbers({1, NumNodes});
+            for (int i = 1; i <= NumNodes; ++i) {
+                NodeNumbers(i) = state.dataNodeInputMgr->NodeLists(ThisOne).NodeNumbers(i);
+            }
             for (int Loop = 1; Loop <= NumNodes; ++Loop) {
                 if (nodeFluidType != Node::FluidType::Blank && state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType != Node::FluidType::Blank) {
                     if (state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType != nodeFluidType) {

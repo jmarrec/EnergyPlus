@@ -5624,19 +5624,25 @@ void DetermineShadowingCombinations(EnergyPlusData &state)
         state.dataShadowComb->ShadowComb(GRSNR).GenSurf.allocate({0, state.dataShadowComb->ShadowComb(GRSNR).NumGenSurf});
         state.dataShadowComb->ShadowComb(GRSNR).GenSurf(0) = 0;
         if (state.dataShadowComb->ShadowComb(GRSNR).NumGenSurf > 0) {
-            state.dataShadowComb->ShadowComb(GRSNR).GenSurf({1, state.dataShadowComb->ShadowComb(GRSNR).NumGenSurf}) = GSS({1, NGSS});
+            for (int i = 1; i <= state.dataShadowComb->ShadowComb(GRSNR).NumGenSurf; ++i) {
+                state.dataShadowComb->ShadowComb(GRSNR).GenSurf(i) = GSS(i);
+            }
         }
 
         state.dataShadowComb->ShadowComb(GRSNR).BackSurf.allocate({0, state.dataShadowComb->ShadowComb(GRSNR).NumBackSurf});
         state.dataShadowComb->ShadowComb(GRSNR).BackSurf(0) = 0;
         if (state.dataShadowComb->ShadowComb(GRSNR).NumBackSurf > 0) {
-            state.dataShadowComb->ShadowComb(GRSNR).BackSurf({1, state.dataShadowComb->ShadowComb(GRSNR).NumBackSurf}) = BKS({1, NBKS});
+            for (int i = 1; i <= state.dataShadowComb->ShadowComb(GRSNR).NumBackSurf; ++i) {
+                state.dataShadowComb->ShadowComb(GRSNR).BackSurf(i) = BKS(i);
+            }
         }
 
         state.dataShadowComb->ShadowComb(GRSNR).SubSurf.allocate({0, state.dataShadowComb->ShadowComb(GRSNR).NumSubSurf});
         state.dataShadowComb->ShadowComb(GRSNR).SubSurf(0) = 0;
         if (state.dataShadowComb->ShadowComb(GRSNR).NumSubSurf > 0) {
-            state.dataShadowComb->ShadowComb(GRSNR).SubSurf({1, state.dataShadowComb->ShadowComb(GRSNR).NumSubSurf}) = SBS({1, NSBS});
+            for (int i = 1; i <= state.dataShadowComb->ShadowComb(GRSNR).NumSubSurf; ++i) {
+                state.dataShadowComb->ShadowComb(GRSNR).SubSurf(i) = SBS(i);
+            }
         }
 
     } // ...end of surfaces (GRSNR) DO loop
@@ -7112,8 +7118,12 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                         WindowEquivalentLayer::CalcEQLOpticalProperty(
                             state, SurfNum, SolarArrays::DIFF, state.dataSolarShading->SurfWinAbsSolDiffEQL);
                     } else {
-                        state.dataSolarShading->SurfWinAbsSolDiffEQL(_, {1, CFS(EQLNum).NL + 1}) =
-                            state.dataWindowEquivalentLayer->CFSDiffAbsTrans(_, {1, CFS(EQLNum).NL + 1}, EQLNum);
+                        for (int Lay = 1; Lay <= CFS(EQLNum).NL + 1; ++Lay) {
+                            for (int i = 1; i <= state.dataSolarShading->SurfWinAbsSolDiffEQL.u1(); ++i) {
+                                state.dataSolarShading->SurfWinAbsSolDiffEQL(i, Lay) =
+                                    state.dataWindowEquivalentLayer->CFSDiffAbsTrans(i, Lay, EQLNum);
+                            }
+                        }
                     }
                     thisConstruct.TransDiff = state.dataSolarShading->SurfWinAbsSolDiffEQL(1, CFS(EQLNum).NL + 1);
 
@@ -8316,8 +8326,9 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                                     state, BackSurfNum, SolarArrays::BEAM, state.dataSolarShading->SurfWinAbsSolBeamBackEQL);
                                 auto &CFS = state.dataWindowEquivLayer->CFS;
                                 int EQLNum = constrBack.EQLConsPtr;
-                                state.dataSolarShading->SurfWinAbsBeamEQL({1, CFS(EQLNum).NL}) =
-                                    state.dataSolarShading->SurfWinAbsSolBeamBackEQL(1, {1, CFS(EQLNum).NL});
+                                for (int i = 1; i <= CFS(EQLNum).NL; ++i) {
+                                    state.dataSolarShading->SurfWinAbsBeamEQL(i) = state.dataSolarShading->SurfWinAbsSolBeamBackEQL(1, i);
+                                }
                                 // get the interior beam transmitted through back exterior or interior EQL window
                                 TransBeamWin = state.dataSolarShading->SurfWinAbsSolBeamBackEQL(1, CFS(EQLNum).NL + 1);
                                 //   Absorbed by the interior shade layer of back exterior window

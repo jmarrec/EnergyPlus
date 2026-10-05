@@ -391,8 +391,12 @@ void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrN
     CalcEQLWindowOpticalProperty(state, CFS(EQLNum), SolarArrays::DIFF, SysAbs1, 0.0, 0.0, 0.0);
     state.dataConstruction->Construct(ConstrNum).TransDiffFrontEQL = SysAbs1(1, CFS(EQLNum).NL + 1);
     state.dataWindowEquivalentLayer->CFSDiffAbsTrans(_, _, EQLNum) = SysAbs1;
-    state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL({1, CFSMAXNL}) = SysAbs1(1, {1, CFSMAXNL});
-    state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL({1, CFSMAXNL}) = SysAbs1(2, {1, CFSMAXNL});
+    for (int i = 1; i <= CFSMAXNL; ++i) {
+        state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL(i) = SysAbs1(1, i);
+    }
+    for (int i = 1; i <= CFSMAXNL; ++i) {
+        state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL(i) = SysAbs1(2, i);
+    }
     // get construction front and back diffuse effective reflectance
     state.dataConstruction->Construct(ConstrNum).ReflectSolDiffFront = CFS(EQLNum).L(1).SWP_EL.RHOSFDD;
     state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack = CFS(EQLNum).L(CFS(EQLNum).NL).SWP_EL.RHOSBDD;
@@ -793,7 +797,9 @@ void EQLWindowSurfaceHeatBalance(EnergyPlusData &state,
     TRMIN = root_4(rmir / Constant::StefanBoltzmann); // TODO check model equation.
 
     NL = state.dataWindowEquivLayer->CFS(EQLNum).NL;
-    QAllSWwinAbs({1, NL + 1}) = state.dataHeatBal->SurfWinQRadSWwinAbs(SurfNum, {1, NL + 1});
+    for (int i = 1; i <= NL + 1; ++i) {
+        QAllSWwinAbs(i) = state.dataHeatBal->SurfWinQRadSWwinAbs(SurfNum, i);
+    }
     //  Solve energy balance(s) for temperature at each node/layer and
     //  heat flux, including components, between each pair of nodes/layers
     ASHWAT_ThermalCalc(state,
@@ -6395,7 +6401,9 @@ void ASHWAT_Solar(int const NL,                                 // # of layers
     }
 
     if (present(SourceBD)) {
-        SourceBD = BeamDiffuseAbs;
+        for (int i = 1; i <= BeamDiffuseAbs.u(); ++i) {
+            SourceBD()(i) = BeamDiffuseAbs(i);
+        }
     }
     //  CHECKSUM - ALL INCOMING SOLAR FLUX MUST GO SOMEWHERE, SHOULD EQUAL ZERO
     CHKSUM = IBEAM + IDIFF + ILIGHTS - BPLUS(0) - DPLUS(0);
@@ -7939,8 +7947,12 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
         // Incident angle
         IncAng = std::acos(state.dataHeatBal->SurfCosIncAng(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, SurfNum));
         CalcEQLWindowOpticalProperty(state, CFS(EQLNum), BeamDIffFlag, Abs1, IncAng, ProfAngVer, ProfAngHor);
-        CFSAbs(1, {1, CFSMAXNL + 1}) = Abs1(1, {1, CFSMAXNL + 1});
-        CFSAbs(2, {1, CFSMAXNL + 1}) = Abs1(2, {1, CFSMAXNL + 1});
+        for (int i = 1; i <= CFSMAXNL + 1; ++i) {
+            CFSAbs(1, i) = Abs1(1, i);
+        }
+        for (int i = 1; i <= CFSMAXNL + 1; ++i) {
+            CFSAbs(2, i) = Abs1(2, i);
+        }
     } else {
         if (state.dataWindowEquivalentLayer->EQLDiffPropFlag(EQLNum)) {
             for (int Lay = 1; Lay <= CFS(EQLNum).NL; ++Lay) {
@@ -7955,21 +7967,37 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             }
             IncAng = std::acos(state.dataHeatBal->SurfCosIncAng(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, SurfNum));
             CalcEQLWindowOpticalProperty(state, CFS(EQLNum), BeamDIffFlag, Abs1, IncAng, ProfAngVer, ProfAngHor);
-            CFSAbs(_, {1, CFSMAXNL + 1}) = Abs1(_, {1, CFSMAXNL + 1});
-            state.dataWindowEquivalentLayer->CFSDiffAbsTrans(_, {1, CFSMAXNL + 1}, EQLNum) = Abs1(_, {1, CFSMAXNL + 1});
+            for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
+                for (int i = 1; i <= 2; ++i) {
+                    CFSAbs(i, Lay) = Abs1(i, Lay);
+                    state.dataWindowEquivalentLayer->CFSDiffAbsTrans(i, Lay, EQLNum) = Abs1(i, Lay);
+                }
+            }
             state.dataConstruction->Construct(ConstrNum).TransDiff = Abs1(1, CFS(EQLNum).NL + 1);
-            state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL({1, CFSMAXNL}) = Abs1(1, {1, CFSMAXNL});
-            state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL({1, CFSMAXNL}) = Abs1(2, {1, CFSMAXNL});
+            for (int i = 1; i <= CFSMAXNL; ++i) {
+                state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL(i) = Abs1(1, i);
+            }
+            for (int i = 1; i <= CFSMAXNL; ++i) {
+                state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL(i) = Abs1(2, i);
+            }
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffFront = CFS(EQLNum).L(1).SWP_EL.RHOSFDD;
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack = CFS(EQLNum).L(CFS(EQLNum).NL).SWP_EL.RHOSBDD;
             if (!CFS(EQLNum).ISControlled) {
                 state.dataWindowEquivalentLayer->EQLDiffPropFlag(EQLNum) = false;
             }
         } else {
-            CFSAbs(_, {1, CFSMAXNL + 1}) = state.dataWindowEquivalentLayer->CFSDiffAbsTrans(_, {1, CFSMAXNL + 1}, EQLNum);
+            for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
+                for (int i = 1; i <= 2; ++i) {
+                    CFSAbs(i, Lay) = state.dataWindowEquivalentLayer->CFSDiffAbsTrans(i, Lay, EQLNum);
+                }
+            }
             state.dataConstruction->Construct(ConstrNum).TransDiff = state.dataWindowEquivalentLayer->CFSDiffAbsTrans(1, CFS(EQLNum).NL + 1, EQLNum);
-            state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL({1, CFSMAXNL}) = CFSAbs(1, {1, CFSMAXNL});
-            state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL({1, CFSMAXNL}) = CFSAbs(2, {1, CFSMAXNL});
+            for (int i = 1; i <= CFSMAXNL; ++i) {
+                state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL(i) = CFSAbs(1, i);
+            }
+            for (int i = 1; i <= CFSMAXNL; ++i) {
+                state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL(i) = CFSAbs(2, i);
+            }
         }
     }
     if (CFS(EQLNum).VBLayerPtr > 0) {

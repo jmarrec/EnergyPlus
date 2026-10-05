@@ -363,7 +363,8 @@ namespace OutAirNodeManager {
 
         if (ListSize > 0) {
             state.dataOutAirNodeMgr->NumOutsideAirNodes = ListSize;
-            state.dataOutAirNodeMgr->OutsideAirNodeList = TmpNums({1, static_cast<int>(ListSize)});
+            state.dataOutAirNodeMgr->OutsideAirNodeList.dimension(static_cast<int>(ListSize));
+            std::copy_n(TmpNums.begin(), ListSize, state.dataOutAirNodeMgr->OutsideAirNodeList.begin());
         }
     }
 

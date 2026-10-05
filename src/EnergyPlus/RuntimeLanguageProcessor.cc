@@ -733,7 +733,9 @@ int AddInstruction(EnergyPlusData &state,
         TempStack = thisErlStack;
         thisErlStack.Instruction.deallocate();
         thisErlStack.Instruction.allocate(thisErlStack.NumInstructions + 1);
-        thisErlStack.Instruction({1, thisErlStack.NumInstructions}) = TempStack.Instruction({1, thisErlStack.NumInstructions});
+        for (int i = 1; i <= thisErlStack.NumInstructions; ++i) {
+            thisErlStack.Instruction(i) = TempStack.Instruction(i);
+        }
         ++thisErlStack.NumInstructions;
     }
 
@@ -786,7 +788,9 @@ void AddError(EnergyPlusData &state,
         TempStack = thisErlStack;
         thisErlStack.Error.deallocate();
         thisErlStack.Error.allocate(thisErlStack.NumErrors + 1);
-        thisErlStack.Error({1, thisErlStack.NumErrors}) = TempStack.Error({1, thisErlStack.NumErrors});
+        for (int i = 1; i <= thisErlStack.NumErrors; ++i) {
+            thisErlStack.Error(i) = TempStack.Error(i);
+        }
         ++thisErlStack.NumErrors;
     }
 
@@ -1531,7 +1535,9 @@ int ProcessTokens(
                         LastPos = TokenNum;
                         NumSubTokens = LastPos - Pos - 1;
                         SubTokenList.allocate(NumSubTokens);
-                        SubTokenList({1, NumSubTokens}) = Token({Pos + 1, LastPos - 1}); // Need to check that these don't exceed bounds
+                        for (int i = 1; i <= NumSubTokens; ++i) { // Need to check that these don't exceed bounds
+                            SubTokenList(i) = Token(Pos + i);
+                        }
                         ExpressionNum = ProcessTokens(state, SubTokenList, NumSubTokens, StackNum, ParsingString);
                         SubTokenList.deallocate();
 
@@ -1539,7 +1545,9 @@ int ProcessTokens(
                         NewNumTokens = NumTokens - NumSubTokens - 1;
                         if (NewNumTokens > 0) {
                             if (LastPos + 1 <= NumTokens) {
-                                Token({Pos + 1, NewNumTokens}) = Token({LastPos + 1, _});
+                                for (int i = Pos + 1; i <= NewNumTokens; ++i) { // shift left, forward copy is overlap-safe
+                                    Token(i) = Token(i + LastPos - Pos);
+                                }
                             }
                             Token.redimension(NewNumTokens);
                             Token(Pos).Type = Token::Expression;
@@ -1679,7 +1687,9 @@ int ProcessTokens(
             // Replace the three tokens with one expression token
             if ((NumOperands == 2) && (NumTokens - 2 > 0)) {
                 if (Pos + 2 <= NumTokens) {
-                    Token({Pos, NumTokens - 2}) = Token({Pos + 2, _});
+                    for (int i = Pos; i <= NumTokens - 2; ++i) { // shift left, forward copy is overlap-safe
+                        Token(i) = Token(i + 2);
+                    }
                 }
                 Token(Pos - 1).Type = Token::Expression;
                 Token(Pos - 1).Expression = ExpressionNum;
@@ -3165,7 +3175,9 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 if (NumAlphas > 1) {
                     state.dataRuntimeLang->ErlStack(StackNum).Line.allocate(NumAlphas - 1);
                     state.dataRuntimeLang->ErlStack(StackNum).NumLines = NumAlphas - 1;
-                    state.dataRuntimeLang->ErlStack(StackNum).Line({1, NumAlphas - 1}) = cAlphaArgs({2, NumAlphas}); // note array assignment
+                    for (int i = 1; i <= NumAlphas - 1; ++i) { // note array assignment
+                        state.dataRuntimeLang->ErlStack(StackNum).Line(i) = cAlphaArgs(i + 1);
+                    }
                 }
 
             } // ProgramNum
@@ -3201,7 +3213,9 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 if (NumAlphas > 1) {
                     state.dataRuntimeLang->ErlStack(StackNum).Line.allocate(NumAlphas - 1);
                     state.dataRuntimeLang->ErlStack(StackNum).NumLines = NumAlphas - 1;
-                    state.dataRuntimeLang->ErlStack(StackNum).Line({1, NumAlphas - 1}) = cAlphaArgs({2, NumAlphas}); // note array assignment
+                    for (int i = 1; i <= NumAlphas - 1; ++i) { // note array assignment
+                        state.dataRuntimeLang->ErlStack(StackNum).Line(i) = cAlphaArgs(i + 1);
+                    }
                 }
             }
         }

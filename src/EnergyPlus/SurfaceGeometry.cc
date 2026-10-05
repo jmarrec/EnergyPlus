@@ -12102,7 +12102,9 @@ namespace SurfaceGeometry {
                 thisFace.FacePoints.allocate(thisSurface.Sides);
                 thisFace.NSides = thisSurface.Sides;
                 thisFace.SurfNum = SurfNum;
-                thisFace.FacePoints({1, thisSurface.Sides}) = thisSurface.Vertex({1, thisSurface.Sides});
+                for (int i = 1; i <= thisSurface.Sides; ++i) {
+                    thisFace.FacePoints(i) = thisSurface.Vertex(i);
+                }
                 Vectors::CreateNewellAreaVector(thisFace.FacePoints, thisFace.NSides, thisFace.NewellAreaVector);
                 SumAreas += Vectors::VecLength(thisFace.NewellAreaVector);
             }
@@ -13551,7 +13553,9 @@ namespace SurfaceGeometry {
             if (state.dataSurface->WindowShadingControl(WSCPtr).ShadingType == DataSurfaces::WinShadingType::IntShade ||
                 state.dataSurface->WindowShadingControl(WSCPtr).ShadingType == DataSurfaces::WinShadingType::IntBlind) {
                 // Interior shading device
-                thisConstructNewSh.LayerPoint({1, TotLayersOld}) = state.dataConstruction->Construct(ConstrNum).LayerPoint({1, TotLayersOld});
+                for (int i = 1; i <= TotLayersOld; ++i) {
+                    thisConstructNewSh.LayerPoint(i) = state.dataConstruction->Construct(ConstrNum).LayerPoint(i);
+                }
                 thisConstructNewSh.LayerPoint(TotLayersNew) = ShDevNum;
                 thisConstructNewSh.InsideAbsorpSolar = thisMaterialSh->AbsorpSolarIn;
                 thisConstructNewSh.InsideAbsorpThermal = thisMaterialSh->AbsorpThermalBack;
@@ -13561,7 +13565,9 @@ namespace SurfaceGeometry {
             } else {
                 // Exterior shading device
                 thisConstructNewSh.LayerPoint(1) = ShDevNum;
-                thisConstructNewSh.LayerPoint({2, TotLayersNew}) = state.dataConstruction->Construct(ConstrNum).LayerPoint({1, TotLayersOld});
+                for (int i = 2; i <= TotLayersNew; ++i) {
+                    thisConstructNewSh.LayerPoint(i) = state.dataConstruction->Construct(ConstrNum).LayerPoint(i - 1);
+                }
                 auto const *thisMaterialShInside = s_mat->materials(state.dataConstruction->Construct(ConstrNewSh).LayerPoint(TotLayersNew));
                 thisConstructNewSh.InsideAbsorpSolar = thisMaterialShInside->AbsorpSolarIn;
                 thisConstructNewSh.InsideAbsorpThermal = thisMaterialShInside->AbsorpThermalBack;
@@ -13767,7 +13773,9 @@ namespace SurfaceGeometry {
             thisConstruct.LayerPoint({1, Construction::MaxLayersInConstruct}) = 0;
             thisConstruct.LayerPoint(1) = stormMaterial;
             thisConstruct.LayerPoint(2) = gapMaterial;
-            thisConstruct.LayerPoint({3, TotLayersOld + 2}) = state.dataConstruction->Construct(oldConstruction).LayerPoint({1, TotLayersOld});
+            for (int i = 3; i <= TotLayersOld + 2; ++i) {
+                thisConstruct.LayerPoint(i) = state.dataConstruction->Construct(oldConstruction).LayerPoint(i - 2);
+            }
             thisConstruct.Name = name;
             thisConstruct.TotLayers = TotLayersOld + 2;
             thisConstruct.TotSolidLayers = state.dataConstruction->Construct(oldConstruction).TotSolidLayers + 1;
@@ -13905,7 +13913,9 @@ namespace SurfaceGeometry {
         H = Vectors::VecLength(TVect); // SQRT((X(1)-X(2))**2 + (Y(1)-Y(2))**2 + (Z(1)-Z(2))**2)
 
         // Save coordinates of original window in case Window 5 data overwrites.
-        OriginalCoord.Vertex({1, surfTemp.Sides}) = surfTemp.Vertex({1, surfTemp.Sides});
+        for (int i = 1; i <= surfTemp.Sides; ++i) {
+            OriginalCoord.Vertex(i) = surfTemp.Vertex(i);
+        }
 
         // Height and width of first glazing system
         h1 = state.dataConstruction->Construct(IConst).W5FileGlazingSysHeight;
@@ -14076,7 +14086,9 @@ namespace SurfaceGeometry {
         H = Vectors::VecLength(TVect); // SQRT((X(1)-X(2))**2 + (Y(1)-Y(2))**2 + (Z(1)-Z(2))**2)
 
         // Save coordinates of original window in case Window 5 data overwrites.
-        OriginalCoord.Vertex({1, surfTemp.Sides}) = surfTemp.Vertex({1, surfTemp.Sides});
+        for (int i = 1; i <= surfTemp.Sides; ++i) {
+            OriginalCoord.Vertex(i) = surfTemp.Vertex(i);
+        }
 
         // Height and width of first glazing system
         h1 = state.dataConstruction->Construct(IConst).W5FileGlazingSysHeight;

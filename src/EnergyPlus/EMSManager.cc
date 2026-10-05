@@ -1477,8 +1477,10 @@ namespace EMSManager {
                 // push into trend
                 state.dataRuntimeLang->TrendVariable(TrendNum).tempTrendARR = state.dataRuntimeLang->TrendVariable(TrendNum).TrendValARR;
                 state.dataRuntimeLang->TrendVariable(TrendNum).TrendValARR(1) = currentVal;
-                state.dataRuntimeLang->TrendVariable(TrendNum).TrendValARR({2, TrendDepth}) =
-                    state.dataRuntimeLang->TrendVariable(TrendNum).tempTrendARR({1, TrendDepth - 1});
+                for (int i = 2; i <= TrendDepth; ++i) {
+                    state.dataRuntimeLang->TrendVariable(TrendNum).TrendValARR(i) =
+                        state.dataRuntimeLang->TrendVariable(TrendNum).tempTrendARR(i - 1);
+                }
             }
         }
     }
