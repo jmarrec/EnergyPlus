@@ -248,8 +248,7 @@ void InitSolarCalculations(EnergyPlusData &state)
         state.dataHeatBal->SurfSunlitFracHR = 0.0;
         state.dataHeatBal->SurfSunlitFrac = 0.0;
         state.dataHeatBal->SurfSunlitFracWithoutReveal = 0.0;
-        state.dataHeatBal->SurfWinBackSurfaces = 0;
-        state.dataHeatBal->SurfWinOverlapAreas = 0.0;
+        state.dataHeatBal->SurfWinBackSurfOverlaps.reset();
         state.dataHeatBal->SurfCosIncAngHR = 0.0;
         state.dataHeatBal->SurfCosIncAng = 0.0;
         state.dataSolarShading->SurfAnisoSkyMult = 1.0; // For isotropic sky; recalculated in AnisoSkyViewFactors if anisotropic radiance
@@ -1003,10 +1002,8 @@ void AllocateModuleArrays(EnergyPlusData &state)
     state.dataHeatBal->SurfSunlitFracHR.dimension(Constant::iHoursInDay, s_surf->TotSurfaces, 0.0);
     state.dataHeatBal->SurfSunlitFrac.dimension(Constant::iHoursInDay, state.dataGlobal->TimeStepsInHour, s_surf->TotSurfaces, 0.0);
     state.dataHeatBal->SurfSunlitFracWithoutReveal.dimension(Constant::iHoursInDay, state.dataGlobal->TimeStepsInHour, s_surf->TotSurfaces, 0.0);
-    state.dataHeatBal->SurfWinBackSurfaces.dimension(
-        Constant::iHoursInDay, state.dataGlobal->TimeStepsInHour, state.dataBSDFWindow->MaxBkSurf, s_surf->TotSurfaces, 0);
-    state.dataHeatBal->SurfWinOverlapAreas.dimension(
-        Constant::iHoursInDay, state.dataGlobal->TimeStepsInHour, state.dataBSDFWindow->MaxBkSurf, s_surf->TotSurfaces, 0.0);
+    state.dataHeatBal->SurfWinBackSurfOverlaps.allocate(
+        Constant::iHoursInDay, state.dataGlobal->TimeStepsInHour, state.dataBSDFWindow->MaxBkSurf, s_surf->TotSurfaces);
     state.dataHeatBal->SurfCosIncAngHR.dimension(Constant::iHoursInDay, s_surf->TotSurfaces, 0.0);
     state.dataHeatBal->SurfCosIncAng.dimension(Constant::iHoursInDay, state.dataGlobal->TimeStepsInHour, s_surf->TotSurfaces, 0.0);
 
@@ -4986,17 +4983,7 @@ void CalcPerSolarBeam(EnergyPlusData &state,
             }
         }
 
-        // Array4D
-        for (int hour = 1; hour <= 24; ++hour) {
-            for (int timestep = 1; timestep <= state.dataGlobal->TimeStepsInHour; ++timestep) {
-                for (int backSurfNum = 1; backSurfNum <= state.dataBSDFWindow->MaxBkSurf; ++backSurfNum) {
-                    for (int surfNum = 1; surfNum <= state.dataSurface->TotSurfaces; ++surfNum) {
-                        state.dataHeatBal->SurfWinBackSurfaces(hour, timestep, backSurfNum, surfNum) = 0.0;
-                        state.dataHeatBal->SurfWinOverlapAreas(hour, timestep, backSurfNum, surfNum) = 0.0;
-                    }
-                }
-            }
-        }
+        state.dataHeatBal->SurfWinBackSurfOverlaps.reset();
 
     } else {
         for (int surfNum = 1; surfNum <= state.dataSurface->TotSurfaces; ++surfNum) {
@@ -5016,13 +5003,7 @@ void CalcPerSolarBeam(EnergyPlusData &state,
             state.dataHeatBal->SurfCosIncAng(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, surfNum) = 0.0;
         }
 
-        // Array4D
-        for (int backSurfNum = 1; backSurfNum <= state.dataBSDFWindow->MaxBkSurf; ++backSurfNum) {
-            for (int surfNum = 1; surfNum <= state.dataSurface->TotSurfaces; ++surfNum) {
-                state.dataHeatBal->SurfWinBackSurfaces(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, backSurfNum, surfNum) = 0;
-                state.dataHeatBal->SurfWinOverlapAreas(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, backSurfNum, surfNum) = 0.0;
-            }
-        }
+        state.dataHeatBal->SurfWinBackSurfOverlaps.reset(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep);
     }
 
     if (!state.dataSysVars->DetailedSolarTimestepIntegration) {
@@ -6478,9 +6459,10 @@ void CalcInteriorSolarOverlaps(EnergyPlusData &state,
                     }
                     if (pssas[s_surf->SurfPenumbraID(bkSurfNum)] > 0) {
                         ++JBKS;
-                        state.dataHeatBal->SurfWinBackSurfaces(iHour, TS, JBKS, HTSS) = bkSurfNum;
+                        state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, JBKS, HTSS).backSurfNum = bkSurfNum;
                         Real64 OverlapArea = pssas[s_surf->SurfPenumbraID(bkSurfNum)] / state.dataSolarShading->SurfSunCosTheta(HTSS);
-                        state.dataHeatBal->SurfWinOverlapAreas(iHour, TS, JBKS, HTSS) = OverlapArea * s_surf->SurfaceWindow(HTSS).glazedFrac;
+                        state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, JBKS, HTSS).overlapArea =
+                            OverlapArea * s_surf->SurfaceWindow(HTSS).glazedFrac;
                     }
                 }
             }
@@ -6523,17 +6505,18 @@ void CalcInteriorSolarOverlaps(EnergyPlusData &state,
                     if (OverlapArea > 0.001) {
                         ++JBKS;
                         if (JBKS <= state.dataBSDFWindow->MaxBkSurf) {
-                            state.dataHeatBal->SurfWinBackSurfaces(iHour, TS, JBKS, HTSS) = BackSurfNum;
+                            state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, JBKS, HTSS).backSurfNum = BackSurfNum;
                             int baseSurfaceNum = s_surf->Surface(BackSurfNum).BaseSurf;
-                            state.dataHeatBal->SurfWinOverlapAreas(iHour, TS, JBKS, HTSS) = OverlapArea * s_surf->SurfaceWindow(HTSS).glazedFrac;
+                            state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, JBKS, HTSS).overlapArea =
+                                OverlapArea * s_surf->SurfaceWindow(HTSS).glazedFrac;
                             // If this is a subsurface, subtract its overlap area from its base surface
                             if (baseSurfaceNum != BackSurfNum) {
                                 for (int iBaseBKS = 1; iBaseBKS <= JBKS; ++iBaseBKS) {
-                                    if (baseSurfaceNum == state.dataHeatBal->SurfWinBackSurfaces(iHour, TS, iBaseBKS, HTSS)) {
-                                        state.dataHeatBal->SurfWinOverlapAreas(iHour, TS, iBaseBKS, HTSS) =
+                                    if (baseSurfaceNum == state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, iBaseBKS, HTSS).backSurfNum) {
+                                        state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, iBaseBKS, HTSS).overlapArea =
                                             max(0.0,
-                                                state.dataHeatBal->SurfWinOverlapAreas(iHour, TS, iBaseBKS, HTSS) -
-                                                    state.dataHeatBal->SurfWinOverlapAreas(iHour, TS, JBKS, HTSS));
+                                                state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, iBaseBKS, HTSS).overlapArea -
+                                                    state.dataHeatBal->SurfWinBackSurfOverlaps(iHour, TS, JBKS, HTSS).overlapArea);
                                         break;
                                     }
                                 }
@@ -7657,7 +7640,8 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                         // Loop over back surfaces irradiated by beam from this exterior window
                         for (int IBack = 1; IBack <= state.dataBSDFWindow->MaxBkSurf; ++IBack) {
                             int BackSurfNum =
-                                state.dataHeatBal->SurfWinBackSurfaces(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum);
+                                state.dataHeatBal->SurfWinBackSurfOverlaps(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum)
+                                    .backSurfNum;
                             if (BackSurfNum == 0) {
                                 break; // No more irradiated back surfaces for this exterior window
                             }
@@ -7670,7 +7654,8 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                             // Irradiated (overlap) area for this back surface, projected onto window plane
                             // (includes effect of shadowing on exterior window)
                             Real64 AOverlap =
-                                state.dataHeatBal->SurfWinOverlapAreas(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum);
+                                state.dataHeatBal->SurfWinBackSurfOverlaps(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum)
+                                    .overlapArea;
                             // Back surface area irradiated by beam solar from an exterior window, projected onto window plane
                             Real64 BOverlap = TBm * AOverlap * CosInc; //[m2]
                             // AOverlap multiplied by exterior window beam transmittance and cosine of incidence angle
@@ -8282,7 +8267,8 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
 
                         for (int IBack = 1; IBack <= state.dataBSDFWindow->MaxBkSurf; ++IBack) {
                             int BackSurfNum =
-                                state.dataHeatBal->SurfWinBackSurfaces(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum);
+                                state.dataHeatBal->SurfWinBackSurfOverlaps(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum)
+                                    .backSurfNum;
                             if (BackSurfNum == 0) {
                                 break; // No more irradiated back surfaces for this exterior window
                             }
@@ -8296,7 +8282,8 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                             // (includes effect of shadowing on exterior window)
 
                             Real64 AOverlap =
-                                state.dataHeatBal->SurfWinOverlapAreas(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum);
+                                state.dataHeatBal->SurfWinBackSurfOverlaps(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum)
+                                    .overlapArea;
                             Real64 BOverlap = TBm * AOverlap * CosInc; //[m2]
 
                             if (constrBack.TransDiff <= 0.0) {
@@ -8879,7 +8866,8 @@ void CalcInteriorSolarDistributionWCESimple(EnergyPlusData &state)
                 for (int IBack = 1; IBack <= NumOfBackSurf; ++IBack) {
 
                     int const BackSurfNum =
-                        state.dataHeatBal->SurfWinBackSurfaces(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum);
+                        state.dataHeatBal->SurfWinBackSurfOverlaps(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum)
+                            .backSurfNum;
 
                     if (BackSurfNum == 0) {
                         break; // No more irradiated back surfaces for this exterior window
@@ -8889,7 +8877,9 @@ void CalcInteriorSolarDistributionWCESimple(EnergyPlusData &state)
                     // NBackGlass = Construct( ConstrNumBack ).TotGlassLayers;
                     // Irradiated (overlap) area for this back surface, projected onto window plane
                     // (includes effect of shadowing on exterior window)
-                    Real64 AOverlap = state.dataHeatBal->SurfWinOverlapAreas(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum);
+                    Real64 AOverlap =
+                        state.dataHeatBal->SurfWinBackSurfOverlaps(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, IBack, SurfNum)
+                            .overlapArea;
                     Real64 BOverlap = TBm * AOverlap * CosInc; //[m2]
 
                     if (constrBack.TransDiff <= 0.0) {
