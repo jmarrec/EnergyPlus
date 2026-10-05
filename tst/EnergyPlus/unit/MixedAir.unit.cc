@@ -7564,8 +7564,7 @@ TEST_F(EnergyPlusFixture, OAController_FixedMinimum_MinimumLimitTypeTest)
     EXPECT_EQ("OA MIXER", state->dataAirLoop->OutsideAirSys(1).ComponentName(2));
 
     GetOAControllerInputs(*state);
-    int const HROutletNodeNum = Util::FindItemInList(
-        "OUTSIDE AIR INLET NODE", state->dataLoopNodes->NodeID({1, state->dataLoopNodes->NumOfNodes}), state->dataLoopNodes->NumOfNodes);
+    int const HROutletNodeNum = Util::FindItemInList("OUTSIDE AIR INLET NODE", state->dataLoopNodes->NodeID, state->dataLoopNodes->NumOfNodes);
     EXPECT_EQ(HROutletNodeNum, state->dataMixedAir->OAController(1).OANode);
     EXPECT_TRUE(OutAirNodeManager::CheckOutAirNodeNumber(*state, state->dataMixedAir->OAController(1).OANode));
 
@@ -7772,8 +7771,7 @@ TEST_F(EnergyPlusFixture, OAController_HighExhaustMassFlowTest)
     EXPECT_EQ("OA MIXER", state->dataAirLoop->OutsideAirSys(1).ComponentName(3));
 
     GetOAControllerInputs(*state);
-    int const OANodeNum = Util::FindItemInList(
-        "OUTSIDE AIR INLET NODE", state->dataLoopNodes->NodeID({1, state->dataLoopNodes->NumOfNodes}), state->dataLoopNodes->NumOfNodes);
+    int const OANodeNum = Util::FindItemInList("OUTSIDE AIR INLET NODE", state->dataLoopNodes->NodeID, state->dataLoopNodes->NumOfNodes);
     EXPECT_EQ(OANodeNum, state->dataMixedAir->OAController(1).OANode);
     EXPECT_TRUE(OutAirNodeManager::CheckOutAirNodeNumber(*state, state->dataMixedAir->OAController(1).OANode));
 
@@ -8025,8 +8023,7 @@ TEST_F(EnergyPlusFixture, OAController_LowExhaustMassFlowTest)
     EXPECT_EQ("OA MIXER", state->dataAirLoop->OutsideAirSys(1).ComponentName(3));
 
     GetOAControllerInputs(*state);
-    int const OANodeNum = Util::FindItemInList(
-        "OUTSIDE AIR INLET NODE", state->dataLoopNodes->NodeID({1, state->dataLoopNodes->NumOfNodes}), state->dataLoopNodes->NumOfNodes);
+    int const OANodeNum = Util::FindItemInList("OUTSIDE AIR INLET NODE", state->dataLoopNodes->NodeID, state->dataLoopNodes->NumOfNodes);
     EXPECT_EQ(OANodeNum, state->dataMixedAir->OAController(1).OANode);
     EXPECT_TRUE(OutAirNodeManager::CheckOutAirNodeNumber(*state, state->dataMixedAir->OAController(1).OANode));
 

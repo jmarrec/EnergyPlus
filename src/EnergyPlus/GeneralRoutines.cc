@@ -1468,7 +1468,9 @@ void TestReturnAirPathIntegrity(EnergyPlusData &state, bool &ErrFound, Array2D_i
             if (state.dataAirLoop->AirToZoneNodeInfo(Count2).NumReturnNodes > 0) {
                 if (AllNodes(1) == state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipReturnNodeNum(1)) {
                     const int WAirLoop = Count2;
-                    ValRetAPaths(_, WAirLoop) = 0;
+                    for (int i = 1; i <= ValRetAPaths.u1(); ++i) {
+                        ValRetAPaths(i, WAirLoop) = 0;
+                    }
                     for (int i = 1; i <= CountNodes; ++i) {
                         ValRetAPaths(i, WAirLoop) = AllNodes(i);
                     }

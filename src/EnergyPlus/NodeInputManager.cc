@@ -678,8 +678,7 @@ int AssignNodeNumber(EnergyPlusData &state,
     }
 
     if (state.dataNodeInputMgr->NumOfUniqueNodeNames > 0) {
-        int NumNode = Util::FindItemInList(
-            Name, state.dataLoopNodes->NodeID({1, state.dataNodeInputMgr->NumOfUniqueNodeNames}), state.dataNodeInputMgr->NumOfUniqueNodeNames);
+        int NumNode = Util::FindItemInList(Name, state.dataLoopNodes->NodeID, state.dataNodeInputMgr->NumOfUniqueNodeNames);
         if (NumNode > 0) {
             AssignNodeNumber = NumNode;
             ++state.dataNodeInputMgr->NodeRef(NumNode);

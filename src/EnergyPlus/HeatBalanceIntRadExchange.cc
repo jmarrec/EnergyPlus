@@ -104,7 +104,7 @@ namespace HeatBalanceIntRadExchange {
     //  McGraw-Hill, Inc., New York, 1967.
 
     void CalcInteriorRadExchange(EnergyPlusData &state,
-                                 Array1S<Real64> const SurfaceTemp,              // Current surface temperatures
+                                 Array1D<Real64> const &SurfaceTemp,             // Current surface temperatures
                                  int const SurfIterations,                       // Number of iterations in calling subroutine
                                  Array1D<Real64> &NetLWRadToSurf,                // Net long wavelength radiant exchange from other surfaces
                                  ObjexxFCL::Optional_int_const ZoneToResimulate, // if passed in, then only calculate for this zone
@@ -693,7 +693,10 @@ namespace HeatBalanceIntRadExchange {
                         print(state.files.eio, "\n");
 
                         for (int Findex : thisEnclosure.SurfaceReportNums) {
-                            Real64 RowSum = sum(SaveApproximateViewFactors(_, Findex));
+                            Real64 RowSum = 0.0;
+                            for (int jSurf = 1; jSurf <= thisEnclosure.NumOfSurfaces; ++jSurf) {
+                                RowSum += SaveApproximateViewFactors(jSurf, Findex);
+                            }
                             print(state.files.eio,
                                   "{},{},{},{:.4f}",
                                   "View Factor",
@@ -714,7 +717,10 @@ namespace HeatBalanceIntRadExchange {
                     print(state.files.eio, "\n");
 
                     for (int Findex : thisEnclosure.SurfaceReportNums) {
-                        Real64 RowSum = sum(thisEnclosure.F(_, Findex));
+                        Real64 RowSum = 0.0;
+                        for (int jSurf = 1; jSurf <= thisEnclosure.NumOfSurfaces; ++jSurf) {
+                            RowSum += thisEnclosure.F(jSurf, Findex);
+                        }
                         print(state.files.eio,
                               "{},{},{},{:.4f}",
                               "View Factor",
@@ -789,7 +795,11 @@ namespace HeatBalanceIntRadExchange {
                 if (!useSolarViewFactors) {
                     Real64 RowSum = 0.0;
                     for (int Findex : thisEnclosure.SurfaceReportNums) {
-                        RowSum += sum(thisEnclosure.F(_, Findex));
+                        Real64 colSum = 0.0;
+                        for (int jSurf = 1; jSurf <= thisEnclosure.NumOfSurfaces; ++jSurf) {
+                            colSum += thisEnclosure.F(jSurf, Findex);
+                        }
+                        RowSum += colSum;
                     }
                     RowSum = std::abs(RowSum - thisEnclosure.NumOfSurfaces);
                     FixedRowSum = std::abs(FixedRowSum - thisEnclosure.NumOfSurfaces);
@@ -1007,7 +1017,10 @@ namespace HeatBalanceIntRadExchange {
                 print(state.files.eio, "\n");
 
                 for (int Findex : thisEnclosure.SurfaceReportNums) {
-                    Real64 RowSum = sum(SaveApproximateViewFactors(_, Findex));
+                    Real64 RowSum = 0.0;
+                    for (int jSurf = 1; jSurf <= thisEnclosure.NumOfSurfaces; ++jSurf) {
+                        RowSum += SaveApproximateViewFactors(jSurf, Findex);
+                    }
                     print(state.files.eio,
                           "Solar View Factor,{},{},{:.4f}",
                           state.dataSurface->Surface(thisEnclosure.SurfacePtr(Findex)).Name,
@@ -1026,7 +1039,10 @@ namespace HeatBalanceIntRadExchange {
                 print(state.files.eio, "\n");
 
                 for (int Findex : thisEnclosure.SurfaceReportNums) {
-                    Real64 RowSum = sum(thisEnclosure.F(_, Findex));
+                    Real64 RowSum = 0.0;
+                    for (int jSurf = 1; jSurf <= thisEnclosure.NumOfSurfaces; ++jSurf) {
+                        RowSum += thisEnclosure.F(jSurf, Findex);
+                    }
                     print(state.files.eio,
                           "{},{},{},{:.4f}",
                           "Solar View Factor",
@@ -1084,7 +1100,11 @@ namespace HeatBalanceIntRadExchange {
 
             Real64 RowSum = 0.0;
             for (int Findex : thisEnclosure.SurfaceReportNums) {
-                RowSum += sum(thisEnclosure.F(_, Findex));
+                Real64 colSum = 0.0;
+                for (int jSurf = 1; jSurf <= thisEnclosure.NumOfSurfaces; ++jSurf) {
+                    colSum += thisEnclosure.F(jSurf, Findex);
+                }
+                RowSum += colSum;
             }
             RowSum = std::abs(RowSum - thisEnclosure.NumOfSurfaces);
             FixedRowSum = std::abs(FixedRowSum - thisEnclosure.NumOfSurfaces);
@@ -1694,7 +1714,10 @@ namespace HeatBalanceIntRadExchange {
             ++NumIterations;
             for (int i = 1; i <= N; ++i) {
                 // Determine row coefficients which will enforce closure.
-                Real64 const sum_FixedAF_i(sum(FixedAF(_, i)));
+                Real64 sum_FixedAF_i = 0.0;
+                for (int j = 1; j <= N; ++j) {
+                    sum_FixedAF_i += FixedAF(j, i);
+                }
                 if (std::abs(sum_FixedAF_i) > 1.0e-10) {
                     RowCoefficient(i) = A(i) / sum_FixedAF_i;
                 } else {

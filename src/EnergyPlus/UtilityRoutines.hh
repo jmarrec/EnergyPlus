@@ -420,8 +420,6 @@ namespace Util {
         return (it == list.end()) ? -1 : static_cast<int>(it - list.begin());
     }
 
-    int FindItemInList(std::string_view const String, Array1S_string const ListOfItems, int NumItems);
-
     template <typename InputIterator> int FindItemInList(std::string_view const str, InputIterator first, InputIterator last)
     {
         auto it = std::find(first, last, str);
@@ -429,11 +427,6 @@ namespace Util {
             return std::distance(first, it) + 1;
         }
         return 0;
-    }
-
-    inline int FindItemInList(std::string_view const String, Array1S_string const ListOfItems)
-    {
-        return Util::FindItemInList(String, ListOfItems, ListOfItems.isize());
     }
 
     template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>
@@ -527,13 +520,6 @@ namespace Util {
         return FindItem(String, ListOfItems, ListOfItems.isize());
     }
 
-    int FindItem(std::string_view const String, Array1S_string const ListOfItems, int const NumItems);
-
-    inline int FindItem(std::string_view const String, Array1S_string const ListOfItems)
-    {
-        return FindItem(String, ListOfItems, ListOfItems.isize());
-    }
-
     template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>
     // Container needs size() and operator[i] and elements need Name
     inline int FindItem(std::string_view const String, Container const &ListOfItems, int const NumItems)
@@ -620,7 +606,7 @@ namespace Util {
                                        std::string &nameToBeSet,          // field that is being set once a match is found
                                        int &ptrToBeSet,                   // pointer that is being set once a match is found
                                        std::string const &userName,       // name to be found searching through the list
-                                       Array1S_string const &listOfNames, // list of names in which the userName must be found
+                                       Array1D_string const &listOfNames, // list of names in which the userName must be found
                                        std::string const &itemType,       // string containing type of base object
                                        std::string const &itemName,       // string containing name of base object
                                        bool &errorFound);                 // set to true if an error is found
