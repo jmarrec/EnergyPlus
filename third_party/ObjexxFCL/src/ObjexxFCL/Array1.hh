@@ -16,7 +16,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1.fwd.hh>
 #include <ObjexxFCL/Array.hh>
-#include <ObjexxFCL/Array1S.hh>
 
 // C++ Headers
 #include <cmath>
@@ -125,14 +124,6 @@ protected: // Creation
 	 I_( a.I_ )
 	{}
 
-	// Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	explicit
-	Array1( Array1S< U > const & a ) :
-	 Super( a ),
-	 I_( a.u() )
-	{}
-
 	// IndexRange Constructor
 	explicit
 	Array1( IR const & I ) :
@@ -180,12 +171,6 @@ protected: // Creation
 	 I_( a.I_ )
 	{}
 
-	// Slice Proxy Constructor
-	Array1( Array1S< T > const & a, ProxySentinel proxy ) :
-	 Super( a, proxy ),
-	 I_( a.u() )
-	{}
-
 	// Base Proxy Constructor
 	Array1( Base const & a, ProxySentinel proxy ) :
 	 Super( a, proxy ),
@@ -200,12 +185,6 @@ protected: // Creation
 
 	// Copy + IndexRange Proxy Constructor
 	Array1( Array1 const & a, IR const & I, ProxySentinel proxy ) :
-	 Super( a, proxy ),
-	 I_( I )
-	{}
-
-	// Slice + IndexRange Proxy Constructor
-	Array1( Array1S< T > const & a, IR const & I, ProxySentinel proxy ) :
 	 Super( a, proxy ),
 	 I_( I )
 	{}
@@ -311,68 +290,6 @@ public: // Subscript
 	}
 
 
-public: // Slice Proxy Generators
-
-	// array( s ) const
-	Array1S< T >
-	operator ()( IS const & s ) const
-	{
-		DS const d( I_, s );
-		return Array1S< T >( data_, -shift_, d );
-	}
-
-	// array( s )
-	Array1S< T >
-	operator ()( IS const & s )
-	{
-		DS const d( I_, s );
-		return Array1S< T >( data_, -shift_, d );
-	}
-
-#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) // VC++2013 bug work-around
-
-	// array( {s} ) const
-	Array1S< T >
-	operator ()( std::initializer_list< int > const l ) const
-	{
-		IS const s( l );
-		DS const d( I_, s );
-		return Array1S< T >( data_, -shift_, d );
-	}
-
-	// array( {s} )
-	Array1S< T >
-	operator ()( std::initializer_list< int > const l )
-	{
-		IS const s( l );
-		DS const d( I_, s );
-		return Array1S< T >( data_, -shift_, d );
-	}
-
-#else
-
-	// array( {s} ) const
-	template< typename U, class = typename std::enable_if< std::is_constructible< int, U >::value >::type >
-	Array1S< T >
-	operator ()( std::initializer_list< U > const l ) const
-	{
-		IS const s( l );
-		DS const d( I_, s );
-		return Array1S< T >( data_, -shift_, d );
-	}
-
-	// array( {s} )
-	template< typename U, class = typename std::enable_if< std::is_constructible< int, U >::value >::type >
-	Array1S< T >
-	operator ()( std::initializer_list< U > const l )
-	{
-		IS const s( l );
-		DS const d( I_, s );
-		return Array1S< T >( data_, -shift_, d );
-	}
-
-#endif
-
 public: // Predicate
 
 	// Contains Indexed Element?
@@ -390,28 +307,12 @@ public: // Predicate
 		return ( size_ == a.size() );
 	}
 
-	// Conformable?
-	template< typename U >
-	bool
-	conformable( Array1S< U > const & a ) const
-	{
-		return ( size_ == a.size() );
-	}
-
 	// Equal Dimensions?
 	template< typename U >
 	bool
 	equal_dimensions( Array1< U > const & a ) const
 	{
 		return ( I_ == a.I_ );
-	}
-
-	// Equal Dimensions?
-	template< typename U >
-	bool
-	equal_dimensions( Array1S< U > const & a ) const
-	{
-		return ( ( l() == 1 ) && ( u() == a.u() ) );
 	}
 
 public: // Inspector
@@ -562,8 +463,6 @@ public: // Comparison: Predicate
 public: // Comparison: Predicate: Any
 
 
-public: // Comparison: Predicate: Slice
-
 protected: // Functions
 
 	// Dimension by IndexRange
@@ -600,24 +499,6 @@ bool
 conformable( Array1< U > const & a, Array1< V > const & b )
 {
 	return a.conformable( b );
-}
-
-// Conformable?
-template< typename U, typename V >
-inline
-bool
-conformable( Array1< U > const & a, Array1S< V > const & b )
-{
-	return a.conformable( b );
-}
-
-// Conformable?
-template< typename U, typename V >
-inline
-bool
-conformable( Array1S< U > const & a, Array1< V > const & b )
-{
-	return b.conformable( a );
 }
 
 // Equal Dimensions?

@@ -16,7 +16,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array2.fwd.hh>
 #include <ObjexxFCL/Array.hh>
-#include <ObjexxFCL/Array1S.hh>
 
 namespace ObjexxFCL {
 
@@ -299,48 +298,6 @@ public: // Subscript
 	index( int const i1, int const i2 ) const
 	{
 		return ( ( i1 * z2_ ) + i2 ) - shift_;
-	}
-
-public: // Slice Proxy Generators
-
-	// array( i1, s2 ) const
-	Array1S< T >
-	operator ()( int const i1, IS const & s2 ) const
-	{
-		std::int64_t k( -shift_ );
-		k += slice_k( I1_, i1, z2_ );
-		DS const d2( I2_, s2 );
-		return Array1S< T >( data_, k, d2 );
-	}
-
-	// array( s1, i2 ) const
-	Array1S< T >
-	operator ()( IS const & s1, int const i2 ) const
-	{
-		std::int64_t k( -shift_ );
-		DS const d1( I1_, s1, z2_ );
-		k += slice_k( I2_, i2 );
-		return Array1S< T >( data_, k, d1 );
-	}
-
-	// array( i1, s2 )
-	Array1S< T >
-	operator ()( int const i1, IS const & s2 )
-	{
-		std::int64_t k( -shift_ );
-		k += slice_k( I1_, i1, z2_ );
-		DS const d2( I2_, s2 );
-		return Array1S< T >( data_, k, d2 );
-	}
-
-	// array( s1, i2 )
-	Array1S< T >
-	operator ()( IS const & s1, int const i2 )
-	{
-		std::int64_t k( -shift_ );
-		DS const d1( I1_, s1, z2_ );
-		k += slice_k( I2_, i2 );
-		return Array1S< T >( data_, k, d1 );
 	}
 
 public: // Predicate

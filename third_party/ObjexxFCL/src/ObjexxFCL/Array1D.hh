@@ -134,19 +134,6 @@ public: // Creation
 	 Super( a )
 	{}
 
-	// Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	explicit
-	Array1D( Array1S< U > const & a ) :
-	 Super( a )
-	{
-		setup_real();
-		size_type l( 0u );
-		for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-			initialize( l, a( i ) );
-		}
-	}
-
 	// IndexRange Constructor
 	explicit
 	Array1D( IR const & I ) :
@@ -189,19 +176,6 @@ public: // Creation
 		initialize( a );
 	}
 
-
-	// IndexRange + Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	Array1D( IR const & I, Array1S< U > const & a ) :
-	 Super( I, InitializerSentinel{} )
-	{
-		assert( conformable( a ) );
-		setup_real();
-		size_type l( 0u );
-		for ( int i = 1, e = a.u(); i <= e; ++i, ++l ) {
-			initialize( l, a( i ) );
-		}
-	}
 
 	// Super + IndexRange Constructor Template
 	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
@@ -843,8 +817,6 @@ swap( Array1D< T > & a, Array1D< T > & b )
 }
 
 // Comparison: Elemental
-
-// Comparison: Elemental: Slice
 
 } // ObjexxFCL
 

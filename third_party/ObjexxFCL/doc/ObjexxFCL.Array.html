@@ -69,7 +69,6 @@
 				<li><a href="#Base_Arrays">Base Arrays</a> are the abstract base class for the concrete Array types.</li>
 				<li><a href="#Real_Arrays">Real Arrays</a> are regular arrays that own their data.</li>
 <!--				<li><a href="#Key_Arrays">Key Arrays</a> are real Arrays that use key index types for element lookup.<-->
-				<li><a href="#Slice_Arrays">Slice Arrays</a> are proxies that select a not necessarily contiguous 1D sub-array defined by index slices or sections.</li>
 			</ul>
 			<p class="body">The Arrays are class templates. Shorthand (typedef) names are provided for the common value types in the Array forward declaration headers so, for example, we use <span class="source">Array2D_int</span> instead of <span class="source">Array2D&lt; int &gt;</span> on this page.</p>
 
@@ -322,30 +321,6 @@ C.redimension( B ); // C is now 5 x 5 with 3 x 3 portion preserved</pre></td>
 #pragma vector aligned
 #endif</pre>
 
-			<h2 class="h3"><a name="Slice_Arrays" id="Slice_Arrays"></a>Slice Arrays</h2>
-			<p class="body">Slice Arrays are array proxies that present a slice of another array as a 1D array. A slice Array is normally created by an indexing operation on an array where some or all of the indexes are index slices rather than scalar indexes. An index slice has a start index, an end index, and a stride, or step, value. Index slices are denoted with a <span class="source">{start,end,stride}</span> syntax:</p>
-			<table border="1" cellspacing="0" cellpadding="12">
-				<tr>
-					<td bgcolor="#F7F4F7"><pre>Array2D_int A( 3, 3 ); // 2D array
-...
-A( 2, {1,2} ); // 1D slice of A with elements 1 and 2 of A's 2nd row
-</pre></td>
-				</tr>
-			</table>
-			<p class="body">Details about slice arrays:</p>
-				<ul>
-					<li>The start and end indexes must be valid array indexes for the dimension.</li>
-					<li>Start indexes default to the lower index of the dimension.</li>
-					<li>End indexes default to the upper index of the dimension.</li>
-					<li>Stride values default to 1 and can be positive or negative but not zero.</li>
-					<li>The <span class="source">{start,end,stride}</span> syntax uses the C++11 initializer_list type. An underscore can be used for the start or end index to indicate the default value. An index slice with a single value is taken as specifying the start index as in <span class="source">{start}</span>. (The underscore is actually a predefined object of the Omit type provided for convenience.)</li>
-					<li>Slice arrays themselves are indexed contiguously like regular arrays with a lower index of 1 in each dimension.</li>
-					<li>Index slices are instances of the IndexSlice class internally and that type can be used instead of the initializer_list syntax but this is not recommended.</li>
-					<li>Slice arrays are types within the ArrayS class template hierarchy.</li>
-					<li>Slice arrays are used for the analog of Fortran's assumed shape array arguments as pass-by-value proxy arguments.</li>
-					<li>While slices are proxies, so creating them does not copy arrays, there are performance considerations when using them. There is some modest overhead in constructing a slice, either from an explicit slicing operation or as a pass-by-value argument. Slices do not support the fast linear indexing of the other FArrys, limiting performance tuning opportunities. Sparse slices are not cache efficient and thus can degrade performance. It is sometimes beneficial to copy the slice of interest into a contiguous Array before using it in a performance-critical section.</li>
-				</ul>
-
 			<h2 class="h3">Array Passing</h2>
 			<p class="body">Arrays can be used as function arguments that are declared as passed by value (expensive), reference, or const reference. Within the functions those Arrays have the same rank and dimensions as the passed Array.</p>
 			<p class="body">To support passing all types of Array of a given rank and value type to a function the arguments should be declared references to the base Array class of that rank and value type:</p>
@@ -478,10 +453,6 @@ C = A + 3; // Adds 3 to each element</pre>
 				<tr class="table_text">
 					<td><font color="#16694A"><b>Array<em>N</em>.all.hh</b></font></td>
 					<td><em>N</em>D Array class template master header</td>
-				</tr>
-				<tr class="table_text">
-					<td><font color="#16694A"><b>Array1S.hh</b></font></td>
-					<td>1D slice Array class template</td>
 				</tr>
 			</table>
 			<p class="body">Headers for each rank and type of Array that are used more than &quot;in name&quot; must be included. To use all array types of a given rank <em>N</em> include Array<em>N</em>.all.hh to. Including only the Array headers needed will reduce compilation time.</p>

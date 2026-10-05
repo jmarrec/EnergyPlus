@@ -18,8 +18,6 @@ set(src
   src/ObjexxFCL/Array1.hh
   src/ObjexxFCL/Array1D.fwd.hh
   src/ObjexxFCL/Array1D.hh
-  src/ObjexxFCL/Array1S.fwd.hh
-  src/ObjexxFCL/Array1S.hh
   src/ObjexxFCL/Array2.all.fwd.hh
   src/ObjexxFCL/Array2.all.hh
   src/ObjexxFCL/Array2.fwd.hh
@@ -36,13 +34,6 @@ set(src
   src/ObjexxFCL/Array4.hh
   src/ObjexxFCL/Array4D.fwd.hh
   src/ObjexxFCL/Array4D.hh
-  src/ObjexxFCL/ArrayRS.fwd.hh
-  src/ObjexxFCL/ArrayRS.hh
-  src/ObjexxFCL/ArrayS.all.fwd.hh
-  src/ObjexxFCL/ArrayS.all.hh
-  src/ObjexxFCL/ArrayS.functions.hh
-  src/ObjexxFCL/ArrayS.fwd.hh
-  src/ObjexxFCL/ArrayS.hh
   src/ObjexxFCL/BArray.fwd.hh
   src/ObjexxFCL/BArray.hh
   src/ObjexxFCL/char.functions.hh
@@ -84,11 +75,9 @@ set(src
 set( test_src
   tst/unit/Array.unit.cc
   tst/unit/Array1.unit.cc
-  tst/unit/Array1S.unit.cc
   tst/unit/Array2.unit.cc
   tst/unit/Array3.unit.cc
   tst/unit/Array4.unit.cc
-  tst/unit/ArrayS.unit.cc
   tst/unit/char.functions.unit.cc
   tst/unit/DimensionSlice.unit.cc
   tst/unit/Fmath.unit.cc

@@ -15,7 +15,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.all.fwd.hh>
-#include <ObjexxFCL/ArrayS.all.fwd.hh>
 #include <ObjexxFCL/Index.fwd.hh>
 #include <ObjexxFCL/IndexRange.fwd.hh>
 #include <ObjexxFCL/IndexSlice.fwd.hh>

@@ -87,10 +87,6 @@
 					<td><em>N</em>D Array master wrapper</td>
 				</tr>
 				<tr class="table_text">
-					<td><font color="#16694A"><b>Array1S</b></font></td>
-					<td>1D Slice Array class template</td>
-				</tr>
-				<tr class="table_text">
 					<td>ArrayInitializer</td>
 					<td>Array initializer class template</td>
 				</tr>
@@ -317,10 +313,6 @@
 			</ul>
 			<p class="body">Objexx has developed some of these and can develop custom extensions for clients.</p>
 			<p class="body">In many cases it may make more sense to interface with existing matrix and numerical libraries. Arrays provide access to their row-major data arrays so they can work directly with libraries that accept arrays with this ordering. Copy in/out semantics will be required to interface with other array representations such as nested std::vectors, TNT, and Blitz++: this should be done as non-member functions declared and defined in separate files to avoid unnecessary dependencies.</p>
-			<h4>Slices</h4>
-			<p class="body">The ArrayS hierarchy is a new system that provides the ObjexxFCL array slice (section) support. Array slices are generally non-contiguous and thus cannot use the fast contiguous implementation of the Arrays and can't efficiently provide linear indexing. For these reasons ArrayS is currently a separate hierarchy from Array. This requires a lot of duplicated code for both types and can create overload complexities in application code, so an effort to integrate slice arrays into the Array hierarchy is planned.</p>
-			<p class="body">Slice arrays have the same characteristics as Fortran slices: some operations are slower and memory cache performance can be degraded. Unlike Fortran, ObjexxFCL does not allow passing slices to contiguous arrays.</p>
-			<p class="body">ObjexxFCL slices use an efficient representation for good performance. This requires "drilling" into the underlying array data rather than resolving lookup calls through, possibly many, layer of slices.</p>
 			<hr />
 			<h3>ChunkVector</h3>
 			<p class="body">ChunkVector is designed to support very large 1D arrays. It uses a std::vector of Chunk objects of user-controllable size to avoid trying to allocate massive contiguous blocks of memory in a possibly fragmented memory environment. By using power-of-two Chunk sizes the 2-level indexing can be done with bit shift operations and provides speed competitive with that of std::vector. As of v.2.4.0 ChunkVector was rewritten to hold Chunk objects, which handle their own memory management, so that some problems with using nested std::vectors for the Chunks could be avoided, including:</p>

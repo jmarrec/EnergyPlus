@@ -17,7 +17,6 @@
 #include <ObjexxFCL/Array.fwd.hh>
 #include <ObjexxFCL/BArray.hh>
 #include <ObjexxFCL/AlignedAllocator.hh>
-#include <ObjexxFCL/ArrayS.hh>
 #include <ObjexxFCL/InitializerSentinel.hh>
 #include <ObjexxFCL/ProxySentinel.hh>
 #include <ObjexxFCL/TypeTraits.hh>
@@ -160,19 +159,6 @@ protected: // Creation
 		}
 	}
 
-	// Slice Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< T, U >::value >::type >
-	explicit
-	Array( ArrayS< U > const & a ) :
-	 owner_( true ),
-	 capacity_( size_of( a.size() ) ),
-	 size_( capacity_ ),
-	 mem_( Aligned::allocate_zero( capacity_ ) ),
-	 data_( Aligned::data( mem_ ) ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{}
-
 	// Size Constructor
 	explicit
 	Array( size_type const size ) :
@@ -262,19 +248,6 @@ protected: // Creation
 	 shift_( 0 ),
 	 sdata_( nullptr )
 	{}
-
-	// Slice Proxy Constructor
-	Array( ArrayS< T > const & a, ProxySentinel ) :
-	 owner_( false ),
-	 capacity_( a.size() ),
-	 size_( a.size() ),
-	 mem_( nullptr ),
-	 data_( a.data_beg_ ),
-	 shift_( 0 ),
-	 sdata_( nullptr )
-	{
-		assert( a.contiguous() );
-	}
 
 	// Value Proxy Constructor
 	Array( T const & t, ProxySentinel ) :
