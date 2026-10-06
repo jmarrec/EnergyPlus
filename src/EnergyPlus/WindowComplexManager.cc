@@ -310,7 +310,7 @@ namespace WindowComplexManager {
                 V = state.dataSurface->Surface(JSurf).Centroid - state.dataSurface->Surface(ISurf).Centroid;
                 VLen = magnitude(V);
                 // Define the unit vector from the window center to the back
-                state.dataBSDFWindow->ComplexWind(ISurf).sWinSurf(KBkSurf) = V / VLen;
+                state.dataBSDFWindow->ComplexWind(ISurf).sWinSurf(KBkSurf) = Array1D<Real64>{V(1) / VLen, V(2) / VLen, V(3) / VLen};
                 // surface center
                 // Define the back surface cosine(incident angle)
                 state.dataBSDFWindow->ComplexWind(ISurf).sdotN(KBkSurf) = dot(V, state.dataSurface->Surface(JSurf).OutNormVec) / VLen;
@@ -1543,7 +1543,9 @@ namespace WindowComplexManager {
         }
         WtSum = sum(Geom.SolSkyWt({1, NSky}));
         if (WtSum > Constant::rTinyValue) {
-            Geom.SolSkyWt({1, NSky}) /= WtSum;
+            for (I = 1; I <= NSky; ++I) {
+                Geom.SolSkyWt(I) /= WtSum;
+            }
         } else {
             Geom.SolSkyWt({1, NSky}) = 0.0;
         }
@@ -1554,7 +1556,9 @@ namespace WindowComplexManager {
         }
         WtSum = sum(Geom.SolSkyGndWt({1, NGnd}));
         if (WtSum > Constant::rTinyValue) {
-            Geom.SolSkyGndWt({1, NGnd}) /= WtSum;
+            for (I = 1; I <= NGnd; ++I) {
+                Geom.SolSkyGndWt(I) /= WtSum;
+            }
         } else {
             Geom.SolSkyGndWt({1, NGnd}) = 0.0;
         }
