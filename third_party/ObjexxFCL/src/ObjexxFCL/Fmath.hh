@@ -84,6 +84,24 @@ min( double const a, double const b, double const c, double const d, Ts const &.
 	return min( a < b ? a : b, c < d ? c : d, o... );
 }
 
+// min( a, b, c )
+template< typename T >
+inline
+T const &
+min( T const & a, T const & b, T const & c )
+{
+	return ( a < b ? ( a < c ? a : c ) : ( b < c ? b : c ) );
+}
+
+// min( a, b, c, d, ... )
+template< typename T, typename... Ts >
+inline
+T const &
+min( T const & a, T const & b, T const & c, T const & d, Ts const &... o )
+{
+	return min( a < b ? a : b, c < d ? c : d, o... );
+}
+
 // max /////
 
 // max( int, int )
@@ -143,6 +161,24 @@ template< typename... Ts >
 inline
 double
 max( double const a, double const b, double const c, double const d, Ts const &... o )
+{
+	return max( a < b ? b : a, c < d ? d : c, o... );
+}
+
+// max( a, b, c )
+template< typename T >
+inline
+T const &
+max( T const & a, T const & b, T const & c )
+{
+	return ( a < b ? ( b < c ? c : b ) : ( a < c ? c : a ) );
+}
+
+// max( a, b, c, d, ... )
+template< typename T, typename... Ts >
+inline
+T const &
+max( T const & a, T const & b, T const & c, T const & d, Ts const &... o )
 {
 	return max( a < b ? b : a, c < d ? d : c, o... );
 }
