@@ -5830,8 +5830,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.SolFrtTransIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(6));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.SolFrtTransIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.SolFrtTransNrows = NumRows;
-                thisConstruct.BSDFInput.SolFrtTransNcols = NumCols;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -5873,8 +5871,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.SolBkReflIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(7));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.SolBkReflIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.SolBkReflNrows = NumRows;
-                thisConstruct.BSDFInput.SolBkReflNcols = NumCols;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -5911,8 +5907,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.VisFrtTransIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(8));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.VisFrtTransIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.VisFrtTransNrows = NumRows;
-                thisConstruct.BSDFInput.VisFrtTransNcols = NumCols;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -5949,8 +5943,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.VisBkReflIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(9));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.VisBkReflIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.VisBkReflNrows = NumRows;
-                thisConstruct.BSDFInput.VisBkReflNcols = NumCols;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -5989,7 +5981,6 @@ namespace HeatBalanceManager {
 
                     // Simon: Load only if optical layer
                     if (mod(Layer, 2) != 0) {
-                        thisConstruct.BSDFInput.Layer(currentOpticalLayer).MaterialIndex = thisConstruct.LayerPoint(Layer);
 
                         ++AlphaIndex;
                         // *******************************************************************************
@@ -6023,7 +6014,6 @@ namespace HeatBalanceManager {
                                             NBasis));
                         }
 
-                        thisConstruct.BSDFInput.Layer(currentOpticalLayer).AbsNcols = NumCols;
                         thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbs.allocate(NumCols, NumRows);
                         if (thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbsIndex == 0) {
                             ErrorsFound = true;
@@ -6096,8 +6086,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.SolFrtTransIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(6));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.SolFrtTransIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.SolFrtTransNrows = NBasis;
-                thisConstruct.BSDFInput.SolFrtTransNcols = NBasis;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -6139,8 +6127,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.SolBkReflIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(7));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.SolBkReflIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.SolBkReflNrows = NBasis;
-                thisConstruct.BSDFInput.SolBkReflNcols = NBasis;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -6181,8 +6167,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.VisFrtTransIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(8));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.VisFrtTransIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.VisFrtTransNrows = NBasis;
-                thisConstruct.BSDFInput.VisFrtTransNcols = NBasis;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -6223,8 +6207,6 @@ namespace HeatBalanceManager {
                 // *******************************************************************************
                 thisConstruct.BSDFInput.VisBkReflIndex = MatrixDataManager::MatrixIndex(state, locAlphaArgs(9));
                 MatrixDataManager::Get2DMatrixDimensions(state, thisConstruct.BSDFInput.VisBkReflIndex, NumRows, NumCols);
-                thisConstruct.BSDFInput.VisBkReflNrows = NBasis;
-                thisConstruct.BSDFInput.VisBkReflNcols = NBasis;
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
@@ -6276,7 +6258,6 @@ namespace HeatBalanceManager {
                     currentOpticalLayer = int(Layer / 2) + 1;
 
                     if (mod(Layer, 2) != 0) {
-                        thisConstruct.BSDFInput.Layer(currentOpticalLayer).MaterialIndex = thisConstruct.LayerPoint(Layer);
 
                         // *******************************************************************************
                         // Front absorptance matrix
@@ -6310,7 +6291,6 @@ namespace HeatBalanceManager {
                                             NBasis));
                         }
 
-                        thisConstruct.BSDFInput.Layer(currentOpticalLayer).AbsNcols = NumCols;
                         thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbs.allocate(NumCols, NumRows);
 
                         if (thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbsIndex == 0) {
