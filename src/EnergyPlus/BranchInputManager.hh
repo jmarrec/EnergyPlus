@@ -179,7 +179,7 @@ namespace BranchInputManager {
                                DataBranchAirLoopPlant::PressureCurveType &PressCurveType, // Index of pressure curve object
                                int &PressCurveIndex,                                      // Index of pressure curve object
                                int &NumComps,                                             // Number of Components on Branch
-                               Array1D<ComponentData> const &BComponents,                 // Component data returned
+                               Array1D<ComponentData> &BComponents,                       // Component data returned
                                bool &ErrorsFound // True when Loop Name is already assigned and this not same loop
     );
 

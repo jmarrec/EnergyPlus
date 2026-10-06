@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdio>
@@ -54,7 +55,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/ArrayS.functions.hh>
 #include <ObjexxFCL/string.functions.hh>
 #include <ObjexxFCL/time.hh>
 
@@ -1283,7 +1283,7 @@ namespace Weather {
             }
         }
 
-        if (any_eq(WeekDays, 0)) {
+        if (std::ranges::any_of(WeekDays, [&](auto const &elem) { return elem == 0; })) {
             // need to start at StMon and go backwards.
             // EndDayOfMonth is also "days" in month.  (without leap year day in February)
             CurWeekDay = StWeekDay;
@@ -1383,7 +1383,7 @@ namespace Weather {
                 }
             }
 
-            if (any_eq(WeekDays, 0)) {
+            if (std::ranges::any_of(WeekDays, [&](auto const &elem) { return elem == 0; })) {
                 // need to start at StMon and go backwards.
                 // EndDayOfMonth is also "days" in month.  (without leap year day in February)
                 CurWeekDay = WeekDays(StartMonth);
@@ -1480,7 +1480,7 @@ namespace Weather {
                     }
                 }
 
-                if (any_eq(WeekDays, 0)) {
+                if (std::ranges::any_of(WeekDays, [&](auto const &elem) { return elem == 0; })) {
                     // need to start at StMon and go backwards.
                     // EndDayOfMonth is also "days" in month.  (without leap year day in February)
                     CurWeekDay = WeekDays(StartMonth);
@@ -1611,10 +1611,16 @@ namespace Weather {
         int JDay = General::OrdinalDay(ActStartMonth, ActStartDay, state.dataWeather->LeapYearAdd);
         int JDay1 = General::OrdinalDay(ActEndMonth, ActEndDay, state.dataWeather->LeapYearAdd);
         if (JDay1 >= JDay) {
-            DSTIdx({JDay, JDay1}) = 1;
+            for (int Day = JDay; Day <= JDay1; ++Day) {
+                DSTIdx(Day) = 1;
+            }
         } else {
-            DSTIdx({JDay, 366}) = 1;
-            DSTIdx({1, JDay1}) = 1;
+            for (int Day = JDay; Day <= 366; ++Day) {
+                DSTIdx(Day) = 1;
+            }
+            for (int Day = 1; Day <= JDay1; ++Day) {
+                DSTIdx(Day) = 1;
+            }
         }
     }
 
@@ -6944,7 +6950,7 @@ namespace Weather {
                 }
 
                 // Assign the ground reflectances to the variable
-                state.dataWeather->GroundReflectances({1, 12}) = GndProps({1, 12});
+                state.dataWeather->GroundReflectances = GndProps;
 
             } else {
                 ShowSevereError(state, std::format("{}: Too many objects entered. Only one allowed.", ipsc->cCurrentModuleObject));
