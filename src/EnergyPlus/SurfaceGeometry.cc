@@ -14575,7 +14575,6 @@ namespace SurfaceGeometry {
 
         auto &Triangle1 = state.dataSurfaceGeometry->Triangle1;
         auto &Triangle2 = state.dataSurfaceGeometry->Triangle2;
-        static Vector const zero_vector(0.0);
         Vector centroid;
 
         int negZcount(0); // for warning error in surface centroids

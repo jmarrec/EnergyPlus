@@ -2166,7 +2166,6 @@ void InitializeCFSDaylighting(EnergyPlusData &state,
 
     // Object Data
     DataBSDFWindow::BSDFDaylghtPosition elPos; // altitude and azimuth of intersection element
-    Vector Vec;                                // temporary vector variable
 
     int NumOfWinEl = NWX * NWY; // Number of window elements
 

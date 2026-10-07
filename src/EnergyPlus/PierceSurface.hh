@@ -229,7 +229,6 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
         Slab::Edge const se0(slabEdges[0]);
         Slab::EdgeXY const eXY0(slabEdgesXY[0]);
         Vertex2D v0(s2d.vertices[se0]);
-        Surface2D::Edge e0(s2d.edges[se0]);
         Real64 const x0(v0.x + (yHit - v0.y) * eXY0);
         if (xHit < x0) {
             return false; // Hit point x is left of left edge
@@ -237,7 +236,6 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
         Slab::Edge const se1(slabEdges[1]);
         Slab::EdgeXY const eXY1(slabEdgesXY[1]);
         Vertex2D v1(s2d.vertices[se1]);
-        Surface2D::Edge e1(s2d.edges[se1]);
         Real64 const x1(v1.x + (yHit - v1.y) * eXY1);
         if (x1 < xHit) {
             return false; // Hit point is right of right edge
@@ -249,7 +247,6 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
         Slab::Edge const il(slabEdges[l]);
         Slab::EdgeXY const eXYl(slabEdgesXY[l]);
         Vertex2D const &vl(s2d.vertices[il]);
-        Surface2D::Edge const el(s2d.edges[il]);
         Real64 const xl(vl.x + (yHit - vl.y) * eXYl);
         if (xHit < xl) {
             return false; // Hit point x is left of leftmost edge
@@ -257,7 +254,6 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
         Slab::Edge const iu(slabEdges[u]);
         Slab::EdgeXY const eXYu(slabEdgesXY[u]);
         Vertex2D const &vu(s2d.vertices[iu]);
-        Surface2D::Edge const eu(s2d.edges[iu]);
         Real64 const xu(vu.x + (yHit - vu.y) * eXYu);
         if (xu < xHit) {
             return false; // Hit point is right of rightmost edge
@@ -267,7 +263,6 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
             Slab::Edge const im(slabEdges[m]);
             Slab::EdgeXY const eXYm(slabEdgesXY[m]);
             Vertex2D const &vm(s2d.vertices[im]);
-            Surface2D::Edge const em(s2d.edges[im]);
             Real64 xm(vm.x + (yHit - vm.y) * eXYm);
             if (xHit <= xm) {
                 u = m;

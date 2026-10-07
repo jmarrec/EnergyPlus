@@ -1300,7 +1300,6 @@ namespace WindowComplexManager {
 
         // Object Data
         Vector HitPt;             // coords of hit pt (world syst)
-        Vector X;                 // position vector
         Vector VecNorm;           // outer normal vector
         Array1D<Vector> TmpGndPt; // Temporary ground intersection list
         Array2D<Vector> TempV2D;  // Temporary vector 2D array
