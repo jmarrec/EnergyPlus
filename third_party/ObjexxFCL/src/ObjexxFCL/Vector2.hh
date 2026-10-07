@@ -45,22 +45,22 @@ class Vector2
   Vector2() = default;
 
   // Uniform Value Constructor
-  explicit Vector2(double t) : x(t), y(t) {}
+  explicit constexpr Vector2(double t) : x(t), y(t) {}
 
   // Value Constructor
-  Vector2(double x_, double y_) : x(x_), y(y_) {}
+  constexpr Vector2(double x_, double y_) : x(x_), y(y_) {}
 
  public:  // Scalar multiplication and division
   /// Scalar Compound Assignment
   // *= Scalar
-  Vector2& operator*=(double t) {
+  constexpr Vector2& operator*=(double t) {
     x *= t;
     y *= t;
     return *this;
   }
 
   // /= Scalar
-  Vector2& operator/=(double const u) {
+  constexpr Vector2& operator/=(double const u) {
     assert(u != 0.0);
     double const inv_u(1.0 / u);
     x *= inv_u;
@@ -70,18 +70,18 @@ class Vector2
 
   /// Scalar Binary Operators
   // Vector2 * Scalar
-  friend Vector2 operator*(Vector2 const& v, double t) {
+  friend constexpr Vector2 operator*(Vector2 const& v, double t) {
     return {v.x * t, v.y * t};
   }
 
   // Scalar * Vector2
-  friend Vector2 operator*(double t, Vector2 const& v) {
+  friend constexpr Vector2 operator*(double t, Vector2 const& v) {
     return {t * v.x, t * v.y};
   }
 
 
   // Vector2 / Scalar
-  friend Vector2 operator/(Vector2 const& v, double u) {
+  friend constexpr Vector2 operator/(Vector2 const& v, double u) {
     assert(u != 0.0);
     double const inv_u(1.0 / u);
     return {v.x * inv_u, v.y * inv_u};
@@ -90,45 +90,45 @@ class Vector2
  public:  // Vector2 Addition and Subtraction
   /// Compound Assignment and Unary negation
   // += Vector2
-  Vector2& operator+=(Vector2 const& v) {
+  constexpr Vector2& operator+=(Vector2 const& v) {
     x += v.x;
     y += v.y;
     return *this;
   }
 
   // -= Vector2
-  Vector2& operator-=(Vector2 const& v) {
+  constexpr Vector2& operator-=(Vector2 const& v) {
     x -= v.x;
     y -= v.y;
     return *this;
   }
 
   // -Vector2 (Negated)
-  Vector2 operator-() const {
+  constexpr Vector2 operator-() const {
     return {-x, -y};
   }
 
   /// Addition and Subtraction: Binary Operators
   // Vector2 + Vector2
-  friend Vector2 operator+(Vector2 const& a, Vector2 const& b) {
+  friend constexpr Vector2 operator+(Vector2 const& a, Vector2 const& b) {
     return {a.x + b.x, a.y + b.y};
   }
 
   // Vector2 - Vector2
-  friend Vector2 operator-(Vector2 const& a, Vector2 const& b) {
+  friend constexpr Vector2 operator-(Vector2 const& a, Vector2 const& b) {
     return {a.x - b.x, a.y - b.y};
   }
 
 
  public:  // Subscript
   // Vector2[ i ] const: 0-Based Index
-  double operator[](size_type const i) const {
+  constexpr double operator[](size_type const i) const {
     assert(i <= 1);
     return (i == 0 ? x : y);
   }
 
   // Vector2[ i ]: 0-Based Index
-  double& operator[](size_type const i) {
+  constexpr double& operator[](size_type const i) {
     assert(i <= 1);
     return (i == 0 ? x : y);
   }
@@ -140,13 +140,13 @@ class Vector2
   }
 
   // Is Unit Vector?
-  bool is_unit() const {
+  constexpr bool is_unit() const {
     return (length_squared() == 1.0);
   }
 
  public:  // Properties: General
   // Size
-  size_type size() const {
+  constexpr size_type size() const {
     return 2u;
   }
 
@@ -156,7 +156,7 @@ class Vector2
   }
 
   // Length Squared
-  double length_squared() const {
+  constexpr double length_squared() const {
     return (x * x) + (y * y);
   }
 
@@ -176,17 +176,17 @@ class Vector2
   }
 
   // Distance Squared to a Vector2
-  double distance_squared(Vector2 const& v) const {
+  constexpr double distance_squared(Vector2 const& v) const {
     return (v - *this).length_squared();
   }
 
   // Dot Product with a Vector2
-  double dot(Vector2 const& v) const {
+  constexpr double dot(Vector2 const& v) const {
     return (x * v.x) + (y * v.y);
   }
 
   // Cross Product with a Vector2
-  double cross(Vector2 const& v) const {
+  constexpr double cross(Vector2 const& v) const {
     return (x * v.y) - (y * v.x);
   }
 
@@ -215,7 +215,7 @@ class Vector2
   }
 
   // Project Normal to a Vector2
-  Vector2& project_normal(Vector2 const& v) {
+  constexpr Vector2& project_normal(Vector2 const& v) {
     assert(v.length_squared() != 0.0);
     double const c(dot(v) / v.length_squared());
     x -= c * v.x;
@@ -224,7 +224,7 @@ class Vector2
   }
 
   // Project onto a Vector2
-  Vector2& project_parallel(Vector2 const& v) {
+  constexpr Vector2& project_parallel(Vector2 const& v) {
     assert(v.length_squared() != 0.0);
     double const c(dot(v) / v.length_squared());
     x = c * v.x;
@@ -254,14 +254,14 @@ class Vector2
   }
 
   // Projected Normal to a Vector2
-  Vector2 projected_normal(Vector2 const& v) const {
+  constexpr Vector2 projected_normal(Vector2 const& v) const {
     assert(v.length_squared() != 0.0);
     double const c(dot(v) / v.length_squared());
     return {x - (c * v.x), y - (c * v.y)};
   }
 
   // Projected onto a Vector2
-  Vector2 projected_parallel(Vector2 const& v) const {
+  constexpr Vector2 projected_parallel(Vector2 const& v) const {
     assert(v.length_squared() != 0.0);
     double const c(dot(v) / v.length_squared());
     return {c * v.x, c * v.y};
@@ -270,8 +270,8 @@ class Vector2
  public:  // Static Methods
 
   // Add 2*Pi to a Negative Value
-  static double bump_up_angle(double t) {
-    static constexpr double Two_Pi = 2.0 * std::numbers::pi;
+  static constexpr double bump_up_angle(double t) {
+    constexpr double Two_Pi = 2.0 * std::numbers::pi;
     return (t >= 0.0 ? t : Two_Pi + t);
   }
 
@@ -282,33 +282,33 @@ class Vector2
 };  // Vector2
 
 /// Lexicographic comparison (x first, then y)
-inline bool operator==(Vector2 const& a, Vector2 const& b) {
+inline constexpr bool operator==(Vector2 const& a, Vector2 const& b) {
   return (a.x == b.x) && (a.y == b.y);
 }
 
-inline bool operator!=(Vector2 const& a, Vector2 const& b) {
+inline constexpr bool operator!=(Vector2 const& a, Vector2 const& b) {
   return (a.x != b.x) || (a.y != b.y);
 }
 
-inline bool operator<(Vector2 const& a, Vector2 const& b) {
+inline constexpr bool operator<(Vector2 const& a, Vector2 const& b) {
   return ((a.x < b.x ? true
                      : (b.x < a.x ? false :  // a.x == b.x
                           (a.y < b.y))));
 }
 
-inline bool operator<=(Vector2 const& a, Vector2 const& b) {
+inline constexpr bool operator<=(Vector2 const& a, Vector2 const& b) {
   return ((a.x < b.x ? true
                      : (b.x < a.x ? false :  // a.x == b.x
                           (a.y <= b.y))));
 }
 
-inline bool operator>=(Vector2 const& a, Vector2 const& b) {
+inline constexpr bool operator>=(Vector2 const& a, Vector2 const& b) {
   return ((a.x > b.x ? true
                      : (b.x > a.x ? false :  // a.x == b.x
                           (a.y >= b.y))));
 }
 
-inline bool operator>(Vector2 const& a, Vector2 const& b) {
+inline constexpr bool operator>(Vector2 const& a, Vector2 const& b) {
   return ((a.x > b.x ? true
                      : (b.x > a.x ? false :  // a.x == b.x
                           (a.y > b.y))));
@@ -317,17 +317,17 @@ inline bool operator>(Vector2 const& a, Vector2 const& b) {
 /// Free Functions
 
 // Center of Two Vector2s
-inline Vector2 cen(Vector2 const& a, Vector2 const& b) {
+inline constexpr Vector2 cen(Vector2 const& a, Vector2 const& b) {
   return 0.5 * (a + b);
 }
 
 // Center of Three Vector2s
-inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
+inline constexpr Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
   return (a + b + c) / 3.0;
 }
 
 // Center of Four Vector2s
-inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
+inline constexpr Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
   return 0.25 * (a + b + c + d);
 }
 

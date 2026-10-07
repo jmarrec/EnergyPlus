@@ -192,3 +192,24 @@ TEST( Vector2Test, BinaryOperations )
 	EXPECT_DOUBLE_EQ( original.x, midpoint.x );
 	EXPECT_DOUBLE_EQ( original.y, midpoint.y );
 }
+
+TEST( Vector2Test, Constexpr )
+{
+	constexpr Vector2 a( 1.0, 2.0 );
+	constexpr Vector2 b( 3.0, 4.0 );
+	static_assert( Vector2().is_zero() );
+	static_assert( a + b == Vector2( 4.0, 6.0 ) );
+	static_assert( b - a == Vector2( 2.0, 2.0 ) );
+	static_assert( 2.0 * a == Vector2( 2.0, 4.0 ) );
+	static_assert( b / 2.0 == Vector2( 1.5, 2.0 ) );
+	static_assert( -a == Vector2( -1.0, -2.0 ) );
+	static_assert( a.dot( b ) == 11.0 );
+	static_assert( a.cross( b ) == -2.0 );
+	static_assert( a.length_squared() == 5.0 );
+	static_assert( a.distance_squared( b ) == 8.0 );
+	static_assert( a[ 1 ] == 2.0 );
+	static_assert( cen( a, b ) == Vector2( 2.0, 3.0 ) );
+	static_assert( a < b );
+	static_assert( Vector2::bump_up_angle( -1.0 ) > 5.0 );
+	SUCCEED();
+}
