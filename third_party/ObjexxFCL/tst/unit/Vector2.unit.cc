@@ -58,12 +58,8 @@ TEST( Vector2Test, BraceInit )
 	Vector2 v{ 33, 52 };
 	EXPECT_EQ( 33, v.x );
 	EXPECT_EQ( 52, v.y );
-	EXPECT_EQ( 33, v.x1() );
-	EXPECT_EQ( 52, v.x2() );
 	EXPECT_EQ( 33, v[ 0 ] );
 	EXPECT_EQ( 52, v[ 1 ] );
-	EXPECT_EQ( 33, v( 1 ) );
-	EXPECT_EQ( 52, v( 2 ) );
 	v = { 44, 55 };
 	EXPECT_EQ( 44, v.x );
 	EXPECT_EQ( 55, v.y );

@@ -185,22 +185,6 @@ public: // Subscript
 		return ( i == 0 ? x : y );
 	}
 
-	// Vector2( i ) const: 1-Based Index
-	double
-	operator ()( size_type const i ) const
-	{
-		assert( ( 1 <= i ) && ( i <= 2 ) );
-		return ( i == 1 ? x : y );
-	}
-
-	// Vector2( i ): 1-Based Index
-	double &
-	operator ()( size_type const i )
-	{
-		assert( ( 1 <= i ) && ( i <= 2 ) );
-		return ( i == 1 ? x : y );
-	}
-
 public: // Properties: Predicates
 
 	// Is Zero Vector?
@@ -316,34 +300,6 @@ public: // Properties: General
 	cross( Vector2 const & v ) const
 	{
 		return ( x * v.y ) - ( y * v.x );
-	}
-
-	// Alias for Element 1
-	double
-	x1() const
-	{
-		return x;
-	}
-
-	// Alias for Element 1
-	double &
-	x1()
-	{
-		return x;
-	}
-
-	// Alias for Element 2
-	double
-	x2() const
-	{
-		return y;
-	}
-
-	// Alias for Element 2
-	double &
-	x2()
-	{
-		return y;
 	}
 
 public: // Modifiers
