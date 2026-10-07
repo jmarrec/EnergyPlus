@@ -50,28 +50,13 @@ class Vector2
   // Default Constructor
   Vector2() = default;
 
-  // Copy Constructor
-  Vector2(Vector2 const& v) : x(v.x), y(v.y) {}
-
   // Uniform Value Constructor
   explicit Vector2(double t) : x(t), y(t) {}
 
   // Value Constructor
   Vector2(double x_, double y_) : x(x_), y(y_) {}
 
-  // Destructor
-  ~Vector2() {}
-
  public:  // Assignment
-  // Copy Assignment
-  Vector2& operator=(Vector2 const& v) {
-    if (this != &v) {
-      x = v.x;
-      y = v.y;
-    }
-    return *this;
-  }
-
   /// Scalar multiplication and division: Compound Assignment
   // *= Scalar
   Vector2& operator*=(double t) {
