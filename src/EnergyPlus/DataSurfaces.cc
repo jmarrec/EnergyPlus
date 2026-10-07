@@ -111,8 +111,8 @@ Surface2D::Surface2D(ShapeCat const shapeCat, int const axis, Vertices const &v,
     }
     if (shapeCat == ShapeCat::Rectangular) { // Set side length squared for ray--surface intersection tests
         assert(n == 4u);
-        s1 = edges[0].magnitude_squared();
-        s3 = edges[3].magnitude_squared();
+        s1 = edges[0].length_squared();
+        s3 = edges[3].length_squared();
     } else if ((shapeCat == ShapeCat::Nonconvex) || (n >= nVerticesBig)) { // Set up slabs
         assert(n >= 4u);
         slabYs.reserve(n);

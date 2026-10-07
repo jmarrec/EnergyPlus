@@ -124,7 +124,7 @@ class Vector2
     return 2u;
   }
 
-  // Length
+  // Length (L2 norm)
   double length() const {
     return std::sqrt((x * x) + (y * y));
   }
@@ -134,34 +134,9 @@ class Vector2
     return (x * x) + (y * y);
   }
 
-  // Magnitude
-  double magnitude() const {
-    return std::sqrt((x * x) + (y * y));
-  }
-
-  // Magnitude
-  double mag() const {
-    return std::sqrt((x * x) + (y * y));
-  }
-
-  // Magnitude Squared
-  double magnitude_squared() const {
-    return (x * x) + (y * y);
-  }
-
-  // Magnitude Squared
-  double mag_squared() const {
-    return (x * x) + (y * y);
-  }
-
   // L1 Norm
   double norm_L1() const {
     return std::abs(x) + std::abs(y);
-  }
-
-  // L2 Norm
-  double norm_L2() const {
-    return std::sqrt((x * x) + (y * y));
   }
 
   // L-infinity Norm
