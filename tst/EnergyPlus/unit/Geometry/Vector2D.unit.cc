@@ -108,15 +108,11 @@ TEST_F(GeometryFixture, Vector2D_Comparisons)
     v -= Vector2D(0.5);
     EXPECT_TRUE(v != w);
     EXPECT_TRUE(!(v == w));
-    EXPECT_TRUE(v < w);
-    EXPECT_TRUE(v <= w);
 
     // Increase v and test inequality
     v += Vector2D(1.0);
     EXPECT_TRUE(v != w);
     EXPECT_TRUE(!(v == w));
-    EXPECT_TRUE(v > w);
-    EXPECT_TRUE(v >= w);
 
     // Set v.x to 0: v and w now differ
     v.x = 0.0;
@@ -233,7 +229,7 @@ TEST_F(GeometryFixture, Vector2D_Constexpr)
     static_assert(a.distance_squared(b) == 8.0);
     static_assert(a[1] == 2.0);
     static_assert(0.5 * (a + b) == Vector2D(2.0, 3.0));
-    static_assert(a < b);
+    static_assert(a != b);
     static_assert(Vector2D::bump_up_angle(-1.0) > 5.0);
     SUCCEED();
 }

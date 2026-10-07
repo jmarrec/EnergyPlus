@@ -168,6 +168,9 @@ public: // Vector2D Addition and Subtraction
         return {a.x - b.x, a.y - b.y};
     }
 
+public: // Comparison
+    friend constexpr bool operator==(Vector2D const &, Vector2D const &) = default;
+
 public: // Subscript
     // Vector2D[ i ] const: 0-Based Index
     constexpr double operator[](size_type const i) const
@@ -379,7 +382,7 @@ public: // Generators
         return {c * v.x, c * v.y};
     }
 
-public: // Static Methods
+private: // Static Methods
     // Add 2*Pi to a Negative Value
     static constexpr double bump_up_angle(double t)
     {
@@ -392,45 +395,6 @@ public: // Data Elements
     double y = 0.0;
 
 }; // Vector2D
-
-/// Lexicographic comparison (x first, then y)
-inline constexpr bool operator==(Vector2D const &a, Vector2D const &b)
-{
-    return (a.x == b.x) && (a.y == b.y);
-}
-
-inline constexpr bool operator!=(Vector2D const &a, Vector2D const &b)
-{
-    return (a.x != b.x) || (a.y != b.y);
-}
-
-inline constexpr bool operator<(Vector2D const &a, Vector2D const &b)
-{
-    return ((a.x < b.x ? true
-                       : (b.x < a.x ? false : // a.x == b.x
-                              (a.y < b.y))));
-}
-
-inline constexpr bool operator<=(Vector2D const &a, Vector2D const &b)
-{
-    return ((a.x < b.x ? true
-                       : (b.x < a.x ? false : // a.x == b.x
-                              (a.y <= b.y))));
-}
-
-inline constexpr bool operator>=(Vector2D const &a, Vector2D const &b)
-{
-    return ((a.x > b.x ? true
-                       : (b.x > a.x ? false : // a.x == b.x
-                              (a.y >= b.y))));
-}
-
-inline constexpr bool operator>(Vector2D const &a, Vector2D const &b)
-{
-    return ((a.x > b.x ? true
-                       : (b.x > a.x ? false : // a.x == b.x
-                              (a.y > b.y))));
-}
 
 // Stream << Vector2D output operator
 inline std::ostream &operator<<(std::ostream &stream, Vector2D const &v)
