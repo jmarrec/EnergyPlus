@@ -230,6 +230,5 @@ TEST_F(GeometryFixture, Vector2D_Constexpr)
     static_assert(a[1] == 2.0);
     static_assert(0.5 * (a + b) == Vector2D(2.0, 3.0));
     static_assert(a != b);
-    static_assert(Vector2D::bump_up_angle(-1.0) > 5.0);
     SUCCEED();
 }

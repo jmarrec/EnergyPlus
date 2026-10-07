@@ -59,22 +59,11 @@
 
 namespace EnergyPlus {
 
-// Vector2D: Fast 2-Element Vector
-// . Heap-free and loop-free for speed
-// . Provides direct element access via .x style lookup
-// . Use std::array< double, 2 > instead in array/vectorization context
 class Vector2D
 {
-
-public: // Types
-    // STL Style
-    using value_type = double;
-    using reference = double &;
-    using const_reference = double const &;
-    using pointer = double *;
-    using const_pointer = double const *;
-    using size_type = std::size_t;
-    using difference_type = std::ptrdiff_t;
+public: // Data Elements
+    double x = 0.0;
+    double y = 0.0;
 
 public: // Creation
     // Default Constructor
@@ -173,14 +162,14 @@ public: // Comparison
 
 public: // Subscript
     // Vector2D[ i ] const: 0-Based Index
-    constexpr double operator[](size_type const i) const
+    constexpr double operator[](std::size_t i) const
     {
         assert(i <= 1);
         return (i == 0 ? x : y);
     }
 
     // Vector2D[ i ]: 0-Based Index
-    constexpr double &operator[](size_type const i)
+    constexpr double &operator[](std::size_t i)
     {
         assert(i <= 1);
         return (i == 0 ? x : y);
@@ -201,7 +190,7 @@ public: // Properties: Predicates
 
 public: // Properties: General
     // Size
-    constexpr size_type size() const
+    static constexpr std::size_t size()
     {
         return 2u;
     }
@@ -298,7 +287,7 @@ public: // Properties: General
         return (mag > 0.0 ? std::clamp(cross(v) / mag, -1.0, 1.0) : 0.0);
     }
 
-public: // Modifiers
+public: // Modifiers (in-place)
     // Normalize to a Length
     Vector2D &normalize(double tar_length = 1.0)
     {
@@ -344,7 +333,7 @@ public: // Modifiers
         return *this;
     }
 
-public: // Generators
+public: // Generators (return a new vector)
     // Normalized to a Length
     Vector2D normalized(double tar_length = 1.0) const
     {
@@ -389,10 +378,6 @@ private: // Static Methods
         constexpr double Two_Pi = 2.0 * std::numbers::pi;
         return (t >= 0.0 ? t : Two_Pi + t);
     }
-
-public: // Data Elements
-    double x = 0.0;
-    double y = 0.0;
 
 }; // Vector2D
 
