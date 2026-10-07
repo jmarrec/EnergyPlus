@@ -74,23 +74,6 @@ TEST( Vector2Test, BraceInit )
 	EXPECT_EQ( -55, v.y );
 }
 
-TEST( Vector2Test, MinMax )
-{
-	Vector2 v( 1.0, 5.0 );
-	Vector2 w( 3.0, 2.0 );
-	Vector2 min_vw( min( v, w ) );
-	Vector2 max_vw( max( v, w ) );
-	EXPECT_EQ( 1.0, min_vw.x );
-	EXPECT_EQ( 2.0, min_vw.y );
-	EXPECT_EQ( 3.0, max_vw.x );
-	EXPECT_EQ( 5.0, max_vw.y );
-	v.max( w );
-	EXPECT_EQ( 3.0, v.x );
-	EXPECT_EQ( 5.0, v.y );
-	w.max( v );
-	EXPECT_EQ( v, w );
-}
-
 TEST( Vector2Test, Comparisons )
 {
 	Vector2 v( 1.0, 2.0 );

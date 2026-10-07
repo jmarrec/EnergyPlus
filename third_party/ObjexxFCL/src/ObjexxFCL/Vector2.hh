@@ -213,20 +213,6 @@ class Vector2
     return *this;
   }
 
-  // Minimum Coordinates with a Vector2
-  Vector2& min(Vector2 const& v) {
-    x = (x <= v.x ? x : v.x);
-    y = (y <= v.y ? y : v.y);
-    return *this;
-  }
-
-  // Maximum Coordinates with a Vector2
-  Vector2& max(Vector2 const& v) {
-    x = (x >= v.x ? x : v.x);
-    y = (y >= v.y ? y : v.y);
-    return *this;
-  }
-
   // Project Normal to a Vector2
   Vector2& project_normal(Vector2 const& v) {
     assert(v.length_squared() != 0.0);
@@ -252,7 +238,7 @@ class Vector2
     double const cur_length(length());
     assert(cur_length != double(0));
     double const dilation(tar_length / cur_length);
-    return Vector2(x * dilation, y * dilation);
+    return {x * dilation, y * dilation};
   }
 
   // Normalized to a Length: Zero Vector2 if Length is Zero
@@ -260,9 +246,9 @@ class Vector2
     double const cur_length(length());
     if (cur_length > 0.0) {
       double const dilation(tar_length / cur_length);
-      return Vector2(x * dilation, y * dilation);
+      return {x * dilation, y * dilation};
     } else {  // Return zero vector
-      return Vector2(0.0);
+      return {0.0, 0.0};
     }
   }
 
@@ -270,22 +256,17 @@ class Vector2
   Vector2 projected_normal(Vector2 const& v) const {
     assert(v.length_squared() != 0.0);
     double const c(dot(v) / v.length_squared());
-    return Vector2(x - (c * v.x), y - (c * v.y));
+    return {x - (c * v.x), y - (c * v.y)};
   }
 
   // Projected onto a Vector2
   Vector2 projected_parallel(Vector2 const& v) const {
     assert(v.length_squared() != 0.0);
     double const c(dot(v) / v.length_squared());
-    return Vector2(c * v.x, c * v.y);
+    return {c * v.x, c * v.y};
   }
 
  public:  // Static Methods
-
-  // Value Clipped to [-1,1]
-  static double sin_cos_range(double t) {
-    return std::min(std::max(t, -1.0), 1.0);
-  }
 
   // Add 2*Pi to a Negative Value
   static double bump_up_angle(double t) {
@@ -334,55 +315,25 @@ inline bool operator>(Vector2 const& a, Vector2 const& b) {
 
 /// Free Functions
 
-// Minimum of Two Vector2s
-inline Vector2 min(Vector2 const& a, Vector2 const& b) {
-  return Vector2((a.x <= b.x ? a.x : b.x), (a.y <= b.y ? a.y : b.y));
-}
-
-// Minimum of Three Vector2s
-inline Vector2 min(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return Vector2(std::min({a.x, b.x, c.x}), std::min({a.y, b.y, c.y}));
-}
-
-// Minimum of Four Vector2s
-inline Vector2 min(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
-  return Vector2(std::min({a.x, b.x, c.x, d.x}), std::min({a.y, b.y, c.y, d.y}));
-}
-
-// Maximum of Two Vector2s
-inline Vector2 max(Vector2 const& a, Vector2 const& b) {
-  return Vector2((a.x >= b.x ? a.x : b.x), (a.y >= b.y ? a.y : b.y));
-}
-
-// Maximum of Three Vector2s
-inline Vector2 max(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return Vector2(std::max({a.x, b.x, c.x}), std::max({a.y, b.y, c.y}));
-}
-
-// Maximum of Four Vector2s
-inline Vector2 max(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
-  return Vector2(std::max({a.x, b.x, c.x, d.x}), std::max({a.y, b.y, c.y, d.y}));
-}
-
 // Midpoint of Two Vector2s
 inline Vector2 mid(Vector2 const& a, Vector2 const& b) {
-  return Vector2(double(0.5 * (a.x + b.x)), double(0.5 * (a.y + b.y)));
+  return {0.5 * (a.x + b.x), 0.5 * (a.y + b.y)};
 }
 
 // Center of Two Vector2s
 inline Vector2 cen(Vector2 const& a, Vector2 const& b) {
-  return Vector2(double(0.5 * (a.x + b.x)), double(0.5 * (a.y + b.y)));
+  return {0.5 * (a.x + b.x), 0.5 * (a.y + b.y)};
 }
 
 // Center of Three Vector2s
 inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  static long double const third(1.0 / 3.0);
-  return Vector2(double(third * (a.x + b.x + c.x)), double(third * (a.y + b.y + c.y)));
+  constexpr double third(1.0 / 3.0);
+  return {third * (a.x + b.x + c.x), third * (a.y + b.y + c.y)};
 }
 
 // Center of Four Vector2s
 inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
-  return Vector2(double(0.25 * (a.x + b.x + c.x + d.x)), double(0.25 * (a.y + b.y + c.y + d.y)));
+  return {0.25 * (a.x + b.x + c.x + d.x), 0.25 * (a.y + b.y + c.y + d.y)};
 }
 
 // Angle Between Two Vector2s (in Radians on [0,pi])
@@ -393,31 +344,16 @@ inline double angle(Vector2 const& a, Vector2 const& b) {
                                        : 0.0);  // More accurate than dot-based for angles near 0 and Pi
 }
 
-// Angle abc Formed by Three Vector2s (in Radians on [0,pi])
-inline double angle(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return angle(a - b, c - b);
-}
-
 // Cosine of Angle Between Two Vector2s
 inline double cos(Vector2 const& a, Vector2 const& b) {
   double const mag(std::sqrt(a.length_squared() * b.length_squared()));
-  return (mag > 0.0 ? Vector2::sin_cos_range(a.dot(b) / mag) : 1.0);
-}
-
-// Cosine of Angle abc Formed by Three Vector2s
-inline double cos(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return cos(a - b, c - b);
+  return (mag > 0.0 ? std::clamp(a.dot(b) / mag, -1.0, 1.0) : 1.0);
 }
 
 // Sine of Angle Between Two Vector2s
 inline double sin(Vector2 const& a, Vector2 const& b) {
   double const mag(std::sqrt(a.length_squared() * b.length_squared()));
-  return (mag > 0.0 ? std::abs(Vector2::sin_cos_range(a.cross(b) / mag)) : 0.0);
-}
-
-// Sine of Angle abc Formed by Three Vector2s
-inline double sin(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return sin(a - b, c - b);
+  return (mag > 0.0 ? std::abs(std::clamp(a.cross(b) / mag, -1.0, 1.0)) : 0.0);
 }
 
 // Directed Angle Between Two Vector2s (in Radians on [0,2*pi])
@@ -427,31 +363,16 @@ inline double dir_angle(Vector2 const& a, Vector2 const& b) {
   return ((axb != 0.0) || (adb != 0.0) ? Vector2::bump_up_angle(std::atan2(axb, adb)) : 0.0);
 }
 
-// Directed Angle abc Formed by Three Vector2s (in Radians on [0,2*pi])
-inline double dir_angle(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return dir_angle(a - b, c - b);
-}
-
 // Cosine of Directed Angle Between Two Vector2s
 inline double dir_cos(Vector2 const& a, Vector2 const& b) {
   double const mag(std::sqrt(a.length_squared() * b.length_squared()));
-  return (mag > 0.0 ? Vector2::sin_cos_range(a.dot(b) / mag) : 1.0);
-}
-
-// Cosine of Directed Angle abc Formed by Three Vector2s
-inline double dir_cos(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return dir_cos(a - b, c - b);
+  return (mag > 0.0 ? std::clamp(a.dot(b) / mag, -1.0, 1.0) : 1.0);
 }
 
 // Sine of Directed Angle Between Two Vector2s
 inline double dir_sin(Vector2 const& a, Vector2 const& b) {
   double const mag(std::sqrt(a.length_squared() * b.length_squared()));
-  return (mag > 0.0 ? Vector2::sin_cos_range(a.cross(b) / mag) : 0.0);
-}
-
-// Sine of Directed Angle abc Formed by Three Vector2s
-inline double dir_sin(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return dir_sin(a - b, c - b);
+  return (mag > 0.0 ? std::clamp(a.cross(b) / mag, -1.0, 1.0) : 0.0);
 }
 
 // Stream << Vector2 output operator
