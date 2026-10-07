@@ -49,11 +49,9 @@
 #define ENERGYPLUS_GEOMETRY_VECTOR2D_INCLUDED
 
 // C++ Headers
-#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <numbers>
 #include <ostream>
 
 namespace EnergyPlus {
@@ -174,26 +172,7 @@ public: // Subscript
         return (i == 0 ? x : y);
     }
 
-public: // Properties: Predicates
-    // Is Zero Vector?
-    constexpr bool is_zero() const
-    {
-        return (x == 0.0) && (y == 0.0);
-    }
-
-    // Is Unit Vector?
-    constexpr bool is_unit() const
-    {
-        return (length_squared() == 1.0);
-    }
-
 public: // Properties: General
-    // Size
-    static constexpr std::size_t size()
-    {
-        return 2u;
-    }
-
     // Length (L2 norm)
     double length() const
     {
@@ -204,30 +183,6 @@ public: // Properties: General
     constexpr double length_squared() const
     {
         return (x * x) + (y * y);
-    }
-
-    // L1 Norm
-    double norm_L1() const
-    {
-        return std::abs(x) + std::abs(y);
-    }
-
-    // L-infinity Norm
-    double norm_Linf() const
-    {
-        return std::max(std::abs(x), std::abs(y));
-    }
-
-    // Distance to a Vector2D
-    double distance(Vector2D const &v) const
-    {
-        return (v - *this).length();
-    }
-
-    // Distance Squared to a Vector2D
-    constexpr double distance_squared(Vector2D const &v) const
-    {
-        return (v - *this).length_squared();
     }
 
     // Dot Product with a Vector2D
@@ -242,50 +197,6 @@ public: // Properties: General
         return (x * v.y) - (y * v.x);
     }
 
-    // Angle Between this and a Vector2D (in Radians on [0,pi])
-    double angle(Vector2D const &v) const
-    {
-        double const axb(std::abs(cross(v)));
-        double const adb(dot(v));
-        return ((axb != 0.0) || (adb != 0.0) ? bump_up_angle(std::atan2(axb, adb)) : 0.0); // More accurate than dot-based for angles near 0 and Pi
-    }
-
-    // Cosine of Angle Between this and a Vector2D
-    double cos(Vector2D const &v) const
-    {
-        double const mag(std::sqrt(length_squared() * v.length_squared()));
-        return (mag > 0.0 ? std::clamp(dot(v) / mag, -1.0, 1.0) : 1.0);
-    }
-
-    // Sine of Angle Between this and a Vector2D
-    double sin(Vector2D const &v) const
-    {
-        double const mag(std::sqrt(length_squared() * v.length_squared()));
-        return (mag > 0.0 ? std::abs(std::clamp(cross(v) / mag, -1.0, 1.0)) : 0.0);
-    }
-
-    // Directed Angle from this to a Vector2D (in Radians on [0,2*pi])
-    double dir_angle(Vector2D const &v) const
-    {
-        double const axb(cross(v));
-        double const adb(dot(v));
-        return ((axb != 0.0) || (adb != 0.0) ? bump_up_angle(std::atan2(axb, adb)) : 0.0);
-    }
-
-    // Cosine of Directed Angle from this to a Vector2D
-    double dir_cos(Vector2D const &v) const
-    {
-        double const mag(std::sqrt(length_squared() * v.length_squared()));
-        return (mag > 0.0 ? std::clamp(dot(v) / mag, -1.0, 1.0) : 1.0);
-    }
-
-    // Sine of Directed Angle from this to a Vector2D
-    double dir_sin(Vector2D const &v) const
-    {
-        double const mag(std::sqrt(length_squared() * v.length_squared()));
-        return (mag > 0.0 ? std::clamp(cross(v) / mag, -1.0, 1.0) : 0.0);
-    }
-
 public: // Modifiers (in-place)
     // Normalize to a Length
     Vector2D &normalize(double tar_length = 1.0)
@@ -298,40 +209,6 @@ public: // Modifiers (in-place)
         return *this;
     }
 
-    // Normalize to a Length: Zero Vector2D if Length is Zero
-    Vector2D &normalize_zero(double tar_length = 1.0)
-    {
-        double const cur_length(length());
-        if (cur_length > 0.0) {
-            double const dilation(tar_length / cur_length);
-            x *= dilation;
-            y *= dilation;
-        } else { // Set zero vector
-            x = y = 0.0;
-        }
-        return *this;
-    }
-
-    // Project Normal to a Vector2D
-    constexpr Vector2D &project_normal(Vector2D const &v)
-    {
-        assert(v.length_squared() != 0.0);
-        double const c(dot(v) / v.length_squared());
-        x -= c * v.x;
-        y -= c * v.y;
-        return *this;
-    }
-
-    // Project onto a Vector2D
-    constexpr Vector2D &project_parallel(Vector2D const &v)
-    {
-        assert(v.length_squared() != 0.0);
-        double const c(dot(v) / v.length_squared());
-        x = c * v.x;
-        y = c * v.y;
-        return *this;
-    }
-
 public: // Generators (return a new vector)
     // Normalized to a Length
     Vector2D normalized(double tar_length = 1.0) const
@@ -340,42 +217,6 @@ public: // Generators (return a new vector)
         assert(cur_length != double(0));
         double const dilation(tar_length / cur_length);
         return {x * dilation, y * dilation};
-    }
-
-    // Normalized to a Length: Zero Vector2D if Length is Zero
-    Vector2D normalized_zero(double tar_length = 1.0) const
-    {
-        double const cur_length(length());
-        if (cur_length > 0.0) {
-            double const dilation(tar_length / cur_length);
-            return {x * dilation, y * dilation};
-        } else { // Return zero vector
-            return {0.0, 0.0};
-        }
-    }
-
-    // Projected Normal to a Vector2D
-    constexpr Vector2D projected_normal(Vector2D const &v) const
-    {
-        assert(v.length_squared() != 0.0);
-        double const c(dot(v) / v.length_squared());
-        return {x - (c * v.x), y - (c * v.y)};
-    }
-
-    // Projected onto a Vector2D
-    constexpr Vector2D projected_parallel(Vector2D const &v) const
-    {
-        assert(v.length_squared() != 0.0);
-        double const c(dot(v) / v.length_squared());
-        return {c * v.x, c * v.y};
-    }
-
-private: // Static Methods
-    // Add 2*Pi to a Negative Value
-    static constexpr double bump_up_angle(double t)
-    {
-        constexpr double Two_Pi = 2.0 * std::numbers::pi;
-        return (t >= 0.0 ? t : Two_Pi + t);
     }
 
 }; // Vector2D

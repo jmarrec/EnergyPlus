@@ -53,9 +53,6 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Geometry/Vector2D.hh>
 
-// C++ Headers
-#include <cmath>
-
 using namespace EnergyPlus;
 
 TEST_F(GeometryFixture, Vector2D_Basic)
@@ -71,9 +68,9 @@ TEST_F(GeometryFixture, Vector2D_Basic)
     EXPECT_EQ(0.0f, v.x);
     EXPECT_EQ(0.0f, v.y);
     EXPECT_EQ(0.0f, v.length());
-    v.normalize_zero();
-    EXPECT_EQ(0.0f, v.x);
-    EXPECT_EQ(0.0f, v.y);
+    Vector2D const n(Vector2D(3.0, 4.0).normalized());
+    EXPECT_DOUBLE_EQ(0.6, n.x);
+    EXPECT_DOUBLE_EQ(0.8, n.y);
 }
 
 TEST_F(GeometryFixture, Vector2D_BraceInit)
@@ -131,14 +128,6 @@ TEST_F(GeometryFixture, Vector2D_Generators)
     EXPECT_EQ(Vector2D(0.5, 6.0), v / 2.0);
 }
 
-TEST_F(GeometryFixture, Vector2D_Distance)
-{
-    Vector2D v(3.0, 3.0);
-    Vector2D w(3.0, 2.0);
-    EXPECT_DOUBLE_EQ(1.0, v.distance(w));
-    EXPECT_DOUBLE_EQ(1.0, v.distance_squared(w));
-}
-
 TEST_F(GeometryFixture, Vector2D_Dot)
 {
     Vector2D x(3.0, 0.0);
@@ -158,42 +147,6 @@ TEST_F(GeometryFixture, Vector2D_Center)
     Vector2D x(4.0, 0.0);
     Vector2D y(0.0, 4.0);
     EXPECT_EQ(Vector2D(2.0, 2.0), 0.5 * (x + y));
-}
-
-TEST_F(GeometryFixture, Vector2D_Angle)
-{
-    double const Pi(std::acos(-1.0));
-    double const Pi_2(std::asin(1.0));
-    {
-        Vector2D a(4.0, 0.0);
-        Vector2D b(0.0, 4.0);
-        EXPECT_DOUBLE_EQ(Pi_2, a.angle(b));
-        EXPECT_DOUBLE_EQ(0.0, a.cos(b));
-        EXPECT_DOUBLE_EQ(1.0, a.sin(b));
-        EXPECT_DOUBLE_EQ(Pi_2, a.dir_angle(b));
-        EXPECT_DOUBLE_EQ(0.0, a.dir_cos(b));
-        EXPECT_DOUBLE_EQ(1.0, a.dir_sin(b));
-    }
-    {
-        Vector2D a(4.0, 0.0);
-        Vector2D b(0.0, -4.0);
-        EXPECT_DOUBLE_EQ(Pi_2, a.angle(b));
-        EXPECT_DOUBLE_EQ(0.0, a.cos(b));
-        EXPECT_DOUBLE_EQ(1.0, a.sin(b));
-        EXPECT_DOUBLE_EQ(3.0 * Pi_2, a.dir_angle(b));
-        EXPECT_DOUBLE_EQ(0.0, a.dir_cos(b));
-        EXPECT_DOUBLE_EQ(-1.0, a.dir_sin(b));
-    }
-    {
-        Vector2D a(4.0, 0.0);
-        Vector2D b(-1.0, 0.0);
-        EXPECT_DOUBLE_EQ(Pi, a.angle(b));
-        EXPECT_DOUBLE_EQ(-1.0, a.cos(b));
-        EXPECT_DOUBLE_EQ(0.0, a.sin(b));
-        EXPECT_DOUBLE_EQ(Pi, a.dir_angle(b));
-        EXPECT_DOUBLE_EQ(-1.0, a.dir_cos(b));
-        EXPECT_DOUBLE_EQ(0.0, a.dir_sin(b));
-    }
 }
 
 TEST_F(GeometryFixture, Vector2D_BinaryOperations)
@@ -217,7 +170,7 @@ TEST_F(GeometryFixture, Vector2D_Constexpr)
 {
     constexpr Vector2D a(1.0, 2.0);
     constexpr Vector2D b(3.0, 4.0);
-    static_assert(Vector2D().is_zero());
+    static_assert(Vector2D() == Vector2D(0.0, 0.0));
     static_assert(a + b == Vector2D(4.0, 6.0));
     static_assert(b - a == Vector2D(2.0, 2.0));
     static_assert(2.0 * a == Vector2D(2.0, 4.0));
@@ -226,7 +179,6 @@ TEST_F(GeometryFixture, Vector2D_Constexpr)
     static_assert(a.dot(b) == 11.0);
     static_assert(a.cross(b) == -2.0);
     static_assert(a.length_squared() == 5.0);
-    static_assert(a.distance_squared(b) == 8.0);
     static_assert(a[1] == 2.0);
     static_assert(0.5 * (a + b) == Vector2D(2.0, 3.0));
     static_assert(a != b);
