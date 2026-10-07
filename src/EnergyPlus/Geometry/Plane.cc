@@ -54,10 +54,10 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Vector3.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Geometry/Plane.hh>
+#include <EnergyPlus/Geometry/Vector3D.hh>
 
 namespace EnergyPlus {
 
@@ -67,9 +67,9 @@ Plane::Plane(double x_, double y_, double z_, double w_) : x(x_), y(y_), z(z_), 
 }
 
 // Plane of a polygon by Newell's method
-Plane Plane::fromVertices(ObjexxFCL::Array1D<ObjexxFCL::Vector3> const &vertices)
+Plane Plane::fromVertices(ObjexxFCL::Array1D<Vector3D> const &vertices)
 {
-    using Vector = ObjexxFCL::Vector3;
+    using Vector = Vector3D;
     std::size_t const n(vertices.size());
     assert(n >= 3);
     Vector center(0.0);                    // Center (vertex average) point (not mass centroid)
@@ -138,9 +138,9 @@ Plane Plane::normalized() const
 }
 
 // Outward Normal vector (x, y, z): not unit length unless the plane was normalized
-ObjexxFCL::Vector3 Plane::normal() const
+Vector3D Plane::normal() const
 {
-    return ObjexxFCL::Vector3(x, y, z);
+    return Vector3D(x, y, z);
 }
 
 // Degenerate plane: zero normal
@@ -150,7 +150,7 @@ bool Plane::isDegenerate() const
 }
 
 // Signed distance from a point to the plane: positive on the side the normal points to
-double Plane::signedDistance(ObjexxFCL::Vector3 const &point) const
+double Plane::signedDistance(Vector3D const &point) const
 {
     double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
     assert(normal_length != 0.0);

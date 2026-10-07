@@ -45,110 +45,107 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef EnergyPlus_hh_INCLUDED
-#define EnergyPlus_hh_INCLUDED
+// Google Test Headers
+#include <gtest/gtest.h>
 
-// EnergyPlus Project-Wide Header File
-//
-// Language: C++
+#include "GeometryFixture.hh"
 
-// C++ Headers
-#include <cassert>
-#include <cstdint> // C++11
-#include <stdexcept>
+// EnergyPlus Headers
+#include <EnergyPlus/Geometry/Vector3D.hh>
 
-#include <EnergyPlus/api/TypeDefs.h>
+using namespace EnergyPlus;
 
-namespace EnergyPlus {
-class FatalError : public std::runtime_error
+TEST(Vector3Test, Basic)
 {
-public:
-    FatalError(std::string const &msg) : runtime_error(msg)
-    {
-    }
-};
-} // namespace EnergyPlus
+    Vector3D d; // Default construction zero-initializes
+    EXPECT_EQ(0.0, d.x);
+    EXPECT_EQ(0.0, d.y);
+    EXPECT_EQ(0.0, d.z);
+    Vector3D v(15.0); // Uniform value construction
+    EXPECT_EQ(15.0, v.x);
+    EXPECT_EQ(15.0, v.y);
+    EXPECT_EQ(15.0, v.z);
+    v = {1.0, 2.0, 3.0};
+    EXPECT_EQ(1.0, v[0]);
+    EXPECT_EQ(2.0, v[1]);
+    EXPECT_EQ(3.0, v[2]);
+    v[1] = 5.0;
+    EXPECT_EQ(5.0, v.y);
+    EXPECT_DOUBLE_EQ(5.0, Vector3D(3.0, 4.0, 0.0).length());
+    EXPECT_DOUBLE_EQ(25.0, Vector3D(3.0, 4.0, 0.0).length_squared());
+}
 
-// macro to guarantee array sizing in debug builds
-#define EP_SIZE_CHECK(array, min_size)                                                                                                               \
-    assert(min_size >= 0);                                                                                                                           \
-    assert(array.size() >= (size_t)min_size)
+TEST(Vector3Test, Comparisons)
+{
+    Vector3D v(1.0, 2.0, 3.0);
+    Vector3D w(1.0, 2.0, 3.0);
+    EXPECT_EQ(v, w);
+    EXPECT_FALSE(v != w);
+    v.z = 0.0;
+    EXPECT_TRUE(v != w);
+    EXPECT_FALSE(v == w);
+}
 
-typedef std::int32_t Int32;
-typedef std::int64_t Int64;
+TEST(Vector3Test, Operators)
+{
+    Vector3D v(1.0, 12.0, 4.0);
+    Vector3D w(2.0, 6.0, 1.0);
+    EXPECT_EQ(Vector3D(3.0, 18.0, 5.0), v + w);
+    EXPECT_EQ(Vector3D(-1.0, 6.0, 3.0), v - w);
+    EXPECT_EQ(Vector3D(-1.0, -12.0, -4.0), -v);
+    EXPECT_EQ(Vector3D(2.0, 24.0, 8.0), v * 2.0);
+    EXPECT_EQ(Vector3D(2.0, 24.0, 8.0), 2.0 * v);
+    EXPECT_EQ(Vector3D(0.5, 6.0, 2.0), v / 2.0);
+    Vector3D u(v);
+    u += w;
+    EXPECT_EQ(Vector3D(3.0, 18.0, 5.0), u);
+    u -= w;
+    EXPECT_EQ(v, u);
+    u *= 2.0;
+    EXPECT_EQ(Vector3D(2.0, 24.0, 8.0), u);
+    u /= 2.0;
+    EXPECT_EQ(v, u);
+    EXPECT_EQ(Vector3D(1.5, 9.0, 2.5), 0.5 * (v + w)); // midpoint
+}
 
-// ObjexxFCL
-#include <ObjexxFCL/Array1.fwd.hh>
-#include <ObjexxFCL/Array1D.fwd.hh>
-#include <ObjexxFCL/Array2.fwd.hh>
-#include <ObjexxFCL/Array2D.fwd.hh>
-#include <ObjexxFCL/Array3D.fwd.hh>
-#include <ObjexxFCL/Omit.hh>
+TEST(Vector3Test, DotCrossDistance)
+{
+    Vector3D x(3.0, 0.0, 0.0);
+    Vector3D y(0.0, 2.0, 0.0);
+    EXPECT_EQ(0.0, x.dot(y));
+    EXPECT_EQ(Vector3D(0.0, 0.0, 6.0), x.cross(y));
+    EXPECT_EQ(Vector3D(0.0, 0.0, -6.0), y.cross(x));
+    Vector3D v(3.0, 3.0, 3.0);
+    Vector3D w(3.0, 2.0, 3.0);
+    EXPECT_DOUBLE_EQ(1.0, v.distance(w));
+    EXPECT_DOUBLE_EQ(1.0, v.distance_squared(w));
+}
 
-using ObjexxFCL::_;
+TEST(Vector3Test, Normalize)
+{
+    Vector3D v(0.0, 3.0, 4.0);
+    EXPECT_DOUBLE_EQ(1.0, v.normalized().length());
+    EXPECT_DOUBLE_EQ(10.0, v.normalized(10.0).length());
+    Vector3D n(v);
+    n.normalize();
+    EXPECT_DOUBLE_EQ(0.6, n.y);
+    EXPECT_DOUBLE_EQ(0.8, n.z);
+}
 
-using ObjexxFCL::Array1;
-using ObjexxFCL::Array1_int;
-using ObjexxFCL::Array1_string;
-using ObjexxFCL::Array1D;
-using ObjexxFCL::Array1D_bool;
-using ObjexxFCL::Array1D_double;
-using ObjexxFCL::Array1D_int;
-using ObjexxFCL::Array1D_string;
-using ObjexxFCL::Array2;
-using ObjexxFCL::Array2_int;
-using ObjexxFCL::Array2D;
-using ObjexxFCL::Array2D_bool;
-using ObjexxFCL::Array2D_int;
-using ObjexxFCL::Array2D_string;
-using ObjexxFCL::Array3D;
-using ObjexxFCL::Array3D_bool;
-using ObjexxFCL::Array3D_int;
-
-// ObjexxFCL Functions
-#include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/random.hh>
-#include <ObjexxFCL/string.functions.hh>
-#include <ObjexxFCL/time.hh>
-
-using ObjexxFCL::CEILING;
-using ObjexxFCL::equali;
-using ObjexxFCL::has;
-using ObjexxFCL::has_prefix;
-using ObjexxFCL::has_prefixi;
-using ObjexxFCL::hasi;
-using ObjexxFCL::index;
-using ObjexxFCL::is_blank;
-using ObjexxFCL::len;
-using ObjexxFCL::len_trim;
-using ObjexxFCL::lessthani;
-using ObjexxFCL::ljustified;
-using ObjexxFCL::max;
-using ObjexxFCL::min;
-using ObjexxFCL::mod;
-using ObjexxFCL::nint;
-using ObjexxFCL::nint64;
-using ObjexxFCL::not_blank;
-using ObjexxFCL::pare;
-using ObjexxFCL::pow_2;
-using ObjexxFCL::pow_3;
-using ObjexxFCL::pow_4;
-using ObjexxFCL::pow_5;
-using ObjexxFCL::pow_6;
-using ObjexxFCL::pow_7;
-using ObjexxFCL::RANDOM_NUMBER;
-using ObjexxFCL::RANDOM_SEED;
-using ObjexxFCL::rjustified;
-using ObjexxFCL::root_4;
-using ObjexxFCL::rstrip;
-using ObjexxFCL::scan;
-using ObjexxFCL::sign;
-using ObjexxFCL::sized;
-using ObjexxFCL::square;
-using ObjexxFCL::strip;
-using ObjexxFCL::stripped;
-using ObjexxFCL::trimmed;
-using ObjexxFCL::uppercase;
-using ObjexxFCL::uppercased;
-
-#endif
+TEST(Vector3Test, Constexpr)
+{
+    constexpr Vector3D a(1.0, 2.0, 3.0);
+    constexpr Vector3D b(4.0, 5.0, 6.0);
+    static_assert(Vector3D() == Vector3D(0.0, 0.0, 0.0));
+    static_assert(a + b == Vector3D(5.0, 7.0, 9.0));
+    static_assert(b - a == Vector3D(3.0, 3.0, 3.0));
+    static_assert(2.0 * a == Vector3D(2.0, 4.0, 6.0));
+    static_assert(-a == Vector3D(-1.0, -2.0, -3.0));
+    static_assert(a.dot(b) == 32.0);
+    static_assert(a.cross(b) == Vector3D(-3.0, 6.0, -3.0));
+    static_assert(a.length_squared() == 14.0);
+    static_assert(a.distance_squared(b) == 27.0);
+    static_assert(a[2] == 3.0);
+    static_assert(a != b);
+    SUCCEED();
+}

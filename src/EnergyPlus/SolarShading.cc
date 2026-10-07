@@ -54,7 +54,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/Vector3.hh>
 #include <ObjexxFCL/member.functions.hh>
 
 // Third Party Headers
@@ -83,6 +82,7 @@
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/EnergyPlusLogger.hh>
+#include <EnergyPlus/Geometry/Vector3D.hh>
 #include <EnergyPlus/HeatBalanceSurfaceManager.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/OutputProcessor.hh>
@@ -964,7 +964,7 @@ void AllocateModuleArrays(EnergyPlusData &state)
 
     s_surf->SurfSunCosHourly.allocate(Constant::iHoursInDay);
     for (int hour = 1; hour <= Constant::iHoursInDay; hour++) {
-        s_surf->SurfSunCosHourly(hour) = Vector3(0.0);
+        s_surf->SurfSunCosHourly(hour) = Vector3D(0.0);
     }
     s_surf->SurfSunlitArea.dimension(s_surf->TotSurfaces, 0.0);
     s_surf->SurfSunlitFrac.dimension(s_surf->TotSurfaces, 0.0);
@@ -10753,10 +10753,10 @@ void CalcWindowProfileAngles(EnergyPlusData &state)
     // This is the incidence angle in a plane that is normal to the window
     // and parallel to the X-axis of the window (the axis along
     // which the width of the window is measured).
-    Vector3 WinNorm;                                  // Unit vector normal to window
-    Vector3 WinNormCrossBase;                         // Cross product of WinNorm and vector along window baseline
-    Vector3 SunPrime;                                 // Projection of sun vector onto plane (perpendicular to
-    Vector3 const SolCosVec(state.dataEnvrn->SOLCOS); // Local Vector3 copy for speed (until SOLCOS mig to Vector3)
+    Vector3D WinNorm;                                  // Unit vector normal to window
+    Vector3D WinNormCrossBase;                         // Cross product of WinNorm and vector along window baseline
+    Vector3D SunPrime;                                 // Projection of sun vector onto plane (perpendicular to
+    Vector3D const SolCosVec(state.dataEnvrn->SOLCOS); // Local Vector3D copy for speed (until SOLCOS mig to Vector3D)
     //  window plane) determined by WinNorm and vector along
     //  baseline of window
     Real64 ThWin; // Azimuth angle of WinNorm (radians)
@@ -10913,12 +10913,12 @@ void CalcFrameDividerShadow(EnergyPlusData &state,
     Real64 FracShFDin; // Fraction of glazing that illuminates frame and divider
     //  inside projections with beam radiation
 
-    Vector3 WinNorm(3);  // Window outward normal unit vector // Why the (3)?
-    Real64 ThWin;        // Azimuth angle of WinNorm
-    Vector3 SunPrime(3); // Projection of sun vector onto plane (perpendicular to // Why the (3)?
+    Vector3D WinNorm(3);  // Window outward normal unit vector // Why the (3)?
+    Real64 ThWin;         // Azimuth angle of WinNorm
+    Vector3D SunPrime(3); // Projection of sun vector onto plane (perpendicular to // Why the (3)?
     //  window plane) determined by WinNorm and vector along
     //  baseline of window
-    Vector3 WinNormCrossBase(3); // Cross product of WinNorm and vector along window baseline // Why the (3)?
+    Vector3D WinNormCrossBase(3); // Cross product of WinNorm and vector along window baseline // Why the (3)?
 
     auto &s_surf = state.dataSurface;
 

@@ -52,10 +52,10 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/Geometry/Plane.hh>
+#include <EnergyPlus/Geometry/Vector3D.hh>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Vector3.hh>
 
 // C++ Headers
 #include <cmath>
@@ -170,13 +170,13 @@ TEST_F(GeometryFixture, StreamOutputRestoresStreamState)
 TEST_F(GeometryFixture, Normal)
 {
     Plane const p(3.0, 0.0, 4.0, 10.0);
-    ObjexxFCL::Vector3 const n(p.normal());
+    Vector3D const n(p.normal());
     EXPECT_EQ(3.0, n.x);
     EXPECT_EQ(0.0, n.y);
     EXPECT_EQ(4.0, n.z);
 
     // Not unit length unless the plane is normalized
-    ObjexxFCL::Vector3 const u(p.normalized().normal());
+    Vector3D const u(p.normalized().normal());
     EXPECT_DOUBLE_EQ(0.6, u.x);
     EXPECT_DOUBLE_EQ(0.0, u.y);
     EXPECT_DOUBLE_EQ(0.8, u.z);
@@ -272,7 +272,7 @@ TEST_F(GeometryFixture, Equal_Tolerance)
 
 TEST_F(GeometryFixture, SignedDistance)
 {
-    using Point = ObjexxFCL::Vector3;
+    using Point = Vector3D;
 
     // x = 10 facing +x: positive in front (x > 10), negative behind, zero on the plane
     Plane const x10(1.0, 0.0, 0.0, -10.0);
@@ -305,7 +305,7 @@ TEST_F(GeometryFixture, SignedDistance)
 
 TEST_F(GeometryFixture, FromVertices)
 {
-    using Point = ObjexxFCL::Vector3;
+    using Point = Vector3D;
     using Vertices = ObjexxFCL::Array1D<Point>;
 
     {

@@ -942,7 +942,7 @@ TEST_F(EnergyPlusFixture, DaylightingManager_GetDaylParamInGeoTrans_Test)
 
     state->dataSurface->SurfSunCosHourly.allocate(Constant::iHoursInDay);
     for (int hour = 1; hour <= Constant::iHoursInDay; hour++) {
-        state->dataSurface->SurfSunCosHourly(hour) = Vector3(0.0);
+        state->dataSurface->SurfSunCosHourly(hour) = Vector3D(0.0);
     }
     CalcDayltgCoefficients(*state);
     int zoneNum = 1;
@@ -964,7 +964,7 @@ TEST_F(EnergyPlusFixture, DaylightingManager_ProfileAngle_Test)
     DataWindowEquivalentLayer::Orientation horiz = DataWindowEquivalentLayer::Orientation::Horizontal;
     DataWindowEquivalentLayer::Orientation vert = DataWindowEquivalentLayer::Orientation::Vertical;
     Real64 ProfAng;
-    Vector3 CosDirSun; // Solar direction cosines
+    Vector3D CosDirSun; // Solar direction cosines
 
     CosDirSun.x = 0.882397;
     CosDirSun.y = 0.470492;
@@ -2659,7 +2659,7 @@ TEST_F(EnergyPlusFixture, DaylightingManager_OutputFormats)
     state->dataGlobal->WeightPreviousHour = 0.0;
     state->dataSurface->SurfSunCosHourly.allocate(Constant::iHoursInDay);
     for (int hour = 1; hour <= Constant::iHoursInDay; hour++) {
-        state->dataSurface->SurfSunCosHourly(hour) = Vector3(0.0);
+        state->dataSurface->SurfSunCosHourly(hour) = Vector3D(0.0);
     }
     CalcDayltgCoefficients(*state);
     int zoneNum = 1;
@@ -3359,7 +3359,7 @@ TEST_F(EnergyPlusFixture, DaylightingManager_TDD_NoDaylightingControls)
     int constexpr HoursInDay(24);
     state->dataSurface->SurfSunCosHourly.allocate(HoursInDay);
     for (int hour = 1; hour <= HoursInDay; hour++) {
-        state->dataSurface->SurfSunCosHourly(hour) = Vector3(0.0);
+        state->dataSurface->SurfSunCosHourly(hour) = Vector3D(0.0);
     }
     SurfaceGeometry::GetSurfaceData(*state, foundErrors); // setup zone geometry and get zone data
     EXPECT_FALSE(foundErrors);                            // expect no errors

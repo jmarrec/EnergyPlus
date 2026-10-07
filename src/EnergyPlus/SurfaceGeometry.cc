@@ -14664,7 +14664,7 @@ namespace SurfaceGeometry {
                 //        Zcm=(Z1+Z2)/2.0d0
 
                 // Calc centroid as average of surfaces
-                centroid = Vector3(0.0);
+                centroid = Vector3D(0.0);
                 for (int vert = 1; vert <= surface.Sides; ++vert) {
                     centroid += vertex(vert);
                 }
@@ -14681,7 +14681,7 @@ namespace SurfaceGeometry {
                                       "...surface name is blank. Examine surfaces -- this may be a problem with ill-formed interzone surfaces.");
                     ShowContinueError(state, std::format("... number of sides must be >= 3, this surface # sides={}", surface.Sides));
                 }
-                centroid = Vector3(0.0);
+                centroid = Vector3D(0.0);
             }
 
             // store result in the surface structure in DataSurfaces

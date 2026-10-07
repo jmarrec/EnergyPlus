@@ -52,15 +52,13 @@
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/Array3D.hh>
-#include <ObjexxFCL/Vector3.fwd.hh>
-
-using ObjexxFCL::Vector3;
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataVectorTypes.hh>
 #include <EnergyPlus/EPVector.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/Geometry/Vector3D.hh>
 
 namespace EnergyPlus {
 
@@ -362,7 +360,7 @@ struct BSDFWindowData : BaseGlobalStruct
     int TotThermalModels = 0;    // Number of thermal models
 
     // calculation
-    Array2D<Vector3> SUNCOSTS = Array2D<Vector3>(60, 24);      // Timestep values of solar direction cosines
+    Array2D<Vector3D> SUNCOSTS = Array2D<Vector3D>(60, 24);    // Timestep values of solar direction cosines
     Array2D<Real64> BSDFTempMtrx;                              // Temporary matrix for holding axisymmetric input
     EPVector<DataBSDFWindow::BSDFWindowGeomDescr> ComplexWind; // Window geometry structure: set in CalcPerSolarBeam/SolarShading
 

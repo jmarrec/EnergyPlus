@@ -51,10 +51,10 @@
 // EnergyPlus Headers
 #include <EnergyPlus/EPVector.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/Geometry/Vector3D.hh>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1.fwd.hh>
-#include <ObjexxFCL/Vector3.hh>
 
 // C++ Headers
 #include <cassert>
@@ -89,7 +89,7 @@ class SurfaceOctreeCube
 public: // Types
     using Real = Real64;
     using Surface = DataSurfaces::SurfaceData;
-    using Vertex = ObjexxFCL::Vector3;
+    using Vertex = Vector3D;
     using Surfaces = std::vector<Surface *>;
     using size_type = Surfaces::size_type;
 

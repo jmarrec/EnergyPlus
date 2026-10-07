@@ -729,23 +729,23 @@ namespace DataSurfaces {
 
         // Vertices
         Array1D<Vector> NewVertex;
-        Vertices Vertex;  // Surface Vertices are represented by Number of Sides and Vector (type)
-        Vector3 Centroid; // computed centroid (also known as center of mass or surface balance point)
-        Vector3 lcsx;
-        Vector3 lcsy;
-        Vector3 lcsz;
-        Vector3 NewellAreaVector;
-        Vector3 NewellSurfaceNormalVector; // same as OutNormVec in vector notation
-        Vector3 OutNormVec;                // Direction cosines (outward normal vector) for surface
-        Real64 SinAzim;                    // Sine of surface azimuth angle
-        Real64 CosAzim;                    // Cosine of surface azimuth angle
-        Real64 SinTilt;                    // Sine of surface tilt angle
-        Real64 CosTilt;                    // Cosine of surface tilt angle
-        bool IsConvex;                     // true if the surface is convex.
-        bool IsDegenerate;                 // true if the surface is degenerate.
-        bool VerticesProcessed;            // true if vertices have been processed (only used for base surfaces)
-        Real64 XShift;                     // relative coordinate shift data - used by child subsurfaces
-        Real64 YShift;                     // relative coordinate shift data - used by child subsurfaces
+        Vertices Vertex;   // Surface Vertices are represented by Number of Sides and Vector (type)
+        Vector3D Centroid; // computed centroid (also known as center of mass or surface balance point)
+        Vector3D lcsx;
+        Vector3D lcsy;
+        Vector3D lcsz;
+        Vector3D NewellAreaVector;
+        Vector3D NewellSurfaceNormalVector; // same as OutNormVec in vector notation
+        Vector3D OutNormVec;                // Direction cosines (outward normal vector) for surface
+        Real64 SinAzim;                     // Sine of surface azimuth angle
+        Real64 CosAzim;                     // Cosine of surface azimuth angle
+        Real64 SinTilt;                     // Sine of surface tilt angle
+        Real64 CosTilt;                     // Cosine of surface tilt angle
+        bool IsConvex;                      // true if the surface is convex.
+        bool IsDegenerate;                  // true if the surface is degenerate.
+        bool VerticesProcessed;             // true if vertices have been processed (only used for base surfaces)
+        Real64 XShift;                      // relative coordinate shift data - used by child subsurfaces
+        Real64 YShift;                      // relative coordinate shift data - used by child subsurfaces
 
         // Boundary conditions and interconnections
         bool HeatTransSurf;                                    // True if surface is a heat transfer surface (light shelf can also be IsShadowing)
@@ -887,7 +887,7 @@ namespace DataSurfaces {
         // Members
         Array1D<SurfaceWindowRefPt> refPts;
 
-        Vector3 WinCenter = {0.0, 0.0, 0.0}; // X,Y,Z coordinates of window center point in building coord system
+        Vector3D WinCenter = {0.0, 0.0, 0.0}; // X,Y,Z coordinates of window center point in building coord system
 
         Real64 theta = 0.0;           // Azimuth of window normal (rad)
         Real64 phi = 0.0;             // Altitude of window normal (rad)
@@ -1540,7 +1540,7 @@ struct SurfacesData : BaseGlobalStruct
     // Surface solar arrays
     Array1D<Real64> SurfAirSkyRadSplit;     // Fractional split between the air and the sky for radiation from the surface
                                             // Fraction of sky IR coming from sky itself; 1-SurfAirSkyRadSplit comes from the atmosphere.
-    Array1D<Vector3> SurfSunCosHourly;      // Hourly values of SUNCOS (solar direction cosines)
+    Array1D<Vector3D> SurfSunCosHourly;     // Hourly values of SUNCOS (solar direction cosines)
                                             // Autodesk: Init Zero-initialization added to avoid use uninitialized
     Array1D<Real64> SurfSunlitArea;         // Sunlit area by surface number
     Array1D<Real64> SurfSunlitFrac;         // Sunlit fraction by surface number

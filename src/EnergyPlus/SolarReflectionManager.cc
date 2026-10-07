@@ -114,10 +114,10 @@ namespace SolarReflectionManager {
         int ObsSurfNum;    // Surface number of an obstruction
         bool ObsBehindRec; // True if an obstruction is entirely behind a receiving surface
         bool ObsHasView;   // True if view between receiving surface and heat trans surf obstruction
-        Vector3 RecVec;    // First vertex of a receiving surface (m)
-        Vector3 ObsVec;    // A vertex of a candidate obstructing surface (m)
-        Vector3 VecAB;     // Vector from receiving surface vertex to obstruction surface vertex (m)
-        Vector3 HitPt;     // Hit point (m)
+        Vector3D RecVec;   // First vertex of a receiving surface (m)
+        Vector3D ObsVec;   // A vertex of a candidate obstructing surface (m)
+        Vector3D VecAB;    // Vector from receiving surface vertex to obstruction surface vertex (m)
+        Vector3D HitPt;    // Hit point (m)
         Real64 DotProd;    // Dot product of vectors (m2)
         int RecPtNum;      // Receiving point number
         // unused  REAL(r64)         :: SumX                 ! Sum of X (or Y or Z) coordinate values of a surface
@@ -139,27 +139,27 @@ namespace SolarReflectionManager {
         int ITheta;       // Ray altitude angle and azimuth angle indices
         // unused  REAL(r64)         :: APhi                 ! Intermediate variable
         int RayNum;                // Ray number
-        Vector3 URay;              // Unit vector along ray pointing away from receiving surface
+        Vector3D URay;             // Unit vector along ray pointing away from receiving surface
         Real64 CosIncAngRay;       // Cosine of angle of incidence of ray on receiving surface
         Real64 dOmega;             // Solid angle associated with a ray
         bool hit;                  // True iff obstruction is hit
         int TotObstructionsHit;    // Number of obstructions hit by a ray
         Real64 HitDistance;        // Distance from receiving point to hit point for a ray (m)
         int NearestHitSurfNum;     // Surface number of nearest obstruction hit by a ray
-        Vector3 NearestHitPt;      // Nearest hit pit for a ray (m)
+        Vector3D NearestHitPt;     // Nearest hit pit for a ray (m)
         Real64 NearestHitDistance; // Distance from receiving point to nearest hit point for a ray (m)
         int ObsSurfNumToSkip;      // Surface number of obstruction to be ignored
-        Vector3 RecPt;             // Receiving point (m)
-        Vector3 RayVec;            // Unit vector along ray
-        Vector3 Vec1;              // Vectors between hit surface vertices (m)
-        Vector3 Vec2;              // Vectors between hit surface vertices (m)
-        Vector3 VNorm;             // For a hit surface, unit normal vector pointing into the hemisphere
+        Vector3D RecPt;            // Receiving point (m)
+        Vector3D RayVec;           // Unit vector along ray
+        Vector3D Vec1;             // Vectors between hit surface vertices (m)
+        Vector3D Vec2;             // Vectors between hit surface vertices (m)
+        Vector3D VNorm;            // For a hit surface, unit normal vector pointing into the hemisphere
         // containing the receiving point
         int ObsConstrNum; // Construction number of obstruction; = 0 if a shading surface
         Real64 Alfa;      // Direction angles for ray heading towards the ground (radians)
         Real64 Beta;
-        Real64 HorDis;       // Distance between ground hit point and proj'n of receiving pt onto ground (m)
-        Vector3 GroundHitPt; // Coordinates of ground hit point
+        Real64 HorDis;        // Distance between ground hit point and proj'n of receiving pt onto ground (m)
+        Vector3D GroundHitPt; // Coordinates of ground hit point
         // unused  REAL(r64)         :: ArgASin
         Real64 ACosTanTan;
         int J;           // DO loop indices
@@ -167,8 +167,8 @@ namespace SolarReflectionManager {
         int NumRecPts;   // Number of surface receiving points for reflected solar radiation
         Real64 VertexWt; // Vertex weighting factor for calculating receiving points
 
-        static Vector3 const unit_z(0.0, 0.0, 1.0);
-        static Vector3 const zero3(0.0);
+        static Vector3D const unit_z(0.0, 0.0, 1.0);
+        static Vector3D const zero3(0.0);
 
         // Find number of surfaces that are sun-exposed exterior building heat transfer surfaces.
         // These are candidates for receiving solar reflected from obstructions and ground.
@@ -265,7 +265,7 @@ namespace SolarReflectionManager {
 
         state.dataSurface->MaxReflRays = AltAngStepsForSolReflCalc * AzimAngStepsForSolReflCalc;
         for (RecSurfNum = 1; RecSurfNum <= state.dataSolarReflectionManager->TotSolReflRecSurf; ++RecSurfNum) {
-            state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).NormVec = Vector3(0.0);
+            state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).NormVec = Vector3D(0.0);
             state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).RecPt.dimension(state.dataSurface->MaxRecPts, zero3);
             state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).RayVec.dimension(state.dataSurface->MaxReflRays, zero3);
             state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).CosIncAngRay.dimension(state.dataSurface->MaxReflRays, 0.0);
@@ -356,7 +356,7 @@ namespace SolarReflectionManager {
 
             NumRecPts = state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).NumRecPts;
             for (J = 1; J <= NumRecPts; ++J) {
-                state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).RecPt(J) = Vector3(0.0);
+                state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).RecPt(J) = Vector3D(0.0);
                 for (K = 1; K <= NumRecPts; ++K) {
                     if (NumRecPts == 3) { // Receiving surface is a triangle
                         VertexWt = 0.2;

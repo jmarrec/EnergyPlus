@@ -73,10 +73,10 @@
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/Geometry/Plane.hh>
 #include <EnergyPlus/Geometry/Vector2D.hh>
+#include <EnergyPlus/Geometry/Vector3D.hh>
 #include <EnergyPlus/Platform.hh>
 
 // ObjexxFCL Headers
-#include <ObjexxFCL/Vector3.hh>
 
 // C++ Headers
 #include <algorithm>
@@ -285,7 +285,7 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
 
 ALWAYS_INLINE
 bool PierceSurface_polygon(DataSurfaces::SurfaceData const &surface, // Surface
-                           Vector3 const &hitPt                      // Ray-plane intersection point
+                           Vector3D const &hitPt                     // Ray-plane intersection point
 )
 {
     // Purpose: Check if hit point on surface plane is in surface polygon
@@ -333,9 +333,9 @@ bool PierceSurface_polygon(DataSurfaces::SurfaceData const &surface, // Surface
 
 ALWAYS_INLINE
 bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
-                   Vector3 const &rayOri,                    // Ray origin point
-                   Vector3 const &rayDir,                    // Ray direction vector
-                   Vector3 &hitPt                            // Ray-plane intersection point
+                   Vector3D const &rayOri,                   // Ray origin point
+                   Vector3D const &rayDir,                   // Ray direction vector
+                   Vector3D &hitPt                           // Ray-plane intersection point
 )
 {
     // Purpose: Check if a ray hits a surface and return the point of intersection
@@ -369,10 +369,10 @@ bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
 
 ALWAYS_INLINE
 bool PierceSurface(EnergyPlusData &state,
-                   int const iSurf,       // Surface index
-                   Vector3 const &rayOri, // Ray origin point
-                   Vector3 const &rayDir, // Ray direction vector
-                   Vector3 &hitPt         // Ray-plane intersection point
+                   int const iSurf,        // Surface index
+                   Vector3D const &rayOri, // Ray origin point
+                   Vector3D const &rayDir, // Ray direction vector
+                   Vector3D &hitPt         // Ray-plane intersection point
 )
 {
     // Purpose: Overload taking surface index instead of surface
@@ -387,10 +387,10 @@ bool PierceSurface(EnergyPlusData &state,
 
 ALWAYS_INLINE
 bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
-                   Vector3 const &rayOri,                    // Ray origin point
-                   Vector3 const &rayDir,                    // Ray direction unit vector
+                   Vector3D const &rayOri,                   // Ray origin point
+                   Vector3D const &rayDir,                   // Ray direction unit vector
                    Real64 const dMax,                        // Max distance from rayOri to hit point
-                   Vector3 &hitPt                            // Ray-plane intersection point
+                   Vector3D &hitPt                           // Ray-plane intersection point
 )
 {
     // Purpose: Check if a ray hits a surface and return the point of intersection
@@ -434,11 +434,11 @@ bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
 
 ALWAYS_INLINE
 bool PierceSurface(EnergyPlusData &state,
-                   int const iSurf,       // Surface index
-                   Vector3 const &rayOri, // Ray origin point
-                   Vector3 const &rayDir, // Ray direction unit vector
-                   Real64 const dMax,     // Max distance from rayOri to hit point
-                   Vector3 &hitPt         // Ray-plane intersection point
+                   int const iSurf,        // Surface index
+                   Vector3D const &rayOri, // Ray origin point
+                   Vector3D const &rayDir, // Ray direction unit vector
+                   Real64 const dMax,      // Max distance from rayOri to hit point
+                   Vector3D &hitPt         // Ray-plane intersection point
 )
 {
     // Purpose: Overload taking surface index instead of surface

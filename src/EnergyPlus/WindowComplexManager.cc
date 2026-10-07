@@ -310,7 +310,7 @@ namespace WindowComplexManager {
                 V = state.dataSurface->Surface(JSurf).Centroid - state.dataSurface->Surface(ISurf).Centroid;
                 VLen = V.length();
                 // Define the unit vector from the window center to the back
-                state.dataBSDFWindow->ComplexWind(ISurf).sWinSurf(KBkSurf) = Vector3(V.x / VLen, V.y / VLen, V.z / VLen);
+                state.dataBSDFWindow->ComplexWind(ISurf).sWinSurf(KBkSurf) = Vector3D(V.x / VLen, V.y / VLen, V.z / VLen);
                 // surface center
                 // Define the back surface cosine(incident angle)
                 state.dataBSDFWindow->ComplexWind(ISurf).sdotN(KBkSurf) = V.dot(state.dataSurface->Surface(JSurf).OutNormVec) / VLen;
