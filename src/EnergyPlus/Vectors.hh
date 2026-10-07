@@ -66,7 +66,6 @@ namespace Vectors {
     // Using/Aliasing
     using DataVectorTypes::Polyhedron;
     using DataVectorTypes::Vector;
-    using DataVectorTypes::Vector_2d;
 
     // MODULE PARAMETER DEFINITIONS
 

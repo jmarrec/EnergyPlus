@@ -360,7 +360,7 @@ namespace SurfaceGeometry {
 
     bool isAlmostEqual3dPt(DataVectorTypes::Vector v1, DataVectorTypes::Vector v2);
 
-    bool isAlmostEqual2dPt(DataVectorTypes::Vector_2d v1, DataVectorTypes::Vector_2d v2);
+    bool isAlmostEqual2dPt(Vector2D v1, Vector2D v2);
 
     int findIndexOfVertex(DataVectorTypes::Vector vertexToFind, std::vector<DataVectorTypes::Vector> const &listOfVertices);
 

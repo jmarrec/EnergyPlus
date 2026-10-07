@@ -3261,8 +3261,8 @@ bool polygon_contains_point(int const nsides,            // number of sides (ver
     int ip1;
 
     // Object Data
-    Array1D<Vector_2d> polygon(nsides);
-    Vector_2d point;
+    Array1D<Vector2D> polygon(nsides);
+    Vector2D point;
 
     bool inside = false;
     if (ignorex) {

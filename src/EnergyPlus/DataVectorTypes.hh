@@ -54,11 +54,11 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Vector2.hh>
 #include <ObjexxFCL/Vector3.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/Geometry/Vector2D.hh>
 
 namespace EnergyPlus {
 
@@ -82,15 +82,14 @@ namespace DataVectorTypes {
 
     // Types
 
-    // Vector2/3 are integrated with Array and offer additional capabilities such as
+    // Vector2D/3 are integrated with Array and offer additional capabilities such as
     //  subscript lookup and are templates so we are using them as plug replacements
     //  for consistent API and to avoid cost of copying them
     // Note: For vectorization contexts std::array is a better choice
     using Vector = ObjexxFCL::Vector3<Real64>;
-    using Vector_2d = ObjexxFCL::Vector2;
     using ObjexxFCL::cross;
 
-    struct Vector2dCount : Vector_2d
+    struct Vector2dCount : Vector2D
     {
         int count{};
         Vector2dCount() = default;
@@ -541,37 +540,6 @@ namespace DataVectorTypes {
         // Default Constructor
         Polyhedron() = default;
     };
-
-    //    struct Vector_2d
-    //    {
-    //        // Members
-    //        Real64 x;
-    //        Real64 y;
-    //
-    //        // Default Constructor
-    //        Vector_2d()
-    //        {}
-    //
-    //
-    //        // Dot Product
-    //        inline
-    //        friend
-    //        Real64
-    //        dot( Vector_2d const & a, Vector_2d const & b )
-    //        {
-    //            return ( a.x * b.x ) + ( a.y * b.y );
-    //        }
-    //
-    //        // Cross Product
-    //        inline
-    //        friend
-    //        Real64
-    //        cross( Vector_2d const & a, Vector_2d const & b )
-    //        {
-    //            return ( a.x * b.y ) - ( a.y * b.x );
-    //        }
-    //
-    //    };
 
     struct dTriangle
     {

@@ -1083,8 +1083,8 @@ TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_isAlmostEqual3dPt)
 
 TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_isAlmostEqual2dPt)
 {
-    DataVectorTypes::Vector_2d a;
-    DataVectorTypes::Vector_2d b;
+    Vector2D a;
+    Vector2D b;
 
     a.x = 0.;
     a.y = 0.;

@@ -12788,7 +12788,7 @@ namespace SurfaceGeometry {
     }
 
     // test if two points on a plane are in the same position based on a small tolerance
-    bool isAlmostEqual2dPt(DataVectorTypes::Vector_2d v1, DataVectorTypes::Vector_2d v2)
+    bool isAlmostEqual2dPt(Vector2D v1, Vector2D v2)
     {
         // J. Glazer - March 2017
 
@@ -15289,12 +15289,12 @@ namespace SurfaceGeometry {
 
         for (int n = 1; n <= NSides; ++n) { // perform convexity test in the plane determined above.
 
-            DataVectorTypes::Vector_2d pt0(A(n), B(n));
-            DataVectorTypes::Vector_2d pt1(A(n + 1), B(n + 1));
-            DataVectorTypes::Vector_2d pt2(A(n + 2), B(n + 2));
+            Vector2D pt0(A(n), B(n));
+            Vector2D pt1(A(n + 1), B(n + 1));
+            Vector2D pt2(A(n + 2), B(n + 2));
 
-            DataVectorTypes::Vector_2d V1 = pt1 - pt0;
-            DataVectorTypes::Vector_2d V2 = pt2 - pt1;
+            Vector2D V1 = pt1 - pt0;
+            Vector2D V2 = pt2 - pt1;
 
             Real64 V1len = V1.length(); // = norm_L2()
             Real64 V2len = V2.length();

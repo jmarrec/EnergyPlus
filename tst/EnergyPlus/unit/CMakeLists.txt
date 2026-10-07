@@ -139,6 +139,7 @@ set(test_src
     GeneralRoutines.unit.cc
     Geometry/GeometryFixture.hh
     Geometry/Plane.unit.cc
+    Geometry/Vector2D.unit.cc
     GroundHeatExchangers/Base.unit.cc
     GroundHeatExchangers/BoreholeArray.unit.cc
     GroundHeatExchangers/BoreholeSingle.unit.cc
