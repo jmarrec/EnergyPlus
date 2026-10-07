@@ -72,20 +72,15 @@ class Vector2
     return *this;
   }
 
-  // = Value
-  Vector2& operator=(double t) {
-    x = y = t;
-    return *this;
-  }
-
-  // *= Value
+  /// Scalar multiplication and division: Compound Assignment
+  // *= Scalar
   Vector2& operator*=(double t) {
     x *= t;
     y *= t;
     return *this;
   }
 
-  // /= Value
+  // /= Scalar
   Vector2& operator/=(double const u) {
     assert(u != 0.0);
     double const inv_u(1.0 / u);
@@ -93,6 +88,27 @@ class Vector2
     y *= inv_u;
     return *this;
   }
+
+  /// Addition and Subtraction: Compound Assignment and Unary negation
+  // += Vector2
+  Vector2& operator+=(Vector2 const& v) {
+    x += v.x;
+    y += v.y;
+    return *this;
+  }
+
+  // -= Vector2
+  Vector2& operator-=(Vector2 const& v) {
+    x -= v.x;
+    y -= v.y;
+    return *this;
+  }
+
+  // -Vector2 (Negated)
+  Vector2 operator-() const {
+    return {-x, -y};
+  }
+
 
  public:  // Subscript
   // Vector2[ i ] const: 0-Based Index
@@ -221,10 +237,6 @@ class Vector2
   }
 
  public:  // Generators
-  // -Vector2 (Negated)
-  Vector2 operator-() const {
-    return Vector2(-x, -y);
-  }
 
   // Normalized to a Length
   Vector2 normalized(double tar_length = 1.0) const {
@@ -282,7 +294,7 @@ class Vector2
 
 };  // Vector2
 
-// Lexicographic comparison (x first, then y)
+/// Lexicographic comparison (x first, then y)
 inline bool operator==(Vector2 const& a, Vector2 const& b) {
   return (a.x == b.x) && (a.y == b.y);
 }
@@ -315,6 +327,26 @@ inline bool operator>(Vector2 const& a, Vector2 const& b) {
                           (a.y > b.y))));
 }
 
+/// Scalar multiplication and division: Binary Operators
+// Vector2 * Scalar
+inline Vector2 operator*(Vector2 const& v, double t) {
+  return Vector2(v.x * t, v.y * t);
+}
+
+// Scalar * Vector2
+inline Vector2 operator*(double t, Vector2 const& v) {
+  return Vector2(t * v.x, t * v.y);
+}
+
+// Vector2 / Scalar
+inline Vector2 operator/(Vector2 const& v, double const u) {
+  assert(u != 0.0);
+  double const inv_u(1.0 / u);
+  return Vector2(v.x * inv_u, v.y * inv_u);
+}
+
+
+/// Addition and Subtraction: Binary Operators
 // Vector2 + Vector2
 inline Vector2 operator+(Vector2 const& a, Vector2 const& b) {
   return Vector2(a.x + b.x, a.y + b.y);
@@ -325,41 +357,7 @@ inline Vector2 operator-(Vector2 const& a, Vector2 const& b) {
   return Vector2(a.x - b.x, a.y - b.y);
 }
 
-// Vector2 * Vector2
-inline Vector2 operator*(Vector2 const& a, Vector2 const& b) {
-  return Vector2(a.x * b.x, a.y * b.y);
-}
-
-// Vector2 * Value
-inline Vector2 operator*(Vector2 const& v, double t) {
-  return Vector2(v.x * t, v.y * t);
-}
-
-// Value * Vector2
-inline Vector2 operator*(double t, Vector2 const& v) {
-  return Vector2(t * v.x, t * v.y);
-}
-
-// Vector2 / Vector2
-inline Vector2 operator/(Vector2 const& a, Vector2 const& b) {
-  assert(b.x != 0.0);
-  assert(b.y != 0.0);
-  return Vector2(a.x / b.x, a.y / b.y);
-}
-
-// Vector2 / Value
-inline Vector2 operator/(Vector2 const& v, double const u) {
-  assert(u != 0.0);
-  double const inv_u(1.0 / u);
-  return Vector2(v.x * inv_u, v.y * inv_u);
-}
-
-// Value / Vector2
-inline Vector2 operator/(double t, Vector2 const& v) {
-  assert(v.x != 0.0);
-  assert(v.y != 0.0);
-  return Vector2(t / v.x, t / v.y);
-}
+/// Free Functions
 
 // Minimum of Two Vector2s
 inline Vector2 min(Vector2 const& a, Vector2 const& b) {

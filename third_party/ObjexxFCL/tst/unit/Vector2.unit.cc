@@ -99,14 +99,14 @@ TEST( Vector2Test, Comparisons )
 	EXPECT_EQ( v, w );
 
 	// Reduce v and test inequality
-	v = v - Vector2( 0.5 );
+	v -= Vector2( 0.5 );
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
 	EXPECT_TRUE( v < w );
 	EXPECT_TRUE( v <= w );
 
 	// Increase v and test inequality
-	v = v + Vector2( 1.0 );
+	v += Vector2( 1.0 );
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
 	EXPECT_TRUE( v > w );
@@ -124,8 +124,9 @@ TEST( Vector2Test, Generators )
 	Vector2 w( 2.0, 6.0 );
 	EXPECT_EQ( Vector2( 3.0, 18.0 ), v + w );
 	EXPECT_EQ( Vector2( -1.0, 6.0 ), v - w );
-	EXPECT_EQ( Vector2( 2.0, 72.0 ), v * w );
-	EXPECT_EQ( Vector2( 0.5, 2.0 ), v / w );
+	EXPECT_EQ( Vector2( 2.0, 24.0 ), v * 2.0 );
+	EXPECT_EQ( Vector2( 2.0, 24.0 ), 2.0 * v );
+	EXPECT_EQ( Vector2( 0.5, 6.0 ), v / 2.0 );
 }
 
 TEST( Vector2Test, Distance )
@@ -203,7 +204,7 @@ TEST( Vector2Test, BinaryOperations )
 	EXPECT_DOUBLE_EQ( v.length_squared(), v.dot( w ) ); // v == w here
 
 	// Check midpoint (should match original vector)
-	v = v + Vector2( 1.0 ); w = w - Vector2( 1.0 );
+	v += Vector2( 1.0 ); w -= Vector2( 1.0 );
 	Vector2 const midpoint( mid( v, w ) );
 	EXPECT_DOUBLE_EQ( original.x, midpoint.x );
 	EXPECT_DOUBLE_EQ( original.y, midpoint.y );
