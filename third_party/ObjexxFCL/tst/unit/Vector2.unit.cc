@@ -122,10 +122,6 @@ TEST( Vector2Test, Comparisons )
 	v.x = 0.0;
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
-
-	// Test length relations
-	EXPECT_TRUE( ! equal_length( v, w ) );
-	EXPECT_TRUE( not_equal_length( v, w ) );
 }
 
 TEST( Vector2Test, Generators )

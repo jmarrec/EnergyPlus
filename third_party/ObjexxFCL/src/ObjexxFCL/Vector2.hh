@@ -397,16 +397,6 @@ inline bool operator>(Vector2 const& a, Vector2 const& b) {
                           (a.y > b.y))));
 }
 
-// Equal Length?
-inline bool equal_length(Vector2 const& a, Vector2 const& b) {
-  return (a.length_squared() == b.length_squared());
-}
-
-// Not Equal Length?
-inline bool not_equal_length(Vector2 const& a, Vector2 const& b) {
-  return (a.length_squared() != b.length_squared());
-}
-
 // Vector2 + Vector2
 inline Vector2 operator+(Vector2 const& a, Vector2 const& b) {
   return Vector2(a.x + b.x, a.y + b.y);
