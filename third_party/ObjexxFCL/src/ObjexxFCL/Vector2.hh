@@ -92,15 +92,6 @@ public: // Creation
 	 y( y_ )
 	{}
 
-	// Array Constructor Template
-	template< typename A, class = typename std::enable_if< std::is_constructible< double, typename A::value_type >::value >::type >
-	Vector2( A const & a ) :
-	 x( a[ 0 ] ),
-	 y( a[ 1 ] )
-	{
-		assert( a.size() == 2 );
-	}
-
 	// Default Vector Named Constructor
 	static
 	Vector2
@@ -155,63 +146,6 @@ public: // Assignment
 			x = v.x;
 			y = v.y;
 		}
-		return *this;
-	}
-
-	// Array Assignment Template
-	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
-	Vector2 &
-	operator =( A const & a )
-	{
-		assert( a.size() == 2 );
-		x = a[ 0 ];
-		y = a[ 1 ];
-		return *this;
-	}
-
-	// += Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
-	Vector2 &
-	operator +=( A const & a )
-	{
-		assert( a.size() == 2 );
-		x += a[ 0 ];
-		y += a[ 1 ];
-		return *this;
-	}
-
-	// -= Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
-	Vector2 &
-	operator -=( A const & a )
-	{
-		assert( a.size() == 2 );
-		x -= a[ 0 ];
-		y -= a[ 1 ];
-		return *this;
-	}
-
-	// *= Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
-	Vector2 &
-	operator *=( A const & a )
-	{
-		assert( a.size() == 2 );
-		x *= a[ 0 ];
-		y *= a[ 1 ];
-		return *this;
-	}
-
-	// /= Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
-	Vector2 &
-	operator /=( A const & a )
-	{
-		assert( a.size() == 2 );
-		assert( a[ 0 ] != 0.0 );
-		assert( a[ 1 ] != 0.0 );
-		x /= a[ 0 ];
-		y /= a[ 1 ];
 		return *this;
 	}
 
@@ -467,29 +401,11 @@ public: // Properties: General
 		return ( x * v.x ) + ( y * v.y );
 	}
 
-	// Dot Product with an Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
-	double
-	dot( A const & a ) const
-	{
-		assert( a.size() == 2 );
-		return ( x * a[ 0 ] ) + ( y * a[ 1 ] );
-	}
-
 	// Cross Product with a Vector2
 	double
 	cross( Vector2 const & v ) const
 	{
 		return ( x * v.y ) - ( y * v.x );
-	}
-
-	// Cross Product with an Array
-	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
-	double
-	cross( A const & a ) const
-	{
-		assert( a.size() == 2 );
-		return ( x * a[ 1 ] ) - ( y * a[ 0 ] );
 	}
 
 	// Alias for Element 1
