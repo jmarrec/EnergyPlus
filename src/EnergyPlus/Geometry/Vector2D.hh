@@ -185,6 +185,18 @@ public: // Properties: General
         return (x * x) + (y * y);
     }
 
+    // Distance to a Vector2D
+    double distance(Vector2D const &v) const
+    {
+        return (v - *this).length();
+    }
+
+    // Distance Squared to a Vector2D
+    constexpr double distance_squared(Vector2D const &v) const
+    {
+        return (v - *this).length_squared();
+    }
+
     // Dot Product with a Vector2D
     constexpr double dot(Vector2D const &v) const
     {

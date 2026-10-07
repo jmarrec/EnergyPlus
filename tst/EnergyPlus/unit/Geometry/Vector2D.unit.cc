@@ -128,6 +128,15 @@ TEST_F(GeometryFixture, Vector2D_Generators)
     EXPECT_EQ(Vector2D(0.5, 6.0), v / 2.0);
 }
 
+TEST_F(GeometryFixture, Vector2D_Distance)
+{
+    Vector2D v(3.0, 3.0);
+    Vector2D w(3.0, 2.0);
+    EXPECT_DOUBLE_EQ(1.0, v.distance(w));
+    EXPECT_DOUBLE_EQ(1.0, v.distance_squared(w));
+    EXPECT_DOUBLE_EQ(5.0, Vector2D(0.0, 0.0).distance(Vector2D(3.0, 4.0)));
+}
+
 TEST_F(GeometryFixture, Vector2D_Dot)
 {
     Vector2D x(3.0, 0.0);
@@ -179,6 +188,7 @@ TEST_F(GeometryFixture, Vector2D_Constexpr)
     static_assert(a.dot(b) == 11.0);
     static_assert(a.cross(b) == -2.0);
     static_assert(a.length_squared() == 5.0);
+    static_assert(a.distance_squared(b) == 8.0);
     static_assert(a[1] == 2.0);
     static_assert(0.5 * (a + b) == Vector2D(2.0, 3.0));
     static_assert(a != b);
