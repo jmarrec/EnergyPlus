@@ -56,10 +56,6 @@
 
 namespace EnergyPlus {
 
-// Derived from ObjexxFCL::Vector3 (Objexx Engineering, Inc.)
-// Vector3D: Fast 3-Element Vector of doubles
-// . Heap-free and loop-free for speed
-// . Provides direct element access via .x style lookup
 class Vector3D
 {
 public: // Data Elements
@@ -82,6 +78,7 @@ public: // Creation
 
 public: // Scalar multiplication and division
     /// Scalar Compound Assignment
+    // *= Scalar
     constexpr Vector3D &operator*=(double t)
     {
         x *= t;
@@ -90,6 +87,7 @@ public: // Scalar multiplication and division
         return *this;
     }
 
+    // /= Scalar
     constexpr Vector3D &operator/=(double u)
     {
         assert(u != 0.0);
@@ -101,16 +99,19 @@ public: // Scalar multiplication and division
     }
 
     /// Scalar Binary Operators
+    // Vector3D * Scalar
     friend constexpr Vector3D operator*(Vector3D const &v, double t)
     {
         return {v.x * t, v.y * t, v.z * t};
     }
 
+    // Scalar * Vector3D
     friend constexpr Vector3D operator*(double t, Vector3D const &v)
     {
         return {t * v.x, t * v.y, t * v.z};
     }
 
+    // Vector3D / Scalar
     friend constexpr Vector3D operator/(Vector3D const &v, double u)
     {
         assert(u != 0.0);
@@ -120,6 +121,7 @@ public: // Scalar multiplication and division
 
 public: // Vector3D Addition and Subtraction
     /// Compound Assignment and Unary negation
+    // += Vector3D
     constexpr Vector3D &operator+=(Vector3D const &v)
     {
         x += v.x;
@@ -128,6 +130,7 @@ public: // Vector3D Addition and Subtraction
         return *this;
     }
 
+    // -= Vector3D
     constexpr Vector3D &operator-=(Vector3D const &v)
     {
         x -= v.x;
@@ -136,17 +139,20 @@ public: // Vector3D Addition and Subtraction
         return *this;
     }
 
+    // -Vector3D (Negated)
     constexpr Vector3D operator-() const
     {
         return {-x, -y, -z};
     }
 
-    /// Binary Operators
+    /// Addition and Subtraction: Binary Operators
+    // Vector3D + Vector3D
     friend constexpr Vector3D operator+(Vector3D const &a, Vector3D const &b)
     {
         return {a.x + b.x, a.y + b.y, a.z + b.z};
     }
 
+    // Vector3D - Vector3D
     friend constexpr Vector3D operator-(Vector3D const &a, Vector3D const &b)
     {
         return {a.x - b.x, a.y - b.y, a.z - b.z};
@@ -156,26 +162,28 @@ public: // Comparison
     friend constexpr bool operator==(Vector3D const &, Vector3D const &) = default;
 
 public: // Subscript
-    // Vector3D[ i ]: 0-Based Index
+    // Vector3D[ i ] const: 0-Based Index
     constexpr double operator[](std::size_t i) const
     {
         assert(i <= 2);
         return (i == 0 ? x : (i == 1 ? y : z));
     }
 
+    // Vector3D[ i ]: 0-Based Index
     constexpr double &operator[](std::size_t i)
     {
         assert(i <= 2);
         return (i == 0 ? x : (i == 1 ? y : z));
     }
 
-public: // Properties
+public: // Properties: General
     // Length (L2 norm)
     double length() const
     {
         return std::sqrt(length_squared());
     }
 
+    // Length Squared
     constexpr double length_squared() const
     {
         return (x * x) + (y * y) + (z * z);
@@ -187,6 +195,7 @@ public: // Properties
         return (v - *this).length();
     }
 
+    // Distance Squared to a Vector3D
     constexpr double distance_squared(Vector3D const &v) const
     {
         return (v - *this).length_squared();
@@ -214,7 +223,7 @@ public: // Normalization
         return *this;
     }
 
-    // Normalized to a Length
+    // Normalized to a Length (return a new vector)
     Vector3D normalized(double tar_length = 1.0) const
     {
         double const cur_length(length());

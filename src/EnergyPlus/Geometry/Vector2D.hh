@@ -63,7 +63,6 @@ public: // Data Elements
     double y = 0.0;
 
 public: // Creation
-    // Default Constructor
     Vector2D() = default;
 
     // Uniform Value Constructor
@@ -209,7 +208,7 @@ public: // Properties: General
         return (x * v.y) - (y * v.x);
     }
 
-public: // Modifiers (in-place)
+public: // Normalization
     // Normalize to a Length
     Vector2D &normalize(double tar_length = 1.0)
     {
@@ -221,8 +220,7 @@ public: // Modifiers (in-place)
         return *this;
     }
 
-public: // Generators (return a new vector)
-    // Normalized to a Length
+    // Normalized to a Length (return a new vector)
     Vector2D normalized(double tar_length = 1.0) const
     {
         double const cur_length(length());
