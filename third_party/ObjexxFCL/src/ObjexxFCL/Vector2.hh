@@ -13,20 +13,13 @@
 // Use of this source code or any derivative of it is restricted by license.
 // Licensing is available from Objexx Engineering, Inc.:  http://objexx.com
 
-// ObjexxFCL Headers
-#include <ObjexxFCL/Vector2.fwd.hh>
-#include <ObjexxFCL/Fmath.hh>
-
 // C++ Headers
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdlib>
 #include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <type_traits>
-
+#include <ostream>
 namespace ObjexxFCL {
 
 // Vector2: Fast 2-Element Vector
@@ -351,12 +344,12 @@ inline Vector2 min(Vector2 const& a, Vector2 const& b) {
 
 // Minimum of Three Vector2s
 inline Vector2 min(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return Vector2(ObjexxFCL::min(a.x, b.x, c.x), ObjexxFCL::min(a.y, b.y, c.y));
+  return Vector2(std::min({a.x, b.x, c.x}), std::min({a.y, b.y, c.y}));
 }
 
 // Minimum of Four Vector2s
 inline Vector2 min(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
-  return Vector2(ObjexxFCL::min(a.x, b.x, c.x, d.x), ObjexxFCL::min(a.y, b.y, c.y, d.y));
+  return Vector2(std::min({a.x, b.x, c.x, d.x}), std::min({a.y, b.y, c.y, d.y}));
 }
 
 // Maximum of Two Vector2s
@@ -366,12 +359,12 @@ inline Vector2 max(Vector2 const& a, Vector2 const& b) {
 
 // Maximum of Three Vector2s
 inline Vector2 max(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  return Vector2(ObjexxFCL::max(a.x, b.x, c.x), ObjexxFCL::max(a.y, b.y, c.y));
+  return Vector2(std::max({a.x, b.x, c.x}), std::max({a.y, b.y, c.y}));
 }
 
 // Maximum of Four Vector2s
 inline Vector2 max(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
-  return Vector2(ObjexxFCL::max(a.x, b.x, c.x, d.x), ObjexxFCL::max(a.y, b.y, c.y, d.y));
+  return Vector2(std::max({a.x, b.x, c.x, d.x}), std::max({a.y, b.y, c.y, d.y}));
 }
 
 // Midpoint of Two Vector2s
