@@ -78,20 +78,6 @@ class Vector2
     return *this;
   }
 
-  // += Value
-  Vector2& operator+=(double t) {
-    x += t;
-    y += t;
-    return *this;
-  }
-
-  // -= Value
-  Vector2& operator-=(double t) {
-    x -= t;
-    y -= t;
-    return *this;
-  }
-
   // *= Value
   Vector2& operator*=(double t) {
     x *= t;
@@ -394,29 +380,9 @@ inline Vector2 operator+(Vector2 const& a, Vector2 const& b) {
   return Vector2(a.x + b.x, a.y + b.y);
 }
 
-// Vector2 + Value
-inline Vector2 operator+(Vector2 const& v, double t) {
-  return Vector2(v.x + t, v.y + t);
-}
-
-// Value + Vector2
-inline Vector2 operator+(double t, Vector2 const& v) {
-  return Vector2(t + v.x, t + v.y);
-}
-
 // Vector2 - Vector2
 inline Vector2 operator-(Vector2 const& a, Vector2 const& b) {
   return Vector2(a.x - b.x, a.y - b.y);
-}
-
-// Vector2 - Value
-inline Vector2 operator-(Vector2 const& v, double t) {
-  return Vector2(v.x - t, v.y - t);
-}
-
-// Value - Vector2
-inline Vector2 operator-(double t, Vector2 const& v) {
-  return Vector2(t - v.x, t - v.y);
 }
 
 // Vector2 * Vector2

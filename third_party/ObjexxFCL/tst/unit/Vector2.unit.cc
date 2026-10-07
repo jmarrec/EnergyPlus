@@ -63,12 +63,6 @@ TEST( Vector2Test, BraceInit )
 	v = { 44, 55 };
 	EXPECT_EQ( 44, v.x );
 	EXPECT_EQ( 55, v.y );
-	v += 10;
-	EXPECT_EQ( 54, v.x );
-	EXPECT_EQ( 65, v.y );
-	v -= 10;
-	EXPECT_EQ( 44, v.x );
-	EXPECT_EQ( 55, v.y );
 	v *= 2;
 	EXPECT_EQ( 88, v.x );
 	EXPECT_EQ( 110, v.y );
@@ -105,14 +99,14 @@ TEST( Vector2Test, Comparisons )
 	EXPECT_EQ( v, w );
 
 	// Reduce v and test inequality
-	v -= 0.5;
+	v = v - Vector2( 0.5 );
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
 	EXPECT_TRUE( v < w );
 	EXPECT_TRUE( v <= w );
 
 	// Increase v and test inequality
-	v += 1.0;
+	v = v + Vector2( 1.0 );
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
 	EXPECT_TRUE( v > w );
@@ -206,10 +200,10 @@ TEST( Vector2Test, BinaryOperations )
 	Vector2 const original( v );
 
 	// Check dot product of equal vectors
-	EXPECT_DOUBLE_EQ( v.length_squared(), dot( v, w ) ); // v == w here
+	EXPECT_DOUBLE_EQ( v.length_squared(), v.dot( w ) ); // v == w here
 
 	// Check midpoint (should match original vector)
-	v += 1.0; w -= 1.0;
+	v = v + Vector2( 1.0 ); w = w - Vector2( 1.0 );
 	Vector2 const midpoint( mid( v, w ) );
 	EXPECT_DOUBLE_EQ( original.x, midpoint.x );
 	EXPECT_DOUBLE_EQ( original.y, midpoint.y );
