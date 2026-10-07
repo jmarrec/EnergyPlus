@@ -92,46 +92,6 @@ public: // Creation
 	 y( y_ )
 	{}
 
-	// Default Vector Named Constructor
-	static
-	Vector2
-	default_vector()
-	{
-		return Vector2( double() );
-	}
-
-	// Zero Vector Named Constructor
-	static
-	Vector2
-	zero_vector()
-	{
-		return Vector2( 0.0 );
-	}
-
-	// x Vector of Specified Length Named Constructor
-	static
-	Vector2
-	x_vector( double tar_length = 1.0 )
-	{
-		return Vector2( tar_length, 0.0 );
-	}
-
-	// y Vector of Specified Length Named Constructor
-	static
-	Vector2
-	y_vector( double tar_length = 1.0 )
-	{
-		return Vector2( 0.0, tar_length );
-	}
-
-	// Uniform Vector of Specified Length Named Constructor
-	static
-	Vector2
-	uniform_vector( double tar_length = 1.0 )
-	{
-		return Vector2( tar_length / std::sqrt( double( 2 ) ) );
-	}
-
 	// Destructor
 	~Vector2()
 	{}
@@ -482,53 +442,6 @@ public: // Modifiers
 		return *this;
 	}
 
-	// Normalize to a Length: Uniform Vector2 if Length is Zero
-	Vector2 &
-	normalize_uniform( double tar_length = 1.0 )
-	{
-		double const cur_length( length() );
-		if ( cur_length > 0.0 ) {
-			double const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-		} else { // Set uniform vector
-			operator =( uniform_vector( tar_length ) );
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: x Vector2 if Length is Zero
-	Vector2 &
-	normalize_x( double tar_length = 1.0 )
-	{
-		double const cur_length( length() );
-		if ( cur_length > 0.0 ) {
-			double const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-		} else { // Set x vector
-			x = tar_length;
-			y = 0.0;
-		}
-		return *this;
-	}
-
-	// Normalize to a Length: y Vector2 if Length is Zero
-	Vector2 &
-	normalize_y( double tar_length = 1.0 )
-	{
-		double const cur_length( length() );
-		if ( cur_length > 0.0 ) {
-			double const dilation( tar_length / cur_length );
-			x *= dilation;
-			y *= dilation;
-		} else { // Set y vector
-			y = tar_length;
-			x = 0.0;
-		}
-		return *this;
-	}
-
 	// Minimum Coordinates with a Vector2
 	Vector2 &
 	min( Vector2 const & v )
@@ -647,54 +560,6 @@ public: // Generators
 			);
 		} else { // Return zero vector
 			return Vector2( 0.0 );
-		}
-	}
-
-	// Normalized to a Length: Uniform Vector2 if Length is Zero
-	Vector2
-	normalized_uniform( double tar_length = 1.0 ) const
-	{
-		double const cur_length( length() );
-		if ( cur_length > 0.0 ) {
-			double const dilation( tar_length / cur_length );
-			return Vector2(
-			 x * dilation,
-			 y * dilation
-			);
-		} else { // Return uniform vector
-			return uniform_vector( tar_length );
-		}
-	}
-
-	// Normalized to a Length: x Vector2 if Length is Zero
-	Vector2
-	normalized_x( double tar_length = 1.0 ) const
-	{
-		double const cur_length( length() );
-		if ( cur_length > 0.0 ) {
-			double const dilation( tar_length / cur_length );
-			return Vector2(
-			 x * dilation,
-			 y * dilation
-			);
-		} else { // Return x vector
-			return Vector2( tar_length, 0.0 );
-		}
-	}
-
-	// Normalized to a Length: y Vector2 if Length is Zero
-	Vector2
-	normalized_y( double tar_length = 1.0 ) const
-	{
-		double const cur_length( length() );
-		if ( cur_length > 0.0 ) {
-			double const dilation( tar_length / cur_length );
-			return Vector2(
-			 x * dilation,
-			 y * dilation
-			);
-		} else { // Return y vector
-			return Vector2( 0.0, tar_length );
 		}
 	}
 

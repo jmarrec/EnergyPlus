@@ -51,18 +51,6 @@ TEST( Vector2Test, Basic )
 	v.normalize_zero();
 	EXPECT_EQ( 0.0f, v.x );
 	EXPECT_EQ( 0.0f, v.y );
-	v.zero();
-	v.normalize_x();
-	EXPECT_EQ( 1.0f, v.x );
-	EXPECT_EQ( 0.0f, v.y );
-	v.zero();
-	v.normalize_y();
-	EXPECT_EQ( 0.0f, v.x );
-	EXPECT_EQ( 1.0f, v.y );
-	v.zero();
-	v.normalize_uniform();
-	EXPECT_EQ( v.x, v.y );
-	EXPECT_FLOAT_EQ( 1.0f, v.length() );
 }
 
 TEST( Vector2Test, BraceInit )
