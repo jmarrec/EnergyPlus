@@ -53,7 +53,6 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <iomanip>
 #include <numbers>
 #include <ostream>
 
@@ -382,24 +381,10 @@ private: // Static Methods
 }; // Vector2D
 
 // Stream << Vector2D output operator
-inline std::ostream &operator<<(std::ostream &stream, Vector2D const &v)
+inline std::ostream &operator<<(std::ostream &os, Vector2D const &v)
 {
-    constexpr std::streamsize precision = 16; // Significant digits
-    constexpr int width = 23;                 // Field width
-
-    // Save current stream state and set persistent state
-    std::ios_base::fmtflags const old_flags(stream.flags());
-    std::streamsize const old_precision(stream.precision(precision));
-    stream << std::right << std::showpoint << std::uppercase;
-
-    // Output Vector2D
-    stream << std::setw(width) << v.x << ' ' << std::setw(width) << v.y;
-
-    // Restore previous stream state
-    stream.precision(old_precision);
-    stream.flags(old_flags);
-
-    return stream;
+    os << "[" << v.x << ", " << v.y << "]";
+    return os;
 }
 
 } // namespace EnergyPlus
