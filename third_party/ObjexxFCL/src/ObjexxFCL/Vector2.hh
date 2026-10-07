@@ -117,13 +117,6 @@ class Vector2
     return *this;
   }
 
-  // Value Assignment
-  Vector2& assign(double x_, double y_) {
-    x = x_;
-    y = y_;
-    return *this;
-  }
-
  public:  // Subscript
   // Vector2[ i ] const: 0-Based Index
   double operator[](size_type const i) const {
@@ -322,12 +315,12 @@ class Vector2
 
   // Value Clipped to [-1,1]
   static double sin_cos_range(double t) {
-    return std::min(std::max(t, double(-1)), 1.0);
+    return std::min(std::max(t, -1.0), 1.0);
   }
 
   // Add 2*Pi to a Negative Value
   static double bump_up_angle(double t) {
-    static double const Two_Pi(double(2) * std::acos(-1.0));
+    static double const Two_Pi(2.0 * std::acos(-1.0));
     return (t >= 0.0 ? t : Two_Pi + t);
   }
 
