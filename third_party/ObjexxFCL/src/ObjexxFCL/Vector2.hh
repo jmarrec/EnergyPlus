@@ -167,56 +167,6 @@ public: // Assignment
 		return *this;
 	}
 
-public: // Assignment: Scaled
-
-	// Assign Value * Vector2
-	Vector2 &
-	scaled_assign( double t, Vector2 const & v )
-	{
-		x = t * v.x;
-		y = t * v.y;
-		return *this;
-	}
-
-	// Add Value * Vector2
-	Vector2 &
-	scaled_add( double t, Vector2 const & v )
-	{
-		x += t * v.x;
-		y += t * v.y;
-		return *this;
-	}
-
-	// Subtract Value * Vector2
-	Vector2 &
-	scaled_sub( double t, Vector2 const & v )
-	{
-		x -= t * v.x;
-		y -= t * v.y;
-		return *this;
-	}
-
-	// Multiply by Value * Vector2
-	Vector2 &
-	scaled_mul( double t, Vector2 const & v )
-	{
-		x *= t * v.x;
-		y *= t * v.y;
-		return *this;
-	}
-
-	// Divide by Value * Vector2
-	Vector2 &
-	scaled_div( double t, Vector2 const & v )
-	{
-		assert( t != 0.0 );
-		assert( v.x != 0.0 );
-		assert( v.y != 0.0 );
-		x /= t * v.x;
-		y /= t * v.y;
-		return *this;
-	}
-
 public: // Subscript
 
 	// Vector2[ i ] const: 0-Based Index
@@ -460,42 +410,6 @@ public: // Modifiers
 		return *this;
 	}
 
-	// Add a Vector2
-	Vector2 &
-	add( Vector2 const & v )
-	{
-		x += v.x;
-		y += v.y;
-		return *this;
-	}
-
-	// Sum a Vector2
-	Vector2 &
-	sum( Vector2 const & v )
-	{
-		x += v.x;
-		y += v.y;
-		return *this;
-	}
-
-	// Subtract a Vector2
-	Vector2 &
-	sub( Vector2 const & v )
-	{
-		x -= v.x;
-		y -= v.y;
-		return *this;
-	}
-
-	// Subtract a Vector2
-	Vector2 &
-	subtract( Vector2 const & v )
-	{
-		x -= v.x;
-		y -= v.y;
-		return *this;
-	}
-
 	// Project Normal to a Vector2
 	Vector2 &
 	project_normal( Vector2 const & v )
@@ -523,13 +437,6 @@ public: // Generators
 	// -Vector2 (Negated)
 	Vector2
 	operator -() const
-	{
-		return Vector2( -x, -y );
-	}
-
-	// Negated
-	Vector2
-	negated() const
 	{
 		return Vector2( -x, -y );
 	}
@@ -1036,46 +943,6 @@ max( Vector2 const & a, Vector2 const & b, Vector2 const & c, Vector2 const & d 
 	 ObjexxFCL::max( a.x, b.x, c.x, d.x ),
 	 ObjexxFCL::max( a.y, b.y, c.y, d.y )
 	);
-}
-
-// Sum of Two Vector2s
-inline
-Vector2
-sum( Vector2 const & a, Vector2 const & b )
-{
-	return Vector2( a.x + b.x, a.y + b.y );
-}
-
-// Sum of Three Vector2s
-inline
-Vector2
-sum( Vector2 const & a, Vector2 const & b, Vector2 const & c )
-{
-	return Vector2( a.x + b.x + c.x, a.y + b.y + c.y );
-}
-
-// Sum of Four Vector2s
-inline
-Vector2
-sum( Vector2 const & a, Vector2 const & b, Vector2 const & c, Vector2 const & d )
-{
-	return Vector2( a.x + b.x + c.x + d.x, a.y + b.y + c.y + d.y );
-}
-
-// Subtract of Two Vector2s
-inline
-Vector2
-sub( Vector2 const & a, Vector2 const & b )
-{
-	return Vector2( a.x - b.x, a.y - b.y );
-}
-
-// Subtract of Two Vector2s
-inline
-Vector2
-subtract( Vector2 const & a, Vector2 const & b )
-{
-	return Vector2( a.x - b.x, a.y - b.y );
 }
 
 // Midpoint of Two Vector2s
