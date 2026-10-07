@@ -65,9 +65,9 @@ TEST( Vector2Test, Basic )
 	EXPECT_FLOAT_EQ( 1.0f, v.length() );
 }
 
-TEST( Vector2Test, InitializerList )
+TEST( Vector2Test, BraceInit )
 {
-	Vector2 v( { 33, 52 } );
+	Vector2 v{ 33, 52 };
 	EXPECT_EQ( 33, v.x );
 	EXPECT_EQ( 52, v.y );
 	EXPECT_EQ( 33, v.x1() );

@@ -23,7 +23,6 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
-#include <initializer_list>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -93,15 +92,6 @@ public: // Creation
 	 y( y_ )
 	{}
 
-	// Initializer List Constructor Template
-	template< typename U, class = typename std::enable_if< std::is_constructible< double, U >::value >::type >
-	Vector2( std::initializer_list< U > const l ) :
-	 x( *l.begin() ),
-	 y( *( l.begin() + 1 ) )
-	{
-		assert( l.size() == 2 );
-	}
-
 	// Array Constructor Template
 	template< typename A, class = typename std::enable_if< std::is_constructible< double, typename A::value_type >::value >::type >
 	Vector2( A const & a ) :
@@ -168,18 +158,6 @@ public: // Assignment
 		return *this;
 	}
 
-	// Initializer List Assignment Template
-	template< typename U, class = typename std::enable_if< std::is_assignable< double&, U >::value >::type >
-	Vector2 &
-	operator =( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 2 );
-		auto i( l.begin() );
-		x = *i;
-		y = *(++i);
-		return *this;
-	}
-
 	// Array Assignment Template
 	template< typename A, class = typename std::enable_if< std::is_assignable< double&, typename A::value_type >::value >::type >
 	Vector2 &
@@ -188,56 +166,6 @@ public: // Assignment
 		assert( a.size() == 2 );
 		x = a[ 0 ];
 		y = a[ 1 ];
-		return *this;
-	}
-
-	// += Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< double&, U >::value >::type >
-	Vector2 &
-	operator +=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 2 );
-		auto i( l.begin() );
-		x += *i;
-		y += *(++i);
-		return *this;
-	}
-
-	// -= Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< double&, U >::value >::type >
-	Vector2 &
-	operator -=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 2 );
-		auto i( l.begin() );
-		x -= *i;
-		y -= *(++i);
-		return *this;
-	}
-
-	// *= Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< double&, U >::value >::type >
-	Vector2 &
-	operator *=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 2 );
-		auto i( l.begin() );
-		x *= *i;
-		y *= *(++i);
-		return *this;
-	}
-
-	// /= Initializer List
-	template< typename U, class = typename std::enable_if< std::is_assignable< double&, U >::value >::type >
-	Vector2 &
-	operator /=( std::initializer_list< U > const l )
-	{
-		assert( l.size() == 2 );
-		auto i( l.begin() );
-		assert( *i != double( 0 ) );
-		assert( *(i+1) != double( 0 ) );
-		x /= *i;
-		y /= *(++i);
 		return *this;
 	}
 
