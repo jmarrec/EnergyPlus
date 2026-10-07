@@ -49,8 +49,8 @@ class Vector2
   // Value Constructor
   Vector2(double x_, double y_) : x(x_), y(y_) {}
 
- public:  // Assignment
-  /// Scalar multiplication and division: Compound Assignment
+ public:  // Scalar multiplication and division
+  /// Scalar Compound Assignment
   // *= Scalar
   Vector2& operator*=(double t) {
     x *= t;
@@ -67,7 +67,27 @@ class Vector2
     return *this;
   }
 
-  /// Addition and Subtraction: Compound Assignment and Unary negation
+  /// Scalar Binary Operators
+  // Vector2 * Scalar
+  friend Vector2 operator*(Vector2 const& v, double t) {
+    return {v.x * t, v.y * t};
+  }
+
+  // Scalar * Vector2
+  friend Vector2 operator*(double t, Vector2 const& v) {
+    return {t * v.x, t * v.y};
+  }
+
+
+  // Vector2 / Scalar
+  friend Vector2 operator/(Vector2 const& v, double u) {
+    assert(u != 0.0);
+    double const inv_u(1.0 / u);
+    return {v.x * inv_u, v.y * inv_u};
+  }
+
+ public:  // Vector2 Addition and Subtraction
+  /// Compound Assignment and Unary negation
   // += Vector2
   Vector2& operator+=(Vector2 const& v) {
     x += v.x;
@@ -85,6 +105,17 @@ class Vector2
   // -Vector2 (Negated)
   Vector2 operator-() const {
     return {-x, -y};
+  }
+
+  /// Addition and Subtraction: Binary Operators
+  // Vector2 + Vector2
+  friend Vector2 operator+(Vector2 const& a, Vector2 const& b) {
+    return {a.x + b.x, a.y + b.y};
+  }
+
+  // Vector2 - Vector2
+  friend Vector2 operator-(Vector2 const& a, Vector2 const& b) {
+    return {a.x - b.x, a.y - b.y};
   }
 
 
@@ -120,7 +151,7 @@ class Vector2
 
   // Length (L2 norm)
   double length() const {
-    return std::sqrt((x * x) + (y * y));
+    return std::sqrt(length_squared());
   }
 
   // Length Squared
@@ -140,12 +171,12 @@ class Vector2
 
   // Distance to a Vector2
   double distance(Vector2 const& v) const {
-    return std::sqrt(square(x - v.x) + square(y - v.y));
+    return (v - *this).length();
   }
 
   // Distance Squared to a Vector2
   double distance_squared(Vector2 const& v) const {
-    return square(x - v.x) + square(y - v.y);
+    return (v - *this).length_squared();
   }
 
   // Dot Product with a Vector2
@@ -250,10 +281,6 @@ class Vector2
   }
 
  public:  // Static Methods
-  // Square of a value
-  static double square(double t) {
-    return t * t;
-  }
 
   // Value Clipped to [-1,1]
   static double sin_cos_range(double t) {
@@ -303,36 +330,6 @@ inline bool operator>(Vector2 const& a, Vector2 const& b) {
   return ((a.x > b.x ? true
                      : (b.x > a.x ? false :  // a.x == b.x
                           (a.y > b.y))));
-}
-
-/// Scalar multiplication and division: Binary Operators
-// Vector2 * Scalar
-inline Vector2 operator*(Vector2 const& v, double t) {
-  return Vector2(v.x * t, v.y * t);
-}
-
-// Scalar * Vector2
-inline Vector2 operator*(double t, Vector2 const& v) {
-  return Vector2(t * v.x, t * v.y);
-}
-
-// Vector2 / Scalar
-inline Vector2 operator/(Vector2 const& v, double const u) {
-  assert(u != 0.0);
-  double const inv_u(1.0 / u);
-  return Vector2(v.x * inv_u, v.y * inv_u);
-}
-
-
-/// Addition and Subtraction: Binary Operators
-// Vector2 + Vector2
-inline Vector2 operator+(Vector2 const& a, Vector2 const& b) {
-  return Vector2(a.x + b.x, a.y + b.y);
-}
-
-// Vector2 - Vector2
-inline Vector2 operator-(Vector2 const& a, Vector2 const& b) {
-  return Vector2(a.x - b.x, a.y - b.y);
 }
 
 /// Free Functions
