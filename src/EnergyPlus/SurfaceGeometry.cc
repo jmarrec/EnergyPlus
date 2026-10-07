@@ -12550,6 +12550,13 @@ namespace SurfaceGeometry {
         return updZonePoly;
     }
 
+    namespace {
+        struct Vector2dCount : Vector2D
+        {
+            int count{};
+        };
+    } // namespace
+
     // test if the ceiling and floor are the same except for their height difference by looking at the corners
     bool areFloorAndCeilingSame(EnergyPlusData &state, DataVectorTypes::Polyhedron const &zonePoly)
     {
@@ -12560,7 +12567,7 @@ namespace SurfaceGeometry {
         // so if you could all the unique vertices of the floor and ceiling, ignoring the z-coordinate, they
         // should always be even (they would be two but you might define multiple surfaces that meet in a corner)
 
-        std::vector<DataVectorTypes::Vector2dCount> floorCeilingXY;
+        std::vector<Vector2dCount> floorCeilingXY;
         floorCeilingXY.reserve(zonePoly.NumSurfaceFaces * 6);
 
         // make list of x and y coordinates for all faces that are on the floor or ceiling
@@ -12570,13 +12577,13 @@ namespace SurfaceGeometry {
                 state.dataSurface->Surface(curSurfNum).Class == SurfaceClass::Roof) {
                 for (int jVertex = 1; jVertex <= zonePoly.SurfaceFace(iFace).NSides; ++jVertex) {
                     Vector curVertex = zonePoly.SurfaceFace(iFace).FacePoints(jVertex);
-                    DataVectorTypes::Vector2dCount curXYc;
+                    Vector2dCount curXYc;
                     curXYc.x = curVertex.x;
                     curXYc.y = curVertex.y;
                     curXYc.count = 1;
                     bool found = false;
-                    for (DataVectorTypes::Vector2dCount &curFloorCeiling : floorCeilingXY) { // can't use just "auto" because updating floorCeilingXY
-                        if (isAlmostEqual2dPt(curXYc, curFloorCeiling)) {                    // count ignored in comparison
+                    for (Vector2dCount &curFloorCeiling : floorCeilingXY) { // can't use just "auto" because updating floorCeilingXY
+                        if (isAlmostEqual2dPt(curXYc, curFloorCeiling)) {   // count ignored in comparison
                             ++curFloorCeiling.count;
                             found = true;
                             break;
@@ -12789,14 +12796,6 @@ namespace SurfaceGeometry {
 
     // test if two points on a plane are in the same position based on a small tolerance
     bool isAlmostEqual2dPt(Vector2D v1, Vector2D v2)
-    {
-        // J. Glazer - March 2017
-
-        return ((std::abs(v1.x - v2.x) < Constant::OneCentimeter) && (std::abs(v1.y - v2.y) < Constant::OneCentimeter));
-    }
-
-    // test if two points on a plane are in the same position based on a small tolerance (based on Vector2dCount comparison)
-    bool isAlmostEqual2dPt(DataVectorTypes::Vector2dCount v1, DataVectorTypes::Vector2dCount v2)
     {
         // J. Glazer - March 2017
 

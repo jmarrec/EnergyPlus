@@ -57,7 +57,6 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/EnergyPlus.hh>
-#include <EnergyPlus/Geometry/Vector2D.hh>
 #include <EnergyPlus/Geometry/Vector3D.hh>
 
 namespace EnergyPlus {
@@ -87,12 +86,6 @@ namespace DataVectorTypes {
     //  for consistent API and to avoid cost of copying them
     // Note: For vectorization contexts std::array is a better choice
     using Vector = Vector3D;
-
-    struct Vector2dCount : Vector2D
-    {
-        int count{};
-        Vector2dCount() = default;
-    };
 
     //    struct Vector // This is used to specify a point in 3D space
     //    {
