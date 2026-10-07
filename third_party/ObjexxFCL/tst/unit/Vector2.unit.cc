@@ -132,22 +132,22 @@ TEST( Vector2Test, Distance )
 {
 	Vector2 v( 3.0, 3.0 );
 	Vector2 w( 3.0, 2.0 );
-	EXPECT_DOUBLE_EQ( 1.0, distance( v, w ) );
-	EXPECT_DOUBLE_EQ( 1.0, distance_squared( v, w ) );
+	EXPECT_DOUBLE_EQ( 1.0, v.distance( w ) );
+	EXPECT_DOUBLE_EQ( 1.0, v.distance_squared( w ) );
 }
 
 TEST( Vector2Test, Dot )
 {
 	Vector2 x( 3.0, 0.0 );
 	Vector2 y( 0.0, 2.0 );
-	EXPECT_EQ( 0.0, dot( x, y ) );
+	EXPECT_EQ( 0.0, x.dot( y ) );
 }
 
 TEST( Vector2Test, Cross )
 {
 	Vector2 x( 3.0, 0.0 );
 	Vector2 y( 0.0, 2.0 );
-	EXPECT_EQ( 6.0, cross( x, y ) );
+	EXPECT_EQ( 6.0, x.cross( y ) );
 }
 
 TEST( Vector2Test, Center )

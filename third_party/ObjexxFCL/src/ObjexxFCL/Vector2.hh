@@ -307,68 +307,33 @@ class Vector2
 
 };  // Vector2
 
-// Length
-inline double length(Vector2 const& v) {
-  return v.length();
-}
-
-// Length Squared
-inline double length_squared(Vector2 const& v) {
-  return v.length_squared();
-}
-
-// Magnitude
-inline double magnitude(Vector2 const& v) {
-  return v.magnitude();
-}
-
-// Magnitude
-inline double mag(Vector2 const& v) {
-  return v.mag();
-}
-
-// Magnitude Squared
-inline double magnitude_squared(Vector2 const& v) {
-  return v.magnitude_squared();
-}
-
-// Magnitude Squared
-inline double mag_squared(Vector2 const& v) {
-  return v.mag_squared();
-}
-
-// Vector2 == Vector2
+// Lexicographic comparison (x first, then y)
 inline bool operator==(Vector2 const& a, Vector2 const& b) {
   return (a.x == b.x) && (a.y == b.y);
 }
 
-// Vector2 != Vector2
 inline bool operator!=(Vector2 const& a, Vector2 const& b) {
   return (a.x != b.x) || (a.y != b.y);
 }
 
-// Vector2 < Vector2: Lexicographic
 inline bool operator<(Vector2 const& a, Vector2 const& b) {
   return ((a.x < b.x ? true
                      : (b.x < a.x ? false :  // a.x == b.x
                           (a.y < b.y))));
 }
 
-// Vector2 <= Vector2: Lexicographic
 inline bool operator<=(Vector2 const& a, Vector2 const& b) {
   return ((a.x < b.x ? true
                      : (b.x < a.x ? false :  // a.x == b.x
                           (a.y <= b.y))));
 }
 
-// Vector2 >= Vector2: Lexicographic
 inline bool operator>=(Vector2 const& a, Vector2 const& b) {
   return ((a.x > b.x ? true
                      : (b.x > a.x ? false :  // a.x == b.x
                           (a.y >= b.y))));
 }
 
-// Vector2 > Vector2: Lexicographic
 inline bool operator>(Vector2 const& a, Vector2 const& b) {
   return ((a.x > b.x ? true
                      : (b.x > a.x ? false :  // a.x == b.x
@@ -470,26 +435,6 @@ inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
 // Center of Four Vector2s
 inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
   return Vector2(double(0.25 * (a.x + b.x + c.x + d.x)), double(0.25 * (a.y + b.y + c.y + d.y)));
-}
-
-// Distance
-inline double distance(Vector2 const& a, Vector2 const& b) {
-  return std::sqrt(Vector2::square(a.x - b.x) + Vector2::square(a.y - b.y));
-}
-
-// Distance Squared
-inline double distance_squared(Vector2 const& a, Vector2 const& b) {
-  return Vector2::square(a.x - b.x) + Vector2::square(a.y - b.y);
-}
-
-// Dot Product
-inline double dot(Vector2 const& a, Vector2 const& b) {
-  return (a.x * b.x) + (a.y * b.y);
-}
-
-// Cross Product
-inline double cross(Vector2 const& a, Vector2 const& b) {
-  return (a.x * b.y) - (a.y * b.x);
 }
 
 // Angle Between Two Vector2s (in Radians on [0,pi])
