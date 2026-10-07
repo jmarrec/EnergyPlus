@@ -54,6 +54,7 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
+#include <ObjexxFCL/Vector2.hh>
 #include <ObjexxFCL/Vector3.hh>
 
 // EnergyPlus Headers
@@ -86,7 +87,7 @@ namespace DataVectorTypes {
     //  for consistent API and to avoid cost of copying them
     // Note: For vectorization contexts std::array is a better choice
     using Vector = ObjexxFCL::Vector3<Real64>;
-    using Vector_2d = ObjexxFCL::Vector2<Real64>;
+    using Vector_2d = ObjexxFCL::Vector2;
     using ObjexxFCL::cross;
 
     struct Vector2dCount : Vector_2d

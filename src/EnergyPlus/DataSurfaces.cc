@@ -399,7 +399,7 @@ Surface2D SurfaceData::computed_surface2d() const
     Vertices::size_type const n(Vertex.size());
     assert(n >= 3);
     assert(plane == Plane::fromVertices(Vertex)); // Set plane first
-    using Vertex2D = ObjexxFCL::Vector2<Real64>;
+    using Vertex2D = ObjexxFCL::Vector2;
     using Vertices2D = ObjexxFCL::Array1D<Vertex2D>;
 
     // Select axis to project along
@@ -455,7 +455,7 @@ Real64 SurfaceData::get_average_height(EnergyPlusData &state) const
     if (std::abs(SinTilt) < Constant::SmallDistance) {
         return 0.0;
     }
-    using Vertex2D = ObjexxFCL::Vector2<Real64>;
+    using Vertex2D = ObjexxFCL::Vector2;
     using Vertices2D = ObjexxFCL::Array1D<Vertex2D>;
     Vertices::size_type const n(Vertex.size());
     assert(n >= 3);

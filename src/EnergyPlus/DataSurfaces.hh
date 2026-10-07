@@ -494,7 +494,7 @@ namespace DataSurfaces {
     {
 
     public: // Types
-        using Vertex = ObjexxFCL::Vector2<Real64>;
+        using Vertex = ObjexxFCL::Vector2;
         using Vertices = ObjexxFCL::Array1D<Vertex>;
         using Edge = Vertices::size_type; // The Surface2D vertex and edge index
         using EdgeXY = Real64;            // The edge x/y inverse slope
@@ -520,7 +520,7 @@ namespace DataSurfaces {
     {
 
     public: // Types
-        using Vector2D = Vector2<Real64>;
+        using Vector2D = Vector2;
         using Edge = Vector2D;
         using Vertices = Array1D<Vector2D>;
         using Vectors = Array1D<Vector2D>;

@@ -86,7 +86,7 @@
 namespace EnergyPlus {
 
 inline bool PierceSurface_Triangular(DataSurfaces::Surface2D const &s2d, // 2D surface
-                                     Vector2<Real64> const &h2d          // 2D hit point
+                                     Vector2 const &h2d                  // 2D hit point
 )
 {
     // Purpose: Check if a 2D hit point is in a triangular 2D surface
@@ -115,7 +115,7 @@ inline bool PierceSurface_Triangular(DataSurfaces::Surface2D const &s2d, // 2D s
 } // PierceSurface_Triangular()
 
 inline bool PierceSurface_Convex(DataSurfaces::Surface2D const &s2d, // 2D surface
-                                 Vector2<Real64> const &h2d          // 2D hit point
+                                 Vector2 const &h2d                  // 2D hit point
 )
 {
     // Purpose: Check if a 2D hit point is in a convex 2D surface
@@ -182,7 +182,7 @@ inline bool PierceSurface_Convex(DataSurfaces::Surface2D const &s2d, // 2D surfa
 } // PierceSurface_Convex()
 
 inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D surface
-                                    Vector2<Real64> const &h2d          // 2D hit point
+                                    Vector2 const &h2d                  // 2D hit point
 )
 {
     // Purpose: Check if a 2D hit point is in a 2D possibly nonconvex surface
@@ -200,7 +200,7 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
     using DataSurfaces::Surface2D;
     using size_type = Surface2D::Vertices::size_type;
     using Slab = DataSurfaces::Surface2DSlab;
-    using Vertex2D = Vector2<Real64>;
+    using Vertex2D = Vector2;
     assert(s2d.vertices.size() >= 3u);
     Surface2D::Slabs const &slabs(s2d.slabs);    // 2D surface y slice slabs
     Surface2D::SlabYs const &slabYs(s2d.slabYs); // 2D surface slab y coordinates
@@ -297,7 +297,7 @@ bool PierceSurface_polygon(DataSurfaces::SurfaceData const &surface, // Surface
 
     using DataSurfaces::nVerticesBig;
     using DataSurfaces::Surface2D;
-    using Vertex2D = Vector2<Real64>;
+    using Vertex2D = Vector2;
     Surface2D const &s2d(surface.surface2d);
     int const axis(s2d.axis);
     Vertex2D const h2d(axis == 0 ? hitPt.y : hitPt.x, axis == 2 ? hitPt.y : hitPt.z); // Hit point in 2D surface's plane
