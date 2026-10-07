@@ -589,38 +589,6 @@ operator >( Vector2 const & a, Vector2 const & b )
 	);
 }
 
-// Vector2 < Vector2: Element-wise
-inline
-bool
-lt( Vector2 const & a, Vector2 const & b )
-{
-	return ( a.x < b.x ) && ( a.y < b.y );
-}
-
-// Vector2 <= Vector2: Element-wise
-inline
-bool
-le( Vector2 const & a, Vector2 const & b )
-{
-	return ( a.x <= b.x ) && ( a.y <= b.y );
-}
-
-// Vector2 >= Vector2: Element-wise
-inline
-bool
-ge( Vector2 const & a, Vector2 const & b )
-{
-	return ( a.x >= b.x ) && ( a.y >= b.y );
-}
-
-// Vector2 > Vector2: Element-wise
-inline
-bool
-gt( Vector2 const & a, Vector2 const & b )
-{
-	return ( a.x > b.x ) && ( a.y > b.y );
-}
-
 // Vector2 == Value
 inline
 bool

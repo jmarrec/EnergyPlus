@@ -118,14 +118,10 @@ TEST( Vector2Test, Comparisons )
 	EXPECT_TRUE( v > w );
 	EXPECT_TRUE( v >= w );
 
-	// Test partial ordering: Set v.x to 0 but leave v.y > w.y v and w are not orderable
+	// Set v.x to 0: v and w now differ
 	v.x = 0.0;
 	EXPECT_TRUE( v != w );
 	EXPECT_TRUE( ! ( v == w ) );
-	EXPECT_TRUE( ! lt( v, w ) );
-	EXPECT_TRUE( ! le( v, w ) );
-	EXPECT_TRUE( ! gt( v, w ) );
-	EXPECT_TRUE( ! ge( v, w ) );
 
 	// Test length relations
 	EXPECT_TRUE( ! equal_length( v, w ) );
