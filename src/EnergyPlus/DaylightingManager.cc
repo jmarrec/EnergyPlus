@@ -1598,8 +1598,8 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
     // center point of window, and vector from ref pt to center of window
     W21 = W1 - W2;
     W23 = W3 - W2;
-    Real64 HW = W21.magnitude();
-    Real64 WW = W23.magnitude();
+    Real64 HW = W21.length();
+    Real64 WW = W23.length();
     if (is_Rectangle) {
         WC = W2 + (W23 + W21) / 2.0;
     } else if (is_Triangle) {
@@ -1619,7 +1619,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
     NDIVY = 40;
 
     // Distance from ref point to window plane
-    ALF = std::abs(dot(WNORM, REFWC));
+    ALF = std::abs(WNORM.dot(REFWC));
     if (CalledFrom == CalledFor::RefPoint) {
         // Check if ref point to close to window due to input error (0.1524 m below is 0.5 ft)
         if (ALF < 0.1524 && extWinType == ExtWinType::InZone) {
@@ -1627,8 +1627,8 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
             // origin to projection of ref pt on window plane.
             Vector3 W2REF = RREF + ALF * WNORM - W2;
 
-            D1a = dot(W2REF, W23);
-            D1b = dot(W2REF, W21);
+            D1a = W2REF.dot(W23);
+            D1b = W2REF.dot(W21);
 
             //            ! Error message if ref pt is too close to window.
             if (D1a > 0.0 && D1b > 0.0 && D1b <= HW && D1a <= WW) {
@@ -1723,10 +1723,10 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
 
         // Calculate reference point coords relative to the diffuser coordinate system
         // W21, W23, and WNORM are the unit vectors
-        Vector3 REFD = {dot(REFWC, W21), dot(REFWC, W23), dot(REFWC, WNORM)};
+        Vector3 REFD = {REFWC.dot(W21), REFWC.dot(W23), REFWC.dot(WNORM)};
 
         // Calculate view vector coords relative to the diffuser coordinate system
-        Vector3 VIEWVD = {dot(VIEWVC, W21), dot(VIEWVC, W23), dot(VIEWVC, WNORM)};
+        Vector3 VIEWVD = {VIEWVC.dot(W21), VIEWVC.dot(W23), VIEWVC.dot(WNORM)};
 
         Vector3 U3 = surf2.Vertex(2);
         U2 = surf2.Vertex(3);
@@ -1750,8 +1750,8 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
         // center point of window, and vector from ref pt to center of window
         U21 = U1 - U2;
         U23 = U3 - U2;
-        HW = U21.magnitude();
-        WW = U23.magnitude();
+        HW = U21.length();
+        WW = U23.length();
         if (surf2.Sides == 4) {
             WC = U2 + (U23 + U21) / 2.0;
         } else if (surf2.Sides == 3) {
@@ -1765,7 +1765,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
         // Unit vector normal to dome (pointing away from TDD)
         // These are specific to the exterior.
         // NOTE:  Preserve WNORM for later in the code.
-        WNORM2 = cross(U21, U23).normalize();
+        WNORM2 = U21.cross(U23).normalize();
 
         // Azimuth and altitude of dome normal
         // These are specific to the exterior.
@@ -1836,7 +1836,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
     if (is_Rectangle) {
         DAXY = DWX * DWY;
     } else if (is_Triangle) {
-        SinCornerAng = std::sqrt(1.0 - pow_2(dot(W21, W23)));
+        SinCornerAng = std::sqrt(1.0 - pow_2(W21.dot(W23)));
         DAXY = DWX * DWY * SinCornerAng;
     }
 }
@@ -1929,7 +1929,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
     Ray = (RWIN - RREF) / DIS;
 
     // Cosine of angle between ray and window outward normal
-    COSB = dot(WNORM2, Ray);
+    COSB = WNORM2.dot(Ray);
 
     // If COSB > 0, direct light from window can reach ref pt. Otherwise go to loop
     // over sun position and calculate inter-reflected component of illuminance
@@ -1961,7 +1961,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
     // normal to view vector containing the window element
 
     if (CalledFrom == CalledFor::RefPoint) {
-        RR = DIS * dot(Ray, VIEWVC2);
+        RR = DIS * Ray.dot(VIEWVC2);
         if (RR > 0.0) {
             // Square of distance from above intersection point to win element
             ASQ = DIS * DIS - RR * RR;
@@ -2023,7 +2023,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
                     hitIntWin = PierceSurface(state, IntWin, RREF, Ray, HitPtIntWin);
                     if (hitIntWin) {
                         IntWinHitNum = IntWin;
-                        COSBIntWin = dot(surfIntWin.OutNormVec, Ray);
+                        COSBIntWin = surfIntWin.OutNormVec.dot(Ray);
                         if (COSBIntWin <= 0.0) {
                             hitIntWin = false;
                             IntWinHitNum = 0;
@@ -2203,7 +2203,7 @@ void InitializeCFSDaylighting(EnergyPlusData &state,
 
     Real64 WinElArea = DWX * DWY;
     if (surf.Sides == 3) {
-        WinElArea *= std::sqrt(1.0 - pow_2(dot(W21, W23)));
+        WinElArea *= std::sqrt(1.0 - pow_2(W21.dot(W23)));
     }
 
     auto &complexWin = state.dataBSDFWindow->ComplexWind(IWin);
@@ -2400,7 +2400,7 @@ void InitializeCFSStateData(EnergyPlusData &state,
                         continue;
                     }
                     //  skip surfaces that face away from the window
-                    DotProd = dot(state.dataBSDFWindow->ComplexWind(iWin).Geom(CurFenState).sInc(IRay), surf2.NewellSurfaceNormalVector);
+                    DotProd = (state.dataBSDFWindow->ComplexWind(iWin).Geom(CurFenState).sInc(IRay)).dot(surf2.NewellSurfaceNormalVector);
                     if (DotProd >= 0) {
                         continue;
                     }
@@ -2416,8 +2416,8 @@ void InitializeCFSStateData(EnergyPlusData &state,
                         TmpRfRyNH(NReflSurf) = 1;
                         TmpHSurfNo(1, NReflSurf) = JSurf;
                         TmpHitPt(1, NReflSurf) = HitPt;
-                        V = HitPt - Centroid;                // vector array from window ctr to hit pt
-                        LeastHitDsq = V.magnitude_squared(); // dist^2 window ctr to hit pt
+                        V = HitPt - Centroid;             // vector array from window ctr to hit pt
+                        LeastHitDsq = V.length_squared(); // dist^2 window ctr to hit pt
                         TmpHSurfDSq(1, NReflSurf) = LeastHitDsq;
                         if (!surf2.HeatTransSurf && surf2.shadowSurfSched != nullptr) {
                             TransRSurf = 1.0; // If a shadowing surface may have a scheduled transmittance, treat it here as completely transparent
@@ -2426,7 +2426,7 @@ void InitializeCFSStateData(EnergyPlusData &state,
                         }
                     } else {
                         V = HitPt - Centroid;
-                        HitDsq = V.magnitude_squared();
+                        HitDsq = V.length_squared();
                         if (HitDsq >= LeastHitDsq) {
                             if (TransRSurf > 0.0) { // forget the new hit if the closer hit is opaque
                                 J = TotHits + 1;
@@ -2679,7 +2679,7 @@ void CFSRefPointSolidAngle(EnergyPlusData &state,
     Real64 BestMatch = 0.0;
     for (int iTrnRay = 1; iTrnRay <= NTrnBasis; ++iTrnRay) {
         Vector3 const &V = state.dataBSDFWindow->ComplexWind(iWin).Geom(CurFenState).sTrn(iTrnRay);
-        Real64 temp = dot(Ray, V);
+        Real64 temp = Ray.dot(V);
         if (temp > BestMatch) {
             BestMatch = temp;
             RefPointMap.RefPointIndex(curWinEl) = iTrnRay;
@@ -2687,10 +2687,10 @@ void CFSRefPointSolidAngle(EnergyPlusData &state,
     }
 
     // calculate solid view angle
-    Real64 Dist = Ray.magnitude();
+    Real64 Dist = Ray.length();
     Vector3 RayNorm = Ray / (-Dist);
     RefPointGeomMap.SolidAngleVec(curWinEl) = RayNorm;
-    Real64 CosB = dot(WNorm, RayNorm);
+    Real64 CosB = WNorm.dot(RayNorm);
     RefPointGeomMap.SolidAngle(curWinEl) = WinElArea * CosB / (Dist * Dist);
 }
 
@@ -2712,7 +2712,7 @@ void CFSRefPointPosFactor(EnergyPlusData &state,
     auto const &sTrn = state.dataBSDFWindow->ComplexWind(iWin).Geom(CurFenState).sTrn;
     for (int iTrnRay = 1; iTrnRay <= NTrnBasis; ++iTrnRay) {
         Vector3 V = sTrn(iTrnRay);
-        V.negate();
+        V = -V;
 
         Vector3 InterPoint;
 
@@ -3043,7 +3043,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
             // Each shadowing surface has a "mirror" duplicate surface facing in the opposite direction.
             // The following gets the correct side of a shadowing surface for reflection.
             if (s_surf->Surface(NearestHitSurfNum).IsShadowing) {
-                if (dot(Ray, s_surf->Surface(NearestHitSurfNum).OutNormVec) > 0.0) {
+                if (Ray.dot(s_surf->Surface(NearestHitSurfNum).OutNormVec) > 0.0) {
                     NearestHitSurfNumX = NearestHitSurfNum + 1;
                 }
             }
@@ -3180,9 +3180,9 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
         RAYCOS.z = dl->sunAngles.sinPhi;
 
         // Is sun on front side of exterior window?
-        Real64 COSI = dot(WNORM2, RAYCOS); // Cosine of angle between direct sun and window outward normal
-        bool hit;                          // True if ray from ref point thru window element hits an obstruction
-        bool hitWin;                       // True if ray passes thru window
+        Real64 COSI = WNORM2.dot(RAYCOS); // Cosine of angle between direct sun and window outward normal
+        bool hit;                         // True if ray from ref point thru window element hits an obstruction
+        bool hitWin;                      // True if ray passes thru window
         Vector3 HP;
         if (COSI > 0.0) {
 
@@ -3227,7 +3227,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                             }
 
                             IntWinDiskHitNum = IntWinDisk;
-                            COSBIntWin = dot(surfIntWinDisk.OutNormVec, RAYCOS);
+                            COSBIntWin = surfIntWinDisk.OutNormVec.dot(RAYCOS);
                             if (COSBIntWin <= 0.0) {
                                 hitIntWinDisk = false;
                                 IntWinDiskHitNum = 0;
@@ -3389,7 +3389,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                         // Each shadowing surface has a "mirror" duplicate surface facing in the opposite direction.
                         // The following gets the correct side of a shadowing surface for reflection.
                         if (s_surf->Surface(ReflSurfNum).IsShadowing) {
-                            if (dot(RAYCOS, s_surf->Surface(ReflSurfNum).OutNormVec) < 0.0) {
+                            if (RAYCOS.dot(s_surf->Surface(ReflSurfNum).OutNormVec) < 0.0) {
                                 ReflSurfNumX = ReflSurfNum + 1;
                             }
                         }
@@ -3397,7 +3397,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                         if (s_surf->Surface(ReflSurfNum).Class == SurfaceClass::Window || s_surf->SurfShadowGlazingFrac(ReflSurfNum) > 0.0) {
                             ReflNorm = s_surf->Surface(ReflSurfNumX).OutNormVec;
                             // Vector to sun that is mirrored in obstruction
-                            SunVecMir = RAYCOS - 2.0 * dot(RAYCOS, ReflNorm) * ReflNorm;
+                            SunVecMir = RAYCOS - 2.0 * RAYCOS.dot(ReflNorm) * ReflNorm;
                             // Skip if reflecting surface is not sunlit
                             if (state.dataHeatBal->SurfSunlitFrac(iHour, 1, ReflSurfNumX) < 0.01) {
                                 continue;
@@ -3408,7 +3408,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                                 continue;
                             }
                             // Cosine of incidence angle of reflected beam on window
-                            Real64 CosIncAngRec = dot(s_surf->Surface(IWin2).OutNormVec, SunVecMir);
+                            Real64 CosIncAngRec = (s_surf->Surface(IWin2).OutNormVec).dot(SunVecMir);
                             if (CosIncAngRec <= 0.0) {
                                 continue;
                             }
@@ -3427,7 +3427,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                             if (!hitRefl) {
                                 continue; // Ray did not hit this reflecting surface
                             }
-                            Real64 ReflDistanceSq = distance_squared(HitPtRefl, RREF2);
+                            Real64 ReflDistanceSq = HitPtRefl.distance_squared(RREF2);
                             Real64 ReflDistance = std::sqrt(ReflDistanceSq);
                             // Is ray from ref. pt. to reflection point (HitPtRefl) obstructed?
                             bool hitObsRefl = false;
@@ -3441,7 +3441,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                                 }
                                 hitObs = PierceSurface(state, ObsSurfNum, RREF2, SunVecMir, ReflDistance, HitPtObs); // ReflDistance cutoff added
                                 if (hitObs) { // => Could skip distance check (unless < vs <= ReflDistance really matters)
-                                    if (distance_squared(HitPtObs, RREF2) < ReflDistanceSq) { // Distance squared from ref pt to reflection point
+                                    if (HitPtObs.distance_squared(RREF2) < ReflDistanceSq) { // Distance squared from ref pt to reflection point
                                         hitObsRefl = true;
                                         break;
                                     }
@@ -3489,7 +3489,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
 
                             // No obstructions. Calculate reflected beam illuminance at ref. pt. from this reflecting surface.
                             SpecReflectance = 0.0;
-                            Real64 CosIncAngRefl = std::abs(dot(RAYCOS, ReflNorm)); // Cos of angle of incidence of beam on reflecting surface
+                            Real64 CosIncAngRefl = std::abs(RAYCOS.dot(ReflNorm)); // Cos of angle of incidence of beam on reflecting surface
                             if (s_surf->Surface(ReflSurfNum).Class == SurfaceClass::Window) {
                                 int const ConstrNumRefl = s_surf->SurfActiveConstruction(ReflSurfNum);
                                 SpecReflectance =
@@ -5458,7 +5458,7 @@ bool DayltgHitInteriorObstruction(EnergyPlusData &state,
     auto &s_surf = state.dataSurface;
 
     // Preconditions
-    assert(magnitude(R2 - R1) > 0.0); // Protect normalize() from divide by zero
+    assert((R2 - R1).length() > 0.0); // Protect normalize() from divide by zero
 
     bool hit = false;
     Vector3 RN = (R2 - R1).normalize(); // Make unit vector
@@ -5538,7 +5538,7 @@ bool DayltgHitBetWinObstruction(EnergyPlusData &state,
     auto &s_surf = state.dataSurface;
 
     // Preconditions
-    assert(magnitude(R2 - R1) > 0.0); // Protect normalize() from divide by zero
+    assert((R2 - R1).length() > 0.0); // Protect normalize() from divide by zero
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     SurfaceClass IType; // Surface type/class
@@ -7489,7 +7489,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                     // Each shadowing surface has a "mirror" duplicate surface facing in the opposite direction.
                     // The following gets the correct side of a shadowing surface for reflection.
                     if (s_surf->Surface(NearestHitSurfNum).IsShadowing) {
-                        if (dot(U, s_surf->Surface(NearestHitSurfNum).OutNormVec) > 0.0) {
+                        if (U.dot(s_surf->Surface(NearestHitSurfNum).OutNormVec) > 0.0) {
                             NearestHitSurfNumX = NearestHitSurfNum + 1;
                         }
                     }
@@ -8700,8 +8700,8 @@ Real64 ProfileAngle(EnergyPlusData &state,
         Vector3 WinNormCrossBase = {-sin_ElevWin * std::cos(ThWin), sin_ElevWin * std::sin(ThWin), std::cos(ElevWin)};
         // Projection of sun vector onto plane (perpendicular to window plane) determined
         // by WinNorm and vector along baseline of window
-        Vector3 SunPrime = CosDirSun - WinNormCrossBase * dot(CosDirSun, WinNormCrossBase);
-        ProfileAng = std::abs(std::acos(dot(WinNorm, SunPrime) / SunPrime.magnitude()));
+        Vector3 SunPrime = CosDirSun - WinNormCrossBase * CosDirSun.dot(WinNormCrossBase);
+        ProfileAng = std::abs(std::acos(WinNorm.dot(SunPrime) / SunPrime.length()));
         // CR7952 correct sign of result for vertical slats
         if ((AzimWin - AzimSun) < 0.0) {
             ProfileAng = -1.0 * ProfileAng;
@@ -8741,7 +8741,7 @@ void DayltgClosestObstruction(EnergyPlusData &state,
 
     NearestHitSurfNum = 0;
     Real64 NearestHitDistance_sq(std::numeric_limits<Real64>::max()); // Distance squared from receiving point to nearest hit point for a ray (m^2)
-    NearestHitPt = 0.0;
+    NearestHitPt = Vector3(0.0);
     if (s_surf->TotSurfaces < octreeCrossover) { // Linear search through surfaces
 
         for (int ObsSurfNum : s_surf->AllShadowPossObstrSurfaceList) {
@@ -8757,7 +8757,7 @@ void DayltgClosestObstruction(EnergyPlusData &state,
                 NearestHitSurfNum = ObsSurfNum;
             } else {
                 // Distance squared from receiving point to hit point
-                Real64 const HitDistance_sq(distance_squared(HitPt, RecPt));
+                Real64 const HitDistance_sq(HitPt.distance_squared(RecPt));
                 // Reset NearestHitSurfNum and NearestHitDistance_sq if this hit point is closer than previous closest
                 if (HitDistance_sq < NearestHitDistance_sq) {
                     NearestHitDistance_sq = HitDistance_sq;
@@ -8787,7 +8787,7 @@ void DayltgClosestObstruction(EnergyPlusData &state,
                     nearestHitSurface = &surface;
                 } else {
                     // Distance squared from receiving point to hit point
-                    Real64 const HitDistance_sq(distance_squared(HitPt, RecPt));
+                    Real64 const HitDistance_sq(HitPt.distance_squared(RecPt));
                     // Reset nearestHitSurface and NearestHitDistance_sq if this hit point is closer than previous closest
                     if (HitDistance_sq < NearestHitDistance_sq) {
                         NearestHitDistance_sq = HitDistance_sq;
@@ -8849,13 +8849,13 @@ Real64 DayltgSurfaceLumFromSun(EnergyPlusData &state,
     // Normal to reflecting surface in hemisphere containing window element
     SurfaceLumFromSunReflNorm = reflSurf.OutNormVec;
     if (reflSurf.IsShadowing) {
-        if (dot(SurfaceLumFromSunReflNorm, Ray) > 0.0) {
+        if (SurfaceLumFromSunReflNorm.dot(Ray) > 0.0) {
             SurfaceLumFromSunReflNorm *= -1.0;
         }
     }
     // Cosine of angle of incidence of sun at HitPt if sun were to reach HitPt
     Vector3 const SUNCOS_IHR = s_surf->SurfSunCosHourly(IHR);
-    Real64 CosIncAngAtHitPt = dot(SurfaceLumFromSunReflNorm, SUNCOS_IHR);
+    Real64 CosIncAngAtHitPt = SurfaceLumFromSunReflNorm.dot(SUNCOS_IHR);
     // Require that the sun be in front of this surface relative to window element
     if (CosIncAngAtHitPt <= 0.0) {
         return 0.0; // Sun is in back of reflecting surface
@@ -9996,8 +9996,8 @@ void CalcMinIntWinSolidAngs(EnergyPlusData &state)
                     // and vector from ref pt to center of window
                     Vector3 W21 = W1 - W2;
                     Vector3 W23 = W3 - W2;
-                    Real64 HW = W21.magnitude();
-                    Real64 WW = W23.magnitude();
+                    Real64 HW = W21.length();
+                    Real64 WW = W23.length();
                     Vector3 WC = (is_Rectangle) ? (W2 + (W23 + W21) / 2.0) : (W2 + (W23 + W21) / 3.0);
 
                     // Vector from ref point to center of window
@@ -10007,11 +10007,11 @@ void CalcMinIntWinSolidAngs(EnergyPlusData &state)
                     // Unit vector normal to window (pointing away from room)
                     Vector3 WNORM = surf.OutNormVec;
                     // Distance from ref point to center of window
-                    Real64 DIS = REFWC.magnitude();
+                    Real64 DIS = REFWC.length();
                     // Unit vector from ref point to center of window
                     Vector3 Ray = REFWC / DIS;
                     // Cosine of angle between ray from ref pt to center of window and window outward normal
-                    Real64 COSB = dot(WNORM, Ray);
+                    Real64 COSB = WNORM.dot(Ray);
                     if (COSB > 0.01765) { // 0 <= B < 89 deg
                         // Above test avoids case where ref point cannot receive daylight directly from the
                         // interior window

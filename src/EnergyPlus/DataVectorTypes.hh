@@ -87,7 +87,6 @@ namespace DataVectorTypes {
     //  for consistent API and to avoid cost of copying them
     // Note: For vectorization contexts std::array is a better choice
     using Vector = ObjexxFCL::Vector3;
-    using ObjexxFCL::cross;
 
     struct Vector2dCount : Vector2D
     {

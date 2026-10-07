@@ -119,19 +119,19 @@ Real64 AreaPolygon(int const n, Array1D<Vector> &p)
     Vector edge0 = p[1] - p[0];
     Vector edge1 = p[2] - p[0];
 
-    Vector edgex = cross(edge0, edge1);
+    Vector edgex = edge0.cross(edge1);
     Vector nor = VecNormalize(edgex);
 
     //  Initialize csum
     Vector csum;
-    csum = 0.0;
+    csum = Vector3(0.0);
 
     for (int i = 0; i <= n - 2; ++i) {
-        csum += cross(p[i], p[i + 1]);
+        csum += p[i].cross(p[i + 1]);
     }
-    csum += cross(p[n - 1], p[0]);
+    csum += p[n - 1].cross(p[0]);
 
-    Real64 areap = 0.5 * std::abs(dot(nor, csum));
+    Real64 areap = 0.5 * std::abs(nor.dot(csum));
 
     return areap;
 }
@@ -240,9 +240,9 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
 
     lcsx = VecNormalize(Surf(3) - Surf(2));
     lcsz = NewellSurfaceNormalVector;
-    lcsy = cross(lcsz, lcsx);
+    lcsy = lcsz.cross(lcsx);
 
-    Real64 costheta = dot(lcsz, ZUnit);
+    Real64 costheta = lcsz.dot(ZUnit);
 
     //    if ( fabs(costheta) < 1.0d0) { // normal cases
     Real64 constexpr epsilon = 1.12e-16;
@@ -250,11 +250,11 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
     if (std::abs(costheta) < 1.0 - epsilon) { // Autodesk Added - 1.12e-16 to treat 1 bit from 1.0 as 1.0 to correct different behavior seen in
                                               // release vs debug build due to slight precision differences: May want larger epsilon here
         // azimuth
-        Vector x2 = cross(ZUnit, lcsz);
-        rotang_0 = std::atan2(dot(x2, YUnit), dot(x2, XUnit));
+        Vector x2 = ZUnit.cross(lcsz);
+        rotang_0 = std::atan2(x2.dot(YUnit), x2.dot(XUnit));
     } else {
         // azimuth
-        rotang_0 = std::atan2(dot(lcsx, YUnit), dot(lcsx, XUnit));
+        rotang_0 = std::atan2(lcsx.dot(YUnit), lcsx.dot(XUnit));
     }
 
     Real64 tlt = std::acos(NewellSurfaceNormalVector.z);
@@ -298,12 +298,12 @@ void CreateNewellAreaVector(Array1D<Vector> const &VList, int const NSides, Vect
     // REFERENCES:
     // Collaboration with Bill Carroll, LBNL.
 
-    OutNewellAreaVector = 0.0;
+    OutNewellAreaVector = Vector3(0.0);
 
     Vector V1 = VList(2) - VList(1);
     for (int Vert = 3; Vert <= NSides; ++Vert) {
         Vector V2 = VList(Vert) - VList(1);
-        OutNewellAreaVector += cross(V1, V2);
+        OutNewellAreaVector += V1.cross(V2);
         V1 = V2;
     }
 
@@ -334,7 +334,7 @@ void CreateNewellSurfaceNormalVector(Array1D<Vector> const &VList, int const NSi
     //    Returning Normalize(Normal)
     // End Function
 
-    OutNewellSurfaceNormalVector = 0.0;
+    OutNewellSurfaceNormalVector = Vector3(0.0);
     Real64 xvalue = 0.0;
     Real64 yvalue = 0.0;
     Real64 zvalue = 0.0;
@@ -472,7 +472,7 @@ Real64 CalcPolyhedronVolume(EnergyPlusData const &state, Polyhedron const &Poly)
 
     for (int NFace = 1; NFace <= Poly.NumSurfaceFaces; ++NFace) {
         p3FaceOrigin = Poly.SurfaceFace(NFace).FacePoints(2);
-        Real64 PyramidVolume = dot(Poly.SurfaceFace(NFace).NewellAreaVector, (p3FaceOrigin - state.dataVectors->p0));
+        Real64 PyramidVolume = Poly.SurfaceFace(NFace).NewellAreaVector.dot((p3FaceOrigin - state.dataVectors->p0));
         Volume += PyramidVolume / 3.0;
     }
     return Volume;

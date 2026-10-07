@@ -404,7 +404,7 @@ bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
     //  Jan 2016: Initial release
 
     // Input checks
-    assert(std::abs(rayDir.mag_squared() - 1.0) <
+    assert(std::abs(rayDir.length_squared() - 1.0) <
            6 * std::numeric_limits<Real64>::epsilon()); // Check unit vector (6x is rough estimate. Increase slightly as needed.)
     assert(dMax >= 0.0);                                // Distance must be nonnegative
 

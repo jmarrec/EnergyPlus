@@ -4251,8 +4251,6 @@ namespace Weather {
         // REFERENCES:
         // "NECAP Engineering Manual", 1974, p.3-117
 
-        EP_SIZE_CHECK(SUNCOS, 3); // NOLINT(misc-static-assert)
-
         // COMPUTE THE HOUR ANGLE
         Real64 H = (15.0 * (12.0 - (TimeValue + EqOfTime)) + (state.dataEnvrn->TimeZoneMeridian - state.dataEnvrn->Longitude)) * Constant::DegToRad;
         Real64 COSH = std::cos(H);

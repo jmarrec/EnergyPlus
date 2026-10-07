@@ -1290,14 +1290,14 @@ namespace SurfaceGeometry {
                 // Outward normal unit vector (pointing away from room)
                 newSurf.OutNormVec = newSurf.NewellSurfaceNormalVector;
                 for (int n = 1; n <= 3; ++n) {
-                    if (std::abs(newSurf.OutNormVec(n) - 1.0) < 1.e-06) {
-                        newSurf.OutNormVec(n) = +1.0;
+                    if (std::abs(newSurf.OutNormVec[n - 1] - 1.0) < 1.e-06) {
+                        newSurf.OutNormVec[n - 1] = +1.0;
                     }
-                    if (std::abs(newSurf.OutNormVec(n) + 1.0) < 1.e-06) {
-                        newSurf.OutNormVec(n) = -1.0;
+                    if (std::abs(newSurf.OutNormVec[n - 1] + 1.0) < 1.e-06) {
+                        newSurf.OutNormVec[n - 1] = -1.0;
                     }
-                    if (std::abs(newSurf.OutNormVec(n)) < 1.e-06) {
-                        newSurf.OutNormVec(n) = 0.0;
+                    if (std::abs(newSurf.OutNormVec[n - 1]) < 1.e-06) {
+                        newSurf.OutNormVec[n - 1] = 0.0;
                     }
                 }
 
@@ -4985,14 +4985,14 @@ namespace SurfaceGeometry {
 
         surfTemp.OutNormVec = surfTemp.NewellSurfaceNormalVector;
         for (int n = 1; n <= 3; ++n) {
-            if (std::abs(surfTemp.OutNormVec(n) - 1.0) < 1.e-06) {
-                surfTemp.OutNormVec(n) = +1.0;
+            if (std::abs(surfTemp.OutNormVec[n - 1] - 1.0) < 1.e-06) {
+                surfTemp.OutNormVec[n - 1] = +1.0;
             }
-            if (std::abs(surfTemp.OutNormVec(n) + 1.0) < 1.e-06) {
-                surfTemp.OutNormVec(n) = -1.0;
+            if (std::abs(surfTemp.OutNormVec[n - 1] + 1.0) < 1.e-06) {
+                surfTemp.OutNormVec[n - 1] = -1.0;
             }
-            if (std::abs(surfTemp.OutNormVec(n)) < 1.e-06) {
-                surfTemp.OutNormVec(n) = 0.0;
+            if (std::abs(surfTemp.OutNormVec[n - 1]) < 1.e-06) {
+                surfTemp.OutNormVec[n - 1] = 0.0;
             }
         }
 
@@ -6367,14 +6367,14 @@ namespace SurfaceGeometry {
         // Outward normal unit vector (pointing away from room)
         surfTemp.OutNormVec = surfTemp.NewellSurfaceNormalVector;
         for (int n = 1; n <= 3; ++n) {
-            if (std::abs(surfTemp.OutNormVec(n) - 1.0) < 1.e-06) {
-                surfTemp.OutNormVec(n) = +1.0;
+            if (std::abs(surfTemp.OutNormVec[n - 1] - 1.0) < 1.e-06) {
+                surfTemp.OutNormVec[n - 1] = +1.0;
             }
-            if (std::abs(surfTemp.OutNormVec(n) + 1.0) < 1.e-06) {
-                surfTemp.OutNormVec(n) = -1.0;
+            if (std::abs(surfTemp.OutNormVec[n - 1] + 1.0) < 1.e-06) {
+                surfTemp.OutNormVec[n - 1] = -1.0;
             }
-            if (std::abs(surfTemp.OutNormVec(n)) < 1.e-06) {
-                surfTemp.OutNormVec(n) = 0.0;
+            if (std::abs(surfTemp.OutNormVec[n - 1]) < 1.e-06) {
+                surfTemp.OutNormVec[n - 1] = 0.0;
             }
         }
 
@@ -9442,7 +9442,7 @@ namespace SurfaceGeometry {
             surfTemp.NetAreaShadowCalc = surfTemp.Area;
             Vectors::DetermineAzimuthAndTilt(
                 surfTemp.Vertex, SurfWorldAz, SurfTilt, surfTemp.lcsx, surfTemp.lcsy, surfTemp.lcsz, surfTemp.NewellSurfaceNormalVector);
-            dotp = dot(surfTemp.NewellSurfaceNormalVector, TestVector);
+            dotp = surfTemp.NewellSurfaceNormalVector.dot(TestVector);
             if (surfTemp.Class == SurfaceClass::Roof && dotp < -0.000001) {
                 TiltString = std::format("{:.1f}", SurfTilt);
                 ShowWarningError(state,
@@ -9498,14 +9498,14 @@ namespace SurfaceGeometry {
             // Outward normal unit vector (pointing away from room)
             surfTemp.OutNormVec = surfTemp.NewellSurfaceNormalVector;
             for (n = 1; n <= 3; ++n) {
-                if (std::abs(surfTemp.OutNormVec(n) - 1.0) < 1.e-06) {
-                    surfTemp.OutNormVec(n) = +1.0;
+                if (std::abs(surfTemp.OutNormVec[n - 1] - 1.0) < 1.e-06) {
+                    surfTemp.OutNormVec[n - 1] = +1.0;
                 }
-                if (std::abs(surfTemp.OutNormVec(n) + 1.0) < 1.e-06) {
-                    surfTemp.OutNormVec(n) = -1.0;
+                if (std::abs(surfTemp.OutNormVec[n - 1] + 1.0) < 1.e-06) {
+                    surfTemp.OutNormVec[n - 1] = -1.0;
                 }
-                if (std::abs(surfTemp.OutNormVec(n)) < 1.e-06) {
-                    surfTemp.OutNormVec(n) = 0.0;
+                if (std::abs(surfTemp.OutNormVec[n - 1]) < 1.e-06) {
+                    surfTemp.OutNormVec[n - 1] = 0.0;
                 }
             }
 
@@ -9650,14 +9650,14 @@ namespace SurfaceGeometry {
             // Outward normal unit vector (pointing away from room)
             newSurface.OutNormVec = newSurface.NewellSurfaceNormalVector;
             for (int n = 1; n <= 3; ++n) {
-                if (std::abs(newSurface.OutNormVec(n) - 1.0) < 1.e-06) {
-                    newSurface.OutNormVec(n) = +1.0;
+                if (std::abs(newSurface.OutNormVec[n - 1] - 1.0) < 1.e-06) {
+                    newSurface.OutNormVec[n - 1] = +1.0;
                 }
-                if (std::abs(newSurface.OutNormVec(n) + 1.0) < 1.e-06) {
-                    newSurface.OutNormVec(n) = -1.0;
+                if (std::abs(newSurface.OutNormVec[n - 1] + 1.0) < 1.e-06) {
+                    newSurface.OutNormVec[n - 1] = -1.0;
                 }
-                if (std::abs(newSurface.OutNormVec(n)) < 1.e-06) {
-                    newSurface.OutNormVec(n) = 0.0;
+                if (std::abs(newSurface.OutNormVec[n - 1]) < 1.e-06) {
+                    newSurface.OutNormVec[n - 1] = 0.0;
                 }
             }
 
@@ -12832,7 +12832,7 @@ namespace SurfaceGeometry {
 
         DataVectorTypes::Vector other = test - start;
 
-        DataVectorTypes::Vector projection = DataVectorTypes::cross(t, other); // normal unit vector, that's the distance component
+        DataVectorTypes::Vector projection = t.cross(other); // normal unit vector, that's the distance component
         return projection.length();
     }
 
@@ -13469,7 +13469,7 @@ namespace SurfaceGeometry {
         x21 = surf.Vertex(2) - surf.Vertex(1);
         x23 = surf.Vertex(2) - surf.Vertex(3);
 
-        DotSelfX23 = magnitude_squared(x23);
+        DotSelfX23 = x23.length_squared();
 
         if (DotSelfX23 <= Constant::OneMillionth) {
             ShowSevereError(state, std::format("CalcCoordinateTransformation: Invalid dot product, surface=\"{}\":", surf.Name));
@@ -13482,7 +13482,7 @@ namespace SurfaceGeometry {
             return;
         }
 
-        Gamma = dot(x21, x23) / magnitude_squared(x23);
+        Gamma = x21.dot(x23) / x23.length_squared();
 
         CompCoordTranslVector = surf.Vertex(2) + Gamma * (surf.Vertex(3) - surf.Vertex(2));
     }
@@ -14592,7 +14592,7 @@ namespace SurfaceGeometry {
 
             if (surface.Sides == 3) { // 3-sided polygon
 
-                centroid = cen(vertex(1), vertex(2), vertex(3));
+                centroid = (vertex(1) + vertex(2) + vertex(3)) / 3.0;
 
             } else if (surface.Sides == 4) { // 4-sided polygon
 
@@ -14638,10 +14638,10 @@ namespace SurfaceGeometry {
                 }
 
                 // get centroid of Triangle 1
-                Vector cen1(cen(Triangle1(1), Triangle1(2), Triangle1(3)));
+                Vector cen1((Triangle1(1) + Triangle1(2) + Triangle1(3)) / 3.0);
 
                 // get centroid of Triangle 2
-                Vector cen2(cen(Triangle2(1), Triangle2(2), Triangle2(3)));
+                Vector cen2((Triangle2(1) + Triangle2(2) + Triangle2(3)) / 3.0);
 
                 // find area weighted combination of the two centroids (coded to avoid temporary Vectors)
                 cen1 *= Tri1Area;
@@ -14664,7 +14664,7 @@ namespace SurfaceGeometry {
                 //        Zcm=(Z1+Z2)/2.0d0
 
                 // Calc centroid as average of surfaces
-                centroid = 0.0;
+                centroid = Vector3(0.0);
                 for (int vert = 1; vert <= surface.Sides; ++vert) {
                     centroid += vertex(vert);
                 }
@@ -14681,7 +14681,7 @@ namespace SurfaceGeometry {
                                       "...surface name is blank. Examine surfaces -- this may be a problem with ill-formed interzone surfaces.");
                     ShowContinueError(state, std::format("... number of sides must be >= 3, this surface # sides={}", surface.Sides));
                 }
-                centroid = 0.0;
+                centroid = Vector3(0.0);
             }
 
             // store result in the surface structure in DataSurfaces
@@ -15434,7 +15434,7 @@ namespace SurfaceGeometry {
         if (std::abs(Diagonal1 - Diagonal2) < 0.020) { // This tolerance based on coincident vertex tolerance of 0.01
             Vect32 = Vectors::VecNormalize(surf.Vertex(3) - surf.Vertex(2));
             Vect21 = Vectors::VecNormalize(surf.Vertex(2) - surf.Vertex(1));
-            DotProd = dot(Vect32, Vect21);
+            DotProd = Vect32.dot(Vect21);
             if (std::abs(DotProd) <= cos89deg) {
                 return true;
             }

@@ -185,15 +185,15 @@ struct SolarReflectionManagerData : BaseGlobalStruct
     void clear_state() override
     {
         this->IHr = 0;
-        this->SunVec = 0.0;
+        this->SunVec = Vector3(0.0);
         this->RecSurfNum = 0;
         this->SurfNum = 0;
         this->RecPtNum = 0;
         this->NumRecPts = 0;
         this->HitPtSurfNum = 0;
         this->RayNum = 0;
-        this->OriginThisRay = 0.0;
-        this->ObsHitPt = 0.0;
+        this->OriginThisRay = Vector3(0.0);
+        this->ObsHitPt = Vector3(0.0);
         this->ObsSurfNum = 0;
         this->CosIncBmAtHitPt = 0.0;
         this->CosIncBmAtHitPt2 = 0.0;
@@ -201,12 +201,12 @@ struct SolarReflectionManagerData : BaseGlobalStruct
         this->dReflBeamToDiffSol = 0.0;
         this->SunLitFract = 0.0;
         this->NumHr = 0;
-        this->SunVect = 0.0;
-        this->SunVecMir = 0.0;
-        this->RecPt = 0.0;
-        this->HitPtRefl = 0.0;
-        this->HitPtObs = 0.0;
-        this->ReflNorm = 0.0;
+        this->SunVect = Vector3(0.0);
+        this->SunVecMir = Vector3(0.0);
+        this->RecPt = Vector3(0.0);
+        this->HitPtRefl = Vector3(0.0);
+        this->HitPtObs = Vector3(0.0);
+        this->ReflNorm = Vector3(0.0);
         this->SpecReflectance = 0.0;
         this->ConstrNumRefl = 0;
         this->CosIncAngRefl = 0.0;
@@ -221,13 +221,13 @@ struct SolarReflectionManagerData : BaseGlobalStruct
         this->HitPntSurfNum = 0;
         this->HitPtSurfNumX = 0;
         this->iRayNum = 0;
-        this->HitPntRefl = 0.0;
-        this->HitPntObs = 0.0;
+        this->HitPntRefl = Vector3(0.0);
+        this->HitPntObs = Vector3(0.0);
         this->SkyReflSolRadiance = 0.0;
         this->dReflSkySol = 0.0;
-        this->URay = 0.0;
-        this->SurfVertToGndPt = 0.0;
-        this->SurfVert = 0.0;
+        this->URay = Vector3(0.0);
+        this->SurfVertToGndPt = Vector3(0.0);
+        this->SurfVert = Vector3(0.0);
     }
 
     // Default Constructor
