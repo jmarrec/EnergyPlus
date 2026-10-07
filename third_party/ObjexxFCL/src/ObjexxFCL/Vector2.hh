@@ -16,7 +16,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Vector2.fwd.hh>
 #include <ObjexxFCL/Fmath.hh>
-#include <ObjexxFCL/TypeTraits.hh>
 
 // C++ Headers
 #include <cassert>
@@ -38,8 +37,6 @@ class Vector2
 {
 
  public:  // Types
-  using Traits = TypeTraits<double>;
-
   // STL Style
   using value_type = double;
   using reference = double&;
@@ -51,13 +48,7 @@ class Vector2
 
  public:  // Creation
   // Default Constructor
-  Vector2()
-#if defined(OBJEXXFCL_ARRAY_INIT) || defined(OBJEXXFCL_ARRAY_INIT_DEBUG)
-    : x(Traits::initial_array_value()),
-      y(Traits::initial_array_value())
-#endif
-  {
-  }
+  Vector2() = default;
 
   // Copy Constructor
   Vector2(Vector2 const& v) : x(v.x), y(v.y) {}
@@ -324,8 +315,9 @@ class Vector2
     return (t >= 0.0 ? t : Two_Pi + t);
   }
 
- public:        // Data
-  double x, y;  // Elements
+ public:  // Data Elements
+  double x = 0.0;
+  double y = 0.0;
 
 };  // Vector2
 
@@ -605,14 +597,16 @@ inline double dir_sin(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
 
 // Stream << Vector2 output operator
 inline std::ostream& operator<<(std::ostream& stream, Vector2 const& v) {
+  constexpr std::streamsize precision = 16;  // Significant digits
+  constexpr int width = 23;                  // Field width
+
   // Save current stream state and set persistent state
   std::ios_base::fmtflags const old_flags(stream.flags());
-  std::streamsize const old_precision(stream.precision(Vector2::Traits::precision));
+  std::streamsize const old_precision(stream.precision(precision));
   stream << std::right << std::showpoint << std::uppercase;
 
   // Output Vector2
-  std::size_t const w(Vector2::Traits::width);
-  stream << std::setw(w) << v.x << ' ' << std::setw(w) << v.y;
+  stream << std::setw(width) << v.x << ' ' << std::setw(width) << v.y;
 
   // Restore previous stream state
   stream.precision(old_precision);
