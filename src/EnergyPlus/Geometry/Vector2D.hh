@@ -58,26 +58,32 @@ namespace EnergyPlus {
 
 class Vector2D
 {
-public: // Data Elements
+public:
+    /// @name Data Elements
+    //@{
     double x = 0.0;
     double y = 0.0;
+    //@}
 
-public: // Creation
-    Vector2D() = default;
+    /// @name Creation
+    //@{
+    constexpr Vector2D() = default;
 
-    // Uniform Value Constructor
+    /// Uniform Value Constructor
     explicit constexpr Vector2D(double t) : x(t), y(t)
     {
     }
 
-    // Value Constructor
+    /// Value Constructor
     constexpr Vector2D(double x_, double y_) : x(x_), y(y_)
     {
     }
+    //@}
 
-public: // Scalar multiplication and division
-    /// Scalar Compound Assignment
-    // *= Scalar
+    /// @name Scalar multiplication and division
+    //@{
+    // Scalar Compound Assignment
+    /// *= Scalar
     constexpr Vector2D &operator*=(double t)
     {
         x *= t;
@@ -85,7 +91,7 @@ public: // Scalar multiplication and division
         return *this;
     }
 
-    // /= Scalar
+    /// /= Scalar
     constexpr Vector2D &operator/=(double const u)
     {
         assert(u != 0.0);
@@ -95,30 +101,28 @@ public: // Scalar multiplication and division
         return *this;
     }
 
-    /// Scalar Binary Operators
-    // Vector2D * Scalar
+    // Scalar Binary Operators
     friend constexpr Vector2D operator*(Vector2D const &v, double t)
     {
         return {v.x * t, v.y * t};
     }
 
-    // Scalar * Vector2D
     friend constexpr Vector2D operator*(double t, Vector2D const &v)
     {
         return {t * v.x, t * v.y};
     }
 
-    // Vector2D / Scalar
     friend constexpr Vector2D operator/(Vector2D const &v, double u)
     {
         assert(u != 0.0);
         double const inv_u(1.0 / u);
         return {v.x * inv_u, v.y * inv_u};
     }
+    //@}
 
-public: // Vector2D Addition and Subtraction
-    /// Compound Assignment and Unary negation
-    // += Vector2D
+    /// @name Vector2D Addition and Subtraction
+    //@{
+    // Compound Assignment and Unary negation
     constexpr Vector2D &operator+=(Vector2D const &v)
     {
         x += v.x;
@@ -126,7 +130,6 @@ public: // Vector2D Addition and Subtraction
         return *this;
     }
 
-    // -= Vector2D
     constexpr Vector2D &operator-=(Vector2D const &v)
     {
         x -= v.x;
@@ -134,82 +137,87 @@ public: // Vector2D Addition and Subtraction
         return *this;
     }
 
-    // -Vector2D (Negated)
     constexpr Vector2D operator-() const
     {
         return {-x, -y};
     }
 
-    /// Addition and Subtraction: Binary Operators
-    // Vector2D + Vector2D
+    // Addition and Subtraction: Binary Operators
     friend constexpr Vector2D operator+(Vector2D const &a, Vector2D const &b)
     {
         return {a.x + b.x, a.y + b.y};
     }
 
-    // Vector2D - Vector2D
     friend constexpr Vector2D operator-(Vector2D const &a, Vector2D const &b)
     {
         return {a.x - b.x, a.y - b.y};
     }
+    //@}
 
-public: // Comparison
+    /// @name Comparison
+    //@{
     friend constexpr bool operator==(Vector2D const &, Vector2D const &) = default;
+    //@}
 
-public: // Subscript
-    // Vector2D[ i ] const: 0-Based Index
+    /// @name Subscript
+    //@{
+    /// Vector2D[ i ] const: 0-Based Index
     constexpr double operator[](std::size_t i) const
     {
         assert(i <= 1);
         return (i == 0 ? x : y);
     }
 
-    // Vector2D[ i ]: 0-Based Index
+    /// Vector2D[ i ]: 0-Based Index
     constexpr double &operator[](std::size_t i)
     {
         assert(i <= 1);
         return (i == 0 ? x : y);
     }
+    //@}
 
-public: // Properties: General
-    // Length (L2 norm)
+    /// @name Properties: General
+    //@{
+    /// Length (L2 norm)
     double length() const
     {
         return std::sqrt(length_squared());
     }
 
-    // Length Squared
+    /// Length Squared
     constexpr double length_squared() const
     {
         return (x * x) + (y * y);
     }
 
-    // Distance to a Vector2D
+    /// Distance to a Vector2D
     double distance(Vector2D const &v) const
     {
         return (v - *this).length();
     }
 
-    // Distance Squared to a Vector2D
+    /// Distance Squared to a Vector2D
     constexpr double distance_squared(Vector2D const &v) const
     {
         return (v - *this).length_squared();
     }
 
-    // Dot Product with a Vector2D
+    /// Dot Product with a Vector2D
     constexpr double dot(Vector2D const &v) const
     {
         return (x * v.x) + (y * v.y);
     }
 
-    // Cross Product with a Vector2D
+    /// Cross Product with a Vector2D
     constexpr double cross(Vector2D const &v) const
     {
         return (x * v.y) - (y * v.x);
     }
+    //@}
 
-public: // Normalization
-    // Normalize to a Length
+    /// @name Normalization
+    //@{
+    /// Normalize to a Length (in-place)
     Vector2D &normalize(double tar_length = 1.0)
     {
         double const cur_length(length());
@@ -220,7 +228,7 @@ public: // Normalization
         return *this;
     }
 
-    // Normalized to a Length (return a new vector)
+    /// Normalized to a Length (return a new vector)
     Vector2D normalized(double tar_length = 1.0) const
     {
         double const cur_length(length());
@@ -228,10 +236,11 @@ public: // Normalization
         double const dilation(tar_length / cur_length);
         return {x * dilation, y * dilation};
     }
+    //@}
 
 }; // Vector2D
 
-// Stream << Vector2D output operator
+/// Stream << Vector2D output operator
 inline std::ostream &operator<<(std::ostream &os, Vector2D const &v)
 {
     os << "[" << v.x << ", " << v.y << "]";

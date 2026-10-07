@@ -58,27 +58,33 @@ namespace EnergyPlus {
 
 class Vector3D
 {
-public: // Data Elements
+public:
+    /// @name Data Elements
+    //@{
     double x = 0.0;
     double y = 0.0;
     double z = 0.0;
+    //@}
 
-public: // Creation
-    Vector3D() = default;
+    /// @name Creation
+    //@{
+    constexpr Vector3D() = default;
 
-    // Uniform Value Constructor
+    /// Uniform Value Constructor
     explicit constexpr Vector3D(double t) : x(t), y(t), z(t)
     {
     }
 
-    // Value Constructor
+    /// Value Constructor
     constexpr Vector3D(double x_, double y_, double z_) : x(x_), y(y_), z(z_)
     {
     }
+    //@}
 
-public: // Scalar multiplication and division
-    /// Scalar Compound Assignment
-    // *= Scalar
+    /// @name Scalar multiplication and division
+    //@{
+    // Scalar Compound Assignment
+    /// *= Scalar
     constexpr Vector3D &operator*=(double t)
     {
         x *= t;
@@ -87,7 +93,7 @@ public: // Scalar multiplication and division
         return *this;
     }
 
-    // /= Scalar
+    /// /= Scalar
     constexpr Vector3D &operator/=(double u)
     {
         assert(u != 0.0);
@@ -98,30 +104,28 @@ public: // Scalar multiplication and division
         return *this;
     }
 
-    /// Scalar Binary Operators
-    // Vector3D * Scalar
+    // Scalar Binary Operators
     friend constexpr Vector3D operator*(Vector3D const &v, double t)
     {
         return {v.x * t, v.y * t, v.z * t};
     }
 
-    // Scalar * Vector3D
     friend constexpr Vector3D operator*(double t, Vector3D const &v)
     {
         return {t * v.x, t * v.y, t * v.z};
     }
 
-    // Vector3D / Scalar
     friend constexpr Vector3D operator/(Vector3D const &v, double u)
     {
         assert(u != 0.0);
         double const inv_u(1.0 / u);
         return {v.x * inv_u, v.y * inv_u, v.z * inv_u};
     }
+    //@}
 
-public: // Vector3D Addition and Subtraction
-    /// Compound Assignment and Unary negation
-    // += Vector3D
+    /// @name Vector3D Addition and Subtraction
+    //@{
+    // Compound Assignment and Unary negation
     constexpr Vector3D &operator+=(Vector3D const &v)
     {
         x += v.x;
@@ -130,7 +134,6 @@ public: // Vector3D Addition and Subtraction
         return *this;
     }
 
-    // -= Vector3D
     constexpr Vector3D &operator-=(Vector3D const &v)
     {
         x -= v.x;
@@ -139,82 +142,87 @@ public: // Vector3D Addition and Subtraction
         return *this;
     }
 
-    // -Vector3D (Negated)
     constexpr Vector3D operator-() const
     {
         return {-x, -y, -z};
     }
 
-    /// Addition and Subtraction: Binary Operators
-    // Vector3D + Vector3D
+    // Addition and Subtraction: Binary Operators
     friend constexpr Vector3D operator+(Vector3D const &a, Vector3D const &b)
     {
         return {a.x + b.x, a.y + b.y, a.z + b.z};
     }
 
-    // Vector3D - Vector3D
     friend constexpr Vector3D operator-(Vector3D const &a, Vector3D const &b)
     {
         return {a.x - b.x, a.y - b.y, a.z - b.z};
     }
+    //@}
 
-public: // Comparison
+    /// @name Comparison
+    //@{
     friend constexpr bool operator==(Vector3D const &, Vector3D const &) = default;
+    //@}
 
-public: // Subscript
-    // Vector3D[ i ] const: 0-Based Index
+    /// @name Subscript
+    //@{
+    /// Vector3D[ i ] const: 0-Based Index
     constexpr double operator[](std::size_t i) const
     {
         assert(i <= 2);
         return (i == 0 ? x : (i == 1 ? y : z));
     }
 
-    // Vector3D[ i ]: 0-Based Index
+    /// Vector3D[ i ]: 0-Based Index
     constexpr double &operator[](std::size_t i)
     {
         assert(i <= 2);
         return (i == 0 ? x : (i == 1 ? y : z));
     }
+    //@}
 
-public: // Properties: General
-    // Length (L2 norm)
+    /// @name Properties: General
+    //@{
+    /// Length (L2 norm)
     double length() const
     {
         return std::sqrt(length_squared());
     }
 
-    // Length Squared
+    /// Length Squared
     constexpr double length_squared() const
     {
         return (x * x) + (y * y) + (z * z);
     }
 
-    // Distance to a Vector3D
+    /// Distance to a Vector3D
     double distance(Vector3D const &v) const
     {
         return (v - *this).length();
     }
 
-    // Distance Squared to a Vector3D
+    /// Distance Squared to a Vector3D
     constexpr double distance_squared(Vector3D const &v) const
     {
         return (v - *this).length_squared();
     }
 
-    // Dot Product with a Vector3D
+    /// Dot Product with a Vector3D
     constexpr double dot(Vector3D const &v) const
     {
         return (x * v.x) + (y * v.y) + (z * v.z);
     }
 
-    // Cross Product with a Vector3D
+    /// Cross Product with a Vector3D
     constexpr Vector3D cross(Vector3D const &v) const
     {
         return {(y * v.z) - (z * v.y), (z * v.x) - (x * v.z), (x * v.y) - (y * v.x)};
     }
+    //@}
 
-public: // Normalization
-    // Normalize to a Length
+    /// @name Normalization
+    //@{
+    /// Normalize to a Length (in-place)
     Vector3D &normalize(double tar_length = 1.0)
     {
         double const cur_length(length());
@@ -223,17 +231,18 @@ public: // Normalization
         return *this;
     }
 
-    // Normalized to a Length (return a new vector)
+    /// Normalized to a Length (return a new vector)
     Vector3D normalized(double tar_length = 1.0) const
     {
         double const cur_length(length());
         assert(cur_length != 0.0);
         return *this * (tar_length / cur_length);
     }
+    //@}
 
 }; // Vector3D
 
-// Stream << Vector3D output operator
+/// Stream << Vector3D output operator
 inline std::ostream &operator<<(std::ostream &os, Vector3D const &v)
 {
     os << "[" << v.x << ", " << v.y << ", " << v.z << "]";
