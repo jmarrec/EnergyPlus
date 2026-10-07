@@ -44,7 +44,7 @@ TEST( Vector2Test, Basic )
 	EXPECT_FLOAT_EQ( 1.0f, v.length() );
 	v.normalize( 5.0f );
 	EXPECT_FLOAT_EQ( 5.0f, v.length() );
-	v.zero();
+	v = { 0.0, 0.0 };
 	EXPECT_EQ( 0.0f, v.x );
 	EXPECT_EQ( 0.0f, v.y );
 	EXPECT_EQ( 0.0f, v.length() );
@@ -75,7 +75,7 @@ TEST( Vector2Test, BraceInit )
 	v /= 2.0;
 	EXPECT_EQ( 44, v.x );
 	EXPECT_EQ( 55, v.y );
-	v.negate();
+	v = -v;
 	EXPECT_EQ( -44, v.x );
 	EXPECT_EQ( -55, v.y );
 }

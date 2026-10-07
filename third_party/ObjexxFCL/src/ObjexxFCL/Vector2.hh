@@ -304,23 +304,6 @@ public: // Properties: General
 
 public: // Modifiers
 
-	// Zero
-	Vector2 &
-	zero()
-	{
-		x = y = 0.0;
-		return *this;
-	}
-
-	// Negate
-	Vector2 &
-	negate()
-	{
-		x = -x;
-		y = -y;
-		return *this;
-	}
-
 	// Normalize to a Length
 	Vector2 &
 	normalize( double tar_length = 1.0 )
