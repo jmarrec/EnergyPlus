@@ -397,66 +397,6 @@ inline bool operator>(Vector2 const& a, Vector2 const& b) {
                           (a.y > b.y))));
 }
 
-// Vector2 == Value
-inline bool operator==(Vector2 const& v, double t) {
-  return (v.x == t) && (v.y == t);
-}
-
-// Vector2 != Value
-inline bool operator!=(Vector2 const& v, double t) {
-  return (v.x != t) || (v.y != t);
-}
-
-// Vector2 < Value
-inline bool operator<(Vector2 const& v, double t) {
-  return (v.x < t) && (v.y < t);
-}
-
-// Vector2 <= Value
-inline bool operator<=(Vector2 const& v, double t) {
-  return (v.x <= t) && (v.y <= t);
-}
-
-// Vector2 >= Value
-inline bool operator>=(Vector2 const& v, double t) {
-  return (v.x >= t) && (v.y >= t);
-}
-
-// Vector2 > Value
-inline bool operator>(Vector2 const& v, double t) {
-  return (v.x > t) && (v.y > t);
-}
-
-// Value == Vector2
-inline bool operator==(double t, Vector2 const& v) {
-  return (t == v.x) && (t == v.y);
-}
-
-// Value != Vector2
-inline bool operator!=(double t, Vector2 const& v) {
-  return (t != v.x) || (t != v.y);
-}
-
-// Value < Vector2
-inline bool operator<(double t, Vector2 const& v) {
-  return (t < v.x) && (t < v.y);
-}
-
-// Value <= Vector2
-inline bool operator<=(double t, Vector2 const& v) {
-  return (t <= v.x) && (t <= v.y);
-}
-
-// Value >= Vector2
-inline bool operator>=(double t, Vector2 const& v) {
-  return (t >= v.x) && (t >= v.y);
-}
-
-// Value > Vector2
-inline bool operator>(double t, Vector2 const& v) {
-  return (t > v.x) && (t > v.y);
-}
-
 // Equal Length?
 inline bool equal_length(Vector2 const& a, Vector2 const& b) {
   return (a.length_squared() == b.length_squared());
