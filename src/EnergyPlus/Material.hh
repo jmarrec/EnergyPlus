@@ -910,7 +910,7 @@ namespace Material {
     void GetWindowGlassSpectralData(EnergyPlusData &state, bool &errorsFound);
 
     // Angles must be in radians
-    void GetRelativePhiTheta(Real64 phiWin, Real64 thetaWin, Vector3<Real64> const &solcos, Real64 &phi, Real64 &theta);
+    void GetRelativePhiTheta(Real64 phiWin, Real64 thetaWin, Vector3 const &solcos, Real64 &phi, Real64 &theta);
     void NormalizePhiTheta(Real64 &phi, Real64 &theta);
     void GetPhiThetaIndices(Real64 phi, Real64 theta, Real64 dPhi, Real64 dTheta, int &iPhi1, int &iPhi2, int &iTheta1, int &iTheta2);
 

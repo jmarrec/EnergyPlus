@@ -93,7 +93,7 @@ public: // Creation
     //  . A degenerate polygon (e.g. collinear vertices) gives a zero normal: check normal() before calling
     //    normalize(), normalized() or signedDistance(), which assert on it
     //  . Requires at least 3 vertices
-    static Plane fromVertices(ObjexxFCL::Array1D<ObjexxFCL::Vector3<Real64>> const &vertices);
+    static Plane fromVertices(ObjexxFCL::Array1D<ObjexxFCL::Vector3> const &vertices);
 
 public: // Subscript
     // Plane[ i ] const: 0-Based Index
@@ -120,7 +120,7 @@ public: // Generators
 
     // Outward Normal vector (x, y, z)
     // not unit length unless the plane was normalized
-    ObjexxFCL::Vector3<Real64> normal() const;
+    ObjexxFCL::Vector3 normal() const;
 
 public: // Queries
     // Degenerate plane: zero normal (e.g. fromVertices() of collinear or coincident vertices)
@@ -131,7 +131,7 @@ public: // Queries
     //  . Positive on the side the normal points to (outside), negative behind it, zero on the plane
     //  . A true distance whether or not the plane is normalized (it divides by the normal's length)
     //  . The plane must not be degenerate: its normal must be nonzero
-    double signedDistance(ObjexxFCL::Vector3<Real64> const &point) const;
+    double signedDistance(ObjexxFCL::Vector3 const &point) const;
 
 public: // Comparison
     // Exact comparison of the four coefficients (also provides !=). Compares the representation: (1, 0, 0, 0) and

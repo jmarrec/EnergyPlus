@@ -86,7 +86,7 @@ namespace DataVectorTypes {
     //  subscript lookup and are templates so we are using them as plug replacements
     //  for consistent API and to avoid cost of copying them
     // Note: For vectorization contexts std::array is a better choice
-    using Vector = ObjexxFCL::Vector3<Real64>;
+    using Vector = ObjexxFCL::Vector3;
     using ObjexxFCL::cross;
 
     struct Vector2dCount : Vector2D
@@ -130,7 +130,7 @@ namespace DataVectorTypes {
     //        // Vector3 Assignment
     //        inline
     //        Vector &
-    //        operator =( Vector3< Real64 > const & v )
+    //        operator =( Vector3 const & v )
     //        {
     //            x = v.x;
     //            y = v.y;
@@ -416,7 +416,7 @@ namespace DataVectorTypes {
     //        inline
     //        friend
     //        Real64
-    //        dot( Vector const & a, Vector3< Real64 > const & b )
+    //        dot( Vector const & a, Vector3 const & b )
     //        {
     //            return ( a.x * b.x ) + ( a.y * b.y ) + ( a.z * b.z );
     //        }
@@ -425,7 +425,7 @@ namespace DataVectorTypes {
     //        inline
     //        friend
     //        Real64
-    //        dot( Vector3< Real64 > const & a, Vector const & b )
+    //        dot( Vector3 const & a, Vector const & b )
     //        {
     //            return ( a.x * b.x ) + ( a.y * b.y ) + ( a.z * b.z );
     //        }
@@ -447,7 +447,7 @@ namespace DataVectorTypes {
     //        inline
     //        friend
     //        Vector
-    //        cross( Vector const & a, Vector3< Real64 > const & b )
+    //        cross( Vector const & a, Vector3 const & b )
     //        {
     //            Vector c;
     //            c.x = ( a.y * b.z ) - ( a.z * b.y );
@@ -460,7 +460,7 @@ namespace DataVectorTypes {
     //        inline
     //        friend
     //        Vector
-    //        cross( Vector3< Real64 > const & a, Vector const & b )
+    //        cross( Vector3 const & a, Vector const & b )
     //        {
     //            Vector c;
     //            c.x = ( a.y * b.z ) - ( a.z * b.y );
@@ -479,10 +479,10 @@ namespace DataVectorTypes {
     //
     //        // Vector3 Generator
     //        inline
-    //        Vector3< Real64 >
+    //        Vector3
     //        Vec3() const
     //        {
-    //            return Vector3< Real64 >( x, y, z );
+    //            return Vector3( x, y, z );
     //        }
     //
     //        // Assign to an Array
@@ -499,7 +499,7 @@ namespace DataVectorTypes {
     //        // Assign to a Vector3
     //        inline
     //        void
-    //        assign_to( Vector3< Real64 > & v ) const
+    //        assign_to( Vector3 & v ) const
     //        {
     //            v.x = x;
     //            v.y = y;

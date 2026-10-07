@@ -89,7 +89,7 @@ class SurfaceOctreeCube
 public: // Types
     using Real = Real64;
     using Surface = DataSurfaces::SurfaceData;
-    using Vertex = ObjexxFCL::Vector3<Real>;
+    using Vertex = ObjexxFCL::Vector3;
     using Surfaces = std::vector<Surface *>;
     using size_type = Surfaces::size_type;
 

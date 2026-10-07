@@ -964,7 +964,7 @@ TEST_F(EnergyPlusFixture, DaylightingManager_ProfileAngle_Test)
     DataWindowEquivalentLayer::Orientation horiz = DataWindowEquivalentLayer::Orientation::Horizontal;
     DataWindowEquivalentLayer::Orientation vert = DataWindowEquivalentLayer::Orientation::Vertical;
     Real64 ProfAng;
-    Vector3<Real64> CosDirSun; // Solar direction cosines
+    Vector3 CosDirSun; // Solar direction cosines
 
     CosDirSun(1) = 0.882397;
     CosDirSun(2) = 0.470492;

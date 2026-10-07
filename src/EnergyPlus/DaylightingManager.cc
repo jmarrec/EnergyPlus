@@ -793,20 +793,20 @@ void CalcDayltgCoeffsRefPoints(EnergyPlusData &state, int const daylightCtrlNum)
     Real64 TVISIntWin;     // Visible transmittance of int win at COSBIntWin for light from ext win
     Real64 TVISIntWinDisk; // Visible transmittance of int win at COSBIntWin for sun
 
-    Vector3<Real64> W2;
-    Vector3<Real64> W3 = {0.0, 0.0, 0.0};
-    Vector3<Real64> W21;
-    Vector3<Real64> W23;
-    Vector3<Real64> RREF2;
-    Vector3<Real64> RWIN;
-    Vector3<Real64> RWIN2;
-    Vector3<Real64> Ray;
-    Vector3<Real64> WNORM2;
-    Vector3<Real64> VIEWVC;
-    Vector3<Real64> U2;
-    Vector3<Real64> U21;
-    Vector3<Real64> U23;
-    Vector3<Real64> VIEWVC2;
+    Vector3 W2;
+    Vector3 W3 = {0.0, 0.0, 0.0};
+    Vector3 W21;
+    Vector3 W23;
+    Vector3 RREF2;
+    Vector3 RWIN;
+    Vector3 RWIN2;
+    Vector3 Ray;
+    Vector3 WNORM2;
+    Vector3 VIEWVC;
+    Vector3 U2;
+    Vector3 U21;
+    Vector3 U23;
+    Vector3 VIEWVC2;
 
     int WinEl; // Current window element
 
@@ -859,7 +859,7 @@ void CalcDayltgCoeffsRefPoints(EnergyPlusData &state, int const daylightCtrlNum)
     for (int IL = 1; IL <= thisDayltgCtrl.TotalDaylRefPoints; ++IL) {
         auto const &refPt = thisDayltgCtrl.refPts(IL);
         // Reference point in absolute coordinate system
-        Vector3<Real64> RREF = refPt.absCoords;
+        Vector3 RREF = refPt.absCoords;
 
         //           -------------
         // ---------- WINDOW LOOP ----------
@@ -1151,20 +1151,20 @@ void CalcDayltgCoeffsMapPoints(EnergyPlusData &state, int const mapNum)
     Real64 TVISIntWinDisk; // Visible transmittance of int win at COSBIntWin for sun
     int WinEl;             // window elements counter
 
-    Vector3<Real64> W2;
-    Vector3<Real64> W3 = {0.0, 0.0, 0.0};
-    Vector3<Real64> W21;
-    Vector3<Real64> W23;
-    Vector3<Real64> RREF2;
-    Vector3<Real64> RWIN;
-    Vector3<Real64> RWIN2;
-    Vector3<Real64> Ray;
-    Vector3<Real64> WNORM2;
-    Vector3<Real64> VIEWVC;
-    Vector3<Real64> U2;
-    Vector3<Real64> U21;
-    Vector3<Real64> U23;
-    Vector3<Real64> VIEWVC2;
+    Vector3 W2;
+    Vector3 W3 = {0.0, 0.0, 0.0};
+    Vector3 W21;
+    Vector3 W23;
+    Vector3 RREF2;
+    Vector3 RWIN;
+    Vector3 RWIN2;
+    Vector3 Ray;
+    Vector3 WNORM2;
+    Vector3 VIEWVC;
+    Vector3 U2;
+    Vector3 U21;
+    Vector3 U23;
+    Vector3 VIEWVC2;
 
     if (dl->mapFirstTime && (int)dl->illumMaps.size() > 0) {
         int IL = -999;
@@ -1211,7 +1211,7 @@ void CalcDayltgCoeffsMapPoints(EnergyPlusData &state, int const mapNum)
 
     for (int IL = 1; IL <= numRefPts; ++IL) {
         auto const &refPt = illumMap.refPts(IL);
-        Vector3<Real64> RREF = refPt.absCoords;
+        Vector3 RREF = refPt.absCoords;
 
         //           -------------
         // ---------- WINDOW LOOP ----------
@@ -1438,35 +1438,35 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
                                               int const daylightCtrlNum, // zero if called for map points
                                               int const iRefPoint,
                                               int const loopwin,
-                                              CalledFor const CalledFrom,    // indicate  which type of routine called this routine
-                                              Vector3<Real64> const &RREF,   // Location of a reference point in absolute coordinate system
-                                              Vector3<Real64> const &VIEWVC, // View vector in absolute coordinate system
+                                              CalledFor const CalledFrom, // indicate  which type of routine called this routine
+                                              Vector3 const &RREF,        // Location of a reference point in absolute coordinate system
+                                              Vector3 const &VIEWVC,      // View vector in absolute coordinate system
                                               int &IWin,
                                               int &IWin2,
                                               int &NWX,
                                               int &NWY,
-                                              Vector3<Real64> &W2,     // Second vertex of window
-                                              Vector3<Real64> &W3,     // Third vertex of window
-                                              Vector3<Real64> &W21,    // Vector from window vertex 2 to window vertex 1
-                                              Vector3<Real64> &W23,    // Vector from window vertex 2 to window vertex 3
-                                              int &LSHCAL,             // Interior shade calculation flag:  0=not yet calculated, 1=already calculated
-                                              int &InShelfSurf,        // Inside daylighting shelf surface number
-                                              int &ICtrl,              // Window control counter
-                                              WinShadingType &ShType,  // Window shading type
-                                              int &BlNum,              // Window blind number
-                                              Vector3<Real64> &WNORM2, // Unit vector normal to window
-                                              ExtWinType &extWinType,  // Exterior window type (InZoneExtWin, AdjZoneExtWin, NotInOrAdjZoneExtWin)
-                                              int &IConst,             // Construction counter
-                                              Vector3<Real64> &RREF2,  // Location of virtual reference point in absolute coordinate system
-                                              Real64 &DWX,             // Horizontal dimension of window element (m)
-                                              Real64 &DWY,             // Vertical dimension of window element (m)
-                                              Real64 &DAXY,            // Area of window element
-                                              Vector3<Real64> &U2,     // Second vertex of window for TDD:DOME (if exists)
-                                              Vector3<Real64> &U23,    // Vector from window vertex 2 to window vertex 3 for TDD:DOME (if exists)
-                                              Vector3<Real64> &U21,    // Vector from window vertex 2 to window vertex 1 for TDD:DOME (if exists)
-                                              Vector3<Real64> &VIEWVC2, // Virtual view vector in absolute coordinate system
-                                              bool &is_Rectangle,       // True if window is rectangular
-                                              bool &is_Triangle,        // True if window is triangular
+                                              Vector3 &W2,            // Second vertex of window
+                                              Vector3 &W3,            // Third vertex of window
+                                              Vector3 &W21,           // Vector from window vertex 2 to window vertex 1
+                                              Vector3 &W23,           // Vector from window vertex 2 to window vertex 3
+                                              int &LSHCAL,            // Interior shade calculation flag:  0=not yet calculated, 1=already calculated
+                                              int &InShelfSurf,       // Inside daylighting shelf surface number
+                                              int &ICtrl,             // Window control counter
+                                              WinShadingType &ShType, // Window shading type
+                                              int &BlNum,             // Window blind number
+                                              Vector3 &WNORM2,        // Unit vector normal to window
+                                              ExtWinType &extWinType, // Exterior window type (InZoneExtWin, AdjZoneExtWin, NotInOrAdjZoneExtWin)
+                                              int &IConst,            // Construction counter
+                                              Vector3 &RREF2,         // Location of virtual reference point in absolute coordinate system
+                                              Real64 &DWX,            // Horizontal dimension of window element (m)
+                                              Real64 &DWY,            // Vertical dimension of window element (m)
+                                              Real64 &DAXY,           // Area of window element
+                                              Vector3 &U2,            // Second vertex of window for TDD:DOME (if exists)
+                                              Vector3 &U23,           // Vector from window vertex 2 to window vertex 3 for TDD:DOME (if exists)
+                                              Vector3 &U21,           // Vector from window vertex 2 to window vertex 1 for TDD:DOME (if exists)
+                                              Vector3 &VIEWVC2,       // Virtual view vector in absolute coordinate system
+                                              bool &is_Rectangle,     // True if window is rectangular
+                                              bool &is_Triangle,      // True if window is triangular
                                               int const MapNum)
 {
     // SUBROUTINE INFORMATION:
@@ -1498,8 +1498,8 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
     int zoneNum = 0; // zone number
     int enclNum = 0; // enclosure number
 
-    Vector3<Real64> W1 = {0.0, 0.0, 0.0};
-    Vector3<Real64> WC = {0.0, 0.0, 0.0};
+    Vector3 W1 = {0.0, 0.0, 0.0};
+    Vector3 WC = {0.0, 0.0, 0.0};
 
     if (CalledFrom == CalledFor::RefPoint) {
         auto &daylCtrl = dl->daylightControl(daylightCtrlNum);
@@ -1606,13 +1606,13 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
         WC = W2 + (W23 + W21) / 3.0;
     }
     s_surf->SurfaceWindow(IWin).WinCenter = WC;
-    Vector3<Real64> REFWC = WC - RREF;
+    Vector3 REFWC = WC - RREF;
     // Unit vectors
     W21 /= HW;
     W23 /= WW;
 
     // Unit vector normal to window (pointing away from room)
-    Vector3<Real64> WNORM = surf.lcsz;
+    Vector3 WNORM = surf.lcsz;
 
     // Initialize number of window elements
     NDIVX = 40; // Does this mean that windows are split into 1,600 points for daylighting? WHYYYYYY?
@@ -1625,7 +1625,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
         if (ALF < 0.1524 && extWinType == ExtWinType::InZone) {
             // Ref pt is close to window plane. Get vector from window
             // origin to projection of ref pt on window plane.
-            Vector3<Real64> W2REF = RREF + ALF * WNORM - W2;
+            Vector3 W2REF = RREF + ALF * WNORM - W2;
 
             D1a = dot(W2REF, W23);
             D1b = dot(W2REF, W21);
@@ -1723,14 +1723,14 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
 
         // Calculate reference point coords relative to the diffuser coordinate system
         // W21, W23, and WNORM are the unit vectors
-        Vector3<Real64> REFD = {dot(REFWC, W21), dot(REFWC, W23), dot(REFWC, WNORM)};
+        Vector3 REFD = {dot(REFWC, W21), dot(REFWC, W23), dot(REFWC, WNORM)};
 
         // Calculate view vector coords relative to the diffuser coordinate system
-        Vector3<Real64> VIEWVD = {dot(VIEWVC, W21), dot(VIEWVC, W23), dot(VIEWVC, WNORM)};
+        Vector3 VIEWVD = {dot(VIEWVC, W21), dot(VIEWVC, W23), dot(VIEWVC, WNORM)};
 
-        Vector3<Real64> U3 = surf2.Vertex(2);
+        Vector3 U3 = surf2.Vertex(2);
         U2 = surf2.Vertex(3);
-        Vector3<Real64> U1 = {0.0, 0.0, 0.0};
+        Vector3 U1 = {0.0, 0.0, 0.0};
 
         if (surf2.Sides == 4) {
             // Vertices of window (numbered counter-clockwise starting
@@ -1853,34 +1853,34 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
     int const iXelement,
     int const iYelement,
     Real64 &SkyObstructionMult,
-    Vector3<Real64> const &W2,      // Second vertex of window
-    Vector3<Real64> const &W21,     // Vector from window vertex 2 to window vertex 1
-    Vector3<Real64> const &W23,     // Vector from window vertex 2 to window vertex 3
-    Vector3<Real64> const &RREF,    // Location of a reference point in absolute coordinate system
-    int const NWYlim,               // For triangle, largest NWY for a given IX
-    Vector3<Real64> const &VIEWVC2, // Virtual view vector in absolute coordinate system
-    Real64 const DWX,               // Horizontal dimension of window element (m)
-    Real64 const DWY,               // Vertical dimension of window element (m)
-    Real64 const DAXY,              // Area of window element
-    Vector3<Real64> const &U2,      // Second vertex of window for TDD:DOME (if exists)
-    Vector3<Real64> const &U23,     // Vector from window vertex 2 to window vertex 3 for TDD:DOME (if exists)
-    Vector3<Real64> const &U21,     // Vector from window vertex 2 to window vertex 1 for TDD:DOME (if exists)
-    Vector3<Real64> &RWIN,          // Center of a window element for TDD:DOME (if exists) in abs coord sys
-    Vector3<Real64> &RWIN2,         // Center of a window element for TDD:DOME (if exists) in abs coord sys
-    Vector3<Real64> &Ray,           // Unit vector along ray from reference point to window element
-    Real64 &PHRAY,                  // Altitude of ray from reference point to window element (radians)
-    int &LSHCAL,                    // Interior shade calculation flag:  0=not yet calculated, 1=already calculated
-    Real64 &COSB,                   // Cosine of angle between window outward normal and ray from reference point to window element
-    Real64 &ObTrans,                // Product of solar transmittances of exterior obstructions hit by ray
-    Real64 &TVISB,                  // Visible transmittance of window for COSB angle of incidence (times light well
-    Real64 &DOMEGA,                 // Solid angle subtended by window element wrt reference point (steradians)
-    Real64 &THRAY,                  // Azimuth of ray from reference point to window element (radians)
-    bool &hitIntObs,                // True iff interior obstruction hit
-    bool &hitExtObs,                // True iff ray from ref pt to ext win hits an exterior obstruction
-    Vector3<Real64> const &WNORM2,  // Unit vector normal to window
-    ExtWinType const extWinType,    // Exterior window type (InZoneExtWin, AdjZoneExtWin, NotInOrAdjZoneExtWin)
-    int const IConst,               // Construction counter
-    Vector3<Real64> const &RREF2,   // Location of virtual reference point in absolute coordinate system
+    Vector3 const &W2,           // Second vertex of window
+    Vector3 const &W21,          // Vector from window vertex 2 to window vertex 1
+    Vector3 const &W23,          // Vector from window vertex 2 to window vertex 3
+    Vector3 const &RREF,         // Location of a reference point in absolute coordinate system
+    int const NWYlim,            // For triangle, largest NWY for a given IX
+    Vector3 const &VIEWVC2,      // Virtual view vector in absolute coordinate system
+    Real64 const DWX,            // Horizontal dimension of window element (m)
+    Real64 const DWY,            // Vertical dimension of window element (m)
+    Real64 const DAXY,           // Area of window element
+    Vector3 const &U2,           // Second vertex of window for TDD:DOME (if exists)
+    Vector3 const &U23,          // Vector from window vertex 2 to window vertex 3 for TDD:DOME (if exists)
+    Vector3 const &U21,          // Vector from window vertex 2 to window vertex 1 for TDD:DOME (if exists)
+    Vector3 &RWIN,               // Center of a window element for TDD:DOME (if exists) in abs coord sys
+    Vector3 &RWIN2,              // Center of a window element for TDD:DOME (if exists) in abs coord sys
+    Vector3 &Ray,                // Unit vector along ray from reference point to window element
+    Real64 &PHRAY,               // Altitude of ray from reference point to window element (radians)
+    int &LSHCAL,                 // Interior shade calculation flag:  0=not yet calculated, 1=already calculated
+    Real64 &COSB,                // Cosine of angle between window outward normal and ray from reference point to window element
+    Real64 &ObTrans,             // Product of solar transmittances of exterior obstructions hit by ray
+    Real64 &TVISB,               // Visible transmittance of window for COSB angle of incidence (times light well
+    Real64 &DOMEGA,              // Solid angle subtended by window element wrt reference point (steradians)
+    Real64 &THRAY,               // Azimuth of ray from reference point to window element (radians)
+    bool &hitIntObs,             // True iff interior obstruction hit
+    bool &hitExtObs,             // True iff ray from ref pt to ext win hits an exterior obstruction
+    Vector3 const &WNORM2,       // Unit vector normal to window
+    ExtWinType const extWinType, // Exterior window type (InZoneExtWin, AdjZoneExtWin, NotInOrAdjZoneExtWin)
+    int const IConst,            // Construction counter
+    Vector3 const &RREF2,        // Location of virtual reference point in absolute coordinate system
     bool const is_Triangle,
     Real64 &TVISIntWin,     // Visible transmittance of int win at COSBIntWin for light from ext win
     Real64 &TVISIntWinDisk, // Visible transmittance of int win at COSBIntWin for sun
@@ -1923,7 +1923,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
     RWIN2 = U2 + (double(iXelement) - 0.5) * U23 * DWX + (double(iYelement) - 0.5) * U21 * DWY;
 
     // Distance between ref pt and window element
-    Real64 DIS = distance(RWIN, RREF);
+    Real64 DIS = RWIN.distance(RREF);
 
     // Unit vector along ray from ref pt to element
     Ray = (RWIN - RREF) / DIS;
@@ -1980,7 +1980,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
     TVISIntWinDisk = 0.0;   // Init Value
     TVISIntWin = 0.0;
 
-    Vector3<Real64> HitPtIntWin = {0.0, 0.0, 0.0};
+    Vector3 HitPtIntWin = {0.0, 0.0, 0.0};
     auto const &surf = s_surf->Surface(IWin);
     if (surf.OriginalClass == SurfaceClass::TDD_Diffuser) {
         // Look up the TDD:DOME object
@@ -2111,7 +2111,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
                 } else if (CalledFrom == CalledFor::MapPoint) {
                     RayIndex = complexWinDayltgGeom.IlluminanceMap(iRefPoint, MapNum).RefSurfIndex(ICplxFen, WinEl);
                 }
-                Vector3<Real64> RayVector = state.dataBSDFWindow->ComplexWind(IWin).Geom(CplxFenState).sInc(RayIndex);
+                Vector3 RayVector = state.dataBSDFWindow->ComplexWind(IWin).Geom(CplxFenState).sInc(RayIndex);
                 // It will get product of all transmittances
                 TransBeam = DayltgHitObstruction(state, state.dataGlobal->HourOfDay, IWin, RWIN, RayVector);
                 // IF (TransBeam > 0.0d0) ObTrans = TransBeam
@@ -2136,7 +2136,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
         Real64 Beta = std::atan2(Ray.y, Ray.x);
         // Distance between ground hit point and proj'n of center of window element onto ground (m)
         Real64 HorDis = (RWIN2.z - s_surf->GroundLevelZ) * std::tan(Alfa);
-        Vector3<Real64> GroundHitPt = {RWIN2.x + HorDis * std::cos(Beta), RWIN2.y + HorDis * std::sin(Beta), s_surf->GroundLevelZ};
+        Vector3 GroundHitPt = {RWIN2.x + HorDis * std::cos(Beta), RWIN2.y + HorDis * std::sin(Beta), s_surf->GroundLevelZ};
 
         SkyObstructionMult =
             CalcObstrMultiplier(state, GroundHitPt, DataSurfaces::AltAngStepsForSolReflCalc, DataSurfaces::AzimAngStepsForSolReflCalc);
@@ -2144,13 +2144,13 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
 } // FigureDayltgCoeffsAtPointsForWindowElements()
 
 void InitializeCFSDaylighting(EnergyPlusData &state,
-                              int const daylightCtrlNum,       // Current daylighting control number
-                              int const IWin,                  // Complex fenestration number
-                              int const NWX,                   // Number of horizontal divisions
-                              int const NWY,                   // Number of vertical divisions
-                              Vector3<Real64> const &RefPoint, // reference point coordinates
-                              int const NRefPts,               // Number of reference points
-                              int const iRefPoint,             // Reference points counter
+                              int const daylightCtrlNum, // Current daylighting control number
+                              int const IWin,            // Complex fenestration number
+                              int const NWX,             // Number of horizontal divisions
+                              int const NWY,             // Number of vertical divisions
+                              Vector3 const &RefPoint,   // reference point coordinates
+                              int const NRefPts,         // Number of reference points
+                              int const iRefPoint,       // Reference points counter
                               CalledFor const CalledFrom,
                               int const MapNum)
 {
@@ -2181,9 +2181,9 @@ void InitializeCFSDaylighting(EnergyPlusData &state,
 
     // Perform necessary calculations for window coordinates and vectors.  This will be used to calculate centroids for
     // each window element
-    Vector3<Real64> W1 = {0.0, 0.0, 0.0};
-    Vector3<Real64> W2 = {0.0, 0.0, 0.0};
-    Vector3<Real64> W3 = {0.0, 0.0, 0.0};
+    Vector3 W1 = {0.0, 0.0, 0.0};
+    Vector3 W2 = {0.0, 0.0, 0.0};
+    Vector3 W3 = {0.0, 0.0, 0.0};
 
     if (surf.Sides == 4) {
         W3 = surf.Vertex(2);
@@ -2195,11 +2195,11 @@ void InitializeCFSDaylighting(EnergyPlusData &state,
         W1 = surf.Vertex(1);
     }
 
-    Vector3<Real64> W21 = W1 - W2;
+    Vector3 W21 = W1 - W2;
     W21 /= surf.Height;
-    Vector3<Real64> W23 = W3 - W2;
+    Vector3 W23 = W3 - W2;
     W23 /= surf.Width;
-    Vector3<Real64> WNorm = surf.lcsz;
+    Vector3 WNorm = surf.lcsz;
 
     Real64 WinElArea = DWX * DWY;
     if (surf.Sides == 3) {
@@ -2304,19 +2304,19 @@ void InitializeCFSStateData(EnergyPlusData &state,
                             DataBSDFWindow::BSDFRefPointsGeomDescr &DaylghtGeomDescr,
                             [[maybe_unused]] int const daylightCtrlNum, // Current daylighting control number
                             int const iWin,
-                            Vector3<Real64> const &RefPoint, // reference point
+                            Vector3 const &RefPoint, // reference point
                             int const CurFenState,
                             int const NBasis,
                             int const NTrnBasis,
                             Real64 const AZVIEW,
                             int const NWX,
                             int const NWY,
-                            Vector3<Real64> const &W2,
-                            Vector3<Real64> const &W21,
-                            Vector3<Real64> const &W23,
+                            Vector3 const &W2,
+                            Vector3 const &W21,
+                            Vector3 const &W23,
                             Real64 const DWX,
                             Real64 const DWY,
-                            Vector3<Real64> const &WNorm, // unit vector from window (point towards outside)
+                            Vector3 const &WNorm, // unit vector from window (point towards outside)
                             Real64 const WinElArea)
 {
     // SUBROUTINE INFORMATION:
@@ -2341,9 +2341,9 @@ void InitializeCFSStateData(EnergyPlusData &state,
     Real64 TransRSurf = 0.0;
     int J;
 
-    Vector3<Real64> RWin;
-    Vector3<Real64> V;
-    Vector3<Real64> GroundHitPt;
+    Vector3 RWin;
+    Vector3 V;
+    Vector3 GroundHitPt;
 
     // temporary arrays for surfaces
     // Each complex fenestration state can have different number of basis elements
@@ -2357,10 +2357,10 @@ void InitializeCFSStateData(EnergyPlusData &state,
     Array2D<Real64> TmpHSurfDSq(s_surf->TotSurfaces, NBasis, 0.0); // Temporary HitSurfDSq
 
     // Object Data
-    Vector3<Real64> Centroid;                                                                       // current window element centroid
-    Vector3<Real64> HitPt;                                                                          // surface hit point
-    Array1D<Vector3<Real64>> TmpGndPt(NBasis, Vector3<Real64>(0.0, 0.0, 0.0));                      // Temporary ground intersection list
-    Array2D<Vector3<Real64>> TmpHitPt(s_surf->TotSurfaces, NBasis, Vector3<Real64>(0.0, 0.0, 0.0)); // Temporary HitPt
+    Vector3 Centroid;                                                               // current window element centroid
+    Vector3 HitPt;                                                                  // surface hit point
+    Array1D<Vector3> TmpGndPt(NBasis, Vector3(0.0, 0.0, 0.0));                      // Temporary ground intersection list
+    Array2D<Vector3> TmpHitPt(s_surf->TotSurfaces, NBasis, Vector3(0.0, 0.0, 0.0)); // Temporary HitPt
 
     CFSRefPointPosFactor(state, RefPoint, StateRefPoint, iWin, CurFenState, NTrnBasis, AZVIEW);
 
@@ -2654,9 +2654,9 @@ void AllocateForCFSRefPointsGeometry(DataBSDFWindow::BSDFRefPointsGeomDescr &Ref
 }
 
 void CFSRefPointSolidAngle(EnergyPlusData &state,
-                           Vector3<Real64> const &RefPoint,
-                           Vector3<Real64> const &RWin,
-                           Vector3<Real64> const &WNorm,
+                           Vector3 const &RefPoint,
+                           Vector3 const &RWin,
+                           Vector3 const &WNorm,
                            DataBSDFWindow::BSDFRefPoints &RefPointMap,
                            DataBSDFWindow::BSDFRefPointsGeomDescr &RefPointGeomMap,
                            int const iWin,
@@ -2673,12 +2673,12 @@ void CFSRefPointSolidAngle(EnergyPlusData &state,
     // Calculate position factor for given reference point.
 
     // calculate vector from center of window element to the current reference point
-    Vector3<Real64> Ray = RefPoint - RWin;
+    Vector3 Ray = RefPoint - RWin;
 
     // figure out outgoing beam direction from current reference point
     Real64 BestMatch = 0.0;
     for (int iTrnRay = 1; iTrnRay <= NTrnBasis; ++iTrnRay) {
-        Vector3<Real64> const &V = state.dataBSDFWindow->ComplexWind(iWin).Geom(CurFenState).sTrn(iTrnRay);
+        Vector3 const &V = state.dataBSDFWindow->ComplexWind(iWin).Geom(CurFenState).sTrn(iTrnRay);
         Real64 temp = dot(Ray, V);
         if (temp > BestMatch) {
             BestMatch = temp;
@@ -2688,14 +2688,14 @@ void CFSRefPointSolidAngle(EnergyPlusData &state,
 
     // calculate solid view angle
     Real64 Dist = Ray.magnitude();
-    Vector3<Real64> RayNorm = Ray / (-Dist);
+    Vector3 RayNorm = Ray / (-Dist);
     RefPointGeomMap.SolidAngleVec(curWinEl) = RayNorm;
     Real64 CosB = dot(WNorm, RayNorm);
     RefPointGeomMap.SolidAngle(curWinEl) = WinElArea * CosB / (Dist * Dist);
 }
 
 void CFSRefPointPosFactor(EnergyPlusData &state,
-                          Vector3<Real64> const &RefPoint,
+                          Vector3 const &RefPoint,
                           DataBSDFWindow::BSDFRefPoints &RefPointMap,
                           int const iWin,
                           int const CurFenState,
@@ -2711,10 +2711,10 @@ void CFSRefPointPosFactor(EnergyPlusData &state,
 
     auto const &sTrn = state.dataBSDFWindow->ComplexWind(iWin).Geom(CurFenState).sTrn;
     for (int iTrnRay = 1; iTrnRay <= NTrnBasis; ++iTrnRay) {
-        Vector3<Real64> V = sTrn(iTrnRay);
+        Vector3 V = sTrn(iTrnRay);
         V.negate();
 
-        Vector3<Real64> InterPoint;
+        Vector3 InterPoint;
 
         bool hit = PierceSurface(state, iWin, RefPoint, V, InterPoint);
         if (hit) {
@@ -2730,9 +2730,9 @@ void CFSRefPointPosFactor(EnergyPlusData &state,
 } // CFSRefPointPosFactor()
 
 Real64 CalcObstrMultiplier(EnergyPlusData &state,
-                           Vector3<Real64> const &GroundHitPt, // Coordinates of point that ray hits ground (m)
-                           int const AltSteps,                 // Number of steps in altitude angle for solar reflection calc
-                           int const AzimSteps                 // Number of steps in azimuth angle of solar reflection calc
+                           Vector3 const &GroundHitPt, // Coordinates of point that ray hits ground (m)
+                           int const AltSteps,         // Number of steps in altitude angle for solar reflection calc
+                           int const AzimSteps         // Number of steps in azimuth angle of solar reflection calc
 )
 {
 
@@ -2755,8 +2755,8 @@ Real64 CalcObstrMultiplier(EnergyPlusData &state,
 
     bool hitObs; // True iff obstruction is hit
 
-    Vector3<Real64> URay;     // Unit vector in (Phi,Theta) direction
-    Vector3<Real64> ObsHitPt; // Unit vector in (Phi,Theta) direction
+    Vector3 URay;     // Unit vector in (Phi,Theta) direction
+    Vector3 ObsHitPt; // Unit vector in (Phi,Theta) direction
 
     assert(AzimSteps <= DataSurfaces::AzimAngStepsForSolReflCalc);
 
@@ -2824,7 +2824,7 @@ Real64 CalcObstrMultiplier(EnergyPlusData &state,
                 };
 
                 // Check octree surface candidates until a hit is found, if any
-                Vector3<Real64> const URay_inv(SurfaceOctreeCube::safe_inverse(URay));
+                Vector3 const URay_inv(SurfaceOctreeCube::safe_inverse(URay));
                 state.dataHeatBalMgr->surfaceOctree.hasSurfaceRayIntersectsCube(GroundHitPt, URay, URay_inv, surfaceHit);
             }
 
@@ -2855,24 +2855,24 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
     int const iHour,
     int &ISunPos,
     Real64 const SkyObstructionMult,
-    Vector3<Real64> const &RWIN2, // Center of a window element for TDD:DOME (if exists) in abs coord sys
-    Vector3<Real64> const &Ray,   // Unit vector along ray from reference point to window element
-    Real64 const PHRAY,           // Altitude of ray from reference point to window element (radians)
-    int const LSHCAL,             // Interior shade calculation flag:  0=not yet calculated, 1=already calculated
-    int const InShelfSurf,        // Inside daylighting shelf surface number
-    Real64 const COSB,            // Cosine of angle between window outward normal and ray from reference point to window element
-    Real64 const ObTrans,         // Product of solar transmittances of exterior obstructions hit by ray from reference point through a window element
-    Real64 const TVISB,           // Visible transmittance of window for COSB angle of incidence (times light well efficiency, if appropriate)
-    Real64 const DOMEGA,          // Solid angle subtended by window element wrt reference point (steradians)
-    int const ICtrl,              // Window control counter
-    WinShadingType const ShType,  // Window shading type
+    Vector3 const &RWIN2,        // Center of a window element for TDD:DOME (if exists) in abs coord sys
+    Vector3 const &Ray,          // Unit vector along ray from reference point to window element
+    Real64 const PHRAY,          // Altitude of ray from reference point to window element (radians)
+    int const LSHCAL,            // Interior shade calculation flag:  0=not yet calculated, 1=already calculated
+    int const InShelfSurf,       // Inside daylighting shelf surface number
+    Real64 const COSB,           // Cosine of angle between window outward normal and ray from reference point to window element
+    Real64 const ObTrans,        // Product of solar transmittances of exterior obstructions hit by ray from reference point through a window element
+    Real64 const TVISB,          // Visible transmittance of window for COSB angle of incidence (times light well efficiency, if appropriate)
+    Real64 const DOMEGA,         // Solid angle subtended by window element wrt reference point (steradians)
+    int const ICtrl,             // Window control counter
+    WinShadingType const ShType, // Window shading type
     [[maybe_unused]] int const BlNum, // Window blind number
     Real64 const THRAY,               // Azimuth of ray from reference point to window element (radians)
-    Vector3<Real64> const &WNORM2,    // Unit vector normal to window
+    Vector3 const &WNORM2,            // Unit vector normal to window
     ExtWinType const extWinType,      // Exterior window type (InZoneExtWin, AdjZoneExtWin, NotInOrAdjZoneExtWin)
     int const IConst,                 // Construction counter
     Real64 const AZVIEW,              // Azimuth of view vector in absolute coord system for glare calculation (radians)
-    Vector3<Real64> const &RREF2,     // Location of virtual reference point in absolute coordinate system
+    Vector3 const &RREF2,             // Location of virtual reference point in absolute coordinate system
     bool const hitIntObs,             // True iff interior obstruction hit
     bool const hitExtObs,             // True iff ray from ref pt to ext win hits an exterior obstruction
     CalledFor const CalledFrom,       // indicate  which type of routine called this routine
@@ -2899,7 +2899,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
     auto &s_mat = state.dataMaterial;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    Vector3<Real64> RREF{0.0, 0.0, 0.0}; // Location of a reference point in absolute coordinate system //Autodesk Was used uninitialized:
+    Vector3 RREF{0.0, 0.0, 0.0}; // Location of a reference point in absolute coordinate system //Autodesk Was used uninitialized:
 
     Real64 ObTransDisk;     // Product of solar transmittances of exterior obstructions hit by ray from reference point to sun
     Real64 LumAtHitPtFrSun; // Luminance at hit point of obstruction by reflection of direct light from sun (cd/m2)
@@ -2997,8 +2997,8 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
     // In the following hitIntObs == false  ==> no interior obstructions hit, and
     //                  hitExtObs == true  ==> one or more exterior obstructions hit.
     if (s_surf->CalcSolRefl && !hitIntObs && hitExtObs) {
-        int NearestHitSurfNum;        // Surface number of nearest obstruction
-        Vector3<Real64> NearestHitPt; // Hit point of ray on nearest obstruction
+        int NearestHitSurfNum; // Surface number of nearest obstruction
+        Vector3 NearestHitPt;  // Hit point of ray on nearest obstruction
         // One or more exterior obstructions was hit; get contribution of reflection
         // from nearest obstruction.
         // Find obstruction whose hit point is closest to this ray's window element
@@ -3094,8 +3094,8 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
             if (PHRAY > 0.0) {
                 dl->dirIllum(iHour)[iWinCover_Bare].sun += dl->winLum(iHour)[iWinCover_Bare].sun * DOMEGA_Ray_3;
             }
-        } else {                         // Bare window
-            Vector3<Real64> GroundHitPt; // Coordinates of point that ray hits ground (m)
+        } else {                 // Bare window
+            Vector3 GroundHitPt; // Coordinates of point that ray hits ground (m)
             // Tuned Hoisted operations out of loop and linear indexing
             if (s_surf->CalcSolRefl) { // Coordinates of ground point hit by the ray
                 Real64 Alfa = std::acos(-Ray_3);
@@ -3121,7 +3121,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
             Real64 const GILSK_mult((state.dataEnvrn->GndReflectanceForDayltg / Constant::Pi) * ObTrans * SkyObstructionMult);
             Real64 const TVISB_ObTrans(TVISB * ObTrans);
             Real64 const AVWLSU_add(TVISB_ObTrans * dl->horIllum[iHour].sun * (state.dataEnvrn->GndReflectanceForDayltg / Constant::Pi));
-            Vector3<Real64> const SUNCOS_iHour(s_surf->SurfSunCosHourly(iHour));
+            Vector3 const SUNCOS_iHour(s_surf->SurfSunCosHourly(iHour));
             assert(equal_dimensions(dl->dirIllum, dl->avgWinLum));
             auto &edirsk = dl->dirIllum(iHour)[iWinCover_Bare];
             auto &avwlsk = dl->avgWinLum(iHour)[iWinCover_Bare];
@@ -3149,7 +3149,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                 if (s_surf->CalcSolRefl) { // Coordinates of ground point hit by the ray
                     // Sun reaches ground point if vector from this point to the sun is unobstructed
                     hitObs = false;
-                    Vector3<Real64> ObsHitPt; // Coordinates of hit point on an obstruction (m)
+                    Vector3 ObsHitPt; // Coordinates of hit point on an obstruction (m)
                     for (int ObsSurfNum : s_surf->AllShadowPossObstrSurfaceList) {
                         hitObs = PierceSurface(state, ObsSurfNum, GroundHitPt, SUNCOS_iHour, ObsHitPt);
                         if (hitObs) {
@@ -3174,7 +3174,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
         // Beam solar reaching reference point directly without exterior reflection
 
         // Unit vector from ref. pt. to sun
-        Vector3<Real64> RAYCOS;
+        Vector3 RAYCOS;
         RAYCOS.x = dl->sunAngles.cosPhi * std::cos(dl->sunAngles.theta);
         RAYCOS.y = dl->sunAngles.cosPhi * std::sin(dl->sunAngles.theta);
         RAYCOS.z = dl->sunAngles.sinPhi;
@@ -3183,7 +3183,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
         Real64 COSI = dot(WNORM2, RAYCOS); // Cosine of angle between direct sun and window outward normal
         bool hit;                          // True if ray from ref point thru window element hits an obstruction
         bool hitWin;                       // True if ray passes thru window
-        Vector3<Real64> HP;
+        Vector3 HP;
         if (COSI > 0.0) {
 
             // Does RAYCOS pass thru exterior window? HP is point that RAYCOS intersects window plane.
@@ -3205,7 +3205,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                     // Surface number of int window intersected by ray betw ref pt and sun
                     int IntWinDiskHitNum = 0;
                     // Intersection point on an interior window for ray from ref pt to sun (m)
-                    Vector3<Real64> HitPtIntWinDisk;
+                    Vector3 HitPtIntWinDisk;
                     auto const &thisZone = state.dataHeatBal->Zone(zoneNum);
                     for (int const spaceNum : thisZone.spaceIndexes) {
                         auto const &thisSpace = state.dataHeatBal->space(spaceNum);
@@ -3377,10 +3377,10 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
             int RecSurfNum = s_surf->SurfShadowRecSurfNum(IWin2);
             if (RecSurfNum > 0) { // interior windows do not apply
                 if (state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).NumPossibleObs > 0) {
-                    bool hitRefl;              // True iff ray hits reflecting surface
-                    Vector3<Real64> HitPtRefl; // Point that ray hits reflecting surface
-                    Vector3<Real64> SunVecMir; // Sun ray mirrored in reflecting surface
-                    Vector3<Real64> ReflNorm;  // Normal vector to reflecting surface
+                    bool hitRefl;      // True iff ray hits reflecting surface
+                    Vector3 HitPtRefl; // Point that ray hits reflecting surface
+                    Vector3 SunVecMir; // Sun ray mirrored in reflecting surface
+                    Vector3 ReflNorm;  // Normal vector to reflecting surface
                     // This window has associated obstructions that could reflect beam onto the window
                     for (int loop = 1, loop_end = state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).NumPossibleObs; loop <= loop_end;
                          ++loop) {
@@ -3431,7 +3431,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                             Real64 ReflDistance = std::sqrt(ReflDistanceSq);
                             // Is ray from ref. pt. to reflection point (HitPtRefl) obstructed?
                             bool hitObsRefl = false;
-                            Vector3<Real64> HitPtObs; // Hit point on obstruction
+                            Vector3 HitPtObs; // Hit point on obstruction
                             for (int loop2 = 1, loop2_end = state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).NumPossibleObs;
                                  loop2 <= loop2_end;
                                  ++loop2) {
@@ -5332,10 +5332,10 @@ void DayltgExtHorizIllum(EnergyPlusData &state,
 
 // Product of solar transmittances of exterior obstructions
 Real64 DayltgHitObstruction(EnergyPlusData &state,
-                            int const IHOUR,           // Hour number
-                            int const IWin,            // Window index
-                            Vector3<Real64> const &R1, // Origin of ray (m)
-                            Vector3<Real64> const &RN  // Unit vector along ray
+                            int const IHOUR,   // Hour number
+                            int const IWin,    // Window index
+                            Vector3 const &R1, // Origin of ray (m)
+                            Vector3 const &RN  // Unit vector along ray
 )
 {
 
@@ -5369,7 +5369,7 @@ Real64 DayltgHitObstruction(EnergyPlusData &state,
     auto const &window = s_surf->Surface(IWin);
     int const window_iBaseSurf = window.BaseSurf;
 
-    Vector3<Real64> DayltgHitObstructionHP;
+    Vector3 DayltgHitObstructionHP;
     // Loop over potentially obstructing surfaces, which can be building elements, like walls, or shadowing surfaces, like overhangs
     // Building elements are assumed to be opaque
     // A shadowing surface is opaque unless its transmittance schedule value is non-zero
@@ -5409,7 +5409,7 @@ Real64 DayltgHitObstruction(EnergyPlusData &state,
                 return false; // Do Consider separate octree without filtered surfaces
             }
             DataSurfaces::SurfaceClass const sClass(surface.Class);
-            Vector3<Real64> HP;
+            Vector3 HP;
             if ((sClass == SurfaceClass::Wall || sClass == SurfaceClass::Roof || sClass == SurfaceClass::Floor) && (&surface != window_base_p)) {
                 hit = PierceSurface(surface, R1, RN, HP);
                 if (hit) { // Building element is hit (assumed opaque)
@@ -5433,7 +5433,7 @@ Real64 DayltgHitObstruction(EnergyPlusData &state,
         };
 
         // Check octree surface candidates for hits: short circuits if zero transmittance reached
-        Vector3<Real64> const RN_inv(SurfaceOctreeCube::safe_inverse(RN));
+        Vector3 const RN_inv(SurfaceOctreeCube::safe_inverse(RN));
         state.dataHeatBalMgr->surfaceOctree.processSomeSurfaceRayIntersectsCube(state, R1, RN, RN_inv, solarTransmittance);
     }
 
@@ -5441,9 +5441,9 @@ Real64 DayltgHitObstruction(EnergyPlusData &state,
 } // DayltgHitObstruction()
 
 bool DayltgHitInteriorObstruction(EnergyPlusData &state,
-                                  int const IWin,            // Window index
-                                  Vector3<Real64> const &R1, // Origin of ray (m)
-                                  Vector3<Real64> const &R2  // Destination of ray (m)
+                                  int const IWin,    // Window index
+                                  Vector3 const &R1, // Origin of ray (m)
+                                  Vector3 const &R2  // Destination of ray (m)
 )
 {
 
@@ -5461,8 +5461,8 @@ bool DayltgHitInteriorObstruction(EnergyPlusData &state,
     assert(magnitude(R2 - R1) > 0.0); // Protect normalize() from divide by zero
 
     bool hit = false;
-    Vector3<Real64> RN = (R2 - R1).normalize(); // Make unit vector
-    Real64 const d12 = distance(R1, R2);        // Distance between R1 and R2
+    Vector3 RN = (R2 - R1).normalize(); // Make unit vector
+    Real64 const d12 = R1.distance(R2); // Distance between R1 and R2
 
     auto const &window = s_surf->Surface(IWin);
     int const window_Enclosure = window.SolarEnclIndex;
@@ -5473,7 +5473,7 @@ bool DayltgHitInteriorObstruction(EnergyPlusData &state,
     // Loop over potentially obstructing surfaces, which can be building elements, like walls, or shadowing surfaces, like overhangs
     if (s_surf->TotSurfaces < octreeCrossover) { // Linear search through surfaces
         // Hit coordinates, if ray hits an obstruction
-        Vector3<Real64> DayltgHitInteriorObstructionHP;
+        Vector3 DayltgHitInteriorObstructionHP;
 
         for (int ISurf = 1; ISurf <= s_surf->TotSurfaces; ++ISurf) {
             auto const &surface = s_surf->Surface(ISurf);
@@ -5499,7 +5499,7 @@ bool DayltgHitInteriorObstruction(EnergyPlusData &state,
         // Lambda function for the octree to test for surface hit
         auto surfaceHit = [=, &R1, &hit](SurfaceData const &surface) -> bool {
             DataSurfaces::SurfaceClass const sClass = surface.Class;
-            Vector3<Real64> HP;                                  // Hit point
+            Vector3 HP;                                          // Hit point
             if ((surface.IsShadowing) ||                         // Shadowing surface
                 ((surface.SolarEnclIndex == window_Enclosure) && // Surface is in same zone as window
                  (sClass == SurfaceClass::Wall || sClass == SurfaceClass::Roof || sClass == SurfaceClass::Floor) && // Wall, ceiling/roof, or floor
@@ -5519,10 +5519,10 @@ bool DayltgHitInteriorObstruction(EnergyPlusData &state,
 } // DayltgHitInteriorObstruction()
 
 bool DayltgHitBetWinObstruction(EnergyPlusData &state,
-                                int const IWin1,           // Surface number of origin window
-                                int const IWin2,           // Surface number of destination window
-                                Vector3<Real64> const &R1, // Origin of ray (on IWin1) (m)
-                                Vector3<Real64> const &R2  // Destination of ray (on IWin2) (m)
+                                int const IWin1,   // Surface number of origin window
+                                int const IWin2,   // Surface number of destination window
+                                Vector3 const &R1, // Origin of ray (on IWin1) (m)
+                                Vector3 const &R2  // Destination of ray (on IWin2) (m)
 )
 {
 
@@ -5544,9 +5544,9 @@ bool DayltgHitBetWinObstruction(EnergyPlusData &state,
     SurfaceClass IType; // Surface type/class
 
     bool hit = false;
-    Vector3<Real64> RN = (R2 - R1).normalize(); // Unit vector
+    Vector3 RN = (R2 - R1).normalize(); // Unit vector
 
-    Real64 const d12 = distance(R1, R2); // Distance between R1 and R2 (m)
+    Real64 const d12 = R1.distance(R2); // Distance between R1 and R2 (m)
 
     auto const &window1 = s_surf->Surface(IWin1);
     int const window1_iBaseSurf = window1.BaseSurf;
@@ -5575,7 +5575,7 @@ bool DayltgHitBetWinObstruction(EnergyPlusData &state,
                  (ISurf != window1_iBaseSurf) && (ISurf != window2_iBaseSurf) &&                                 // Exclude windows' base surfaces
                  (ISurf != window1_base_iExtBoundCond) && (ISurf != window2_base_iExtBoundCond))) // Exclude windows' base-adjacent surfaces
             {
-                Vector3<Real64> HP;
+                Vector3 HP;
                 hit = PierceSurface(state, ISurf, R1, RN, d12, HP); // Check if R2-R1 segment pierces surface
                 if (hit) {
                     break; // Segment pierces surface: Don't check the rest
@@ -5596,7 +5596,7 @@ bool DayltgHitBetWinObstruction(EnergyPlusData &state,
         // Lambda function for the octree to test for surface hit
         auto surfaceHit = [=, &R1, &RN, &hit](SurfaceData const &surface) -> bool {
             DataSurfaces::SurfaceClass const sClass = surface.Class;
-            Vector3<Real64> HP;
+            Vector3 HP;
             if ((surface.IsShadowing) ||                          // Shadowing surface
                 ((surface.SolarEnclIndex == window2_Enclosure) && // Surface is in same zone as window
                  (sClass == SurfaceClass::Wall || sClass == SurfaceClass::Roof || sClass == SurfaceClass::Floor) && // Wall, ceiling/roof, or floor
@@ -7173,11 +7173,11 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
     // In the following I,J arrays:
     // I = sky type;
     // J = 1 for bare window, 2 and above for window with shade or blind.
-    Illums ZSK;                   // Sky-related and sun-related illuminance on window from sky/ground
-    Vector3<Real64> U;            // Unit vector in (PH,TH) direction
-    Vector3<Real64> nearestHitPt; // Hit point of ray on nearest obstruction (m)
-    Vector3<Real64> obsHitPt;     // Coordinates of hit point on an obstruction (m)
-    Vector3<Real64> groundHitPt;  // Coordinates of point that ray from window center hits the ground (m)
+    Illums ZSK;           // Sky-related and sun-related illuminance on window from sky/ground
+    Vector3 U;            // Unit vector in (PH,TH) direction
+    Vector3 nearestHitPt; // Hit point of ray on nearest obstruction (m)
+    Vector3 obsHitPt;     // Coordinates of hit point on an obstruction (m)
+    Vector3 groundHitPt;  // Coordinates of point that ray from window center hits the ground (m)
     std::array<Dayltg::Illums, (int)DataSurfaces::WinCover::Num> FLCW = {Illums()}; // Sky-related upgoing luminous flux
     std::array<Dayltg::Illums, (int)DataSurfaces::WinCover::Num> FLFW = {Illums()}; // Sky-related downgoing luminous flux
 
@@ -7327,7 +7327,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
     DPH = (PHMAX - PHMIN) / double(NPHMAX);
 
     // Sky/ground element altitude integration
-    Vector3<Real64> const SUNCOS_IHR(s_surf->SurfSunCosHourly(IHR));
+    Vector3 const SUNCOS_IHR(s_surf->SurfSunCosHourly(IHR));
     for (int IPH = 1; IPH <= NPHMAX; ++IPH) {
         PH = PHMIN + (double(IPH) - 0.5) * DPH;
 
@@ -8085,8 +8085,8 @@ void ComplexFenestrationLuminances(EnergyPlusData &state,
     //       AUTHOR         Simon Vidanovic
     //       DATE WRITTEN   June 2013
 
-    Vector3<Real64> obsHitPt;    // Coordinates of hit point on an obstruction (m)
-    Vector3<Real64> groundHitPt; // Coordinates of point that ray from window center hits the ground (m)
+    Vector3 obsHitPt;    // Coordinates of hit point on an obstruction (m)
+    Vector3 groundHitPt; // Coordinates of point that ray from window center hits the ground (m)
 
     auto &dl = state.dataDayltg;
     auto &s_surf = state.dataSurface;
@@ -8150,7 +8150,7 @@ void ComplexFenestrationLuminances(EnergyPlusData &state,
 
         // add exterior ground element obstruction multipliers to calculated luminances. For sun reflection, calculate if
         // sun reaches the ground for that point
-        Vector3<Real64> const SUNCOS_IHR = s_surf->SurfSunCosHourly(IHR);
+        Vector3 const SUNCOS_IHR = s_surf->SurfSunCosHourly(IHR);
         for (int iGndElem = 1; iGndElem <= complexWinRefPoint.NGnd(WinEl); ++iGndElem) {
             // case for sky elements. Integration is done over upper ground hemisphere to determine how many obstructions
             // were hit in the process
@@ -8197,7 +8197,7 @@ void ComplexFenestrationLuminances(EnergyPlusData &state,
 
         // add exterior ground element obstruction multipliers to calculated luminances. For sun reflection, calculate if
         // sun reaches the ground for that point
-        Vector3<Real64> const SUNCOS_IHR = s_surf->SurfSunCosHourly(IHR);
+        Vector3 const SUNCOS_IHR = s_surf->SurfSunCosHourly(IHR);
         for (int iGndElem = 1; iGndElem <= complexWinIllumMap.NGnd(WinEl); ++iGndElem) {
             // case for sky elements. Integration is done over upper ground hemisphere to determine how many obstructions
             // were hit in the process
@@ -8557,8 +8557,8 @@ void DayltgDirectSunDiskComplexFenestration(EnergyPlusData &state,
 
         Real64 dirTrans = (SolBmIndex > 0) ? state.dataConstruction->Construct(iConst).BSDFInput.VisFrtTrans(iTrnElem, SolBmIndex) : 0.0;
         Real64 LambdaTrn = complexWindowGeom.Trn.Lamda(iTrnElem);
-        Vector3<Real64> V = -complexWindowGeom.sTrn(iTrnElem);
-        Vector3<Real64> RWin = s_surf->Surface(iWin).Centroid;
+        Vector3 V = -complexWindowGeom.sTrn(iTrnElem);
+        Vector3 RWin = s_surf->Surface(iWin).Centroid;
         Real64 TransBeam = DayltgHitObstruction(state, iHour, iWin, RWin, V);
 
         WinLum.sunDisk += (14700.0 * std::sqrt(0.000068 * PosFac) * double(NumEl) / std::pow(WindowSolidAngleDaylightPoint, 0.8)) * dirTrans *
@@ -8652,7 +8652,7 @@ Real64 DayltgSkyLuminance(EnergyPlusData const &state,
 
 Real64 ProfileAngle(EnergyPlusData &state,
                     int const SurfNum,                                     // Surface number
-                    Vector3<Real64> const &CosDirSun,                      // Solar direction cosines
+                    Vector3 const &CosDirSun,                              // Solar direction cosines
                     DataWindowEquivalentLayer::Orientation const HorOrVert // If HORIZONTAL, calculates ProfileAngHor
 )
 {
@@ -8693,14 +8693,14 @@ Real64 ProfileAngle(EnergyPlusData &state,
     if (std::abs(ElevWin) < 0.1) {      // Near-vertical window
         ProfileAng = AzimWin - AzimSun; // CR7952 allow sign changes.
     } else {
-        Vector3<Real64> WinNorm = surf.OutNormVec; // Window outward normal unit vector
+        Vector3 WinNorm = surf.OutNormVec; // Window outward normal unit vector
         Real64 ThWin = AzimWin - Constant::PiOvr2;
         Real64 const sin_ElevWin = std::sin(ElevWin);
         // Cross product of WinNorm and vector along window baseline
-        Vector3<Real64> WinNormCrossBase = {-sin_ElevWin * std::cos(ThWin), sin_ElevWin * std::sin(ThWin), std::cos(ElevWin)};
+        Vector3 WinNormCrossBase = {-sin_ElevWin * std::cos(ThWin), sin_ElevWin * std::sin(ThWin), std::cos(ElevWin)};
         // Projection of sun vector onto plane (perpendicular to window plane) determined
         // by WinNorm and vector along baseline of window
-        Vector3<Real64> SunPrime = CosDirSun - WinNormCrossBase * dot(CosDirSun, WinNormCrossBase);
+        Vector3 SunPrime = CosDirSun - WinNormCrossBase * dot(CosDirSun, WinNormCrossBase);
         ProfileAng = std::abs(std::acos(dot(WinNorm, SunPrime) / SunPrime.magnitude()));
         // CR7952 correct sign of result for vertical slats
         if ((AzimWin - AzimSun) < 0.0) {
@@ -8715,10 +8715,10 @@ Real64 ProfileAngle(EnergyPlusData &state,
 }
 
 void DayltgClosestObstruction(EnergyPlusData &state,
-                              Vector3<Real64> const &RecPt,  // Point on window from which ray emanates (m)
-                              Vector3<Real64> const &RayVec, // Unit vector along ray pointing away from window (m)
-                              int &NearestHitSurfNum,        // Surface number of nearest obstruction that is hit by ray;
-                              Vector3<Real64> &NearestHitPt  // Ray's hit point on nearest obstruction (m)
+                              Vector3 const &RecPt,   // Point on window from which ray emanates (m)
+                              Vector3 const &RayVec,  // Unit vector along ray pointing away from window (m)
+                              int &NearestHitSurfNum, // Surface number of nearest obstruction that is hit by ray;
+                              Vector3 &NearestHitPt   // Ray's hit point on nearest obstruction (m)
 )
 {
 
@@ -8736,8 +8736,8 @@ void DayltgClosestObstruction(EnergyPlusData &state,
     auto &s_surf = state.dataSurface;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    Vector3<Real64> HitPt; // Hit point on an obstruction (m)
-    bool hit;              // True iff obstruction is hit
+    Vector3 HitPt; // Hit point on an obstruction (m)
+    bool hit;      // True iff obstruction is hit
 
     NearestHitSurfNum = 0;
     Real64 NearestHitDistance_sq(std::numeric_limits<Real64>::max()); // Distance squared from receiving point to nearest hit point for a ray (m^2)
@@ -8774,7 +8774,7 @@ void DayltgClosestObstruction(EnergyPlusData &state,
         // Lambda function for the octree to test for surface hit
         auto surfaceHit = [&s_surf, &RecPt, &RayVec, &hit, &NearestHitDistance_sq, &nearestHitSurface, &NearestHitPt](SurfaceData const &surface) {
             if (surface.IsShadowPossibleObstruction) {
-                Vector3<Real64> HitPt;
+                Vector3 HitPt;
                 // Determine if this ray hits the surface and, if so, get the distance from the receiving point to the hit
                 hit = PierceSurface(surface, RecPt, RayVec, HitPt); // Check if ray pierces surface
                 if (!hit) {
@@ -8799,7 +8799,7 @@ void DayltgClosestObstruction(EnergyPlusData &state,
         };
 
         // Process octree surface candidates
-        Vector3<Real64> const RayVec_inv(SurfaceOctreeCube::safe_inverse(RayVec));
+        Vector3 const RayVec_inv(SurfaceOctreeCube::safe_inverse(RayVec));
         state.dataHeatBalMgr->surfaceOctree.processSurfaceRayIntersectsCube(RecPt, RayVec, RayVec_inv, surfaceHit);
         if (nearestHitSurface != nullptr) { // Find surface number: This is inefficient: Improve when surfaces know their own number
             for (int i = 1; i <= s_surf->TotSurfaces; ++i) {
@@ -8814,10 +8814,10 @@ void DayltgClosestObstruction(EnergyPlusData &state,
 } // DayltgClosestObstruction()
 
 Real64 DayltgSurfaceLumFromSun(EnergyPlusData &state,
-                               int const IHR,                   // Hour number
-                               Vector3<Real64> const &Ray,      // Ray from window to reflecting surface (m)
-                               int const ReflSurfNum,           // Number of surface for which luminance is being calculated
-                               Vector3<Real64> const &ReflHitPt // Point on ReflSurfNum for luminance calculation (m)
+                               int const IHR,           // Hour number
+                               Vector3 const &Ray,      // Ray from window to reflecting surface (m)
+                               int const ReflSurfNum,   // Number of surface for which luminance is being calculated
+                               Vector3 const &ReflHitPt // Point on ReflSurfNum for luminance calculation (m)
 )
 {
 
@@ -8833,10 +8833,10 @@ Real64 DayltgSurfaceLumFromSun(EnergyPlusData &state,
     //  beam normal illuminance (cd/m2)
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    Vector3<Real64> SurfaceLumFromSunReflNorm; // Unit normal to reflecting surface (m)
-    Vector3<Real64> SurfaceLumFromSunObsHitPt; // Hit point on obstruction (m)
-    bool hitObs;                               // True iff obstruction is hit
-    Real64 DiffVisRefl;                        // Diffuse visible reflectance of ReflSurfNum
+    Vector3 SurfaceLumFromSunReflNorm; // Unit normal to reflecting surface (m)
+    Vector3 SurfaceLumFromSunObsHitPt; // Hit point on obstruction (m)
+    bool hitObs;                       // True iff obstruction is hit
+    Real64 DiffVisRefl;                // Diffuse visible reflectance of ReflSurfNum
 
     auto &s_surf = state.dataSurface;
     // Skip daylighting shelves since reflection from these is separately calculated
@@ -8854,7 +8854,7 @@ Real64 DayltgSurfaceLumFromSun(EnergyPlusData &state,
         }
     }
     // Cosine of angle of incidence of sun at HitPt if sun were to reach HitPt
-    Vector3<Real64> const SUNCOS_IHR = s_surf->SurfSunCosHourly(IHR);
+    Vector3 const SUNCOS_IHR = s_surf->SurfSunCosHourly(IHR);
     Real64 CosIncAngAtHitPt = dot(SurfaceLumFromSunReflNorm, SUNCOS_IHR);
     // Require that the sun be in front of this surface relative to window element
     if (CosIncAngAtHitPt <= 0.0) {
@@ -9975,11 +9975,11 @@ void CalcMinIntWinSolidAngs(EnergyPlusData &state)
                 auto &thisDayltgCtrl = dl->daylightControl(controlNum);
                 for (int IL = 1; IL <= thisDayltgCtrl.TotalDaylRefPoints; ++IL) {
                     // Reference point in absolute coordinate system
-                    Vector3<Real64> RREF = thisDayltgCtrl.refPts(IL).absCoords;
+                    Vector3 RREF = thisDayltgCtrl.refPts(IL).absCoords;
                     bool is_Triangle = (surf.Sides == 3);
                     bool is_Rectangle = (surf.Sides == 4);
 
-                    Vector3<Real64> W1, W2, W3;
+                    Vector3 W1, W2, W3;
                     if (is_Rectangle) {
                         // Vertices of window numbered counter-clockwise starting at upper left as viewed
                         // from inside of room. Assumes original vertices are numbered counter-clockwise from
@@ -9994,22 +9994,22 @@ void CalcMinIntWinSolidAngs(EnergyPlusData &state)
                     }
                     // Unit vectors from window vertex 2 to 1 and 2 to 3, center point of window,
                     // and vector from ref pt to center of window
-                    Vector3<Real64> W21 = W1 - W2;
-                    Vector3<Real64> W23 = W3 - W2;
+                    Vector3 W21 = W1 - W2;
+                    Vector3 W23 = W3 - W2;
                     Real64 HW = W21.magnitude();
                     Real64 WW = W23.magnitude();
-                    Vector3<Real64> WC = (is_Rectangle) ? (W2 + (W23 + W21) / 2.0) : (W2 + (W23 + W21) / 3.0);
+                    Vector3 WC = (is_Rectangle) ? (W2 + (W23 + W21) / 2.0) : (W2 + (W23 + W21) / 3.0);
 
                     // Vector from ref point to center of window
-                    Vector3<Real64> REFWC = WC - RREF;
+                    Vector3 REFWC = WC - RREF;
                     W21 /= HW;
                     W23 /= WW;
                     // Unit vector normal to window (pointing away from room)
-                    Vector3<Real64> WNORM = surf.OutNormVec;
+                    Vector3 WNORM = surf.OutNormVec;
                     // Distance from ref point to center of window
                     Real64 DIS = REFWC.magnitude();
                     // Unit vector from ref point to center of window
-                    Vector3<Real64> Ray = REFWC / DIS;
+                    Vector3 Ray = REFWC / DIS;
                     // Cosine of angle between ray from ref pt to center of window and window outward normal
                     Real64 COSB = dot(WNORM, Ray);
                     if (COSB > 0.01765) { // 0 <= B < 89 deg

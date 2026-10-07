@@ -153,7 +153,7 @@ struct EnvironmentData : BaseGlobalStruct
     Real64 EMSWindSpeedOverrideValue = 0.0;                     // EMS override value for outdoor air wind speed
     Real64 WaterMainsTemp = 0.0;                                // Current water mains temperature
     int Year = 0;                                               // Current calendar year of the simulation from the weather file
-    Vector3<Real64> SOLCOS = {0.0, 0.0, 0.0};                   // Solar direction cosines at current time step
+    Vector3 SOLCOS = {0.0, 0.0, 0.0};                           // Solar direction cosines at current time step
     Real64 CloudFraction = 0.0;                                 // Fraction of sky covered by clouds
     Real64 HISKF = 0.0;                                         // Exterior horizontal illuminance from sky (lux).
     Real64 HISUNF = 0.0;                                        // Exterior horizontal beam illuminance (lux)

@@ -570,9 +570,9 @@ namespace Weather {
                                       Real64 EqOfTime,     // Equation of Time
                                       Real64 SinSolDeclin, // Sine of Solar Declination
                                       Real64 CosSolDeclin, // Cosine of Solar Declination
-                                      Vector3<Real64> &SUNCOS);
+                                      Vector3 &SUNCOS);
 
-    void DetermineSunUpDown(EnergyPlusData &state, Vector3<Real64> &SUNCOS);
+    void DetermineSunUpDown(EnergyPlusData &state, Vector3 &SUNCOS);
 
     void OpenWeatherFile(EnergyPlusData &state, bool &ErrorsFound);
 

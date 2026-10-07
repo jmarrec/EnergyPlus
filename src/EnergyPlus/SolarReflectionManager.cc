@@ -105,21 +105,21 @@ namespace SolarReflectionManager {
         // needed to calculate factors for solar reflection from obstructions and ground.
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int SurfNum;            // Surface number
-        int RecSurfNum;         // Receiving surface number
-        int loop;               // DO loop indices
-        int loop1;              // DO loop indices
-        int loopA;              // DO loop indices
-        int loopB;              // DO loop indices
-        int ObsSurfNum;         // Surface number of an obstruction
-        bool ObsBehindRec;      // True if an obstruction is entirely behind a receiving surface
-        bool ObsHasView;        // True if view between receiving surface and heat trans surf obstruction
-        Vector3<Real64> RecVec; // First vertex of a receiving surface (m)
-        Vector3<Real64> ObsVec; // A vertex of a candidate obstructing surface (m)
-        Vector3<Real64> VecAB;  // Vector from receiving surface vertex to obstruction surface vertex (m)
-        Vector3<Real64> HitPt;  // Hit point (m)
-        Real64 DotProd;         // Dot product of vectors (m2)
-        int RecPtNum;           // Receiving point number
+        int SurfNum;       // Surface number
+        int RecSurfNum;    // Receiving surface number
+        int loop;          // DO loop indices
+        int loop1;         // DO loop indices
+        int loopA;         // DO loop indices
+        int loopB;         // DO loop indices
+        int ObsSurfNum;    // Surface number of an obstruction
+        bool ObsBehindRec; // True if an obstruction is entirely behind a receiving surface
+        bool ObsHasView;   // True if view between receiving surface and heat trans surf obstruction
+        Vector3 RecVec;    // First vertex of a receiving surface (m)
+        Vector3 ObsVec;    // A vertex of a candidate obstructing surface (m)
+        Vector3 VecAB;     // Vector from receiving surface vertex to obstruction surface vertex (m)
+        Vector3 HitPt;     // Hit point (m)
+        Real64 DotProd;    // Dot product of vectors (m2)
+        int RecPtNum;      // Receiving point number
         // unused  REAL(r64)         :: SumX                 ! Sum of X (or Y or Z) coordinate values of a surface
         // unused  REAL(r64)         :: SumY                 ! Sum of X (or Y or Z) coordinate values of a surface
         // unused  REAL(r64)         :: SumZ                 ! Sum of X (or Y or Z) coordinate values of a surface
@@ -138,28 +138,28 @@ namespace SolarReflectionManager {
         int IPhi;         // Ray altitude angle and azimuth angle indices
         int ITheta;       // Ray altitude angle and azimuth angle indices
         // unused  REAL(r64)         :: APhi                 ! Intermediate variable
-        int RayNum;                   // Ray number
-        Vector3<Real64> URay;         // Unit vector along ray pointing away from receiving surface
-        Real64 CosIncAngRay;          // Cosine of angle of incidence of ray on receiving surface
-        Real64 dOmega;                // Solid angle associated with a ray
-        bool hit;                     // True iff obstruction is hit
-        int TotObstructionsHit;       // Number of obstructions hit by a ray
-        Real64 HitDistance;           // Distance from receiving point to hit point for a ray (m)
-        int NearestHitSurfNum;        // Surface number of nearest obstruction hit by a ray
-        Vector3<Real64> NearestHitPt; // Nearest hit pit for a ray (m)
-        Real64 NearestHitDistance;    // Distance from receiving point to nearest hit point for a ray (m)
-        int ObsSurfNumToSkip;         // Surface number of obstruction to be ignored
-        Vector3<Real64> RecPt;        // Receiving point (m)
-        Vector3<Real64> RayVec;       // Unit vector along ray
-        Vector3<Real64> Vec1;         // Vectors between hit surface vertices (m)
-        Vector3<Real64> Vec2;         // Vectors between hit surface vertices (m)
-        Vector3<Real64> VNorm;        // For a hit surface, unit normal vector pointing into the hemisphere
+        int RayNum;                // Ray number
+        Vector3 URay;              // Unit vector along ray pointing away from receiving surface
+        Real64 CosIncAngRay;       // Cosine of angle of incidence of ray on receiving surface
+        Real64 dOmega;             // Solid angle associated with a ray
+        bool hit;                  // True iff obstruction is hit
+        int TotObstructionsHit;    // Number of obstructions hit by a ray
+        Real64 HitDistance;        // Distance from receiving point to hit point for a ray (m)
+        int NearestHitSurfNum;     // Surface number of nearest obstruction hit by a ray
+        Vector3 NearestHitPt;      // Nearest hit pit for a ray (m)
+        Real64 NearestHitDistance; // Distance from receiving point to nearest hit point for a ray (m)
+        int ObsSurfNumToSkip;      // Surface number of obstruction to be ignored
+        Vector3 RecPt;             // Receiving point (m)
+        Vector3 RayVec;            // Unit vector along ray
+        Vector3 Vec1;              // Vectors between hit surface vertices (m)
+        Vector3 Vec2;              // Vectors between hit surface vertices (m)
+        Vector3 VNorm;             // For a hit surface, unit normal vector pointing into the hemisphere
         // containing the receiving point
         int ObsConstrNum; // Construction number of obstruction; = 0 if a shading surface
         Real64 Alfa;      // Direction angles for ray heading towards the ground (radians)
         Real64 Beta;
-        Real64 HorDis;               // Distance between ground hit point and proj'n of receiving pt onto ground (m)
-        Vector3<Real64> GroundHitPt; // Coordinates of ground hit point
+        Real64 HorDis;       // Distance between ground hit point and proj'n of receiving pt onto ground (m)
+        Vector3 GroundHitPt; // Coordinates of ground hit point
         // unused  REAL(r64)         :: ArgASin
         Real64 ACosTanTan;
         int J;           // DO loop indices
@@ -167,8 +167,8 @@ namespace SolarReflectionManager {
         int NumRecPts;   // Number of surface receiving points for reflected solar radiation
         Real64 VertexWt; // Vertex weighting factor for calculating receiving points
 
-        static Vector3<Real64> const unit_z(0.0, 0.0, 1.0);
-        static Vector3<Real64> const zero3(0.0);
+        static Vector3 const unit_z(0.0, 0.0, 1.0);
+        static Vector3 const zero3(0.0);
 
         // Find number of surfaces that are sun-exposed exterior building heat transfer surfaces.
         // These are candidates for receiving solar reflected from obstructions and ground.
@@ -500,7 +500,7 @@ namespace SolarReflectionManager {
                             } else {
                                 ++TotObstructionsHit;
                                 // Distance from receiving point to hit point
-                                HitDistance = distance(HitPt, RecPt);
+                                HitDistance = HitPt.distance(RecPt);
                                 // Reset NearestHitSurfNum and NearestHitDistance if this hit point is closer than previous closest
                                 if (HitDistance < NearestHitDistance) {
                                     NearestHitDistance = HitDistance;

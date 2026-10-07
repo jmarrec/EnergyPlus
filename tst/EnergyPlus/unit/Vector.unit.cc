@@ -129,7 +129,7 @@ TEST_F(EnergyPlusFixture, VectorTest_Basic)
         EXPECT_EQ(14.0, v.length_squared());
         EXPECT_EQ(14.0, magnitude_squared(v));
         Vector u(1.0, 2.0, 3.0);
-        EXPECT_EQ(0.0, distance(u, v));
+        EXPECT_EQ(0.0, u.distance(v));
         EXPECT_EQ(0.0, distance_squared(u, v));
         EXPECT_EQ(14.0, dot(u, v));
         Vector x(cross(u, v));
