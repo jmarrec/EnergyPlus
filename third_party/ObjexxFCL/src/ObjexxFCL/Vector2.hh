@@ -19,6 +19,7 @@
 #include <cmath>
 #include <cstddef>
 #include <iomanip>
+#include <numbers>
 #include <ostream>
 namespace ObjexxFCL {
 
@@ -270,7 +271,7 @@ class Vector2
 
   // Add 2*Pi to a Negative Value
   static double bump_up_angle(double t) {
-    static double const Two_Pi(2.0 * std::acos(-1.0));
+    static constexpr double Two_Pi = 2.0 * std::numbers::pi;
     return (t >= 0.0 ? t : Two_Pi + t);
   }
 
@@ -315,31 +316,25 @@ inline bool operator>(Vector2 const& a, Vector2 const& b) {
 
 /// Free Functions
 
-// Midpoint of Two Vector2s
-inline Vector2 mid(Vector2 const& a, Vector2 const& b) {
-  return {0.5 * (a.x + b.x), 0.5 * (a.y + b.y)};
-}
-
 // Center of Two Vector2s
 inline Vector2 cen(Vector2 const& a, Vector2 const& b) {
-  return {0.5 * (a.x + b.x), 0.5 * (a.y + b.y)};
+  return 0.5 * (a + b);
 }
 
 // Center of Three Vector2s
 inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c) {
-  constexpr double third(1.0 / 3.0);
-  return {third * (a.x + b.x + c.x), third * (a.y + b.y + c.y)};
+  return (a + b + c) / 3.0;
 }
 
 // Center of Four Vector2s
 inline Vector2 cen(Vector2 const& a, Vector2 const& b, Vector2 const& c, Vector2 const& d) {
-  return {0.25 * (a.x + b.x + c.x + d.x), 0.25 * (a.y + b.y + c.y + d.y)};
+  return 0.25 * (a + b + c + d);
 }
 
 // Angle Between Two Vector2s (in Radians on [0,pi])
 inline double angle(Vector2 const& a, Vector2 const& b) {
-  double const axb(std::abs(a.cross(b)));
-  double const adb(a.dot(b));
+  double const axb = std::abs(a.cross(b));
+  double const adb = a.dot(b);
   return ((axb != 0.0) || (adb != 0.0) ? Vector2::bump_up_angle(std::atan2(axb, adb))
                                        : 0.0);  // More accurate than dot-based for angles near 0 and Pi
 }

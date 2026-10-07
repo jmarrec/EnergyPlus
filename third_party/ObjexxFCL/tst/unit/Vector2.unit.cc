@@ -188,7 +188,7 @@ TEST( Vector2Test, BinaryOperations )
 
 	// Check midpoint (should match original vector)
 	v += Vector2( 1.0 ); w -= Vector2( 1.0 );
-	Vector2 const midpoint( mid( v, w ) );
+	Vector2 const midpoint( cen( v, w ) );
 	EXPECT_DOUBLE_EQ( original.x, midpoint.x );
 	EXPECT_DOUBLE_EQ( original.y, midpoint.y );
 }
