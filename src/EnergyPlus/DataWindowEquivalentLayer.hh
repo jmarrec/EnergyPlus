@@ -60,20 +60,11 @@ namespace EnergyPlus {
 
 namespace DataWindowEquivalentLayer {
 
-    // Using/Aliasing
+    // Port of the ASHWAT model (Wright & Kotey, ASHRAE RP-1311). See the Engineering Reference,
+    // "Equivalent Layer Fenestration Model". CFS = Complex Fenestration System.
 
-    // Data
-    // CFSTY: Complex Fenestration System
     int constexpr CFSMAXNL = 6; // max # of glaze or shade layers
-    // Long-wave (aka LW or thermal) layer properties
-    // Short wave (aka SW or solar) layer properties
-    // "black" room (no reflection)
-    // Layer information
 
-    // Gap Gas Properties
-    // Gap information
-    // Equivalent Layer Window Constructon
-    // CFSLAYER: layer types
     enum class LayerType
     {
         Invalid = -1,
@@ -119,6 +110,7 @@ namespace DataWindowEquivalentLayer {
         Num
     };
 
+    // Long-wave (thermal IR) properties of a layer
     struct CFSLWP
     {
         // Members
@@ -132,6 +124,9 @@ namespace DataWindowEquivalentLayer {
         }
     };
 
+    // Short-wave (solar) properties of a layer
+    // Names: RHO/TAU = reflectance/transmittance, S = solar, F/B = front (outside) / back (inside) incidence,
+    // then incident->outgoing: BB = beam-beam, BD = beam-diffuse, DD = diffuse-diffuse
     struct CFSSWP
     {
         // Members
@@ -161,6 +156,8 @@ namespace DataWindowEquivalentLayer {
         }
     };
 
+    // One solid layer (glazing or shade)
+    // _MAT = raw material properties (e.g. the slat of a blind), _EL = equivalent flat-layer properties
     struct CFSLAYER
     {
         // Members
@@ -214,6 +211,7 @@ namespace DataWindowEquivalentLayer {
         }
     };
 
+    // Fill gas properties
     struct CFSFILLGAS
     {
         // Members
@@ -238,6 +236,7 @@ namespace DataWindowEquivalentLayer {
         }
     };
 
+    // Gap between two solid layers
     struct CFSGAP
     {
         // Members
@@ -258,6 +257,7 @@ namespace DataWindowEquivalentLayer {
         }
     };
 
+    // One equivalent layer window construction
     struct CFSTY
     {
         // Members
@@ -283,11 +283,7 @@ struct WindowEquivLayerData : BaseGlobalStruct
     // Defined CFSLayers and CFSs
     int TotWinEquivLayerConstructs = 0; // Number of constructions with Window equivalent Layer
 
-    DataWindowEquivalentLayer::CFSSWP
-        SWP_ROOMBLK; // Solar reflectance, BEAM-BEAM, front | Solar reflectance, BEAM-BEAM, back | Solar transmittance, BEAM-BEAM, front | Solar
-    // transmittance, BEAM-BEAM, back | Solar reflectance, BEAM-DIFFUSE, front | Solar reflectance, BEAM-DIFFUSE, back | Solar
-    // transmittance, BEAM-DIFFUSE, front | Solar transmittance, BEAM-DIFFUSE, back | Solar reflectance, DIFFUSE-DIFFUSE, front |
-    // Solar reflectance, DIFFUSE-DIFFUSE, back | Solar transmittance, DIFFUSE-DIFFUSE
+    DataWindowEquivalentLayer::CFSSWP SWP_ROOMBLK; // "black" room: all zeros, no reflection
     Array1D<DataWindowEquivalentLayer::CFSLAYER> CFSLayers;
     Array1D<DataWindowEquivalentLayer::CFSTY> CFS;
     Array1D<DataWindowEquivalentLayer::CFSGAP> CFSGaps;
