@@ -98,7 +98,7 @@ public:
     constexpr Vector3D &operator/=(double u)
     {
         assert(u != 0.0);
-        double const inv_u(1.0 / u);
+        double const inv_u = 1.0 / u;
         x *= inv_u;
         y *= inv_u;
         z *= inv_u;
@@ -119,7 +119,7 @@ public:
     friend constexpr Vector3D operator/(Vector3D const &v, double u)
     {
         assert(u != 0.0);
-        double const inv_u(1.0 / u);
+        double const inv_u = 1.0 / u;
         return {v.x * inv_u, v.y * inv_u, v.z * inv_u};
     }
     //@}
@@ -227,7 +227,7 @@ public:
     /// Normalize to a Length (in-place)
     Vector3D &normalize(double tar_length = 1.0)
     {
-        double const cur_length(length());
+        double const cur_length = length();
         assert(cur_length != 0.0);
         *this *= tar_length / cur_length;
         return *this;
@@ -236,7 +236,7 @@ public:
     /// Normalized to a Length (return a new vector)
     Vector3D normalized(double tar_length = 1.0) const
     {
-        double const cur_length(length());
+        double const cur_length = length();
         assert(cur_length != 0.0);
         return *this * (tar_length / cur_length);
     }

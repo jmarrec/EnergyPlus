@@ -50,7 +50,6 @@
 
 // C++ Headers
 #include <cassert>
-#include <cmath>
 #include <cstddef>
 #include <iosfwd>
 
@@ -160,7 +159,7 @@ public:
     /// normalize(), normalized() and signedDistance() must not be called on a degenerate plane
     constexpr bool isDegenerate() const
     {
-        return (x * x) + (y * y) + (z * z) == 0.0; // Same test as the normal_length != 0.0 asserts
+        return normal().length_squared() == 0.0; // Same test as the normal_length != 0.0 asserts
     }
 
     /// @brief Signed distance from a point to the plane: (a*x + b*y + c*z + d) / |(a, b, c)|
@@ -170,7 +169,7 @@ public:
     ///  - The plane must not be degenerate: its normal must be nonzero
     double signedDistance(Vector3D const &point) const
     {
-        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+        double const normal_length = normal().length();
         assert(normal_length != 0.0);
         return ((x * point.x) + (y * point.y) + (z * point.z) + w) / normal_length;
     }
@@ -183,12 +182,13 @@ public:
     /// Scale All Four Coefficients So the Normal (x, y, z) Has Unit Length (w Then Is the Distance to the Origin)
     Plane &normalize()
     {
-        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+        double const normal_length = normal().length();
         assert(normal_length != 0.0);
-        x /= normal_length;
-        y /= normal_length;
-        z /= normal_length;
-        w /= normal_length;
+        double const inv_length = 1.0 / normal_length;
+        x *= inv_length;
+        y *= inv_length;
+        z *= inv_length;
+        w *= inv_length;
         return *this;
     }
 
@@ -197,9 +197,10 @@ public:
     /// Copy with the Normal (x, y, z) Scaled to Unit Length
     Plane normalized() const
     {
-        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+        double const normal_length = normal().length();
         assert(normal_length != 0.0);
-        return {x / normal_length, y / normal_length, z / normal_length, w / normal_length};
+        double const inv_length = 1.0 / normal_length;
+        return {x * inv_length, y * inv_length, z * inv_length, w * inv_length};
     }
     //@}
 

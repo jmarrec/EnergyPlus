@@ -96,7 +96,7 @@ public:
     constexpr Vector2D &operator/=(double const u)
     {
         assert(u != 0.0);
-        double const inv_u(1.0 / u);
+        double const inv_u = 1.0 / u;
         x *= inv_u;
         y *= inv_u;
         return *this;
@@ -116,7 +116,7 @@ public:
     friend constexpr Vector2D operator/(Vector2D const &v, double u)
     {
         assert(u != 0.0);
-        double const inv_u(1.0 / u);
+        double const inv_u = 1.0 / u;
         return {v.x * inv_u, v.y * inv_u};
     }
     //@}
@@ -222,21 +222,18 @@ public:
     /// Normalize to a Length (in-place)
     Vector2D &normalize(double tar_length = 1.0)
     {
-        double const cur_length(length());
+        double const cur_length = length();
         assert(cur_length != 0.0);
-        double const dilation(tar_length / cur_length);
-        x *= dilation;
-        y *= dilation;
+        *this *= tar_length / cur_length;
         return *this;
     }
 
     /// Normalized to a Length (return a new vector)
     Vector2D normalized(double tar_length = 1.0) const
     {
-        double const cur_length(length());
+        double const cur_length = length();
         assert(cur_length != 0.0);
-        double const dilation(tar_length / cur_length);
-        return {x * dilation, y * dilation};
+        return *this * (tar_length / cur_length);
     }
     //@}
 

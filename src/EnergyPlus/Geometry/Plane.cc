@@ -65,13 +65,16 @@ namespace EnergyPlus {
 Plane Plane::fromVertices(ObjexxFCL::Array1D<Vector3D> const &vertices)
 {
     using Vector = Vector3D;
-    std::size_t const n(vertices.size());
+    std::size_t const n = vertices.size();
     assert(n >= 3);
-    Vector center(0.0);                    // Center (vertex average) point (not mass centroid)
-    double a(0.0), b(0.0), c(0.0), d(0.0); // Plane coefficients
-    for (std::size_t i = 0; i < n; ++i) {  // Newell's method for robustness (not speed)
-        Vector const &v(vertices[i]);
-        Vector const &w(vertices[(i + 1) % n]);
+    Vector center; // Center (vertex average) point (not mass centroid)
+    double a = 0.0;
+    double b = 0.0;
+    double c = 0.0;
+    double d = 0.0;                       // Plane coefficients
+    for (std::size_t i = 0; i < n; ++i) { // Newell's method for robustness (not speed)
+        Vector const &v = vertices[i];
+        Vector const &w = vertices[(i + 1) % n];
         a += (v.y - w.y) * (v.z + w.z);
         b += (v.z - w.z) * (v.x + w.x);
         c += (v.x - w.x) * (v.y + w.y);
@@ -102,8 +105,8 @@ std::ostream &operator<<(std::ostream &stream, Plane const &v)
     constexpr int width = 23;                 // Field width
 
     // Save current stream state and set persistent state
-    std::ios_base::fmtflags const old_flags(stream.flags());
-    std::streamsize const old_precision(stream.precision(precision));
+    std::ios_base::fmtflags const old_flags = stream.flags();
+    std::streamsize const old_precision = stream.precision(precision);
     stream << std::right << std::showpoint << std::uppercase;
 
     // Output Plane
