@@ -67,6 +67,7 @@ public:
 
     /// @name Creation
     //@{
+    /// Default Constructor: Zero-Initializes All Elements
     constexpr Vector2D() = default;
 
     /// Uniform Value Constructor
@@ -156,6 +157,7 @@ public:
 
     /// @name Comparison
     //@{
+    /// Exact comparison of the components (also provides !=)
     friend constexpr bool operator==(Vector2D const &, Vector2D const &) = default;
     //@}
 
@@ -176,7 +178,7 @@ public:
     }
     //@}
 
-    /// @name Properties: General
+    /// @name Queries
     //@{
     /// Length (L2 norm)
     double length() const
@@ -221,7 +223,7 @@ public:
     Vector2D &normalize(double tar_length = 1.0)
     {
         double const cur_length(length());
-        assert(cur_length != double(0));
+        assert(cur_length != 0.0);
         double const dilation(tar_length / cur_length);
         x *= dilation;
         y *= dilation;
@@ -232,7 +234,7 @@ public:
     Vector2D normalized(double tar_length = 1.0) const
     {
         double const cur_length(length());
-        assert(cur_length != double(0));
+        assert(cur_length != 0.0);
         double const dilation(tar_length / cur_length);
         return {x * dilation, y * dilation};
     }

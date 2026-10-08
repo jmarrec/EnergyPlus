@@ -186,10 +186,9 @@ TEST_F(GeometryFixture, Normal)
 TEST_F(GeometryFixture, ReversedPlane)
 {
     Plane const p(1.0, -2.0, 3.0, -4.0);
-    Plane const r(p.reversedPlane());
+    Plane const r(-p);
     EXPECT_EQ(Plane(-1.0, 2.0, -3.0, 4.0), r);
-    EXPECT_EQ(-p, r);                   // Same as unary minus
-    EXPECT_EQ(p, r.reversedPlane());    // Reversing twice gives the original back
+    EXPECT_EQ(p, -r);                   // Reversing twice gives the original back
     EXPECT_EQ(-p.normal(), r.normal()); // The normal flips
 }
 
@@ -237,7 +236,7 @@ TEST_F(GeometryFixture, ReverseEqual)
     EXPECT_FALSE(up.equal(down));
     EXPECT_TRUE(up.reverseEqual(down));
     EXPECT_TRUE(down.reverseEqual(up));
-    EXPECT_TRUE(up.reverseEqual(up.reversedPlane()));
+    EXPECT_TRUE(up.reverseEqual(-up));
 
     // Scaling does not matter: Newell planes of the two sides of a 2 m x 3 m surface (|normal| = 2 * area = 12)
     EXPECT_TRUE(Plane(0.0, 0.0, 12.0, -24.0).reverseEqual(Plane(0.0, 0.0, -12.0, 24.0)));
@@ -266,8 +265,8 @@ TEST_F(GeometryFixture, Equal_Tolerance)
     };
     EXPECT_TRUE(p.equal(tilted(2.0)));  // cos(2 deg) = 0.99939
     EXPECT_FALSE(p.equal(tilted(3.0))); // cos(3 deg) = 0.99863
-    EXPECT_TRUE(p.reverseEqual(tilted(2.0).reversedPlane()));
-    EXPECT_FALSE(p.reverseEqual(tilted(3.0).reversedPlane()));
+    EXPECT_TRUE(p.reverseEqual(-tilted(2.0)));
+    EXPECT_FALSE(p.reverseEqual(-tilted(3.0)));
 }
 
 TEST_F(GeometryFixture, SignedDistance)
@@ -281,7 +280,7 @@ TEST_F(GeometryFixture, SignedDistance)
     EXPECT_DOUBLE_EQ(0.0, x10.signedDistance(Point(10.0, 3.0, -8.0)));
 
     // Reversing the plane flips the sign
-    EXPECT_DOUBLE_EQ(-2.0, x10.reversedPlane().signedDistance(Point(12.0, 5.0, 7.0)));
+    EXPECT_DOUBLE_EQ(-2.0, (-x10).signedDistance(Point(12.0, 5.0, 7.0)));
 
     // A true distance even when the plane is not normalized: the same plane scaled by 2 (Newell of a 1 m^2 surface)
     // and by 1e-4 (a tiny surface) gives the same distances

@@ -68,6 +68,7 @@ public:
 
     /// @name Creation
     //@{
+    /// Default Constructor: Zero-Initializes All Elements
     constexpr Vector3D() = default;
 
     /// Uniform Value Constructor
@@ -161,6 +162,7 @@ public:
 
     /// @name Comparison
     //@{
+    /// Exact comparison of the components (also provides !=)
     friend constexpr bool operator==(Vector3D const &, Vector3D const &) = default;
     //@}
 
@@ -181,7 +183,7 @@ public:
     }
     //@}
 
-    /// @name Properties: General
+    /// @name Queries
     //@{
     /// Length (L2 norm)
     double length() const

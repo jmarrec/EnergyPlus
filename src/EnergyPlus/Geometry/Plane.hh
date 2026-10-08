@@ -63,65 +63,124 @@
 
 namespace EnergyPlus {
 
-// Plane: an infinite plane in 3D space.  The equation of a plane is
-//  a*x + b*y + c*z + d = 0, any point that satisfies this equation is on the plane.
-// . Heap-free and loop-free for speed
-// . Provides direct element access via .x style lookup
-// . Use std::array< double, 4 > instead in array/vectorization context
+/// @brief Plane: an infinite plane in 3D space.
+///
+/// The equation of a plane is a*x + b*y + c*z + d = 0, any point that satisfies this equation is on the plane.
 class Plane
 {
+public:
+    /// @name Data Elements
+    //@{
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+    double w = 0.0;
+    //@}
 
-public: // Types
-    using value_type = double;
-    using reference = double &;
-    using const_reference = double const &;
-    using pointer = double *;
-    using const_pointer = double const *;
-    using size_type = std::size_t;
-    using difference_type = std::ptrdiff_t;
-
-public: // Creation
-    // Default Constructor: Zero-Initializes All Elements
+    /// @name Creation
+    //@{
+    /// Default Constructor: Zero-Initializes All Elements
     constexpr Plane() = default;
 
-    // Value Constructor
+    /// Value Constructor
     constexpr Plane(double x_, double y_, double z_, double w_) : x(x_), y(y_), z(z_), w(w_)
     {
     }
 
-    // Plane of a polygon by Newell's method (robust for nonplanar and nonconvex polygons)
-    //  . Normal (x, y, z) = Newell area vector: oriented by the vertex order (counterclockwise seen from the front),
-    //    with a length of twice the polygon area, so the plane is not normalized
-    //  . w is set so the plane passes through the vertex average (not the area centroid)
-    //  . A degenerate polygon (e.g. collinear vertices) gives a zero normal: check normal() before calling
-    //    normalize(), normalized() or signedDistance(), which assert on it
-    //  . Requires at least 3 vertices
+    /// @brief Plane of a polygon by Newell's method (robust for nonplanar and nonconvex polygons)
+    ///
+    ///  - Normal (x, y, z) = Newell area vector: oriented by the vertex order (counterclockwise seen from the front),
+    ///    with a length of twice the polygon area, so the plane is not normalized
+    ///  - w is set so the plane passes through the vertex average (not the area centroid)
+    ///  - A degenerate polygon (e.g. collinear vertices) gives a zero normal: check normal() before calling
+    ///    normalize(), normalized() or signedDistance(), which assert on it
+    ///  - Requires at least 3 vertices
     static Plane fromVertices(ObjexxFCL::Array1D<Vector3D> const &vertices);
+    //@}
 
-public: // Subscript
-    // Plane[ i ] const: 0-Based Index
-    constexpr double operator[](size_type i) const
+    /// @name Unary Operators
+    //@{
+    /// -Plane (Negated)
+    constexpr Plane operator-() const
+    {
+        return {-x, -y, -z, -w};
+    }
+    //@}
+
+    /// @name Comparison
+    //@{
+    /// @brief Exact comparison of the four coefficients (also provides !=)
+    ///
+    /// Compares the representation: (1, 0, 0, 0) and (2, 0, 0, 0) describe the same plane but compare unequal.
+    constexpr bool operator==(Plane const &) const = default;
+
+    /// @brief Is this plane equal to the other plane (same position and same orientation)?
+    ///
+    /// Both planes are normalized before comparing, so any scaling of the coefficients is accepted.
+    /// tol is used for two separate tests, and both must pass:
+    ///  - Angle: dot product of the unit normals >= (1 - tol)
+    ///    (tol is on the cosine, not in radians: 0.001 allows about 2.6 degrees of tilt)
+    ///  - Distance: abs(w1 - w2) <= tol, the difference in distance to the origin
+    ///    (in length units: 0.001 is 1 mm when working in meters)
+    bool equal(const Plane &other, double tol = 0.001) const;
+
+    /// Is this plane reverse equal to the other plane
+    bool reverseEqual(const Plane &other, double tol = 0.001) const;
+    //@}
+
+    /// @name Subscript
+    //@{
+    /// Plane[ i ] const: 0-Based Index
+    constexpr double operator[](std::size_t i) const
     {
         assert(i <= 3);
         return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
     }
 
-    // Plane[ i ]: 0-Based Index
-    constexpr double &operator[](size_type i)
+    /// Plane[ i ]: 0-Based Index
+    constexpr double &operator[](std::size_t i)
     {
         assert(i <= 3);
         return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
     }
+    //@}
 
-public: // Properties: General
-    // Size
-    constexpr size_type size() const
+    /// @name Queries
+    //@{
+    /// @brief Outward Normal vector (x, y, z)
+    ///
+    /// Not unit length unless the plane was normalized
+    constexpr Vector3D normal() const
     {
-        return 4u;
+        return {x, y, z};
     }
 
-public: // Modifiers
-    // Normalize: Scale All Four Coefficients So the Normal (x, y, z) Has Unit Length (w Then Is the Distance to the Origin)
+    /// @brief Degenerate plane: zero normal (e.g. fromVertices() of collinear or coincident vertices)
+    ///
+    /// normalize(), normalized() and signedDistance() must not be called on a degenerate plane
+    constexpr bool isDegenerate() const
+    {
+        return (x * x) + (y * y) + (z * z) == 0.0; // Same test as the normal_length != 0.0 asserts
+    }
+
+    /// @brief Signed distance from a point to the plane: (a*x + b*y + c*z + d) / |(a, b, c)|
+    ///
+    ///  - Positive on the side the normal points to (outside), negative behind it, zero on the plane
+    ///  - A true distance whether or not the plane is normalized (it divides by the normal's length)
+    ///  - The plane must not be degenerate: its normal must be nonzero
+    double signedDistance(Vector3D const &point) const
+    {
+        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+        assert(normal_length != 0.0);
+        return ((x * point.x) + (y * point.y) + (z * point.z) + w) / normal_length;
+    }
+    //@}
+
+    /// @name Normalization
+    //@{
+    /// @brief Normalize to a Length (in-place)
+    ///
+    /// Scale All Four Coefficients So the Normal (x, y, z) Has Unit Length (w Then Is the Distance to the Origin)
     Plane &normalize()
     {
         double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
@@ -133,77 +192,20 @@ public: // Modifiers
         return *this;
     }
 
-public: // Generators
-    // -Plane (Negated)
-    constexpr Plane operator-() const
-    {
-        return {-x, -y, -z, -w};
-    }
-
-    constexpr Plane reversedPlane() const
-    {
-        return {-x, -y, -z, -w};
-    }
-
-    // Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
+    /// @brief Normalized to a Length (return a new vector)
+    ///
+    /// Copy with the Normal (x, y, z) Scaled to Unit Length
     Plane normalized() const
     {
         double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
         assert(normal_length != 0.0);
         return {x / normal_length, y / normal_length, z / normal_length, w / normal_length};
     }
+    //@}
 
-    // Outward Normal vector (x, y, z)
-    // not unit length unless the plane was normalized
-    constexpr Vector3D normal() const
-    {
-        return {x, y, z};
-    }
-
-public: // Queries
-    // Degenerate plane: zero normal (e.g. fromVertices() of collinear or coincident vertices)
-    //  normalize(), normalized() and signedDistance() must not be called on a degenerate plane
-    constexpr bool isDegenerate() const
-    {
-        return (x * x) + (y * y) + (z * z) == 0.0; // Same test as the normal_length != 0.0 asserts
-    }
-
-    // Signed distance from a point to the plane: (a*x + b*y + c*z + d) / |(a, b, c)|
-    //  . Positive on the side the normal points to (outside), negative behind it, zero on the plane
-    //  . A true distance whether or not the plane is normalized (it divides by the normal's length)
-    //  . The plane must not be degenerate: its normal must be nonzero
-    double signedDistance(Vector3D const &point) const
-    {
-        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
-        assert(normal_length != 0.0);
-        return ((x * point.x) + (y * point.y) + (z * point.z) + w) / normal_length;
-    }
-
-public: // Comparison
-    // Exact comparison of the four coefficients (also provides !=). Compares the representation: (1, 0, 0, 0) and
-    // (2, 0, 0, 0) describe the same plane but compare unequal.
-    constexpr bool operator==(Plane const &) const = default;
-
-    /// Is this plane equal to the other plane (same position and same orientation)?
-    /// Both planes are normalized before comparing, so any scaling of the coefficients is accepted.
-    /// tol is used for two separate tests, and both must pass:
-    ///  . Angle:    dot product of the unit normals >= (1 - tol)
-    ///              (tol is on the cosine, not in radians: 0.001 allows about 2.6 degrees of tilt)
-    ///  . Distance: abs(w1 - w2) <= tol, the difference in distance to the origin
-    ///              (in length units: 0.001 is 1 mm when working in meters)
-    bool equal(const Plane &other, double tol = 0.001) const;
-
-    /// is this plane reverse equal to the other plane
-    bool reverseEqual(const Plane &other, double tol = 0.001) const;
-
-public: // Data Elements
-    double x = 0.0;
-    double y = 0.0;
-    double z = 0.0;
-    double w = 0.0;
 }; // Plane
 
-// Stream << Plane output operator
+/// Stream << Plane output operator
 std::ostream &operator<<(std::ostream &stream, Plane const &v);
 
 } // namespace EnergyPlus
