@@ -60,6 +60,7 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/Geometry/Vector3D.hh>
+#include <EnergyPlus/Platform.hh>
 #include <EnergyPlus/api/TypeDefs.h>
 
 namespace EnergyPlus {
@@ -171,7 +172,7 @@ public:
     ///  - tMax is in units of rayDir: with a unit rayDir it is the maximum distance from rayOri. The default (infinity) means no limit,
     ///    and costs nothing: no value compares greater than infinity, so the check is optimized away
     ///  - Works on a non-normalized plane: t does not depend on the scaling of the coefficients
-    constexpr std::optional<Vector3D>
+    ALWAYS_INLINE constexpr std::optional<Vector3D>
     rayIntersection(Vector3D const &rayOri, Vector3D const &rayDir, double const tMax = std::numeric_limits<double>::infinity()) const
     {
         double const den = normal().dot(rayDir);
