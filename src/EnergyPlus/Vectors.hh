@@ -67,13 +67,6 @@ namespace Vectors {
     using DataVectorTypes::Polyhedron;
     using DataVectorTypes::Vector;
 
-    // MODULE PARAMETER DEFINITIONS
-
-    // Object Data
-    extern Vector const XUnit;
-    extern Vector const YUnit;
-    extern Vector const ZUnit;
-
     // Functions
 
     Real64 AreaPolygon(int const n, Array1D<Vector> &p);

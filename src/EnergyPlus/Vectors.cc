@@ -97,13 +97,6 @@ namespace EnergyPlus::Vectors {
 // Using/Aliasing
 using namespace DataVectorTypes;
 
-// MODULE PARAMETER DEFINITIONS
-
-// Object Data
-Vector const XUnit(1.0, 0.0, 0.0);
-Vector const YUnit(0.0, 1.0, 0.0);
-Vector const ZUnit(0.0, 0.0, 1.0);
-
 Real64 AreaPolygon(int const n, Array1D<Vector> &p)
 {
 
@@ -242,7 +235,7 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
     lcsz = NewellSurfaceNormalVector;
     lcsy = lcsz.cross(lcsx);
 
-    Real64 costheta = lcsz.dot(ZUnit);
+    Real64 costheta = lcsz.dot(Vector3D::UnitZ());
 
     //    if ( fabs(costheta) < 1.0d0) { // normal cases
     Real64 constexpr epsilon = 1.12e-16;
@@ -250,11 +243,11 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
     if (std::abs(costheta) < 1.0 - epsilon) { // Autodesk Added - 1.12e-16 to treat 1 bit from 1.0 as 1.0 to correct different behavior seen in
                                               // release vs debug build due to slight precision differences: May want larger epsilon here
         // azimuth
-        Vector x2 = ZUnit.cross(lcsz);
-        rotang_0 = std::atan2(x2.dot(YUnit), x2.dot(XUnit));
+        Vector x2 = Vector3D::UnitZ().cross(lcsz);
+        rotang_0 = std::atan2(x2.dot(Vector3D::UnitY()), x2.dot(Vector3D::UnitX()));
     } else {
         // azimuth
-        rotang_0 = std::atan2(lcsx.dot(YUnit), lcsx.dot(XUnit));
+        rotang_0 = std::atan2(lcsx.dot(Vector3D::UnitY()), lcsx.dot(Vector3D::UnitX()));
     }
 
     Real64 tlt = std::acos(NewellSurfaceNormalVector.z);

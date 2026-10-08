@@ -82,6 +82,27 @@ public:
     }
     //@}
 
+    /// @name Unit Vectors
+    //@{
+    /// Unit vector along x: (1, 0, 0)
+    static constexpr Vector3D UnitX()
+    {
+        return {1.0, 0.0, 0.0};
+    }
+
+    /// Unit vector along y: (0, 1, 0)
+    static constexpr Vector3D UnitY()
+    {
+        return {0.0, 1.0, 0.0};
+    }
+
+    /// Unit vector along z: (0, 0, 1)
+    static constexpr Vector3D UnitZ()
+    {
+        return {0.0, 0.0, 1.0};
+    }
+    //@}
+
     /// @name Scalar multiplication and division
     //@{
     // Scalar Compound Assignment

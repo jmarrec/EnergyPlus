@@ -9260,7 +9260,6 @@ namespace SurfaceGeometry {
         Real64 dotp;
 
         // Object Data
-        Vector const TestVector(0.0, 0.0, 1.0);
         Vector temp;
 
         auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
@@ -9442,7 +9441,7 @@ namespace SurfaceGeometry {
             surfTemp.NetAreaShadowCalc = surfTemp.Area;
             Vectors::DetermineAzimuthAndTilt(
                 surfTemp.Vertex, SurfWorldAz, SurfTilt, surfTemp.lcsx, surfTemp.lcsy, surfTemp.lcsz, surfTemp.NewellSurfaceNormalVector);
-            dotp = surfTemp.NewellSurfaceNormalVector.dot(TestVector);
+            dotp = surfTemp.NewellSurfaceNormalVector.dot(Vector3D::UnitZ());
             if (surfTemp.Class == SurfaceClass::Roof && dotp < -0.000001) {
                 TiltString = std::format("{:.1f}", SurfTilt);
                 ShowWarningError(state,
