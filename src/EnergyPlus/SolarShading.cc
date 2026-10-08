@@ -9628,7 +9628,7 @@ void WindowShadingManager(EnergyPlusData &state)
                     if (state.dataWindowEquivLayer->CFS(EQLNum).VBLayerPtr > 0) {
                         auto &surfShade = s_surf->surfShades(ISurf);
                         if (state.dataWindowEquivLayer->CFS(EQLNum).L(state.dataWindowEquivLayer->CFS(EQLNum).VBLayerPtr).CNTRL ==
-                            state.dataWindowEquivalentLayer->lscNONE) {
+                            WindowEquivalentLayer::lscNONE) {
                             surfShade.blind.slatAngDeg =
                                 state.dataWindowEquivLayer->CFS(EQLNum).L(state.dataWindowEquivLayer->CFS(EQLNum).VBLayerPtr).PHI_DEG;
                         } else {

@@ -73,6 +73,23 @@ namespace WindowEquivalentLayer {
     // Using/Aliasing
     using namespace DataWindowEquivalentLayer;
 
+    constexpr int hipRHO = 1;                // return reflectance
+    constexpr int hipTAU = 2;                // return transmittance
+    constexpr Real64 SMALL_ERROR = 0.000001; // small number
+    // CFSGAP: space between layers (gap types)
+    constexpr int gtySEALED = 1;  // sealed
+    constexpr int gtyOPENin = 2;  // open to indoor air  (re Open Channel Flow (OCF))
+    constexpr int gtyOPENout = 3; // open to outdoor air (re Open Channel Flow (OCF))
+    // shade control options
+    constexpr int lscNONE = 0;   // no control
+    constexpr int lscVBPROF = 1; // VB slatA = ProfA (max gain)
+    constexpr int lscVBNOBM = 2; // VB slatA just exclude beam
+    // Constants
+    constexpr int hipRHO_BT0 = 1;
+    constexpr int hipTAU_BT0 = 2;
+    constexpr int hipTAU_BB0 = 3;
+    constexpr int hipDIM = 3; // dimension of parameter array
+
     void InitEquivalentLayerWindowCalculations(EnergyPlusData &state);
 
     void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrNum);
@@ -409,8 +426,7 @@ namespace WindowEquivalentLayer {
                                 Real64 const C  // slat crown height (any units, same units as W) must be >= 0
     );
 
-    void VB_SOL46_CURVE(EnergyPlusData const &state,
-                        Real64 const S,           // slat spacing (any length units; same units as W)
+    void VB_SOL46_CURVE(Real64 const S,           // slat spacing (any length units; same units as W)
                         Real64 const W,           // slat tip-to-tip (chord) width (any length units; same units as S)
                         Real64 const SL_WR,       // slat curvature radius ratio (= W/R)
                         Real64 const PHIx,        // slat angle, radians (-PI/2 <= PHI <= PI/2)
@@ -423,8 +439,7 @@ namespace WindowEquivalentLayer {
                         Real64 &TAU_BD            // returned: effective SW (solar) beam-to-diffuse transmittance front side
     );
 
-    void VB_SOL4(EnergyPlusData const &state,
-                 Real64 const S,           // slat spacing (any length units; same units as W)
+    void VB_SOL4(Real64 const S,           // slat spacing (any length units; same units as W)
                  Real64 const W,           // slat tip-to-tip width (any length units; same units as S)
                  Real64 const OMEGA,       // incident beam profile angle (radians)
                  Real64 const DE,          // distance from front tip of any slat to shadow (caused by the adjacent slat) on
@@ -436,8 +451,7 @@ namespace WindowEquivalentLayer {
                  Real64 &TAU_BD            // returned: solar beam-to-diffuse transmittance of the venetian blind (front side)
     );
 
-    void VB_SOL6(EnergyPlusData const &state,
-                 Real64 const S,           // slat spacing (any length units; same units as W)
+    void VB_SOL6(Real64 const S,           // slat spacing (any length units; same units as W)
                  Real64 const W,           // slat tip-to-tip width (any length units; same units as S)
                  Real64 const OMEGA,       // incident beam profile angle (radians)
                  Real64 const DE,          // distance from front tip of any slat to shadow (caused by the adjacent slat) on
@@ -542,15 +556,13 @@ namespace WindowEquivalentLayer {
                       Real64 const TI  // inside air temp, C or K
     );
 
-    void SLtoGL(EnergyPlusData const &state,
-                Real64 const breal, // distance from shade to glass (m)
+    void SLtoGL(Real64 const breal, // distance from shade to glass (m)
                 Real64 const Ts,    // shade temperature (K)
                 Real64 const Tg,    // glass temperature (K)
                 Real64 &hsg,        // the heat transfer coefficient, shade-to-glass, {W/m2K}
                 int const scheme);
 
-    Real64 SLtoAMB(EnergyPlusData const &state,
-                   Real64 const b,     // distance from shade to glass (m) where air flow takes place
+    Real64 SLtoAMB(Real64 const b,     // distance from shade to glass (m) where air flow takes place
                    Real64 const L,     // window height, m (usually taken as 1 m)
                    Real64 const Ts,    // shade temperature, K
                    Real64 const Tamb,  // room air temperature, K
@@ -558,8 +570,7 @@ namespace WindowEquivalentLayer {
                    int const scheme    // flag to select model, scheme=2 has problems
     );
 
-    void GLtoAMB(EnergyPlusData const &state,
-                 Real64 const b,     // distance from shade to glass {m}
+    void GLtoAMB(Real64 const b,     // distance from shade to glass {m}
                  Real64 const L,     // window height {m}, usually taken as 1 meter
                  Real64 const Tg,    // glass temperature {K}
                  Real64 const Tamb,  // room air temperature, {K}
@@ -690,8 +701,7 @@ namespace WindowEquivalentLayer {
                 CFSLWP &LLWP       // returned: equivalent layer long wave properties
     );
 
-    bool VB_SWP(EnergyPlusData const &state,
-                CFSLAYER const &L, // VB layer
+    bool VB_SWP(CFSLAYER const &L, // VB layer
                 CFSSWP &LSWP,      // returned: equivalent off-normal properties
                 const Real64 OMEGA // incident profile angle (radians)
     );
@@ -702,8 +712,7 @@ namespace WindowEquivalentLayer {
 
     );
 
-    bool VB_ShadeControl(EnergyPlusData const &state,
-                         CFSLAYER &L,           // VB layer
+    bool VB_ShadeControl(CFSLAYER &L,           // VB layer
                          Real64 const OMEGA_DEG // incident profile angle (degrees)
     );
 
@@ -723,7 +732,7 @@ namespace WindowEquivalentLayer {
 
     bool IsGlazeLayerX(CFSLAYER const &L);
 
-    bool IsControlledShade(EnergyPlusData const &state, CFSLAYER const &L);
+    bool IsControlledShade(CFSLAYER const &L);
 
     bool IsVBLayer(CFSLAYER const &L);
 
@@ -744,7 +753,7 @@ namespace WindowEquivalentLayer {
 
     int CFSNGlz(CFSTY const &FS); // CFS
 
-    int CFSHasControlledShade(EnergyPlusData const &state, CFSTY const &FS);
+    int CFSHasControlledShade(CFSTY const &FS);
 
     void CheckAndFixCFSLayer(EnergyPlusData &state, CFSLAYER &Layer);
 
@@ -791,27 +800,6 @@ namespace WindowEquivalentLayer {
 
 struct WindowEquivalentLayerData : BaseGlobalStruct
 {
-
-    // Data
-    Real64 const RadiansToDeg; // Conversion for Radians to Degrees: Not using Constant::Pi() to avoid initialization order bug
-    Real64 const PAtmSeaLevel; // Standard atmospheric pressure at sea level (Pa)
-    int const hipRHO;          // return reflectance
-    int const hipTAU;          // return transmittance
-    Real64 const SMALL_ERROR;  // small number
-                               // CFSGAP: space between layers (gap types)
-    int const gtySEALED;       // sealed
-    int const gtyOPENin;       // open to indoor air  (re Open Channel Flow (OCF))
-    int const gtyOPENout;      // open to outdoor air (re Open Channel Flow (OCF))
-                               // shade control options
-    int const lscNONE;         // no control
-    int const lscVBPROF;       // VB slatA = ProfA (max gain)
-    int const lscVBNOBM;       // VB slatA just exclude beam
-                               // Constants
-    int const hipRHO_BT0;
-    int const hipTAU_BT0;
-    int const hipTAU_BB0;
-    int const hipDIM; // dimension of parameter array
-
     Array3D<Real64> CFSDiffAbsTrans;
     Array1D_bool EQLDiffPropFlag;
 
@@ -832,12 +820,6 @@ struct WindowEquivalentLayerData : BaseGlobalStruct
         this->EQLDiffPropFlag.deallocate();
         this->X1MRDiff = -1.0;
         this->XTAUDiff = -1.0;
-    }
-    // Default Constructor
-    WindowEquivalentLayerData()
-        : RadiansToDeg(180.0 / 3.141592653589793), PAtmSeaLevel(101325.0), hipRHO(1), hipTAU(2), SMALL_ERROR(0.000001), gtySEALED(1), gtyOPENin(2),
-          gtyOPENout(3), lscNONE(0), lscVBPROF(1), lscVBNOBM(2), hipRHO_BT0(1), hipTAU_BT0(2), hipTAU_BB0(3), hipDIM(3)
-    {
     }
 };
 
