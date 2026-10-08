@@ -295,7 +295,6 @@ EnergyPlusData::EnergyPlusData()
     this->dataWindowAC = std::make_unique<WindowACData>();
     this->dataWindowComplexManager = std::make_unique<WindowComplexManagerData>();
     this->dataWindowEquivLayer = std::make_unique<WindowEquivLayerData>();
-    this->dataWindowEquivalentLayer = std::make_unique<WindowEquivalentLayerData>();
     this->dataWindowManager = std::make_unique<WindowManagerData>();
     this->dataWindowManagerExterior = std::make_unique<WindowManagerExteriorData>();
     this->dataZoneAirLoopEquipmentManager = std::make_unique<ZoneAirLoopEquipmentManagerData>();
@@ -555,7 +554,6 @@ void EnergyPlusData::clear_state()
     this->dataWindowAC->clear_state();
     this->dataWindowComplexManager->clear_state();
     this->dataWindowEquivLayer->clear_state();
-    this->dataWindowEquivalentLayer->clear_state();
     this->dataWindowManager->clear_state();
     this->dataWindowManagerExterior->clear_state();
     this->dataZoneAirLoopEquipmentManager->clear_state();
@@ -828,7 +826,6 @@ void EnergyPlusData::init_constant_state(EnergyPlusData &state)
     this->dataWindowAC->init_constant_state(state);
     this->dataWindowComplexManager->init_constant_state(state);
     this->dataWindowEquivLayer->init_constant_state(state);
-    this->dataWindowEquivalentLayer->init_constant_state(state);
     this->dataWindowManager->init_constant_state(state);
     this->dataWindowManagerExterior->init_constant_state(state);
     this->dataZoneAirLoopEquipmentManager->init_constant_state(state);
@@ -1093,7 +1090,6 @@ void EnergyPlusData::init_state(EnergyPlusData &state)
     this->dataWindowAC->init_state(state);
     this->dataWindowComplexManager->init_state(state);
     this->dataWindowEquivLayer->init_state(state);
-    this->dataWindowEquivalentLayer->init_state(state);
     this->dataWindowManager->init_state(state);
     this->dataWindowManagerExterior->init_state(state);
     this->dataZoneAirLoopEquipmentManager->init_state(state);

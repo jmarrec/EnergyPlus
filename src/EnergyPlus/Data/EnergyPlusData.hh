@@ -303,7 +303,6 @@ struct WindTurbineData;
 struct WindowACData;
 struct WindowComplexManagerData;
 struct WindowEquivLayerData;
-struct WindowEquivalentLayerData;
 struct WindowManagerData;
 struct WindowManagerExteriorData;
 struct ZoneAirLoopEquipmentManagerData;
@@ -562,7 +561,6 @@ struct EnergyPlusData : BaseGlobalStruct
     std::unique_ptr<WindowACData> dataWindowAC;
     std::unique_ptr<WindowComplexManagerData> dataWindowComplexManager;
     std::unique_ptr<WindowEquivLayerData> dataWindowEquivLayer;
-    std::unique_ptr<WindowEquivalentLayerData> dataWindowEquivalentLayer;
     std::unique_ptr<WindowManagerData> dataWindowManager;
     std::unique_ptr<WindowManagerExteriorData> dataWindowManagerExterior;
     std::unique_ptr<ZoneAirLoopEquipmentManagerData> dataZoneAirLoopEquipmentManager;

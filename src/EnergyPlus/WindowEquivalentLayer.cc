@@ -144,15 +144,15 @@ void InitEquivalentLayerWindowCalculations(EnergyPlusData &state)
     if (!allocated(state.dataWindowEquivLayer->CFS)) {
         state.dataWindowEquivLayer->CFS.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
     }
-    if (!allocated(state.dataWindowEquivalentLayer->EQLDiffPropFlag)) {
-        state.dataWindowEquivalentLayer->EQLDiffPropFlag.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
+    if (!allocated(state.dataWindowEquivLayer->EQLDiffPropFlag)) {
+        state.dataWindowEquivLayer->EQLDiffPropFlag.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
     }
-    if (!allocated(state.dataWindowEquivalentLayer->CFSDiffAbsTrans)) {
-        state.dataWindowEquivalentLayer->CFSDiffAbsTrans.allocate(2, CFSMAXNL + 1, state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
+    if (!allocated(state.dataWindowEquivLayer->CFSDiffAbsTrans)) {
+        state.dataWindowEquivLayer->CFSDiffAbsTrans.allocate(2, CFSMAXNL + 1, state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
     }
 
-    state.dataWindowEquivalentLayer->EQLDiffPropFlag = true;
-    state.dataWindowEquivalentLayer->CFSDiffAbsTrans = 0.0;
+    state.dataWindowEquivLayer->EQLDiffPropFlag = true;
+    state.dataWindowEquivLayer->CFSDiffAbsTrans = 0.0;
 
     for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
         if (!state.dataConstruction->Construct(ConstrNum).TypeIsWindow) {
@@ -393,7 +393,7 @@ void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrN
     state.dataConstruction->Construct(ConstrNum).TransDiffFrontEQL = SysAbs1(1, CFS(EQLNum).NL + 1);
     for (int i = 1; i <= 2; ++i) {
         for (int j = 1; j <= CFSMAXNL + 1; ++j) {
-            state.dataWindowEquivalentLayer->CFSDiffAbsTrans(i, j, EQLNum) = SysAbs1(i, j);
+            state.dataWindowEquivLayer->CFSDiffAbsTrans(i, j, EQLNum) = SysAbs1(i, j);
         }
     }
     for (int i = 1; i <= CFSMAXNL; ++i) {
@@ -6719,13 +6719,13 @@ void Specular_RATDiff(EnergyPlusData &state, Real64 &RAT_1MRDiff, Real64 &RAT_TA
 
     Array1D<Real64> P(hipDIM);
 
-    if (state.dataWindowEquivalentLayer->XTAUDiff < 0.0) {
+    if (state.dataWindowEquivLayer->XTAUDiff < 0.0) {
         // calculate and save on first call
-        state.dataWindowEquivalentLayer->X1MRDiff = HEMINT(state, Specular_F, hipRHO, P);
-        state.dataWindowEquivalentLayer->XTAUDiff = HEMINT(state, Specular_F, hipTAU, P);
+        state.dataWindowEquivLayer->X1MRDiff = HEMINT(state, Specular_F, hipRHO, P);
+        state.dataWindowEquivLayer->XTAUDiff = HEMINT(state, Specular_F, hipTAU, P);
     }
-    RAT_TAUDiff = state.dataWindowEquivalentLayer->XTAUDiff;
-    RAT_1MRDiff = state.dataWindowEquivalentLayer->X1MRDiff;
+    RAT_TAUDiff = state.dataWindowEquivLayer->XTAUDiff;
+    RAT_1MRDiff = state.dataWindowEquivLayer->X1MRDiff;
 }
 
 Real64 Specular_F([[maybe_unused]] EnergyPlusData const &state,
@@ -7911,7 +7911,7 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             CFSAbs(2, i) = Abs1(2, i);
         }
     } else {
-        if (state.dataWindowEquivalentLayer->EQLDiffPropFlag(EQLNum)) {
+        if (state.dataWindowEquivLayer->EQLDiffPropFlag(EQLNum)) {
             for (int Lay = 1; Lay <= CFS(EQLNum).NL; ++Lay) {
                 if (IsVBLayer(CFS(EQLNum).L(Lay))) {
                     if (CFS(EQLNum).L(Lay).LTYPE == LayerType::VBHOR) {
@@ -7927,7 +7927,7 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
                 for (int i = 1; i <= 2; ++i) {
                     CFSAbs(i, Lay) = Abs1(i, Lay);
-                    state.dataWindowEquivalentLayer->CFSDiffAbsTrans(i, Lay, EQLNum) = Abs1(i, Lay);
+                    state.dataWindowEquivLayer->CFSDiffAbsTrans(i, Lay, EQLNum) = Abs1(i, Lay);
                 }
             }
             state.dataConstruction->Construct(ConstrNum).TransDiff = Abs1(1, CFS(EQLNum).NL + 1);
@@ -7940,15 +7940,15 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffFront = CFS(EQLNum).L(1).SWP_EL.RHOSFDD;
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack = CFS(EQLNum).L(CFS(EQLNum).NL).SWP_EL.RHOSBDD;
             if (!CFS(EQLNum).ISControlled) {
-                state.dataWindowEquivalentLayer->EQLDiffPropFlag(EQLNum) = false;
+                state.dataWindowEquivLayer->EQLDiffPropFlag(EQLNum) = false;
             }
         } else {
             for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
                 for (int i = 1; i <= 2; ++i) {
-                    CFSAbs(i, Lay) = state.dataWindowEquivalentLayer->CFSDiffAbsTrans(i, Lay, EQLNum);
+                    CFSAbs(i, Lay) = state.dataWindowEquivLayer->CFSDiffAbsTrans(i, Lay, EQLNum);
                 }
             }
-            state.dataConstruction->Construct(ConstrNum).TransDiff = state.dataWindowEquivalentLayer->CFSDiffAbsTrans(1, CFS(EQLNum).NL + 1, EQLNum);
+            state.dataConstruction->Construct(ConstrNum).TransDiff = state.dataWindowEquivLayer->CFSDiffAbsTrans(1, CFS(EQLNum).NL + 1, EQLNum);
             for (int i = 1; i <= CFSMAXNL; ++i) {
                 state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL(i) = CFSAbs(1, i);
             }
