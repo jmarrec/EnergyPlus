@@ -147,12 +147,11 @@ void InitEquivalentLayerWindowCalculations(EnergyPlusData &state)
     if (!allocated(state.dataWindowEquivLayer->EQLDiffPropFlag)) {
         state.dataWindowEquivLayer->EQLDiffPropFlag.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
     }
-    if (!allocated(state.dataWindowEquivLayer->CFSDiffAbsTrans)) {
-        state.dataWindowEquivLayer->CFSDiffAbsTrans.allocate(2, CFSMAXNL + 1, state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
-    }
 
     state.dataWindowEquivLayer->EQLDiffPropFlag = true;
-    state.dataWindowEquivLayer->CFSDiffAbsTrans = 0.0;
+    for (auto &cfs : state.dataWindowEquivLayer->CFS) {
+        cfs.DiffAbsTrans = {};
+    }
 
     for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
         if (!state.dataConstruction->Construct(ConstrNum).TypeIsWindow) {
@@ -393,7 +392,7 @@ void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrN
     state.dataConstruction->Construct(ConstrNum).TransDiffFrontEQL = SysAbs1(1, CFS(EQLNum).NL + 1);
     for (int i = 1; i <= 2; ++i) {
         for (int j = 1; j <= CFSMAXNL + 1; ++j) {
-            state.dataWindowEquivLayer->CFSDiffAbsTrans(i, j, EQLNum) = SysAbs1(i, j);
+            CFS(EQLNum).DiffAbsTrans[i - 1][j - 1] = SysAbs1(i, j);
         }
     }
     for (int i = 1; i <= CFSMAXNL; ++i) {
@@ -7927,7 +7926,7 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
                 for (int i = 1; i <= 2; ++i) {
                     CFSAbs(i, Lay) = Abs1(i, Lay);
-                    state.dataWindowEquivLayer->CFSDiffAbsTrans(i, Lay, EQLNum) = Abs1(i, Lay);
+                    CFS(EQLNum).DiffAbsTrans[i - 1][Lay - 1] = Abs1(i, Lay);
                 }
             }
             state.dataConstruction->Construct(ConstrNum).TransDiff = Abs1(1, CFS(EQLNum).NL + 1);
@@ -7945,10 +7944,10 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
         } else {
             for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
                 for (int i = 1; i <= 2; ++i) {
-                    CFSAbs(i, Lay) = state.dataWindowEquivLayer->CFSDiffAbsTrans(i, Lay, EQLNum);
+                    CFSAbs(i, Lay) = CFS(EQLNum).DiffAbsTrans[i - 1][Lay - 1];
                 }
             }
-            state.dataConstruction->Construct(ConstrNum).TransDiff = state.dataWindowEquivLayer->CFSDiffAbsTrans(1, CFS(EQLNum).NL + 1, EQLNum);
+            state.dataConstruction->Construct(ConstrNum).TransDiff = CFS(EQLNum).DiffAbsTrans[0][CFS(EQLNum).NL];
             for (int i = 1; i <= CFSMAXNL; ++i) {
                 state.dataConstruction->Construct(ConstrNum).AbsDiffFrontEQL(i) = CFSAbs(1, i);
             }

@@ -7104,7 +7104,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                     } else {
                         for (int Lay = 1; Lay <= CFS(EQLNum).NL + 1; ++Lay) {
                             for (int i = 1; i <= state.dataSolarShading->SurfWinAbsSolDiffEQL.u1(); ++i) {
-                                state.dataSolarShading->SurfWinAbsSolDiffEQL(i, Lay) = state.dataWindowEquivLayer->CFSDiffAbsTrans(i, Lay, EQLNum);
+                                state.dataSolarShading->SurfWinAbsSolDiffEQL(i, Lay) = CFS(EQLNum).DiffAbsTrans[i - 1][Lay - 1];
                             }
                         }
                     }

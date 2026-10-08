@@ -48,9 +48,11 @@
 #ifndef DataWindowEquivalentLayer_hh_INCLUDED
 #define DataWindowEquivalentLayer_hh_INCLUDED
 
+// C++ Headers
+#include <array>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Array3D.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
@@ -269,6 +271,9 @@ namespace DataWindowEquivalentLayer {
         bool ISControlled;        // CFS is not controlled, or has no controlled VB layer
         int VBLayerPtr;           // Venetian blind layer pointer
         int WEQLSolverErrorIndex; // recurring error index
+        // Diffuse properties: [0] = front (outside) incident, [1] = back (inside) incident;
+        // [0, NL) = layer absorptance (0 = outside layer), [NL] = system transmittance
+        std::array<std::array<Real64, CFSMAXNL + 1>, 2> DiffAbsTrans{};
 
         // Default Constructor
         CFSTY() : NL(0), L(CFSMAXNL), G(CFSMAXNL - 1), ISControlled(false), VBLayerPtr(0), WEQLSolverErrorIndex(0)
@@ -289,7 +294,6 @@ struct WindowEquivLayerData : BaseGlobalStruct
     Array1D<DataWindowEquivalentLayer::CFSTY> CFS;
     Array1D<DataWindowEquivalentLayer::CFSGAP> CFSGaps;
 
-    Array3D<Real64> CFSDiffAbsTrans;
     Array1D_bool EQLDiffPropFlag;
 
     Real64 X1MRDiff = -1.0;
@@ -310,7 +314,6 @@ struct WindowEquivLayerData : BaseGlobalStruct
         this->CFSLayers.clear();
         this->CFS.clear();
         this->CFSGaps.clear();
-        this->CFSDiffAbsTrans.deallocate();
         this->EQLDiffPropFlag.deallocate();
         this->X1MRDiff = -1.0;
         this->XTAUDiff = -1.0;
