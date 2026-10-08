@@ -61,11 +61,6 @@
 
 namespace EnergyPlus {
 
-// Value Constructor
-Plane::Plane(double x_, double y_, double z_, double w_) : x(x_), y(y_), z(z_), w(w_)
-{
-}
-
 // Plane of a polygon by Newell's method
 Plane Plane::fromVertices(ObjexxFCL::Array1D<Vector3D> const &vertices)
 {
@@ -84,77 +79,6 @@ Plane Plane::fromVertices(ObjexxFCL::Array1D<Vector3D> const &vertices)
     }
     d = -(center.dot(Vector(a, b, c)) / n); // center/n is the center point
     return {a, b, c, d};                    // a*x + b*y + c*z + d = 0
-}
-
-// Plane[ i ] const: 0-Based Index
-double Plane::operator[](size_type i) const
-{
-    assert(i <= 3);
-    return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
-}
-
-// Plane[ i ]: 0-Based Index
-double &Plane::operator[](size_type i)
-{
-    assert(i <= 3);
-    return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
-}
-
-// Size
-Plane::size_type Plane::size() const
-{
-    return 4u;
-}
-
-// Normalize: Scale All Four Coefficients So the Normal (x, y, z) Has Unit Length
-Plane &Plane::normalize()
-{
-    double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
-    assert(normal_length != 0.0);
-    x /= normal_length;
-    y /= normal_length;
-    z /= normal_length;
-    w /= normal_length;
-    return *this;
-}
-
-// -Plane (Negated)
-Plane Plane::operator-() const
-{
-    return {-x, -y, -z, -w};
-}
-
-Plane Plane::reversedPlane() const
-{
-    return {-x, -y, -z, -w};
-}
-
-// Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
-Plane Plane::normalized() const
-{
-    double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
-    assert(normal_length != 0.0);
-    return {x / normal_length, y / normal_length, z / normal_length, w / normal_length};
-}
-
-// Outward Normal vector (x, y, z): not unit length unless the plane was normalized
-Vector3D Plane::normal() const
-{
-    return Vector3D(x, y, z);
-}
-
-// Degenerate plane: zero normal
-bool Plane::isDegenerate() const
-{
-    return (x * x) + (y * y) + (z * z) == 0.0; // Same test as the normal_length != 0.0 asserts
-}
-
-// Signed distance from a point to the plane: positive on the side the normal points to
-double Plane::signedDistance(Vector3D const &point) const
-{
-    double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
-    assert(normal_length != 0.0);
-    return ((x * point.x) + (y * point.y) + (z * point.z) + w) / normal_length;
 }
 
 bool Plane::equal(const Plane &other, double tol) const

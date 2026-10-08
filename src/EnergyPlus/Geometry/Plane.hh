@@ -50,6 +50,7 @@
 
 // C++ Headers
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <iosfwd>
 
@@ -57,11 +58,10 @@
 #include <ObjexxFCL/Array1D.fwd.hh>
 
 // EnergyPlus Headers
+#include <EnergyPlus/Geometry/Vector3D.hh>
 #include <EnergyPlus/api/TypeDefs.h>
 
 namespace EnergyPlus {
-
-class Vector3D;
 
 // Plane: an infinite plane in 3D space.  The equation of a plane is
 //  a*x + b*y + c*z + d = 0, any point that satisfies this equation is on the plane.
@@ -82,10 +82,12 @@ public: // Types
 
 public: // Creation
     // Default Constructor: Zero-Initializes All Elements
-    Plane() = default;
+    constexpr Plane() = default;
 
     // Value Constructor
-    Plane(double x_, double y_, double z_, double w_);
+    constexpr Plane(double x_, double y_, double z_, double w_) : x(x_), y(y_), z(z_), w(w_)
+    {
+    }
 
     // Plane of a polygon by Newell's method (robust for nonplanar and nonconvex polygons)
     //  . Normal (x, y, z) = Newell area vector: oriented by the vertex order (counterclockwise seen from the front),
@@ -98,46 +100,89 @@ public: // Creation
 
 public: // Subscript
     // Plane[ i ] const: 0-Based Index
-    double operator[](size_type i) const;
+    constexpr double operator[](size_type i) const
+    {
+        assert(i <= 3);
+        return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
+    }
 
     // Plane[ i ]: 0-Based Index
-    double &operator[](size_type i);
+    constexpr double &operator[](size_type i)
+    {
+        assert(i <= 3);
+        return (i < 2 ? (i == 0 ? x : y) : (i == 2 ? z : w));
+    }
 
 public: // Properties: General
     // Size
-    size_type size() const;
+    constexpr size_type size() const
+    {
+        return 4u;
+    }
 
 public: // Modifiers
     // Normalize: Scale All Four Coefficients So the Normal (x, y, z) Has Unit Length (w Then Is the Distance to the Origin)
-    Plane &normalize();
+    Plane &normalize()
+    {
+        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+        assert(normal_length != 0.0);
+        x /= normal_length;
+        y /= normal_length;
+        z /= normal_length;
+        w /= normal_length;
+        return *this;
+    }
 
 public: // Generators
     // -Plane (Negated)
-    Plane operator-() const;
-    Plane reversedPlane() const;
+    constexpr Plane operator-() const
+    {
+        return {-x, -y, -z, -w};
+    }
+
+    constexpr Plane reversedPlane() const
+    {
+        return {-x, -y, -z, -w};
+    }
 
     // Normalized: Copy with the Normal (x, y, z) Scaled to Unit Length
-    Plane normalized() const;
+    Plane normalized() const
+    {
+        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+        assert(normal_length != 0.0);
+        return {x / normal_length, y / normal_length, z / normal_length, w / normal_length};
+    }
 
     // Outward Normal vector (x, y, z)
     // not unit length unless the plane was normalized
-    Vector3D normal() const;
+    constexpr Vector3D normal() const
+    {
+        return {x, y, z};
+    }
 
 public: // Queries
     // Degenerate plane: zero normal (e.g. fromVertices() of collinear or coincident vertices)
     //  normalize(), normalized() and signedDistance() must not be called on a degenerate plane
-    bool isDegenerate() const;
+    constexpr bool isDegenerate() const
+    {
+        return (x * x) + (y * y) + (z * z) == 0.0; // Same test as the normal_length != 0.0 asserts
+    }
 
     // Signed distance from a point to the plane: (a*x + b*y + c*z + d) / |(a, b, c)|
     //  . Positive on the side the normal points to (outside), negative behind it, zero on the plane
     //  . A true distance whether or not the plane is normalized (it divides by the normal's length)
     //  . The plane must not be degenerate: its normal must be nonzero
-    double signedDistance(Vector3D const &point) const;
+    double signedDistance(Vector3D const &point) const
+    {
+        double const normal_length(std::sqrt((x * x) + (y * y) + (z * z)));
+        assert(normal_length != 0.0);
+        return ((x * point.x) + (y * point.y) + (z * point.z) + w) / normal_length;
+    }
 
 public: // Comparison
     // Exact comparison of the four coefficients (also provides !=). Compares the representation: (1, 0, 0, 0) and
     // (2, 0, 0, 0) describe the same plane but compare unequal.
-    bool operator==(Plane const &) const = default;
+    constexpr bool operator==(Plane const &) const = default;
 
     /// Is this plane equal to the other plane (same position and same orientation)?
     /// Both planes are normalized before comparing, so any scaling of the coefficients is accepted.
