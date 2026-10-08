@@ -7102,8 +7102,8 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                         WindowEquivalentLayer::CalcEQLOpticalProperty(
                             state, SurfNum, SolarArrays::DIFF, state.dataSolarShading->SurfWinAbsSolDiffEQL);
                     } else {
-                        for (int Lay = 1; Lay <= CFS(EQLNum).NL + 1; ++Lay) {
-                            for (int i = 1; i <= state.dataSolarShading->SurfWinAbsSolDiffEQL.u1(); ++i) {
+                        for (int i = 1; i <= state.dataSolarShading->SurfWinAbsSolDiffEQL.u1(); ++i) {
+                            for (int Lay = 1; Lay <= CFS(EQLNum).NL + 1; ++Lay) {
                                 state.dataSolarShading->SurfWinAbsSolDiffEQL(i, Lay) = CFS(EQLNum).DiffAbsTrans[i - 1][Lay - 1];
                             }
                         }

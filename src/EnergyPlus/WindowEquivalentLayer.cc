@@ -7923,8 +7923,8 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             }
             IncAng = std::acos(state.dataHeatBal->SurfCosIncAng(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, SurfNum));
             CalcEQLWindowOpticalProperty(state, CFS(EQLNum), BeamDIffFlag, Abs1, IncAng, ProfAngVer, ProfAngHor);
-            for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
-                for (int i = 1; i <= 2; ++i) {
+            for (int i = 1; i <= 2; ++i) {
+                for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
                     CFSAbs(i, Lay) = Abs1(i, Lay);
                     CFS(EQLNum).DiffAbsTrans[i - 1][Lay - 1] = Abs1(i, Lay);
                 }
@@ -7942,8 +7942,8 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
                 state.dataWindowEquivLayer->EQLDiffPropFlag(EQLNum) = false;
             }
         } else {
-            for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
-                for (int i = 1; i <= 2; ++i) {
+            for (int i = 1; i <= 2; ++i) {
+                for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
                     CFSAbs(i, Lay) = CFS(EQLNum).DiffAbsTrans[i - 1][Lay - 1];
                 }
             }
