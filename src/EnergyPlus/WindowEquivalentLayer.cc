@@ -147,7 +147,6 @@ void InitEquivalentLayerWindowCalculations(EnergyPlusData &state)
 
     for (auto &cfs : state.dataWindowEquivLayer->CFS) {
         cfs.DiffAbsTrans = {};
-        cfs.DiffPropFlag = true;
     }
 
     for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
@@ -7907,7 +7906,7 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             CFSAbs(2, i) = Abs1(2, i);
         }
     } else {
-        if (CFS(EQLNum).DiffPropFlag) {
+        if (CFS(EQLNum).ISControlled) {
             for (int Lay = 1; Lay <= CFS(EQLNum).NL; ++Lay) {
                 if (IsVBLayer(CFS(EQLNum).L(Lay))) {
                     if (CFS(EQLNum).L(Lay).LTYPE == LayerType::VBHOR) {
@@ -7933,11 +7932,6 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             for (int i = 1; i <= CFSMAXNL; ++i) {
                 state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL(i) = Abs1(2, i);
             }
-            state.dataConstruction->Construct(ConstrNum).ReflectSolDiffFront = CFS(EQLNum).L(1).SWP_EL.RHOSFDD;
-            state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack = CFS(EQLNum).L(CFS(EQLNum).NL).SWP_EL.RHOSBDD;
-            if (!CFS(EQLNum).ISControlled) {
-                CFS(EQLNum).DiffPropFlag = false;
-            }
         } else {
             for (int i = 1; i <= 2; ++i) {
                 for (int Lay = 1; Lay <= CFSMAXNL + 1; ++Lay) {
@@ -7952,6 +7946,9 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
                 state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL(i) = CFSAbs(2, i);
             }
         }
+        // Window::InitWindowOpticalCalculations overwrites these after the EQL init
+        state.dataConstruction->Construct(ConstrNum).ReflectSolDiffFront = CFS(EQLNum).L(1).SWP_EL.RHOSFDD;
+        state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack = CFS(EQLNum).L(CFS(EQLNum).NL).SWP_EL.RHOSBDD;
     }
     if (CFS(EQLNum).VBLayerPtr > 0) {
         auto &surfShade = state.dataSurface->surfShades(SurfNum);

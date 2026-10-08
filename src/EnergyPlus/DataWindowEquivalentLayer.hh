@@ -274,7 +274,6 @@ namespace DataWindowEquivalentLayer {
         // Diffuse properties: [0] = front (outside) incident, [1] = back (inside) incident;
         // [0, NL) = layer absorptance (0 = outside layer), [NL] = system transmittance
         std::array<std::array<Real64, CFSMAXNL + 1>, 2> DiffAbsTrans{};
-        bool DiffPropFlag = true; // DiffAbsTrans needs computing
 
         // Default Constructor
         CFSTY() : NL(0), L(CFSMAXNL), G(CFSMAXNL - 1), ISControlled(false), VBLayerPtr(0), WEQLSolverErrorIndex(0)
