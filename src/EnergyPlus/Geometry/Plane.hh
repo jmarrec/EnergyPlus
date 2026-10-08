@@ -207,7 +207,7 @@ public:
 }; // Plane
 
 /// Stream << Plane output operator
-std::ostream &operator<<(std::ostream &stream, Plane const &v);
+std::ostream &operator<<(std::ostream &os, Plane const &v);
 
 } // namespace EnergyPlus
 

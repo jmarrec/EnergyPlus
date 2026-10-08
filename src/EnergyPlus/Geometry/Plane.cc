@@ -49,7 +49,6 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <iomanip>
 #include <ostream>
 
 // ObjexxFCL Headers
@@ -99,24 +98,10 @@ bool Plane::reverseEqual(const Plane &other, double tol) const
 }
 
 // Stream << Plane output operator
-std::ostream &operator<<(std::ostream &stream, Plane const &v)
+std::ostream &operator<<(std::ostream &os, Plane const &v)
 {
-    constexpr std::streamsize precision = 16; // Significant digits
-    constexpr int width = 23;                 // Field width
-
-    // Save current stream state and set persistent state
-    std::ios_base::fmtflags const old_flags = stream.flags();
-    std::streamsize const old_precision = stream.precision(precision);
-    stream << std::right << std::showpoint << std::uppercase;
-
-    // Output Plane
-    stream << std::setw(width) << v.x << ' ' << std::setw(width) << v.y << ' ' << std::setw(width) << v.z << ' ' << std::setw(width) << v.w;
-
-    // Restore previous stream state
-    stream.precision(old_precision);
-    stream.flags(old_flags);
-
-    return stream;
+    os << "[" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << "]";
+    return os;
 }
 
 } // namespace EnergyPlus
