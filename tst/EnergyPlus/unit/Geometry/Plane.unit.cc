@@ -171,83 +171,6 @@ TEST_F(GeometryFixture, ReversedPlane)
     EXPECT_EQ(-p.normal(), r.normal()); // The normal flips
 }
 
-TEST_F(GeometryFixture, Equal_SamePlaneDifferentScale)
-{
-    // z = 0 facing +z, as a unit plane and as the Newell plane of a 1 m x 1 m counterclockwise square
-    Plane const unit(0.0, 0.0, 1.0, 0.0);
-    Plane const newell(0.0, 0.0, 2.0, 0.0);
-    EXPECT_NE(unit, newell);         // Different representation...
-    EXPECT_TRUE(unit.equal(newell)); // ...same plane
-    EXPECT_TRUE(newell.equal(unit));
-    EXPECT_FALSE(unit.reverseEqual(newell));
-
-    // z = 2 facing +z, scaled by 7
-    EXPECT_TRUE(Plane(0.0, 0.0, 1.0, -2.0).equal(Plane(0.0, 0.0, 7.0, -14.0)));
-}
-
-TEST_F(GeometryFixture, Equal_SmallSurface)
-{
-    // Newell plane of a 1 cm x 1 cm square at z = 0: the normal is only 2e-4 long, normalizing must still work
-    Plane const small(0.0, 0.0, 2.0e-4, 0.0);
-    EXPECT_TRUE(small.equal(Plane(0.0, 0.0, 1.0, 0.0)));
-}
-
-TEST_F(GeometryFixture, Equal_ParallelOffset)
-{
-    // z = 0 and z = 1, both facing +z: parallel, but neither equal nor reverse equal
-    Plane const p1(0.0, 0.0, 1.0, 0.0);
-    Plane const p2(0.0, 0.0, 1.0, -1.0);
-    EXPECT_FALSE(p1.equal(p2));
-    EXPECT_FALSE(p1.reverseEqual(p2));
-
-    // x = 10 and x = 20, both facing +x
-    Plane const x10(1.0, 0.0, 0.0, -10.0);
-    Plane const x20(1.0, 0.0, 0.0, -20.0);
-    EXPECT_FALSE(x10.equal(x20));
-    EXPECT_FALSE(x10.reverseEqual(x20));
-}
-
-TEST_F(GeometryFixture, ReverseEqual)
-{
-    // z = 2 facing +z, and the same plane facing -z (the other side of the same wall)
-    Plane const up(0.0, 0.0, 1.0, -2.0);
-    Plane const down(0.0, 0.0, -1.0, 2.0);
-    EXPECT_FALSE(up.equal(down));
-    EXPECT_TRUE(up.reverseEqual(down));
-    EXPECT_TRUE(down.reverseEqual(up));
-    EXPECT_TRUE(up.reverseEqual(-up));
-
-    // Scaling does not matter: Newell planes of the two sides of a 2 m x 3 m surface (|normal| = 2 * area = 12)
-    EXPECT_TRUE(Plane(0.0, 0.0, 12.0, -24.0).reverseEqual(Plane(0.0, 0.0, -12.0, 24.0)));
-
-    // Opposite normals but different planes: x = 10 facing +x and x = -10 facing -x
-    Plane const x10(1.0, 0.0, 0.0, -10.0);
-    Plane const xm10(-1.0, 0.0, 0.0, -10.0);
-    EXPECT_FALSE(x10.equal(xm10));
-    EXPECT_FALSE(x10.reverseEqual(xm10));
-}
-
-TEST_F(GeometryFixture, Equal_Tolerance)
-{
-    // Default tol = 0.001
-    Plane const p(0.0, 0.0, 1.0, 0.0);
-
-    // Distance: tol is in length units
-    EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, -0.0005)));      // 0.5 mm away
-    EXPECT_FALSE(p.equal(Plane(0.0, 0.0, 1.0, -0.002)));      // 2 mm away
-    EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, -0.002), 0.01)); // ...unless a larger tol is passed
-
-    // Angle: tol is on the cosine of the angle between the normals (0.001 is about 2.6 degrees)
-    auto tilted = [](double const degrees) {
-        double const theta(degrees * std::acos(-1.0) / 180.0);
-        return Plane(std::sin(theta), 0.0, std::cos(theta), 0.0); // Through the origin, normal tilted about y
-    };
-    EXPECT_TRUE(p.equal(tilted(2.0)));  // cos(2 deg) = 0.99939
-    EXPECT_FALSE(p.equal(tilted(3.0))); // cos(3 deg) = 0.99863
-    EXPECT_TRUE(p.reverseEqual(-tilted(2.0)));
-    EXPECT_FALSE(p.reverseEqual(-tilted(3.0)));
-}
-
 TEST_F(GeometryFixture, SignedDistance)
 {
     using Point = Vector3D;
@@ -291,14 +214,14 @@ TEST_F(GeometryFixture, FromVertices)
         Vertices const v({Point(0.0, 0.0, 0.0), Point(1.0, 0.0, 0.0), Point(1.0, 1.0, 0.0), Point(0.0, 1.0, 0.0)});
         Plane const p(Plane::fromVertices(v));
         EXPECT_EQ(Plane(0.0, 0.0, 2.0, 0.0), p);
-        EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, 0.0)));
+        EXPECT_EQ(Plane(0.0, 0.0, 1.0, 0.0), p.normalized());
     }
     {
         // Same square, clockwise: the normal flips
         Vertices const v({Point(0.0, 1.0, 0.0), Point(1.0, 1.0, 0.0), Point(1.0, 0.0, 0.0), Point(0.0, 0.0, 0.0)});
         Plane const p(Plane::fromVertices(v));
         EXPECT_EQ(Plane(0.0, 0.0, -2.0, 0.0), p);
-        EXPECT_TRUE(p.reverseEqual(Plane(0.0, 0.0, 1.0, 0.0)));
+        EXPECT_EQ(Plane(0.0, 0.0, 1.0, 0.0), (-p).normalized());
     }
     {
         // 2 m x 3 m rectangle at z = 2: |normal| = 12, plane z = 2
@@ -311,7 +234,8 @@ TEST_F(GeometryFixture, FromVertices)
         // Wall at x = 10 facing +x (counterclockwise seen from +x)
         Vertices const v({Point(10.0, 0.0, 1.0), Point(10.0, 0.0, 0.0), Point(10.0, 1.0, 0.0), Point(10.0, 1.0, 1.0)});
         Plane const p(Plane::fromVertices(v));
-        EXPECT_TRUE(p.equal(Plane(1.0, 0.0, 0.0, -10.0)));
+        EXPECT_EQ(Plane(2.0, 0.0, 0.0, -20.0), p);
+        EXPECT_EQ(Plane(1.0, 0.0, 0.0, -10.0), p.normalized());
         for (Point const &vertex : v) {
             EXPECT_DOUBLE_EQ(0.0, p.signedDistance(vertex));
         }
@@ -326,7 +250,7 @@ TEST_F(GeometryFixture, FromVertices)
         Vertices const v({Point(0.0, 0.0, 0.0), Point(0.01, 0.0, 0.0), Point(0.01, 0.01, 0.0), Point(0.0, 0.01, 0.0)});
         Plane const p(Plane::fromVertices(v));
         EXPECT_DOUBLE_EQ(2.0e-4, p.z);
-        EXPECT_TRUE(p.equal(Plane(0.0, 0.0, 1.0, 0.0)));
+        EXPECT_DOUBLE_EQ(1.0, p.normalized().z);                         // Still a unit +z normal once normalized
         EXPECT_DOUBLE_EQ(0.0, p.signedDistance(Point(10.0, 10.0, 0.0))); // Far point on the same plane
     }
     {

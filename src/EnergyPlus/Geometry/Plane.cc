@@ -47,7 +47,6 @@
 
 // C++ Headers
 #include <cassert>
-#include <cmath>
 #include <cstddef>
 #include <ostream>
 
@@ -81,20 +80,6 @@ Plane Plane::fromVertices(ObjexxFCL::Array1D<Vector3D> const &vertices)
     }
     d = -(center.dot(Vector(a, b, c)) / n); // center/n is the center point
     return {a, b, c, d};                    // a*x + b*y + c*z + d = 0
-}
-
-bool Plane::equal(const Plane &other, double tol) const
-{
-    Plane const p = normalized();
-    Plane const q = other.normalized();
-    const double dot = (p.x * q.x) + (p.y * q.y) + (p.z * q.z);
-    const double dist = p.w - q.w;
-    return (dot >= 1.0 - tol) && (std::fabs(dist) <= tol);
-}
-
-bool Plane::reverseEqual(const Plane &other, double tol) const
-{
-    return equal(-other, tol);
 }
 
 // Stream << Plane output operator
