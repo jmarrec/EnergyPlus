@@ -59,6 +59,7 @@
 
 // C++ Headers
 #include <cmath>
+#include <optional>
 #include <sstream>
 
 using namespace EnergyPlus;
@@ -169,6 +170,43 @@ TEST_F(GeometryFixture, ReversedPlane)
     EXPECT_EQ(Plane(-1.0, 2.0, -3.0, 4.0), r);
     EXPECT_EQ(p, -r);                   // Reversing twice gives the original back
     EXPECT_EQ(-p.normal(), r.normal()); // The normal flips
+}
+
+TEST_F(GeometryFixture, RayIntersection)
+{
+    using Point = Vector3D;
+    Plane const z2(0.0, 0.0, 1.0, -2.0); // Plane z = 2, normal +z
+
+    // Ray from below, going up: hits at z = 2
+    std::optional<Point> hit = z2.rayIntersection(Point(1.0, 3.0, 0.0), Vector3D::UnitZ());
+    ASSERT_TRUE(hit);
+    EXPECT_EQ(Point(1.0, 3.0, 2.0), *hit);
+
+    // Either side can be hit: ray from above, going down
+    hit = z2.rayIntersection(Point(1.0, 3.0, 5.0), -Vector3D::UnitZ());
+    ASSERT_TRUE(hit);
+    EXPECT_EQ(Point(1.0, 3.0, 2.0), *hit);
+
+    // Oblique ray: (0, 0, 0) + t * (1, 0, 1) reaches z = 2 at t = 2
+    hit = z2.rayIntersection(Point(0.0, 0.0, 0.0), Vector3D(1.0, 0.0, 1.0));
+    ASSERT_TRUE(hit);
+    EXPECT_EQ(Point(2.0, 0.0, 2.0), *hit);
+
+    // No hit: parallel to the plane, pointing away from it, or starting on it
+    EXPECT_FALSE(z2.rayIntersection(Point(0.0, 0.0, 0.0), Vector3D::UnitX()));
+    EXPECT_FALSE(z2.rayIntersection(Point(0.0, 0.0, 2.0), Vector3D::UnitX())); // Even when the ray lies in the plane
+    EXPECT_FALSE(z2.rayIntersection(Point(0.0, 0.0, 0.0), -Vector3D::UnitZ()));
+    EXPECT_FALSE(z2.rayIntersection(Point(0.0, 0.0, 2.0), Vector3D::UnitZ()));
+
+    // tMax: the plane is 2 away along a unit direction
+    EXPECT_TRUE(z2.rayIntersection(Point(0.0, 0.0, 0.0), Vector3D::UnitZ(), 3.0));
+    EXPECT_TRUE(z2.rayIntersection(Point(0.0, 0.0, 0.0), Vector3D::UnitZ(), 2.0)); // t == tMax is a hit
+    EXPECT_FALSE(z2.rayIntersection(Point(0.0, 0.0, 0.0), Vector3D::UnitZ(), 1.0));
+
+    // A non-normalized plane (same plane, scaled by 7) gives the same hit point
+    hit = Plane(0.0, 0.0, 7.0, -14.0).rayIntersection(Point(1.0, 3.0, 0.0), Vector3D::UnitZ());
+    ASSERT_TRUE(hit);
+    EXPECT_EQ(Point(1.0, 3.0, 2.0), *hit);
 }
 
 TEST_F(GeometryFixture, SignedDistance)

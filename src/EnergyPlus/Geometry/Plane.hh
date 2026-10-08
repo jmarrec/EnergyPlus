@@ -52,6 +52,8 @@
 #include <cassert>
 #include <cstddef>
 #include <iosfwd>
+#include <limits>
+#include <optional>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.fwd.hh>
@@ -159,6 +161,32 @@ public:
         double const normal_length = normal().length();
         assert(normal_length != 0.0);
         return ((x * point.x) + (y * point.y) + (z * point.z) + w) / normal_length;
+    }
+
+    /// @brief Point where the ray rayOri + t * rayDir hits the plane, for 0 < t <= tMax
+    ///
+    ///  - Either side of the plane can be hit: the normal's orientation does not matter
+    ///  - No hit (std::nullopt) if the ray is parallel to the plane (even if it lies in it), points away from it, starts on it,
+    ///    or hits it beyond tMax
+    ///  - tMax is in units of rayDir: with a unit rayDir it is the maximum distance from rayOri. The default (infinity) means no limit,
+    ///    and costs nothing: no value compares greater than infinity, so the check is optimized away
+    ///  - Works on a non-normalized plane: t does not depend on the scaling of the coefficients
+    constexpr std::optional<Vector3D>
+    rayIntersection(Vector3D const &rayOri, Vector3D const &rayDir, double const tMax = std::numeric_limits<double>::infinity()) const
+    {
+        double const den = normal().dot(rayDir);
+        if (den == 0.0) {
+            return std::nullopt;
+        }
+        double const num = -(normal().dot(rayOri) + w);
+        if (num * den <= 0.0) { // t <= 0: checks for different signs without dividing
+            return std::nullopt;
+        }
+        double const t = num / den;
+        if (t > tMax) {
+            return std::nullopt;
+        }
+        return rayOri + t * rayDir;
     }
     //@}
 
