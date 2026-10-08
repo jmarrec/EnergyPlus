@@ -144,13 +144,10 @@ void InitEquivalentLayerWindowCalculations(EnergyPlusData &state)
     if (!allocated(state.dataWindowEquivLayer->CFS)) {
         state.dataWindowEquivLayer->CFS.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
     }
-    if (!allocated(state.dataWindowEquivLayer->EQLDiffPropFlag)) {
-        state.dataWindowEquivLayer->EQLDiffPropFlag.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
-    }
 
-    state.dataWindowEquivLayer->EQLDiffPropFlag = true;
     for (auto &cfs : state.dataWindowEquivLayer->CFS) {
         cfs.DiffAbsTrans = {};
+        cfs.DiffPropFlag = true;
     }
 
     for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
@@ -7910,7 +7907,7 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             CFSAbs(2, i) = Abs1(2, i);
         }
     } else {
-        if (state.dataWindowEquivLayer->EQLDiffPropFlag(EQLNum)) {
+        if (CFS(EQLNum).DiffPropFlag) {
             for (int Lay = 1; Lay <= CFS(EQLNum).NL; ++Lay) {
                 if (IsVBLayer(CFS(EQLNum).L(Lay))) {
                     if (CFS(EQLNum).L(Lay).LTYPE == LayerType::VBHOR) {
@@ -7939,7 +7936,7 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffFront = CFS(EQLNum).L(1).SWP_EL.RHOSFDD;
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack = CFS(EQLNum).L(CFS(EQLNum).NL).SWP_EL.RHOSBDD;
             if (!CFS(EQLNum).ISControlled) {
-                state.dataWindowEquivLayer->EQLDiffPropFlag(EQLNum) = false;
+                CFS(EQLNum).DiffPropFlag = false;
             }
         } else {
             for (int i = 1; i <= 2; ++i) {
