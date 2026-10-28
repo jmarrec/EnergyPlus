@@ -12805,10 +12805,11 @@ FenestrationSurface:Detailed,
        \note If not specified (blank), window or glass door has no frame or divider
        \note and no beam solar reflection from reveal surfaces.
   N2,  \field Multiplier
+       \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
-       \note Non-integer values will be truncated to integer
-       \default 1.0
-       \minimum 1.0
+       \note Non-integer values will be rounded to integer
+       \default 1
+       \minimum 1
   N3,  \field Number of Vertices
        \minimum 3
        \maximum 4
@@ -12898,10 +12899,11 @@ Window,
        \note If not specified (blank), window or glass door has no frame or divider
        \note and no beam solar reflection from reveal surfaces.
   N1 , \field Multiplier
+       \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
-       \note Non-integer values will be truncated to integer
-       \default 1.0
-       \minimum 1.0
+       \note Non-integer values will be rounded to integer
+       \default 1
+       \minimum 1
   N2,  \field Starting X Coordinate
        \note Window starting coordinate is specified relative to the Base Surface origin.
        \units m
@@ -12937,10 +12939,11 @@ Door,
        \type object-list
        \object-list SurfaceNames
   N1 , \field Multiplier
+       \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
-       \note Non-integer values will be truncated to integer
-       \default 1.0
-       \minimum 1.0
+       \note Non-integer values will be rounded to integer
+       \default 1
+       \minimum 1
   N2,  \field Starting X Coordinate
        \note Door starting coordinate is specified relative to the Base Surface origin.
        \units m
@@ -12984,10 +12987,11 @@ GlazedDoor,
        \note If not specified (blank), window or glass door has no frame or divider
        \note and no beam solar reflection from reveal surfaces.
   N1 , \field Multiplier
+       \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
-       \note Non-integer values will be truncated to integer
-       \default 1.0
-       \minimum 1.0
+       \note Non-integer values will be rounded to integer
+       \default 1
+       \minimum 1
   N2,  \field Starting X Coordinate
        \note Door starting coordinate is specified relative to the Base Surface origin.
        \units m
@@ -13031,10 +13035,11 @@ Window:Interzone,
        \note a blank field will set up a Window in an adjacent zone
        \note (same zone as adjacent to base surface)
   N1 , \field Multiplier
+       \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
-       \note Non-integer values will be truncated to integer
-       \default 1.0
-       \minimum 1.0
+       \note Non-integer values will be rounded to integer
+       \default 1
+       \minimum 1
   N2,  \field Starting X Coordinate
        \note Window starting coordinate is specified relative to the Base Surface origin.
        \units m
@@ -13079,10 +13084,11 @@ Door:Interzone,
        \note a blank field will set up a Window in an adjacent zone
        \note (same zone as adjacent to base surface)
   N1 , \field Multiplier
+       \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
-       \note Non-integer values will be truncated to integer
-       \default 1.0
-       \minimum 1.0
+       \note Non-integer values will be rounded to integer
+       \default 1
+       \minimum 1
   N2,  \field Starting X Coordinate
        \note Door starting coordinate is specified relative to the Base Surface origin.
        \units m
@@ -13128,7 +13134,7 @@ GlazedDoor:Interzone,
   N1 , \field Multiplier
        \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
-       \note Non-integer values will be truncated to integer
+       \note Non-integer values will be rounded to integer
        \default 1
        \minimum 1
   N2,  \field Starting X Coordinate
