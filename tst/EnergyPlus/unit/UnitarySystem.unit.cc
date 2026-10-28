@@ -23265,215 +23265,204 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
 TEST_F(ZoneUnitarySysTest, UnitarySystemModel_LowerSpeedFlowSizingTest)
 {
     // issue #9100
-    std::string_view constexpr idf_objects = R"IDF(
-
-  AirLoopHVAC:UnitarySystem,
-    Unitary System Model,            !- Name
-    Load,                            !- Control Type
-    East Zone,                       !- Controlling Zone or Thermostat Location
-    None,                            !- Dehumidification Control Type
-    Constant-1.0,                       !- Availability Schedule Name
-    Zone Exhaust Node,               !- Air Inlet Node Name
-    DX ClgCoil Air Outlet Node,      !- Air Outlet Node Name
-    Fan:OnOff,                       !- Supply Fan Object Type
-    Zone Supply Air Fan,             !- Supply Fan Name
-    BlowThrough,                     !- Fan Placement
-    ,                                !- Supply Air Fan Operating Mode Schedule Name
-    ,                                !- Heating Coil Object Type
-    ,                                !- Heating Coil Name
-    ,                                !- DX Heating Coil Sizing Ratio
-    Coil:Cooling:DX,                 !- ClgCoil Object Type
-    DX ClgCoil,                      !- ClgCoil Name
-    No,                              !- Use DOAS DX ClgCoil
-    2.0,                             !- DOAS DX ClgCoil Leaving Minimum Air Temperature{ C }
-    SensibleOnlyLoadControl,         !- Latent Load Control
-    ,                                !- Supplemental Heating Coil Object Type
-    ,                                !- Supplemental Heating Coil Name
-    ,                                !- Supply Air Flow Rate Method During Cooling Operation
-    autosize,                        !- Supply Air Flow Rate During Cooling Operation{ m3/s }
-    ,                                !- Supply Air Flow Rate Per Floor Area During Cooling Operation{ m3/s-m2 }
-    ,                                !- Fraction of Autosized Design Cooling Supply Air Flow Rate
-    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Cooling Operation{ m3/s-W }
-    SupplyAirFlowRate,               !- Supply air Flow Rate Method During Heating Operation
-    autosize,                        !- Supply Air Flow Rate During Heating Operation{ m3/s }
-    ,                                !- Supply Air Flow Rate Per Floor Area during Heating Operation{ m3/s-m2 }
-    ,                                !- Fraction of Autosized Design Heating Supply Air Flow Rate
-    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Heating Operation{ m3/s-W }
-    ,                                !- Supply Air Flow Rate Method When No Cooling or Heating is Required
-    autosize,                        !- Supply Air Flow Rate When No Cooling or Heating is Required{ m3/s }
-    ,                                !- Supply Air Flow Rate Per Floor Area When No Cooling or Heating is Required{ m3/s-m2 }
-    ,                                !- Fraction of Autosized Design Cooling Supply Air Flow Rate
-    ,                                !- Fraction of Autosized Design Heating Supply Air Flow Rate
-    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Cooling Operation{ m3/s-W }
-    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Heating Operation{ m3/s-W }
-    ,                                !- No Load Supply Air Flow Rate Control Set To Low Speed
-    80.0,                            !- Maximum Supply Air Temperature{ C }
-    ,                                !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
-    ,                                !- Outdoor Dry-Bulb Temperature Sensor Node Name
-    ,                                !- Ancillary On-Cycle Electric Power
-    ,                                !- Ancillary Off-Cycle Electric Power
-    ,                                !- Design Heat Recovery Water Flow Rate
-    ,                                !- Maximum Temperature for Heat Recovery
-    ,                                !- Heat Recovery Water Inlet Node Name
-    ,                                !- Heat Recovery Water Outlet Node Name
-    ,                                !- Design Specification Multispeed Object Type
-    ;                                !- Design Specification Multispeed Object Name
-
-  Fan:OnOff,
-    Zone Supply Air Fan,             !- Name
-    Constant-1.0,                       !- Availability Schedule Name
-    0.5,                             !- Fan Total Efficiency
-    500.0,                           !- Pressure Rise{ Pa }
-    autosize,                        !- Maximum Flow Rate{ m3 / s }
-    0.9,                             !- Motor Efficiency
-    1.0,                             !- Motor In Airstream Fraction
-    Zone Exhaust Node,               !- Air Inlet Node Name
-    DX ClgCoil Air Inlet Node;       !- Air Outlet Node Name
-
-  ScheduleTypeLimits,
-    Any Number;                      !- Name
-
-  Coil:Cooling:DX,
-    DX ClgCoil,                      !- Name
-    DX ClgCoil Air Inlet Node,       !- Evaporator Inlet Node Name
-    DX ClgCoil Air Outlet Node,      !- Evaporator Outlet Node Name
-    ,                                !- Availability Schedule Name
-    ,                                !- Condenser Zone Name
-    DX ClgCoil Cond Inlet Node,      !- Condenser Inlet Node Name
-    DX ClgCoil Cond Outlet Node,     !- Condenser Outlet Node Name
-    DX ClgCoil Performance,          !- Performance Object Name
-    ,                                !- Condensate Collection Water Storage Tank Name
-    ;                                !- Evaporative Condenser Supply Water Storage Tank Name
-
-  Coil:Cooling:DX:CurveFit:Performance,
-    DX ClgCoil Performance,          !- Name
-    0,                               !- Crankcase Heater Capacity {W}
-    ,                                !- Crankcase Heater Capacity Function of Temperature Curve Name
-    ,                                !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
-    10,                              !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
-    ,                                !- Unit Internal Static Air Pressure {Pa}
-    ,                                !- Capacity Control Method
-    ,                                !- Evaporative Condenser Basin Heater Capacity {W/K}
-    ,                                !- Evaporative Condenser Basin Heater Setpoint Temperature {C}
-    ,                                !- Evaporative Condenser Basin Heater Operating Schedule Name
-    Electricity,                     !- Compressor Fuel Type
-    DX ClgCoil Operating Mode,       !- Base Operating Mode
-    ,                                !- Alternative Operating Mode 1
-    ;                                !- Alternative Operating Mode 2
-
-  Coil:Cooling:DX:CurveFit:OperatingMode,
-    DX ClgCoil Operating Mode,       !- Name
-    autosize,                        !- Rated Gross Total Cooling Capacity {W}
-    autosize,                        !- Rated Evaporator Air Flow Rate {m3/s}
-    ,                                !- Rated Condenser Air Flow Rate {m3/s}
-    0,                               !- Maximum Cycling Rate {cycles/hr}
-    0,                               !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
-    0,                               !- Latent Capacity Time Constant {s}
-    0,                               !- Nominal Time for Condensate Removal to Begin {s}
-    Yes,                             !- Apply Part Load Fraction to Speeds Greater than 1
-    ,                                !- Apply Latent Degradation to Speeds Greater than 1
-    AirCooled,                       !- Condenser Type
-    0,                               !- Nominal Evaporative Condenser Pump Power {W}
-    4,                               !- Nominal Speed Number
-    DX ClgCoil Speed 1 Performance,  !- Speed 1 Name
-    DX ClgCoil Speed 2 Performance,  !- Speed 2 Name
-    DX ClgCoil Speed 3 Performance,  !- Speed 3 Name
-    DX ClgCoil Speed 4 Performance;  !- Speed 4 Name
-
-  Coil:Cooling:DX:CurveFit:Speed,
-    DX ClgCoil Speed 1 Performance,  !- Name
-    0.25,                            !- Gross Total Cooling Capacity Fraction
-    0.25,                            !- Evaporator Air Flow Rate Fraction
-    0.25,                            !- Condenser Air Flow Rate Fraction
-    0.77,                            !- Gross Sensible Heat Ratio
-    4.17,                            !- Gross Cooling COP {W/W}
-    1.0,                             !- Active Fraction of Coil Face Area
-    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- Evaporative Condenser Pump Power Fraction
-    0,                               !- Evaporative Condenser Effectiveness {dimensionless}
-    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name
-    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name
-    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name
-    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name
-    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name
-    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}
-    ,                                !- Waste Heat Modifier Function of Temperature Curve Name
-    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name
-    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name
-
-  Coil:Cooling:DX:CurveFit:Speed,
-    DX ClgCoil Speed 2 Performance,  !- Name
-    0.5,                             !- Gross Total Cooling Capacity Fraction
-    0.5,                             !- Evaporator Air Flow Rate Fraction
-    0.5,                             !- Condenser Air Flow Rate Fraction
-    0.77,                            !- Gross Sensible Heat Ratio
-    4.17,                            !- Gross Cooling COP {W/W}
-    1.0,                             !- Active Fraction of Coil Face Area
-    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- Evaporative Condenser Pump Power Fraction
-    0,                               !- Evaporative Condenser Effectiveness {dimensionless}
-    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name
-    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name
-    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name
-    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name
-    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name
-    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}
-    ,                                !- Waste Heat Modifier Function of Temperature Curve Name
-    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name
-    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name
-
-  Coil:Cooling:DX:CurveFit:Speed,
-    DX ClgCoil Speed 3 Performance,  !- Name
-    0.75,                            !- Gross Total Cooling Capacity Fraction
-    0.75,                            !- Evaporator Air Flow Rate Fraction
-    0.75,                            !- Condenser Air Flow Rate Fraction
-    0.77,                            !- Gross Sensible Heat Ratio
-    4.17,                            !- Gross Cooling COP {W/W}
-    1.0,                             !- Active Fraction of Coil Face Area
-    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- Evaporative Condenser Pump Power Fraction
-    0,                               !- Evaporative Condenser Effectiveness {dimensionless}
-    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name
-    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name
-    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name
-    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name
-    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name
-    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}
-    ,                                !- Waste Heat Modifier Function of Temperature Curve Name
-    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name
-    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name
-
-  Coil:Cooling:DX:CurveFit:Speed,
-    DX ClgCoil Speed 4 Performance,  !- Name
-    1.0,                             !- Gross Total Cooling Capacity Fraction
-    1.0,                             !- Evaporator Air Flow Rate Fraction
-    1.0,                             !- Condenser Air Flow Rate Fraction
-    0.77,                            !- Gross Sensible Heat Ratio
-    4.17,                            !- Gross Cooling COP {W/W}
-    1.0,                             !- Active Fraction of Coil Face Area
-    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-    ,                                !- Evaporative Condenser Pump Power Fraction
-    0,                               !- Evaporative Condenser Effectiveness {dimensionless}
-    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name
-    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name
-    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name
-    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name
-    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name
-    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}
-    ,                                !- Waste Heat Modifier Function of Temperature Curve Name
-    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name
-    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name
-
-Curve:Quadratic, PLFFPLR, 0.85, 0.83, 0.0, 0.0, 0.3, 0.85, 1.0, Dimensionless, Dimensionless;
-Curve:Cubic, CAPFF, 1, 0, 0, 0, 0, 1, , , Dimensionless, Dimensionless;
-Curve:Cubic, EIRFF, 1, 0, 0, 0, 0, 1, , , Dimensionless, Dimensionless;
-Curve:Biquadratic, CAPFT, 1, 0, 0, 0, 0, 0, 0, 100, 0, 100, , , Temperature, Temperature, Dimensionless;
-Curve:Biquadratic, EIRFT, 1, 0, 0, 0, 0, 0, 0, 100, 0, 100, , , Temperature, Temperature, Dimensionless;
-)IDF";
+    std::string const idf_objects = delimited_string({
+        "  AirLoopHVAC:UnitarySystem,",
+        "    Unitary System Model,            !- Name",
+        "    Load,                            !- Control Type",
+        "    East Zone,                       !- Controlling Zone or Thermostat Location",
+        "    None,                            !- Dehumidification Control Type",
+        "    Constant-1.0,                       !- Availability Schedule Name",
+        "    Zone Exhaust Node,               !- Air Inlet Node Name",
+        "    DX ClgCoil Air Outlet Node,      !- Air Outlet Node Name",
+        "    Fan:OnOff,                       !- Supply Fan Object Type",
+        "    Zone Supply Air Fan,             !- Supply Fan Name",
+        "    BlowThrough,                     !- Fan Placement",
+        "    ,                                !- Supply Air Fan Operating Mode Schedule Name",
+        "    ,                                !- Heating Coil Object Type",
+        "    ,                                !- Heating Coil Name",
+        "    ,                                !- DX Heating Coil Sizing Ratio",
+        "    Coil:Cooling:DX,                 !- ClgCoil Object Type",
+        "    DX ClgCoil,                      !- ClgCoil Name",
+        "    No,                              !- Use DOAS DX ClgCoil",
+        "    2.0,                             !- DOAS DX ClgCoil Leaving Minimum Air Temperature{ C }",
+        "    SensibleOnlyLoadControl,         !- Latent Load Control",
+        "    ,                                !- Supplemental Heating Coil Object Type",
+        "    ,                                !- Supplemental Heating Coil Name",
+        "    ,                                !- Supply Air Flow Rate Method During Cooling Operation",
+        "    autosize,                        !- Supply Air Flow Rate During Cooling Operation{ m3/s }",
+        "    ,                                !- Supply Air Flow Rate Per Floor Area During Cooling Operation{ m3/s-m2 }",
+        "    ,                                !- Fraction of Autosized Design Cooling Supply Air Flow Rate",
+        "    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Cooling Operation{ m3/s-W }",
+        "    SupplyAirFlowRate,               !- Supply air Flow Rate Method During Heating Operation",
+        "    autosize,                        !- Supply Air Flow Rate During Heating Operation{ m3/s }",
+        "    ,                                !- Supply Air Flow Rate Per Floor Area during Heating Operation{ m3/s-m2 }",
+        "    ,                                !- Fraction of Autosized Design Heating Supply Air Flow Rate",
+        "    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Heating Operation{ m3/s-W }",
+        "    ,                                !- Supply Air Flow Rate Method When No Cooling or Heating is Required",
+        "    autosize,                        !- Supply Air Flow Rate When No Cooling or Heating is Required{ m3/s }",
+        "    ,                                !- Supply Air Flow Rate Per Floor Area When No Cooling or Heating is Required{ m3/s-m2 }",
+        "    ,                                !- Fraction of Autosized Design Cooling Supply Air Flow Rate",
+        "    ,                                !- Fraction of Autosized Design Heating Supply Air Flow Rate",
+        "    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Cooling Operation{ m3/s-W }",
+        "    ,                                !- Design Supply Air Flow Rate Per Unit of Capacity During Heating Operation{ m3/s-W }",
+        "    ,                                !- No Load Supply Air Flow Rate Control Set To Low Speed",
+        "    80.0,                            !- Maximum Supply Air Temperature{ C }",
+        "    ,                                !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}",
+        "    ,                                !- Outdoor Dry-Bulb Temperature Sensor Node Name",
+        "    ,                                !- Ancillary On-Cycle Electric Power",
+        "    ,                                !- Ancillary Off-Cycle Electric Power",
+        "    ,                                !- Design Heat Recovery Water Flow Rate",
+        "    ,                                !- Maximum Temperature for Heat Recovery",
+        "    ,                                !- Heat Recovery Water Inlet Node Name",
+        "    ,                                !- Heat Recovery Water Outlet Node Name",
+        "    ,                                !- Design Specification Multispeed Object Type",
+        "    ;                                !- Design Specification Multispeed Object Name",
+        "  Fan:OnOff,",
+        "    Zone Supply Air Fan,             !- Name",
+        "    Constant-1.0,                       !- Availability Schedule Name",
+        "    0.5,                             !- Fan Total Efficiency",
+        "    500.0,                           !- Pressure Rise{ Pa }",
+        "    autosize,                        !- Maximum Flow Rate{ m3 / s }",
+        "    0.9,                             !- Motor Efficiency",
+        "    1.0,                             !- Motor In Airstream Fraction",
+        "    Zone Exhaust Node,               !- Air Inlet Node Name",
+        "    DX ClgCoil Air Inlet Node;       !- Air Outlet Node Name",
+        "  ScheduleTypeLimits,",
+        "    Any Number;                      !- Name",
+        "  Coil:Cooling:DX,",
+        "    DX ClgCoil,                      !- Name",
+        "    DX ClgCoil Air Inlet Node,       !- Evaporator Inlet Node Name",
+        "    DX ClgCoil Air Outlet Node,      !- Evaporator Outlet Node Name",
+        "    ,                                !- Availability Schedule Name",
+        "    ,                                !- Condenser Zone Name",
+        "    DX ClgCoil Cond Inlet Node,      !- Condenser Inlet Node Name",
+        "    DX ClgCoil Cond Outlet Node,     !- Condenser Outlet Node Name",
+        "    DX ClgCoil Performance,          !- Performance Object Name",
+        "    ,                                !- Condensate Collection Water Storage Tank Name",
+        "    ;                                !- Evaporative Condenser Supply Water Storage Tank Name",
+        "  Coil:Cooling:DX:CurveFit:Performance,",
+        "    DX ClgCoil Performance,          !- Name",
+        "    0,                               !- Crankcase Heater Capacity {W}",
+        "    ,                                !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        "    ,                                !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    10,                              !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "    ,                                !- Unit Internal Static Air Pressure {Pa}",
+        "    ,                                !- Capacity Control Method",
+        "    ,                                !- Evaporative Condenser Basin Heater Capacity {W/K}",
+        "    ,                                !- Evaporative Condenser Basin Heater Setpoint Temperature {C}",
+        "    ,                                !- Evaporative Condenser Basin Heater Operating Schedule Name",
+        "    Electricity,                     !- Compressor Fuel Type",
+        "    DX ClgCoil Operating Mode,       !- Base Operating Mode",
+        "    ,                                !- Alternative Operating Mode 1",
+        "    ;                                !- Alternative Operating Mode 2",
+        "  Coil:Cooling:DX:CurveFit:OperatingMode,",
+        "    DX ClgCoil Operating Mode,       !- Name",
+        "    autosize,                        !- Rated Gross Total Cooling Capacity {W}",
+        "    autosize,                        !- Rated Evaporator Air Flow Rate {m3/s}",
+        "    ,                                !- Rated Condenser Air Flow Rate {m3/s}",
+        "    0,                               !- Maximum Cycling Rate {cycles/hr}",
+        "    0,                               !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
+        "    0,                               !- Latent Capacity Time Constant {s}",
+        "    0,                               !- Nominal Time for Condensate Removal to Begin {s}",
+        "    Yes,                             !- Apply Part Load Fraction to Speeds Greater than 1",
+        "    ,                                !- Apply Latent Degradation to Speeds Greater than 1",
+        "    AirCooled,                       !- Condenser Type",
+        "    0,                               !- Nominal Evaporative Condenser Pump Power {W}",
+        "    4,                               !- Nominal Speed Number",
+        "    DX ClgCoil Speed 1 Performance,  !- Speed 1 Name",
+        "    DX ClgCoil Speed 2 Performance,  !- Speed 2 Name",
+        "    DX ClgCoil Speed 3 Performance,  !- Speed 3 Name",
+        "    DX ClgCoil Speed 4 Performance;  !- Speed 4 Name",
+        "  Coil:Cooling:DX:CurveFit:Speed,",
+        "    DX ClgCoil Speed 1 Performance,  !- Name",
+        "    0.25,                            !- Gross Total Cooling Capacity Fraction",
+        "    0.25,                            !- Evaporator Air Flow Rate Fraction",
+        "    0.25,                            !- Condenser Air Flow Rate Fraction",
+        "    0.77,                            !- Gross Sensible Heat Ratio",
+        "    4.17,                            !- Gross Cooling COP {W/W}",
+        "    1.0,                             !- Active Fraction of Coil Face Area",
+        "    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- Evaporative Condenser Pump Power Fraction",
+        "    0,                               !- Evaporative Condenser Effectiveness {dimensionless}",
+        "    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name",
+        "    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name",
+        "    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name",
+        "    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name",
+        "    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name",
+        "    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}",
+        "    ,                                !- Waste Heat Modifier Function of Temperature Curve Name",
+        "    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name",
+        "    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name",
+        "  Coil:Cooling:DX:CurveFit:Speed,",
+        "    DX ClgCoil Speed 2 Performance,  !- Name",
+        "    0.5,                             !- Gross Total Cooling Capacity Fraction",
+        "    0.5,                             !- Evaporator Air Flow Rate Fraction",
+        "    0.5,                             !- Condenser Air Flow Rate Fraction",
+        "    0.77,                            !- Gross Sensible Heat Ratio",
+        "    4.17,                            !- Gross Cooling COP {W/W}",
+        "    1.0,                             !- Active Fraction of Coil Face Area",
+        "    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- Evaporative Condenser Pump Power Fraction",
+        "    0,                               !- Evaporative Condenser Effectiveness {dimensionless}",
+        "    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name",
+        "    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name",
+        "    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name",
+        "    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name",
+        "    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name",
+        "    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}",
+        "    ,                                !- Waste Heat Modifier Function of Temperature Curve Name",
+        "    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name",
+        "    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name",
+        "  Coil:Cooling:DX:CurveFit:Speed,",
+        "    DX ClgCoil Speed 3 Performance,  !- Name",
+        "    0.75,                            !- Gross Total Cooling Capacity Fraction",
+        "    0.75,                            !- Evaporator Air Flow Rate Fraction",
+        "    0.75,                            !- Condenser Air Flow Rate Fraction",
+        "    0.77,                            !- Gross Sensible Heat Ratio",
+        "    4.17,                            !- Gross Cooling COP {W/W}",
+        "    1.0,                             !- Active Fraction of Coil Face Area",
+        "    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- Evaporative Condenser Pump Power Fraction",
+        "    0,                               !- Evaporative Condenser Effectiveness {dimensionless}",
+        "    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name",
+        "    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name",
+        "    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name",
+        "    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name",
+        "    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name",
+        "    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}",
+        "    ,                                !- Waste Heat Modifier Function of Temperature Curve Name",
+        "    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name",
+        "    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name",
+        "  Coil:Cooling:DX:CurveFit:Speed,",
+        "    DX ClgCoil Speed 4 Performance,  !- Name",
+        "    1.0,                             !- Gross Total Cooling Capacity Fraction",
+        "    1.0,                             !- Evaporator Air Flow Rate Fraction",
+        "    1.0,                             !- Condenser Air Flow Rate Fraction",
+        "    0.77,                            !- Gross Sensible Heat Ratio",
+        "    4.17,                            !- Gross Cooling COP {W/W}",
+        "    1.0,                             !- Active Fraction of Coil Face Area",
+        "    ,                                !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "    ,                                !- Evaporative Condenser Pump Power Fraction",
+        "    0,                               !- Evaporative Condenser Effectiveness {dimensionless}",
+        "    CAPFT,                           !- Total Cooling Capacity Modifier Function of Temperature Curve Name",
+        "    CAPFF,                           !- Total Cooling Capacity Modifier Function of Air Flow Fraction Curve Name",
+        "    EIRFT,                           !- Energy Input Ratio Modifier Function of Temperature Curve Name",
+        "    EIRFF,                           !- Energy Input Ratio Modifier Function of Air Flow Fraction Curve Name",
+        "    PLFFPLR,                         !- Part Load Fraction Correlation Curve Name",
+        "    ,                                !- Rated Waste Heat Fraction of Power Input {dimensionless}",
+        "    ,                                !- Waste Heat Modifier Function of Temperature Curve Name",
+        "    ,                                !- Sensible Heat Ratio Modifier Function of Temperature Curve Name",
+        "    ;                                !- Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name",
+        "Curve:Quadratic, PLFFPLR, 0.85, 0.83, 0.0, 0.0, 0.3, 0.85, 1.0, Dimensionless, Dimensionless;",
+        "Curve:Cubic, CAPFF, 1, 0, 0, 0, 0, 1, , , Dimensionless, Dimensionless;",
+        "Curve:Cubic, EIRFF, 1, 0, 0, 0, 0, 1, , , Dimensionless, Dimensionless;",
+        "Curve:Biquadratic, CAPFT, 1, 0, 0, 0, 0, 0, 0, 100, 0, 100, , , Temperature, Temperature, Dimensionless;",
+        "Curve:Biquadratic, EIRFT, 1, 0, 0, 0, 0, 0, 0, 100, 0, 100, , , Temperature, Temperature, Dimensionless;",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
