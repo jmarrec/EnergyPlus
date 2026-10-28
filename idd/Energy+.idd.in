@@ -1424,6 +1424,7 @@ RunPeriod,
        \maximum 31
        \type integer
   N3,  \field Begin Year
+       \type integer
        \note Start year of the simulation, if this field is specified it must agree with the Day of Week for Start Day
        \note If this field is blank, the year will be selected to match the weekday, which is Sunday if not specified
   N4 , \field End Month
@@ -1437,6 +1438,7 @@ RunPeriod,
        \maximum 31
        \type integer
   N6,  \field End Year
+       \type integer
        \note end year of simulation, if specified
   A2 , \field Day of Week for Start Day
        \note =[Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday];
@@ -5003,6 +5005,7 @@ Schedule:File,
        \type integer
        \minimum 0
   N3 , \field Number of Hours of Data
+       \type integer
        \note 8760 hours does not account for leap years, 8784 does.
        \note should be either 8760 or 8784
        \default 8760
@@ -13123,10 +13126,11 @@ GlazedDoor:Interzone,
        \note a blank field will set up a Window in an adjacent zone
        \note (same zone as adjacent to base surface)
   N1 , \field Multiplier
+       \type integer
        \note Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        \note Non-integer values will be truncated to integer
-       \default 1.0
-       \minimum 1.0
+       \default 1
+       \minimum 1
   N2,  \field Starting X Coordinate
        \note Door starting coordinate is specified relative to the Base Surface origin.
        \units m
@@ -20056,6 +20060,7 @@ GroundHeatTransfer:Slab:BldgProps,
           \memo insulated floor boundary condition, and then using the resulting
           \memo monthly average zone temperatures in these fields.
       N1, \field IYRS: Number of years to iterate
+          \type integer
           \note This field specifies the number of years to iterate.
           \note Either the ground heat transfer calculations come to an
           \note an annual steady periodic condition by converging to a tolerance
@@ -20242,12 +20247,15 @@ GroundHeatTransfer:Slab:ManualGrid,
             \memo Used only in special cases when previous two objects are not used.
             \memo User must input complete gridding information.
         N1, \field NX: Number of cells in the X direction
+          \type integer
           \minimum 1
           \required-field
         N2, \field NY: Number of cells in the Y direction
+          \type integer
           \minimum 1
           \required-field
         N3, \field NZ: Number of cells in the Z direction
+          \type integer
           \minimum 1
           \required-field
         N4, \field IBOX: X direction cell indicator of slab edge
@@ -20587,15 +20595,19 @@ GroundHeatTransfer:Basement:AutoGrid,
 GroundHeatTransfer:Basement:ManualGrid,
     \memo Manual Grid only necessary using manual gridding (not recommended)
        N1, \field NX: Number of cells in the X direction: 20]
+          \type integer
           \minimum 1
           \required-field
        N2, \field NY: Number of cells in the Y direction: 20]
+          \type integer
           \minimum 1
           \required-field
        N3, \field NZAG: Number of cells in the Z direction. above grade: 4 Always]
+          \type integer
           \minimum 1
           \required-field
        N4, \field NZBG: Number of cells in Z direction. below grade: 10-35]
+          \type integer
           \minimum 1
           \required-field
        N5, \field IBASE: X direction cell indicator of slab edge: 5-20]
@@ -49425,6 +49437,7 @@ ZoneHVAC:VentilatedSlab,
        \units m
        \minimum 0
    N6, \field Number of Cores
+       \type integer
        \note flow will be divided evenly among the cores
        \minimum 0
    A9, \field Temperature Control Type
@@ -53497,12 +53510,14 @@ Coil:Cooling:Water:DetailedGeometry,
        \default .026
        \minimum> 0.0
   N15, \field Number of Tube Rows
+       \type integer
        \default 4
-       \minimum> 0.0
+       \minimum> 0
   N16, \field Number of Tubes per Row
+       \type integer
        \autosizable
        \default autosize
-       \minimum> 0.0
+       \minimum> 0
   A3 , \field Water Inlet Node Name
        \required-field
        \type node
@@ -59643,7 +59658,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
    N11,  \field Flag for Using Hot Gas Reheat, 0 or 1
         \note Flag for using hot gas reheat, 0 - not used, 1 - used
         \units dimensionless
-        \type real
+        \type integer
         \minimum 0
         \default 0
    A7,  \field Energy Part Load Fraction Curve Name
@@ -93794,11 +93809,13 @@ Generator:Photovoltaic,
         \key PhotovoltaicThermalSolarCollector
         \default Decoupled
    N1 , \field Number of Series Strings in Parallel
+        \type integer
         \note number of series-wired strings of PV modules that are in parallel
         \default 1
         \units dimensionless
         \minimum 1
    N2 ; \field Number of Modules in Series
+        \type integer
         \note Number of PV modules wired in series for each string.
         \default 1
         \units dimensionless
@@ -94252,6 +94269,7 @@ Generator:FuelCell:PowerModule,
       \note This field is not used
       \units W
   N3, \field Number of Stops at Start of Simulation
+      \type integer
       \note this is Nstops in SOFC model specification
   N4, \field Cycling Performance Degradation Coefficient
       \note this is D in SOFC model specification
@@ -94362,6 +94380,7 @@ Generator:FuelCell:AirSupply,
       \key AmbientAir
       \key UserDefinedConstituents
   N4, \field Number of UserDefined Constituents
+      \type integer
       \maximum 5
   A9, \field Constituent 1 Name
       \begin-extensible
@@ -94745,8 +94764,9 @@ Generator:FuelSupply,
       \units g/mol
   N5, \field Liquid Generic Fuel CO2 Emission Factor
   N6, \field Number of Constituents in Gaseous Constituent Fuel Supply
-      \minimum 0.0
-      \maximum 12.0
+      \type integer
+      \minimum 0
+      \maximum 12
   ! sets of input data on each constituent
   A7, \field Constituent 1 Name
       \type choice
@@ -95020,6 +95040,7 @@ Generator:WindTurbine,
       \minimum> 0.0
       \units m
   N4, \field Number of Blades
+      \type integer
       \minimum 2
       \default 3
   N5, \field Rated Power
@@ -103862,6 +103883,7 @@ UtilityCost:Qualify,
         \note of months per year. If the Threshold Test is set to consecutive then the qualification is based on
         \note a consecutive number of months.
    N1;  \field Number of Months
+        \type integer
         \minimum 1
         \maximum 12
         \note A number from 1 to 12. If no value entered 12 is assumed when the qualify type is minimum and 1 when
