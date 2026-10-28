@@ -20814,7 +20814,7 @@ TEST_F(EnergyPlusFixture, VRF_MixedTypes)
         "  TU1 Outlet Node,         !- Zone Air Inlet Node or NodeList Name",
         "  TU1 Inlet Node,          !- Zone Air Exhaust Node or NodeList Name",
         "  SPACE1-1 Node,           !- Zone Air Node Name",
-        "  SPACE1-1 Out Node;       !- Zone Return Air Node Name", // not used anywhere else in the example file",
+        "  SPACE1-1 Out Node;       !- Zone Return Air Node Name", // not used anywhere else in the example file
         "",
         "ZoneHVAC:EquipmentList,",
         "  SPACE1-1 Eq,             !- Name",
@@ -20985,7 +20985,7 @@ TEST_F(EnergyPlusFixture, VRF_MixedTypes)
         "  TU2 Outlet Node,         !- Zone Air Inlet Node or NodeList Name",
         "  TU2 Inlet Node,          !- Zone Air Exhaust Node or NodeList Name",
         "  SPACE2-1 Node,           !- Zone Air Node Name",
-        "  SPACE2-1 Out Node;       !- Zone Return Air Node Name", // not used anywhere else in the example file",
+        "  SPACE2-1 Out Node;       !- Zone Return Air Node Name", // not used anywhere else in the example file
         "",
         "ZoneHVAC:EquipmentList,",
         "  SPACE2-1 Eq,             !- Name",
@@ -21352,7 +21352,7 @@ TEST_F(EnergyPlusFixture, VRF_MixedTypes)
         "  TU3 Outlet Node,         !- Zone Air Inlet Node or NodeList Name",
         "  TU3 Inlet Node,          !- Zone Air Exhaust Node or NodeList Name",
         "  SPACE3-1 Node,           !- Zone Air Node Name",
-        "  SPACE3-1 Out Node;       !- Zone Return Air Node Name // not used anywhere else in the example file",
+        "  SPACE3-1 Out Node;       !- Zone Return Air Node Name", // not used anywhere else in the example file
         "",
         "ZoneHVAC:EquipmentList,",
         "  SPACE3-1 Eq,             !- Name",
