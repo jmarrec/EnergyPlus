@@ -425,8 +425,8 @@ TEST_F(EnergyPlusFixture, DualDuctVAVAirTerminals_MinFlowTurnDownTest)
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
     });
 

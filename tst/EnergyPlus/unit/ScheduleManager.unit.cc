@@ -2613,8 +2613,8 @@ TEST_F(EnergyPlusFixture, ScheduleCompact_MissingDayTypes)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous,              !- Numeric Type",
         "  Percent;                 !- Unit Type",
 
@@ -2711,8 +2711,8 @@ TEST_F(EnergyPlusFixture, ScheduleCompact_MissingValues)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous,              !- Numeric Type",
         "  Percent;                 !- Unit Type",
 
@@ -2753,8 +2753,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_RulePriorityOrder)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -2872,8 +2872,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_NoRules)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -2912,8 +2912,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DefaultDaySchedule)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -2998,8 +2998,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DesignDayOverrides)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3076,8 +3076,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_Validation)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3158,8 +3158,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_SpecificDates)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3306,8 +3306,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DateRangeWrapAround)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3416,8 +3416,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_DateRangeDiffWeekdaysWithOverlap)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3552,8 +3552,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_InternalWeekScheduleNameDoesNotColli
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3671,8 +3671,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_InvalidSpecialDayScheduleFailsCleanl
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3701,8 +3701,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_InvalidCalendarDateIsRejected)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",
@@ -3754,8 +3754,8 @@ TEST_F(EnergyPlusFixture, ScheduleYearRules_MissingParentIsRejected)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fractional,              !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Day:Interval,",

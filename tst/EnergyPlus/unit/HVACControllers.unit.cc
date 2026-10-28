@@ -627,7 +627,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_WaterCoilOnOutsideAirSystemCheckTest)
         "  HWCoil Water InletNode,  !- Actuator Node Name",
         "  Autosize,                !- Controller Convergence Tolerance {deltaC}",
         "  Autosize,                !- Maximum Actuated Flow {m3/s}",
-        "  0;                       !- Minimum Actuated Flow {m3/s}",
+        "  0.0;                     !- Minimum Actuated Flow {m3/s}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

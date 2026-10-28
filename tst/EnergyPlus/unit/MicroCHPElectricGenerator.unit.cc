@@ -72,7 +72,7 @@ TEST_F(EnergyPlusFixture, MicroCHPTest_InitGeneratorDynamics)
         "  Electric Load Center Distribution 1,  !- Name",
         "  Electric Load Center Distribution 1 Generators,  !- Generator List Name",
         "  TrackSchedule,           !- Generator Operation Scheme Type",
-        "  0,                       !- Generator Demand Limit Scheme Purchased Electric Demand Limit {W}",
+        "  0.0,                     !- Generator Demand Limit Scheme Purchased Electric Demand Limit {W}",
         "  Generator Demand,        !- Generator Track Schedule Name Scheme Schedule Name",
         "  ,                        !- Generator Track Meter Scheme Meter Name",
         "  AlternatingCurrent;      !- Electrical Buss Type",
@@ -81,7 +81,7 @@ TEST_F(EnergyPlusFixture, MicroCHPTest_InitGeneratorDynamics)
         "  Electric Load Center Distribution 1 Generators,  !- Name",
         "  Generator Fuel Cell 1,   !- Generator Name",
         "  Generator:FuelCell,      !- Generator Object Type",
-        "  3400,                    !- Generator Rated Electric Power Output {W}",
+        "  3400.0,                  !- Generator Rated Electric Power Output {W}",
         "  ,                        !- Generator Availability Schedule Name",
         "  ;                        !- Generator Rated Thermal to Electrical Power Ratio",
 
@@ -109,7 +109,7 @@ TEST_F(EnergyPlusFixture, MicroCHPTest_InitGeneratorDynamics)
 
         "Generator:MicroCHP:NonNormalizedParameters,",
         "  SENERTECH5_5KW2,         !- Name",
-        "  5500,                    !- Maximum Electric Power {W}",
+        "  5500.0,                  !- Maximum Electric Power {W}",
         "  0.0,                     !- Minimum Electric Power {W}",
         "  0.0,                     !- Minimum Cooling Water Flow Rate {kg/s}",
         "  80.0,                    !- Maximum Cooling Water Temperature {C}",

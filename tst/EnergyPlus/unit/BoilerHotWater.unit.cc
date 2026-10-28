@@ -169,20 +169,20 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BlankDesignWaterFlowRate)
         "Boiler:HotWater,",
         "  Boiler 1,                !- Name",
         "  NaturalGas,              !- Fuel Type",
-        "  2344000,                 !- Nominal Capacity {W}",
+        "  2344000.0,               !- Nominal Capacity {W}",
         "  0.8,                     !- Nominal Thermal Efficiency",
         "  ,                        !- Efficiency Curve Temperature Evaluation Variable",
         "  ,                        !- Normalized Boiler Efficiency Curve Name",
         "  ,                        !- Design Water Flow Rate {m3/s}",
         "  ,                        !- Minimum Part Load Ratio",
-        "  1,                       !- Maximum Part Load Ratio",
-        "  1,                       !- Optimum Part Load Ratio",
+        "  1.0,                     !- Maximum Part Load Ratio",
+        "  1.0,                     !- Optimum Part Load Ratio",
         "  Node boiler 1 inlet,     !- Boiler Water Inlet Node Name",
         "  Node boiler 1 outlet,    !- Boiler Water Outlet Node Name",
         "  99.9,                    !- Water Outlet Upper Temperature Limit {C}",
         "  NotModulated,            !- Boiler Flow Mode",
         "  ,                        !- On Cycle Parasitic Electric Load {W}",
-        "  1;                       !- Sizing Factor",
+        "  1.0;                     !- Sizing Factor",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -266,15 +266,15 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BoilerEfficiency)
         "  99.9,                    !- Water Outlet Upper Temperature Limit {C}",
         "  NotModulated,            !- Boiler Flow Mode",
         "  ,                        !- On Cycle Parasitic Electric Load {W}",
-        "  1;                       !- Sizing Factor",
+        "  1.0;                     !- Sizing Factor",
 
         "Curve:Quadratic,",
         "  BoilerEfficiency,        !- Name",
         "  0.5887682,               !- Coefficient1 Constant",
         "  0.7888184,               !- Coefficient2 x",
         "  -0.3862498,              !- Coefficient3 x**2",
-        "  0,                       !- Minimum Value of x {BasedOnField A2}",
-        "  1;                       !- Maximum Value of x {BasedOnField A2}",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.0;                     !- Maximum Value of x {BasedOnField A2}",
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));

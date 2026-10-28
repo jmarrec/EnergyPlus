@@ -222,31 +222,31 @@ PlantEquipmentOperation:ChillerHeaterChangeover,
 PlantEquipmentOperation:CoolingLoad,
   Two AWHP Cooling Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  50000,                   !- Load Range 1 Upper Limit {W}
+  50000.0,                 !- Load Range 1 Upper Limit {W}
   One AWHP Cooling Equipment List,  !- Range 1 Equipment List Name
-  50000,                   !- Load Range 2 Lower Limit {W}
-  10000000000000,          !- Load Range 2 Upper Limit {W}
+  50000.0,                 !- Load Range 2 Lower Limit {W}
+  10000000000000.0,        !- Load Range 2 Upper Limit {W}
   Two AWHP Cooling Equipment List;  !- Range 2 Equipment List Name
 
 PlantEquipmentOperation:HeatingLoad,
   Two AWHP Heating Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  100000,                  !- Load Range 1 Upper Limit {W}
+  100000.0,                !- Load Range 1 Upper Limit {W}
   One AWHP Heating Equipment List,  !- Range 1 Equipment List Name
-  100000,                  !- Load Range 2 Lower Limit {W}
-  10000000000000,          !- Load Range 2 Upper Limit {W}
+  100000.0,                !- Load Range 2 Lower Limit {W}
+  10000000000000.0,        !- Load Range 2 Upper Limit {W}
   Two AWHP Heating Equipment List;  !- Range 2 Equipment List Name
 
 PlantEquipmentOperation:CoolingLoad,
   One AWHP Cooling Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  1e+16,                   !- Load Range 1 Upper Limit {W}
   One AWHP Cooling Equipment List;  !- Range 1 Equipment List Name
 
 PlantEquipmentOperation:HeatingLoad,
   One AWHP Heating Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  1e+16,                   !- Load Range 1 Upper Limit {W}
   One AWHP Heating Equipment List;  !- Range 1 Equipment List Name
 
 PlantEquipmentList,
@@ -492,7 +492,7 @@ PlantEquipmentOperation:ChillerHeaterChangeover,
 PlantEquipmentOperation:CoolingLoad,
   One AWHP Cooling Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  1e+16,                   !- Load Range 1 Upper Limit {W}
   One AWHP Cooling Equipment List;  !- Range 1 Equipment List Name
 
 PlantEquipmentList,
@@ -503,7 +503,7 @@ PlantEquipmentList,
 PlantEquipmentOperation:HeatingLoad,
   One AWHP Heating Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  1e+16,                   !- Load Range 1 Upper Limit {W}
   One AWHP Heating Equipment List;  !- Range 1 Equipment List Name
 
 PlantEquipmentList,

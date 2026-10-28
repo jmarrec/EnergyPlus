@@ -72,7 +72,7 @@ TEST_F(EnergyPlusFixture, HeatingCoils_FuelTypeInput)
         "  ,                        !- Availability Schedule Name",
         "  OtherFuel1,              !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  20000,                   !- Nominal Capacity {W}",
+        "  20000.0,                 !- Nominal Capacity {W}",
         "  Heating Coil Air Inlet Node,  !- Air Inlet Node Name",
         "  Air Loop Outlet Node;    !- Air Outlet Node Name",
     });
@@ -120,7 +120,7 @@ TEST_F(EnergyPlusFixture, HeatingCoils_FuelTypeCoal)
         "  ,                        !- Availability Schedule Name",
         "  Coal,                    !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  20000,                   !- Nominal Capacity {W}",
+        "  20000.0,                 !- Nominal Capacity {W}",
         "  Heating Coil Air Inlet Node,  !- Air Inlet Node Name",
         "  Air Loop Outlet Node;    !- Air Outlet Node Name",
     });
@@ -140,7 +140,7 @@ TEST_F(EnergyPlusFixture, HeatingCoils_FuelTypePropaneGas)
         "  ,                        !- Availability Schedule Name",
         "  Propane,                 !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  20000,                   !- Nominal Capacity {W}",
+        "  20000.0,                 !- Nominal Capacity {W}",
         "  Heating Coil Air Inlet Node,  !- Air Inlet Node Name",
         "  Air Loop Outlet Node;    !- Air Outlet Node Name",
     });

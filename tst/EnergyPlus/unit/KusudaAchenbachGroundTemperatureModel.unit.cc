@@ -64,11 +64,11 @@ TEST_F(EnergyPlusFixture, KusudaAchenbachGroundTempModelTest1)
         "Site:GroundTemperature:Undisturbed:KusudaAchenbach,",
         "  Test,                    !- Name",
         "  1.08,                    !- Soil Thermal Conductivity {W/m-K}",
-        "  980,                     !- Soil Density {kg/m3}",
-        "  2570,                    !- Soil Specific Heat {J/kg-K}",
+        "  980.0,                   !- Soil Density {kg/m3}",
+        "  2570.0,                  !- Soil Specific Heat {J/kg-K}",
         "  15.0,                    !- Average Soil Surface Temperature {C}",
         "  5.0,                     !- Average Amplitude of Surface Temperature {deltaC}",
-        "  1;                       !- Phase Shift of Minimum Surface Temperature {days}",
+        "  1.0;                     !- Phase Shift of Minimum Surface Temperature {days}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -90,8 +90,8 @@ TEST_F(EnergyPlusFixture, KusudaAchenbachGroundTempModelTest2) // lNumericFieldB
         "Site:GroundTemperature:Undisturbed:KusudaAchenbach,",
         "  Test,                    !- Name",
         "  1.08,                    !- Soil Thermal Conductivity {W/m-K}",
-        "  980,                     !- Soil Density {kg/m3}",
-        "  2570,                    !- Soil Specific Heat {J/kg-K}",
+        "  980.0,                   !- Soil Density {kg/m3}",
+        "  2570.0,                  !- Soil Specific Heat {J/kg-K}",
         "  ,                        !- Average Soil Surface Temperature {C}",
         "  ,                        !- Average Amplitude of Surface Temperature {deltaC}",
         "  ;                        !- Phase Shift of Minimum Surface Temperature {days}",

@@ -111,7 +111,7 @@ TEST_F(EnergyPlusFixture, DuctLoss_test)
 
 Building,
   House with AirflowNetwork simulation,  !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   Suburbs,                 !- Terrain
   0.001,                   !- Loads Convergence Tolerance Value {W}
   0.005,                   !- Temperature Convergence Tolerance Value {deltaC}
@@ -196,7 +196,7 @@ SizingPeriod:DesignDay,
   ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
   99063.0,                 !- Barometric Pressure {Pa}
   4.9,                     !- Wind Speed {m/s}
-  270,                     !- Wind Direction {deg}
+  270.0,                   !- Wind Direction {deg}
   No,                      !- Rain Indicator
   No,                      !- Snow Indicator
   No,                      !- Daylight Saving Time Indicator
@@ -226,7 +226,7 @@ SizingPeriod:DesignDay,
   ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
   99063.0,                 !- Barometric Pressure {Pa}
   5.3,                     !- Wind Speed {m/s}
-  230,                     !- Wind Direction {deg}
+  230.0,                   !- Wind Direction {deg}
   No,                      !- Rain Indicator
   No,                      !- Snow Indicator
   No,                      !- Daylight Saving Time Indicator
@@ -447,10 +447,10 @@ Construction,
 
 Zone,
   LIVING ZONE,             !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   1,                       !- Type
   1,                       !- Multiplier
   Autocalculate,           !- Ceiling Height {m}
@@ -458,10 +458,10 @@ Zone,
 
 Zone,
   GARAGE ZONE,             !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   1,                       !- Type
   1,                       !- Multiplier
   Autocalculate,           !- Ceiling Height {m}
@@ -469,10 +469,10 @@ Zone,
 
 Zone,
   ATTIC ZONE,              !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   1,                       !- Type
   1,                       !- Multiplier
   Autocalculate,           !- Ceiling Height {m}
@@ -500,11 +500,11 @@ BuildingSurface:Detailed,
   2.4384,                  !- Vertex Z-coordinate {m}
   10.323,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384;                  !- Vertex Z-coordinate {m}
 
@@ -525,14 +525,14 @@ BuildingSurface:Detailed,
   0.5,                     !- View Factor to Ground
   4,                       !- Number of Vertices
   17.242,                  !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384;                  !- Vertex Z-coordinate {m}
@@ -549,17 +549,17 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   0.5,                     !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,                       !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4383,                  !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4384;                  !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
@@ -574,17 +574,17 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   0.5,                     !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4384;                  !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
@@ -604,10 +604,10 @@ BuildingSurface:Detailed,
   2.4384,                  !- Vertex Z-coordinate {m}
   10.323,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384;                  !- Vertex Z-coordinate {m}
@@ -629,10 +629,10 @@ BuildingSurface:Detailed,
   2.4384,                  !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   10.323,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   10.323,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384;                  !- Vertex Z-coordinate {m}
@@ -647,20 +647,20 @@ BuildingSurface:Detailed,
   Living:Floor,            !- Outside Boundary Condition Object
   NoSun,                   !- Sun Exposure
   NoWind,                  !- Wind Exposure
-  0,                       !- View Factor to Ground
+  0.0,                     !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,                       !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
-  0;                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
+  0.0;                     !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
   Living:Ceiling,          !- Name
@@ -672,16 +672,16 @@ BuildingSurface:Detailed,
   Attic:LivingFloor,       !- Outside Boundary Condition Object
   NoSun,                   !- Sun Exposure
   NoWind,                  !- Wind Exposure
-  0,                       !- View Factor to Ground
+  0.0,                     !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
@@ -699,17 +699,17 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   0.5,                     !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,                       !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
   2.4384,                  !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
-  0,                       !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Y-coordinate {m}
   2.4384;                  !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
@@ -730,10 +730,10 @@ BuildingSurface:Detailed,
   13.782,                  !- Vertex X-coordinate {m}
   7.3172,                  !- Vertex Y-coordinate {m}
   3.8804,                  !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   7.3172,                  !- Vertex Y-coordinate {m}
   3.8804,                  !- Vertex Z-coordinate {m}
-  0,                       !- Vertex X-coordinate {m}
+  0.0,                     !- Vertex X-coordinate {m}
   5.389,                   !- Vertex Y-coordinate {m}
   4.6838;                  !- Vertex Z-coordinate {m}
 
@@ -1089,20 +1089,20 @@ BuildingSurface:Detailed,
   Garage:Floor,            !- Outside Boundary Condition Object
   NoSun,                   !- Sun Exposure
   NoWind,                  !- Wind Exposure
-  0,                       !- View Factor to Ground
+  0.0,                     !- View Factor to Ground
   4,                       !- Number of Vertices
   10.323,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   10.323,                  !- Vertex X-coordinate {m}
   16.876,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   16.876,                  !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
   17.242,                  !- Vertex X-coordinate {m}
   10.778,                  !- Vertex Y-coordinate {m}
-  0;                       !- Vertex Z-coordinate {m}
+  0.0;                     !- Vertex Z-coordinate {m}
 
 FenestrationSurface:Detailed,
   NorthWindow,             !- Name
@@ -1112,7 +1112,7 @@ FenestrationSurface:Detailed,
   ,                        !- Outside Boundary Condition Object
   0.5,                     !- View Factor to Ground
   ,                        !- Frame and Divider Name
-  1.0,                     !- Multiplier
+  1,                       !- Multiplier
   4,                       !- Number of Vertices
   6.572,                   !- Vertex 1 X-coordinate {m}
   10.778,                  !- Vertex 1 Y-coordinate {m}
@@ -1120,10 +1120,10 @@ FenestrationSurface:Detailed,
   6.572,                   !- Vertex 2 X-coordinate {m}
   10.778,                  !- Vertex 2 Y-coordinate {m}
   0.6096,                  !- Vertex 2 Z-coordinate {m}
-  2,                       !- Vertex 3 X-coordinate {m}
+  2.0,                     !- Vertex 3 X-coordinate {m}
   10.778,                  !- Vertex 3 Y-coordinate {m}
   0.6096,                  !- Vertex 3 Z-coordinate {m}
-  2,                       !- Vertex 4 X-coordinate {m}
+  2.0,                     !- Vertex 4 X-coordinate {m}
   10.778,                  !- Vertex 4 Y-coordinate {m}
   2.1336;                  !- Vertex 4 Z-coordinate {m}
 
@@ -1135,13 +1135,13 @@ FenestrationSurface:Detailed,
   ,                        !- Outside Boundary Condition Object
   0.5,                     !- View Factor to Ground
   ,                        !- Frame and Divider Name
-  1.0,                     !- Multiplier
+  1,                       !- Multiplier
   4,                       !- Number of Vertices
   17.242,                  !- Vertex 1 X-coordinate {m}
-  2,                       !- Vertex 1 Y-coordinate {m}
+  2.0,                     !- Vertex 1 Y-coordinate {m}
   2.1336,                  !- Vertex 1 Z-coordinate {m}
   17.242,                  !- Vertex 2 X-coordinate {m}
-  2,                       !- Vertex 2 Y-coordinate {m}
+  2.0,                     !- Vertex 2 Y-coordinate {m}
   0.6096,                  !- Vertex 2 Z-coordinate {m}
   17.242,                  !- Vertex 3 X-coordinate {m}
   6.572,                   !- Vertex 3 Y-coordinate {m}
@@ -1158,19 +1158,19 @@ FenestrationSurface:Detailed,
   ,                        !- Outside Boundary Condition Object
   0.5,                     !- View Factor to Ground
   ,                        !- Frame and Divider Name
-  1.0,                     !- Multiplier
+  1,                       !- Multiplier
   4,                       !- Number of Vertices
-  2,                       !- Vertex 1 X-coordinate {m}
-  0,                       !- Vertex 1 Y-coordinate {m}
+  2.0,                     !- Vertex 1 X-coordinate {m}
+  0.0,                     !- Vertex 1 Y-coordinate {m}
   2.1336,                  !- Vertex 1 Z-coordinate {m}
-  2,                       !- Vertex 2 X-coordinate {m}
-  0,                       !- Vertex 2 Y-coordinate {m}
+  2.0,                     !- Vertex 2 X-coordinate {m}
+  0.0,                     !- Vertex 2 Y-coordinate {m}
   0.6096,                  !- Vertex 2 Z-coordinate {m}
   6.572,                   !- Vertex 3 X-coordinate {m}
-  0,                       !- Vertex 3 Y-coordinate {m}
+  0.0,                     !- Vertex 3 Y-coordinate {m}
   0.6096,                  !- Vertex 3 Z-coordinate {m}
   6.572,                   !- Vertex 4 X-coordinate {m}
-  0,                       !- Vertex 4 Y-coordinate {m}
+  0.0,                     !- Vertex 4 Y-coordinate {m}
   2.1336;                  !- Vertex 4 Z-coordinate {m}
 
 FenestrationSurface:Detailed,
@@ -1181,19 +1181,19 @@ FenestrationSurface:Detailed,
   ,                        !- Outside Boundary Condition Object
   0.5,                     !- View Factor to Ground
   ,                        !- Frame and Divider Name
-  1.0,                     !- Multiplier
+  1,                       !- Multiplier
   4,                       !- Number of Vertices
-  0,                       !- Vertex 1 X-coordinate {m}
+  0.0,                     !- Vertex 1 X-coordinate {m}
   6.572,                   !- Vertex 1 Y-coordinate {m}
   2.1336,                  !- Vertex 1 Z-coordinate {m}
-  0,                       !- Vertex 2 X-coordinate {m}
+  0.0,                     !- Vertex 2 X-coordinate {m}
   6.572,                   !- Vertex 2 Y-coordinate {m}
   0.6096,                  !- Vertex 2 Z-coordinate {m}
-  0,                       !- Vertex 3 X-coordinate {m}
-  2,                       !- Vertex 3 Y-coordinate {m}
+  0.0,                     !- Vertex 3 X-coordinate {m}
+  2.0,                     !- Vertex 3 Y-coordinate {m}
   0.6096,                  !- Vertex 3 Z-coordinate {m}
-  0,                       !- Vertex 4 X-coordinate {m}
-  2,                       !- Vertex 4 Y-coordinate {m}
+  0.0,                     !- Vertex 4 X-coordinate {m}
+  2.0,                     !- Vertex 4 Y-coordinate {m}
   2.1336;                  !- Vertex 4 Z-coordinate {m}
 
     )IDF";
@@ -1211,21 +1211,21 @@ ScheduleTypeLimits,
 
 ScheduleTypeLimits,
   Temperature,             !- Name
-  -60,                     !- Lower Limit Value {BasedOnField A3}
-  200,                     !- Upper Limit Value {BasedOnField A3}
+  -60.0,                   !- Lower Limit Value {BasedOnField A3}
+  200.0,                   !- Upper Limit Value {BasedOnField A3}
   Continuous,              !- Numeric Type
   Temperature;             !- Unit Type
 
 ScheduleTypeLimits,
   Control Type,            !- Name
-  0,                       !- Lower Limit Value {BasedOnField A3}
-  4,                       !- Upper Limit Value {BasedOnField A3}
+  0.0,                     !- Lower Limit Value {BasedOnField A3}
+  4.0,                     !- Upper Limit Value {BasedOnField A3}
   Discrete;                !- Numeric Type
 
 ScheduleTypeLimits,
   On/Off,                  !- Name
-  0,                       !- Lower Limit Value {BasedOnField A3}
-  1,                       !- Upper Limit Value {BasedOnField A3}
+  0.0,                     !- Lower Limit Value {BasedOnField A3}
+  1.0,                     !- Upper Limit Value {BasedOnField A3}
   Discrete;                !- Numeric Type
 
 Schedule:Compact,
@@ -1428,13 +1428,13 @@ Lights,
   LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
   HOUSE LIGHTING,          !- Schedule Name
   LightingLevel,           !- Design Level Calculation Method
-  1000,                    !- Lighting Level {W}
+  1000.0,                  !- Lighting Level {W}
   ,                        !- Watts per Floor Area {W/m2}
   ,                        !- Watts per Person {W/person}
-  0,                       !- Return Air Fraction
+  0.0,                     !- Return Air Fraction
   0.2,                     !- Fraction Radiant
   0.2,                     !- Fraction Visible
-  0,                       !- Fraction Replaceable
+  0.0,                     !- Fraction Replaceable
   GeneralLights;           !- End-Use Subcategory
 
 ElectricEquipment,
@@ -1442,12 +1442,12 @@ ElectricEquipment,
   LIVING ZONE,             !- Zone or ZoneList or Space or SpaceList Name
   INTERMITTENT,            !- Schedule Name
   EquipmentLevel,          !- Design Level Calculation Method
-  500,                     !- Design Level {W}
+  500.0,                   !- Design Level {W}
   ,                        !- Watts per Floor Area {W/m2}
   ,                        !- Watts per Person {W/person}
-  0,                       !- Fraction Latent
+  0.0,                     !- Fraction Latent
   0.3,                     !- Fraction Radiant
-  0;                       !- Fraction Lost
+  0.0;                     !- Fraction Lost
 
 Curve:Biquadratic,
   WindACCoolCapFT,         !- Name
@@ -1715,35 +1715,35 @@ AirflowNetwork:Distribution:Component:LeakageRatio,
   SupplyLeak,              !- Name
   0.1,                     !- Effective Leakage Ratio {dimensionless}
   1.9,                     !- Maximum Flow Rate {m3/s}
-  60,                      !- Reference Pressure Difference {Pa}
+  60.0,                    !- Reference Pressure Difference {Pa}
   0.65;                    !- Air Mass Flow Exponent {dimensionless}
 
 AirflowNetwork:Distribution:Component:LeakageRatio,
   ReturnLeak,              !- Name
   0.05,                    !- Effective Leakage Ratio {dimensionless}
   1.9,                     !- Maximum Flow Rate {m3/s}
-  15,                      !- Reference Pressure Difference {Pa}
+  15.0,                    !- Reference Pressure Difference {Pa}
   0.65;                    !- Air Mass Flow Exponent {dimensionless}
 
 AirflowNetwork:Distribution:Component:LeakageRatio,
   SupplyBranchLeak,        !- Name
   0.05,                    !- Effective Leakage Ratio {dimensionless}
   1.9,                     !- Maximum Flow Rate {m3/s}
-  60,                      !- Reference Pressure Difference {Pa}
+  60.0,                    !- Reference Pressure Difference {Pa}
   0.65;                    !- Air Mass Flow Exponent {dimensionless}
 
 AirflowNetwork:Distribution:Component:LeakageRatio,
   ReturnBranchLeak,        !- Name
   0.02,                    !- Effective Leakage Ratio {dimensionless}
   1.9,                     !- Maximum Flow Rate {m3/s}
-  15,                      !- Reference Pressure Difference {Pa}
+  15.0,                    !- Reference Pressure Difference {Pa}
   0.65;                    !- Air Mass Flow Exponent {dimensionless}
 
 AirflowNetwork:Distribution:Component:LeakageRatio,
   ReturnMakeupAir,         !- Name
   0.07,                    !- Effective Leakage Ratio {dimensionless}
   1.9,                     !- Maximum Flow Rate {m3/s}
-  15,                      !- Reference Pressure Difference {Pa}
+  15.0,                    !- Reference Pressure Difference {Pa}
   0.65;                    !- Air Mass Flow Exponent {dimensionless}
 
 AirflowNetwork:Distribution:Component:Duct,
@@ -1910,7 +1910,7 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir,
   Air Loop Outlet Node,    !- Air Outlet Node Name
   1.18,                    !- Cooling Supply Air Flow Rate {m3/s}
   1.18,                    !- Heating Supply Air Flow Rate {m3/s}
-  0,                       !- No Load Supply Air Flow Rate {m3/s}
+  0.0,                     !- No Load Supply Air Flow Rate {m3/s}
   LIVING ZONE,             !- Controlling Zone or Thermostat Location
   Fan:OnOff,               !- Supply Air Fan Object Type
   Supply Fan 1,            !- Supply Air Fan Name
@@ -1920,8 +1920,8 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir,
   ACDXCoil 1,              !- Cooling Coil Name
   Coil:Heating:Fuel,       !- Supplemental Heating Coil Object Type
   Supp Heating Coil 1,     !- Supplemental Heating Coil Name
-  50,                      !- Maximum Supply Air Temperature from Supplemental Heater {C}
-  21,                      !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
+  50.0,                    !- Maximum Supply Air Temperature from Supplemental Heater {C}
+  21.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
   BlowThrough,             !- Fan Placement
   CyclingFanSchedule;      !- Supply Air Fan Operating Mode Schedule Name
 
@@ -1983,7 +1983,7 @@ Coil:Heating:Fuel,
   HVACAvailSched,          !- Availability Schedule Name
   NaturalGas,              !- Fuel Type
   0.8,                     !- Burner Efficiency
-  25000,                   !- Nominal Capacity {W}
+  25000.0,                 !- Nominal Capacity {W}
   SuppHeating Coil Air Inlet Node,  !- Air Inlet Node Name
   Air Loop Outlet Node;    !- Air Outlet Node Name
 
@@ -1994,7 +1994,7 @@ Coil:Heating:Fuel,
 Coil:Cooling:DX:SingleSpeed,
   ACDXCoil 1,              !- Name
   HVACAvailSched,          !- Availability Schedule Name
-  21000,                   !- Gross Rated Total Cooling Capacity {W}
+  21000.0,                 !- Gross Rated Total Cooling Capacity {W}
   0.8,                     !- Gross Rated Sensible Heat Ratio
   3.0,                     !- Gross Rated Cooling COP {W/W}
   1.18,                    !- Rated Air Flow Rate {m3/s}
@@ -2014,7 +2014,7 @@ Coil:Cooling:DX:SingleSpeed,
 Coil:Heating:DX:SingleSpeed,
   Heat Pump DX Heating Coil 1,  !- Name
   HVACAvailSched,          !- Availability Schedule Name
-  21000,                   !- Gross Rated Heating Capacity {W}
+  21000.0,                 !- Gross Rated Heating Capacity {W}
   2.75,                    !- Gross Rated Heating COP {W/W}
   1.18,                    !- Rated Air Flow Rate {m3/s}
   ,                        !- 2017 Rated Supply Fan Power Per Volume Flow Rate {W/(m3/s)}
@@ -2036,7 +2036,7 @@ Coil:Heating:DX:SingleSpeed,
   Resistive,               !- Defrost Strategy
   Timed,                   !- Defrost Control
   0.166667,                !- Defrost Time Period Fraction
-  20000,                   !- Resistive Defrost Heater Capacity {W}
+  20000.0,                 !- Resistive Defrost Heater Capacity {W}
   ,                        !- Region number for calculating HSPF
   ,                        !- Evaporator Air Inlet Node Name
   ,                        !- Zone Name for Evaporator Placement

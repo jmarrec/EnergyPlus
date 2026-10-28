@@ -139,10 +139,10 @@ TEST_F(EnergyPlusFixture, DemandManagerAssignmentListGetInputTest)
         "Exterior:Lights,",
         "  Exterior Lights,         !- Name",
         "  ON,                      !- Schedule Name",
-        "  1000,                    !- Design Level {W}",
+        "  1000.0,                  !- Design Level {W}",
         "  ScheduleNameOnly;        !- Control Option",
 
-        "Schedule:Constant,ON,Fraction,1;",
+        "Schedule:Constant,ON,Fraction,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",

@@ -123,10 +123,10 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing1)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  SPACE3-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -170,8 +170,8 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing1)
 
         "DesignSpecification:ZoneAirDistribution,",
         "  SZ DZAD SPACE3-1,        !- Name",
-        "  1,                       !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
-        "  1;                       !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
+        "  1.0,                     !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
+        "  1.0;                     !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
 
         "DesignSpecification:OutdoorAir,",
         "  SZ DSOA SPACE3-1,        !- Name",
@@ -223,7 +223,7 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing1)
         "  ReheatCoilAvailSched,    !- Availability Schedule Name",
         "  NaturalGas,              !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  1000,                    ! Nominal Capacity",
+        "  1000.0,                  ! Nominal Capacity",
         "  SPACE3-1 Zone Coil Air In Node,  !- Air Inlet Node Name",
         "  SPACE3-1 In Node;        !- Air Outlet Node Name",
 
@@ -337,10 +337,10 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing2)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  SPACE3-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -384,8 +384,8 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing2)
 
         "DesignSpecification:ZoneAirDistribution,",
         "  SZ DZAD SPACE3-1,        !- Name",
-        "  1,                       !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
-        "  1;                       !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
+        "  1.0,                     !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
+        "  1.0;                     !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
 
         "DesignSpecification:OutdoorAir,",
         "  SZ DSOA SPACE3-1,        !- Name",
@@ -437,7 +437,7 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing2)
         "  ReheatCoilAvailSched,    !- Availability Schedule Name",
         "  NaturalGas,              !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  1000,                    ! Nominal Capacity",
+        "  1000.0,                  ! Nominal Capacity",
         "  SPACE3-1 Zone Coil Air In Node,  !- Air Inlet Node Name",
         "  SPACE3-1 In Node;        !- Air Outlet Node Name",
 
@@ -555,10 +555,10 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing3)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  SPACE3-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -602,8 +602,8 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing3)
 
         "DesignSpecification:ZoneAirDistribution,",
         "  SZ DZAD SPACE3-1,        !- Name",
-        "  1,                       !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
-        "  1;                       !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
+        "  1.0,                     !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
+        "  1.0;                     !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
 
         "DesignSpecification:OutdoorAir,",
         "  SZ DSOA SPACE3-1,        !- Name",
@@ -655,7 +655,7 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing3)
         "  ReheatCoilAvailSched,    !- Availability Schedule Name",
         "  NaturalGas,              !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  1000,                    ! Nominal Capacity",
+        "  1000.0,                  ! Nominal Capacity",
         "  SPACE3-1 Zone Coil Air In Node,  !- Air Inlet Node Name",
         "  SPACE3-1 In Node;        !- Air Outlet Node Name",
 
@@ -770,10 +770,10 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing4)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  SPACE3-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -856,7 +856,7 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing4)
         "  ReheatCoilAvailSched,    !- Availability Schedule Name",
         "  NaturalGas,              !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  1000,                    ! Nominal Capacity",
+        "  1000.0,                  ! Nominal Capacity",
         "  SPACE3-1 Zone Coil Air In Node,  !- Air Inlet Node Name",
         "  SPACE3-1 In Node;        !- Air Outlet Node Name",
 
@@ -927,10 +927,10 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing5)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  SPACE3-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -974,8 +974,8 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing5)
 
         "DesignSpecification:ZoneAirDistribution,",
         "  SZ DZAD SPACE3-1,        !- Name",
-        "  1,                       !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
-        "  1;                       !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
+        "  1.0,                     !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}",
+        "  1.0;                     !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}",
 
         "DesignSpecification:OutdoorAir,",
         "  SZ DSOA SPACE3-1,        !- Name",
@@ -1027,7 +1027,7 @@ TEST_F(EnergyPlusFixture, VAVDefMinMaxFlowTestSizing5)
         "  ReheatCoilAvailSched,    !- Availability Schedule Name",
         "  NaturalGas,              !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  1000,                    ! Nominal Capacity",
+        "  1000.0,                  ! Nominal Capacity",
         "  SPACE3-1 Zone Coil Air In Node,  !- Air Inlet Node Name",
         "  SPACE3-1 In Node;        !- Air Outlet Node Name",
 

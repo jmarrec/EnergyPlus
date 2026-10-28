@@ -490,7 +490,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
 
         "Building,",
         "  Mid-Rise Apartment,      !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  City,                    !- Terrain",
         "  0.04,                    !- Loads Convergence Tolerance Value {W}",
         "  0.4,                     !- Temperature Convergence Tolerance Value {deltaC}",
@@ -523,7 +523,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
         "ScheduleTypeLimits,",
         "  Any Number;              !- Name",
 
-        "Schedule:Constant,Always On Discrete,Any Number,1;",
+        "Schedule:Constant,Always On Discrete,Any Number,1.0;",
 
         "Exterior:Lights,",
         "  Exterior Facade Lighting,  !- Name",
@@ -1303,7 +1303,7 @@ TEST_F(SQLiteFixture, WriteEconomicTariffTable_DualUnits)
 
         "Building,",
         "  Mid-Rise Apartment,      !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  City,                    !- Terrain",
         "  0.04,                    !- Loads Convergence Tolerance Value {W}",
         "  0.4,                     !- Temperature Convergence Tolerance Value {deltaC}",
@@ -1336,7 +1336,7 @@ TEST_F(SQLiteFixture, WriteEconomicTariffTable_DualUnits)
         "ScheduleTypeLimits,",
         "  Any Number;              !- Name",
 
-        "Schedule:Constant,Always On Discrete,Any Number,1;",
+        "Schedule:Constant,Always On Discrete,Any Number,1.0;",
 
         "Exterior:Lights,",
         "  Exterior Facade Lighting,  !- Name",
@@ -1651,7 +1651,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_LEEDtariff_with_Custom_Meter)
         "  Water Tariff,            !- Name",
         "  Water:Facility,          !- Output Meter Name",
         "  UserDefined,             !- Conversion Factor Choice",
-        "  1,                       !- Energy Conversion Factor",
+        "  1.0,                     !- Energy Conversion Factor",
         "  ,                        !- Demand Conversion Factor",
         "  ,                        !- Time of Use Period Schedule Name",
         "  ,                        !- Season Schedule Name",

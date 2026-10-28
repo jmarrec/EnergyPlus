@@ -88,7 +88,7 @@ TEST_F(EnergyPlusFixture, TranspiredCollectors_InitTranspiredCollectorTest)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  ZN1_S_Space_1,           !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
+        "  0.0,                     !- Direction of Relative North {deg}",
         "  0.0,                     !- X Origin {m}",
         "  0.0,                     !- Y Origin {m}",
         "  0.0,                     !- Z Origin {m}",
@@ -102,7 +102,7 @@ TEST_F(EnergyPlusFixture, TranspiredCollectors_InitTranspiredCollectorTest)
         "  Smooth,                  !- Roughness",
         "  0.1016,                  !- Thickness {m}",
         "  0.858,                   !- Conductivity {W/m-K}",
-        "  1968,                    !- Density {kg/m3}",
+        "  1968.0,                  !- Density {kg/m3}",
         "  836.8,                   !- Specific Heat {J/kg-K}",
         "  0.9,                     !- Thermal Absorptance",
         "  0.7,                     !- Solar Absorptance",

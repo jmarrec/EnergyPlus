@@ -1035,8 +1035,8 @@ TEST_F(EnergyPlusFixture, FindRangeBasedOrUncontrolledInputTest)
 
         "PlantEquipmentOperation:CoolingLoad,",
         "  Central Chiller Only,    !- Name",
-        "  0,                       !- Load Range 1 Lower Limit {W}",
-        "  900000,                  !- Load Range 1 Upper Limit {W}",
+        "  0.0,                     !- Load Range 1 Lower Limit {W}",
+        "  900000.0,                !- Load Range 1 Upper Limit {W}",
         "  cooling plant;           !- Range 1 Equipment List Name",
 
         "PlantEquipmentOperationSchemes,",
@@ -1047,8 +1047,8 @@ TEST_F(EnergyPlusFixture, FindRangeBasedOrUncontrolledInputTest)
 
         "PlantEquipmentOperation:HeatingLoad,",
         "  Central Boiler Only,     !- Name",
-        "  0,                       !- Load Range 1 Lower Limit {W}",
-        "  1000000,                 !- Load Range 1 Upper Limit {W}",
+        "  0.0,                     !- Load Range 1 Lower Limit {W}",
+        "  1000000.0,               !- Load Range 1 Upper Limit {W}",
         "  heating plant;           !- Range 1 Equipment List Name",
 
         "PlantEquipmentOperationSchemes,",
@@ -1124,7 +1124,7 @@ TEST_F(EnergyPlusFixture, FindRangeBasedOrUncontrolledInputTest)
         "  0.03303,                 !- Coefficient 1 of Full Load Ratio Curve",
         "  0.6852,                  !- Coefficient 2 of Full Load Ratio Curve",
         "  0.2818,                  !- Coefficient 3 of Full Load Ratio Curve",
-        "  5,                       !- Chilled Water Outlet Temperature Lower Limit {C}",
+        "  5.0,                     !- Chilled Water Outlet Temperature Lower Limit {C}",
         "  LeavingSetpointModulated;  !- Chiller Flow Mode",
 
         "Boiler:HotWater,",
@@ -1222,15 +1222,15 @@ TEST_F(EnergyPlusFixture, OperationSchemePriority)
         "  Condenser Supply Inlet Node,  !- Inlet Node Name",
         "  Condenser Pump Outlet Node,  !- Outlet Node Name",
         "  0.005,                   !- Design Maximum Flow Rate {m3/s}",
-        "  179352,                  !- Design Pump Head {Pa}",
-        "  1100,                    !- Design Power Consumption {W}",
+        "  179352.0,                !- Design Pump Head {Pa}",
+        "  1100.0,                  !- Design Power Consumption {W}",
         "  0.9,                     !- Motor Efficiency",
         "  0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream",
-        "  0,                       !- Coefficient 1 of the Part Load Performance Curve",
-        "  1,                       !- Coefficient 2 of the Part Load Performance Curve",
-        "  0,                       !- Coefficient 3 of the Part Load Performance Curve",
-        "  0,                       !- Coefficient 4 of the Part Load Performance Curve",
-        "  0,                       !- Design Minimum Flow Rate {m3/s}",
+        "  0.0,                     !- Coefficient 1 of the Part Load Performance Curve",
+        "  1.0,                     !- Coefficient 2 of the Part Load Performance Curve",
+        "  0.0,                     !- Coefficient 3 of the Part Load Performance Curve",
+        "  0.0,                     !- Coefficient 4 of the Part Load Performance Curve",
+        "  0.0,                     !- Design Minimum Flow Rate {m3/s}",
         "  Intermittent;            !- Pump Control Type",
 
         "CoolingTower:SingleSpeed,",
@@ -1319,10 +1319,10 @@ TEST_F(EnergyPlusFixture, OperationSchemePriority)
         "  Condenser Chiller Outlet Node,  !- Condenser Outlet Node Name",
         "  WaterCooled,             !- Condenser Type",
         "  ,                        !- Condenser Fan Power Ratio {W/W}",
-        "  1,                       !- Fraction of Compressor Electric Consumption Rejected by Condenser",
+        "  1.0,                     !- Fraction of Compressor Electric Consumption Rejected by Condenser",
         "  5.0,                     !- Leaving Chilled Water Lower Temperature Limit {C}",
         "  ConstantFlow,            !- Chiller Flow Mode",
-        "  0,                       !- Design Heat Recovery Water Flow Rate {m3/s}",
+        "  0.0,                     !- Design Heat Recovery Water Flow Rate {m3/s}",
         "  ,                        !- Heat Recovery Inlet Node Name",
         "  ,                        !- Heat Recovery Outlet Node Name",
         "  1.0;                     !- Sizing Factor",
@@ -1403,11 +1403,11 @@ TEST_F(EnergyPlusFixture, OperationSchemePriority)
 
         "ScheduleTypeLimits,",
         "  OnOff,                   !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Discrete;                !- Numeric Type",
 
-        "Schedule:Constant,AlwaysOn,OnOff,1;",
+        "Schedule:Constant,AlwaysOn,OnOff,1.0;",
 
         "PlantEquipmentOperationSchemes,",
         "  Condenser Loop Operation,  !- Name",
@@ -1424,8 +1424,8 @@ TEST_F(EnergyPlusFixture, OperationSchemePriority)
 
         "PlantEquipmentOperation:CoolingLoad,",
         "  Tower Operation Scheme 2,  !- Name",
-        "  0,                       !- Load Range 1 Lower Limit {W}",
-        "  99999999,                !- Load Range 1 Upper Limit {W}",
+        "  0.0,                     !- Load Range 1 Lower Limit {W}",
+        "  99999999.0,              !- Load Range 1 Upper Limit {W}",
         "  Tower List;              !- Range 1 Equipment List Name",
 
         "PlantEquipmentList,",

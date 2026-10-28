@@ -91,7 +91,7 @@ Zone,
 Sizing:Plant,
   SWHSys1,                 !- Plant or Condenser Loop Name
   Heating,                 !- Loop Type
-  60,                      !- Design Loop Exit Temperature {C}
+  60.0,                    !- Design Loop Exit Temperature {C}
   5.0;                     !- Loop Design Temperature Difference {deltaC}
 
 SetpointManager:Scheduled,
@@ -109,7 +109,7 @@ PlantEquipmentOperationSchemes,
 PlantEquipmentOperation:HeatingLoad,
   SWHSys1 Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  1000000000000000,        !- Load Range 1 Upper Limit {W}
+  1000000000000000.0,      !- Load Range 1 Upper Limit {W}
   SWHSys1 Equipment List;  !- Range 1 Equipment List Name
 
 ! ***SWH LOOP***
@@ -288,8 +288,8 @@ ScheduleTypeLimits,
 
 ScheduleTypeLimits,
   Temperature,             !- Name
-  -60,                     !- Lower Limit Value {BasedOnField A3}
-  200,                     !- Upper Limit Value {BasedOnField A3}
+  -60.0,                   !- Lower Limit Value {BasedOnField A3}
+  200.0,                   !- Upper Limit Value {BasedOnField A3}
   Continuous;              !- Numeric Type
 
 Schedule:Compact,
@@ -352,14 +352,14 @@ WaterHeater:Mixed,
   2.0,                     !- Deadband Temperature Difference {deltaC}
   82.2222,                 !- Maximum Temperature Limit {C}
   Cycle,                   !- Heater Control Type
-  845000,                  !- Heater Maximum Capacity {W}
+  845000.0,                !- Heater Maximum Capacity {W}
   ,                        !- Heater Minimum Capacity {W}
   ,                        !- Heater Ignition Minimum Flow Rate {m3/s}
   ,                        !- Heater Ignition Delay {s}
   NaturalGas,              !- Heater Fuel Type
   0.8,                     !- Heater Thermal Efficiency
   ,                        !- Part Load Factor Curve Name
-  20,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
+  20.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
   NaturalGas,              !- Off Cycle Parasitic Fuel Type
   0.8,                     !- Off Cycle Parasitic Heat Fraction to Tank
   ,                        !- On Cycle Parasitic Fuel Consumption Rate {W}
@@ -393,7 +393,7 @@ Pump:ConstantSpeed,
   Autosize,                !- Design Flow Rate {m3/s}
   0.001,                   !- Design Pump Head {Pa}
   Autosize,                !- Design Power Consumption {W}
-  1,                       !- Motor Efficiency
+  1.0,                     !- Motor Efficiency
   0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
   Intermittent,            !- Pump Control Type
   ;                        !- Pump Flow Rate Schedule Name
@@ -553,7 +553,7 @@ Zone,
 Sizing:Plant,
   SWHSys1,                 !- Plant or Condenser Loop Name
   Heating,                 !- Loop Type
-  60,                      !- Design Loop Exit Temperature {C}
+  60.0,                    !- Design Loop Exit Temperature {C}
   5.0;                     !- Loop Design Temperature Difference {deltaC}
 
 SetpointManager:Scheduled,
@@ -571,7 +571,7 @@ PlantEquipmentOperationSchemes,
 PlantEquipmentOperation:HeatingLoad,
   SWHSys1 Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  1000000000000000,        !- Load Range 1 Upper Limit {W}
+  1000000000000000.0,      !- Load Range 1 Upper Limit {W}
   SWHSys1 Equipment List;  !- Range 1 Equipment List Name
 
 ! ***SWH LOOP***
@@ -759,8 +759,8 @@ ScheduleTypeLimits,
 
 ScheduleTypeLimits,
   Temperature,             !- Name
-  -60,                     !- Lower Limit Value {BasedOnField A3}
-  200,                     !- Upper Limit Value {BasedOnField A3}
+  -60.0,                   !- Lower Limit Value {BasedOnField A3}
+  200.0,                   !- Upper Limit Value {BasedOnField A3}
   Continuous;              !- Numeric Type
 
 Schedule:Compact,
@@ -823,14 +823,14 @@ WaterHeater:Mixed,
   2.0,                     !- Deadband Temperature Difference {deltaC}
   82.2222,                 !- Maximum Temperature Limit {C}
   Cycle,                   !- Heater Control Type
-  845000,                  !- Heater Maximum Capacity {W}
+  845000.0,                !- Heater Maximum Capacity {W}
   ,                        !- Heater Minimum Capacity {W}
   ,                        !- Heater Ignition Minimum Flow Rate {m3/s}
   ,                        !- Heater Ignition Delay {s}
   NaturalGas,              !- Heater Fuel Type
   0.8,                     !- Heater Thermal Efficiency
   ,                        !- Part Load Factor Curve Name
-  20,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
+  20.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
   NaturalGas,              !- Off Cycle Parasitic Fuel Type
   0.8,                     !- Off Cycle Parasitic Heat Fraction to Tank
   ,                        !- On Cycle Parasitic Fuel Consumption Rate {W}
@@ -864,7 +864,7 @@ Pump:ConstantSpeed,
   Autosize,                !- Design Flow Rate {m3/s}
   0.001,                   !- Design Pump Head {Pa}
   Autosize,                !- Design Power Consumption {W}
-  1,                       !- Motor Efficiency
+  1.0,                     !- Motor Efficiency
   0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
   Intermittent,            !- Pump Control Type
   ;                        !- Pump Flow Rate Schedule Name
@@ -995,7 +995,7 @@ Zone,
 Sizing:Plant,
   SWHSys1,                 !- Plant or Condenser Loop Name
   Heating,                 !- Loop Type
-  60,                      !- Design Loop Exit Temperature {C}
+  60.0,                    !- Design Loop Exit Temperature {C}
   5.0;                     !- Loop Design Temperature Difference {deltaC}
 
 SetpointManager:Scheduled,
@@ -1013,7 +1013,7 @@ PlantEquipmentOperationSchemes,
 PlantEquipmentOperation:HeatingLoad,
   SWHSys1 Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  1000000000000000,        !- Load Range 1 Upper Limit {W}
+  1000000000000000.0,      !- Load Range 1 Upper Limit {W}
   SWHSys1 Equipment List;  !- Range 1 Equipment List Name
 
 ! ***SWH LOOP***
@@ -1192,8 +1192,8 @@ ScheduleTypeLimits,
 
 ScheduleTypeLimits,
   Temperature,             !- Name
-  -60,                     !- Lower Limit Value {BasedOnField A3}
-  200,                     !- Upper Limit Value {BasedOnField A3}
+  -60.0,                   !- Lower Limit Value {BasedOnField A3}
+  200.0,                   !- Upper Limit Value {BasedOnField A3}
   Continuous;              !- Numeric Type
 
 Schedule:Compact,
@@ -1248,14 +1248,14 @@ WaterHeater:Mixed,
   2.0,                     !- Deadband Temperature Difference {deltaC}
   82.2222,                 !- Maximum Temperature Limit {C}
   Cycle,                   !- Heater Control Type
-  845000,                  !- Heater Maximum Capacity {W}
+  845000.0,                !- Heater Maximum Capacity {W}
   ,                        !- Heater Minimum Capacity {W}
   ,                        !- Heater Ignition Minimum Flow Rate {m3/s}
   ,                        !- Heater Ignition Delay {s}
   NaturalGas,              !- Heater Fuel Type
   0.8,                     !- Heater Thermal Efficiency
   ,                        !- Part Load Factor Curve Name
-  20,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
+  20.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
   NaturalGas,              !- Off Cycle Parasitic Fuel Type
   0.8,                     !- Off Cycle Parasitic Heat Fraction to Tank
   ,                        !- On Cycle Parasitic Fuel Consumption Rate {W}
@@ -1289,7 +1289,7 @@ Pump:ConstantSpeed,
   Autosize,                !- Design Flow Rate {m3/s}
   0.001,                   !- Design Pump Head {Pa}
   Autosize,                !- Design Power Consumption {W}
-  1,                       !- Motor Efficiency
+  1.0,                     !- Motor Efficiency
   0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
   Intermittent,            !- Pump Control Type
   ;                        !- Pump Flow Rate Schedule Name
@@ -1390,7 +1390,7 @@ Zone,
 Sizing:Plant,
   SWHSys1,                 !- Plant or Condenser Loop Name
   Heating,                 !- Loop Type
-  60,                      !- Design Loop Exit Temperature {C}
+  60.0,                    !- Design Loop Exit Temperature {C}
   5.0;                     !- Loop Design Temperature Difference {deltaC}
 
 SetpointManager:Scheduled,
@@ -1408,7 +1408,7 @@ PlantEquipmentOperationSchemes,
 PlantEquipmentOperation:HeatingLoad,
   SWHSys1 Operation Scheme,  !- Name
   0.0,                     !- Load Range 1 Lower Limit {W}
-  1000000000000000,        !- Load Range 1 Upper Limit {W}
+  1000000000000000.0,      !- Load Range 1 Upper Limit {W}
   SWHSys1 Equipment List;  !- Range 1 Equipment List Name
 
 ! ***SWH LOOP***
@@ -1587,8 +1587,8 @@ ScheduleTypeLimits,
 
 ScheduleTypeLimits,
   Temperature,             !- Name
-  -60,                     !- Lower Limit Value {BasedOnField A3}
-  200,                     !- Upper Limit Value {BasedOnField A3}
+  -60.0,                   !- Lower Limit Value {BasedOnField A3}
+  200.0,                   !- Upper Limit Value {BasedOnField A3}
   Continuous;              !- Numeric Type
 
 Schedule:Compact,
@@ -1643,14 +1643,14 @@ WaterHeater:Mixed,
   2.0,                     !- Deadband Temperature Difference {deltaC}
   82.2222,                 !- Maximum Temperature Limit {C}
   Cycle,                   !- Heater Control Type
-  845000,                  !- Heater Maximum Capacity {W}
+  845000.0,                !- Heater Maximum Capacity {W}
   ,                        !- Heater Minimum Capacity {W}
   ,                        !- Heater Ignition Minimum Flow Rate {m3/s}
   ,                        !- Heater Ignition Delay {s}
   NaturalGas,              !- Heater Fuel Type
   0.8,                     !- Heater Thermal Efficiency
   ,                        !- Part Load Factor Curve Name
-  20,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
+  20.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
   NaturalGas,              !- Off Cycle Parasitic Fuel Type
   0.8,                     !- Off Cycle Parasitic Heat Fraction to Tank
   ,                        !- On Cycle Parasitic Fuel Consumption Rate {W}
@@ -1684,7 +1684,7 @@ Pump:ConstantSpeed,
   Autosize,                !- Design Flow Rate {m3/s}
   0.001,                   !- Design Pump Head {Pa}
   Autosize,                !- Design Power Consumption {W}
-  1,                       !- Motor Efficiency
+  1.0,                     !- Motor Efficiency
   0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
   Intermittent,            !- Pump Control Type
   ;                        !- Pump Flow Rate Schedule Name

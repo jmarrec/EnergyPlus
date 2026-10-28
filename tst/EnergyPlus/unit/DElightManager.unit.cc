@@ -291,7 +291,7 @@ TEST_F(EnergyPlusFixture, DElightManagerF_GetInputDElightComplexFenestration_Tes
         "  ,                        !- Outside Boundary Condition Object",
         "  0.5,                     !- View Factor to Ground",
         "  ,                        !- Frame and Divider Name",
-        "  1.0,                     !- Multiplier",
+        "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
         "  0.548,                   !- Vertex 1 X-coordinate {m}",
         "  0.0,                     !- Vertex 1 Y-coordinate {m}",

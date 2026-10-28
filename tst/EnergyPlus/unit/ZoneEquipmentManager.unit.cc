@@ -181,10 +181,10 @@ TEST_F(EnergyPlusFixture, ZoneEquipmentManager_MultiCrossMixingTest)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  SPACE1-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -192,10 +192,10 @@ TEST_F(EnergyPlusFixture, ZoneEquipmentManager_MultiCrossMixingTest)
 
         "Zone,",
         "  SPACE2-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -203,10 +203,10 @@ TEST_F(EnergyPlusFixture, ZoneEquipmentManager_MultiCrossMixingTest)
 
         "Zone,",
         "  SPACE3-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -214,10 +214,10 @@ TEST_F(EnergyPlusFixture, ZoneEquipmentManager_MultiCrossMixingTest)
 
         "Zone,",
         "  SPACE4-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -225,10 +225,10 @@ TEST_F(EnergyPlusFixture, ZoneEquipmentManager_MultiCrossMixingTest)
 
         "Zone,",
         "  SPACE5-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -3092,10 +3092,10 @@ TEST_F(EnergyPlusFixture, ZoneEquipmentManager_ZoneMassBalance_wAdjustInfiltrati
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
 
         "ZoneInfiltration:DesignFlowRate,",
         "  RZone Infiltration,      !- Name",
@@ -3106,10 +3106,10 @@ TEST_F(EnergyPlusFixture, ZoneEquipmentManager_ZoneMassBalance_wAdjustInfiltrati
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3328,10 +3328,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wAdjustReturnOnly)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
 
         "ZoneInfiltration:DesignFlowRate,",
         "  RZone Infiltration,      !- Name",
@@ -3342,10 +3342,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wAdjustReturnOnly)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3580,10 +3580,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wAdjustReturnThenMixing)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
 
         "ZoneInfiltration:DesignFlowRate,",
         "  RZone Infiltration,      !- Name",
@@ -3594,10 +3594,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wAdjustReturnThenMixing)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3844,10 +3844,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wAdjustMixingThenReturn)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
 
         "ZoneInfiltration:DesignFlowRate,",
         "  RZone Infiltration,      !- Name",
@@ -3858,10 +3858,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wAdjustMixingThenReturn)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4148,10 +4148,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wSourceAndReceivingZone)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
 
         "ZoneInfiltration:DesignFlowRate,",
         "  RZone Infiltration,      !- Name",
@@ -4162,10 +4162,10 @@ TEST_F(EnergyPlusFixture, ZoneAirMassFlowBalance_wSourceAndReceivingZone)
         "  ,                        !- Flow Rate per Floor Area {m3/s-m2}",
         "  ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}",
         "  ,                        !- Air Changes per Hour {1/hr}",
-        "  1,                       !- Constant Term Coefficient",
-        "  0,                       !- Temperature Term Coefficient",
-        "  0,                       !- Velocity Term Coefficient",
-        "  0;                       !- Velocity Squared Term Coefficient",
+        "  1.0,                     !- Constant Term Coefficient",
+        "  0.0,                     !- Temperature Term Coefficient",
+        "  0.0,                     !- Velocity Term Coefficient",
+        "  0.0;                     !- Velocity Squared Term Coefficient",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -5016,9 +5016,9 @@ AirTerminal:SingleDuct:ConstantVolume:Reheat,
   Coil:Heating:Water,      !- Reheat Coil Object Type
   CV HW Rht Coil,          !- Reheat Coil Name
   Autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
-  0,                       !- Minimum Hot Water or Steam Flow Rate {m3/s}
+  0.0,                     !- Minimum Hot Water or Steam Flow Rate {m3/s}
   0.001,                   !- Convergence Tolerance
-  50;                      !- Maximum Reheat Air Temperature {C}
+  50.0;                    !- Maximum Reheat Air Temperature {C}
 
 ZoneHVAC:AirDistributionUnit,
   ADU VAV Rht,             !- Name
@@ -5041,13 +5041,13 @@ AirTerminal:SingleDuct:VAV:Reheat,
   Coil:Heating:Water,      !- Reheat Coil Object Type
   VAV HW Rht Coil,         !- Reheat Coil Name
   Autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
-  0,                       !- Minimum Hot Water or Steam Flow Rate {m3/s}
+  0.0,                     !- Minimum Hot Water or Steam Flow Rate {m3/s}
   Node 5,                  !- Air Outlet Node Name
   0.001,                   !- Convergence Tolerance
   Normal,                  !- Damper Heating Action
   Autosize,                !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
   Autosize,                !- Maximum Flow Fraction During Reheat
-  50;                      !- Maximum Reheat Air Temperature {C}
+  50.0;                    !- Maximum Reheat Air Temperature {C}
 
     )IDF";
 

@@ -75,16 +75,16 @@ static std::string_view constexpr oneZoneBuildingWithIdealLoads = R"IDF(
 ScheduleTypeLimits,
   Any Number;              !- Name
 
-Schedule:Constant,Always On,Any Number,1;
+Schedule:Constant,Always On,Any Number,1.0;
 
-Schedule:Constant,Always Off,Any Number,0;
+Schedule:Constant,Always Off,Any Number,0.0;
 
 Zone,
   Zone_1,                  !- Name
   ,                        !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1,                       !- Multiplier
   ,                        !- Ceiling Height {m}
@@ -114,18 +114,18 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  10,                      !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  0;                       !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  0.0;                     !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
   Space_1 RoofCeiling,     !- Name
@@ -139,18 +139,18 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  -10,                     !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  3;                       !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  3.0;                     !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 1,          !- Name
@@ -164,18 +164,18 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  10,                      !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  0;                       !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  0.0;                     !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 2,          !- Name
@@ -189,18 +189,18 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  10,                      !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  0;                       !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  0.0;                     !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 3,          !- Name
@@ -214,18 +214,18 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  -10,                     !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  -5,                      !- Vertex Y-coordinate {m}
-  0;                       !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  -5.0,                    !- Vertex Y-coordinate {m}
+  0.0;                     !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 4,          !- Name
@@ -239,18 +239,18 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  -10,                     !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  3,                       !- Vertex Z-coordinate {m}
-  10,                      !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  0,                       !- Vertex Z-coordinate {m}
-  -10,                     !- Vertex X-coordinate {m}
-  5,                       !- Vertex Y-coordinate {m}
-  0;                       !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  3.0,                     !- Vertex Z-coordinate {m}
+  10.0,                    !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  0.0,                     !- Vertex Z-coordinate {m}
+  -10.0,                   !- Vertex X-coordinate {m}
+  5.0,                     !- Vertex Y-coordinate {m}
+  0.0;                     !- Vertex Z-coordinate {m}
 
 Material,
   Material 1,              !- Name
@@ -258,7 +258,7 @@ Material,
   0.1,                     !- Thickness {m}
   0.1,                     !- Conductivity {W/m-K}
   0.1,                     !- Density {kg/m3}
-  1400,                    !- Specific Heat {J/kg-K}
+  1400.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -501,14 +501,14 @@ Curve:Quadratic,
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
   Always On,               !- Availability Schedule Name
-  5,                       !- Rated Coil Cooling Capacity {W}
+  5.0,                     !- Rated Coil Cooling Capacity {W}
   1.66666666666667,        !- Operating Temperature {C}
   -6.11111111111111,       !- Rated Cooling Source Temperature {C}
   0.0,                     !- Rated Total Heating Power {W}
   Always On,               !- Heating Power Schedule Name
-  5,                       !- Rated Cooling Coil Fan Power {W}
+  5.0,                     !- Rated Cooling Coil Fan Power {W}
   0.0,                     !- Rated Circulation Fan Power {W}
-  5,                       !- Rated Total Lighting Power {W}
+  5.0,                     !- Rated Total Lighting Power {W}
   Always On,               !- Lighting Schedule Name
   Electric,                !- Defrost Type
   TimeSchedule,            !- Defrost Control Type
@@ -518,7 +518,7 @@ Refrigeration:WalkIn,
   ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}
   ,                        !- Restocking Schedule Name
   ,                        !- Average Refrigerant Charge Inventory {kg}
-  1,                       !- Insulated Floor Surface Area {m2}
+  1.0,                     !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
   ZONE_1,                  !- Zone Name
   6.504,                   !- Total Insulated Surface Area Facing Zone {m2}
@@ -601,14 +601,14 @@ Refrigeration:CaseAndWalkInList,
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
   Always On,               !- Availability Schedule Name
-  5,                       !- Rated Coil Cooling Capacity {W}
+  5.0,                     !- Rated Coil Cooling Capacity {W}
   1.66666666666667,        !- Operating Temperature {C}
   -6.11111111111111,       !- Rated Cooling Source Temperature {C}
   0.0,                     !- Rated Total Heating Power {W}
   Always On,               !- Heating Power Schedule Name
-  5,                       !- Rated Cooling Coil Fan Power {W}
+  5.0,                     !- Rated Cooling Coil Fan Power {W}
   0.0,                     !- Rated Circulation Fan Power {W}
-  5,                       !- Rated Total Lighting Power {W}
+  5.0,                     !- Rated Total Lighting Power {W}
   Always On,               !- Lighting Schedule Name
   Electric,                !- Defrost Type
   TimeSchedule,            !- Defrost Control Type
@@ -618,7 +618,7 @@ Refrigeration:WalkIn,
   ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}
   ,                        !- Restocking Schedule Name
   ,                        !- Average Refrigerant Charge Inventory {kg}
-  1,                       !- Insulated Floor Surface Area {m2}
+  1.0,                     !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
   ZONE_1,                  !- Zone Name
   6.504,                   !- Total Insulated Surface Area Facing Zone {m2}
@@ -702,14 +702,14 @@ Refrigeration:CaseAndWalkInList,
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
   Always On,               !- Availability Schedule Name
-  5,                       !- Rated Coil Cooling Capacity {W}
+  5.0,                     !- Rated Coil Cooling Capacity {W}
   1.66666666666667,        !- Operating Temperature {C}
   -6.11111111111111,       !- Rated Cooling Source Temperature {C}
   0.0,                     !- Rated Total Heating Power {W}
   Always On,               !- Heating Power Schedule Name
-  5,                       !- Rated Cooling Coil Fan Power {W}
+  5.0,                     !- Rated Cooling Coil Fan Power {W}
   0.0,                     !- Rated Circulation Fan Power {W}
-  5,                       !- Rated Total Lighting Power {W}
+  5.0,                     !- Rated Total Lighting Power {W}
   Always On,               !- Lighting Schedule Name
   Electric,                !- Defrost Type
   TimeSchedule,            !- Defrost Control Type
@@ -719,7 +719,7 @@ Refrigeration:WalkIn,
   ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}
   ,                        !- Restocking Schedule Name
   ,                        !- Average Refrigerant Charge Inventory {kg}
-  1,                       !- Insulated Floor Surface Area {m2}
+  1.0,                     !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
   ZONE_1,                  !- Zone Name
   6.504,                   !- Total Insulated Surface Area Facing Zone {m2}

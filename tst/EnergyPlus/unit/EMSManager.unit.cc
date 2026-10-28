@@ -1176,7 +1176,7 @@ TEST_F(EnergyPlusFixture, EMSManager_TestFuntionCall)
         "  set Var11 = @Max 0.5 1.5,  !- Program Line",
         "  set Var12 = @Min 0.5 1.5,  !- Program Line",
         "  set Var13 = @Abs 1.3,    !- Program Line", // -3.1 does not work, (-3.1) does not work, "set absNum = -3.1" and use @Abs absNum does work
-                                                      // if EMS line of code
+        // if EMS line of code
         // occurs before this line
         "  set Var14 = @SEEDRANDOM 2.65,  !- Program Line",
         "  set Var15 = @RANDOMUNIFORM 0.0 1.0,  !- Program Line",
@@ -1202,7 +1202,7 @@ TEST_F(EnergyPlusFixture, EMSManager_TestFuntionCall)
         "  set Var35 = @WFnTdbH 20.0 30000.0,  !- Program Line",
         "  set Var36 = @WFnTdbTwbPb 30.0 16.0 101325.0,  !- Program Line",
         "  set Var37 = @WFnTdbRhPb 30.0 0.5 101325.0,  !- Program Line", // this function implementation looks suspicious given it takes up to 4
-                                                                         // arguments (CalledFrom is
+        // arguments (CalledFrom is
         // 4th)
         "  set Var38 = @PsatFnTemp 30.0,  !- Program Line",
         "  set Var39 = @TsatFnHPb 30000.0 101325.0,  !- Program Line",
@@ -1220,7 +1220,7 @@ TEST_F(EnergyPlusFixture, EMSManager_TestFuntionCall)
         "  set Var51 = @CURVEVALUE 1 0.75,  !- Program Line",
         "  set absNum = -3.1,       !- Program Line",
         "  set Var53 = @Abs absNum,  !- Program Line", // -3.1 does not work, (-3.1) does not work, "set absNum = -3.1" and use @Abs absNum does work
-                                                       // if EMS "set absNum"
+        // if EMS "set absNum"
         // line of code occurs before this line
         "  Run Test_Trend_Variables;  !- Program Line",
 
@@ -1872,8 +1872,8 @@ TEST_F(EnergyPlusFixture, EMS_WeatherDataActuators)
         "  ,                        !- Humidity Condition Day Schedule Name",
         "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
         "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
-        "  8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "  97620,                   !- Barometric Pressure {Pa}",
+        "  8.0,                     !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "  97620.0,                 !- Barometric Pressure {Pa}",
         "  5.0,                     !- Wind Speed {m/s}",
         "  180.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
@@ -2015,8 +2015,8 @@ TEST_F(EnergyPlusFixture, EMS_TodayTomorrowFunctions)
         "  ,                        !- Humidity Condition Day Schedule Name",
         "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
         "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
-        "  8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "  97620,                   !- Barometric Pressure {Pa}",
+        "  8.0,                     !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "  97620.0,                 !- Barometric Pressure {Pa}",
         "  5.0,                     !- Wind Speed {m/s}",
         "  180.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
@@ -2449,9 +2449,9 @@ TEST_F(EnergyPlusFixture, EMSManager_TrendValue_to_Actuator)
 {
     // Test for #10279 - Make sure that assigning the result of a TendVariable @TrendValue results in proper actuator behavior
     std::string const idf_objects = delimited_string({
-        "Schedule:Constant,Actuated Schedule Direct,,18;",
+        "Schedule:Constant,Actuated Schedule Direct,,18.0;",
 
-        "Schedule:Constant,Actuated Schedule Indirect,,18;",
+        "Schedule:Constant,Actuated Schedule Indirect,,18.0;",
 
         "EnergyManagementSystem:GlobalVariable,",
         "  argTrendValue,           !- Erl Variable Name",

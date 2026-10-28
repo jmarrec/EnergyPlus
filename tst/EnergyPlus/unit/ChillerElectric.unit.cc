@@ -101,7 +101,7 @@ TEST_F(EnergyPlusFixture, ChillerElectric_WaterCooled_Autosize)
         "  0.03303,                 !- Coefficient 1 of Full Load Ratio Curve",
         "  0.6852,                  !- Coefficient 2 of Full Load Ratio Curve",
         "  0.2818,                  !- Coefficient 3 of Full Load Ratio Curve",
-        "  5,                       !- Chilled Water Outlet Temperature Lower Limit {C}",
+        "  5.0,                     !- Chilled Water Outlet Temperature Lower Limit {C}",
         "  LeavingSetpointModulated;  !- Chiller Flow Mode",
     });
 
@@ -234,7 +234,7 @@ TEST_F(EnergyPlusFixture, ChillerElectric_WaterCooled_Simulate)
         "  0.03303,                 !- Coefficient 1 of Full Load Ratio Curve",
         "  0.6852,                  !- Coefficient 2 of Full Load Ratio Curve",
         "  0.2818,                  !- Coefficient 3 of Full Load Ratio Curve",
-        "  5,                       !- Chilled Water Outlet Temperature Lower Limit {C}",
+        "  5.0,                     !- Chilled Water Outlet Temperature Lower Limit {C}",
         "  LeavingSetpointModulated,  !- Chiller Flow Mode",
         "  ,                        !- Design Heat Recovery Water Flow Rate {m3/s}",
         "  ,                        !- Heat Recovery Inlet Node Name",

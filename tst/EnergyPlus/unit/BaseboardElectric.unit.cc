@@ -79,7 +79,7 @@ TEST_F(EnergyPlusFixture, ExerciseBaseboardElectric)
         "  Zone1Baseboard,          !- Name",
         "  ,                        !- Availability Schedule Name",
         "  HeatingDesignCapacity,   !- Heating Design Capacity Method",
-        "  5000,                    !- Heating Design Capacity {W}",
+        "  5000.0,                  !- Heating Design Capacity {W}",
         "  ,                        !- Heating Design Capacity Per Floor Area {W/m2}",
         "  ,                        !- Fraction of Autosized Heating Design Capacity",
         "  0.97;                    !- Efficiency",

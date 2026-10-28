@@ -746,10 +746,10 @@ TEST_F(EnergyPlusFixture, ZoneContaminantPredictorCorrector_MissingGenericContam
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  Zone1,                   !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -769,8 +769,8 @@ TEST_F(EnergyPlusFixture, ZoneContaminantPredictorCorrector_MissingGenericContam
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
 
         "ScheduleTypeLimits,",
@@ -824,11 +824,11 @@ TEST_F(EnergyPlusFixture, ZoneContaminantPredictorCorrector_EMSActuatesContamina
         "  Always On,               !- Generic Contaminant Control Availability Schedule Name",
         "  Generic Contaminant Setpoint Schedule;  !- Generic Contaminant Setpoint Schedule Name",
 
-        "Schedule:Constant,Always On,,1;",
+        "Schedule:Constant,Always On,,1.0;",
 
-        "Schedule:Constant,CO2 Setpoint Schedule,,1000;",
+        "Schedule:Constant,CO2 Setpoint Schedule,,1000.0;",
 
-        "Schedule:Constant,Generic Contaminant Setpoint Schedule,,10;",
+        "Schedule:Constant,Generic Contaminant Setpoint Schedule,,10.0;",
 
         "EnergyManagementSystem:Actuator,",
         "  CO2SetpointScheduleActuator,  !- Name",

@@ -144,7 +144,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceKiva_SetInitialBCs)
         "  ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type",
         "  Core_bottom DualSPSched;  !- Control 1 Name",
 
-        "Schedule:Constant,Dual Zone Control Type Sched,Control Type,4;",
+        "Schedule:Constant,Dual Zone Control Type Sched,Control Type,4.0;",
 
         "ThermostatSetpoint:DualSetpoint,",
         "  Core_bottom DualSPSched,  !- Name",
@@ -523,7 +523,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceKiva_setupKivaInstances_ThermalComfort)
         "  Core_bottom,             !- Zone or ZoneList or Space or SpaceList Name",
         "  Core_bottom Occupancy,   !- Number of People Schedule Name",
         "  People,                  !- Number of People Calculation Method",
-        "  4,                       !- Number of People",
+        "  4.0,                     !- Number of People",
         "  ,                        !- People per Floor Area {person/m2}",
         "  ,                        !- Floor Area per Person {m2/person}",
         "  0.9,                     !- Fraction Radiant",
@@ -604,8 +604,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceKiva_setupKivaInstances_ThermalComfort)
         "  Core_bottom,             !- Zone or ZoneList Name",
         "  SpecificObject,          !- Averaging Method",
         "  Core_bottom People,      !- Specific People Name",
-        "  0,                       !- Minimum Dry-Bulb Temperature Setpoint {C}",
-        "  50,                      !- Maximum Dry-Bulb Temperature Setpoint {C}",
+        "  0.0,                     !- Minimum Dry-Bulb Temperature Setpoint {C}",
+        "  50.0,                    !- Maximum Dry-Bulb Temperature Setpoint {C}",
         "  Comfort Control,         !- Thermal Comfort Control Type Schedule Name",
         "  ThermostatSetpoint:ThermalComfort:Fanger:SingleHeating,  !- Thermal Comfort Control 1 Object Type",
         "  Single Htg PMV,          !- Thermal Comfort Control 1 Name",
@@ -636,7 +636,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceKiva_setupKivaInstances_ThermalComfort)
         "  Single Cooling PMV,      !- Name",
         "  Single Cooling PMV;      !- Fanger Thermal Comfort Schedule Name",
 
-        "Schedule:Constant,Dual Zone Control Type Sched,Control Type,4;",
+        "Schedule:Constant,Dual Zone Control Type Sched,Control Type,4.0;",
 
         "ThermostatSetpoint:DualSetpoint,",
         "  Core_bottom DualSPSched,  !- Name",
@@ -673,29 +673,29 @@ TEST_F(EnergyPlusFixture, HeatBalanceKiva_setupKivaInstances_ThermalComfort)
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous,              !- Numeric Type",
         "  Dimensionless;           !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  Temperature,             !- Name",
-        "  -60,                     !- Lower Limit Value {BasedOnField A3}",
-        "  200,                     !- Upper Limit Value {BasedOnField A3}",
+        "  -60.0,                   !- Lower Limit Value {BasedOnField A3}",
+        "  200.0,                   !- Upper Limit Value {BasedOnField A3}",
         "  Continuous,              !- Numeric Type",
         "  Temperature;             !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  Control Type,            !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  4,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  4.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Discrete,                !- Numeric Type",
         "  Dimensionless;           !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  On/Off,                  !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Discrete,                !- Numeric Type",
         "  Dimensionless;           !- Unit Type",
 
@@ -714,15 +714,15 @@ TEST_F(EnergyPlusFixture, HeatBalanceKiva_setupKivaInstances_ThermalComfort)
 
         "ScheduleTypeLimits,",
         "  Activity Level,          !- Name",
-        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
         "  ,                        !- Upper Limit Value {BasedOnField A3}",
         "  Continuous,              !- Numeric Type",
         "  ActivityLevel;           !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  Dimensionless,           !- Name",
-        "  -1,                      !- Lower Limit Value {BasedOnField A3}",
-        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  -1.0,                    !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
         "  Continuous;              !- Numeric Type",
     });
 

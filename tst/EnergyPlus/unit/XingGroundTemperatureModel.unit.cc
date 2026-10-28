@@ -64,13 +64,13 @@ TEST_F(EnergyPlusFixture, XingGroundTempsModelTest)
         "Site:GroundTemperature:Undisturbed:Xing,",
         "  Test,                    !- Name",
         "  1.08,                    !- Soil Thermal Conductivity {W/m-K}",
-        "  962,                     !- Soil Density {kg/m3}",
-        "  2576,                    !- Soil Specific Heat {J/kg-K}",
+        "  962.0,                   !- Soil Density {kg/m3}",
+        "  2576.0,                  !- Soil Specific Heat {J/kg-K}",
         "  11.1,                    !- Average Soil Surface Temperature {C}",
         "  13.4,                    !- Soil Surface Temperature Amplitude 1 {deltaC}",
         "  0.7,                     !- Soil Surface Temperature Amplitude 2 {deltaC}",
-        "  25,                      !- Phase Shift of Temperature Amplitude 1 {days}",
-        "  30;                      !- Phase Shift of Temperature Amplitude 2 {days}",
+        "  25.0,                    !- Phase Shift of Temperature Amplitude 1 {days}",
+        "  30.0;                    !- Phase Shift of Temperature Amplitude 2 {days}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -97,23 +97,23 @@ TEST_F(EnergyPlusFixture, XingGroundTempsGetInputTest)
         "  Test1,                   !- Name",
         "  1.0,                     !- Soil Thermal Conductivity {W/m-K}",
         "  1000.0,                  !- Soil Density {kg/m3}",
-        "  2500,                    !- Soil Specific Heat {J/kg-K}",
+        "  2500.0,                  !- Soil Specific Heat {J/kg-K}",
         "  10.0,                    !- Average Soil Surface Temperature {C}",
         "  12.0,                    !- Soil Surface Temperature Amplitude 1 {deltaC}",
         "  1.0,                     !- Soil Surface Temperature Amplitude 2 {deltaC}",
-        "  25,                      !- Phase Shift of Temperature Amplitude 1 {days}",
-        "  30;                      !- Phase Shift of Temperature Amplitude 2 {days}",
+        "  25.0,                    !- Phase Shift of Temperature Amplitude 1 {days}",
+        "  30.0;                    !- Phase Shift of Temperature Amplitude 2 {days}",
 
         "Site:GroundTemperature:Undisturbed:Xing,",
         "  Test2,                   !- Name",
         "  2.0,                     !- Soil Thermal Conductivity {W/m-K}",
-        "  1200,                    !- Soil Density {kg/m3}",
-        "  2400,                    !- Soil Specific Heat {J/kg-K}",
+        "  1200.0,                  !- Soil Density {kg/m3}",
+        "  2400.0,                  !- Soil Specific Heat {J/kg-K}",
         "  11.1,                    !- Average Soil Surface Temperature {C}",
         "  22.2,                    !- Soil Surface Temperature Amplitude 1 {deltaC}",
         "  2.5,                     !- Soil Surface Temperature Amplitude 2 {deltaC}",
-        "  20,                      !- Phase Shift of Temperature Amplitude 1 {days}",
-        "  40;                      !- Phase Shift of Temperature Amplitude 2 {days}",
+        "  20.0,                    !- Phase Shift of Temperature Amplitude 1 {days}",
+        "  40.0;                    !- Phase Shift of Temperature Amplitude 2 {days}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
