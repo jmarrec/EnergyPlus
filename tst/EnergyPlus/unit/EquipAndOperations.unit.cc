@@ -181,98 +181,105 @@ TEST_F(DistributeEquipOpTest, EvaluateChillerHeaterChangeoverOpSchemeTest)
 
     std::string_view constexpr idf_objects = R"IDF(
 
-      PlantEquipmentOperationSchemes,
-        Cooling Loop Operation Scheme List, !- Name
-        PlantEquipmentOperation:ChillerHeaterChangeover, !- Control Scheme 1 Object Type
-        Two AWHP Operation Scheme,         !- Control Scheme 1 Name
-        ALWAYS_ON;                         !- Control Scheme 1 Schedule Name
+PlantEquipmentOperationSchemes,
+  Cooling Loop Operation Scheme List,  !- Name
+  PlantEquipmentOperation:ChillerHeaterChangeover,  !- Control Scheme 1 Object Type
+  Two AWHP Operation Scheme,  !- Control Scheme 1 Name
+  ALWAYS_ON;               !- Control Scheme 1 Schedule Name
 
-      PlantEquipmentOperationSchemes,
-        Heating Loop Operation Scheme List, !- Name
-        PlantEquipmentOperation:ChillerHeaterChangeover,  !- Control Scheme 1 Object Type
-        Two AWHP Operation Scheme,         !- Control Scheme 1 Name
-        ALWAYS_ON;                         !- Control Scheme 1 Schedule Name
+PlantEquipmentOperationSchemes,
+  Heating Loop Operation Scheme List,  !- Name
+  PlantEquipmentOperation:ChillerHeaterChangeover,  !- Control Scheme 1 Object Type
+  Two AWHP Operation Scheme,  !- Control Scheme 1 Name
+  ALWAYS_ON;               !- Control Scheme 1 Schedule Name
 
-      Schedule:Compact, ALWAYS_ON, On/Off, Through: 12/31, For: AllDays, Until: 24:00,1;
+Schedule:Compact,
+  ALWAYS_ON,               !- Name
+  On/Off,                  !- Schedule Type Limits Name
+  Through: 12/31,          !- Field
+  For: AllDays,            !- Field
+  Until: 24:00,            !- Field
+  1;                       !- Field
 
-    PlantEquipmentOperation:ChillerHeaterChangeover,
-      Two AWHP Operation Scheme ,          !- Name
-      6.6 ,                                !- Primary Cooling Plant Setpoint Temperature
-      13.7,                                !- Secondary Distribution Cooling Plant Setpoint Temperature
-      59.8 ,                               !- Primary Heating Plant Setpoint at Outdoor High Temperature
-      10.0,                                !- Outdoor High Temperature
-      37.6 ,                               !- Primary Heating Plant Setpoint at Outdoor Low Temperature
-      0.0 ,                                !- Outdoor Low Temperature
-      45.0 ,                               !- Secondary Distribution Heating Plant Setpoint Temperature
-      This Zone List,                      !- Zone Load Polling ZoneList Name
-      Two AWHP Cooling Operation Scheme,   !- Cooling Only Load Plant Equipment Operation Cooling Load Name
-      Two AWHP Heating Operation Scheme,   !- Heating Only Load Plant Equipment Operation Heating Load Name
-      One AWHP Cooling Operation Scheme,   !- Simultaneous Cooling And Heating Plant Equipment Operation Cooling Load Name
-      One AWHP Heating Operation Scheme,   !- Simultaneous Cooling And Heating Plant Equipment Operation Heating Load Name
-      ,                                    !- Dedicated Chilled Water Return Recovery HeatPump Name
-      ,                                    !- Dedicated Hot Water Return Recovery HeatPump Name
-      1.0;                                 !-  Dedicated Recovery Heat Pump Control Load Capacity Factor
+PlantEquipmentOperation:ChillerHeaterChangeover,
+  Two AWHP Operation Scheme,  !- Name
+  6.6,                     !- Primary Cooling Plant Setpoint Temperature {C}
+  13.7,                    !- Secondary Distribution Cooling Plant Setpoint Temperature {C}
+  59.8,                    !- Primary Heating Plant Setpoint at Outdoor High Temperature {C}
+  10.0,                    !- Outdoor High Temperature {C}
+  37.6,                    !- Primary Heating Plant Setpoint at Outdoor Low Temperature {C}
+  0.0,                     !- Outdoor Low Temperature {C}
+  45.0,                    !- Secondary Distribution Heating Plant Setpoint Temperature {C}
+  This Zone List,          !- Zone Load Polling ZoneList Name
+  Two AWHP Cooling Operation Scheme,  !- Cooling Only Load Plant Equipment Operation Cooling Load Name
+  Two AWHP Heating Operation Scheme,  !- Heating Only Load Plant Equipment Operation Heating Load Name
+  One AWHP Cooling Operation Scheme,  !- Simultaneous Cooling And Heating Plant Equipment Operation Cooling Load Name
+  One AWHP Heating Operation Scheme,  !- Simultaneous Cooling And Heating Plant Equipment Operation Heating Load Name
+  ,                        !- Dedicated Chilled Water Return Recovery Heat Pump Name
+  ,                        !- Dedicated Hot Water Return Recovery Heat Pump Name
+  1.0;                     !- Boiler Setpoint Temperature Offset {deltaC}
 
-      PlantEquipmentOperation:CoolingLoad,
-        Two AWHP Cooling Operation Scheme, !- Name
-        0.0,                               !- Load Range 1 Lower Limit {W}
-        50000,                             !- Load Range 1 Upper Limit {W}
-        One AWHP Cooling Equipment List,   !- Range 1 Equipment List Name
-        50000,                             !- Load Range 2 Lower Limit {W}
-        10000000000000,                    !- Load Range 2 Upper Limit {W}
-        Two AWHP Cooling Equipment List;   !- Range 2 Equipment List Name
+PlantEquipmentOperation:CoolingLoad,
+  Two AWHP Cooling Operation Scheme,  !- Name
+  0.0,                     !- Load Range 1 Lower Limit {W}
+  50000,                   !- Load Range 1 Upper Limit {W}
+  One AWHP Cooling Equipment List,  !- Range 1 Equipment List Name
+  50000,                   !- Load Range 2 Lower Limit {W}
+  10000000000000,          !- Load Range 2 Upper Limit {W}
+  Two AWHP Cooling Equipment List;  !- Range 2 Equipment List Name
 
-      PlantEquipmentOperation:HeatingLoad,
-        Two AWHP Heating Operation Scheme, !- Name
-        0.0,                               !- Load Range 1 Lower Limit {W}
-        100000,                            !- Load Range 1 Upper Limit {W}
-        One AWHP Heating Equipment List,   !- Range 1 Equipment List Name
-        100000,                            !- Load Range 2 Lower Limit {W}
-        10000000000000,                    !- Load Range 2 Upper Limit {W}
-        Two AWHP Heating Equipment List;   !- Range 2 Equipment List Name
+PlantEquipmentOperation:HeatingLoad,
+  Two AWHP Heating Operation Scheme,  !- Name
+  0.0,                     !- Load Range 1 Lower Limit {W}
+  100000,                  !- Load Range 1 Upper Limit {W}
+  One AWHP Heating Equipment List,  !- Range 1 Equipment List Name
+  100000,                  !- Load Range 2 Lower Limit {W}
+  10000000000000,          !- Load Range 2 Upper Limit {W}
+  Two AWHP Heating Equipment List;  !- Range 2 Equipment List Name
 
-      PlantEquipmentOperation:CoolingLoad,
-        One AWHP Cooling Operation Scheme, !- Name
-        0.0,                               !- Load Range 1 Lower Limit {W}
-        10000000000000000,                 !- Load Range 1 Upper Limit {W}
-        One AWHP Cooling Equipment List;   !- Range 1 Equipment List Name
+PlantEquipmentOperation:CoolingLoad,
+  One AWHP Cooling Operation Scheme,  !- Name
+  0.0,                     !- Load Range 1 Lower Limit {W}
+  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  One AWHP Cooling Equipment List;  !- Range 1 Equipment List Name
 
-      PlantEquipmentOperation:HeatingLoad,
-        One AWHP Heating Operation Scheme, !- Name
-        0.0,                               !- Load Range 1 Lower Limit {W}
-        10000000000000000,                 !- Load Range 1 Upper Limit {W}
-        One AWHP Heating Equipment List;   !- Range 1 Equipment List Name
+PlantEquipmentOperation:HeatingLoad,
+  One AWHP Heating Operation Scheme,  !- Name
+  0.0,                     !- Load Range 1 Lower Limit {W}
+  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  One AWHP Heating Equipment List;  !- Range 1 Equipment List Name
 
-      PlantEquipmentList,
-        One AWHP Heating Equipment List,   !- Name
-        HeatPump:PlantLoop:EIR:Heating,    !- Equipment 1 Object Type
-        AWHP_2 Heating Side;               !- Equipment 1 Name
+PlantEquipmentList,
+  One AWHP Heating Equipment List,  !- Name
+  HeatPump:PlantLoop:EIR:Heating,  !- Equipment Object Type
+  AWHP_2 Heating Side;     !- Equipment Name
 
-      PlantEquipmentList,
-        One AWHP Cooling Equipment List,   !- Name
-        HeatPump:PlantLoop:EIR:Cooling,    !- Equipment 1 Object Type
-        AWHP_1 Cooling Side;               !- Equipment 1 Name
+PlantEquipmentList,
+  One AWHP Cooling Equipment List,  !- Name
+  HeatPump:PlantLoop:EIR:Cooling,  !- Equipment Object Type
+  AWHP_1 Cooling Side;     !- Equipment Name
 
-      PlantEquipmentList,
-        Two AWHP Heating Equipment List,   !- Name
-        HeatPump:PlantLoop:EIR:Heating,    !- Equipment 1 Object Type
-        AWHP_1 Heating Side,               !- Equipment 1 Name
-        HeatPump:PlantLoop:EIR:Heating,    !- Equipment 2 Object Type
-        AWHP_2 Heating Side;               !- Equipment 2 Name
+PlantEquipmentList,
+  Two AWHP Heating Equipment List,  !- Name
+  HeatPump:PlantLoop:EIR:Heating,  !- Equipment Object Type
+  AWHP_1 Heating Side,     !- Equipment Name
+  HeatPump:PlantLoop:EIR:Heating,  !- Equipment Object Type
+  AWHP_2 Heating Side;     !- Equipment Name
 
-      PlantEquipmentList,
-        Two AWHP Cooling Equipment List,   !- Name
-        HeatPump:PlantLoop:EIR:Cooling,    !- Equipment 1 Object Type
-        AWHP_1 Cooling Side,               !- Equipment 1 Name
-        HeatPump:PlantLoop:EIR:Cooling,    !- Equipment 2 Object Type
-        AWHP_2 Cooling Side;               !- Equipment 2 Name
+PlantEquipmentList,
+  Two AWHP Cooling Equipment List,  !- Name
+  HeatPump:PlantLoop:EIR:Cooling,  !- Equipment Object Type
+  AWHP_1 Cooling Side,     !- Equipment Name
+  HeatPump:PlantLoop:EIR:Cooling,  !- Equipment Object Type
+  AWHP_2 Cooling Side;     !- Equipment Name
 
-      ZoneList,
-        This Zone List,                    !- Name
-        Zone1,                             !- Zone Name 1
-        Zone2,                             !- Zone Name 2
-        Zone3,                             !- Zone Name 3
-        Zone4;                             !- Zone Name 4
+ZoneList,
+  This Zone List,          !- Name
+  Zone1,                   !- Zone Name
+  Zone2,                   !- Zone Name
+  Zone3,                   !- Zone Name
+  Zone4;                   !- Zone Name
+
      )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -444,66 +451,73 @@ TEST_F(DistributeEquipOpTest, SupervisoryControlLogicForAirSourcePlantsTest)
 
     std::string_view constexpr idf_objects = R"IDF(
 
-      PlantEquipmentOperationSchemes,
-        Cooling Loop Operation Scheme List, !- Name
-        PlantEquipmentOperation:ChillerHeaterChangeover, !- Control Scheme 1 Object Type
-        Two AWHP Operation Scheme,         !- Control Scheme 1 Name
-        ALWAYS_ON;                         !- Control Scheme 1 Schedule Name
+PlantEquipmentOperationSchemes,
+  Cooling Loop Operation Scheme List,  !- Name
+  PlantEquipmentOperation:ChillerHeaterChangeover,  !- Control Scheme 1 Object Type
+  Two AWHP Operation Scheme,  !- Control Scheme 1 Name
+  ALWAYS_ON;               !- Control Scheme 1 Schedule Name
 
-      PlantEquipmentOperationSchemes,
-        Heating Loop Operation Scheme List, !- Name
-        PlantEquipmentOperation:ChillerHeaterChangeover,  !- Control Scheme 1 Object Type
-        Two AWHP Operation Scheme,         !- Control Scheme 1 Name
-        ALWAYS_ON;                         !- Control Scheme 1 Schedule Name
+PlantEquipmentOperationSchemes,
+  Heating Loop Operation Scheme List,  !- Name
+  PlantEquipmentOperation:ChillerHeaterChangeover,  !- Control Scheme 1 Object Type
+  Two AWHP Operation Scheme,  !- Control Scheme 1 Name
+  ALWAYS_ON;               !- Control Scheme 1 Schedule Name
 
-      Schedule:Compact, ALWAYS_ON, On/Off, Through: 12/31, For: AllDays, Until: 24:00,1;
+Schedule:Compact,
+  ALWAYS_ON,               !- Name
+  On/Off,                  !- Schedule Type Limits Name
+  Through: 12/31,          !- Field
+  For: AllDays,            !- Field
+  Until: 24:00,            !- Field
+  1;                       !- Field
 
-      PlantEquipmentOperation:ChillerHeaterChangeover,
-        Two AWHP Operation Scheme ,          !- Name
-        6.6 ,                                !- Primary Cooling Plant Setpoint Temperature
-        13.7,                                !- Secondary Distribution Cooling Plant Setpoint Temperature
-        59.8 ,                               !- Primary Heating Plant Setpoint at Outdoor High Temperature
-        10.0,                                !- Outdoor High Temperature
-        37.6 ,                               !- Primary Heating Plant Setpoint at Outdoor Low Temperature
-        0.0 ,                                !- Outdoor Low Temperature
-        45.0 ,                               !- Secondary Distribution Heating Plant Setpoint Temperature
-        This Zone List,                      !- Zone Load Polling ZoneList Name
-        One AWHP Cooling Operation Scheme,   !- Cooling Only Load Plant Equipment Operation Cooling Load Name
-        One AWHP Heating Operation Scheme,   !- Heating Only Load Plant Equipment Operation Heating Load Name
-        ,                                    !- Simultaneous Cooling And Heating Plant Equipment Operation Cooling Load Name
-        ,                                    !- Simultaneous Cooling And Heating Plant Equipment Operation Heating Load Name
-        ,                                    !- Dedicated Chilled Water Return Recovery HeatPump Name
-        ,                                    !- Dedicated Hot Water Return Recovery HeatPump Name
-        1.0;                                 !-  Dedicated Recovery Heat Pump Control Load Capacity Factor
+PlantEquipmentOperation:ChillerHeaterChangeover,
+  Two AWHP Operation Scheme,  !- Name
+  6.6,                     !- Primary Cooling Plant Setpoint Temperature {C}
+  13.7,                    !- Secondary Distribution Cooling Plant Setpoint Temperature {C}
+  59.8,                    !- Primary Heating Plant Setpoint at Outdoor High Temperature {C}
+  10.0,                    !- Outdoor High Temperature {C}
+  37.6,                    !- Primary Heating Plant Setpoint at Outdoor Low Temperature {C}
+  0.0,                     !- Outdoor Low Temperature {C}
+  45.0,                    !- Secondary Distribution Heating Plant Setpoint Temperature {C}
+  This Zone List,          !- Zone Load Polling ZoneList Name
+  One AWHP Cooling Operation Scheme,  !- Cooling Only Load Plant Equipment Operation Cooling Load Name
+  One AWHP Heating Operation Scheme,  !- Heating Only Load Plant Equipment Operation Heating Load Name
+  ,                        !- Simultaneous Cooling And Heating Plant Equipment Operation Cooling Load Name
+  ,                        !- Simultaneous Cooling And Heating Plant Equipment Operation Heating Load Name
+  ,                        !- Dedicated Chilled Water Return Recovery Heat Pump Name
+  ,                        !- Dedicated Hot Water Return Recovery Heat Pump Name
+  1.0;                     !- Boiler Setpoint Temperature Offset {deltaC}
 
-      PlantEquipmentOperation:CoolingLoad,
-        One AWHP Cooling Operation Scheme, !- Name
-        0.0,                               !- Load Range 1 Lower Limit {W}
-        10000000000000000,                 !- Load Range 1 Upper Limit {W}
-        One AWHP Cooling Equipment List;   !- Range 1 Equipment List Name
+PlantEquipmentOperation:CoolingLoad,
+  One AWHP Cooling Operation Scheme,  !- Name
+  0.0,                     !- Load Range 1 Lower Limit {W}
+  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  One AWHP Cooling Equipment List;  !- Range 1 Equipment List Name
 
-      PlantEquipmentList,
-        One AWHP Cooling Equipment List,   !- Name
-        HeatPump:PlantLoop:EIR:Cooling,    !- Equipment 1 Object Type
-        AWHP_1 Cooling Side;               !- Equipment 1 Name
+PlantEquipmentList,
+  One AWHP Cooling Equipment List,  !- Name
+  HeatPump:PlantLoop:EIR:Cooling,  !- Equipment Object Type
+  AWHP_1 Cooling Side;     !- Equipment Name
 
-      PlantEquipmentOperation:HeatingLoad,
-        One AWHP Heating Operation Scheme, !- Name
-        0.0,                               !- Load Range 1 Lower Limit {W}
-        10000000000000000,                 !- Load Range 1 Upper Limit {W}
-        One AWHP Heating Equipment List;   !- Range 1 Equipment List Name
+PlantEquipmentOperation:HeatingLoad,
+  One AWHP Heating Operation Scheme,  !- Name
+  0.0,                     !- Load Range 1 Lower Limit {W}
+  10000000000000000,       !- Load Range 1 Upper Limit {W}
+  One AWHP Heating Equipment List;  !- Range 1 Equipment List Name
 
-      PlantEquipmentList,
-        One AWHP Heating Equipment List,   !- Name
-        HeatPump:PlantLoop:EIR:Heating,    !- Equipment 1 Object Type
-        AWHP_1 Heating Side;               !- Equipment 1 Name
+PlantEquipmentList,
+  One AWHP Heating Equipment List,  !- Name
+  HeatPump:PlantLoop:EIR:Heating,  !- Equipment Object Type
+  AWHP_1 Heating Side;     !- Equipment Name
 
-      ZoneList,
-        This Zone List,                    !- Name
-        Zone1,                             !- Zone Name 1
-        Zone2,                             !- Zone Name 2
-        Zone3,                             !- Zone Name 3
-        Zone4;                             !- Zone Name 4
+ZoneList,
+  This Zone List,          !- Name
+  Zone1,                   !- Zone Name
+  Zone2,                   !- Zone Name
+  Zone3,                   !- Zone Name
+  Zone4;                   !- Zone Name
+
      )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects));

@@ -71,216 +71,262 @@
 using namespace EnergyPlus;
 
 static std::string_view constexpr oneZoneBuildingWithIdealLoads = R"IDF(
+
 ScheduleTypeLimits,
-  Any Number;                             !- Name
+  Any Number;              !- Name
 
-Schedule:Constant,
-  Always On,                              !- Name
-  Any Number,                             !- Schedule Type Limits Name
-  1;                                      !- Hourly Value
+Schedule:Constant,Always On,Any Number,1;
 
-Schedule:Constant,
-  Always Off,                             !- Name
-  Any Number,                             !- Schedule Type Limits Name
-  0;                                      !- Hourly Value
+Schedule:Constant,Always Off,Any Number,0;
 
 Zone,
-  Zone_1,                                 !- Name
-  ,                                       !- Direction of Relative North {deg}
-  0,                                      !- X Origin {m}
-  0,                                      !- Y Origin {m}
-  0,                                      !- Z Origin {m}
-  ,                                       !- Type
-  1,                                      !- Multiplier
-  ,                                       !- Ceiling Height {m}
-  ,                                       !- Volume {m3}
-  ,                                       !- Floor Area {m2}
-  ,                                       !- Zone Inside Convection Algorithm
-  ,                                       !- Zone Outside Convection Algorithm
-  Yes;                                    !- Part of Total Floor Area
+  Zone_1,                  !- Name
+  ,                        !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  ,                        !- Type
+  1,                       !- Multiplier
+  ,                        !- Ceiling Height {m}
+  ,                        !- Volume {m3}
+  ,                        !- Floor Area {m2}
+  ,                        !- Zone Inside Convection Algorithm
+  ,                        !- Zone Outside Convection Algorithm
+  Yes;                     !- Part of Total Floor Area
 
 Space,
-  Space_1,                                !- Name
-  Zone_1,                                 !- Zone Name
-  ,                                       !- Ceiling Height {m}
-  ,                                       !- Volume {m3}
-  ;                                       !- Floor Area {m2}
+  Space_1,                 !- Name
+  Zone_1,                  !- Zone Name
+  ,                        !- Ceiling Height {m}
+  ,                        !- Volume {m3}
+  ,                        !- Floor Area {m2}
+  ;                        !- Space Type
 
 BuildingSurface:Detailed,
-  Space_1 Floor,                          !- Name
-  Floor,                                  !- Surface Type
-  Construction 1,                         !- Construction Name
-  Zone_1,                                 !- Zone Name
-  Space_1,                                !- Space Name
-  Ground,                                 !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  NoSun,                                  !- Sun Exposure
-  NoWind,                                 !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  10, 5, 0,                               !- X,Y,Z Vertex 1 {m}
-  10, -5, 0,                              !- X,Y,Z Vertex 2 {m}
-  -10, -5, 0,                             !- X,Y,Z Vertex 3 {m}
-  -10, 5, 0;                              !- X,Y,Z Vertex 4 {m}
+  Space_1 Floor,           !- Name
+  Floor,                   !- Surface Type
+  Construction 1,          !- Construction Name
+  Zone_1,                  !- Zone Name
+  Space_1,                 !- Space Name
+  Ground,                  !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  ,                        !- View Factor to Ground
+  ,                        !- Number of Vertices
+  10,                      !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-  Space_1 RoofCeiling,                    !- Name
-  Roof,                                   !- Surface Type
-  Construction 1,                         !- Construction Name
-  Zone_1,                                 !- Zone Name
-  Space_1,                                !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  -10, 5, 3,                              !- X,Y,Z Vertex 1 {m}
-  -10, -5, 3,                             !- X,Y,Z Vertex 2 {m}
-  10, -5, 3,                              !- X,Y,Z Vertex 3 {m}
-  10, 5, 3;                               !- X,Y,Z Vertex 4 {m}
+  Space_1 RoofCeiling,     !- Name
+  Roof,                    !- Surface Type
+  Construction 1,          !- Construction Name
+  Zone_1,                  !- Zone Name
+  Space_1,                 !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  ,                        !- Number of Vertices
+  -10,                     !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  3;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-  Space_1 Wall 1,                         !- Name
-  Wall,                                   !- Surface Type
-  Construction 1,                         !- Construction Name
-  Zone_1,                                 !- Zone Name
-  Space_1,                                !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  10, 5, 3,                               !- X,Y,Z Vertex 1 {m}
-  10, -5, 3,                              !- X,Y,Z Vertex 2 {m}
-  10, -5, 0,                              !- X,Y,Z Vertex 3 {m}
-  10, 5, 0;                               !- X,Y,Z Vertex 4 {m}
+  Space_1 Wall 1,          !- Name
+  Wall,                    !- Surface Type
+  Construction 1,          !- Construction Name
+  Zone_1,                  !- Zone Name
+  Space_1,                 !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  ,                        !- Number of Vertices
+  10,                      !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-  Space_1 Wall 2,                         !- Name
-  Wall,                                   !- Surface Type
-  Construction 1,                         !- Construction Name
-  Zone_1,                                 !- Zone Name
-  Space_1,                                !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  10, -5, 3,                              !- X,Y,Z Vertex 1 {m}
-  -10, -5, 3,                             !- X,Y,Z Vertex 2 {m}
-  -10, -5, 0,                             !- X,Y,Z Vertex 3 {m}
-  10, -5, 0;                              !- X,Y,Z Vertex 4 {m}
+  Space_1 Wall 2,          !- Name
+  Wall,                    !- Surface Type
+  Construction 1,          !- Construction Name
+  Zone_1,                  !- Zone Name
+  Space_1,                 !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  ,                        !- Number of Vertices
+  10,                      !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-  Space_1 Wall 3,                         !- Name
-  Wall,                                   !- Surface Type
-  Construction 1,                         !- Construction Name
-  Zone_1,                                 !- Zone Name
-  Space_1,                                !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  -10, -5, 3,                             !- X,Y,Z Vertex 1 {m}
-  -10, 5, 3,                              !- X,Y,Z Vertex 2 {m}
-  -10, 5, 0,                              !- X,Y,Z Vertex 3 {m}
-  -10, -5, 0;                             !- X,Y,Z Vertex 4 {m}
+  Space_1 Wall 3,          !- Name
+  Wall,                    !- Surface Type
+  Construction 1,          !- Construction Name
+  Zone_1,                  !- Zone Name
+  Space_1,                 !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  ,                        !- Number of Vertices
+  -10,                     !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  -5,                      !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-  Space_1 Wall 4,                         !- Name
-  Wall,                                   !- Surface Type
-  Construction 1,                         !- Construction Name
-  Zone_1,                                 !- Zone Name
-  Space_1,                                !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  -10, 5, 3,                              !- X,Y,Z Vertex 1 {m}
-  10, 5, 3,                               !- X,Y,Z Vertex 2 {m}
-  10, 5, 0,                               !- X,Y,Z Vertex 3 {m}
-  -10, 5, 0;                              !- X,Y,Z Vertex 4 {m}
+  Space_1 Wall 4,          !- Name
+  Wall,                    !- Surface Type
+  Construction 1,          !- Construction Name
+  Zone_1,                  !- Zone Name
+  Space_1,                 !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  ,                        !- Number of Vertices
+  -10,                     !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  3,                       !- Vertex Z-coordinate {m}
+  10,                      !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  -10,                     !- Vertex X-coordinate {m}
+  5,                       !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 Material,
-  Material 1,                             !- Name
-  Smooth,                                 !- Roughness
-  0.1,                                    !- Thickness {m}
-  0.1,                                    !- Conductivity {W/m-K}
-  0.1,                                    !- Density {kg/m3}
-  1400,                                   !- Specific Heat {J/kg-K}
-  0.9,                                    !- Thermal Absorptance
-  0.7,                                    !- Solar Absorptance
-  0.7;                                    !- Visible Absorptance
+  Material 1,              !- Name
+  Smooth,                  !- Roughness
+  0.1,                     !- Thickness {m}
+  0.1,                     !- Conductivity {W/m-K}
+  0.1,                     !- Density {kg/m3}
+  1400,                    !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 Construction,
-  Construction 1,                         !- Name
-  Material 1;                             !- Layer 1
+  Construction 1,          !- Name
+  Material 1;              !- Outside Layer
 
 ZoneHVAC:EquipmentConnections,
-  Zone_1,                                 !- Zone Name
-  Zone_1 Equipment List,                  !- Zone Conditioning Equipment List Name
-  Zone_1 Inlet Node List,                 !- Zone Air Inlet Node or NodeList Name
-  Zone_1 Exhaust Node List,               !- Zone Air Exhaust Node or NodeList Name
-  Node 1;                                 !- Zone Air Node Name
+  Zone_1,                  !- Zone Name
+  Zone_1 Equipment List,   !- Zone Conditioning Equipment List Name
+  Zone_1 Inlet Node List,  !- Zone Air Inlet Node or NodeList Name
+  Zone_1 Exhaust Node List,  !- Zone Air Exhaust Node or NodeList Name
+  Node 1;                  !- Zone Air Node Name
 
 NodeList,
-  Zone_1 Inlet Node List,                 !- Name
-  Node 3;                                 !- Node Name 1
+  Zone_1 Inlet Node List,  !- Name
+  Node 3;                  !- Node Name
 
 NodeList,
-  Zone_1 Exhaust Node List,               !- Name
-  Node 2;                                 !- Node Name 1
+  Zone_1 Exhaust Node List,  !- Name
+  Node 2;                  !- Node Name
 
 ZoneHVAC:IdealLoadsAirSystem,
-  Zone HVAC Ideal Loads Air System 1,     !- Name
-  ,                                       !- Availability Schedule Name
-  Node 3,                                 !- Zone Supply Air Node Name
-  Node 2,                                 !- Zone Exhaust Air Node Name
-  ,                                       !- System Inlet Air Node Name
-  ,                                       !- Maximum Heating Supply Air Temperature {C}
-  ,                                       !- Minimum Cooling Supply Air Temperature {C}
-  ,                                       !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
-  ,                                       !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
-  ,                                       !- Heating Limit
-  ,                                       !- Maximum Heating Air Flow Rate {m3/s}
-  ,                                       !- Maximum Sensible Heating Capacity {W}
-  ,                                       !- Cooling Limit
-  ,                                       !- Maximum Cooling Air Flow Rate {m3/s}
-  ,                                       !- Maximum Total Cooling Capacity {W}
-  ,                                       !- Heating Availability Schedule Name
-  ,                                       !- Cooling Availability Schedule Name
-  ,                                       !- Dehumidification Control Type
-  ,                                       !- Cooling Sensible Heat Ratio {dimensionless}
-  ,                                       !- Humidification Control Type
-  ,                                       !- Design Specification Outdoor Air Object Name
-  ,                                       !- Outdoor Air Inlet Node Name
-  ,                                       !- Demand Controlled Ventilation Type
-  ,                                       !- Outdoor Air Economizer Type
-  ,                                       !- Heat Recovery Type
-  ,                                       !- Sensible Heat Recovery Effectiveness {dimensionless}
-  ;                                       !- Latent Heat Recovery Effectiveness {dimensionless}
+  Zone HVAC Ideal Loads Air System 1,  !- Name
+  ,                        !- Availability Schedule Name
+  Node 3,                  !- Zone Supply Air Node Name
+  Node 2,                  !- Zone Exhaust Air Node Name
+  ,                        !- System Inlet Air Node Name
+  ,                        !- Maximum Heating Supply Air Temperature {C}
+  ,                        !- Minimum Cooling Supply Air Temperature {C}
+  ,                        !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                        !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                        !- Heating Limit
+  ,                        !- Maximum Heating Air Flow Rate {m3/s}
+  ,                        !- Maximum Sensible Heating Capacity {W}
+  ,                        !- Cooling Limit
+  ,                        !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                        !- Maximum Total Cooling Capacity {W}
+  ,                        !- Heating Availability Schedule Name
+  ,                        !- Cooling Availability Schedule Name
+  ,                        !- Dehumidification Control Type
+  ,                        !- Cooling Sensible Heat Ratio {dimensionless}
+  ,                        !- Humidification Control Type
+  ,                        !- Design Specification Outdoor Air Object Name
+  ,                        !- Outdoor Air Inlet Node Name
+  ,                        !- Demand Controlled Ventilation Type
+  ,                        !- Outdoor Air Economizer Type
+  ,                        !- Heat Recovery Type
+  ,                        !- Sensible Heat Recovery Effectiveness {dimensionless}
+  ;                        !- Latent Heat Recovery Effectiveness {dimensionless}
 
 ZoneHVAC:EquipmentList,
-  Zone_1 Equipment List,                  !- Name
-  SequentialLoad,                         !- Load Distribution Scheme
-  ZoneHVAC:IdealLoadsAirSystem,           !- Zone Equipment Object Type 1
-  Zone HVAC Ideal Loads Air System 1,     !- Zone Equipment Name 1
-  1,                                      !- Zone Equipment Cooling Sequence 1
-  1,                                      !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                       !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ;                                       !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  Zone_1 Equipment List,   !- Name
+  SequentialLoad,          !- Load Distribution Scheme
+  ZoneHVAC:IdealLoadsAirSystem,  !- Zone Equipment Object Type
+  Zone HVAC Ideal Loads Air System 1,  !- Zone Equipment Name
+  1,                       !- Zone Equipment Cooling Sequence
+  1,                       !- Zone Equipment Heating or No-Load Sequence
+  ,                        !- Zone Equipment Sequential Cooling Fraction Schedule Name
+  ;                        !- Zone Equipment Sequential Heating Fraction Schedule Name
+
 )IDF";
 
 TEST_F(EnergyPlusFixture, RefrigeratedRackWithCaseInZone)
 {
     std::string_view constexpr idf_objects = R"IDF(
+
 Refrigeration:CompressorRack,
   SelfContainedDisplay,    !- Name
   Zone,                    !- Heat Rejection Location
@@ -306,24 +352,23 @@ Refrigeration:CompressorRack,
   ,                        !- Evaporative Water Supply Tank Name
   ,                        !- Condenser Air Inlet Node Name
   ,                        !- End-Use Subcategory
-  SelfContainedDisplayCase,!- Refrigeration Case Name or WalkIn Name or CaseAndWalkInList Name
+  SelfContainedDisplayCase,  !- Refrigeration Case Name or WalkIn Name or CaseAndWalkInList Name
   ZONE_1;                  !- Heat Rejection Zone Name
-
 
 Curve:Quadratic,
   RackCOPfTCurve2,         !- Name
   1.0,                     !- Coefficient1 Constant
   0.0,                     !- Coefficient2 x
   0.0,                     !- Coefficient3 x**2
-  0.0,                     !- Minimum Value of x
-  50.0,                    !- Maximum Value of x
-  ,                        !- Minimum Curve Output
-  ,                        !- Maximum Curve Output
+  0.0,                     !- Minimum Value of x {BasedOnField A2}
+  50.0,                    !- Maximum Value of x {BasedOnField A2}
+  ,                        !- Minimum Curve Output {BasedOnField A3}
+  ,                        !- Maximum Curve Output {BasedOnField A3}
   Temperature,             !- Input Unit Type for X
   Dimensionless;           !- Output Unit Type
 
 Refrigeration:Case,
-  SelfContainedDisplayCase,!- Name
+  SelfContainedDisplayCase,  !- Name
   ,                        !- Availability Schedule Name
   ZONE_1,                  !- Zone Name
   23.88,                   !- Rated Ambient Temperature {C}
@@ -360,26 +405,37 @@ Curve:Cubic,
   MultiShelfVertical_LatentEnergyMult,  !- Name
   0.026526281,             !- Coefficient1 Constant
   0.001078032,             !- Coefficient2 x
-  -0.0000602558,           !- Coefficient3 x**2
-  0.00000123732,           !- Coefficient4 x**3
-  -35.0,                   !- Minimum Value of x
-  20.0;                    !- Maximum Value of x
+  -6.02558e-05,            !- Coefficient3 x**2
+  1.23732e-06,             !- Coefficient4 x**3
+  -35.0,                   !- Minimum Value of x {BasedOnField A2}
+  20.0;                    !- Maximum Value of x {BasedOnField A2}
 
 Schedule:Compact,
   SelfContainedCaseStockingSched,  !- Name
   AnyNumber,               !- Schedule Type Limits Name
-  Through: 12/31,          !- Field 1
-  For: AllDays,            !- Field 2
-  Until: 6:00,0.0,         !- Field 3
-  Until: 7:00,50.0,        !- Field 5
-  Until: 9:00,70.0,        !- Field 7
-  Until: 10:00,80.0,       !- Field 9
-  Until: 11:00,70.0,       !- Field 11
-  Until: 13:00,50.0,       !- Field 13
-  Until: 14:00,80.0,       !- Field 15
-  Until: 15:00,90.0,       !- Field 17
-  Until: 16:00,80.0,       !- Field 19
-  Until: 24:00,0.0;        !- Field 21
+  Through: 12/31,          !- Field
+  For: AllDays,            !- Field
+  Until: 6:00,             !- Field
+  0.0,                     !- Field
+  Until: 7:00,             !- Field
+  50.0,                    !- Field
+  Until: 9:00,             !- Field
+  70.0,                    !- Field
+  Until: 10:00,            !- Field
+  80.0,                    !- Field
+  Until: 11:00,            !- Field
+  70.0,                    !- Field
+  Until: 13:00,            !- Field
+  50.0,                    !- Field
+  Until: 14:00,            !- Field
+  80.0,                    !- Field
+  Until: 15:00,            !- Field
+  90.0,                    !- Field
+  Until: 16:00,            !- Field
+  80.0,                    !- Field
+  Until: 24:00,            !- Field
+  0.0;                     !- Field
+
 )IDF";
 
     ASSERT_TRUE(process_idf(std::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects
@@ -401,6 +457,7 @@ TEST_F(EnergyPlusFixture, RefrigeratedRackWithWalkInInZone)
 {
 
     std::string_view constexpr idf_objects = R"IDF(
+
 Refrigeration:CompressorRack,
   SelfContainedDisplay,    !- Name
   Zone,                    !- Heat Rejection Location
@@ -429,16 +486,15 @@ Refrigeration:CompressorRack,
   RefrigerationWalkIn,     !- Refrigeration Case Name or WalkIn Name or CaseAndWalkInList Name
   ZONE_1;                  !- Heat Rejection Zone Name
 
-
 Curve:Quadratic,
   RackCOPfTCurve2,         !- Name
   1.0,                     !- Coefficient1 Constant
   0.0,                     !- Coefficient2 x
   0.0,                     !- Coefficient3 x**2
-  0.0,                     !- Minimum Value of x
-  50.0,                    !- Maximum Value of x
-  ,                        !- Minimum Curve Output
-  ,                        !- Maximum Curve Output
+  0.0,                     !- Minimum Value of x {BasedOnField A2}
+  50.0,                    !- Maximum Value of x {BasedOnField A2}
+  ,                        !- Minimum Curve Output {BasedOnField A3}
+  ,                        !- Maximum Curve Output {BasedOnField A3}
   Temperature,             !- Input Unit Type for X
   Dimensionless;           !- Output Unit Type
 
@@ -464,18 +520,19 @@ Refrigeration:WalkIn,
   ,                        !- Average Refrigerant Charge Inventory {kg}
   1,                       !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
-  ZONE_1,                  !- Zone 1 Name
-  6.504,                   !- Total Insulated Surface Area Facing Zone 1 {m2}
-  0.17744571875,           !- Insulated Surface U-Value Facing Zone 1 {W/m2-K}
-  ,                        !- Area of Glass Reach In Doors Facing Zone 1 {m2}
-  ,                        !- Height of Glass Reach In Doors Facing Zone 1 {m}
-  ,                        !- Glass Reach In Door U Value Facing Zone 1 {W/m2-K}
-  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone 1
-  1.216,                   !- Area of Stocking Doors Facing Zone 1 {m2}
-  1.651,                   !- Height of Stocking Doors Facing Zone 1 {m}
-  ,                        !- Stocking Door U Value Facing Zone 1 {W/m2-K}
-  ,                        !- Stocking Door Opening Schedule Name Facing Zone 1
-  None;                    !- Stocking Door Opening Protection Type Facing Zone 1
+  ZONE_1,                  !- Zone Name
+  6.504,                   !- Total Insulated Surface Area Facing Zone {m2}
+  0.17744571875,           !- Insulated Surface U-Value Facing Zone {W/m2-K}
+  ,                        !- Area of Glass Reach In Doors Facing Zone {m2}
+  ,                        !- Height of Glass Reach In Doors Facing Zone {m}
+  ,                        !- Glass Reach In Door U Value Facing Zone {W/m2-K}
+  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone
+  1.216,                   !- Area of Stocking Doors Facing Zone {m2}
+  1.651,                   !- Height of Stocking Doors Facing Zone {m}
+  ,                        !- Stocking Door U Value Facing Zone {W/m2-K}
+  ,                        !- Stocking Door Opening Schedule Name Facing Zone
+  None;                    !- Stocking Door Opening Protection Type Facing Zone
+
 )IDF";
 
     ASSERT_TRUE(process_idf(std::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects
@@ -496,6 +553,7 @@ TEST_F(EnergyPlusFixture, RefrigeratedRackWithWalkInInZone_CaseAndWalkinList)
 {
 
     std::string_view constexpr idf_objects = R"IDF(
+
 Refrigeration:CompressorRack,
   SelfContainedDisplay,    !- Name
   Zone,                    !- Heat Rejection Location
@@ -521,7 +579,7 @@ Refrigeration:CompressorRack,
   ,                        !- Evaporative Water Supply Tank Name
   ,                        !- Condenser Air Inlet Node Name
   ,                        !- End-Use Subcategory
-  CompressorRack with Case and Walkin List,     !- Refrigeration Case Name or WalkIn Name or CaseAndWalkInList Name
+  CompressorRack with Case and Walkin List,  !- Refrigeration Case Name or WalkIn Name or CaseAndWalkInList Name
   ZONE_1;                  !- Heat Rejection Zone Name
 
 Curve:Quadratic,
@@ -529,16 +587,16 @@ Curve:Quadratic,
   1.0,                     !- Coefficient1 Constant
   0.0,                     !- Coefficient2 x
   0.0,                     !- Coefficient3 x**2
-  0.0,                     !- Minimum Value of x
-  50.0,                    !- Maximum Value of x
-  ,                        !- Minimum Curve Output
-  ,                        !- Maximum Curve Output
+  0.0,                     !- Minimum Value of x {BasedOnField A2}
+  50.0,                    !- Maximum Value of x {BasedOnField A2}
+  ,                        !- Minimum Curve Output {BasedOnField A3}
+  ,                        !- Maximum Curve Output {BasedOnField A3}
   Temperature,             !- Input Unit Type for X
   Dimensionless;           !- Output Unit Type
 
 Refrigeration:CaseAndWalkInList,
-  CompressorRack with Case and Walkin List, !- Name
-  RefrigerationWalkIn;                      !- Case or WalkIn Name 1
+  CompressorRack with Case and Walkin List,  !- Name
+  RefrigerationWalkIn;     !- Case or WalkIn Name
 
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
@@ -562,18 +620,19 @@ Refrigeration:WalkIn,
   ,                        !- Average Refrigerant Charge Inventory {kg}
   1,                       !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
-  ZONE_1,                  !- Zone 1 Name
-  6.504,                   !- Total Insulated Surface Area Facing Zone 1 {m2}
-  0.17744571875,           !- Insulated Surface U-Value Facing Zone 1 {W/m2-K}
-  ,                        !- Area of Glass Reach In Doors Facing Zone 1 {m2}
-  ,                        !- Height of Glass Reach In Doors Facing Zone 1 {m}
-  ,                        !- Glass Reach In Door U Value Facing Zone 1 {W/m2-K}
-  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone 1
-  1.216,                   !- Area of Stocking Doors Facing Zone 1 {m2}
-  1.651,                   !- Height of Stocking Doors Facing Zone 1 {m}
-  ,                        !- Stocking Door U Value Facing Zone 1 {W/m2-K}
-  ,                        !- Stocking Door Opening Schedule Name Facing Zone 1
-  None;                    !- Stocking Door Opening Protection Type Facing Zone 1
+  ZONE_1,                  !- Zone Name
+  6.504,                   !- Total Insulated Surface Area Facing Zone {m2}
+  0.17744571875,           !- Insulated Surface U-Value Facing Zone {W/m2-K}
+  ,                        !- Area of Glass Reach In Doors Facing Zone {m2}
+  ,                        !- Height of Glass Reach In Doors Facing Zone {m}
+  ,                        !- Glass Reach In Door U Value Facing Zone {W/m2-K}
+  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone
+  1.216,                   !- Area of Stocking Doors Facing Zone {m2}
+  1.651,                   !- Height of Stocking Doors Facing Zone {m}
+  ,                        !- Stocking Door U Value Facing Zone {W/m2-K}
+  ,                        !- Stocking Door Opening Schedule Name Facing Zone
+  None;                    !- Stocking Door Opening Protection Type Facing Zone
+
 )IDF";
 
     ASSERT_TRUE(process_idf(std::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects
@@ -594,6 +653,7 @@ TEST_F(EnergyPlusFixture, RefrigeratedRackWithBothInZone_CaseAndWalkinList)
 {
 
     std::string_view constexpr idf_objects = R"IDF(
+
 Refrigeration:CompressorRack,
   SelfContainedDisplay,    !- Name
   Zone,                    !- Heat Rejection Location
@@ -619,7 +679,7 @@ Refrigeration:CompressorRack,
   ,                        !- Evaporative Water Supply Tank Name
   ,                        !- Condenser Air Inlet Node Name
   ,                        !- End-Use Subcategory
-  CompressorRack with Case and Walkin List,     !- Refrigeration Case Name or WalkIn Name or CaseAndWalkInList Name
+  CompressorRack with Case and Walkin List,  !- Refrigeration Case Name or WalkIn Name or CaseAndWalkInList Name
   ZONE_1;                  !- Heat Rejection Zone Name
 
 Curve:Quadratic,
@@ -627,17 +687,17 @@ Curve:Quadratic,
   1.0,                     !- Coefficient1 Constant
   0.0,                     !- Coefficient2 x
   0.0,                     !- Coefficient3 x**2
-  0.0,                     !- Minimum Value of x
-  50.0,                    !- Maximum Value of x
-  ,                        !- Minimum Curve Output
-  ,                        !- Maximum Curve Output
+  0.0,                     !- Minimum Value of x {BasedOnField A2}
+  50.0,                    !- Maximum Value of x {BasedOnField A2}
+  ,                        !- Minimum Curve Output {BasedOnField A3}
+  ,                        !- Maximum Curve Output {BasedOnField A3}
   Temperature,             !- Input Unit Type for X
   Dimensionless;           !- Output Unit Type
 
 Refrigeration:CaseAndWalkInList,
-  CompressorRack with Case and Walkin List, !- Name
-  RefrigerationWalkIn,                      !- Case or WalkIn Name 1
-  SelfContainedDisplayCase;                 !- Case or WalkIn Name 2
+  CompressorRack with Case and Walkin List,  !- Name
+  RefrigerationWalkIn,     !- Case or WalkIn Name
+  SelfContainedDisplayCase;  !- Case or WalkIn Name
 
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
@@ -661,21 +721,21 @@ Refrigeration:WalkIn,
   ,                        !- Average Refrigerant Charge Inventory {kg}
   1,                       !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
-  ZONE_1,                  !- Zone 1 Name
-  6.504,                   !- Total Insulated Surface Area Facing Zone 1 {m2}
-  0.17744571875,           !- Insulated Surface U-Value Facing Zone 1 {W/m2-K}
-  ,                        !- Area of Glass Reach In Doors Facing Zone 1 {m2}
-  ,                        !- Height of Glass Reach In Doors Facing Zone 1 {m}
-  ,                        !- Glass Reach In Door U Value Facing Zone 1 {W/m2-K}
-  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone 1
-  1.216,                   !- Area of Stocking Doors Facing Zone 1 {m2}
-  1.651,                   !- Height of Stocking Doors Facing Zone 1 {m}
-  ,                        !- Stocking Door U Value Facing Zone 1 {W/m2-K}
-  ,                        !- Stocking Door Opening Schedule Name Facing Zone 1
-  None;                    !- Stocking Door Opening Protection Type Facing Zone 1
+  ZONE_1,                  !- Zone Name
+  6.504,                   !- Total Insulated Surface Area Facing Zone {m2}
+  0.17744571875,           !- Insulated Surface U-Value Facing Zone {W/m2-K}
+  ,                        !- Area of Glass Reach In Doors Facing Zone {m2}
+  ,                        !- Height of Glass Reach In Doors Facing Zone {m}
+  ,                        !- Glass Reach In Door U Value Facing Zone {W/m2-K}
+  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone
+  1.216,                   !- Area of Stocking Doors Facing Zone {m2}
+  1.651,                   !- Height of Stocking Doors Facing Zone {m}
+  ,                        !- Stocking Door U Value Facing Zone {W/m2-K}
+  ,                        !- Stocking Door Opening Schedule Name Facing Zone
+  None;                    !- Stocking Door Opening Protection Type Facing Zone
 
 Refrigeration:Case,
-  SelfContainedDisplayCase,!- Name
+  SelfContainedDisplayCase,  !- Name
   ,                        !- Availability Schedule Name
   ZONE_1,                  !- Zone Name
   23.88,                   !- Rated Ambient Temperature {C}
@@ -712,26 +772,37 @@ Curve:Cubic,
   MultiShelfVertical_LatentEnergyMult,  !- Name
   0.026526281,             !- Coefficient1 Constant
   0.001078032,             !- Coefficient2 x
-  -0.0000602558,           !- Coefficient3 x**2
-  0.00000123732,           !- Coefficient4 x**3
-  -35.0,                   !- Minimum Value of x
-  20.0;                    !- Maximum Value of x
+  -6.02558e-05,            !- Coefficient3 x**2
+  1.23732e-06,             !- Coefficient4 x**3
+  -35.0,                   !- Minimum Value of x {BasedOnField A2}
+  20.0;                    !- Maximum Value of x {BasedOnField A2}
 
 Schedule:Compact,
   SelfContainedCaseStockingSched,  !- Name
   AnyNumber,               !- Schedule Type Limits Name
-  Through: 12/31,          !- Field 1
-  For: AllDays,            !- Field 2
-  Until: 6:00,0.0,         !- Field 3
-  Until: 7:00,50.0,        !- Field 5
-  Until: 9:00,70.0,        !- Field 7
-  Until: 10:00,80.0,       !- Field 9
-  Until: 11:00,70.0,       !- Field 11
-  Until: 13:00,50.0,       !- Field 13
-  Until: 14:00,80.0,       !- Field 15
-  Until: 15:00,90.0,       !- Field 17
-  Until: 16:00,80.0,       !- Field 19
-  Until: 24:00,0.0;        !- Field 21
+  Through: 12/31,          !- Field
+  For: AllDays,            !- Field
+  Until: 6:00,             !- Field
+  0.0,                     !- Field
+  Until: 7:00,             !- Field
+  50.0,                    !- Field
+  Until: 9:00,             !- Field
+  70.0,                    !- Field
+  Until: 10:00,            !- Field
+  80.0,                    !- Field
+  Until: 11:00,            !- Field
+  70.0,                    !- Field
+  Until: 13:00,            !- Field
+  50.0,                    !- Field
+  Until: 14:00,            !- Field
+  80.0,                    !- Field
+  Until: 15:00,            !- Field
+  90.0,                    !- Field
+  Until: 16:00,            !- Field
+  80.0,                    !- Field
+  Until: 24:00,            !- Field
+  0.0;                     !- Field
+
 )IDF";
 
     ASSERT_TRUE(process_idf(std::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects

@@ -64,24 +64,34 @@ using namespace EnergyPlus;
 
 TEST_F(EnergyPlusFixture, ExerciseCoolTower)
 {
-    std::string const idf_objects =
-        delimited_string({"ScheduleTypeLimits, Any Number;",
-                          "Schedule:Compact, Cooltower Operation, Any Number, Through: 12/31, For: AllDays, Until: 24:00, 1.0;",
-                          "ZoneCoolTower:Shower,",
-                          "    CoolTower 1,             !- Name",
-                          "    ,     !- Availability Schedule Name",
-                          "    Zone 1,                  !- Zone Name",
-                          "    ,                        !- Water Supply Storage Tank Name",
-                          "    WindDrivenFlow,          !- Flow Control Type",
-                          "    Cooltower Operation,     !- Pump Flow Rate Schedule Name",
-                          "    0.0005,                  !- Maximum Water Flow Rate {m3/s}",
-                          "    5.0,                     !- Effective Tower Height {m}",
-                          "    0.5,                     !- Airflow Outlet Area {m2}",
-                          "    10.0,                    !- Maximum Air Flow Rate {m3/s}",
-                          "    18.0,                    !- Minimum Indoor Temperature {C}",
-                          "    0.05,                    !- Fraction of Water Loss",
-                          "    0.05,                    !- Fraction of Flow Schedule",
-                          "    200.0;                   !- Rated Power Consumption {W}"});
+    std::string const idf_objects = delimited_string({
+        "ScheduleTypeLimits,",
+        "  Any Number;              !- Name",
+
+        "Schedule:Compact,",
+        "  Cooltower Operation,     !- Name",
+        "  Any Number,              !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  1.0;                     !- Field",
+
+        "ZoneCoolTower:Shower,",
+        "  CoolTower 1,             !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  Zone 1,                  !- Zone or Space Name",
+        "  ,                        !- Water Supply Storage Tank Name",
+        "  WindDrivenFlow,          !- Flow Control Type",
+        "  Cooltower Operation,     !- Pump Flow Rate Schedule Name",
+        "  0.0005,                  !- Maximum Water Flow Rate {m3/s}",
+        "  5.0,                     !- Effective Tower Height {m}",
+        "  0.5,                     !- Airflow Outlet Area {m2}",
+        "  10.0,                    !- Maximum Air Flow Rate {m3/s}",
+        "  18.0,                    !- Minimum Indoor Temperature {C}",
+        "  0.05,                    !- Fraction of Water Loss",
+        "  0.05,                    !- Fraction of Flow Schedule",
+        "  200.0;                   !- Rated Power Consumption {W}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects, false));
 

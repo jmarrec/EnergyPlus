@@ -113,27 +113,32 @@ TEST_F(EnergyPlusFixture, ERLExpression_TestExponentials)
 
 TEST_F(EnergyPlusFixture, TestOutOfRangeAlphaFields)
 {
-    std::string const idf_objects = delimited_string({"EnergyManagementSystem:Sensor,",
-                                                      "  EMSSensor,",
-                                                      "  *,",
-                                                      "  Electricity:Facility;",
-                                                      "EnergyManagementSystem:Program,",
-                                                      "  DummyProgram,",
-                                                      "  SET N = EMSSensor;",
-                                                      "EnergyManagementSystem:ProgramCallingManager,",
-                                                      "  DummyManager,",
-                                                      "  BeginTimestepBeforePredictor,",
-                                                      "  DummyProgram;",
-                                                      "EnergyManagementSystem:MeteredOutputVariable,",
-                                                      "  MyLongMeteredOutputVariable,",
-                                                      "  EMSSensor,",
-                                                      "  ZoneTimeStep,",
-                                                      "  ,",
-                                                      "  Electricity,",
-                                                      "  Building,",
-                                                      "  ExteriorEquipment,",
-                                                      "  Transformer,",
-                                                      "  J;"});
+    std::string const idf_objects = delimited_string({
+        "EnergyManagementSystem:Sensor,",
+        "  EMSSensor,               !- Name",
+        "  *,                       !- Output:Variable or Output:Meter Index Key Name",
+        "  Electricity:Facility;    !- Output:Variable or Output:Meter Name",
+
+        "EnergyManagementSystem:Program,",
+        "  DummyProgram,            !- Name",
+        "  SET N = EMSSensor;       !- Program Line",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "  DummyManager,            !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  DummyProgram;            !- Program Name",
+
+        "EnergyManagementSystem:MeteredOutputVariable,",
+        "  MyLongMeteredOutputVariable,  !- Name",
+        "  EMSSensor,               !- EMS Variable Name",
+        "  ZoneTimestep,            !- Update Frequency",
+        "  ,                        !- EMS Program or Subroutine Name",
+        "  Electricity,             !- Resource Type",
+        "  Building,                !- Group Type",
+        "  ExteriorEquipment,       !- End-Use Category",
+        "  Transformer,             !- End-Use Subcategory",
+        "  J;                       !- Units",
+    });
     ASSERT_TRUE(process_idf(idf_objects));
     RuntimeLanguageProcessor::GetRuntimeLanguageUserInput(*state);
 }

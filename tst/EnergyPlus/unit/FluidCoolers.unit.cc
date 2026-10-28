@@ -264,19 +264,19 @@ TEST_F(EnergyPlusFixture, SingleSpeedFluidCoolerInput_Test4)
     int FluidCoolerNum(1);
 
     std::string const idf_objects = delimited_string({
-        "   FluidCooler:SingleSpeed,",
-        "     FluidCooler_SingleSpeed, !- Name",
-        "     FluidCooler_SingleSpeed Water Inlet,  !- Water Inlet Node Name",
-        "     FluidCooler_SingleSpeed Water Outlet,  !- Water Outlet Node Name",
-        "     UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method",
-        "     autosize,                !- Design Air Flow Rate U-factor Times Area Value {W/K}",
-        "     ,                        !- Nominal Capacity {W}",
-        "     46.0,                    !- Design Entering Water Temperature {C}",
-        "     35.0,                    !- Design Entering Air Temperature {C}",
-        "     25.5,                    !- Design Entering Air Wetbulb Temperature {C}",
-        "     5.05e-03,                 !- Design Water Flow Rate {m3/s}",
-        "     autosize,                !- Design Air Flow Rate {m3/s}",
-        "     autosize;                !- Design Air Flow Rate Fan Power {W}",
+        "FluidCooler:SingleSpeed,",
+        "  FluidCooler_SingleSpeed,  !- Name",
+        "  FluidCooler_SingleSpeed Water Inlet,  !- Water Inlet Node Name",
+        "  FluidCooler_SingleSpeed Water Outlet,  !- Water Outlet Node Name",
+        "  UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method",
+        "  Autosize,                !- Design Air Flow Rate U-factor Times Area Value {W/K}",
+        "  ,                        !- Nominal Capacity {W}",
+        "  46.0,                    !- Design Entering Water Temperature {C}",
+        "  35.0,                    !- Design Entering Air Temperature {C}",
+        "  25.5,                    !- Design Entering Air Wetbulb Temperature {C}",
+        "  0.00505,                 !- Design Water Flow Rate {m3/s}",
+        "  Autosize,                !- Design Air Flow Rate {m3/s}",
+        "  Autosize;                !- Design Air Flow Rate Fan Power {W}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -341,19 +341,19 @@ TEST_F(EnergyPlusFixture, FluidCooler_SizeWhenPlantSizingIndexIsZero)
     int FluidCoolerNum(1);
 
     std::string const idf_objects = delimited_string({
-        "   FluidCooler:SingleSpeed,",
-        "     Dry Cooler,              !- Name",
-        "     Dry Cooler Inlet Node,   !- Water Inlet Node Name",
-        "     Dry Cooler Outlet Node,  !- Water Outlet Node Name",
-        "     NominalCapacity,         !- Performance Input Method",
-        "     ,                        !- Design Air Flow Rate U-factor Times Area Value {W/K}",
-        "     58601,                   !- Nominal Capacity {W}",
-        "     50,                      !- Design Entering Water Temperature {C}",
-        "     35,                      !- Design Entering Air Temperature {C}",
-        "     25,                      !- Design Entering Air Wetbulb Temperature {C}",
-        "     0.001262,                !- Design Water Flow Rate {m3/s}",
-        "     2.124,                   !- Design Air Flow Rate {m3/s}",
-        "     1491;                    !- Design Air Flow Rate Fan Power {W}",
+        "FluidCooler:SingleSpeed,",
+        "  Dry Cooler,              !- Name",
+        "  Dry Cooler Inlet Node,   !- Water Inlet Node Name",
+        "  Dry Cooler Outlet Node,  !- Water Outlet Node Name",
+        "  NominalCapacity,         !- Performance Input Method",
+        "  ,                        !- Design Air Flow Rate U-factor Times Area Value {W/K}",
+        "  58601,                   !- Nominal Capacity {W}",
+        "  50,                      !- Design Entering Water Temperature {C}",
+        "  35,                      !- Design Entering Air Temperature {C}",
+        "  25,                      !- Design Entering Air Wetbulb Temperature {C}",
+        "  0.001262,                !- Design Water Flow Rate {m3/s}",
+        "  2.124,                   !- Design Air Flow Rate {m3/s}",
+        "  1491;                    !- Design Air Flow Rate Fan Power {W}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -384,19 +384,19 @@ TEST_F(EnergyPlusFixture, FluidCooler_SizeWhenPlantSizingIndexIsZero)
 TEST_F(EnergyPlusFixture, ExerciseSingleSpeedFluidCooler)
 {
     std::string const idf_objects = delimited_string({
-        "   FluidCooler:SingleSpeed,",
-        "     Dry Cooler,              !- Name",
-        "     Dry Cooler Inlet Node,   !- Water Inlet Node Name",
-        "     Dry Cooler Outlet Node,  !- Water Outlet Node Name",
-        "     NominalCapacity,         !- Performance Input Method",
-        "     ,                        !- Design Air Flow Rate U-factor Times Area Value {W/K}",
-        "     58601,                   !- Nominal Capacity {W}",
-        "     50,                      !- Design Entering Water Temperature {C}",
-        "     35,                      !- Design Entering Air Temperature {C}",
-        "     25,                      !- Design Entering Air Wetbulb Temperature {C}",
-        "     0.001262,                !- Design Water Flow Rate {m3/s}",
-        "     2.124,                   !- Design Air Flow Rate {m3/s}",
-        "     1491;                    !- Design Air Flow Rate Fan Power {W}",
+        "FluidCooler:SingleSpeed,",
+        "  Dry Cooler,              !- Name",
+        "  Dry Cooler Inlet Node,   !- Water Inlet Node Name",
+        "  Dry Cooler Outlet Node,  !- Water Outlet Node Name",
+        "  NominalCapacity,         !- Performance Input Method",
+        "  ,                        !- Design Air Flow Rate U-factor Times Area Value {W/K}",
+        "  58601,                   !- Nominal Capacity {W}",
+        "  50,                      !- Design Entering Water Temperature {C}",
+        "  35,                      !- Design Entering Air Temperature {C}",
+        "  25,                      !- Design Entering Air Wetbulb Temperature {C}",
+        "  0.001262,                !- Design Water Flow Rate {m3/s}",
+        "  2.124,                   !- Design Air Flow Rate {m3/s}",
+        "  1491;                    !- Design Air Flow Rate Fan Power {W}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -453,27 +453,29 @@ TEST_F(EnergyPlusFixture, ExerciseSingleSpeedFluidCooler)
 
 TEST_F(EnergyPlusFixture, ExerciseTwoSpeedFluidCooler)
 {
-    std::string const idf_objects = delimited_string({"FluidCooler:TwoSpeed,",
-                                                      "Big FluidCooler,         !- Name",
-                                                      "Condenser FluidCooler Inlet Node,  !- Water Inlet Node Name",
-                                                      "Condenser FluidCooler Outlet Node,  !- Water Outlet Node Name",
-                                                      "NominalCapacity,         !- Performance Input Method",
-                                                      ",                        !- High Fan Speed U-factor Times Area Value {W/K}",
-                                                      ",                        !- Low Fan Speed U-factor Times Area Value {W/K}",
-                                                      ",                        !- Low Fan Speed U-Factor Times Area Sizing Factor",
-                                                      "58601.,                  !- High Speed Nominal Capacity {W}",
-                                                      "28601.,                  !- Low Speed Nominal Capacity {W}",
-                                                      ",                        !- Low Speed Nominal Capacity Sizing Factor",
-                                                      "51.67,                   !- Design Entering Water Temperature {C}",
-                                                      "35,                      !- Design Entering Air Temperature {C}",
-                                                      "25.6,                    !- Design Entering Air Wet-bulb Temperature {C}",
-                                                      "Autosize,                !- Design Water Flow Rate {m3/s}",
-                                                      "Autosize,                !- High Fan Speed Air Flow Rate {m3/s}",
-                                                      "Autosize,                !- High Fan Speed Fan Power {W}",
-                                                      "autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
-                                                      ",                        !- Low Fan Speed Air Flow Rate Sizing Factor",
-                                                      "autocalculate,           !- Low Fan Speed Fan Power {W}",
-                                                      ";                        !- Low Fan Speed Fan Power Sizing Factor"});
+    std::string const idf_objects = delimited_string({
+        "FluidCooler:TwoSpeed,",
+        "  Big FluidCooler,         !- Name",
+        "  Condenser FluidCooler Inlet Node,  !- Water Inlet Node Name",
+        "  Condenser FluidCooler Outlet Node,  !- Water Outlet Node Name",
+        "  NominalCapacity,         !- Performance Input Method",
+        "  ,                        !- High Fan Speed U-factor Times Area Value {W/K}",
+        "  ,                        !- Low Fan Speed U-factor Times Area Value {W/K}",
+        "  ,                        !- Low Fan Speed U-Factor Times Area Sizing Factor",
+        "  58601.0,                 !- High Speed Nominal Capacity {W}",
+        "  28601.0,                 !- Low Speed Nominal Capacity {W}",
+        "  ,                        !- Low Speed Nominal Capacity Sizing Factor",
+        "  51.67,                   !- Design Entering Water Temperature {C}",
+        "  35,                      !- Design Entering Air Temperature {C}",
+        "  25.6,                    !- Design Entering Air Wet-bulb Temperature {C}",
+        "  Autosize,                !- Design Water Flow Rate {m3/s}",
+        "  Autosize,                !- High Fan Speed Air Flow Rate {m3/s}",
+        "  Autosize,                !- High Fan Speed Fan Power {W}",
+        "  Autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
+        "  ,                        !- Low Fan Speed Air Flow Rate Sizing Factor",
+        "  Autocalculate,           !- Low Fan Speed Fan Power {W}",
+        "  ;                        !- Low Fan Speed Fan Power Sizing Factor",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -536,19 +538,19 @@ TEST_F(EnergyPlusFixture, FluidCooler_SizeWhenPlantSizingIndexIsZeroAndAutosized
 {
     // Test for #10817
     std::string const idf_objects = delimited_string({
-        "   FluidCooler:SingleSpeed,",
-        "     Dry Cooler,              !- Name",
-        "     Dry Cooler Inlet Node,   !- Water Inlet Node Name",
-        "     Dry Cooler Outlet Node,  !- Water Outlet Node Name",
-        "     NominalCapacity,         !- Performance Input Method",
-        "     Autosize,                !- Design Air Flow Rate U-factor Times Area Value {W/K}",
-        "     58601,                   !- Nominal Capacity {W}",
-        "     50,                      !- Design Entering Water Temperature {C}",
-        "     35,                      !- Design Entering Air Temperature {C}",
-        "     25,                      !- Design Entering Air Wetbulb Temperature {C}",
-        "     Autosize,                !- Design Water Flow Rate {m3/s}",
-        "     Autosize,                !- Design Air Flow Rate {m3/s}",
-        "     Autosize;                !- Design Air Flow Rate Fan Power {W}",
+        "FluidCooler:SingleSpeed,",
+        "  Dry Cooler,              !- Name",
+        "  Dry Cooler Inlet Node,   !- Water Inlet Node Name",
+        "  Dry Cooler Outlet Node,  !- Water Outlet Node Name",
+        "  NominalCapacity,         !- Performance Input Method",
+        "  Autosize,                !- Design Air Flow Rate U-factor Times Area Value {W/K}",
+        "  58601,                   !- Nominal Capacity {W}",
+        "  50,                      !- Design Entering Water Temperature {C}",
+        "  35,                      !- Design Entering Air Temperature {C}",
+        "  25,                      !- Design Entering Air Wetbulb Temperature {C}",
+        "  Autosize,                !- Design Water Flow Rate {m3/s}",
+        "  Autosize,                !- Design Air Flow Rate {m3/s}",
+        "  Autosize;                !- Design Air Flow Rate Fan Power {W}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

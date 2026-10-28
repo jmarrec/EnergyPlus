@@ -273,8 +273,8 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BoilerEfficiency)
         "  0.5887682,               !- Coefficient1 Constant",
         "  0.7888184,               !- Coefficient2 x",
         "  -0.3862498,              !- Coefficient3 x**2",
-        "  0,                       !- Minimum Value of x",
-        "  1;                       !- Maximum Value of x",
+        "  0,                       !- Minimum Value of x {BasedOnField A2}",
+        "  1;                       !- Maximum Value of x {BasedOnField A2}",
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));

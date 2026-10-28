@@ -67,17 +67,19 @@ namespace EnergyPlus {
 TEST_F(EnergyPlusFixture, DemandManagerGetInput)
 {
     // Test input processing for DemandManager:Ventilation
-    std::string const idf_objects = delimited_string({"DemandManager:Ventilation,",
-                                                      " Ventilation Manager,",
-                                                      " ,",
-                                                      " FIXEDRATE,",
-                                                      " 60,",
-                                                      " 0.2,",
-                                                      " ,", // N3 left blank because Numbers was only assigned up to 2
-                                                      " ,", // N4 left blank because Numbers was only assigned up to 2
-                                                      " ALL,",
-                                                      " ,",
-                                                      " OA CONTROLLER 1;"});
+    std::string const idf_objects = delimited_string({
+        "DemandManager:Ventilation,",
+        "  Ventilation Manager,     !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  FixedRate,               !- Limit Control",
+        "  60,                      !- Minimum Limit Duration {minutes}",
+        "  0.2,                     !- Fixed Rate {m3/s}",
+        "  ,                        !- Reduction Ratio",   // N3 left blank because Numbers was only assigned up to 2
+        "  ,                        !- Limit Step Change", // N4 left blank because Numbers was only assigned up to 2
+        "  All,                     !- Selection Control",
+        "  ,                        !- Rotation Duration {minutes}",
+        "  OA CONTROLLER 1;         !- Controller Outdoor Air Name",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -99,58 +101,57 @@ TEST_F(EnergyPlusFixture, DemandManagerGetInput)
 TEST_F(EnergyPlusFixture, DemandManagerAssignmentListGetInputTest)
 {
     std::string const idf_objects = delimited_string({
-        "  DemandManagerAssignmentList,",
-        "    Demand Manager,          !- Name",
-        "    Electricity:Facility,    !- Meter Name",
-        "    Limit Schedule,          !- Demand Limit Schedule Name",
-        "    1.0,                     !- Demand Limit Safety Fraction",
-        "    ,                        !- Billing Period Schedule Name",
-        "    ,                        !- Peak Period Schedule Name",
-        "    15,                      !- Demand Window Length {minutes}",
-        "    SEQUENTIAL,              !- Demand Manager Priority",
-        "    DemandManager:ExteriorLights,  !- DemandManager 1 Object Type",
-        "    Ext Lights Manager 1;    !- DemandManager 1 Name",
+        "DemandManagerAssignmentList,",
+        "  Demand Manager,          !- Name",
+        "  Electricity:Facility,    !- Meter Name",
+        "  Limit Schedule,          !- Demand Limit Schedule Name",
+        "  1.0,                     !- Demand Limit Safety Fraction",
+        "  ,                        !- Billing Period Schedule Name",
+        "  ,                        !- Peak Period Schedule Name",
+        "  15,                      !- Demand Window Length {minutes}",
+        "  Sequential,              !- Demand Manager Priority",
+        "  DemandManager:ExteriorLights,  !- DemandManager Object Type",
+        "  Ext Lights Manager 1;    !- DemandManager Name",
 
-        "  Schedule:Compact,",
-        "    Limit Schedule,          !- Name",
-        "    Any Number,              !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    FOR: AllDays,            !- Field 2",
-        "    Until: 8:00,9999999,     !- Field 3",
-        "    Until: 20:00,10000,      !- Field 5",
-        "    Until: 24:00,9999999;    !- Field 7",
+        "Schedule:Compact,",
+        "  Limit Schedule,          !- Name",
+        "  Any Number,              !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  FOR: AllDays,            !- Field",
+        "  Until: 8:00,             !- Field",
+        "  9999999,                 !- Field",
+        "  Until: 20:00,            !- Field",
+        "  10000,                   !- Field",
+        "  Until: 24:00,            !- Field",
+        "  9999999;                 !- Field",
 
-        "  DemandManager:ExteriorLights,",
-        "    Ext Lights Manager,      !- Name",
-        "    ,                        !- Availability Schedule Name",
-        "    FIXED,                   !- Limit Control",
-        "    60,                      !- Minimum Limit Duration {minutes}",
-        "    0.0,                     !- Maximum Limit Fraction",
-        "    ,                        !- Limit Step Change",
-        "    ALL,                     !- Selection Control",
-        "    ,                        !- Rotation Duration {minutes}",
-        "    Exterior Lights;         !- Exterior Lights 1 Name",
+        "DemandManager:ExteriorLights,",
+        "  Ext Lights Manager,      !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  Fixed,                   !- Limit Control",
+        "  60,                      !- Minimum Limit Duration {minutes}",
+        "  0.0,                     !- Maximum Limit Fraction",
+        "  ,                        !- Limit Step Change",
+        "  All,                     !- Selection Control",
+        "  ,                        !- Rotation Duration {minutes}",
+        "  Exterior Lights;         !- Exterior Lights Name",
 
-        "  Exterior:Lights,",
-        "    Exterior Lights,         !- Name",
-        "    ON,                      !- Schedule Name",
-        "    1000,                    !- Design Level {W}",
-        "    ScheduleNameOnly;        !- Control Option",
+        "Exterior:Lights,",
+        "  Exterior Lights,         !- Name",
+        "  ON,                      !- Schedule Name",
+        "  1000,                    !- Design Level {W}",
+        "  ScheduleNameOnly;        !- Control Option",
 
-        "  Schedule:Constant,",
-        "    ON,                      !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    1;                       !- TimeStep Value",
+        "Schedule:Constant,ON,Fraction,1;",
 
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    CONTINUOUS;              !- Numeric Type",
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
 
-        "  ScheduleTypeLimits,",
-        "    Any Number;              !- Name",
-
+        "ScheduleTypeLimits,",
+        "  Any Number;              !- Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

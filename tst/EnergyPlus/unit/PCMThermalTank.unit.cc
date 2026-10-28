@@ -64,50 +64,52 @@ TEST_F(EnergyPlusFixture, PCMThermalTankUseEnergy)
 {
     // Inline IDF (from your PCM/Tank inputs). Matches the WH test flow:
     // 1) inline IDF  2) process_idf  3) state->init_state  4) Get...Input  5) asserts on struct
-    std::string const idf_objects = delimited_string({"Schedule:Constant, ALWAYS_ON,,1.0;",
+    std::string const idf_objects = delimited_string({
+        "Schedule:Constant,ALWAYS_ON,,1.0;",
 
-                                                      // Base material the PCM property attaches to
-                                                      "Material,",
-                                                      "  PCM_Material,           !- Name",
-                                                      "  Smooth,                 !- Roughness",
-                                                      "  0.10,                   !- Thickness {m}",
-                                                      "  0.20,                   !- Conductivity {W/m-K}",
-                                                      "  800.0,                  !- Density {kg/m3}",
-                                                      "  1000.0,                 !- Specific Heat {J/kg-K}",
-                                                      "  0.90,                   !- Thermal Absorptance",
-                                                      "  0.70,                   !- Solar Absorptance",
-                                                      "  0.70;                   !- Visible Absorptance",
+        // Base material the PCM property attaches to
+        "Material,",
+        "  PCM_Material,            !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.1,                     !- Thickness {m}",
+        "  0.2,                     !- Conductivity {W/m-K}",
+        "  800.0,                   !- Density {kg/m3}",
+        "  1000.0,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.7,                     !- Solar Absorptance",
+        "  0.7;                     !- Visible Absorptance",
 
-                                                      // Your hysteresis block (as in your IDF)
-                                                      "MaterialProperty:PhaseChangeHysteresis,",
-                                                      "  PCM_Material,            !- Name",
-                                                      "  60000,                   !- Latent Heat during the Entire Phase Change Process {J/kg}",
-                                                      "  0.5,                     !- Liquid State Thermal Conductivity {W/m-K}",
-                                                      "  800,                     !- Liquid State Density {kg/m3}",
-                                                      "  2000,                    !- Liquid State Specific Heat {J/kg-K}",
-                                                      "  2,                       !- High Temperature Difference of Melting Curve {deltaC}",
-                                                      "  50,                      !- Peak Melting Temperature {C}",
-                                                      "  2,                       !- Low Temperature Difference of Melting Curve {deltaC}",
-                                                      "  0.5,                     !- Solid State Thermal Conductivity {W/m-K}",
-                                                      "  800,                     !- Solid State Density {kg/m3}",
-                                                      "  2000,                    !- Solid State Specific Heat {J/kg-K}",
-                                                      "  2,                       !- High Temperature Difference of Freezing Curve {deltaC}",
-                                                      "  35,                      !- Peak Freezing Temperature {C}",
-                                                      "  2;                       !- Low Temperature Difference of Freezing Curve {deltaC}",
+        // Your hysteresis block (as in your IDF)
+        "MaterialProperty:PhaseChangeHysteresis,",
+        "  PCM_Material,            !- Name",
+        "  60000,                   !- Latent Heat during the Entire Phase Change Process {J/kg}",
+        "  0.5,                     !- Liquid State Thermal Conductivity {W/m-K}",
+        "  800,                     !- Liquid State Density {kg/m3}",
+        "  2000,                    !- Liquid State Specific Heat {J/kg-K}",
+        "  2,                       !- High Temperature Difference of Melting Curve {deltaC}",
+        "  50,                      !- Peak Melting Temperature {C}",
+        "  2,                       !- Low Temperature Difference of Melting Curve {deltaC}",
+        "  0.5,                     !- Solid State Thermal Conductivity {W/m-K}",
+        "  800,                     !- Solid State Density {kg/m3}",
+        "  2000,                    !- Solid State Specific Heat {J/kg-K}",
+        "  2,                       !- High Temperature Difference of Freezing Curve {deltaC}",
+        "  35,                      !- Peak Freezing Temperature {C}",
+        "  2;                       !- Low Temperature Difference of Freezing Curve {deltaC}",
 
-                                                      // The PCM storage object under test (your nodes & values)
-                                                      "ThermalStorage:PCM,",
-                                                      "  PCM Tank,                !- Name",
-                                                      "  ALWAYS_ON,               !- Availability Schedule Name",
-                                                      "  MICROCHP SENERTECH Water Inlet Node,  !- Plant Side Inlet Node Name",
-                                                      "  MICROCHP SENERTECH Water Outlet Node, !- Plant Side Outlet Node Name",
-                                                      "  PCM Inlet Node,          !- Use Side Inlet Node Name",
-                                                      "  PCM Outlet Node,         !- Use Side Outlet Node Name",
-                                                      "  PCM_Material,            !- PCM Material Name",
-                                                      "  400,                     !- Tank Capacity {kg}",
-                                                      "  25,                      !- Heat Loss Rate {W}",
-                                                      "  autosize,                !- Use Side Design Flow Rate {m3/s}",
-                                                      "  autosize;                !- Plant Side Design Flow Rate {m3/s}"});
+        // The PCM storage object under test (your nodes & values)
+        "ThermalStorage:PCM,",
+        "  PCM Tank,                !- Name",
+        "  ALWAYS_ON,               !- Availability Schedule Name",
+        "  MICROCHP SENERTECH Water Inlet Node,  !- Plant Side Inlet Node Name",
+        "  MICROCHP SENERTECH Water Outlet Node,  !- Plant Side Outlet Node Name",
+        "  PCM Inlet Node,          !- Use Side Inlet Node Name",
+        "  PCM Outlet Node,         !- Use Side Outlet Node Name",
+        "  PCM_Material,            !- PCM Material Name",
+        "  400,                     !- Tank Capacity {kg}",
+        "  25,                      !- Heat Loss Rate {W}",
+        "  Autosize,                !- Use Side Design Flow Rate {m3/s}",
+        "  Autosize;                !- Plant Side Design Flow Rate {m3/s}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);

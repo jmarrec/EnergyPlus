@@ -518,321 +518,431 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_polygon_contains_point)
 TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
 {
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior,            !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
-        "  SurfaceConvectionAlgorithm:Inside,TARP;",
-        "  SurfaceConvectionAlgorithm:Outside,TARP;",
-        "  HeatBalanceAlgorithm,ConductionTransferFunction;",
-        "  Timestep,6;",
-        "  RunPeriod,",
-        "    RP1,                     !- Name",
-        "    1,                       !- Begin Month",
-        "    1,                       !- Begin Day of Month",
-        "    ,                        !- Begin Year",
-        "    12,                      !- End Month",
-        "    31,                      !- End Day of Month",
-        "    ,                        !- End Year",
-        "    ,                        !- Day of Week for Start Day",
-        "    ,                        !- Use Weather File Holidays and Special Days",
-        "    ,                        !- Use Weather File Daylight Saving Period",
-        "    ,                        !- Apply Weekend Holiday Rule",
-        "    ,                        !- Use Weather File Rain Indicators",
-        "    ;                        !- Use Weather File Snow Indicators",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
-        "  Material,",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    0.1014984,               !- Thickness {m}",
-        "    1.245296,                !- Conductivity {W/m-K}",
-        "    2082.400,                !- Density {kg/m3}",
-        "    920.4800,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9300000,               !- Solar Absorptance",
-        "    0.9300000;               !- Visible Absorptance",
-        "  Material,",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
-        "    Smooth,                  !- Roughness",
-        "    1.9050000E-02,           !- Thickness {m}",
-        "    0.7264224,               !- Conductivity {W/m-K}",
-        "    1601.846,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9200000,               !- Solar Absorptance",
-        "    0.9200000;               !- Visible Absorptance",
-        "  Material,",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    1.2710161E-02,           !- Thickness {m}",
-        "    1.435549,                !- Conductivity {W/m-K}",
-        "    881.0155,                !- Density {kg/m3}",
-        "    1673.600,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.5500000,               !- Solar Absorptance",
-        "    0.5500000;               !- Visible Absorptance",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  WindowMaterial:Gas,",
-        "    AIRGAP,                  !- Name",
-        "    AIR,                     !- Gas Type",
-        "    0.0125;                  !- Thickness {m}",
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
-        "  Construction,",
-        "    EXTWALL09,               !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  Construction,",
-        "    INTERIOR,                !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    ROOF31,                  !- Name",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    DOUBLE PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
-        "    AIRGAP,                  !- Layer 2",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
-        "  Construction,",
-        "    PARTITION02,             !- Name",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE,  !- Layer 4",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
-        "  Construction,",
-        "    single PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
-        "  Construction,",
-        "    EXTWALLdemo,             !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    0,                       !- Ceiling Height {m}",
-        "    0;                       !- Volume {m3}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALLdemo,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    ROOF31,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+
+        "SurfaceConvectionAlgorithm:Inside,TARP;",
+
+        "SurfaceConvectionAlgorithm:Outside,TARP;",
+
+        "HeatBalanceAlgorithm,ConductionTransferFunction;",
+
+        "Timestep,6;",
+
+        "RunPeriod,",
+        "  RP1,                     !- Name",
+        "  1,                       !- Begin Month",
+        "  1,                       !- Begin Day of Month",
+        "  ,                        !- Begin Year",
+        "  12,                      !- End Month",
+        "  31,                      !- End Day of Month",
+        "  ,                        !- End Year",
+        "  ,                        !- Day of Week for Start Day",
+        "  ,                        !- Use Weather File Holidays and Special Days",
+        "  ,                        !- Use Weather File Daylight Saving Period",
+        "  ,                        !- Apply Weekend Holiday Rule",
+        "  ,                        !- Use Weather File Rain Indicators",
+        "  ;                        !- Use Weather File Snow Indicators",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
+
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
+
+        "Material,",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.1014984,               !- Thickness {m}",
+        "  1.245296,                !- Conductivity {W/m-K}",
+        "  2082.4,                  !- Density {kg/m3}",
+        "  920.48,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.93,                    !- Solar Absorptance",
+        "  0.93;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.01905,                 !- Thickness {m}",
+        "  0.7264224,               !- Conductivity {W/m-K}",
+        "  1601.846,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.012710161,             !- Thickness {m}",
+        "  1.435549,                !- Conductivity {W/m-K}",
+        "  881.0155,                !- Density {kg/m3}",
+        "  1673.6,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.55,                    !- Solar Absorptance",
+        "  0.55;                    !- Visible Absorptance",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "WindowMaterial:Gas,",
+        "  AIRGAP,                  !- Name",
+        "  Air,                     !- Gas Type",
+        "  0.0125;                  !- Thickness {m}",
+
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALL09,               !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "Construction,",
+        "  INTERIOR,                !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  ROOF31,                  !- Name",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE;  !- Layer 2",
+
+        "Construction,",
+        "  DOUBLE PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
+        "  AIRGAP,                  !- Layer 2",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
+
+        "Construction,",
+        "  PARTITION02,             !- Name",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE,  !- Layer 2",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
+
+        "Construction,",
+        "  single PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALLdemo,             !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  0,                       !- Ceiling Height {m}",
+        "  0;                       !- Volume {m3}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALLdemo,             !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  ROOF31,                  !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -906,336 +1016,447 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
 TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
 {
     std::string const idf_objects = delimited_string({
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
 
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior,            !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
-        "  ShadowCalculation,",
-        "    Scheduled,               !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                           !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                           !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling, !- Sky Diffuse Modeling Algorithm",
-        "    Yes;                        !- Output External Shading Calculation Results",
-        "  SurfaceConvectionAlgorithm:Inside,TARP;",
-        "  SurfaceConvectionAlgorithm:Outside,TARP;",
-        "  HeatBalanceAlgorithm,ConductionTransferFunction;",
-        "  Timestep,6;",
-        "  RunPeriod,",
-        "    RP1,                     !- Name",
-        "    1,                       !- Begin Month",
-        "    1,                       !- Begin Day of Month",
-        "    ,                        !- Begin Year",
-        "    12,                      !- End Month",
-        "    31,                      !- End Day of Month",
-        "    ,                        !- End Year",
-        "    ,                        !- Day of Week for Start Day",
-        "    ,                        !- Use Weather File Holidays and Special Days",
-        "    ,                        !- Use Weather File Daylight Saving Period",
-        "    ,                        !- Apply Weekend Holiday Rule",
-        "    ,                        !- Use Weather File Rain Indicators",
-        "    ;                        !- Use Weather File Snow Indicators",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
-        "  Material,",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    0.1014984,               !- Thickness {m}",
-        "    1.245296,                !- Conductivity {W/m-K}",
-        "    2082.400,                !- Density {kg/m3}",
-        "    920.4800,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9300000,               !- Solar Absorptance",
-        "    0.9300000;               !- Visible Absorptance",
-        "  Material,",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
-        "    Smooth,                  !- Roughness",
-        "    1.9050000E-02,           !- Thickness {m}",
-        "    0.7264224,               !- Conductivity {W/m-K}",
-        "    1601.846,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9200000,               !- Solar Absorptance",
-        "    0.9200000;               !- Visible Absorptance",
-        "  Material,",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    1.2710161E-02,           !- Thickness {m}",
-        "    1.435549,                !- Conductivity {W/m-K}",
-        "    881.0155,                !- Density {kg/m3}",
-        "    1673.600,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.5500000,               !- Solar Absorptance",
-        "    0.5500000;               !- Visible Absorptance",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  WindowMaterial:Gas,",
-        "    AIRGAP,                  !- Name",
-        "    AIR,                     !- Gas Type",
-        "    0.0125;                  !- Thickness {m}",
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
-        "  Construction,",
-        "    EXTWALL09,               !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  Construction,",
-        "    INTERIOR,                !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    ROOF31,                  !- Name",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    DOUBLE PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
-        "    AIRGAP,                  !- Layer 2",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
-        "  Construction,",
-        "    PARTITION02,             !- Name",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE,  !- Layer 4",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
-        "  Construction,",
-        "    single PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
-        "  Construction,",
-        "    EXTWALLdemo,             !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    0,                       !- Ceiling Height {m}",
-        "    0;                       !- Volume {m3}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALLdemo,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    ROOF31,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  SurfaceProperty:LocalEnvironment,",
-        "    LocEnv:Zn001:roof,",
-        "    Zn001:roof,",
-        "    ExtShadingSch:Zn001:roof,",
-        "    ,",
-        "    ;",
-        "  Schedule:Compact,",
-        "    ExtShadingSch:Zn001:roof,",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    Until: 24:00,            !- Field 3",
-        "    0.5432;                  !- Field 4",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "ShadowCalculation,",
+        "  Scheduled,               !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling,  !- Sky Diffuse Modeling Algorithm",
+        "  Yes;                     !- Output External Shading Calculation Results",
+
+        "SurfaceConvectionAlgorithm:Inside,TARP;",
+
+        "SurfaceConvectionAlgorithm:Outside,TARP;",
+
+        "HeatBalanceAlgorithm,ConductionTransferFunction;",
+
+        "Timestep,6;",
+
+        "RunPeriod,",
+        "  RP1,                     !- Name",
+        "  1,                       !- Begin Month",
+        "  1,                       !- Begin Day of Month",
+        "  ,                        !- Begin Year",
+        "  12,                      !- End Month",
+        "  31,                      !- End Day of Month",
+        "  ,                        !- End Year",
+        "  ,                        !- Day of Week for Start Day",
+        "  ,                        !- Use Weather File Holidays and Special Days",
+        "  ,                        !- Use Weather File Daylight Saving Period",
+        "  ,                        !- Apply Weekend Holiday Rule",
+        "  ,                        !- Use Weather File Rain Indicators",
+        "  ;                        !- Use Weather File Snow Indicators",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
+
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
+
+        "Material,",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.1014984,               !- Thickness {m}",
+        "  1.245296,                !- Conductivity {W/m-K}",
+        "  2082.4,                  !- Density {kg/m3}",
+        "  920.48,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.93,                    !- Solar Absorptance",
+        "  0.93;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.01905,                 !- Thickness {m}",
+        "  0.7264224,               !- Conductivity {W/m-K}",
+        "  1601.846,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.012710161,             !- Thickness {m}",
+        "  1.435549,                !- Conductivity {W/m-K}",
+        "  881.0155,                !- Density {kg/m3}",
+        "  1673.6,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.55,                    !- Solar Absorptance",
+        "  0.55;                    !- Visible Absorptance",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "WindowMaterial:Gas,",
+        "  AIRGAP,                  !- Name",
+        "  Air,                     !- Gas Type",
+        "  0.0125;                  !- Thickness {m}",
+
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALL09,               !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "Construction,",
+        "  INTERIOR,                !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  ROOF31,                  !- Name",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE;  !- Layer 2",
+
+        "Construction,",
+        "  DOUBLE PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
+        "  AIRGAP,                  !- Layer 2",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
+
+        "Construction,",
+        "  PARTITION02,             !- Name",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE,  !- Layer 2",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
+
+        "Construction,",
+        "  single PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALLdemo,             !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  0,                       !- Ceiling Height {m}",
+        "  0;                       !- Volume {m3}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALLdemo,             !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  ROOF31,                  !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "SurfaceProperty:LocalEnvironment,",
+        "  LocEnv:Zn001:roof,       !- Name",
+        "  Zn001:roof,              !- Exterior Surface Name",
+        "  ExtShadingSch:Zn001:roof,  !- Sunlit Fraction Schedule Name",
+        "  ,                        !- Surrounding Surfaces Object Name",
+        "  ;                        !- Outdoor Air Node Name",
+
+        "Schedule:Compact,",
+        "  ExtShadingSch:Zn001:roof,  !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  0.5432;                  !- Field",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1319,335 +1540,447 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
 TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
 {
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior,            !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                           !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                           !- Polygon Clipping Algorithm",
-        "    ,                           !- Pixel Counting Resolution",
-        "    ,                           !- Sky Diffuse Modeling Algorithm",
-        "    ,                           !- Output External Shading Calculation Results",
-        "    Yes,                        !- Disable Shading within A Zone Group",
-        "    ,                           !- Disable Shading between Zone Groups",
-        "    ShadingZoneGroup;           !- Shading Group 1 ZoneList Name",
-        "  SurfaceConvectionAlgorithm:Inside,TARP;",
-        "  SurfaceConvectionAlgorithm:Outside,TARP;",
-        "  HeatBalanceAlgorithm,ConductionTransferFunction;",
-        "  Timestep,6;",
-        "  RunPeriod,",
-        "    RP1,                     !- Name",
-        "    1,                       !- Begin Month",
-        "    1,                       !- Begin Day of Month",
-        "    ,                        !- Begin Year",
-        "    12,                      !- End Month",
-        "    31,                      !- End Day of Month",
-        "    ,                        !- End Year",
-        "    ,                        !- Day of Week for Start Day",
-        "    ,                        !- Use Weather File Holidays and Special Days",
-        "    ,                        !- Use Weather File Daylight Saving Period",
-        "    ,                        !- Apply Weekend Holiday Rule",
-        "    ,                        !- Use Weather File Rain Indicators",
-        "    ;                        !- Use Weather File Snow Indicators",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
-        "  Material,",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    0.1014984,               !- Thickness {m}",
-        "    1.245296,                !- Conductivity {W/m-K}",
-        "    2082.400,                !- Density {kg/m3}",
-        "    920.4800,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9300000,               !- Solar Absorptance",
-        "    0.9300000;               !- Visible Absorptance",
-        "  Material,",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
-        "    Smooth,                  !- Roughness",
-        "    1.9050000E-02,           !- Thickness {m}",
-        "    0.7264224,               !- Conductivity {W/m-K}",
-        "    1601.846,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9200000,               !- Solar Absorptance",
-        "    0.9200000;               !- Visible Absorptance",
-        "  Material,",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    1.2710161E-02,           !- Thickness {m}",
-        "    1.435549,                !- Conductivity {W/m-K}",
-        "    881.0155,                !- Density {kg/m3}",
-        "    1673.600,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.5500000,               !- Solar Absorptance",
-        "    0.5500000;               !- Visible Absorptance",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  WindowMaterial:Gas,",
-        "    AIRGAP,                  !- Name",
-        "    AIR,                     !- Gas Type",
-        "    0.0125;                  !- Thickness {m}",
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
-        "  Construction,",
-        "    EXTWALL09,               !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  Construction,",
-        "    INTERIOR,                !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    ROOF31,                  !- Name",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    DOUBLE PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
-        "    AIRGAP,                  !- Layer 2",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
-        "  Construction,",
-        "    PARTITION02,             !- Name",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE,  !- Layer 4",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
-        "  Construction,",
-        "    single PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
-        "  Construction,",
-        "    EXTWALLdemo,             !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    0,                       !- Ceiling Height {m}",
-        "    0;                       !- Volume {m3}",
-        "  ZoneList,",
-        "    ShadingZoneGroup,",
-        "    ZONE ONE;",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALLdemo,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    ROOF31,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    ExtShadingSch:Zn001:roof,",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    Until: 24:00,            !- Field 3",
-        "    0.5432;                  !- Field 4",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  ,                        !- Sky Diffuse Modeling Algorithm",
+        "  ,                        !- Output External Shading Calculation Results",
+        "  Yes,                     !- Disable Self-Shading Within Shading Zone Groups",
+        "  ,                        !- Disable Self-Shading From Shading Zone Groups to Other Zones",
+        "  ShadingZoneGroup;        !- Shading Zone Group ZoneList Name",
+
+        "SurfaceConvectionAlgorithm:Inside,TARP;",
+
+        "SurfaceConvectionAlgorithm:Outside,TARP;",
+
+        "HeatBalanceAlgorithm,ConductionTransferFunction;",
+
+        "Timestep,6;",
+
+        "RunPeriod,",
+        "  RP1,                     !- Name",
+        "  1,                       !- Begin Month",
+        "  1,                       !- Begin Day of Month",
+        "  ,                        !- Begin Year",
+        "  12,                      !- End Month",
+        "  31,                      !- End Day of Month",
+        "  ,                        !- End Year",
+        "  ,                        !- Day of Week for Start Day",
+        "  ,                        !- Use Weather File Holidays and Special Days",
+        "  ,                        !- Use Weather File Daylight Saving Period",
+        "  ,                        !- Apply Weekend Holiday Rule",
+        "  ,                        !- Use Weather File Rain Indicators",
+        "  ;                        !- Use Weather File Snow Indicators",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
+
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
+
+        "Material,",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.1014984,               !- Thickness {m}",
+        "  1.245296,                !- Conductivity {W/m-K}",
+        "  2082.4,                  !- Density {kg/m3}",
+        "  920.48,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.93,                    !- Solar Absorptance",
+        "  0.93;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.01905,                 !- Thickness {m}",
+        "  0.7264224,               !- Conductivity {W/m-K}",
+        "  1601.846,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.012710161,             !- Thickness {m}",
+        "  1.435549,                !- Conductivity {W/m-K}",
+        "  881.0155,                !- Density {kg/m3}",
+        "  1673.6,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.55,                    !- Solar Absorptance",
+        "  0.55;                    !- Visible Absorptance",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "WindowMaterial:Gas,",
+        "  AIRGAP,                  !- Name",
+        "  Air,                     !- Gas Type",
+        "  0.0125;                  !- Thickness {m}",
+
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALL09,               !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "Construction,",
+        "  INTERIOR,                !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  ROOF31,                  !- Name",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE;  !- Layer 2",
+
+        "Construction,",
+        "  DOUBLE PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
+        "  AIRGAP,                  !- Layer 2",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
+
+        "Construction,",
+        "  PARTITION02,             !- Name",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE,  !- Layer 2",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
+
+        "Construction,",
+        "  single PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALLdemo,             !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  0,                       !- Ceiling Height {m}",
+        "  0;                       !- Volume {m3}",
+
+        "ZoneList,",
+        "  ShadingZoneGroup,        !- Name",
+        "  ZONE ONE;                !- Zone Name",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALLdemo,             !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  ROOF31,                  !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  ExtShadingSch:Zn001:roof,  !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  0.5432;                  !- Field",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1706,321 +2039,431 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
 TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
 {
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior,            !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
-        "  SurfaceConvectionAlgorithm:Inside,TARP;",
-        "  SurfaceConvectionAlgorithm:Outside,TARP;",
-        "  HeatBalanceAlgorithm,ConductionTransferFunction;",
-        "  Timestep,6;",
-        "  RunPeriod,",
-        "    RP1,                     !- Name",
-        "    1,                       !- Begin Month",
-        "    1,                       !- Begin Day of Month",
-        "    ,                        !- Begin Year",
-        "    12,                      !- End Month",
-        "    31,                      !- End Day of Month",
-        "    ,                        !- End Year",
-        "    ,                        !- Day of Week for Start Day",
-        "    ,                        !- Use Weather File Holidays and Special Days",
-        "    ,                        !- Use Weather File Daylight Saving Period",
-        "    ,                        !- Apply Weekend Holiday Rule",
-        "    ,                        !- Use Weather File Rain Indicators",
-        "    ;                        !- Use Weather File Snow Indicators",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
-        "  Material,",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    0.1014984,               !- Thickness {m}",
-        "    1.245296,                !- Conductivity {W/m-K}",
-        "    2082.400,                !- Density {kg/m3}",
-        "    920.4800,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9300000,               !- Solar Absorptance",
-        "    0.9300000;               !- Visible Absorptance",
-        "  Material,",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
-        "    Smooth,                  !- Roughness",
-        "    1.9050000E-02,           !- Thickness {m}",
-        "    0.7264224,               !- Conductivity {W/m-K}",
-        "    1601.846,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9200000,               !- Solar Absorptance",
-        "    0.9200000;               !- Visible Absorptance",
-        "  Material,",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    1.2710161E-02,           !- Thickness {m}",
-        "    1.435549,                !- Conductivity {W/m-K}",
-        "    881.0155,                !- Density {kg/m3}",
-        "    1673.600,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.5500000,               !- Solar Absorptance",
-        "    0.5500000;               !- Visible Absorptance",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  WindowMaterial:Gas,",
-        "    AIRGAP,                  !- Name",
-        "    AIR,                     !- Gas Type",
-        "    0.0125;                  !- Thickness {m}",
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
-        "  Construction,",
-        "    EXTWALL09,               !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  Construction,",
-        "    INTERIOR,                !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    ROOF31,                  !- Name",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    DOUBLE PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
-        "    AIRGAP,                  !- Layer 2",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
-        "  Construction,",
-        "    PARTITION02,             !- Name",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE,  !- Layer 4",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
-        "  Construction,",
-        "    single PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
-        "  Construction,",
-        "    EXTWALLdemo,             !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    0,                       !- Ceiling Height {m}",
-        "    0;                       !- Volume {m3}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALLdemo,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    ROOF31,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+
+        "SurfaceConvectionAlgorithm:Inside,TARP;",
+
+        "SurfaceConvectionAlgorithm:Outside,TARP;",
+
+        "HeatBalanceAlgorithm,ConductionTransferFunction;",
+
+        "Timestep,6;",
+
+        "RunPeriod,",
+        "  RP1,                     !- Name",
+        "  1,                       !- Begin Month",
+        "  1,                       !- Begin Day of Month",
+        "  ,                        !- Begin Year",
+        "  12,                      !- End Month",
+        "  31,                      !- End Day of Month",
+        "  ,                        !- End Year",
+        "  ,                        !- Day of Week for Start Day",
+        "  ,                        !- Use Weather File Holidays and Special Days",
+        "  ,                        !- Use Weather File Daylight Saving Period",
+        "  ,                        !- Apply Weekend Holiday Rule",
+        "  ,                        !- Use Weather File Rain Indicators",
+        "  ;                        !- Use Weather File Snow Indicators",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
+
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
+
+        "Material,",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.1014984,               !- Thickness {m}",
+        "  1.245296,                !- Conductivity {W/m-K}",
+        "  2082.4,                  !- Density {kg/m3}",
+        "  920.48,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.93,                    !- Solar Absorptance",
+        "  0.93;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.01905,                 !- Thickness {m}",
+        "  0.7264224,               !- Conductivity {W/m-K}",
+        "  1601.846,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
+
+        "Material,",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.012710161,             !- Thickness {m}",
+        "  1.435549,                !- Conductivity {W/m-K}",
+        "  881.0155,                !- Density {kg/m3}",
+        "  1673.6,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.55,                    !- Solar Absorptance",
+        "  0.55;                    !- Visible Absorptance",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "WindowMaterial:Gas,",
+        "  AIRGAP,                  !- Name",
+        "  Air,                     !- Gas Type",
+        "  0.0125;                  !- Thickness {m}",
+
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALL09,               !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "Construction,",
+        "  INTERIOR,                !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  ROOF31,                  !- Name",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE;  !- Layer 2",
+
+        "Construction,",
+        "  DOUBLE PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
+        "  AIRGAP,                  !- Layer 2",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
+
+        "Construction,",
+        "  PARTITION02,             !- Name",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE,  !- Layer 2",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 3",
+
+        "Construction,",
+        "  single PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        "Construction,",
+        "  EXTWALLdemo,             !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  0,                       !- Ceiling Height {m}",
+        "  0;                       !- Volume {m3}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALLdemo,             !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  ROOF31,                  !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -2181,6 +2624,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CHKBKS)
 TEST_F(EnergyPlusFixture, SolarShadingTest_NonConvexErrors)
 {
     std::string const idf_objects = R"IDF(
+
 RunPeriod,
   Annual,                  !- Name
   1,                       !- Begin Month
@@ -2197,221 +2641,301 @@ RunPeriod,
   Yes;                     !- Use Weather File Snow Indicators
 
 ShadowCalculation,
-  PolygonClipping,  !- Calculation Method
-  Periodic,  !- Calculation Update Frequency Method
-  20,  !- Calculation Update Frequency
-  15000;  !- Maximum Figures in Shadow Overlap Calculations
+  PolygonClipping,         !- Shading Calculation Method
+  Periodic,                !- Shading Calculation Update Frequency Method
+  20,                      !- Shading Calculation Update Frequency
+  15000;                   !- Maximum Figures in Shadow Overlap Calculations
 
 Timestep,4;
 
 Building,
-  Non-convex,    !- Name
-  0,      !- North Axis {deg}
-  City,          !- Terrain
-  0.5,  !- Loads Convergence Tolerance Value
-  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
-  FullInteriorAndExterior, !- Solar Distribution
-  25,  !- Maximum Number of Warmup Days
-  2;  !- Minimum Number of Warmup Days
+  Non-convex,              !- Name
+  0,                       !- North Axis {deg}
+  City,                    !- Terrain
+  0.5,                     !- Loads Convergence Tolerance Value {W}
+  0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior,  !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  2;                       !- Minimum Number of Warmup Days
 
 GlobalGeometryRules,
-    UpperLeftCorner,          !- Starting Vertex Position
-    Counterclockwise,         !- Vertex Entry Direction
-    Relative;                 !- Coordinate System
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  Relative;                !- Coordinate System
 
 Zone,
-    Zone A,                   !- Name
-    0,                        !- Direction of Relative North
-    0,                        !- X Origin
-    0,                        !- Y Origin
-    0,                        !- Z Origin
-    ,                         !- Type
-    1;                        !- Multiplier
+  Zone A,                  !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  ,                        !- Type
+  1;                       !- Multiplier
 
 BuildingSurface:Detailed,
-    A48756,                   !- Name
-    Floor,                    !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    NoSun,                    !- Sun Exposure
-    NoWind,                   !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+  A48756,                  !- Name
+  Floor,                   !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    69C03D,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
-    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+  69C03D,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    5BB552,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+  5BB552,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    682F88,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  682F88,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    C292CF,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 0,                        !- Vertex 2 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
-    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+  C292CF,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    319080,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+  319080,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    866E33,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+  866E33,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    32CB6F,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  32CB6F,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 FenestrationSurface:Detailed,
-    DAF2B2,                   !- Name
-    Window,                   !- Surface Type
-    Exterior Window,          !- Construction Name
-    319080,                   !- Building Surface Name
-    ,                         !- Outside Boundary Condition Object
-    ,                         !- View Factor to Ground
-    ,                         !- Frame and Divider Name
-    ,                         !- Multiplier
-    4,                        !- Number of Vertices
-    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
-    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
-    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
-    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+  DAF2B2,                  !- Name
+  Window,                  !- Surface Type
+  Exterior Window,         !- Construction Name
+  319080,                  !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  ,                        !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  ,                        !- Multiplier
+  4,                       !- Number of Vertices
+  0.6096,                  !- Vertex 1 X-coordinate {m}
+  3.048,                   !- Vertex 1 Y-coordinate {m}
+  5.4864,                  !- Vertex 1 Z-coordinate {m}
+  0.6096,                  !- Vertex 2 X-coordinate {m}
+  3.048,                   !- Vertex 2 Y-coordinate {m}
+  3.6576,                  !- Vertex 2 Z-coordinate {m}
+  5.4864,                  !- Vertex 3 X-coordinate {m}
+  3.048,                   !- Vertex 3 Y-coordinate {m}
+  3.6576,                  !- Vertex 3 Z-coordinate {m}
+  5.4864,                  !- Vertex 4 X-coordinate {m}
+  3.048,                   !- Vertex 4 Y-coordinate {m}
+  5.4864;                  !- Vertex 4 Z-coordinate {m}
 
 Material,
   Wall Continuous Insulation,  !- Name
-  MediumSmooth,               !- Roughness
-  0.038037600000000005,  !- Thickness {m}
-  0.0288,  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Extruded polystyrene, smooth skin - aged 180 days)
-  1465;                     !- Specific Heat {J/kg-K}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Extruded polystyrene, smooth skin - aged 180 days)
+  MediumSmooth,            !- Roughness
+  0.038037600000000005,    !- Thickness {m}
+  0.0288,                  !- Conductivity {W/m-K}
+  32,                      !- Density {kg/m3}
+  1465;                    !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
   VeryRough,               !- Roughness
-  0.08889999999999999,  !- Thickness {m}
-  0.08389829384297165,  !- Conductivity {W/m-K}
-  8.17,                      !- Density {kg/m3}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Glass-fiber batts)
-  837;                     !- Specific Heat {J/kg-K}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Glass-fiber batts)
+  0.08889999999999999,     !- Thickness {m}
+  0.08389829384297165,     !- Conductivity {W/m-K}
+  8.17,                    !- Density {kg/m3}
+  837;                     !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
-  Stucco,  !- Layer
-  Wall Continuous Insulation,  !- Layer
-  Wall Cavity Effective Insulation,  !- Layer
-  Gypsum 5/8in;  !- Layer
+  Stucco,                  !- Outside Layer
+  Wall Continuous Insulation,  !- Layer 2
+  Wall Cavity Effective Insulation,  !- Layer 3
+  Gypsum 5/8in;            !- Layer 4
 
 Construction,
   Exterior Window,         !- Name
   Theoretical Glazing;     !- Outside Layer
 
 Material,
-  Gypsum 5/8in,           !- Name
+  Gypsum 5/8in,            !- Name
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
@@ -2422,7 +2946,7 @@ Material,
   0.7;                     !- Visible Absorptance
 
 Material,
-  Stucco,           !- Name
+  Stucco,                  !- Name
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
@@ -2434,9 +2958,10 @@ Material,
 
 WindowMaterial:SimpleGlazingSystem,
   Theoretical Glazing,     !- Name
-  3.1232254400908577,  !- U-Factor {W/m2-K}
-  0.4,  !- Solar Heat Gain Coefficient
-  0.4;  !- Visible Transmittance
+  3.1232254400908577,      !- U-Factor {W/m2-K}
+  0.4,                     !- Solar Heat Gain Coefficient
+  0.4;                     !- Visible Transmittance
+
 )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -2501,6 +3026,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_GetBuildingDataUsesShadowCalculationS
 // Also provides coverage for Polygon Clipping Algorithm = ConvexWeilerAtherton -- issue #5558
 {
     std::string const idf_objects = R"IDF(
+
 RunPeriod,
   Annual,                  !- Name
   1,                       !- Begin Month
@@ -2517,222 +3043,302 @@ RunPeriod,
   Yes;                     !- Use Weather File Snow Indicators
 
 ShadowCalculation,
-  PolygonClipping,               !- Shading Calculation Method
-  Timestep,                      !- Shading Calculation Update Frequency Method
-  20,                            !- Shading Calculation Update Frequency
-  15000,                         !- Maximum Figures in Shadow Overlap Calculations
-  ConvexWeilerAtherton;          !- Polygon Clipping Algorithm
+  PolygonClipping,         !- Shading Calculation Method
+  Timestep,                !- Shading Calculation Update Frequency Method
+  20,                      !- Shading Calculation Update Frequency
+  15000,                   !- Maximum Figures in Shadow Overlap Calculations
+  ConvexWeilerAtherton;    !- Polygon Clipping Algorithm
 
 Timestep,4;
 
 Building,
-  Non-convex,    !- Name
-  0,      !- North Axis {deg}
-  City,          !- Terrain
-  0.5,  !- Loads Convergence Tolerance Value
-  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
-  FullInteriorAndExterior, !- Solar Distribution
-  25,  !- Maximum Number of Warmup Days
-  2;  !- Minimum Number of Warmup Days
+  Non-convex,              !- Name
+  0,                       !- North Axis {deg}
+  City,                    !- Terrain
+  0.5,                     !- Loads Convergence Tolerance Value {W}
+  0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior,  !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  2;                       !- Minimum Number of Warmup Days
 
 GlobalGeometryRules,
-    UpperLeftCorner,          !- Starting Vertex Position
-    Counterclockwise,         !- Vertex Entry Direction
-    Relative;                 !- Coordinate System
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  Relative;                !- Coordinate System
 
 Zone,
-    Zone A,                   !- Name
-    0,                        !- Direction of Relative North
-    0,                        !- X Origin
-    0,                        !- Y Origin
-    0,                        !- Z Origin
-    ,                         !- Type
-    1;                        !- Multiplier
+  Zone A,                  !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  ,                        !- Type
+  1;                       !- Multiplier
 
 BuildingSurface:Detailed,
-    A48756,                   !- Name
-    Floor,                    !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    NoSun,                    !- Sun Exposure
-    NoWind,                   !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+  A48756,                  !- Name
+  Floor,                   !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    69C03D,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
-    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+  69C03D,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    5BB552,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+  5BB552,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    682F88,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  682F88,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    C292CF,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 0,                        !- Vertex 2 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
-    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+  C292CF,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    319080,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+  319080,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    866E33,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+  866E33,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    32CB6F,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  32CB6F,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 FenestrationSurface:Detailed,
-    DAF2B2,                   !- Name
-    Window,                   !- Surface Type
-    Exterior Window,          !- Construction Name
-    319080,                   !- Building Surface Name
-    ,                         !- Outside Boundary Condition Object
-    ,                         !- View Factor to Ground
-    ,                         !- Frame and Divider Name
-    ,                         !- Multiplier
-    4,                        !- Number of Vertices
-    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
-    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
-    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
-    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+  DAF2B2,                  !- Name
+  Window,                  !- Surface Type
+  Exterior Window,         !- Construction Name
+  319080,                  !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  ,                        !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  ,                        !- Multiplier
+  4,                       !- Number of Vertices
+  0.6096,                  !- Vertex 1 X-coordinate {m}
+  3.048,                   !- Vertex 1 Y-coordinate {m}
+  5.4864,                  !- Vertex 1 Z-coordinate {m}
+  0.6096,                  !- Vertex 2 X-coordinate {m}
+  3.048,                   !- Vertex 2 Y-coordinate {m}
+  3.6576,                  !- Vertex 2 Z-coordinate {m}
+  5.4864,                  !- Vertex 3 X-coordinate {m}
+  3.048,                   !- Vertex 3 Y-coordinate {m}
+  3.6576,                  !- Vertex 3 Z-coordinate {m}
+  5.4864,                  !- Vertex 4 X-coordinate {m}
+  3.048,                   !- Vertex 4 Y-coordinate {m}
+  5.4864;                  !- Vertex 4 Z-coordinate {m}
 
 Material,
   Wall Continuous Insulation,  !- Name
-  MediumSmooth,               !- Roughness
-  0.038037600000000005,  !- Thickness {m}
-  0.0288,  !- Conductivity {W/m-K}
+  MediumSmooth,            !- Roughness
+  0.038037600000000005,    !- Thickness {m}
+  0.0288,                  !- Conductivity {W/m-K}
   32,                      !- Density {kg/m3}
-  1465;                     !- Specific Heat {J/kg-K}
+  1465;                    !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
   VeryRough,               !- Roughness
-  0.08889999999999999,  !- Thickness {m}
-  0.08389829384297165,  !- Conductivity {W/m-K}
-  8.17,                      !- Density {kg/m3}
+  0.08889999999999999,     !- Thickness {m}
+  0.08389829384297165,     !- Conductivity {W/m-K}
+  8.17,                    !- Density {kg/m3}
   837;                     !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
-  Stucco,  !- Layer
-  Wall Continuous Insulation,  !- Layer
-  Wall Cavity Effective Insulation,  !- Layer
-  Gypsum 5/8in;  !- Layer
+  Stucco,                  !- Outside Layer
+  Wall Continuous Insulation,  !- Layer 2
+  Wall Cavity Effective Insulation,  !- Layer 3
+  Gypsum 5/8in;            !- Layer 4
 
 Construction,
   Exterior Window,         !- Name
   Theoretical Glazing;     !- Outside Layer
 
 Material,
-  Gypsum 5/8in,           !- Name
+  Gypsum 5/8in,            !- Name
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
@@ -2743,7 +3349,7 @@ Material,
   0.7;                     !- Visible Absorptance
 
 Material,
-  Stucco,           !- Name
+  Stucco,                  !- Name
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
@@ -2755,9 +3361,10 @@ Material,
 
 WindowMaterial:SimpleGlazingSystem,
   Theoretical Glazing,     !- Name
-  3.1232254400908577,  !- U-Factor {W/m2-K}
-  0.4,  !- Solar Heat Gain Coefficient
-  0.4;  !- Visible Transmittance
+  3.1232254400908577,      !- U-Factor {W/m2-K}
+  0.4,                     !- Solar Heat Gain Coefficient
+  0.4;                     !- Visible Transmittance
+
 )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -2811,6 +3418,7 @@ WindowMaterial:SimpleGlazingSystem,
 TEST_F(EnergyPlusFixture, SolarShadingTest_GPUNonConvexErrors)
 {
     std::string const idf_objects = R"IDF(
+
 RunPeriod,
   Annual,                  !- Name
   1,                       !- Begin Month
@@ -2827,221 +3435,301 @@ RunPeriod,
   Yes;                     !- Use Weather File Snow Indicators
 
 ShadowCalculation,
-  PixelCounting,  !- Calculation Method
-  Periodic,  !- Calculation Update Frequency Method
-  20,  !- Calculation Update Frequency
-  15000;  !- Maximum Figures in Shadow Overlap Calculations
+  PixelCounting,           !- Shading Calculation Method
+  Periodic,                !- Shading Calculation Update Frequency Method
+  20,                      !- Shading Calculation Update Frequency
+  15000;                   !- Maximum Figures in Shadow Overlap Calculations
 
 Timestep,4;
 
 Building,
-  Non-convex,    !- Name
-  0,      !- North Axis {deg}
-  City,          !- Terrain
-  0.5,  !- Loads Convergence Tolerance Value
-  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
-  FullInteriorAndExterior, !- Solar Distribution
-  25,  !- Maximum Number of Warmup Days
-  2;  !- Minimum Number of Warmup Days
+  Non-convex,              !- Name
+  0,                       !- North Axis {deg}
+  City,                    !- Terrain
+  0.5,                     !- Loads Convergence Tolerance Value {W}
+  0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior,  !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  2;                       !- Minimum Number of Warmup Days
 
 GlobalGeometryRules,
-    UpperLeftCorner,          !- Starting Vertex Position
-    Counterclockwise,         !- Vertex Entry Direction
-    Relative;                 !- Coordinate System
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  Relative;                !- Coordinate System
 
 Zone,
-    Zone A,                   !- Name
-    0,                        !- Direction of Relative North
-    0,                        !- X Origin
-    0,                        !- Y Origin
-    0,                        !- Z Origin
-    ,                         !- Type
-    1;                        !- Multiplier
+  Zone A,                  !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  ,                        !- Type
+  1;                       !- Multiplier
 
 BuildingSurface:Detailed,
-    A48756,                   !- Name
-    Floor,                    !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    NoSun,                    !- Sun Exposure
-    NoWind,                   !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+  A48756,                  !- Name
+  Floor,                   !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    69C03D,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
-    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+  69C03D,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    5BB552,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+  5BB552,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    682F88,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  682F88,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    C292CF,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 0,                        !- Vertex 2 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
-    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+  C292CF,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    319080,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+  319080,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    866E33,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+  866E33,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    32CB6F,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  32CB6F,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 FenestrationSurface:Detailed,
-    DAF2B2,                   !- Name
-    Window,                   !- Surface Type
-    Exterior Window,          !- Construction Name
-    319080,                   !- Building Surface Name
-    ,                         !- Outside Boundary Condition Object
-    ,                         !- View Factor to Ground
-    ,                         !- Frame and Divider Name
-    ,                         !- Multiplier
-    4,                        !- Number of Vertices
-    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
-    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
-    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
-    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+  DAF2B2,                  !- Name
+  Window,                  !- Surface Type
+  Exterior Window,         !- Construction Name
+  319080,                  !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  ,                        !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  ,                        !- Multiplier
+  4,                       !- Number of Vertices
+  0.6096,                  !- Vertex 1 X-coordinate {m}
+  3.048,                   !- Vertex 1 Y-coordinate {m}
+  5.4864,                  !- Vertex 1 Z-coordinate {m}
+  0.6096,                  !- Vertex 2 X-coordinate {m}
+  3.048,                   !- Vertex 2 Y-coordinate {m}
+  3.6576,                  !- Vertex 2 Z-coordinate {m}
+  5.4864,                  !- Vertex 3 X-coordinate {m}
+  3.048,                   !- Vertex 3 Y-coordinate {m}
+  3.6576,                  !- Vertex 3 Z-coordinate {m}
+  5.4864,                  !- Vertex 4 X-coordinate {m}
+  3.048,                   !- Vertex 4 Y-coordinate {m}
+  5.4864;                  !- Vertex 4 Z-coordinate {m}
 
 Material,
   Wall Continuous Insulation,  !- Name
-  MediumSmooth,               !- Roughness
-  0.038037600000000005,  !- Thickness {m}
-  0.0288,  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Extruded polystyrene, smooth skin - aged 180 days)
-  1465;                     !- Specific Heat {J/kg-K}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Extruded polystyrene, smooth skin - aged 180 days)
+  MediumSmooth,            !- Roughness
+  0.038037600000000005,    !- Thickness {m}
+  0.0288,                  !- Conductivity {W/m-K}
+  32,                      !- Density {kg/m3}
+  1465;                    !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
   VeryRough,               !- Roughness
-  0.08889999999999999,  !- Thickness {m}
-  0.08389829384297165,  !- Conductivity {W/m-K}
-  8.17,                      !- Density {kg/m3}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Glass-fiber batts)
-  837;                     !- Specific Heat {J/kg-K}(2013 ASHRAE Handbook - Fundamentals Section 26 Table 1 - Glass-fiber batts)
+  0.08889999999999999,     !- Thickness {m}
+  0.08389829384297165,     !- Conductivity {W/m-K}
+  8.17,                    !- Density {kg/m3}
+  837;                     !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
-  Stucco,  !- Layer
-  Wall Continuous Insulation,  !- Layer
-  Wall Cavity Effective Insulation,  !- Layer
-  Gypsum 5/8in;  !- Layer
+  Stucco,                  !- Outside Layer
+  Wall Continuous Insulation,  !- Layer 2
+  Wall Cavity Effective Insulation,  !- Layer 3
+  Gypsum 5/8in;            !- Layer 4
 
 Construction,
   Exterior Window,         !- Name
   Theoretical Glazing;     !- Outside Layer
 
 Material,
-  Gypsum 5/8in,           !- Name
+  Gypsum 5/8in,            !- Name
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
@@ -3052,7 +3740,7 @@ Material,
   0.7;                     !- Visible Absorptance
 
 Material,
-  Stucco,           !- Name
+  Stucco,                  !- Name
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
@@ -3064,9 +3752,10 @@ Material,
 
 WindowMaterial:SimpleGlazingSystem,
   Theoretical Glazing,     !- Name
-  3.1232254400908577,  !- U-Factor {W/m2-K}
-  0.4,  !- Solar Heat Gain Coefficient
-  0.4;  !- Visible Transmittance
+  3.1232254400908577,      !- U-Factor {W/m2-K}
+  0.4,                     !- Solar Heat Gain Coefficient
+  0.4;                     !- Visible Transmittance
+
 )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3286,342 +3975,417 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ShadingFlagTest)
 TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
 {
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior,            !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
 
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;!- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
 
-        "  SurfaceConvectionAlgorithm:Inside,TARP;",
-        "  SurfaceConvectionAlgorithm:Outside,TARP;",
-        "  HeatBalanceAlgorithm,ConductionTransferFunction;",
+        "SurfaceConvectionAlgorithm:Inside,TARP;",
 
-        "  Timestep,6;",
+        "SurfaceConvectionAlgorithm:Outside,TARP;",
 
-        "  RunPeriod,",
-        "    RP1,                     !- Name",
-        "    1,                       !- Begin Month",
-        "    1,                       !- Begin Day of Month",
-        "    ,                        !- Begin Year",
-        "    12,                      !- End Month",
-        "    31,                      !- End Day of Month",
-        "    ,                        !- End Year",
-        "    ,                        !- Day of Week for Start Day",
-        "    ,                        !- Use Weather File Holidays and Special Days",
-        "    ,                        !- Use Weather File Daylight Saving Period",
-        "    ,                        !- Apply Weekend Holiday Rule",
-        "    ,                        !- Use Weather File Rain Indicators",
-        "    ;                        !- Use Weather File Snow Indicators",
+        "HeatBalanceAlgorithm,ConductionTransferFunction;",
 
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
+        "Timestep,6;",
 
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
+        "RunPeriod,",
+        "  RP1,                     !- Name",
+        "  1,                       !- Begin Month",
+        "  1,                       !- Begin Day of Month",
+        "  ,                        !- Begin Year",
+        "  12,                      !- End Month",
+        "  31,                      !- End Day of Month",
+        "  ,                        !- End Year",
+        "  ,                        !- Day of Week for Start Day",
+        "  ,                        !- Use Weather File Holidays and Special Days",
+        "  ,                        !- Use Weather File Daylight Saving Period",
+        "  ,                        !- Apply Weekend Holiday Rule",
+        "  ,                        !- Use Weather File Rain Indicators",
+        "  ;                        !- Use Weather File Snow Indicators",
 
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
 
-        "  Material,",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    0.1014984,               !- Thickness {m}",
-        "    1.245296,                !- Conductivity {W/m-K}",
-        "    2082.400,                !- Density {kg/m3}",
-        "    920.4800,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9300000,               !- Solar Absorptance",
-        "    0.9300000;               !- Visible Absorptance",
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
 
-        "  Material,",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
-        "    Smooth,                  !- Roughness",
-        "    1.9050000E-02,           !- Thickness {m}",
-        "    0.7264224,               !- Conductivity {W/m-K}",
-        "    1601.846,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9200000,               !- Solar Absorptance",
-        "    0.9200000;               !- Visible Absorptance",
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
 
-        "  Material,",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    1.2710161E-02,           !- Thickness {m}",
-        "    1.435549,                !- Conductivity {W/m-K}",
-        "    881.0155,                !- Density {kg/m3}",
-        "    1673.600,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.5500000,               !- Solar Absorptance",
-        "    0.5500000;               !- Visible Absorptance",
+        "Material,",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.1014984,               !- Thickness {m}",
+        "  1.245296,                !- Conductivity {W/m-K}",
+        "  2082.4,                  !- Density {kg/m3}",
+        "  920.48,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.93,                    !- Solar Absorptance",
+        "  0.93;                    !- Visible Absorptance",
 
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
+        "Material,",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.01905,                 !- Thickness {m}",
+        "  0.7264224,               !- Conductivity {W/m-K}",
+        "  1601.846,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
 
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
+        "Material,",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.012710161,             !- Thickness {m}",
+        "  1.435549,                !- Conductivity {W/m-K}",
+        "  881.0155,                !- Density {kg/m3}",
+        "  1673.6,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.55,                    !- Solar Absorptance",
+        "  0.55;                    !- Visible Absorptance",
 
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
 
-        "  WindowMaterial:Gas,",
-        "    AIRGAP,                  !- Name",
-        "    AIR,                     !- Gas Type",
-        "    0.0125;                  !- Thickness {m}",
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
 
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
 
-        "  Construction,",
-        "    EXTWALL09,               !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
+        "WindowMaterial:Gas,",
+        "  AIRGAP,                  !- Name",
+        "  Air,                     !- Gas Type",
+        "  0.0125;                  !- Thickness {m}",
 
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
 
-        "  Construction,",
-        "    ROOF31,                  !- Name",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
+        "Construction,",
+        "  EXTWALL09,               !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
 
-        "  Construction,",
-        "    DOUBLE PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
-        "    AIRGAP,                  !- Layer 2",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
 
-        "  Construction,",
-        "    EXTWALLdemo,             !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
+        "Construction,",
+        "  ROOF31,                  !- Name",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE;  !- Layer 2",
 
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
+        "Construction,",
+        "  DOUBLE PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
+        "  AIRGAP,                  !- Layer 2",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
 
-        "  Zone,",
-        "    ZONE ONE,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    0,                       !- Ceiling Height {m}",
-        "    0;                       !- Volume {m3}",
+        "Construction,",
+        "  EXTWALLdemo,             !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALLdemo,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,                   !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,                   !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,                  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;                  !- X,Y,Z ==> Vertex 4 {m}",
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,                  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,                  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,                   !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;                   !- X,Y,Z ==> Vertex 4 {m}",
+        "Zone,",
+        "  ZONE ONE,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  0,                       !- Ceiling Height {m}",
+        "  0;                       !- Volume {m3}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,                 !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,                 !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,                  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;                  !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALLdemo,             !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,                  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,                  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,                 !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;                 !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    ROOF31,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,                 !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,                  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,                   !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;                  !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,                  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,                   !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,                  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;                 !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,               !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,               !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,                !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;                !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  ROOF31,                  !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
 
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,               !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,               !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,                !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;                !- X,Y,Z ==> Vertex 4 {m}",
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
 
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3764,152 +4528,199 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
     //      -10│
 
     std::string const idf_objects = delimited_string({
-
         "GlobalGeometryRules,",
-        "  UpperLeftCorner,                        !- Starting Vertex Position",
-        "  Counterclockwise,                       !- Vertex Entry Direction",
-        "  Relative,                               !- Coordinate System",
-        "  Relative,                               !- Daylighting Reference Point Coordinate System",
-        "  Relative;                               !- Rectangular Surface Coordinate System",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative,                !- Coordinate System",
+        "  Relative,                !- Daylighting Reference Point Coordinate System",
+        "  Relative;                !- Rectangular Surface Coordinate System",
 
         "Building,",
-        "  Building 1,                             !- Name",
-        "  20,                                     !- North Axis {deg}",
-        "  ,                                       !- Terrain",
-        "  ,                                       !- Loads Convergence Tolerance Value {W}",
-        "  ,                                       !- Temperature Convergence Tolerance Value {deltaC}",
-        "  ,                                       !- Solar Distribution",
-        "  ,                                       !- Maximum Number of Warmup Days",
-        "  ;                                       !- Minimum Number of Warmup Days",
+        "  Building 1,              !- Name",
+        "  20,                      !- North Axis {deg}",
+        "  ,                        !- Terrain",
+        "  ,                        !- Loads Convergence Tolerance Value {W}",
+        "  ,                        !- Temperature Convergence Tolerance Value {deltaC}",
+        "  ,                        !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  ;                        !- Minimum Number of Warmup Days",
 
         "Zone,",
-        "  Zone1,                                  !- Name",
-        "  0,                                      !- Direction of Relative North {deg}",
-        "  0,                                      !- X Origin {m}",
-        "  0,                                      !- Y Origin {m}",
-        "  0,                                      !- Z Origin {m}",
-        "  ,                                       !- Type",
-        "  1,                                      !- Multiplier",
-        "  ,                                       !- Ceiling Height {m}",
-        "  ,                                       !- Volume {m3}",
-        "  ,                                       !- Floor Area {m2}",
-        "  ,                                       !- Zone Inside Convection Algorithm",
-        "  ,                                       !- Zone Outside Convection Algorithm",
-        "  Yes;                                    !- Part of Total Floor Area",
+        "  Zone1,                   !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  ,                        !- Type",
+        "  1,                       !- Multiplier",
+        "  ,                        !- Ceiling Height {m}",
+        "  ,                        !- Volume {m3}",
+        "  ,                        !- Floor Area {m2}",
+        "  ,                        !- Zone Inside Convection Algorithm",
+        "  ,                        !- Zone Outside Convection Algorithm",
+        "  Yes;                     !- Part of Total Floor Area",
 
         "Material:NoMass,",
-        "  R13-IP,                                 !- Name",
-        "  Smooth,                                 !- Roughness",
-        "  2.28943238786998,                       !- Thermal Resistance {m2-K/W}",
-        "  0.9,                                    !- Thermal Absorptance",
-        "  0.7,                                    !- Solar Absorptance",
-        "  0.7;                                    !- Visible Absorptance",
+        "  R13-IP,                  !- Name",
+        "  Smooth,                  !- Roughness",
+        "  2.28943238786998,        !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.7,                     !- Solar Absorptance",
+        "  0.7;                     !- Visible Absorptance",
 
         "Construction,",
-        "  R13 Construction,                       !- Name",
-        "  R13-IP;                                 !- Layer 1",
+        "  R13 Construction,        !- Name",
+        "  R13-IP;                  !- Outside Layer",
 
         "BuildingSurface:Detailed,",
-        "  1-SOUTH - ABS AZIMUTH 165.00,           !- Name",
-        "  Wall,                                   !- Surface Type",
-        "  R13 Construction,                       !- Construction Name",
-        "  Zone1,                                  !- Zone Name",
-        "  ,                                       !- Space Name",
-        "  Outdoors,                               !- Outside Boundary Condition",
-        "  ,                                       !- Outside Boundary Condition Object",
-        "  SunExposed,                             !- Sun Exposure",
-        "  WindExposed,                            !- Wind Exposure",
-        "  ,                                       !- View Factor to Ground",
-        "  ,                                       !- Number of Vertices",
-        "  -7.07106781186548, -12.2474487139159, 3, !- X,Y,Z Vertex 1 {m}",
-        "  -7.07106781186548, -12.2474487139159, 0, !- X,Y,Z Vertex 2 {m}",
-        "  12.2474487139159, -7.07106781186548, 0, !- X,Y,Z Vertex 3 {m}",
-        "  12.2474487139159, -7.07106781186548, 3; !- X,Y,Z Vertex 4 {m}",
+        "  1-SOUTH - ABS AZIMUTH 165.00,  !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13 Construction,        !- Construction Name",
+        "  Zone1,                   !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  ,                        !- View Factor to Ground",
+        "  ,                        !- Number of Vertices",
+        "  -7.07106781186548,       !- Vertex X-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex X-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  12.2474487139159,        !- Vertex X-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  12.2474487139159,        !- Vertex X-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
         "BuildingSurface:Detailed,",
-        "  2-WEST - ABS AZIMUTH 255.00,            !- Name",
-        "  Wall,                                   !- Surface Type",
-        "  R13 Construction,                       !- Construction Name",
-        "  Zone1,                                  !- Zone Name",
-        "  ,                                       !- Space Name",
-        "  Outdoors,                               !- Outside Boundary Condition",
-        "  ,                                       !- Outside Boundary Condition Object",
-        "  SunExposed,                             !- Sun Exposure",
-        "  WindExposed,                            !- Wind Exposure",
-        "  ,                                       !- View Factor to Ground",
-        "  ,                                       !- Number of Vertices",
-        "  -12.2474487139159, 7.07106781186548, 3, !- X,Y,Z Vertex 1 {m}",
-        "  -12.2474487139159, 7.07106781186548, 0, !- X,Y,Z Vertex 2 {m}",
-        "  -7.07106781186548, -12.2474487139159, 0, !- X,Y,Z Vertex 3 {m}",
-        "  -7.07106781186548, -12.2474487139159, 3; !- X,Y,Z Vertex 4 {m}",
+        "  2-WEST - ABS AZIMUTH 255.00,  !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13 Construction,        !- Construction Name",
+        "  Zone1,                   !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  ,                        !- View Factor to Ground",
+        "  ,                        !- Number of Vertices",
+        "  -12.2474487139159,       !- Vertex X-coordinate {m}",
+        "  7.07106781186548,        !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex X-coordinate {m}",
+        "  7.07106781186548,        !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex X-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex X-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
         "BuildingSurface:Detailed,",
-        "  3-EAST - ABS AZIMUTH 75.00,             !- Name",
-        "  Wall,                                   !- Surface Type",
-        "  R13 Construction,                       !- Construction Name",
-        "  Zone1,                                  !- Zone Name",
-        "  ,                                       !- Space Name",
-        "  Outdoors,                               !- Outside Boundary Condition",
-        "  ,                                       !- Outside Boundary Condition Object",
-        "  SunExposed,                             !- Sun Exposure",
-        "  WindExposed,                            !- Wind Exposure",
-        "  ,                                       !- View Factor to Ground",
-        "  ,                                       !- Number of Vertices",
-        "  12.2474487139159, -7.07106781186548, 3, !- X,Y,Z Vertex 1 {m}",
-        "  12.2474487139159, -7.07106781186548, 0, !- X,Y,Z Vertex 2 {m}",
-        "  7.07106781186548, 12.2474487139159, 0,  !- X,Y,Z Vertex 3 {m}",
-        "  7.07106781186548, 12.2474487139159, 3;  !- X,Y,Z Vertex 4 {m}",
+        "  3-EAST - ABS AZIMUTH 75.00,  !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13 Construction,        !- Construction Name",
+        "  Zone1,                   !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  ,                        !- View Factor to Ground",
+        "  ,                        !- Number of Vertices",
+        "  12.2474487139159,        !- Vertex X-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  12.2474487139159,        !- Vertex X-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  7.07106781186548,        !- Vertex X-coordinate {m}",
+        "  12.2474487139159,        !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  7.07106781186548,        !- Vertex X-coordinate {m}",
+        "  12.2474487139159,        !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
         "BuildingSurface:Detailed,",
-        "  4-NORTH - ABS AZIMUTH 345.00,           !- Name",
-        "  Wall,                                   !- Surface Type",
-        "  R13 Construction,                       !- Construction Name",
-        "  Zone1,                                  !- Zone Name",
-        "  ,                                       !- Space Name",
-        "  Outdoors,                               !- Outside Boundary Condition",
-        "  ,                                       !- Outside Boundary Condition Object",
-        "  SunExposed,                             !- Sun Exposure",
-        "  WindExposed,                            !- Wind Exposure",
-        "  ,                                       !- View Factor to Ground",
-        "  ,                                       !- Number of Vertices",
-        "  7.07106781186548, 12.2474487139159, 3,  !- X,Y,Z Vertex 1 {m}",
-        "  7.07106781186548, 12.2474487139159, 0,  !- X,Y,Z Vertex 2 {m}",
-        "  -12.2474487139159, 7.07106781186548, 0, !- X,Y,Z Vertex 3 {m}",
-        "  -12.2474487139159, 7.07106781186548, 3; !- X,Y,Z Vertex 4 {m}",
+        "  4-NORTH - ABS AZIMUTH 345.00,  !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13 Construction,        !- Construction Name",
+        "  Zone1,                   !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  ,                        !- View Factor to Ground",
+        "  ,                        !- Number of Vertices",
+        "  7.07106781186548,        !- Vertex X-coordinate {m}",
+        "  12.2474487139159,        !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  7.07106781186548,        !- Vertex X-coordinate {m}",
+        "  12.2474487139159,        !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex X-coordinate {m}",
+        "  7.07106781186548,        !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex X-coordinate {m}",
+        "  7.07106781186548,        !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
         "BuildingSurface:Detailed,",
-        "  FLOOR,                                  !- Name",
-        "  Floor,                                  !- Surface Type",
-        "  R13 Construction,                       !- Construction Name",
-        "  Zone1,                                  !- Zone Name",
-        "  ,                                       !- Space Name",
-        "  Ground,                                 !- Outside Boundary Condition",
-        "  ,                                       !- Outside Boundary Condition Object",
-        "  NoSun,                                  !- Sun Exposure",
-        "  NoWind,                                 !- Wind Exposure",
-        "  ,                                       !- View Factor to Ground",
-        "  ,                                       !- Number of Vertices",
-        "  12.2474487139159, -7.07106781186548, 0, !- X,Y,Z Vertex 1 {m}",
-        "  -7.07106781186548, -12.2474487139159, 0, !- X,Y,Z Vertex 2 {m}",
-        "  -12.2474487139159, 7.07106781186548, 0, !- X,Y,Z Vertex 3 {m}",
-        "  7.07106781186548, 12.2474487139159, 0;  !- X,Y,Z Vertex 4 {m}",
+        "  FLOOR,                   !- Name",
+        "  Floor,                   !- Surface Type",
+        "  R13 Construction,        !- Construction Name",
+        "  Zone1,                   !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Ground,                  !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  NoSun,                   !- Sun Exposure",
+        "  NoWind,                  !- Wind Exposure",
+        "  ,                        !- View Factor to Ground",
+        "  ,                        !- Number of Vertices",
+        "  12.2474487139159,        !- Vertex X-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex X-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex X-coordinate {m}",
+        "  7.07106781186548,        !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  7.07106781186548,        !- Vertex X-coordinate {m}",
+        "  12.2474487139159,        !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
 
         "BuildingSurface:Detailed,",
-        "  ROOF,                                   !- Name",
-        "  Roof,                                   !- Surface Type",
-        "  R13 Construction,                       !- Construction Name",
-        "  Zone1,                                  !- Zone Name",
-        "  ,                                       !- Space Name",
-        "  Outdoors,                               !- Outside Boundary Condition",
-        "  ,                                       !- Outside Boundary Condition Object",
-        "  SunExposed,                             !- Sun Exposure",
-        "  WindExposed,                            !- Wind Exposure",
-        "  ,                                       !- View Factor to Ground",
-        "  ,                                       !- Number of Vertices",
-        "  7.07106781186548, 12.2474487139159, 3,  !- X,Y,Z Vertex 1 {m}",
-        "  -12.2474487139159, 7.07106781186548, 3, !- X,Y,Z Vertex 2 {m}",
-        "  -7.07106781186548, -12.2474487139159, 3, !- X,Y,Z Vertex 3 {m}",
-        "  12.2474487139159, -7.07106781186548, 3; !- X,Y,Z Vertex 4 {m}",
+        "  ROOF,                    !- Name",
+        "  Roof,                    !- Surface Type",
+        "  R13 Construction,        !- Construction Name",
+        "  Zone1,                   !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  ,                        !- View Factor to Ground",
+        "  ,                        !- Number of Vertices",
+        "  7.07106781186548,        !- Vertex X-coordinate {m}",
+        "  12.2474487139159,        !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex X-coordinate {m}",
+        "  7.07106781186548,        !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex X-coordinate {m}",
+        "  -12.2474487139159,       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  12.2474487139159,        !- Vertex X-coordinate {m}",
+        "  -7.07106781186548,       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4017,351 +4828,434 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
     // and schedule shading surface transmittance values
     // Test the addressed Issue 9059 via PR 9653
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior,            !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
 
-        "  ShadowCalculation,",
-        "    PixelCounting, !-Shading Calculation Method",
-        "    Timestep, !-Shading Calculation Update Frequency Method",
-        "    , !-Shading Calculation Update Frequency",
-        "    , !-Maximum Figures in Shadow Overlap Calculations",
-        "    , !-Polygon Clipping Algorithm",
-        "    2048, !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;!- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PixelCounting,           !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  2048,                    !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
 
-        "  SurfaceConvectionAlgorithm:Inside,TARP;",
-        "  SurfaceConvectionAlgorithm:Outside,TARP;",
-        "  HeatBalanceAlgorithm,ConductionTransferFunction;",
+        "SurfaceConvectionAlgorithm:Inside,TARP;",
 
-        "  Timestep,6;",
+        "SurfaceConvectionAlgorithm:Outside,TARP;",
 
-        "  RunPeriod,",
-        "    RP1,                     !- Name",
-        "    1,                       !- Begin Month",
-        "    1,                       !- Begin Day of Month",
-        "    ,                        !- Begin Year",
-        "    12,                      !- End Month",
-        "    31,                      !- End Day of Month",
-        "    ,                        !- End Year",
-        "    ,                        !- Day of Week for Start Day",
-        "    ,                        !- Use Weather File Holidays and Special Days",
-        "    ,                        !- Use Weather File Daylight Saving Period",
-        "    ,                        !- Apply Weekend Holiday Rule",
-        "    ,                        !- Use Weather File Rain Indicators",
-        "    ;                        !- Use Weather File Snow Indicators",
+        "HeatBalanceAlgorithm,ConductionTransferFunction;",
 
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
+        "Timestep,6;",
 
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
+        "RunPeriod,",
+        "  RP1,                     !- Name",
+        "  1,                       !- Begin Month",
+        "  1,                       !- Begin Day of Month",
+        "  ,                        !- Begin Year",
+        "  12,                      !- End Month",
+        "  31,                      !- End Day of Month",
+        "  ,                        !- End Year",
+        "  ,                        !- Day of Week for Start Day",
+        "  ,                        !- Use Weather File Holidays and Special Days",
+        "  ,                        !- Use Weather File Daylight Saving Period",
+        "  ,                        !- Apply Weekend Holiday Rule",
+        "  ,                        !- Use Weather File Rain Indicators",
+        "  ;                        !- Use Weather File Snow Indicators",
 
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
 
-        "  Material,",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    0.1014984,               !- Thickness {m}",
-        "    1.245296,                !- Conductivity {W/m-K}",
-        "    2082.400,                !- Density {kg/m3}",
-        "    920.4800,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9300000,               !- Solar Absorptance",
-        "    0.9300000;               !- Visible Absorptance",
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
 
-        "  Material,",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
-        "    Smooth,                  !- Roughness",
-        "    1.9050000E-02,           !- Thickness {m}",
-        "    0.7264224,               !- Conductivity {W/m-K}",
-        "    1601.846,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.9200000,               !- Solar Absorptance",
-        "    0.9200000;               !- Visible Absorptance",
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
 
-        "  Material,",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
-        "    Rough,                   !- Roughness",
-        "    1.2710161E-02,           !- Thickness {m}",
-        "    1.435549,                !- Conductivity {W/m-K}",
-        "    881.0155,                !- Density {kg/m3}",
-        "    1673.600,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.5500000,               !- Solar Absorptance",
-        "    0.5500000;               !- Visible Absorptance",
+        "Material,",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.1014984,               !- Thickness {m}",
+        "  1.245296,                !- Conductivity {W/m-K}",
+        "  2082.4,                  !- Density {kg/m3}",
+        "  920.48,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.93,                    !- Solar Absorptance",
+        "  0.93;                    !- Visible Absorptance",
 
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
+        "Material,",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.01905,                 !- Thickness {m}",
+        "  0.7264224,               !- Conductivity {W/m-K}",
+        "  1601.846,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
 
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
+        "Material,",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.012710161,             !- Thickness {m}",
+        "  1.435549,                !- Conductivity {W/m-K}",
+        "  881.0155,                !- Density {kg/m3}",
+        "  1673.6,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.55,                    !- Solar Absorptance",
+        "  0.55;                    !- Visible Absorptance",
 
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
 
-        "  WindowMaterial:Gas,",
-        "    AIRGAP,                  !- Name",
-        "    AIR,                     !- Gas Type",
-        "    0.0125;                  !- Thickness {m}",
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
 
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
 
-        "  Construction,",
-        "    EXTWALL09,               !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
+        "WindowMaterial:Gas,",
+        "  AIRGAP,                  !- Name",
+        "  Air,                     !- Gas Type",
+        "  0.0125;                  !- Thickness {m}",
 
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
 
-        "  Construction,",
-        "    ROOF31,                  !- Name",
-        "    E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
+        "Construction,",
+        "  EXTWALL09,               !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
 
-        "  Construction,",
-        "    DOUBLE PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
-        "    AIRGAP,                  !- Layer 2",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
 
-        "  Construction,",
-        "    EXTWALLdemo,             !- Name",
-        "    A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
-        "    E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 4",
+        "Construction,",
+        "  ROOF31,                  !- Name",
+        "  E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer",
+        "  C12 - 2 IN HW CONCRETE;  !- Layer 2",
 
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
+        "Construction,",
+        "  DOUBLE PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
+        "  AIRGAP,                  !- Layer 2",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
 
-        "  Zone,",
-        "    ZONE ONE,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    0,                       !- Ceiling Height {m}",
-        "    0;                       !- Volume {m3}",
+        "Construction,",
+        "  EXTWALLdemo,             !- Name",
+        "  A2 - 4 IN DENSE FACE BRICK,  !- Outside Layer",
+        "  E1 - 3 / 4 IN PLASTER OR GYP BOARD;  !- Layer 2",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALLdemo,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,                   !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,                   !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,                  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;                  !- X,Y,Z ==> Vertex 4 {m}",
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,                  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,                  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,                   !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;                   !- X,Y,Z ==> Vertex 4 {m}",
+        "Zone,",
+        "  ZONE ONE,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  0,                       !- Ceiling Height {m}",
+        "  0;                       !- Volume {m3}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,                 !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,                 !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,                  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;                  !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALLdemo,             !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    EXTWALL09,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,                  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,                  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,                 !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;                 !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    ROOF31,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,                 !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,                  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,                   !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;                  !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,                  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,                   !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,                  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;                 !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  EXTWALL09,               !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,               !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,               !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,                !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;                !- X,Y,Z ==> Vertex 4 {m}",
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  ROOF31,                  !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
 
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
 
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,               !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,               !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,                !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;                !- X,Y,Z ==> Vertex 4 {m}",
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
 
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
 
-        "  Shading:Site:Detailed,",
-        "    Zn001:Wall-South:Shade002,  !- Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,5,               !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,5,               !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,5,                !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,5;                !- X,Y,Z ==> Vertex 4 {m}",
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
+
+        "Shading:Site:Detailed,",
+        "  Zn001:Wall-South:Shade002,  !- Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  5,                       !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  5,                       !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  5,                       !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  5;                       !- Vertex Z-coordinate {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4519,172 +5413,242 @@ TEST_F(EnergyPlusFixture, ShadowCalculation_CSV)
 TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap)
 {
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior;            !- Solar Distribution",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
-        "  Timestep,6;",
-        "  Site:Location,",
-        "    CHICAGO_IL_USA TMY2-94846,  !- Name",
-        "    42.00,                   !- Latitude {deg}",
-        "    -87.88,                  !- Longitude {deg}",
-        "    -6.00,                   !- Time Zone {hr}",
-        "    190.00;                  !- Elevation {m}",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  Construction,",
-        "    Surfaces,                !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    Single PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE;                !- Name",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    Single PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    Surfaces,                !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    Surfaces,                !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    OverhangTransmittance,   !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    OverhangTransmittance,   !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0.5,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,0;          !- Field 11",
-        "  Shading:Building:Detailed,",
-        "    Zn001:Wall-South:Tree,   !- Name",
-        "    TreeTransmittance,       !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-8,10,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-8,2,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-8,2,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-8,10;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    TreeTransmittance,   !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0.8,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,0;          !- Field 11",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  ;                        !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+
+        "Timestep,6;",
+
+        "Site:Location,",
+        "  CHICAGO_IL_USA TMY2-94846,  !- Name",
+        "  42.0,                    !- Latitude {deg}",
+        "  -87.88,                  !- Longitude {deg}",
+        "  -6.0,                    !- Time Zone {hr}",
+        "  190.0;                   !- Elevation {m}",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "Construction,",
+        "  Surfaces,                !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  Single PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE;                !- Name",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  Single PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  Surfaces,                !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  Surfaces,                !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  OverhangTransmittance,   !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  OverhangTransmittance,   !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0.5,                     !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0;                       !- Field",
+
+        "Shading:Building:Detailed,",
+        "  Zn001:Wall-South:Tree,   !- Name",
+        "  TreeTransmittance,       !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  10,                      !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  2,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  2,                       !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  10;                      !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  TreeTransmittance,       !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0.8,                     !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0;                       !- Field",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4946,171 +5910,241 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap2)
 // Tests complete overlap of shadows which completely shade the test surfaces
 {
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior;            !- Solar Distribution",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
-        "  Timestep,6;",
-        "  Site:Location,",
-        "    CHICAGO_IL_USA TMY2-94846,  !- Name",
-        "    42.00,                   !- Latitude {deg}",
-        "    -87.88,                  !- Longitude {deg}",
-        "    -6.00,                   !- Time Zone {hr}",
-        "    190.00;                  !- Elevation {m}",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  Construction,",
-        "    Surfaces,                !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    Single PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE;                !- Name",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    Single PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    Surfaces,                !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    Surfaces,                !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Shading:Building:Detailed,",
-        "    Zn001:Wall-South:Shade1,   !- Name",
-        "    Shade1Transmittance,       !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -10,-8,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -10,-8,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    10,-8,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    10,-8,20;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    Shade1Transmittance,   !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0.5,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,0;          !- Field 11",
-        "  Shading:Building:Detailed,",
-        "    Zn001:Wall-South:Shade2,   !- Name",
-        "    Shade2Transmittance,       !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -10,-9,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -10,-9,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    10,-9,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    10,-9,20;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    Shade2Transmittance,   !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0.8,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,0;          !- Field 11",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  ;                        !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+
+        "Timestep,6;",
+
+        "Site:Location,",
+        "  CHICAGO_IL_USA TMY2-94846,  !- Name",
+        "  42.0,                    !- Latitude {deg}",
+        "  -87.88,                  !- Longitude {deg}",
+        "  -6.0,                    !- Time Zone {hr}",
+        "  190.0;                   !- Elevation {m}",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "Construction,",
+        "  Surfaces,                !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  Single PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE;                !- Name",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  Single PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  Surfaces,                !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  Surfaces,                !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "Shading:Building:Detailed,",
+        "  Zn001:Wall-South:Shade1,  !- Name",
+        "  Shade1Transmittance,     !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  20,                      !- Vertex Z-coordinate {m}",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  20;                      !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  Shade1Transmittance,     !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0.5,                     !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0;                       !- Field",
+
+        "Shading:Building:Detailed,",
+        "  Zn001:Wall-South:Shade2,  !- Name",
+        "  Shade2Transmittance,     !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  20,                      !- Vertex Z-coordinate {m}",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  20;                      !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  Shade2Transmittance,     !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0.8,                     !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0;                       !- Field",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -5289,188 +6323,270 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
 // Tests complete overlap of 3 shadows which completely shade the test surfaces
 {
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullExterior;            !- Solar Distribution",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
-        "  Timestep,6;",
-        "  Site:Location,",
-        "    CHICAGO_IL_USA TMY2-94846,  !- Name",
-        "    42.00,                   !- Latitude {deg}",
-        "    -87.88,                  !- Longitude {deg}",
-        "    -6.00,                   !- Time Zone {hr}",
-        "    190.00;                  !- Elevation {m}",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  Construction,",
-        "    Surfaces,                !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    Single PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE;                !- Name",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    Single PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    Surfaces,                !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    Surfaces,                !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Shading:Building:Detailed,",
-        "    Zn001:Wall-South:Shade1,   !- Name",
-        "    Shade1Transmittance,       !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -10,-8,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -10,-8,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    10,-8,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    10,-8,20;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    Shade1Transmittance,   !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0.5,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,0;          !- Field 11",
-        "  Shading:Building:Detailed,",
-        "    Zn001:Wall-South:Shade2,   !- Name",
-        "    Shade2Transmittance,       !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -10,-9,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -10,-9,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    10,-9,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    10,-9,20;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    Shade2Transmittance,   !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0.8,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,0;          !- Field 11",
-        "  Shading:Building:Detailed,",
-        "    Zn001:Wall-South:Shade3,   !- Name",
-        "    Shade3Transmittance,       !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -10,-9,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -10,-9,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    10,-9,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    10,-9,20;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  Schedule:Compact,",
-        "    Shade3Transmittance,   !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0.2,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,0;          !- Field 11",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullExterior,            !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  ;                        !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+
+        "Timestep,6;",
+
+        "Site:Location,",
+        "  CHICAGO_IL_USA TMY2-94846,  !- Name",
+        "  42.0,                    !- Latitude {deg}",
+        "  -87.88,                  !- Longitude {deg}",
+        "  -6.0,                    !- Time Zone {hr}",
+        "  190.0;                   !- Elevation {m}",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "Construction,",
+        "  Surfaces,                !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  Single PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE;                !- Name",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  Single PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  Surfaces,                !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  Surfaces,                !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "Shading:Building:Detailed,",
+        "  Zn001:Wall-South:Shade1,  !- Name",
+        "  Shade1Transmittance,     !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  20,                      !- Vertex Z-coordinate {m}",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -8,                      !- Vertex Y-coordinate {m}",
+        "  20;                      !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  Shade1Transmittance,     !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0.5,                     !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0;                       !- Field",
+
+        "Shading:Building:Detailed,",
+        "  Zn001:Wall-South:Shade2,  !- Name",
+        "  Shade2Transmittance,     !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  20,                      !- Vertex Z-coordinate {m}",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  20;                      !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  Shade2Transmittance,     !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0.8,                     !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0;                       !- Field",
+
+        "Shading:Building:Detailed,",
+        "  Zn001:Wall-South:Shade3,  !- Name",
+        "  Shade3Transmittance,     !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  20,                      !- Vertex Z-coordinate {m}",
+        "  -10,                     !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  10,                      !- Vertex X-coordinate {m}",
+        "  -9,                      !- Vertex Y-coordinate {m}",
+        "  20;                      !- Vertex Z-coordinate {m}",
+
+        "Schedule:Compact,",
+        "  Shade3Transmittance,     !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0.2,                     !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0;                       !- Field",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -5573,6 +6689,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_checkSurfaceExternalShadingSchedules_
     // Set up data for test. Shading surfaces are skipped so they should not report any errors.
     // Some surfaces will be correctly defined while two other surfaces will not be correctly defined and will generate errors.
     std::string const idf_objects = R"IDF(
+
 RunPeriod,
   Annual,                  !- Name
   1,                       !- Begin Month
@@ -5601,272 +6718,358 @@ ShadowCalculation,
 Timestep,4;
 
 Building,
-  Non-convex,    !- Name
-  0,      !- North Axis {deg}
-  City,          !- Terrain
-  0.5,  !- Loads Convergence Tolerance Value
-  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
-  FullInteriorAndExterior, !- Solar Distribution
-  25,  !- Maximum Number of Warmup Days
-  2;  !- Minimum Number of Warmup Days
+  Non-convex,              !- Name
+  0,                       !- North Axis {deg}
+  City,                    !- Terrain
+  0.5,                     !- Loads Convergence Tolerance Value {W}
+  0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior,  !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  2;                       !- Minimum Number of Warmup Days
 
 GlobalGeometryRules,
-    UpperLeftCorner,          !- Starting Vertex Position
-    Counterclockwise,         !- Vertex Entry Direction
-    Relative;                 !- Coordinate System
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  Relative;                !- Coordinate System
 
 Zone,
-    Zone A,                   !- Name
-    0,                        !- Direction of Relative North
-    0,                        !- X Origin
-    0,                        !- Y Origin
-    0,                        !- Z Origin
-    ,                         !- Type
-    1;                        !- Multiplier
+  Zone A,                  !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  ,                        !- Type
+  1;                       !- Multiplier
 
 Schedule:Constant,OnSch,,1.0;
 
 BuildingSurface:Detailed,
-    A48756,                   !- Name
-    Floor,                    !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    NoSun,                    !- Sun Exposure
-    NoWind,                   !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+  A48756,                  !- Name
+  Floor,                   !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:A48756,    !- Name
-  A48756,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:A48756,           !- Name
+  A48756,                  !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 BuildingSurface:Detailed,
-    WALL1NOTOK,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
-    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+  WALL1NOTOK,              !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    5BB552,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+  5BB552,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:5BB552,    !- Name
-  5BB552,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:5BB552,           !- Name
+  5BB552,                  !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 BuildingSurface:Detailed,
-    682F88,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  682F88,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:682F88,    !- Name
-  682F88,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:682F88,           !- Name
+  682F88,                  !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 BuildingSurface:Detailed,
-    C292CF,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 0,                        !- Vertex 2 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
-    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+  C292CF,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:C292CF,    !- Name
-  C292CF,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:C292CF,           !- Name
+  C292CF,                  !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 BuildingSurface:Detailed,
-    319080,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+  319080,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:319080,    !- Name
-  319080,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:319080,           !- Name
+  319080,                  !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 BuildingSurface:Detailed,
-    866E33,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+  866E33,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:866E33,    !- Name
-  866E33,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:866E33,           !- Name
+  866E33,                  !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 BuildingSurface:Detailed,
-    32CB6F,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  32CB6F,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:32CB6F,    !- Name
-  32CB6F,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:32CB6F,           !- Name
+  32CB6F,                  !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 FenestrationSurface:Detailed,
-    WINDOW1NOTOK,                   !- Name
-    Window,                   !- Surface Type
-    Exterior Window,          !- Construction Name
-    319080,                   !- Building Surface Name
-    ,                         !- Outside Boundary Condition Object
-    ,                         !- View Factor to Ground
-    ,                         !- Frame and Divider Name
-    ,                         !- Multiplier
-    4,                        !- Number of Vertices
-    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
-    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
-    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
-    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+  WINDOW1NOTOK,            !- Name
+  Window,                  !- Surface Type
+  Exterior Window,         !- Construction Name
+  319080,                  !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  ,                        !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  ,                        !- Multiplier
+  4,                       !- Number of Vertices
+  0.6096,                  !- Vertex 1 X-coordinate {m}
+  3.048,                   !- Vertex 1 Y-coordinate {m}
+  5.4864,                  !- Vertex 1 Z-coordinate {m}
+  0.6096,                  !- Vertex 2 X-coordinate {m}
+  3.048,                   !- Vertex 2 Y-coordinate {m}
+  3.6576,                  !- Vertex 2 Z-coordinate {m}
+  5.4864,                  !- Vertex 3 X-coordinate {m}
+  3.048,                   !- Vertex 3 Y-coordinate {m}
+  3.6576,                  !- Vertex 3 Z-coordinate {m}
+  5.4864,                  !- Vertex 4 X-coordinate {m}
+  3.048,                   !- Vertex 4 Y-coordinate {m}
+  5.4864;                  !- Vertex 4 Z-coordinate {m}
 
 Shading:Site:Detailed,
   EAST SIDE TREE,          !- Name
-  OnSch,  !- Transmittance Schedule Name
+  OnSch,                   !- Transmittance Schedule Name
   3,                       !- Number of Vertices
-  33.52800,10.66800,10.05800,  !- X,Y,Z ==> Vertex 1 {m}
-  33.52800,13.71600,0.9140000,  !- X,Y,Z ==> Vertex 2 {m}
-  33.52800,4.572000,0.9140000;  !- X,Y,Z ==> Vertex 3 {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  10.668,                  !- Vertex Y-coordinate {m}
+  10.058,                  !- Vertex Z-coordinate {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  13.716,                  !- Vertex Y-coordinate {m}
+  0.914,                   !- Vertex Z-coordinate {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  4.572,                   !- Vertex Y-coordinate {m}
+  0.914;                   !- Vertex Z-coordinate {m}
 
 Material,
   Wall Continuous Insulation,  !- Name
-  MediumSmooth,               !- Roughness
-  0.038037600000000005,  !- Thickness {m}
-  0.0288,  !- Conductivity {W/m-K}
+  MediumSmooth,            !- Roughness
+  0.038037600000000005,    !- Thickness {m}
+  0.0288,                  !- Conductivity {W/m-K}
   32,                      !- Density {kg/m3}
-  1465;                     !- Specific Heat {J/kg-K}
+  1465;                    !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
   VeryRough,               !- Roughness
-  0.08889999999999999,  !- Thickness {m}
-  0.08389829384297165,  !- Conductivity {W/m-K}
-  8.17,                      !- Density {kg/m3}
+  0.08889999999999999,     !- Thickness {m}
+  0.08389829384297165,     !- Conductivity {W/m-K}
+  8.17,                    !- Density {kg/m3}
   837;                     !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
-  Stucco,  !- Layer
-  Wall Continuous Insulation,  !- Layer
-  Wall Cavity Effective Insulation,  !- Layer
-  Gypsum 5/8in;  !- Layer
+  Stucco,                  !- Outside Layer
+  Wall Continuous Insulation,  !- Layer 2
+  Wall Cavity Effective Insulation,  !- Layer 3
+  Gypsum 5/8in;            !- Layer 4
 
 Construction,
   Exterior Window,         !- Name
   Theoretical Glazing;     !- Outside Layer
 
 Material,
-  Gypsum 5/8in,           !- Name
+  Gypsum 5/8in,            !- Name
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
@@ -5877,7 +7080,7 @@ Material,
   0.7;                     !- Visible Absorptance
 
 Material,
-  Stucco,           !- Name
+  Stucco,                  !- Name
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
@@ -5889,9 +7092,10 @@ Material,
 
 WindowMaterial:SimpleGlazingSystem,
   Theoretical Glazing,     !- Name
-  3.1232254400908577,  !- U-Factor {W/m2-K}
-  0.4,  !- Solar Heat Gain Coefficient
-  0.4;  !- Visible Transmittance
+  3.1232254400908577,      !- U-Factor {W/m2-K}
+  0.4,                     !- Solar Heat Gain Coefficient
+  0.4;                     !- Visible Transmittance
+
 )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -5946,6 +7150,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_checkSurfaceExternalShadingSchedules_
     const fs::path scheduleFile = configured_source_directory() / "testfiles/SolarShadingTest_Shading_Data.csv";
 
     std::string const idf_objects1 = R"IDF(
+
 RunPeriod,
   Annual,                  !- Name
   1,                       !- Begin Month
@@ -5962,14 +7167,15 @@ RunPeriod,
   Yes;                     !- Use Weather File Snow Indicators
 
 ShadowCalculation,
-  Imported,               !- Shading Calculation Method
+  Imported,                !- Shading Calculation Method
   Periodic,                !- Shading Calculation Update Frequency Method
   1,                       !- Shading Calculation Update Frequency
   ,                        !- Maximum Figures in Shadow Overlap Calculations
   ,                        !- Polygon Clipping Algorithm
   ,                        !- Pixel Counting Resolution
   ,                        !- Sky Diffuse Modeling Algorithm
-  No;                     !- Output External Shading Calculation Results
+  No;                      !- Output External Shading Calculation Results
+
 )IDF";
 
     std::string const idf_objects2 = delimited_string({
@@ -5978,226 +7184,313 @@ ShadowCalculation,
     });
 
     std::string const idf_objects3 = R"IDF(
+
 Timestep,4;
 
 Building,
-  Non-convex,    !- Name
-  0,      !- North Axis {deg}
-  City,          !- Terrain
-  0.5,  !- Loads Convergence Tolerance Value
-  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
-  FullInteriorAndExterior, !- Solar Distribution
-  25,  !- Maximum Number of Warmup Days
-  2;  !- Minimum Number of Warmup Days
+  Non-convex,              !- Name
+  0,                       !- North Axis {deg}
+  City,                    !- Terrain
+  0.5,                     !- Loads Convergence Tolerance Value {W}
+  0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior,  !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  2;                       !- Minimum Number of Warmup Days
 
 GlobalGeometryRules,
-    UpperLeftCorner,          !- Starting Vertex Position
-    Counterclockwise,         !- Vertex Entry Direction
-    Relative;                 !- Coordinate System
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  Relative;                !- Coordinate System
 
 Zone,
-    Zone A,                   !- Name
-    0,                        !- Direction of Relative North
-    0,                        !- X Origin
-    0,                        !- Y Origin
-    0,                        !- Z Origin
-    ,                         !- Type
-    1;                        !- Multiplier
+  Zone A,                  !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  ,                        !- Type
+  1;                       !- Multiplier
 
 Schedule:Constant,OnSch,,1.0;
 
 BuildingSurface:Detailed,
-    ZN001:FLR001,                   !- Name
-    Floor,                    !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    NoSun,                    !- Sun Exposure
-    NoWind,                   !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+  ZN001:FLR001,            !- Name
+  Floor,                   !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    WALL1NOTOK,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
-    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+  WALL1NOTOK,              !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    Zn001:Wall001,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+  Zn001:Wall001,           !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    ZN001:WALL002,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  ZN001:WALL002,           !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    ZN001:WALL003,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 0,                        !- Vertex 2 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
-    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+  ZN001:WALL003,           !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    ZN001:WALL004,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+  ZN001:WALL004,           !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    ZN001:WALL005,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+  ZN001:WALL005,           !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    ZN001:WALL006,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  ZN001:WALL006,           !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 FenestrationSurface:Detailed,
-    WINDOW1NOTOK,                   !- Name
-    Window,                   !- Surface Type
-    Exterior Window,          !- Construction Name
-    ZN001:WALL004,                   !- Building Surface Name
-    ,                         !- Outside Boundary Condition Object
-    ,                         !- View Factor to Ground
-    ,                         !- Frame and Divider Name
-    ,                         !- Multiplier
-    4,                        !- Number of Vertices
-    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
-    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
-    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
-    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+  WINDOW1NOTOK,            !- Name
+  Window,                  !- Surface Type
+  Exterior Window,         !- Construction Name
+  ZN001:WALL004,           !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  ,                        !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  ,                        !- Multiplier
+  4,                       !- Number of Vertices
+  0.6096,                  !- Vertex 1 X-coordinate {m}
+  3.048,                   !- Vertex 1 Y-coordinate {m}
+  5.4864,                  !- Vertex 1 Z-coordinate {m}
+  0.6096,                  !- Vertex 2 X-coordinate {m}
+  3.048,                   !- Vertex 2 Y-coordinate {m}
+  3.6576,                  !- Vertex 2 Z-coordinate {m}
+  5.4864,                  !- Vertex 3 X-coordinate {m}
+  3.048,                   !- Vertex 3 Y-coordinate {m}
+  3.6576,                  !- Vertex 3 Z-coordinate {m}
+  5.4864,                  !- Vertex 4 X-coordinate {m}
+  3.048,                   !- Vertex 4 Y-coordinate {m}
+  5.4864;                  !- Vertex 4 Z-coordinate {m}
 
 Shading:Site:Detailed,
   EAST SIDE TREE,          !- Name
-  OnSch,  !- Transmittance Schedule Name
+  OnSch,                   !- Transmittance Schedule Name
   3,                       !- Number of Vertices
-  33.52800,10.66800,10.05800,  !- X,Y,Z ==> Vertex 1 {m}
-  33.52800,13.71600,0.9140000,  !- X,Y,Z ==> Vertex 2 {m}
-  33.52800,4.572000,0.9140000;  !- X,Y,Z ==> Vertex 3 {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  10.668,                  !- Vertex Y-coordinate {m}
+  10.058,                  !- Vertex Z-coordinate {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  13.716,                  !- Vertex Y-coordinate {m}
+  0.914,                   !- Vertex Z-coordinate {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  4.572,                   !- Vertex Y-coordinate {m}
+  0.914;                   !- Vertex Z-coordinate {m}
 
 Material,
   Wall Continuous Insulation,  !- Name
-  MediumSmooth,               !- Roughness
-  0.038037600000000005,  !- Thickness {m}
-  0.0288,  !- Conductivity {W/m-K}
+  MediumSmooth,            !- Roughness
+  0.038037600000000005,    !- Thickness {m}
+  0.0288,                  !- Conductivity {W/m-K}
   32,                      !- Density {kg/m3}
-  1465;                     !- Specific Heat {J/kg-K}
+  1465;                    !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
   VeryRough,               !- Roughness
-  0.08889999999999999,  !- Thickness {m}
-  0.08389829384297165,  !- Conductivity {W/m-K}
-  8.17,                      !- Density {kg/m3}
+  0.08889999999999999,     !- Thickness {m}
+  0.08389829384297165,     !- Conductivity {W/m-K}
+  8.17,                    !- Density {kg/m3}
   837;                     !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
-  Stucco,  !- Layer
-  Wall Continuous Insulation,  !- Layer
-  Wall Cavity Effective Insulation,  !- Layer
-  Gypsum 5/8in;  !- Layer
+  Stucco,                  !- Outside Layer
+  Wall Continuous Insulation,  !- Layer 2
+  Wall Cavity Effective Insulation,  !- Layer 3
+  Gypsum 5/8in;            !- Layer 4
 
 Construction,
   Exterior Window,         !- Name
   Theoretical Glazing;     !- Outside Layer
 
 Material,
-  Gypsum 5/8in,           !- Name
+  Gypsum 5/8in,            !- Name
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
@@ -6208,7 +7501,7 @@ Material,
   0.7;                     !- Visible Absorptance
 
 Material,
-  Stucco,           !- Name
+  Stucco,                  !- Name
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
@@ -6220,9 +7513,10 @@ Material,
 
 WindowMaterial:SimpleGlazingSystem,
   Theoretical Glazing,     !- Name
-  3.1232254400908577,  !- U-Factor {W/m2-K}
-  0.4,  !- Solar Heat Gain Coefficient
-  0.4;  !- Visible Transmittance
+  3.1232254400908577,      !- U-Factor {W/m2-K}
+  0.4,                     !- Solar Heat Gain Coefficient
+  0.4;                     !- Visible Transmittance
+
 )IDF";
 
     std::string const idf_objects = idf_objects1 + idf_objects2 + idf_objects3;
@@ -6294,6 +7588,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_checkSurfaceExternalShadingSchedules_
     // Set up data for test. Shading surfaces are skipped so they should not report any errors.
     // Some surfaces will be correctly defined while two other surfaces will not be correctly defined and will generate errors.
     std::string const idf_objects = R"IDF(
+
 RunPeriod,
   Annual,                  !- Name
   1,                       !- Begin Month
@@ -6310,246 +7605,332 @@ RunPeriod,
   Yes;                     !- Use Weather File Snow Indicators
 
 ShadowCalculation,
-  PolygonClipping,               !- Shading Calculation Method
-  Periodic,                      !- Shading Calculation Update Frequency Method
-  ,                            !- Shading Calculation Update Frequency
-  ,                         !- Maximum Figures in Shadow Overlap Calculations
-  ;          !- Polygon Clipping Algorithm
+  PolygonClipping,         !- Shading Calculation Method
+  Periodic,                !- Shading Calculation Update Frequency Method
+  ,                        !- Shading Calculation Update Frequency
+  ,                        !- Maximum Figures in Shadow Overlap Calculations
+  ;                        !- Polygon Clipping Algorithm
 
 Timestep,4;
 
 Building,
-  Non-convex,    !- Name
-  0,      !- North Axis {deg}
-  City,          !- Terrain
-  0.5,  !- Loads Convergence Tolerance Value
-  0.5,  !- Temperature Convergence Tolerance Value {deltaC}
-  FullInteriorAndExterior, !- Solar Distribution
-  25,  !- Maximum Number of Warmup Days
-  2;  !- Minimum Number of Warmup Days
+  Non-convex,              !- Name
+  0,                       !- North Axis {deg}
+  City,                    !- Terrain
+  0.5,                     !- Loads Convergence Tolerance Value {W}
+  0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior,  !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  2;                       !- Minimum Number of Warmup Days
 
 GlobalGeometryRules,
-    UpperLeftCorner,          !- Starting Vertex Position
-    Counterclockwise,         !- Vertex Entry Direction
-    Relative;                 !- Coordinate System
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  Relative;                !- Coordinate System
 
 Zone,
-    Zone A,                   !- Name
-    0,                        !- Direction of Relative North
-    0,                        !- X Origin
-    0,                        !- Y Origin
-    0,                        !- Z Origin
-    ,                         !- Type
-    1;                        !- Multiplier
+  Zone A,                  !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  ,                        !- Type
+  1;                       !- Multiplier
 
 Schedule:Constant,OnSch,,1.0;
 
 BuildingSurface:Detailed,
-    A48756,                   !- Name
-    Floor,                    !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    NoSun,                    !- Sun Exposure
-    NoWind,                   !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 0,                        !- Vertex 1 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 0;                        !- Vertex 4 Zcoordinate
+  A48756,                  !- Name
+  Floor,                   !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0;                       !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    WALL1NOTOK,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 0, 0,                        !- Vertex 3 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 4 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 5 Zcoordinate
-    0, 3.048, 6.096;                    !- Vertex 6 Zcoordinate
+  WALL1NOTOK,              !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:WALL1NOTOK,    !- Name
-  WALL1NOTOK,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:WALL1NOTOK,       !- Name
+  WALL1NOTOK,              !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 BuildingSurface:Detailed,
-    5BB552,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    6,                        !- Number of Vertices
-    6.096, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 4 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 5 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 6 Zcoordinate
+  5BB552,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  6,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    682F88,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    6.096, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    6.096, 6.096, 0,                        !- Vertex 2 Zcoordinate
-    0, 6.096, 0,                        !- Vertex 3 Zcoordinate
-    0, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  682F88,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    C292CF,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 0, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 0,                        !- Vertex 2 Zcoordinate
-    6.096, 0, 0,                        !- Vertex 3 Zcoordinate
-    6.096, 0, 3.048;                    !- Vertex 4 Zcoordinate
+  C292CF,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  0,                       !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    319080,                   !- Name
-    Wall,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 6.096;                    !- Vertex 4 Zcoordinate
+  319080,                  !- Name
+  Wall,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    866E33,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 3.048, 3.048,                    !- Vertex 1 Zcoordinate
-    0, 0, 3.048,                    !- Vertex 2 Zcoordinate
-    6.096, 0, 3.048,                    !- Vertex 3 Zcoordinate
-    6.096, 3.048, 3.048;                    !- Vertex 4 Zcoordinate
+  866E33,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  0,                       !- Vertex Y-coordinate {m}
+  3.048,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  3.048;                   !- Vertex Z-coordinate {m}
 
 BuildingSurface:Detailed,
-    32CB6F,                   !- Name
-    Roof,                     !- Surface Type
-    Exterior Wall,            !- Construction Name
-    Zone A,                   !- Zone Name
-    ,                         !- Space Name
-    Outdoors,                 !- Outside Boundary Condition
-    ,                         !- Outside Boundary Condition Object
-    SunExposed,               !- Sun Exposure
-    WindExposed,              !- Wind Exposure
-    ,                         !- View Factor to Ground
-    4,                        !- Number of Vertices
-    0, 6.096, 6.096,                    !- Vertex 1 Zcoordinate
-    0, 3.048, 6.096,                    !- Vertex 2 Zcoordinate
-    6.096, 3.048, 6.096,                    !- Vertex 3 Zcoordinate
-    6.096, 6.096, 6.096;                    !- Vertex 4 Zcoordinate
+  32CB6F,                  !- Name
+  Roof,                    !- Surface Type
+  Exterior Wall,           !- Construction Name
+  Zone A,                  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  ,                        !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0,                       !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  0,                       !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  3.048,                   !- Vertex Y-coordinate {m}
+  6.096,                   !- Vertex Z-coordinate {m}
+  6.096,                   !- Vertex X-coordinate {m}
+  6.096,                   !- Vertex Y-coordinate {m}
+  6.096;                   !- Vertex Z-coordinate {m}
 
 FenestrationSurface:Detailed,
-    WINDOW1NOTOK,                   !- Name
-    Window,                   !- Surface Type
-    Exterior Window,          !- Construction Name
-    319080,                   !- Building Surface Name
-    ,                         !- Outside Boundary Condition Object
-    ,                         !- View Factor to Ground
-    ,                         !- Frame and Divider Name
-    ,                         !- Multiplier
-    4,                        !- Number of Vertices
-    0.6096, 3.048, 5.4864,                   !- Vertex 1 Zcoordinate
-    0.6096, 3.048, 3.6576,                   !- Vertex 2 Zcoordinate
-    5.4864, 3.048, 3.6576,                   !- Vertex 3 Zcoordinate
-    5.4864, 3.048, 5.4864;                   !- Vertex 4 Zcoordinate
+  WINDOW1NOTOK,            !- Name
+  Window,                  !- Surface Type
+  Exterior Window,         !- Construction Name
+  319080,                  !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  ,                        !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  ,                        !- Multiplier
+  4,                       !- Number of Vertices
+  0.6096,                  !- Vertex 1 X-coordinate {m}
+  3.048,                   !- Vertex 1 Y-coordinate {m}
+  5.4864,                  !- Vertex 1 Z-coordinate {m}
+  0.6096,                  !- Vertex 2 X-coordinate {m}
+  3.048,                   !- Vertex 2 Y-coordinate {m}
+  3.6576,                  !- Vertex 2 Z-coordinate {m}
+  5.4864,                  !- Vertex 3 X-coordinate {m}
+  3.048,                   !- Vertex 3 Y-coordinate {m}
+  3.6576,                  !- Vertex 3 Z-coordinate {m}
+  5.4864,                  !- Vertex 4 X-coordinate {m}
+  3.048,                   !- Vertex 4 Y-coordinate {m}
+  5.4864;                  !- Vertex 4 Z-coordinate {m}
 
 SurfaceProperty:LocalEnvironment,
-  LocEnv:WINDOW1NOTOK,    !- Name
-  WINDOW1NOTOK,           !- Exterior Surface Name
-  OnSch,  !- Sunlit Fraction Schedule Name
+  LocEnv:WINDOW1NOTOK,     !- Name
+  WINDOW1NOTOK,            !- Exterior Surface Name
+  OnSch,                   !- Sunlit Fraction Schedule Name
   ,                        !- Surrounding Surfaces Object Name
   ;                        !- Outdoor Air Node Name
 
 Shading:Site:Detailed,
   EAST SIDE TREE,          !- Name
-  OnSch,  !- Transmittance Schedule Name
+  OnSch,                   !- Transmittance Schedule Name
   3,                       !- Number of Vertices
-  33.52800,10.66800,10.05800,  !- X,Y,Z ==> Vertex 1 {m}
-  33.52800,13.71600,0.9140000,  !- X,Y,Z ==> Vertex 2 {m}
-  33.52800,4.572000,0.9140000;  !- X,Y,Z ==> Vertex 3 {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  10.668,                  !- Vertex Y-coordinate {m}
+  10.058,                  !- Vertex Z-coordinate {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  13.716,                  !- Vertex Y-coordinate {m}
+  0.914,                   !- Vertex Z-coordinate {m}
+  33.528,                  !- Vertex X-coordinate {m}
+  4.572,                   !- Vertex Y-coordinate {m}
+  0.914;                   !- Vertex Z-coordinate {m}
 
 Material,
   Wall Continuous Insulation,  !- Name
-  MediumSmooth,               !- Roughness
-  0.038037600000000005,  !- Thickness {m}
-  0.0288,  !- Conductivity {W/m-K}
+  MediumSmooth,            !- Roughness
+  0.038037600000000005,    !- Thickness {m}
+  0.0288,                  !- Conductivity {W/m-K}
   32,                      !- Density {kg/m3}
-  1465;                     !- Specific Heat {J/kg-K}
+  1465;                    !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
   VeryRough,               !- Roughness
-  0.08889999999999999,  !- Thickness {m}
-  0.08389829384297165,  !- Conductivity {W/m-K}
-  8.17,                      !- Density {kg/m3}
+  0.08889999999999999,     !- Thickness {m}
+  0.08389829384297165,     !- Conductivity {W/m-K}
+  8.17,                    !- Density {kg/m3}
   837;                     !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
-  Stucco,  !- Layer
-  Wall Continuous Insulation,  !- Layer
-  Wall Cavity Effective Insulation,  !- Layer
-  Gypsum 5/8in;  !- Layer
+  Stucco,                  !- Outside Layer
+  Wall Continuous Insulation,  !- Layer 2
+  Wall Cavity Effective Insulation,  !- Layer 3
+  Gypsum 5/8in;            !- Layer 4
 
 Construction,
   Exterior Window,         !- Name
   Theoretical Glazing;     !- Outside Layer
 
 Material,
-  Gypsum 5/8in,           !- Name
+  Gypsum 5/8in,            !- Name
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
@@ -6560,7 +7941,7 @@ Material,
   0.7;                     !- Visible Absorptance
 
 Material,
-  Stucco,           !- Name
+  Stucco,                  !- Name
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
@@ -6572,9 +7953,10 @@ Material,
 
 WindowMaterial:SimpleGlazingSystem,
   Theoretical Glazing,     !- Name
-  3.1232254400908577,  !- U-Factor {W/m2-K}
-  0.4,  !- Solar Heat Gain Coefficient
-  0.4;  !- Visible Transmittance
+  3.1232254400908577,      !- U-Factor {W/m2-K}
+  0.4,                     !- Solar Heat Gain Coefficient
+  0.4;                     !- Visible Transmittance
+
 )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -6928,257 +8310,363 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
 {
     // Test for detailed window model
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullInteriorAndExterior,    !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
-        "  Timestep,6;",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
-        "  WindowMaterial:Glazing,",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
-        "    SpectralAverage,         !- Optical Data Type",
-        "    ,                        !- Window Glass Spectral Data Set Name",
-        "    0.006,                   !- Thickness {m}",
-        "    0.80,                    !- Solar Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Solar Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Solar Reflectance at Normal Incidence",
-        "    0.80,                    !- Visible Transmittance at Normal Incidence",
-        "    0.10,                    !- Front Side Visible Reflectance at Normal Incidence",
-        "    0.10,                    !- Back Side Visible Reflectance at Normal Incidence",
-        "    0.0,                     !- Infrared Transmittance at Normal Incidence",
-        "    0.84,                    !- Front Side Infrared Hemispherical Emissivity",
-        "    0.84,                    !- Back Side Infrared Hemispherical Emissivity",
-        "    0.9;                     !- Conductivity {W/m-K}",
-        "  WindowMaterial:Gas,",
-        "    AIRGAP,                  !- Name",
-        "    AIR,                     !- Gas Type",
-        "    0.0125;                  !- Thickness {m}",
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  Construction,",
-        "    DOUBLE PANE HW WINDOW,   !- Name",
-        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
-        "    AIRGAP,                  !- Layer 2",
-        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE;                !- Name",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    R13WALL,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Floor:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Floor,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -4,4,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    4,4,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    4,-4,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -4,-4,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    DOUBLE PANE HW WINDOW,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullInteriorAndExterior,  !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+
+        "Timestep,6;",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
+
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
+
+        "WindowMaterial:Glazing,",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.006,                   !- Thickness {m}",
+        "  0.8,                     !- Solar Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Solar Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Solar Reflectance at Normal Incidence",
+        "  0.8,                     !- Visible Transmittance at Normal Incidence",
+        "  0.1,                     !- Front Side Visible Reflectance at Normal Incidence",
+        "  0.1,                     !- Back Side Visible Reflectance at Normal Incidence",
+        "  0.0,                     !- Infrared Transmittance at Normal Incidence",
+        "  0.84,                    !- Front Side Infrared Hemispherical Emissivity",
+        "  0.84,                    !- Back Side Infrared Hemispherical Emissivity",
+        "  0.9;                     !- Conductivity {W/m-K}",
+
+        "WindowMaterial:Gas,",
+        "  AIRGAP,                  !- Name",
+        "  Air,                     !- Gas Type",
+        "  0.0125;                  !- Thickness {m}",
+
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
+
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "Construction,",
+        "  DOUBLE PANE HW WINDOW,   !- Name",
+        "  GLASS - CLEAR PLATE 1 / 4 IN,  !- Outside Layer",
+        "  AIRGAP,                  !- Layer 2",
+        "  GLASS - CLEAR PLATE 1 / 4 IN;  !- Layer 3",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE;                !- Name",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Floor:Win001,      !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Floor,             !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -4,                      !- Vertex 1 X-coordinate {m}",
+        "  4,                       !- Vertex 1 Y-coordinate {m}",
+        "  0,                       !- Vertex 1 Z-coordinate {m}",
+        "  4,                       !- Vertex 2 X-coordinate {m}",
+        "  4,                       !- Vertex 2 Y-coordinate {m}",
+        "  0,                       !- Vertex 2 Z-coordinate {m}",
+        "  4,                       !- Vertex 3 X-coordinate {m}",
+        "  -4,                      !- Vertex 3 Y-coordinate {m}",
+        "  0,                       !- Vertex 3 Z-coordinate {m}",
+        "  -4,                      !- Vertex 4 X-coordinate {m}",
+        "  -4,                      !- Vertex 4 Y-coordinate {m}",
+        "  0;                       !- Vertex 4 Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  DOUBLE PANE HW WINDOW,   !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -7252,304 +8740,412 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
 {
     // Test for equivalent layer window model
     std::string const idf_objects = delimited_string({
-        "  Building,",
-        "    DemoFDT,                 !- Name",
-        "    0,                       !- North Axis {deg}",
-        "    Suburbs,                 !- Terrain",
-        "    3.9999999E-02,           !- Loads Convergence Tolerance Value",
-        "    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}",
-        "    FullInteriorAndExterior,    !- Solar Distribution",
-        "    ,                        !- Maximum Number of Warmup Days",
-        "    6;                       !- Minimum Number of Warmup Days",
-        "  ShadowCalculation,",
-        "    PolygonClipping,         !- Shading Calculation Method",
-        "    Timestep,                !- Shading Calculation Update Frequency Method",
-        "    ,                        !- Shading Calculation Update Frequency",
-        "    ,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    ,                        !- Polygon Clipping Algorithm",
-        "    ,                        !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
-        "  Timestep,6;",
-        "  ScheduleTypeLimits,",
-        "    Fraction,                !- Name",
-        "    0.0,                     !- Lower Limit Value",
-        "    1.0,                     !- Upper Limit Value",
-        "    Continuous;              !- Numeric Type",
-        "  ScheduleTypeLimits,",
-        "    ON/OFF,                  !- Name",
-        "    0,                       !- Lower Limit Value",
-        "    1,                       !- Upper Limit Value",
-        "    Discrete;                !- Numeric Type",
-        "  Schedule:Compact,",
-        "    SunShading,              !- Name",
-        "    ON/OFF,                  !- Schedule Type Limits Name",
-        "    Through: 4/30,           !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    until: 24:00,1,          !- Field 3",
-        "    Through: 10/31,          !- Field 5",
-        "    For: AllDays,            !- Field 6",
-        "    until: 24:00,0,          !- Field 7",
-        "    Through: 12/31,          !- Field 9",
-        "    For: AllDays,            !- Field 10",
-        "    until: 24:00,1;          !- Field 11",
-        "  Material,",
-        "    C12 - 2 IN HW CONCRETE,  !- Name",
-        "    MediumRough,             !- Roughness",
-        "    5.0901599E-02,           !- Thickness {m}",
-        "    1.729577,                !- Conductivity {W/m-K}",
-        "    2242.585,                !- Density {kg/m3}",
-        "    836.8000,                !- Specific Heat {J/kg-K}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.6500000,               !- Solar Absorptance",
-        "    0.6500000;               !- Visible Absorptance",
-        "  Material:NoMass,",
-        "    R13LAYER,                !- Name",
-        "    Rough,                   !- Roughness",
-        "    2.290965,                !- Thermal Resistance {m2-K/W}",
-        "    0.9000000,               !- Thermal Absorptance",
-        "    0.7500000,               !- Solar Absorptance",
-        "    0.7500000;               !- Visible Absorptance",
-        "  Construction:WindowEquivalentLayer,",
-        "  CLR CLR VB,                !- Name",
-        "  GLZCLR,                    !- Outside Layer",
-        "  Air GAP SealedOut 20mm,    !- Layer 2",
-        "  GLZCLR;                    !- Layer 3",
-        "  ! Air GAP SealedIndoor 20mm, !- Layer 4",
-        "  ! VBU8D6+45SW1;              !- Layer 5",
+        "Building,",
+        "  DemoFDT,                 !- Name",
+        "  0,                       !- North Axis {deg}",
+        "  Suburbs,                 !- Terrain",
+        "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
+        "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
+        "  FullInteriorAndExterior,  !- Solar Distribution",
+        "  ,                        !- Maximum Number of Warmup Days",
+        "  6;                       !- Minimum Number of Warmup Days",
+
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  ,                        !- Shading Calculation Update Frequency",
+        "  ,                        !- Maximum Figures in Shadow Overlap Calculations",
+        "  ,                        !- Polygon Clipping Algorithm",
+        "  ,                        !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+
+        "Timestep,6;",
+
+        "ScheduleTypeLimits,",
+        "  Fraction,                !- Name",
+        "  0.0,                     !- Lower Limit Value {BasedOnField A3}",
+        "  1.0,                     !- Upper Limit Value {BasedOnField A3}",
+        "  Continuous;              !- Numeric Type",
+
+        "ScheduleTypeLimits,",
+        "  ON/OFF,                  !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete;                !- Numeric Type",
+
+        "Schedule:Compact,",
+        "  SunShading,              !- Name",
+        "  ON/OFF,                  !- Schedule Type Limits Name",
+        "  Through: 4/30,           !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1,                       !- Field",
+        "  Through: 10/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  0,                       !- Field",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  until: 24:00,            !- Field",
+        "  1;                       !- Field",
+
+        "Material,",
+        "  C12 - 2 IN HW CONCRETE,  !- Name",
+        "  MediumRough,             !- Roughness",
+        "  0.050901599,             !- Thickness {m}",
+        "  1.729577,                !- Conductivity {W/m-K}",
+        "  2242.585,                !- Density {kg/m3}",
+        "  836.8,                   !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.65,                    !- Solar Absorptance",
+        "  0.65;                    !- Visible Absorptance",
+
+        "Material:NoMass,",
+        "  R13LAYER,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  2.290965,                !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.75,                    !- Solar Absorptance",
+        "  0.75;                    !- Visible Absorptance",
+
+        "Construction:WindowEquivalentLayer,",
+        "  CLR CLR VB,              !- Name",
+        "  GLZCLR,                  !- Outside Layer",
+        "  Air GAP SealedOut 20mm,  !- Layer 2",
+        "  GLZCLR;                  !- Layer 3",
+
+        "! Air GAP SealedIndoor 20mm, !- Layer 4",
+        "! VBU8D6+45SW1;              !- Layer 5",
         "WindowMaterial:Glazing:EquivalentLayer,",
-        "  GLZCLR,                    !-  Name",
-        "  SpectralAverage,           !-  Optical Data Type",
-        "  ,                          !-  Window Glass Spectral Data Set Name",
-        "  0.83,                      !-  Front Side Beam-Beam Solar Transmittance",
-        "  0.83,                      !-  Back Side Beam-Beam Solar Transmittance",
-        "  0.08,                      !-  Front Side Beam-Beam Solar Reflectance",
-        "  0.08,                      !-  Back Side Beam-Beam Solar Reflectance",
-        "  0.0,                       !-  Front Side Beam-Beam Visible Transmittance",
-        "  0.0,                       !-  Back Side Beam-Beam Visible Transmittance",
-        "  0.0,                       !-  Front Side Beam-Beam Visible Reflectance",
-        "  0.0,                       !-  Back Side Beam-Beam Visible Reflectance",
-        "  0.0,                       !-  Front Side Beam-Diffuse Solar Transmittance",
-        "  0.0,                       !-  Back Side Beam-Diffuse Solar Transmittance",
-        "  0.0,                       !-  Front Side Beam-Diffuse Solar Reflectance",
-        "  0.0,                       !-  Back Side Beam-Diffuse Solar Reflectance",
-        "  0.0,                       !-  Front Side Beam-Diffuse Visible Transmittance",
-        "  0.0,                       !-  Back Side Beam-Diffuse Visible Transmittance",
-        "  0.0,                       !-  Front Side Beam-Diffuse Visible Reflectance",
-        "  0.0,                       !-  Back Side Beam-Diffuse Visible Reflectance",
-        "  0.76,                      !-  Diffuse-Diffuse Solar Transmittance",
-        "  0.14,                      !-  Front Side Diffuse-Diffuse Solar Reflectance",
-        "  0.14,                      !-  Back Side Diffuse-Diffuse Solar Reflectance",
-        "  0.0,                       !-  Diffuse-Diffuse Visible Transmittance",
-        "  0.0,                       !-  Front Side Diffuse-Diffuse Visible Reflectance",
-        "  0.0,                       !-  Back Side Diffuse-Diffuse Visible Reflectance",
-        "  0.0,                       !-  Infrared Transmittance (front and back)",
-        "  0.84,                      !-  Front Side Infrared Emissivity",
-        "  0.84;                      !-  Back Side Infrared Emissivity",
+        "  GLZCLR,                  !- Name",
+        "  SpectralAverage,         !- Optical Data Type",
+        "  ,                        !- Window Glass Spectral Data Set Name",
+        "  0.83,                    !- Front Side Beam-Beam Solar Transmittance {dimensionless}",
+        "  0.83,                    !- Back Side Beam-Beam Solar Transmittance {dimensionless}",
+        "  0.08,                    !- Front Side Beam-Beam Solar Reflectance {dimensionless}",
+        "  0.08,                    !- Back Side Beam-Beam Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Front Side Beam-Beam Visible Solar Transmittance {dimensionless}",
+        "  0.0,                     !- Back Side Beam-Beam Visible Solar Transmittance {dimensionless}",
+        "  0.0,                     !- Front Side Beam-Beam Visible Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Back Side Beam-Beam Visible Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Front Side Beam-Diffuse Solar Transmittance {dimensionless}",
+        "  0.0,                     !- Back Side Beam-Diffuse Solar Transmittance {dimensionless}",
+        "  0.0,                     !- Front Side Beam-Diffuse Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Back Side Beam-Diffuse Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Front Side Beam-Diffuse Visible Solar Transmittance {dimensionless}",
+        "  0.0,                     !- Back Side Beam-Diffuse Visible Solar Transmittance {dimensionless}",
+        "  0.0,                     !- Front Side Beam-Diffuse Visible Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Back Side Beam-Diffuse Visible Solar Reflectance {dimensionless}",
+        "  0.76,                    !- Diffuse-Diffuse Solar Transmittance {dimensionless}",
+        "  0.14,                    !- Front Side Diffuse-Diffuse Solar Reflectance {dimensionless}",
+        "  0.14,                    !- Back Side Diffuse-Diffuse Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Diffuse-Diffuse Visible Solar Transmittance {dimensionless}",
+        "  0.0,                     !- Front Side Diffuse-Diffuse Visible Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Back Side Diffuse-Diffuse Visible Solar Reflectance {dimensionless}",
+        "  0.0,                     !- Infrared Transmittance (applies to front and back) {dimensionless}",
+        "  0.84,                    !- Front Side Infrared Emissivity {dimensionless}",
+        "  0.84;                    !- Back Side Infrared Emissivity {dimensionless}",
+
         "WindowMaterial:Blind:EquivalentLayer,",
-        "  VBU8D6+45SW1,           ! - Name",
-        "  Horizontal,             ! - Slat Orientation",
-        "  0.025,                  ! - Slat Width",
-        "  0.025,                  ! - Slat Separation",
-        "  0.0,                    ! - Slat Crown",
-        "  45.0,                   ! - Slat Angle",
-        "  0.0,                    ! - Front Side Slat Beam-Diffuse Solar Transmittance",
-        "  0.0,                    ! - Back Side Slat Beam-Diffuse Solar Transmittance",
-        "  0.0,                    ! - Front Side Slat Beam-Diffuse Solar Reflectance",
-        "  0.0,                    ! - Back Side Slat Beam-Diffuse Solar Reflectance",
-        "  0.0,                    ! - Front Side Slat Beam-Diffuse Visible Solar Transmittance",
-        "  0.0,                    ! - Back Side Slat Beam-Diffuse Visible Solar Transmittance",
-        "  0.0,                    ! - Front Side Slat Beam-Diffuse Visible Solar Reflectance",
-        "  0.0,                    ! - Back Side Slat Beam-Diffuse Visible Solar Reflectance",
-        "  0.0,                    ! - Slat Diffuse-Diffuse Solar Transmittance",
-        "  0.80,                   ! - Front Side Slat Diffuse-Diffuse Solar Reflectance",
-        "  0.60,                   ! - Back Side Slat Diffuse-Diffuse Solar Reflectance",
-        "  0.0,                    ! - Slat Diffuse-Diffuse Visible Transmittance",
-        "  0.0,                    ! - Front Side Slat Diffuse-Diffuse Visible Reflectance",
-        "  0.0,                    ! - Back Side Slat Diffuse-Diffuse Visible Reflectance",
-        "  0.0,                    ! - Slat Infrared Transmittance",
-        "  0.90,                   ! - Front Side Slat Infrared Emissivity",
-        "  0.90,                   ! - Back Side Slat Infrared Emissivity",
-        "  BlockBeamSolar;         ! - Slat Angle Control",
-        " WindowMaterial:Gap:EquivalentLayer,",
-        "  Air GAP SealedOut 20mm,    !- Name",
-        "  Air,                       !- Gas Type",
-        "  0.0200,                    !- Thickness",
-        "  Sealed;                    !- Gap Vent Type",
-        " WindowMaterial:Gap:EquivalentLayer,",
-        "  Air GAP SealedIndoor 20mm, !- Name",
-        "  Air,                       !- Gas Type",
-        "  0.020,                     !- Thickness",
-        "  Sealed;                    !- Gap Vent Type ",
-        "  Construction,",
-        "    R13WALL,                 !- Name",
-        "    R13LAYER;                !- Outside Layer",
-        "  Construction,",
-        "    SLAB FLOOR,              !- Name",
-        "    C12 - 2 IN HW CONCRETE;  !- Layer 4",
-        "  GlobalGeometryRules,",
-        "    UpperLeftCorner,         !- Starting Vertex Position",
-        "    Counterclockwise,        !- Vertex Entry Direction",
-        "    Relative;                !- Coordinate System",
-        "  Zone,",
-        "    ZONE ONE;                !- Name",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-North,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,             !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-East,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-South,        !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,                 !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:Wall-West,         !- Name",
-        "    Wall,                    !- Surface Type",
-        "    R13WALL,               !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.5000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:roof,              !- Name",
-        "    Roof,                    !- Surface Type",
-        "    R13WALL,                  !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  BuildingSurface:Detailed,",
-        "    Zn001:floor,             !- Name",
-        "    Floor,                   !- Surface Type",
-        "    SLAB FLOOR,              !- Construction Name",
-        "    ZONE ONE,                !- Zone Name",
-        "    ,                        !- Space Name",
-        "    Outdoors,                !- Outside Boundary Condition",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    SunExposed,              !- Sun Exposure",
-        "    WindExposed,             !- Wind Exposure",
-        "    0.0000000,               !- View Factor to Ground",
-        "    4,                       !- Number of Vertices",
-        "    -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Floor:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    CLR CLR VB,   !- Construction Name",
-        "    Zn001:Floor,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -4,4,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    4,4,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    4,-4,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    -4,-4,0;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  FenestrationSurface:Detailed,",
-        "    Zn001:Wall-South:Win001, !- Name",
-        "    Window,                  !- Surface Type",
-        "    CLR CLR VB,   !- Construction Name",
-        "    Zn001:Wall-South,        !- Building Surface Name",
-        "    ,                        !- Outside Boundary Condition Object",
-        "    0.5000000,               !- View Factor to Ground",
-        "    TestFrameAndDivider,     !- Frame and Divider Name",
-        "    1.0,                     !- Multiplier",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  WindowProperty:FrameAndDivider,",
-        "    TestFrameAndDivider,     !- Name",
-        "    0.05,                    !- Frame Width {m}",
-        "    0.05,                    !- Frame Outside Projection {m}",
-        "    0.05,                    !- Frame Inside Projection {m}",
-        "    5.0,                     !- Frame Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Gl",
-        "    0.8,                     !- Frame Solar Absorptance",
-        "    0.8,                     !- Frame Visible Absorptance",
-        "    0.9,                     !- Frame Thermal Hemispherical Emissivity",
-        "    DividedLite,             !- Divider Type",
-        "    0.02,                    !- Divider Width {m}",
-        "    2,                       !- Number of Horizontal Dividers",
-        "    2,                       !- Number of Vertical Dividers",
-        "    0.02,                    !- Divider Outside Projection {m}",
-        "    0.02,                    !- Divider Inside Projection {m}",
-        "    5.0,                     !- Divider Conductance {W/m2-K}",
-        "    1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-",
-        "    0.8,                     !- Divider Solar Absorptance",
-        "    0.8,                     !- Divider Visible Absorptance",
-        "    0.9;                     !- Divider Thermal Hemispherical Emissivity",
-        "  Shading:Zone:Detailed,",
-        "    Zn001:Wall-South:Shade001,  !- Name",
-        "    Zn001:Wall-South,        !- Base Surface Name",
-        "    SunShading,              !- Transmittance Schedule Name",
-        "    4,                       !- Number of Vertices",
-        "    -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "    -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "    3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "    3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
-        "  ShadingProperty:Reflectance,",
-        "    Zn001:Wall-South:Shade001,  !- Shading Surface Name",
-        "    0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading",
-        "    0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading",
+        "  VBU8D6+45SW1,            ! - Name",
+        "  Horizontal,              ! - Slat Orientation",
+        "  0.025,                   ! - Slat Width",
+        "  0.025,                   ! - Slat Separation",
+        "  0.0,                     ! - Slat Crown",
+        "  45.0,                    ! - Slat Angle",
+        "  0.0,                     ! - Front Side Slat Beam-Diffuse Solar Transmittance",
+        "  0.0,                     ! - Back Side Slat Beam-Diffuse Solar Transmittance",
+        "  0.0,                     ! - Front Side Slat Beam-Diffuse Solar Reflectance",
+        "  0.0,                     ! - Back Side Slat Beam-Diffuse Solar Reflectance",
+        "  0.0,                     ! - Front Side Slat Beam-Diffuse Visible Solar Transmittance",
+        "  0.0,                     ! - Back Side Slat Beam-Diffuse Visible Solar Transmittance",
+        "  0.0,                     ! - Front Side Slat Beam-Diffuse Visible Solar Reflectance",
+        "  0.0,                     ! - Back Side Slat Beam-Diffuse Visible Solar Reflectance",
+        "  0.0,                     ! - Slat Diffuse-Diffuse Solar Transmittance",
+        "  0.8,                     ! - Front Side Slat Diffuse-Diffuse Solar Reflectance",
+        "  0.6,                     ! - Back Side Slat Diffuse-Diffuse Solar Reflectance",
+        "  0.0,                     ! - Slat Diffuse-Diffuse Visible Transmittance",
+        "  0.0,                     ! - Front Side Slat Diffuse-Diffuse Visible Reflectance",
+        "  0.0,                     ! - Back Side Slat Diffuse-Diffuse Visible Reflectance",
+        "  0.0,                     ! - Slat Infrared Transmittance",
+        "  0.9,                     ! - Front Side Slat Infrared Emissivity",
+        "  0.9,                     ! - Back Side Slat Infrared Emissivity",
+        "  BlockBeamSolar;          ! - Slat Angle Control",
+
+        "WindowMaterial:Gap:EquivalentLayer,",
+        "  Air GAP SealedOut 20mm,  !- Name",
+        "  AIR,                     !- Gas Type",
+        "  0.02,                    !- Thickness {m}",
+        "  Sealed;                  !- Gap Vent Type",
+
+        "WindowMaterial:Gap:EquivalentLayer,",
+        "  Air GAP SealedIndoor 20mm,  !- Name",
+        "  AIR,                     !- Gas Type",
+        "  0.02,                    !- Thickness {m}",
+        "  Sealed;                  !- Gap Vent Type",
+
+        "Construction,",
+        "  R13WALL,                 !- Name",
+        "  R13LAYER;                !- Outside Layer",
+
+        "Construction,",
+        "  SLAB FLOOR,              !- Name",
+        "  C12 - 2 IN HW CONCRETE;  !- Outside Layer",
+
+        "GlobalGeometryRules,",
+        "  UpperLeftCorner,         !- Starting Vertex Position",
+        "  Counterclockwise,        !- Vertex Entry Direction",
+        "  Relative;                !- Coordinate System",
+
+        "Zone,",
+        "  ZONE ONE;                !- Name",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-North,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-East,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-South,        !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:Wall-West,         !- Name",
+        "  Wall,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.5,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:roof,              !- Name",
+        "  Roof,                    !- Surface Type",
+        "  R13WALL,                 !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  3;                       !- Vertex Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zn001:floor,             !- Name",
+        "  Floor,                   !- Surface Type",
+        "  SLAB FLOOR,              !- Construction Name",
+        "  ZONE ONE,                !- Zone Name",
+        "  ,                        !- Space Name",
+        "  Outdoors,                !- Outside Boundary Condition",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  SunExposed,              !- Sun Exposure",
+        "  WindExposed,             !- Wind Exposure",
+        "  0.0,                     !- View Factor to Ground",
+        "  4,                       !- Number of Vertices",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  5,                       !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  5,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0,                       !- Vertex Z-coordinate {m}",
+        "  -5,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  0;                       !- Vertex Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Floor:Win001,      !- Name",
+        "  Window,                  !- Surface Type",
+        "  CLR CLR VB,              !- Construction Name",
+        "  Zn001:Floor,             !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -4,                      !- Vertex 1 X-coordinate {m}",
+        "  4,                       !- Vertex 1 Y-coordinate {m}",
+        "  0,                       !- Vertex 1 Z-coordinate {m}",
+        "  4,                       !- Vertex 2 X-coordinate {m}",
+        "  4,                       !- Vertex 2 Y-coordinate {m}",
+        "  0,                       !- Vertex 2 Z-coordinate {m}",
+        "  4,                       !- Vertex 3 X-coordinate {m}",
+        "  -4,                      !- Vertex 3 Y-coordinate {m}",
+        "  0,                       !- Vertex 3 Z-coordinate {m}",
+        "  -4,                      !- Vertex 4 X-coordinate {m}",
+        "  -4,                      !- Vertex 4 Y-coordinate {m}",
+        "  0;                       !- Vertex 4 Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Zn001:Wall-South:Win001,  !- Name",
+        "  Window,                  !- Surface Type",
+        "  CLR CLR VB,              !- Construction Name",
+        "  Zn001:Wall-South,        !- Building Surface Name",
+        "  ,                        !- Outside Boundary Condition Object",
+        "  0.5,                     !- View Factor to Ground",
+        "  TestFrameAndDivider,     !- Frame and Divider Name",
+        "  1.0,                     !- Multiplier",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex 1 X-coordinate {m}",
+        "  -5,                      !- Vertex 1 Y-coordinate {m}",
+        "  2.5,                     !- Vertex 1 Z-coordinate {m}",
+        "  -3,                      !- Vertex 2 X-coordinate {m}",
+        "  -5,                      !- Vertex 2 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 2 Z-coordinate {m}",
+        "  3,                       !- Vertex 3 X-coordinate {m}",
+        "  -5,                      !- Vertex 3 Y-coordinate {m}",
+        "  0.5,                     !- Vertex 3 Z-coordinate {m}",
+        "  3,                       !- Vertex 4 X-coordinate {m}",
+        "  -5,                      !- Vertex 4 Y-coordinate {m}",
+        "  2.5;                     !- Vertex 4 Z-coordinate {m}",
+
+        "WindowProperty:FrameAndDivider,",
+        "  TestFrameAndDivider,     !- Name",
+        "  0.05,                    !- Frame Width {m}",
+        "  0.05,                    !- Frame Outside Projection {m}",
+        "  0.05,                    !- Frame Inside Projection {m}",
+        "  5.0,                     !- Frame Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Frame Solar Absorptance",
+        "  0.8,                     !- Frame Visible Absorptance",
+        "  0.9,                     !- Frame Thermal Hemispherical Emissivity",
+        "  DividedLite,             !- Divider Type",
+        "  0.02,                    !- Divider Width {m}",
+        "  2,                       !- Number of Horizontal Dividers",
+        "  2,                       !- Number of Vertical Dividers",
+        "  0.02,                    !- Divider Outside Projection {m}",
+        "  0.02,                    !- Divider Inside Projection {m}",
+        "  5.0,                     !- Divider Conductance {W/m2-K}",
+        "  1.2,                     !- Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance",
+        "  0.8,                     !- Divider Solar Absorptance",
+        "  0.8,                     !- Divider Visible Absorptance",
+        "  0.9,                     !- Divider Thermal Hemispherical Emissivity",
+        "  ,                        !- Outside Reveal Solar Absorptance",
+        "  ,                        !- Inside Sill Depth {m}",
+        "  ,                        !- Inside Sill Solar Absorptance",
+        "  ,                        !- Inside Reveal Depth {m}",
+        "  ,                        !- Inside Reveal Solar Absorptance",
+        "  ;                        !- NFRC Product Type for Assembly Calculations",
+
+        "Shading:Zone:Detailed,",
+        "  Zn001:Wall-South:Shade001,  !- Name",
+        "  Zn001:Wall-South,        !- Base Surface Name",
+        "  SunShading,              !- Transmittance Schedule Name",
+        "  4,                       !- Number of Vertices",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  -3,                      !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -6,                      !- Vertex Y-coordinate {m}",
+        "  2.5,                     !- Vertex Z-coordinate {m}",
+        "  3,                       !- Vertex X-coordinate {m}",
+        "  -5,                      !- Vertex Y-coordinate {m}",
+        "  2.5;                     !- Vertex Z-coordinate {m}",
+
+        "ShadingProperty:Reflectance,",
+        "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
+        "  0.2,                     !- Diffuse Solar Reflectance of Unglazed Part of Shading Surface",
+        "  0.2;                     !- Diffuse Visible Reflectance of Unglazed Part of Shading Surface",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -7626,14 +9222,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_GetShadowingInputTest1)
     // with a focus put on the correct setting of variables associated with calculation
     // method and polygon clipping algorithm
     std::string const idf_objects = delimited_string({
-        "  ShadowCalculation,",
-        "    PolygonClipping,             !- Shading Calculation Method",
-        "    Timestep,                    !- Shading Calculation Update Frequency Method",
-        "    1,                           !- Shading Calculation Update Frequency",
-        "    200,                         !- Maximum Figures in Shadow Overlap Calculations",
-        "    ConvexWeilerAtherton,        !- Polygon Clipping Algorithm",
-        "    512.0,                       !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  1,                       !- Shading Calculation Update Frequency",
+        "  200,                     !- Maximum Figures in Shadow Overlap Calculations",
+        "  ConvexWeilerAtherton,    !- Polygon Clipping Algorithm",
+        "  512,                     !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -7659,14 +9255,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_GetShadowingInputTest2)
     // with a focus put on the correct setting of variables associated with calculation
     // method and polygon clipping algorithm
     std::string const idf_objects = delimited_string({
-        "  ShadowCalculation,",
-        "    PolygonClipping,           !- Shading Calculation Method",
-        "    Periodic,                  !- Shading Calculation Update Frequency Method",
-        "    10,                        !- Shading Calculation Update Frequency",
-        "    2000,                      !- Maximum Figures in Shadow Overlap Calculations",
-        "    SutherlandHodgman,         !- Polygon Clipping Algorithm",
-        "    512.0,                     !- Pixel Counting Resolution",
-        "    SimpleSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Periodic,                !- Shading Calculation Update Frequency Method",
+        "  10,                      !- Shading Calculation Update Frequency",
+        "  2000,                    !- Maximum Figures in Shadow Overlap Calculations",
+        "  SutherlandHodgman,       !- Polygon Clipping Algorithm",
+        "  512,                     !- Pixel Counting Resolution",
+        "  SimpleSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -7692,14 +9288,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_GetShadowingInputTest3)
     // with a focus put on the correct setting of variables associated with calculation
     // method and polygon clipping algorithm
     std::string const idf_objects = delimited_string({
-        "  ShadowCalculation,",
-        "    PolygonClipping,                   !- Shading Calculation Method",
-        "    Timestep,                          !- Shading Calculation Update Frequency Method",
-        "    30,                                !- Shading Calculation Update Frequency",
-        "    15000,                             !- Maximum Figures in Shadow Overlap Calculations",
-        "    SlaterBarskyandSutherlandHodgman,  !- Polygon Clipping Algorithm",
-        "    512.0,                             !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;        !- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PolygonClipping,         !- Shading Calculation Method",
+        "  Timestep,                !- Shading Calculation Update Frequency Method",
+        "  30,                      !- Shading Calculation Update Frequency",
+        "  15000,                   !- Maximum Figures in Shadow Overlap Calculations",
+        "  SlaterBarskyandSutherlandHodgman,  !- Polygon Clipping Algorithm",
+        "  512,                     !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -7724,14 +9320,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_GetShadowingInputTest4)
     // with a focus put on the correct setting of variables associated with calculation
     // method and polygon clipping algorithm
     std::string const idf_objects = delimited_string({
-        "  ShadowCalculation,",
-        "    PixelCounting,               !- Shading Calculation Method",
-        "    Periodic,                    !- Shading Calculation Update Frequency Method",
-        "    1,                           !- Shading Calculation Update Frequency",
-        "    200,                         !- Maximum Figures in Shadow Overlap Calculations",
-        "    ConvexWeilerAtherton,        !- Polygon Clipping Algorithm",
-        "    512.0,                       !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PixelCounting,           !- Shading Calculation Method",
+        "  Periodic,                !- Shading Calculation Update Frequency Method",
+        "  1,                       !- Shading Calculation Update Frequency",
+        "  200,                     !- Maximum Figures in Shadow Overlap Calculations",
+        "  ConvexWeilerAtherton,    !- Polygon Clipping Algorithm",
+        "  512,                     !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -7765,14 +9361,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_GetShadowingInputTest5)
     // with a focus put on the correct setting of variables associated with calculation
     // method and polygon clipping algorithm
     std::string const idf_objects = delimited_string({
-        "  ShadowCalculation,",
-        "    PixelCounting,               !- Shading Calculation Method",
-        "    Periodic,                    !- Shading Calculation Update Frequency Method",
-        "    10,                          !- Shading Calculation Update Frequency",
-        "    2000,                        !- Maximum Figures in Shadow Overlap Calculations",
-        "    SutherlandHodgman,           !- Polygon Clipping Algorithm",
-        "    512.0,                       !- Pixel Counting Resolution",
-        "    DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PixelCounting,           !- Shading Calculation Method",
+        "  Periodic,                !- Shading Calculation Update Frequency Method",
+        "  10,                      !- Shading Calculation Update Frequency",
+        "  2000,                    !- Maximum Figures in Shadow Overlap Calculations",
+        "  SutherlandHodgman,       !- Polygon Clipping Algorithm",
+        "  512,                     !- Pixel Counting Resolution",
+        "  DetailedSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -7806,14 +9402,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_GetShadowingInputTest6)
     // with a focus put on the correct setting of variables associated with calculation
     // method and polygon clipping algorithm
     std::string const idf_objects = delimited_string({
-        "  ShadowCalculation,",
-        "    PixelCounting,                     !- Shading Calculation Method",
-        "    Periodic,                          !- Shading Calculation Update Frequency Method",
-        "    56,                                !- Shading Calculation Update Frequency",
-        "    1234,                              !- Maximum Figures in Shadow Overlap Calculations",
-        "    SlaterBarskyandSutherlandHodgman,  !- Polygon Clipping Algorithm",
-        "    512.0,                             !- Pixel Counting Resolution",
-        "    SimpleSkyDiffuseModeling;          !- Sky Diffuse Modeling Algorithm",
+        "ShadowCalculation,",
+        "  PixelCounting,           !- Shading Calculation Method",
+        "  Periodic,                !- Shading Calculation Update Frequency Method",
+        "  56,                      !- Shading Calculation Update Frequency",
+        "  1234,                    !- Maximum Figures in Shadow Overlap Calculations",
+        "  SlaterBarskyandSutherlandHodgman,  !- Polygon Clipping Algorithm",
+        "  512,                     !- Pixel Counting Resolution",
+        "  SimpleSkyDiffuseModeling;  !- Sky Diffuse Modeling Algorithm",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

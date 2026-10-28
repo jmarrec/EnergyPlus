@@ -64,13 +64,14 @@ TEST_F(EnergyPlusFixture, TestPipesInput)
 
     std::string const idf_objects = delimited_string({
         "Pipe:Adiabatic,",
-        " Pipe Name,           !- Name",
-        " Pipe Inlet Node,     !- Inlet Node Name",
-        " Pipe Outlet Node;    !- Outlet Node Name",
+        "  Pipe Name,               !- Name",
+        "  Pipe Inlet Node,         !- Inlet Node Name",
+        "  Pipe Outlet Node;        !- Outlet Node Name",
+
         "Pipe:Adiabatic:Steam,",
-        " Pipe Name 2,           !- Name",
-        " Pipe Inlet Node 2,     !- Inlet Node Name",
-        " Pipe Outlet Node 2;    !- Outlet Node Name",
+        "  Pipe Name 2,             !- Name",
+        "  Pipe Inlet Node 2,       !- Inlet Node Name",
+        "  Pipe Outlet Node 2;      !- Outlet Node Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

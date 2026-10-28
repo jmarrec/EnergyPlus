@@ -677,14 +677,14 @@ TEST_F(DataExchangeAPIUnitTestFixture, DataTransfer_Python_EMS_Override)
     // Test for #8084, should warn when getting a handle for an actuator that is actually already defined in the IDF
 
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpointLo,          !- Name",
-        "Test node,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Minimum Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpointLo,          !- Name",
+        "  Test node,               !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Minimum Setpoint;  !- Actuated Component Control Type",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -724,12 +724,14 @@ TEST_F(DataExchangeAPIUnitTestFixture, DataTransfer_PythonHandle_MarksActuatorAs
     // mark wasActuated so the end-of-sim unused-actuator check doesn't false-positive
     // on legitimate Python-driven actuators (Python catches typos itself at handle lookup).
     std::string const idf_objects = delimited_string({
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
+
         "EnergyManagementSystem:Actuator,",
-        "TempSetpointLo,          !- Name",
-        "Test node,               !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Minimum Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpointLo,          !- Name",
+        "  Test node,               !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Minimum Setpoint;  !- Actuated Component Control Type",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -758,14 +760,14 @@ TEST_F(DataExchangeAPIUnitTestFixture, DataTransfer_Python_Python_Override)
     // Test for #8084, should warn when getting a handle for an actuator via API Twice
 
     std::string const idf_objects = delimited_string({
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "PythonPlugin:Instance,",
-        "  Vav2Mixedairmanagers,",
-        "  Yes,",
-        "  PythonPluginDemandManager_LargeOffice,",
-        "  Vav2Mixedairmanagers;",
-
+        "  Vav2Mixedairmanagers,    !- Name",
+        "  Yes,                     !- Run During Warmup Days",
+        "  PythonPluginDemandManager_LargeOffice,  !- Python Module Name",
+        "  Vav2Mixedairmanagers;    !- Plugin Class Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

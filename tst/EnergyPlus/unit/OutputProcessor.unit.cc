@@ -2363,11 +2363,15 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -2412,12 +2416,17 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -2472,15 +2481,16 @@ namespace OutputProcessor {
     TEST_F(SQLiteFixture, OutputProcessor_buildKeyVarListWithKey)
     {
         std::string const idf_objects = delimited_string({
-            "  Output:Table:Monthly,",
-            "    Test Report,  !- Name",
-            "    2,                       !- Digits After Decimal",
-            "    Zone Total Internal Latent Gain Rate,  !- Variable or Meter 1 Name",
-            "    SumOrAverage;            !- Aggregation Type for Variable or Meter 1",
-            "",
+            "Output:Table:Monthly,",
+            "  Test Report,             !- Name",
+            "  2,                       !- Digits After Decimal",
+            "  Zone Total Internal Latent Gain Rate,  !- Variable or Meter Name",
+            "  SumOrAverage;            !- Aggregation Type for Variable or Meter",
+
             "Output:Variable,Living,Zone Total Internal Latent Gain Rate,Hourly;",
+
             "Output:Variable,Attic,Zone Total Internal Latent Gain Rate,Hourly;",
-            "",
+
             "Output:Variable,Living,Zone Total Internal Sensible Gain Rate,Hourly;",
         });
 
@@ -2562,14 +2572,14 @@ namespace OutputProcessor {
     TEST_F(SQLiteFixture, OutputProcessor_buildKeyVarListWithRegexKey)
     {
         std::string const idf_objects = delimited_string({
-            "  Output:Table:Monthly,",
-            "    Test Report,  !- Name",
-            "    2,                       !- Digits After Decimal",
-            "    Zone Total Internal Latent Gain Rate,  !- Variable or Meter 1 Name",
-            "    SumOrAverage;            !- Aggregation Type for Variable or Meter 1",
-            "",
+            "Output:Table:Monthly,",
+            "  Test Report,             !- Name",
+            "  2,                       !- Digits After Decimal",
+            "  Zone Total Internal Latent Gain Rate,  !- Variable or Meter Name",
+            "  SumOrAverage;            !- Aggregation Type for Variable or Meter",
+
             "Output:Variable,Liv.*,Zone Total Internal Latent Gain Rate,Hourly;",
-            "",
+
             "Output:Variable,Living,Zone Total Internal Sensible Gain Rate,Hourly;",
         });
 
@@ -2676,11 +2686,15 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -2756,15 +2770,23 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Wetbulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Humidity Ratio,hourly;",
-            "Output:Variable,*,Site Outdoor Air Relative Humidity,hourly;",
-            "Output:Variable,*,Zone Mean Air Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Wetbulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Humidity Ratio,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Relative Humidity,Hourly;",
+
+            "Output:Variable,*,Zone Mean Air Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -2812,7 +2834,7 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -2853,9 +2875,11 @@ namespace OutputProcessor {
         auto &op = state->dataOutputProcessor;
 
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Chiller Electricity Energy,runperiod;",
-            "Output:Variable,*,Lights Electricity Energy,runperiod;",
-            "Output:Variable,*,Environmental Impact Fuel Oil No 2 CO2 Emissions Mass,runperiod;",
+            "Output:Variable,*,Chiller Electricity Energy,RunPeriod;",
+
+            "Output:Variable,*,Lights Electricity Energy,RunPeriod;",
+
+            "Output:Variable,*,Environmental Impact Fuel Oil No 2 CO2 Emissions Mass,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -2950,7 +2974,9 @@ namespace OutputProcessor {
 
     TEST_F(SQLiteFixture, OutputProcessor_setupOutputVariable_star)
     {
-        std::string const idf_objects = delimited_string({"Output:Variable,*,Boiler NaturalGas Rate,runperiod;"});
+        std::string const idf_objects = delimited_string({
+            "Output:Variable,*,Boiler NaturalGas Rate,RunPeriod;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -2984,7 +3010,9 @@ namespace OutputProcessor {
 
     TEST_F(SQLiteFixture, OutputProcessor_setupOutputVariable_regex)
     {
-        std::string const idf_objects = delimited_string({"Output:Variable,Boiler[13],Boiler NaturalGas Rate,runperiod;"});
+        std::string const idf_objects = delimited_string({
+            "Output:Variable,Boiler[13],Boiler NaturalGas Rate,RunPeriod;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -3016,7 +3044,9 @@ namespace OutputProcessor {
 
     TEST_F(SQLiteFixture, OutputProcessor_setupOutputVariable_regex_2)
     {
-        std::string const idf_objects = delimited_string({"Output:Variable,Boiler.*,Boiler NaturalGas Rate,runperiod;"});
+        std::string const idf_objects = delimited_string({
+            "Output:Variable,Boiler.*,Boiler NaturalGas Rate,RunPeriod;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -3050,7 +3080,9 @@ namespace OutputProcessor {
 
     TEST_F(SQLiteFixture, OutputProcessor_setupOutputVariable_regex_3)
     {
-        std::string const idf_objects = delimited_string({"Output:Variable,Zn003:Wall.*,AFN Linkage Node 1 to Node 2 Volume Flow Rate,timestep;"});
+        std::string const idf_objects = delimited_string({
+            "Output:Variable,Zn003:Wall.*,AFN Linkage Node 1 to Node 2 Volume Flow Rate,Timestep;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -3123,8 +3155,9 @@ namespace OutputProcessor {
     TEST_F(SQLiteFixture, OutputProcessor_setupOutputVariable_regex_4)
     {
         // case-insensitive comparison
-        std::string const idf_objects =
-            delimited_string({"Output:Variable,(?i)Zn003:Wall.*,AFN Linkage Node 1 to Node 2 Volume Flow Rate,timestep;"});
+        std::string const idf_objects = delimited_string({
+            "Output:Variable,(?i)Zn003:Wall.*,AFN Linkage Node 1 to Node 2 Volume Flow Rate,Timestep;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -3198,11 +3231,15 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -3254,7 +3291,9 @@ namespace OutputProcessor {
     TEST_F(SQLiteFixture, OutputProcessor_getMeters_WildCard)
     {
         // Test for #9150
-        std::string const idf_objects = delimited_string({"Output:Meter:MeterFileOnly,InteriorLights:Electricity:Zone:*,Monthly;"});
+        std::string const idf_objects = delimited_string({
+            "Output:Meter:MeterFileOnly,InteriorLights:Electricity:Zone:*,Monthly;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -3293,36 +3332,44 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "  Output:Meter:MeterFileOnly,MyGeneralLights,monthly;",
-            "  Output:Meter:MeterFileOnly,MyGeneralLights,runperiod;",
-            "  Output:Meter:MeterFileOnly,MyBuildingOther,monthly;",
-            "  Output:Meter:MeterFileOnly,MyBuildingOther,runperiod;",
-            "  Output:Meter:MeterFileOnly,Building Infiltration Heat Loss,monthly;",
-            "  Output:Meter:MeterFileOnly,Building Infiltration Heat Loss,runperiod;",
-            "  Meter:Custom,",
-            "    MyGeneralLights,         !- Name",
-            "    Electricity,             !- Fuel Type",
-            "    SPACE1-1 Lights 1,       !- Key Name 1",
-            "    Lights Electricity Energy,  !- Output Variable or Meter Name 1",
-            "    SPACE2-1 Lights 1,       !- Key Name 2",
-            "    Lights Electricity Energy,  !- Output Variable or Meter Name 2",
-            "    SPACE3-1 Lights 1,       !- Key Name 3",
-            "    Lights Electricity Energy,  !- Output Variable or Meter Name 3",
-            "    SPACE4-1 Lights 1,       !- Key Name 4",
-            "    Lights Electricity Energy,  !- Output Variable or Meter Name 4",
-            "    SPACE5-1 Lights 1,       !- Key Name 5",
-            "    Lights Electricity Energy;  !- Output Variable or Meter Name 5",
-            "  Meter:Custom,",
-            "    Building Infiltration Heat Loss,  !- Name",
-            "    Generic,                 !- Fuel Type",
-            "    *,                       !- Key Name 1",
-            "    Zone Infiltration Total Heat Loss Energy;  !- Output Variable or Meter Name 1",
-            "  Meter:CustomDecrement,",
-            "    MyBuildingOther,         !- Name",
-            "    Electricity,             !- Fuel Type",
-            "    Electricity:Building,    !- Source Meter Name",
-            "    ,                        !- Key Name 1",
-            "    MyGeneralLights;         !- Output Variable or Meter Name 1",
+            "Output:Meter:MeterFileOnly,MyGeneralLights,Monthly;",
+
+            "Output:Meter:MeterFileOnly,MyGeneralLights,RunPeriod;",
+
+            "Output:Meter:MeterFileOnly,MyBuildingOther,Monthly;",
+
+            "Output:Meter:MeterFileOnly,MyBuildingOther,RunPeriod;",
+
+            "Output:Meter:MeterFileOnly,Building Infiltration Heat Loss,Monthly;",
+
+            "Output:Meter:MeterFileOnly,Building Infiltration Heat Loss,RunPeriod;",
+
+            "Meter:Custom,",
+            "  MyGeneralLights,         !- Name",
+            "  Electricity,             !- Resource Type",
+            "  SPACE1-1 Lights 1,       !- Key Name",
+            "  Lights Electricity Energy,  !- Output Variable or Meter Name",
+            "  SPACE2-1 Lights 1,       !- Key Name",
+            "  Lights Electricity Energy,  !- Output Variable or Meter Name",
+            "  SPACE3-1 Lights 1,       !- Key Name",
+            "  Lights Electricity Energy,  !- Output Variable or Meter Name",
+            "  SPACE4-1 Lights 1,       !- Key Name",
+            "  Lights Electricity Energy,  !- Output Variable or Meter Name",
+            "  SPACE5-1 Lights 1,       !- Key Name",
+            "  Lights Electricity Energy;  !- Output Variable or Meter Name",
+
+            "Meter:Custom,",
+            "  Building Infiltration Heat Loss,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Infiltration Total Heat Loss Energy;  !- Output Variable or Meter Name",
+
+            "Meter:CustomDecrement,",
+            "  MyBuildingOther,         !- Name",
+            "  Electricity,             !- Resource Type",
+            "  Electricity:Building,    !- Source Meter Name",
+            "  ,                        !- Key Name",
+            "  MyGeneralLights;         !- Output Variable or Meter Name",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -3610,11 +3657,15 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Meter,Electricity:Facility,timestep;",
-            "Output:Meter,Electricity:Facility,hourly;",
-            "Output:Meter,Electricity:Facility,daily;",
-            "Output:Meter,Electricity:Facility,monthly;",
-            "Output:Meter,Electricity:Facility,runperiod;",
+            "Output:Meter,Electricity:Facility,Timestep;",
+
+            "Output:Meter,Electricity:Facility,Hourly;",
+
+            "Output:Meter,Electricity:Facility,Daily;",
+
+            "Output:Meter,Electricity:Facility,Monthly;",
+
+            "Output:Meter,Electricity:Facility,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -3720,16 +3771,25 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
-            "Output:Meter,Electricity:Facility,timestep;",
-            "Output:Meter,Electricity:Facility,hourly;",
-            "Output:Meter,Electricity:Facility,daily;",
-            "Output:Meter,Electricity:Facility,monthly;",
-            "Output:Meter,Electricity:Facility,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
+
+            "Output:Meter,Electricity:Facility,Timestep;",
+
+            "Output:Meter,Electricity:Facility,Hourly;",
+
+            "Output:Meter,Electricity:Facility,Daily;",
+
+            "Output:Meter,Electricity:Facility,Monthly;",
+
+            "Output:Meter,Electricity:Facility,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -4013,20 +4073,33 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,detailed;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
-            "Output:Variable,*,Boiler NaturalGas Rate,detailed;",
-            "Output:Variable,*,Boiler Heating Rate,detailed;",
-            "Output:Meter,Electricity:Facility,detailed;",
-            "Output:Meter,Electricity:Facility,timestep;",
-            "Output:Meter,Electricity:Facility,hourly;",
-            "Output:Meter,Electricity:Facility,daily;",
-            "Output:Meter,Electricity:Facility,monthly;",
-            "Output:Meter,Electricity:Facility,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Detailed;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
+
+            "Output:Variable,*,Boiler NaturalGas Rate,Detailed;",
+
+            "Output:Variable,*,Boiler Heating Rate,Detailed;",
+
+            "Output:Meter,Electricity:Facility,Detailed;",
+
+            "Output:Meter,Electricity:Facility,Timestep;",
+
+            "Output:Meter,Electricity:Facility,Hourly;",
+
+            "Output:Meter,Electricity:Facility,Daily;",
+
+            "Output:Meter,Electricity:Facility,Monthly;",
+
+            "Output:Meter,Electricity:Facility,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -4321,20 +4394,33 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,detailed;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,daily;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,monthly;",
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
-            "Output:Variable,*,Boiler NaturalGas Rate,detailed;",
-            "Output:Variable,*,Boiler Heating Rate,detailed;",
-            "Output:Meter,Electricity:Facility,detailed;",
-            "Output:Meter,Electricity:Facility,timestep;",
-            "Output:Meter,Electricity:Facility,hourly;",
-            "Output:Meter,Electricity:Facility,daily;",
-            "Output:Meter,Electricity:Facility,monthly;",
-            "Output:Meter,Electricity:Facility,runperiod;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Detailed;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Daily;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Monthly;",
+
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
+
+            "Output:Variable,*,Boiler NaturalGas Rate,Detailed;",
+
+            "Output:Variable,*,Boiler Heating Rate,Detailed;",
+
+            "Output:Meter,Electricity:Facility,Detailed;",
+
+            "Output:Meter,Electricity:Facility,Timestep;",
+
+            "Output:Meter,Electricity:Facility,Hourly;",
+
+            "Output:Meter,Electricity:Facility,Daily;",
+
+            "Output:Meter,Electricity:Facility,Monthly;",
+
+            "Output:Meter,Electricity:Facility,RunPeriod;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -4578,7 +4664,7 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Meter,Electricity:Facility,timestep;",
+            "Output:Meter,Electricity:Facility,Timestep;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -4665,10 +4751,13 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;",
-            "Output:Variable,*,Boiler NaturalGas Rate,detailed;",
-            "Output:Variable,*,Boiler Heating Rate,detailed;",
-            "Output:Meter,Electricity:Facility,timestep;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;",
+
+            "Output:Variable,*,Boiler NaturalGas Rate,Detailed;",
+
+            "Output:Variable,*,Boiler Heating Rate,Detailed;",
+
+            "Output:Meter,Electricity:Facility,Timestep;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -4753,6 +4842,7 @@ namespace OutputProcessor {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
             "Output:Variable,(Air Loop 1|Air Supply) InletNode,System Node Setpoint Temperature,Hourly;",
+
             "Output:Variable,(Air Loop 1|Air Supply) InletNode,System Node Temperature,Hourly;",
         });
 
@@ -4867,130 +4957,131 @@ namespace OutputProcessor {
     TEST_F(EnergyPlusFixture, OutputProcessor_MeterCustomSystemEnergy)
     {
         auto &op = state->dataOutputProcessor;
-        std::string const idf_objects =
-            delimited_string({"Meter:Custom,",
-                              "Meter Surface Average Face Conduction Heat Transfer Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Surface Average Face Conduction Heat Transfer Energy;  !- Output Variable or Meter Name 1",
+        std::string const idf_objects = delimited_string({
+            "Meter:Custom,",
+            "  Meter Surface Average Face Conduction Heat Transfer Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Surface Average Face Conduction Heat Transfer Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Surface Window Heat Loss Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Surface Window Heat Loss Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Surface Window Heat Loss Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Surface Window Heat Loss Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Windows Total Heat Gain Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Windows Total Heat Gain Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Windows Total Heat Gain Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Windows Total Heat Gain Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Surface Window Heat Gain Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Surface Window Heat Gain Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Surface Window Heat Gain Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Surface Window Heat Gain Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Ventilation Heat Gain,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Ventilation Total Heat Gain Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Ventilation Heat Gain,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Ventilation Total Heat Gain Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Ventilation Heat Loss,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Ventilation Total Heat Loss Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Ventilation Heat Loss,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Ventilation Total Heat Loss Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Infiltration Heat Gain,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Infiltration Total Heat Gain Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Infiltration Heat Gain,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Infiltration Total Heat Gain Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Infiltration Heat Loss,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Infiltration Total Heat Loss Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Infiltration Heat Loss,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Infiltration Total Heat Loss Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Internal Loads Heating Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Electric Equipment Total Heating Energy,  !- Output Variable or Meter Name 1",
-                              "* ,                       !- Key Name 2",
-                              "Zone Lights Total Heating Energy,  !- Output Variable or Meter Name 2",
-                              "* ,                       !- Key Name 3",
-                              "People Total Heating Energy;  !- Output Variable or Meter Name 3",
+            "Meter:Custom,",
+            "  Meter Internal Loads Heating Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Electric Equipment Total Heating Energy,  !- Output Variable or Meter Name",
+            "  *,                       !- Key Name",
+            "  Zone Lights Total Heating Energy,  !- Output Variable or Meter Name",
+            "  *,                       !- Key Name",
+            "  People Total Heating Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Electric Equipment Total Heating Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Electric Equipment Total Heating Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Electric Equipment Total Heating Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Electric Equipment Total Heating Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Mechanical Ventilation XYZ,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Mechanical Ventilation Cooling Load Decrease Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Mechanical Ventilation XYZ,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Mechanical Ventilation Cooling Load Decrease Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Zone Mechanical Ventilation 123,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Zone Mechanical Ventilation No Load Heat Removal Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Zone Mechanical Ventilation 123,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Zone Mechanical Ventilation No Load Heat Removal Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Air System Total Heating Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Air System Total Heating Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Air System Total Heating Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Air System Total Heating Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Air System Total Cooling Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Air System Total Cooling Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Air System Total Cooling Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Air System Total Cooling Energy;  !- Output Variable or Meter Name",
 
-                              "Meter:Custom,",
-                              "Meter Air System Hot Water Energy,  !- Name",
-                              "Generic,                 !- Fuel Type",
-                              "*,                       !- Key Name 1",
-                              "Air System Hot Water Energy;  !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  Meter Air System Hot Water Energy,  !- Name",
+            "  Generic,                 !- Resource Type",
+            "  *,                       !- Key Name",
+            "  Air System Hot Water Energy;  !- Output Variable or Meter Name",
 
-                              "Output:Meter, Meter Surface Average Face Conduction Heat Transfer Energy, Timestep;",
+            "Output:Meter,Meter Surface Average Face Conduction Heat Transfer Energy,Timestep;",
 
-                              "Output:Meter, Meter Surface Window Heat Loss Energy, Timestep;",
+            "Output:Meter,Meter Surface Window Heat Loss Energy,Timestep;",
 
-                              "Output:Meter, Meter Zone Windows Total Heat Gain Energy, Timestep;",
+            "Output:Meter,Meter Zone Windows Total Heat Gain Energy,Timestep;",
 
-                              "Output:Meter, Meter Surface Window Heat Gain Energy, Timestep;",
+            "Output:Meter,Meter Surface Window Heat Gain Energy,Timestep;",
 
-                              "Output:Meter, Meter Zone Ventilation Heat Gain, Timestep;",
+            "Output:Meter,Meter Zone Ventilation Heat Gain,Timestep;",
 
-                              "Output:Meter, Meter Zone Ventilation Heat Loss, Timestep;",
+            "Output:Meter,Meter Zone Ventilation Heat Loss,Timestep;",
 
-                              "Output:Meter, Meter Zone Infiltration Heat Gain, Timestep;",
+            "Output:Meter,Meter Zone Infiltration Heat Gain,Timestep;",
 
-                              "Output:Meter, Meter Zone Infiltration Heat Loss, Timestep;",
+            "Output:Meter,Meter Zone Infiltration Heat Loss,Timestep;",
 
-                              "Output:Meter, Meter Internal Loads Heating Energy, Timestep;",
+            "Output:Meter,Meter Internal Loads Heating Energy,Timestep;",
 
-                              "Output:Meter, Meter Zone Electric Equipment Total Heating Energy, Timestep;",
+            "Output:Meter,Meter Zone Electric Equipment Total Heating Energy,Timestep;",
 
-                              "Output:Meter, Meter Zone Mechanical Ventilation XYZ, Timestep;",
+            "Output:Meter,Meter Zone Mechanical Ventilation XYZ,Timestep;",
 
-                              "Output:Meter, Meter Zone Mechanical Ventilation 123, Timestep;",
+            "Output:Meter,Meter Zone Mechanical Ventilation 123,Timestep;",
 
-                              "Output:Meter, Meter Air System Total Heating Energy, Timestep;",
+            "Output:Meter,Meter Air System Total Heating Energy,Timestep;",
 
-                              "Output:Meter, Meter Air System Total Cooling Energy, Timestep;",
+            "Output:Meter,Meter Air System Total Cooling Energy,Timestep;",
 
-                              "Output:Meter, Meter Air System Hot Water Energy, Timestep;"});
+            "Output:Meter,Meter Air System Hot Water Energy,Timestep;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -5039,12 +5130,15 @@ namespace OutputProcessor {
 
     TEST_F(EnergyPlusFixture, OutputProcessor_MeterCustom_InvalidReference)
     {
-        std::string const idf_objects = delimited_string({"Meter:Custom,",
-                                                          "CustomMeter1,               !- Name",
-                                                          "Generic,                    !- Fuel Type",
-                                                          ",                           !- Key Name 1",
-                                                          "DistrictHeatingWater:Facility;   !- Variable or Meter 1 Name",
-                                                          "Output:Meter,CustomMeter1,Hourly;"});
+        std::string const idf_objects = delimited_string({
+            "Meter:Custom,",
+            "  CustomMeter1,            !- Name",
+            "  Generic,                 !- Resource Type",
+            "  ,                        !- Key Name",
+            "  DistrictHeatingWater:Facility;  !- Output Variable or Meter Name",
+
+            "Output:Meter,CustomMeter1,Hourly;",
+        });
 
         ASSERT_TRUE(process_idf(idf_objects));
         state->init_state(*state);
@@ -5068,45 +5162,51 @@ namespace OutputProcessor {
     {
         auto &op = state->dataOutputProcessor;
         std::string const idf_objects = delimited_string({
-            "  Meter:Custom,",
-            "    MyCustomLights,             !- Name",
-            "    Electricity,                !- Fuel Type",
-            "    SPACE1-1,                   !- Key Name 1",
-            "    Lights Electricity Energy;  !- Output Variable or Meter Name 1",
-            "  Meter:CustomDecrement,",
-            "    GoodDecrement,              !- Name",
-            "    Electricity,                !- Fuel Type",
-            "    Electricity:Building,       !- Source Meter Name",
-            "    ,                           !- Key Name 1",
-            "    MyCustomLights;             !- Output Variable or Meter Name 1",
-            "  Meter:CustomDecrement,",
-            "    GoodDecrementFromCustomSource,  !- Name",
-            "    Electricity,                !- Fuel Type",
-            "    MyCustomLights,             !- Source Meter Name",
-            "    SPACE1-1,                   !- Key Name 1",
-            "    Lights Electricity Energy;  !- Output Variable or Meter Name 1",
-            "  Meter:CustomDecrement,",
-            "    BadDecrementSource,         !- Name",
-            "    Electricity,                !- Fuel Type",
-            "    GoodDecrement,              !- Source Meter Name",
-            "    ,                           !- Key Name 1",
-            "    MyCustomLights;             !- Output Variable or Meter Name 1",
-            "  Meter:CustomDecrement,",
-            "    BadDecrementGroup,          !- Name",
-            "    Electricity,                !- Fuel Type",
-            "    Electricity:Building,       !- Source Meter Name",
-            "    ,                           !- Key Name 1",
-            "    GoodDecrement;              !- Output Variable or Meter Name 1",
-            "  Meter:Custom,",
-            "    BadCustomRefDec,            !- Name",
-            "    Electricity,                !- Fuel Type",
-            "    ,                           !- Key Name 1",
-            "    GoodDecrement;              !- Output Variable or Meter Name 1",
-            "  Meter:Custom,",
-            "    BadCustomRefCustom,         !- Name",
-            "    Electricity,                !- Fuel Type",
-            "    ,                           !- Key Name 1",
-            "    MyCustomLights;             !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  MyCustomLights,          !- Name",
+            "  Electricity,             !- Resource Type",
+            "  SPACE1-1,                !- Key Name",
+            "  Lights Electricity Energy;  !- Output Variable or Meter Name",
+
+            "Meter:CustomDecrement,",
+            "  GoodDecrement,           !- Name",
+            "  Electricity,             !- Resource Type",
+            "  Electricity:Building,    !- Source Meter Name",
+            "  ,                        !- Key Name",
+            "  MyCustomLights;          !- Output Variable or Meter Name",
+
+            "Meter:CustomDecrement,",
+            "  GoodDecrementFromCustomSource,  !- Name",
+            "  Electricity,             !- Resource Type",
+            "  MyCustomLights,          !- Source Meter Name",
+            "  SPACE1-1,                !- Key Name",
+            "  Lights Electricity Energy;  !- Output Variable or Meter Name",
+
+            "Meter:CustomDecrement,",
+            "  BadDecrementSource,      !- Name",
+            "  Electricity,             !- Resource Type",
+            "  GoodDecrement,           !- Source Meter Name",
+            "  ,                        !- Key Name",
+            "  MyCustomLights;          !- Output Variable or Meter Name",
+
+            "Meter:CustomDecrement,",
+            "  BadDecrementGroup,       !- Name",
+            "  Electricity,             !- Resource Type",
+            "  Electricity:Building,    !- Source Meter Name",
+            "  ,                        !- Key Name",
+            "  GoodDecrement;           !- Output Variable or Meter Name",
+
+            "Meter:Custom,",
+            "  BadCustomRefDec,         !- Name",
+            "  Electricity,             !- Resource Type",
+            "  ,                        !- Key Name",
+            "  GoodDecrement;           !- Output Variable or Meter Name",
+
+            "Meter:Custom,",
+            "  BadCustomRefCustom,      !- Name",
+            "  Electricity,             !- Resource Type",
+            "  ,                        !- Key Name",
+            "  MyCustomLights;          !- Output Variable or Meter Name",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -5167,17 +5267,18 @@ namespace OutputProcessor {
     TEST_F(EnergyPlusFixture, OutputProcessor_MeterCustomDecrement_SameCustomMeterAsSourceAndSubtraction)
     {
         std::string const idf_objects = delimited_string({
-            "  Meter:Custom,",
-            "    My Custom Meter,           !- Name",
-            "    Generic,                   !- Resource Type",
-            "    Test Key,                  !- Key Name 1",
-            "    Test Energy;               !- Output Variable or Meter Name 1",
-            "  Meter:CustomDecrement,",
-            "    My Decrement Meter,        !- Name",
-            "    Generic,                   !- Resource Type",
-            "    My Custom Meter,           !- Source Meter Name",
-            "    ,                          !- Key Name 1",
-            "    My Custom Meter;           !- Output Variable or Meter Name 1",
+            "Meter:Custom,",
+            "  My Custom Meter,         !- Name",
+            "  Generic,                 !- Resource Type",
+            "  Test Key,                !- Key Name",
+            "  Test Energy;             !- Output Variable or Meter Name",
+
+            "Meter:CustomDecrement,",
+            "  My Decrement Meter,      !- Name",
+            "  Generic,                 !- Resource Type",
+            "  My Custom Meter,         !- Source Meter Name",
+            "  ,                        !- Key Name",
+            "  My Custom Meter;         !- Output Variable or Meter Name",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -5262,22 +5363,22 @@ namespace OutputProcessor {
     {
         std::string const idf_objects = delimited_string({
             "Meter:Custom,",
-            "FuelOilNo1CustomMeter,      !- Name",
-            "FuelOilNo1,                 !- Fuel Type",
-            ",                           !- Key Name 1",
-            "FuelOilNo1:Facility;        !- Variable or Meter 1 Name",
+            "  FuelOilNo1CustomMeter,   !- Name",
+            "  FuelOilNo1,              !- Resource Type",
+            "  ,                        !- Key Name",
+            "  FuelOilNo1:Facility;     !- Output Variable or Meter Name",
 
             "Meter:Custom,",
-            "FuelOilNo2CustomMeter,      !- Name",
-            "FuelOilNo2,                 !- Fuel Type",
-            ",                           !- Key Name 1",
-            "FuelOilNo2:Facility;        !- Variable or Meter 1 Name",
+            "  FuelOilNo2CustomMeter,   !- Name",
+            "  FuelOilNo2,              !- Resource Type",
+            "  ,                        !- Key Name",
+            "  FuelOilNo2:Facility;     !- Output Variable or Meter Name",
 
             "Meter:Custom,",
-            "NaturalGasCustomMeter,      !- Name",
-            "NaturalGas,                 !- Fuel Type",
-            ",                           !- Key Name 1",
-            "NaturalGas:Facility;        !- Variable or Meter 1 Name",
+            "  NaturalGasCustomMeter,   !- Name",
+            "  NaturalGas,              !- Resource Type",
+            "  ,                        !- Key Name",
+            "  NaturalGas:Facility;     !- Output Variable or Meter Name",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -5356,12 +5457,17 @@ namespace OutputProcessor {
         // 4). Report frequencies;
         // 5). Emissions categories;
         std::string const idf_objects = delimited_string({
-            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;",
-            "Output:Variable,*,Chiller Electricity Energy,runperiod;",
-            "Output:Variable,*,Lights Electricity Energy,runperiod;",
-            "Output:Variable,*,Environmental Impact Fuel Oil No 2 CO2 Emissions Mass,runperiod;",
-            "Output:Variable,*,Chiller Electricity Energy,hourly;",
-            "Output:Variable,*,Lights Electricity Energy,timestep;",
+            "Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;",
+
+            "Output:Variable,*,Chiller Electricity Energy,RunPeriod;",
+
+            "Output:Variable,*,Lights Electricity Energy,RunPeriod;",
+
+            "Output:Variable,*,Environmental Impact Fuel Oil No 2 CO2 Emissions Mass,RunPeriod;",
+
+            "Output:Variable,*,Chiller Electricity Energy,Hourly;",
+
+            "Output:Variable,*,Lights Electricity Energy,Timestep;",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -5500,6 +5606,7 @@ namespace OutputProcessor {
     {
         std::string const idf_objects = delimited_string({
             "Output:Meter,Electricity:Facility,Timestep;",
+
             "Output:Variable,*,Lights Electricity Energy,Timestep;",
         });
 
@@ -5634,10 +5741,10 @@ namespace OutputProcessor {
 
         std::string const idf_objects = delimited_string({
             "Meter:Custom,",
-            "LightsRegexMeter,           !- Name",
-            "Electricity,                !- Fuel Type",
-            "SPACE[1-3]-1 LIGHTS.*,      !- Key Name 1",
-            "Lights Electricity Energy;  !- Output Variable or Meter Name 1",
+            "  LightsRegexMeter,        !- Name",
+            "  Electricity,             !- Resource Type",
+            "  SPACE[1-3]-1 LIGHTS.*,   !- Key Name",
+            "  Lights Electricity Energy;  !- Output Variable or Meter Name",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));
@@ -5689,11 +5796,11 @@ namespace OutputProcessor {
         // Regex SPACE[4-5]-1 LIGHTS.* should subtract only SPACE4-1 and SPACE5-1 from Electricity:Building.
         std::string const idf_objects = delimited_string({
             "Meter:CustomDecrement,",
-            "LightsDecMeter,              !- Name",
-            "Electricity,                 !- Fuel Type",
-            "Electricity:Building,        !- Source Meter Name",
-            "SPACE[4-5]-1 LIGHTS.*,       !- Key Name 1",
-            "Lights Electricity Energy;   !- Output Variable or Meter Name 1",
+            "  LightsDecMeter,          !- Name",
+            "  Electricity,             !- Resource Type",
+            "  Electricity:Building,    !- Source Meter Name",
+            "  SPACE[4-5]-1 LIGHTS.*,   !- Key Name",
+            "  Lights Electricity Energy;  !- Output Variable or Meter Name",
         });
 
         ASSERT_TRUE(process_idf(idf_objects));

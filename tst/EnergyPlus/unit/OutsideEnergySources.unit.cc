@@ -67,24 +67,23 @@ using namespace OutsideEnergySources;
 TEST_F(EnergyPlusFixture, DistrictCoolingandHeating)
 {
     std::string const idf_objects = delimited_string({
+        "DistrictCooling,",
+        "  Purchased Cooling,       !- Name",
+        "  Purchased Cooling Inlet Node,  !- Chilled Water Inlet Node Name",
+        "  Purchased Cooling Outlet Node,  !- Chilled Water Outlet Node Name",
+        "  900000;                  !- Nominal Capacity {W}",
 
-        "  DistrictCooling,",
-        "    Purchased Cooling,              !- Name                            ",
-        "    Purchased Cooling Inlet Node,   !- Chilled Water Inlet Node Name   ",
-        "    Purchased Cooling Outlet Node,  !- Chilled Water Outlet Node Name  ",
-        "    900000;                         !- Nominal Capacity {W}            ",
+        "DistrictHeating:Water,",
+        "  Purchased Heating,       !- Name",
+        "  Purchased Heat Inlet Node,  !- Hot Water Inlet Node Name",
+        "  Purchased Heat Outlet Node,  !- Hot Water Outlet Node Name",
+        "  1000000;                 !- Nominal Capacity {W}",
 
-        "  DistrictHeating:Water,",
-        "    Purchased Heating,           !- Name                        ",
-        "    Purchased Heat Inlet Node,   !- Hot Water Inlet Node Name   ",
-        "    Purchased Heat Outlet Node,  !- Hot Water Outlet Node Name  ",
-        "    1000000;                     !- Nominal Capacity {W}        ",
-
-        "  DistrictHeating:Steam,",
-        "    DistrictHeating Steam,              !- Name                    ",
-        "    DistrictHeating Steam Inlet Node,   !- Steam Inlet Node Name   ",
-        "    DistrictHeating Steam Outlet Node,  !- Steam Outlet Node Name  ",
-        "    1100000;                            !- Nominal Capacity {W}    ",
+        "DistrictHeating:Steam,",
+        "  DistrictHeating Steam,   !- Name",
+        "  DistrictHeating Steam Inlet Node,  !- Steam Inlet Node Name",
+        "  DistrictHeating Steam Outlet Node,  !- Steam Outlet Node Name",
+        "  1100000;                 !- Nominal Capacity {W}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects, false));

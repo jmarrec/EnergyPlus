@@ -62,21 +62,22 @@ TEST_F(EnergyPlusFixture, SiteGroundDomainSlabAndBasementModelsIndexChecking)
 {
     std::string const idf_objects = delimited_string({
         "Site:GroundTemperature:Undisturbed:KusudaAchenbach,",
-        "KA1,						!- Name of object",
-        "1.8,						!- Soil Thermal Conductivity {W/m-K}",
-        "3200,						!- Soil Density {kg/m3}",
-        "836,						!- Soil Specific Heat {J/kg-K}",
-        "15.5,						!- Annual average surface temperature {C}",
-        "12.8,						!- Annual amplitude of surface temperature {delta C}",
-        "17.3;						!- Phase shift of minimum surface temperature {days}",
+        "  KA1,                     !- Name",
+        "  1.8,                     !- Soil Thermal Conductivity {W/m-K}",
+        "  3200,                    !- Soil Density {kg/m3}",
+        "  836,                     !- Soil Specific Heat {J/kg-K}",
+        "  15.5,                    !- Average Soil Surface Temperature {C}",
+        "  12.8,                    !- Average Amplitude of Surface Temperature {deltaC}",
+        "  17.3;                    !- Phase Shift of Minimum Surface Temperature {days}",
+
         "Site:GroundTemperature:Undisturbed:KusudaAchenbach,",
-        "KA2,						!- Name of object",
-        "1.8,						!- Soil Thermal Conductivity {W/m-K}",
-        "3200,						!- Soil Density {kg/m3}",
-        "836,						!- Soil Specific Heat {J/kg-K}",
-        "15.5,						!- Annual average surface temperature {C}",
-        "12.8,						!- Annual amplitude of surface temperature {delta C}",
-        "17.3;						!- Phase shift of minimum surface temperature {days}",
+        "  KA2,                     !- Name",
+        "  1.8,                     !- Soil Thermal Conductivity {W/m-K}",
+        "  3200,                    !- Soil Density {kg/m3}",
+        "  836,                     !- Soil Specific Heat {J/kg-K}",
+        "  15.5,                    !- Average Soil Surface Temperature {C}",
+        "  12.8,                    !- Average Amplitude of Surface Temperature {deltaC}",
+        "  17.3;                    !- Phase Shift of Minimum Surface Temperature {days}",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));

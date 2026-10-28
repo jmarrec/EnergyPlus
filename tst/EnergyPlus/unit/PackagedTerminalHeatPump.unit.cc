@@ -626,210 +626,215 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimPTAC_HeatingCoilTest)
 
     std::string const idf_objects = delimited_string({
         "Schedule:Compact,",
-        "    FanAvailSched,           !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    Until: 24:00,            !- Field 16",
-        "    1.0;                     !- Field 17",
+        "  FanAvailSched,           !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  1.0;                     !- Field",
 
         "Schedule:Compact,",
-        "    ContinuousFanSch,        !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    Until: 24:00,            !- Field 3",
-        "    1.0;                     !- Field 4",
+        "  ContinuousFanSch,        !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  1.0;                     !- Field",
 
         "ZoneHVAC:EquipmentList,",
-        "    SPACE1-1 Equipment,      !- Name",
-        "    SequentialLoad,          !- Load Distribution Scheme",
-        "    ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment 1 Object Type",
-        "    SPACE1-1 PTAC,           !- Zone Equipment 1 Name",
-        "    1,                       !- Zone Equipment 1 Cooling Sequence",
-        "    1;                       !- Zone Equipment 1 Heating or No-Load Sequence",
+        "  SPACE1-1 Equipment,      !- Name",
+        "  SequentialLoad,          !- Load Distribution Scheme",
+        "  ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment Object Type",
+        "  SPACE1-1 PTAC,           !- Zone Equipment Name",
+        "  1,                       !- Zone Equipment Cooling Sequence",
+        "  1,                       !- Zone Equipment Heating or No-Load Sequence",
+        "  ,                        !- Zone Equipment Sequential Cooling Fraction Schedule Name",
+        "  ;                        !- Zone Equipment Sequential Heating Fraction Schedule Name",
 
-        "  ZoneHVAC:PackagedTerminalAirConditioner,",
-        "    SPACE1-1 PTAC,           !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name",
-        "    SPACE1-1 Supply Inlet,   !- Air Outlet Node Name",
-        "    OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type",
-        "    PTACOAMixer,             !- Outdoor Air Mixer Name",
-        "    0.500,                   !- Supply Air Flow Rate During Cooling Operation {m3/s}",
-        "    0.500,                   !- Supply Air Flow Rate During Heating Operation {m3/s}",
-        "    ,                        !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    ,                        !- No Load Supply Air Flow Rate Control Set To Low Speed",
-        "    0.200,                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}",
-        "    0.200,                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}",
-        "    0.200,                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    Fan:ConstantVolume,      !- Supply Air Fan Object Type",
-        "    SPACE1-1 Supply Fan,     !- Supply Air Fan Name",
-        "    Coil:Heating:Fuel,       !- Heating Coil Object Type",
-        "    SPACE1-1 Heating Coil,   !- Heating Coil Name",
-        "    Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type",
-        "    SPACE1-1 PTAC CCoil,     !- Cooling Coil Name",
-        "    BlowThrough,             !- Fan Placement",
-        "    ContinuousFanSch;        !- Supply Air Fan Operating Mode Schedule Name",
+        "ZoneHVAC:PackagedTerminalAirConditioner,",
+        "  SPACE1-1 PTAC,           !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 Supply Inlet,   !- Air Outlet Node Name",
+        "  OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type",
+        "  PTACOAMixer,             !- Outdoor Air Mixer Name",
+        "  0.5,                     !- Cooling Supply Air Flow Rate {m3/s}",
+        "  0.5,                     !- Heating Supply Air Flow Rate {m3/s}",
+        "  ,                        !- No Load Supply Air Flow Rate {m3/s}",
+        "  ,                        !- No Load Supply Air Flow Rate Control Set To Low Speed",
+        "  0.2,                     !- Cooling Outdoor Air Flow Rate {m3/s}",
+        "  0.2,                     !- Heating Outdoor Air Flow Rate {m3/s}",
+        "  0.2,                     !- No Load Outdoor Air Flow Rate {m3/s}",
+        "  Fan:ConstantVolume,      !- Supply Air Fan Object Type",
+        "  SPACE1-1 Supply Fan,     !- Supply Air Fan Name",
+        "  Coil:Heating:Fuel,       !- Heating Coil Object Type",
+        "  SPACE1-1 Heating Coil,   !- Heating Coil Name",
+        "  Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type",
+        "  SPACE1-1 PTAC CCoil,     !- Cooling Coil Name",
+        "  BlowThrough,             !- Fan Placement",
+        "  ContinuousFanSch;        !- Supply Air Fan Operating Mode Schedule Name",
 
-        "  OutdoorAir:Mixer,",
-        "	 PTACOAMixer,             !- Name",
-        "	 PTACOAMixerOutletNode,   !- Mixed Air Node Name",
-        "    PTACOAInNode,            !- Outdoor Air Stream Node Name",
-        "    ZoneExhausts,            !- Relief Air Stream Node Name",
-        "    SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name",
+        "OutdoorAir:Mixer,",
+        "  PTACOAMixer,             !- Name",
+        "  PTACOAMixerOutletNode,   !- Mixed Air Node Name",
+        "  PTACOAInNode,            !- Outdoor Air Stream Node Name",
+        "  ZoneExhausts,            !- Relief Air Stream Node Name",
+        "  SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name",
 
         "Fan:ConstantVolume,",
-        "    SPACE1-1 Supply Fan,     !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    0.7,                     !- Fan Total Efficiency",
-        "    75,                      !- Pressure Rise {Pa}",
-        "    0.500,                   !- Maximum Flow Rate {m3/s}",
-        "    0.9,                     !- Motor Efficiency",
-        "    1,                       !- Motor In Airstream Fraction",
-        "    PTACOAMixerOutletNode,   !- Air Inlet Node Name",
-        "    SPACE1-1 Fan Outlet Node;!- Air Outlet Node Name",
+        "  SPACE1-1 Supply Fan,     !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  0.7,                     !- Fan Total Efficiency",
+        "  75,                      !- Pressure Rise {Pa}",
+        "  0.5,                     !- Maximum Flow Rate {m3/s}",
+        "  0.9,                     !- Motor Efficiency",
+        "  1,                       !- Motor In Airstream Fraction",
+        "  PTACOAMixerOutletNode,   !- Air Inlet Node Name",
+        "  SPACE1-1 Fan Outlet Node;  !- Air Outlet Node Name",
 
         "Coil:Heating:Fuel,",
-        "    SPACE1-1 Heating Coil,   !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    NaturalGas,              !- Fuel Type",
-        "    0.8,                     !- Gas Burner Efficiency",
-        "    10000.0,                 !- Nominal Capacity {W}",
-        "    SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name",
-        "    SPACE1-1 Supply Inlet;   !- Air Outlet Node Name",
+        "  SPACE1-1 Heating Coil,   !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  NaturalGas,              !- Fuel Type",
+        "  0.8,                     !- Burner Efficiency",
+        "  10000.0,                 !- Nominal Capacity {W}",
+        "  SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 Supply Inlet;   !- Air Outlet Node Name",
 
-        "  Coil:Cooling:DX:SingleSpeed,",
-        "    SPACE1-1 PTAC CCoil,     !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    6680.0,                  !- Gross Rated Total Cooling Capacity {W}",
-        "    0.75,                    !- Gross Rated Sensible Heat Ratio",
-        "    3.0,                     !- Gross Rated Cooling COP {W/W}",
-        "    0.500,                   !- Rated Air Flow Rate {m3/s}",
-        "    ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
-        "    ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
-        "    SPACE1-1 Fan Outlet Node,!- Air Inlet Node Name",
-        "    SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name",
-        "    HPACCoolCapFT,           !- Total Cooling Capacity Function of Temperature Curve Name",
-        "    HPACCoolCapFFF,          !- Total Cooling Capacity Function of Flow Fraction Curve Name",
-        "    HPACEIRFT,               !- Energy Input Ratio Function of Temperature Curve Name",
-        "    HPACEIRFFF,              !- Energy Input Ratio Function of Flow Fraction Curve Name",
-        "    HPACPLFFPLR;             !- Part Load Fraction Correlation Curve Name",
+        "Coil:Cooling:DX:SingleSpeed,",
+        "  SPACE1-1 PTAC CCoil,     !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  6680.0,                  !- Gross Rated Total Cooling Capacity {W}",
+        "  0.75,                    !- Gross Rated Sensible Heat Ratio",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
+        "  0.5,                     !- Rated Air Flow Rate {m3/s}",
+        "  ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  SPACE1-1 Fan Outlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name",
+        "  HPACCoolCapFT,           !- Total Cooling Capacity Function of Temperature Curve Name",
+        "  HPACCoolCapFFF,          !- Total Cooling Capacity Function of Flow Fraction Curve Name",
+        "  HPACEIRFT,               !- Energy Input Ratio Function of Temperature Curve Name",
+        "  HPACEIRFFF,              !- Energy Input Ratio Function of Flow Fraction Curve Name",
+        "  HPACPLFFPLR,             !- Part Load Fraction Correlation Curve Name",
+        "  ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  ,                        !- Nominal Time for Condensate Removal to Begin {s}",
+        "  ;                        !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
 
-        "  Curve:Quadratic,",
-        "    HPACCoolCapFFF,          !- Name",
-        "    0.8,                     !- Coefficient1 Constant",
-        "    0.2,                     !- Coefficient2 x",
-        "    0.0,                     !- Coefficient3 x**2",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACCoolCapFFF,          !- Name",
+        "  0.8,                     !- Coefficient1 Constant",
+        "  0.2,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Quadratic,",
-        "    HPACEIRFFF,              !- Name",
-        "    1.1552,                  !- Coefficient1 Constant",
-        "    -0.1808,                 !- Coefficient2 x",
-        "    0.0256,                  !- Coefficient3 x**2",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACEIRFFF,              !- Name",
+        "  1.1552,                  !- Coefficient1 Constant",
+        "  -0.1808,                 !- Coefficient2 x",
+        "  0.0256,                  !- Coefficient3 x**2",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Quadratic,",
-        "    HPACPLFFPLR,             !- Name",
-        "    0.85,                    !- Coefficient1 Constant",
-        "    0.15,                    !- Coefficient2 x",
-        "    0.0,                     !- Coefficient3 x**2",
-        "    0.0,                     !- Minimum Value of x",
-        "    1.0;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACPLFFPLR,             !- Name",
+        "  0.85,                    !- Coefficient1 Constant",
+        "  0.15,                    !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.0;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Cubic,",
-        "    FanEffRatioCurve,        !- Name",
-        "    0.33856828,              !- Coefficient1 Constant",
-        "    1.72644131,              !- Coefficient2 x",
-        "    -1.49280132,             !- Coefficient3 x**2",
-        "    0.42776208,              !- Coefficient4 x**3",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5,                     !- Maximum Value of x",
-        "    0.3,                     !- Minimum Curve Output",
-        "    1.0;                     !- Maximum Curve Output",
+        "Curve:Cubic,",
+        "  FanEffRatioCurve,        !- Name",
+        "  0.33856828,              !- Coefficient1 Constant",
+        "  1.72644131,              !- Coefficient2 x",
+        "  -1.49280132,             !- Coefficient3 x**2",
+        "  0.42776208,              !- Coefficient4 x**3",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5,                     !- Maximum Value of x {BasedOnField A2}",
+        "  0.3,                     !- Minimum Curve Output {BasedOnField A3}",
+        "  1.0;                     !- Maximum Curve Output {BasedOnField A3}",
 
-        "  Curve:Exponent,",
-        "    FanPowerRatioCurve,      !- Name",
-        "    0.0,                     !- Coefficient1 Constant",
-        "    1.0,                     !- Coefficient2 Constant",
-        "    3.0,                     !- Coefficient3 Constant",
-        "    0.0,                     !- Minimum Value of x",
-        "    1.5,                     !- Maximum Value of x",
-        "    0.01,                    !- Minimum Curve Output",
-        "    1.5;                     !- Maximum Curve Output",
+        "Curve:Exponent,",
+        "  FanPowerRatioCurve,      !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 Constant",
+        "  3.0,                     !- Coefficient3 Constant",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5,                     !- Maximum Value of x {BasedOnField A2}",
+        "  0.01,                    !- Minimum Curve Output {BasedOnField A3}",
+        "  1.5;                     !- Maximum Curve Output {BasedOnField A3}",
 
-        "  Curve:Biquadratic,",
-        "    HPACCoolCapFT,           !- Name",
-        "    0.942587793,             !- Coefficient1 Constant",
-        "    0.009543347,             !- Coefficient2 x",
-        "    0.000683770,             !- Coefficient3 x**2",
-        "    -0.011042676,            !- Coefficient4 y",
-        "    0.000005249,             !- Coefficient5 y**2",
-        "    -0.000009720,            !- Coefficient6 x*y",
-        "    12.77778,                !- Minimum Value of x",
-        "    23.88889,                !- Maximum Value of x",
-        "    18.0,                    !- Minimum Value of y",
-        "    46.11111,                !- Maximum Value of y",
-        "    ,                        !- Minimum Curve Output",
-        "    ,                        !- Maximum Curve Output",
-        "    Temperature,             !- Input Unit Type for X",
-        "    Temperature,             !- Input Unit Type for Y",
-        "    Dimensionless;           !- Output Unit Type",
+        "Curve:Biquadratic,",
+        "  HPACCoolCapFT,           !- Name",
+        "  0.942587793,             !- Coefficient1 Constant",
+        "  0.009543347,             !- Coefficient2 x",
+        "  0.00068377,              !- Coefficient3 x**2",
+        "  -0.011042676,            !- Coefficient4 y",
+        "  5.249e-06,               !- Coefficient5 y**2",
+        "  -9.72e-06,               !- Coefficient6 x*y",
+        "  12.77778,                !- Minimum Value of x {BasedOnField A2}",
+        "  23.88889,                !- Maximum Value of x {BasedOnField A2}",
+        "  18.0,                    !- Minimum Value of y {BasedOnField A3}",
+        "  46.11111,                !- Maximum Value of y {BasedOnField A3}",
+        "  ,                        !- Minimum Curve Output {BasedOnField A4}",
+        "  ,                        !- Maximum Curve Output {BasedOnField A4}",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
 
-        "  Curve:Biquadratic,",
-        "    HPACEIRFT,               !- Name",
-        "    0.342414409,             !- Coefficient1 Constant",
-        "    0.034885008,             !- Coefficient2 x",
-        "    -0.000623700,            !- Coefficient3 x**2",
-        "    0.004977216,             !- Coefficient4 y",
-        "    0.000437951,             !- Coefficient5 y**2",
-        "    -0.000728028,            !- Coefficient6 x*y",
-        "    12.77778,                !- Minimum Value of x",
-        "    23.88889,                !- Maximum Value of x",
-        "    18.0,                    !- Minimum Value of y",
-        "    46.11111,                !- Maximum Value of y",
-        "    ,                        !- Minimum Curve Output",
-        "    ,                        !- Maximum Curve Output",
-        "    Temperature,             !- Input Unit Type for X",
-        "    Temperature,             !- Input Unit Type for Y",
-        "    Dimensionless;           !- Output Unit Type",
+        "Curve:Biquadratic,",
+        "  HPACEIRFT,               !- Name",
+        "  0.342414409,             !- Coefficient1 Constant",
+        "  0.034885008,             !- Coefficient2 x",
+        "  -0.0006237,              !- Coefficient3 x**2",
+        "  0.004977216,             !- Coefficient4 y",
+        "  0.000437951,             !- Coefficient5 y**2",
+        "  -0.000728028,            !- Coefficient6 x*y",
+        "  12.77778,                !- Minimum Value of x {BasedOnField A2}",
+        "  23.88889,                !- Maximum Value of x {BasedOnField A2}",
+        "  18.0,                    !- Minimum Value of y {BasedOnField A3}",
+        "  46.11111,                !- Maximum Value of y {BasedOnField A3}",
+        "  ,                        !- Minimum Curve Output {BasedOnField A4}",
+        "  ,                        !- Maximum Curve Output {BasedOnField A4}",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
 
         "Zone,",
-        "    SPACE1-1,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    2.438400269,             !- Ceiling Height {m}",
-        "    239.247360229;           !- Volume {m3}",
+        "  SPACE1-1,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  2.438400269,             !- Ceiling Height {m}",
+        "  239.247360229;           !- Volume {m3}",
 
         "ZoneHVAC:EquipmentConnections,",
-        "    SPACE1-1,                !- Zone Name",
-        "    SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name",
-        "    SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name",
-        "    SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name",
-        "    SPACE1-1 Zone Air Node,  !- Zone Air Node Name",
-        "    SPACE1-1 Return Outlet;  !- Zone Return Air Node Name",
+        "  SPACE1-1,                !- Zone Name",
+        "  SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name",
+        "  SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name",
+        "  SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name",
+        "  SPACE1-1 Zone Air Node,  !- Zone Air Node Name",
+        "  SPACE1-1 Return Outlet;  !- Zone Return Air Node or NodeList Name",
 
         "NodeList,",
-        "    SPACE1-1 Inlets,         !- Name",
-        "    SPACE1-1 Supply Inlet;   !- Node 1 Name",
+        "  SPACE1-1 Inlets,         !- Name",
+        "  SPACE1-1 Supply Inlet;   !- Node Name",
 
         "NodeList,",
-        "    SPACE1-1 Exhausts,       !- Name",
-        "    SPACE1-1 HP Inlet Node;  !- Node 1 Name",
+        "  SPACE1-1 Exhausts,       !- Name",
+        "  SPACE1-1 HP Inlet Node;  !- Node Name",
 
         "NodeList,",
-        "    OutsideAirInletNodes,    !- Name",
-        "    PTACOAInNode;            !- Node 1 Name",
+        "  OutsideAirInletNodes,    !- Name",
+        "  PTACOAInNode;            !- Node Name",
 
         "OutdoorAir:NodeList,",
-        "    OutsideAirInletNodes;    !- Name",
+        "  OutsideAirInletNodes;    !- Node or NodeList Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -971,216 +976,221 @@ TEST_F(EnergyPlusFixture, SimPTAC_SZVAVTest)
     int PTUnitNum(0);
 
     std::string const idf_objects = delimited_string({
-        "  Schedule:Compact,",
-        "    FanAvailSched,           !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    Until: 24:00,            !- Field 16",
-        "    1.0;                     !- Field 17",
+        "Schedule:Compact,",
+        "  FanAvailSched,           !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  1.0;                     !- Field",
 
-        "  Schedule:Compact,",
-        "    ContinuousFanSch,        !- Name",
-        "    Fraction,                !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    Until: 24:00,            !- Field 3",
-        "    1.0;                     !- Field 4",
+        "Schedule:Compact,",
+        "  ContinuousFanSch,        !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  1.0;                     !- Field",
 
-        "  ZoneHVAC:EquipmentList,",
-        "    SPACE1-1 Equipment,      !- Name",
-        "    SequentialLoad,          !- Load Distribution Scheme",
-        "    ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment 1 Object Type",
-        "    SPACE1-1 PTAC,           !- Zone Equipment 1 Name",
-        "    1,                       !- Zone Equipment 1 Cooling Sequence",
-        "    1;                       !- Zone Equipment 1 Heating or No-Load Sequence",
+        "ZoneHVAC:EquipmentList,",
+        "  SPACE1-1 Equipment,      !- Name",
+        "  SequentialLoad,          !- Load Distribution Scheme",
+        "  ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment Object Type",
+        "  SPACE1-1 PTAC,           !- Zone Equipment Name",
+        "  1,                       !- Zone Equipment Cooling Sequence",
+        "  1,                       !- Zone Equipment Heating or No-Load Sequence",
+        "  ,                        !- Zone Equipment Sequential Cooling Fraction Schedule Name",
+        "  ;                        !- Zone Equipment Sequential Heating Fraction Schedule Name",
 
-        "  ZoneHVAC:PackagedTerminalAirConditioner,",
-        "    SPACE1-1 PTAC,           !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name",
-        "    SPACE1-1 Supply Inlet,   !- Air Outlet Node Name",
-        "    OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type",
-        "    PTACOAMixer,             !- Outdoor Air Mixer Name",
-        "    0.500,                   !- Supply Air Flow Rate During Cooling Operation {m3/s}",
-        "    0.500,                   !- Supply Air Flow Rate During Heating Operation {m3/s}",
-        "    0.335,                   !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    ,                        !- No Load Supply Air Flow Rate Control Set To Low Speed",
-        "    0.200,                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}",
-        "    0.200,                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}",
-        "    0.200,                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    Fan:ConstantVolume,      !- Supply Air Fan Object Type",
-        "    SPACE1-1 Supply Fan,     !- Supply Air Fan Name",
-        "    Coil:Heating:Fuel,       !- Heating Coil Object Type",
-        "    SPACE1-1 Heating Coil,   !- Heating Coil Name",
-        "    Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type",
-        "    SPACE1-1 PTAC CCoil,     !- Cooling Coil Name",
-        "    BlowThrough,             !- Fan Placement",
-        "    FanAvailSched,           !- Supply Air Fan Operating Mode Schedule Name",
-        "    ,                        !- Availability Manager List Name",
-        "    ,                        !- Design Specification ZoneHVAC Sizing Object Name",
-        "    SingleZoneVAV,           !- Capacity Control Method",
-        "    18.0,                    !- Minimum Supply Air Temperature in Cooling Mode",
-        "    26.0;                    !- Maximum Supply Air Temperature in Heating Mode",
+        "ZoneHVAC:PackagedTerminalAirConditioner,",
+        "  SPACE1-1 PTAC,           !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 Supply Inlet,   !- Air Outlet Node Name",
+        "  OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type",
+        "  PTACOAMixer,             !- Outdoor Air Mixer Name",
+        "  0.5,                     !- Cooling Supply Air Flow Rate {m3/s}",
+        "  0.5,                     !- Heating Supply Air Flow Rate {m3/s}",
+        "  0.335,                   !- No Load Supply Air Flow Rate {m3/s}",
+        "  ,                        !- No Load Supply Air Flow Rate Control Set To Low Speed",
+        "  0.2,                     !- Cooling Outdoor Air Flow Rate {m3/s}",
+        "  0.2,                     !- Heating Outdoor Air Flow Rate {m3/s}",
+        "  0.2,                     !- No Load Outdoor Air Flow Rate {m3/s}",
+        "  Fan:ConstantVolume,      !- Supply Air Fan Object Type",
+        "  SPACE1-1 Supply Fan,     !- Supply Air Fan Name",
+        "  Coil:Heating:Fuel,       !- Heating Coil Object Type",
+        "  SPACE1-1 Heating Coil,   !- Heating Coil Name",
+        "  Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type",
+        "  SPACE1-1 PTAC CCoil,     !- Cooling Coil Name",
+        "  BlowThrough,             !- Fan Placement",
+        "  FanAvailSched,           !- Supply Air Fan Operating Mode Schedule Name",
+        "  ,                        !- Availability Manager List Name",
+        "  ,                        !- Design Specification ZoneHVAC Sizing Object Name",
+        "  SingleZoneVAV,           !- Capacity Control Method",
+        "  18.0,                    !- Minimum Supply Air Temperature in Cooling Mode {C}",
+        "  26.0;                    !- Maximum Supply Air Temperature in Heating Mode {C}",
 
-        "  OutdoorAir:Mixer,",
-        "	 PTACOAMixer,             !- Name",
-        "	 PTACOAMixerOutletNode,   !- Mixed Air Node Name",
-        "    PTACOAInNode,            !- Outdoor Air Stream Node Name",
-        "    ZoneExhausts,            !- Relief Air Stream Node Name",
-        "    SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name",
+        "OutdoorAir:Mixer,",
+        "  PTACOAMixer,             !- Name",
+        "  PTACOAMixerOutletNode,   !- Mixed Air Node Name",
+        "  PTACOAInNode,            !- Outdoor Air Stream Node Name",
+        "  ZoneExhausts,            !- Relief Air Stream Node Name",
+        "  SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name",
 
         "Fan:ConstantVolume,",
-        "    SPACE1-1 Supply Fan,     !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    0.7,                     !- Fan Total Efficiency",
-        "    75,                      !- Pressure Rise {Pa}",
-        "    0.500,                   !- Maximum Flow Rate {m3/s}",
-        "    0.9,                     !- Motor Efficiency",
-        "    1,                       !- Motor In Airstream Fraction",
-        "    PTACOAMixerOutletNode,   !- Air Inlet Node Name",
-        "    SPACE1-1 Fan Outlet Node;!- Air Outlet Node Name",
+        "  SPACE1-1 Supply Fan,     !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  0.7,                     !- Fan Total Efficiency",
+        "  75,                      !- Pressure Rise {Pa}",
+        "  0.5,                     !- Maximum Flow Rate {m3/s}",
+        "  0.9,                     !- Motor Efficiency",
+        "  1,                       !- Motor In Airstream Fraction",
+        "  PTACOAMixerOutletNode,   !- Air Inlet Node Name",
+        "  SPACE1-1 Fan Outlet Node;  !- Air Outlet Node Name",
 
         "Coil:Heating:Fuel,",
-        "    SPACE1-1 Heating Coil,   !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    NaturalGas,              !- Fuel Type",
-        "    0.8,                     !- Gas Burner Efficiency",
-        "    10000.0,                 !- Nominal Capacity {W}",
-        "    SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name",
-        "    SPACE1-1 Supply Inlet;   !- Air Outlet Node Name",
+        "  SPACE1-1 Heating Coil,   !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  NaturalGas,              !- Fuel Type",
+        "  0.8,                     !- Burner Efficiency",
+        "  10000.0,                 !- Nominal Capacity {W}",
+        "  SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 Supply Inlet;   !- Air Outlet Node Name",
 
-        "  Coil:Cooling:DX:SingleSpeed,",
-        "    SPACE1-1 PTAC CCoil,     !- Name",
-        "    FanAvailSched,           !- Availability Schedule Name",
-        "    6680.0,                  !- Gross Rated Total Cooling Capacity {W}",
-        "    0.75,                    !- Gross Rated Sensible Heat Ratio",
-        "    3.0,                     !- Gross Rated Cooling COP {W/W}",
-        "    0.500,                   !- Rated Air Flow Rate {m3/s}",
-        "    ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
-        "    ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
-        "    SPACE1-1 Fan Outlet Node,!- Air Inlet Node Name",
-        "    SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name",
-        "    HPACCoolCapFT,           !- Total Cooling Capacity Function of Temperature Curve Name",
-        "    HPACCoolCapFFF,          !- Total Cooling Capacity Function of Flow Fraction Curve Name",
-        "    HPACEIRFT,               !- Energy Input Ratio Function of Temperature Curve Name",
-        "    HPACEIRFFF,              !- Energy Input Ratio Function of Flow Fraction Curve Name",
-        "    HPACPLFFPLR;             !- Part Load Fraction Correlation Curve Name",
+        "Coil:Cooling:DX:SingleSpeed,",
+        "  SPACE1-1 PTAC CCoil,     !- Name",
+        "  FanAvailSched,           !- Availability Schedule Name",
+        "  6680.0,                  !- Gross Rated Total Cooling Capacity {W}",
+        "  0.75,                    !- Gross Rated Sensible Heat Ratio",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
+        "  0.5,                     !- Rated Air Flow Rate {m3/s}",
+        "  ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  SPACE1-1 Fan Outlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name",
+        "  HPACCoolCapFT,           !- Total Cooling Capacity Function of Temperature Curve Name",
+        "  HPACCoolCapFFF,          !- Total Cooling Capacity Function of Flow Fraction Curve Name",
+        "  HPACEIRFT,               !- Energy Input Ratio Function of Temperature Curve Name",
+        "  HPACEIRFFF,              !- Energy Input Ratio Function of Flow Fraction Curve Name",
+        "  HPACPLFFPLR,             !- Part Load Fraction Correlation Curve Name",
+        "  ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  ,                        !- Nominal Time for Condensate Removal to Begin {s}",
+        "  ;                        !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
 
-        "  Curve:Quadratic,",
-        "    HPACCoolCapFFF,          !- Name",
-        "    0.8,                     !- Coefficient1 Constant",
-        "    0.2,                     !- Coefficient2 x",
-        "    0.0,                     !- Coefficient3 x**2",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACCoolCapFFF,          !- Name",
+        "  0.8,                     !- Coefficient1 Constant",
+        "  0.2,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Quadratic,",
-        "    HPACEIRFFF,              !- Name",
-        "    1.1552,                  !- Coefficient1 Constant",
-        "    -0.1808,                 !- Coefficient2 x",
-        "    0.0256,                  !- Coefficient3 x**2",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACEIRFFF,              !- Name",
+        "  1.1552,                  !- Coefficient1 Constant",
+        "  -0.1808,                 !- Coefficient2 x",
+        "  0.0256,                  !- Coefficient3 x**2",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Quadratic,",
-        "    HPACPLFFPLR,             !- Name",
-        "    0.85,                    !- Coefficient1 Constant",
-        "    0.15,                    !- Coefficient2 x",
-        "    0.0,                     !- Coefficient3 x**2",
-        "    0.0,                     !- Minimum Value of x",
-        "    1.0;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACPLFFPLR,             !- Name",
+        "  0.85,                    !- Coefficient1 Constant",
+        "  0.15,                    !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.0;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Cubic,",
-        "    FanEffRatioCurve,        !- Name",
-        "    0.33856828,              !- Coefficient1 Constant",
-        "    1.72644131,              !- Coefficient2 x",
-        "    -1.49280132,             !- Coefficient3 x**2",
-        "    0.42776208,              !- Coefficient4 x**3",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5,                     !- Maximum Value of x",
-        "    0.3,                     !- Minimum Curve Output",
-        "    1.0;                     !- Maximum Curve Output",
+        "Curve:Cubic,",
+        "  FanEffRatioCurve,        !- Name",
+        "  0.33856828,              !- Coefficient1 Constant",
+        "  1.72644131,              !- Coefficient2 x",
+        "  -1.49280132,             !- Coefficient3 x**2",
+        "  0.42776208,              !- Coefficient4 x**3",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5,                     !- Maximum Value of x {BasedOnField A2}",
+        "  0.3,                     !- Minimum Curve Output {BasedOnField A3}",
+        "  1.0;                     !- Maximum Curve Output {BasedOnField A3}",
 
-        "  Curve:Exponent,",
-        "    FanPowerRatioCurve,      !- Name",
-        "    0.0,                     !- Coefficient1 Constant",
-        "    1.0,                     !- Coefficient2 Constant",
-        "    3.0,                     !- Coefficient3 Constant",
-        "    0.0,                     !- Minimum Value of x",
-        "    1.5,                     !- Maximum Value of x",
-        "    0.01,                    !- Minimum Curve Output",
-        "    1.5;                     !- Maximum Curve Output",
+        "Curve:Exponent,",
+        "  FanPowerRatioCurve,      !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 Constant",
+        "  3.0,                     !- Coefficient3 Constant",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5,                     !- Maximum Value of x {BasedOnField A2}",
+        "  0.01,                    !- Minimum Curve Output {BasedOnField A3}",
+        "  1.5;                     !- Maximum Curve Output {BasedOnField A3}",
 
-        "  Curve:Biquadratic,",
-        "    HPACCoolCapFT,           !- Name",
-        "    0.942587793,             !- Coefficient1 Constant",
-        "    0.009543347,             !- Coefficient2 x",
-        "    0.000683770,             !- Coefficient3 x**2",
-        "    -0.011042676,            !- Coefficient4 y",
-        "    0.000005249,             !- Coefficient5 y**2",
-        "    -0.000009720,            !- Coefficient6 x*y",
-        "    12.77778,                !- Minimum Value of x",
-        "    23.88889,                !- Maximum Value of x",
-        "    18.0,                    !- Minimum Value of y",
-        "    46.11111,                !- Maximum Value of y",
-        "    ,                        !- Minimum Curve Output",
-        "    ,                        !- Maximum Curve Output",
-        "    Temperature,             !- Input Unit Type for X",
-        "    Temperature,             !- Input Unit Type for Y",
-        "    Dimensionless;           !- Output Unit Type",
+        "Curve:Biquadratic,",
+        "  HPACCoolCapFT,           !- Name",
+        "  0.942587793,             !- Coefficient1 Constant",
+        "  0.009543347,             !- Coefficient2 x",
+        "  0.00068377,              !- Coefficient3 x**2",
+        "  -0.011042676,            !- Coefficient4 y",
+        "  5.249e-06,               !- Coefficient5 y**2",
+        "  -9.72e-06,               !- Coefficient6 x*y",
+        "  12.77778,                !- Minimum Value of x {BasedOnField A2}",
+        "  23.88889,                !- Maximum Value of x {BasedOnField A2}",
+        "  18.0,                    !- Minimum Value of y {BasedOnField A3}",
+        "  46.11111,                !- Maximum Value of y {BasedOnField A3}",
+        "  ,                        !- Minimum Curve Output {BasedOnField A4}",
+        "  ,                        !- Maximum Curve Output {BasedOnField A4}",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
 
-        "  Curve:Biquadratic,",
-        "    HPACEIRFT,               !- Name",
-        "    0.342414409,             !- Coefficient1 Constant",
-        "    0.034885008,             !- Coefficient2 x",
-        "    -0.000623700,            !- Coefficient3 x**2",
-        "    0.004977216,             !- Coefficient4 y",
-        "    0.000437951,             !- Coefficient5 y**2",
-        "    -0.000728028,            !- Coefficient6 x*y",
-        "    12.77778,                !- Minimum Value of x",
-        "    23.88889,                !- Maximum Value of x",
-        "    18.0,                    !- Minimum Value of y",
-        "    46.11111,                !- Maximum Value of y",
-        "    ,                        !- Minimum Curve Output",
-        "    ,                        !- Maximum Curve Output",
-        "    Temperature,             !- Input Unit Type for X",
-        "    Temperature,             !- Input Unit Type for Y",
-        "    Dimensionless;           !- Output Unit Type",
+        "Curve:Biquadratic,",
+        "  HPACEIRFT,               !- Name",
+        "  0.342414409,             !- Coefficient1 Constant",
+        "  0.034885008,             !- Coefficient2 x",
+        "  -0.0006237,              !- Coefficient3 x**2",
+        "  0.004977216,             !- Coefficient4 y",
+        "  0.000437951,             !- Coefficient5 y**2",
+        "  -0.000728028,            !- Coefficient6 x*y",
+        "  12.77778,                !- Minimum Value of x {BasedOnField A2}",
+        "  23.88889,                !- Maximum Value of x {BasedOnField A2}",
+        "  18.0,                    !- Minimum Value of y {BasedOnField A3}",
+        "  46.11111,                !- Maximum Value of y {BasedOnField A3}",
+        "  ,                        !- Minimum Curve Output {BasedOnField A4}",
+        "  ,                        !- Maximum Curve Output {BasedOnField A4}",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
 
         "Zone,",
-        "    SPACE1-1,                !- Name",
-        "    0,                       !- Direction of Relative North {deg}",
-        "    0,                       !- X Origin {m}",
-        "    0,                       !- Y Origin {m}",
-        "    0,                       !- Z Origin {m}",
-        "    1,                       !- Type",
-        "    1,                       !- Multiplier",
-        "    2.438400269,             !- Ceiling Height {m}",
-        "    239.247360229;           !- Volume {m3}",
+        "  SPACE1-1,                !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  2.438400269,             !- Ceiling Height {m}",
+        "  239.247360229;           !- Volume {m3}",
 
         "ZoneHVAC:EquipmentConnections,",
-        "    SPACE1-1,                !- Zone Name",
-        "    SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name",
-        "    SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name",
-        "    SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name",
-        "    SPACE1-1 Zone Air Node,  !- Zone Air Node Name",
-        "    SPACE1-1 Return Outlet;  !- Zone Return Air Node Name",
+        "  SPACE1-1,                !- Zone Name",
+        "  SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name",
+        "  SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name",
+        "  SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name",
+        "  SPACE1-1 Zone Air Node,  !- Zone Air Node Name",
+        "  SPACE1-1 Return Outlet;  !- Zone Return Air Node or NodeList Name",
 
         "NodeList,",
-        "    SPACE1-1 Inlets,         !- Name",
-        "    SPACE1-1 Supply Inlet;   !- Node 1 Name",
+        "  SPACE1-1 Inlets,         !- Name",
+        "  SPACE1-1 Supply Inlet;   !- Node Name",
 
         "NodeList,",
-        "    SPACE1-1 Exhausts,       !- Name",
-        "    SPACE1-1 HP Inlet Node;  !- Node 1 Name",
+        "  SPACE1-1 Exhausts,       !- Name",
+        "  SPACE1-1 HP Inlet Node;  !- Node Name",
 
         "NodeList,",
-        "    OutsideAirInletNodes,    !- Name",
-        "    PTACOAInNode;            !- Node 1 Name",
+        "  OutsideAirInletNodes,    !- Name",
+        "  PTACOAInNode;            !- Node Name",
 
         "OutdoorAir:NodeList,",
-        "    OutsideAirInletNodes;    !- Name",
+        "  OutsideAirInletNodes;    !- Node or NodeList Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4091,206 +4101,211 @@ TEST_F(EnergyPlusFixture, PTAC_ZoneEquipment_NodeInputTest)
 
     std::string const idf_objects = delimited_string({
         "Schedule:Compact,",
-        "    ContinuousFanSch,        !- Name",
-        "    ,                !- Schedule Type Limits Name",
-        "    Through: 12/31,          !- Field 1",
-        "    For: AllDays,            !- Field 2",
-        "    Until: 24:00,            !- Field 3",
-        "    1.0;                     !- Field 4",
+        "  ContinuousFanSch,        !- Name",
+        "  ,                        !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  1.0;                     !- Field",
 
         "ZoneHVAC:EquipmentList,",
-        "    SPACE1-1 Equipment,      !- Name",
-        "    SequentialLoad,          !- Load Distribution Scheme",
-        "    ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment 1 Object Type",
-        "    SPACE1-1 PTAC,           !- Zone Equipment 1 Name",
-        "    1,                       !- Zone Equipment 1 Cooling Sequence",
-        "    1;                       !- Zone Equipment 1 Heating or No-Load Sequence",
+        "  SPACE1-1 Equipment,      !- Name",
+        "  SequentialLoad,          !- Load Distribution Scheme",
+        "  ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment Object Type",
+        "  SPACE1-1 PTAC,           !- Zone Equipment Name",
+        "  1,                       !- Zone Equipment Cooling Sequence",
+        "  1,                       !- Zone Equipment Heating or No-Load Sequence",
+        "  ,                        !- Zone Equipment Sequential Cooling Fraction Schedule Name",
+        "  ;                        !- Zone Equipment Sequential Heating Fraction Schedule Name",
 
-        "  ZoneHVAC:PackagedTerminalAirConditioner,",
-        "    SPACE1-1 PTAC,           !- Name",
-        "    ,           !- Availability Schedule Name",
-        "    SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name",
-        "    SPACE1-1 Supply Inlet,   !- Air Outlet Node Name",
-        "    OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type",
-        "    PTACOAMixer,             !- Outdoor Air Mixer Name",
-        "    0.500,                   !- Supply Air Flow Rate During Cooling Operation {m3/s}",
-        "    0.500,                   !- Supply Air Flow Rate During Heating Operation {m3/s}",
-        "    ,                        !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    ,                        !- No Load Supply Air Flow Rate Control Set To Low Speed",
-        "    0.200,                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}",
-        "    0.200,                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}",
-        "    0.200,                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    Fan:ConstantVolume,      !- Supply Air Fan Object Type",
-        "    SPACE1-1 Supply Fan,     !- Supply Air Fan Name",
-        "    Coil:Heating:Fuel,       !- Heating Coil Object Type",
-        "    SPACE1-1 Heating Coil,   !- Heating Coil Name",
-        "    Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type",
-        "    SPACE1-1 PTAC CCoil,     !- Cooling Coil Name",
-        "    BlowThrough,             !- Fan Placement",
-        "    ContinuousFanSch;        !- Supply Air Fan Operating Mode Schedule Name",
+        "ZoneHVAC:PackagedTerminalAirConditioner,",
+        "  SPACE1-1 PTAC,           !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 Supply Inlet,   !- Air Outlet Node Name",
+        "  OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type",
+        "  PTACOAMixer,             !- Outdoor Air Mixer Name",
+        "  0.5,                     !- Cooling Supply Air Flow Rate {m3/s}",
+        "  0.5,                     !- Heating Supply Air Flow Rate {m3/s}",
+        "  ,                        !- No Load Supply Air Flow Rate {m3/s}",
+        "  ,                        !- No Load Supply Air Flow Rate Control Set To Low Speed",
+        "  0.2,                     !- Cooling Outdoor Air Flow Rate {m3/s}",
+        "  0.2,                     !- Heating Outdoor Air Flow Rate {m3/s}",
+        "  0.2,                     !- No Load Outdoor Air Flow Rate {m3/s}",
+        "  Fan:ConstantVolume,      !- Supply Air Fan Object Type",
+        "  SPACE1-1 Supply Fan,     !- Supply Air Fan Name",
+        "  Coil:Heating:Fuel,       !- Heating Coil Object Type",
+        "  SPACE1-1 Heating Coil,   !- Heating Coil Name",
+        "  Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type",
+        "  SPACE1-1 PTAC CCoil,     !- Cooling Coil Name",
+        "  BlowThrough,             !- Fan Placement",
+        "  ContinuousFanSch;        !- Supply Air Fan Operating Mode Schedule Name",
 
-        "  OutdoorAir:Mixer,",
-        "	 PTACOAMixer,             !- Name",
-        "	 PTACOAMixerOutletNode,   !- Mixed Air Node Name",
-        "    PTACOAInNode,            !- Outdoor Air Stream Node Name",
-        "    ZoneExhausts,            !- Relief Air Stream Node Name",
-        "    SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name",
+        "OutdoorAir:Mixer,",
+        "  PTACOAMixer,             !- Name",
+        "  PTACOAMixerOutletNode,   !- Mixed Air Node Name",
+        "  PTACOAInNode,            !- Outdoor Air Stream Node Name",
+        "  ZoneExhausts,            !- Relief Air Stream Node Name",
+        "  SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name",
 
         "Fan:ConstantVolume,",
-        "    SPACE1-1 Supply Fan,     !- Name",
-        "    ,           !- Availability Schedule Name",
-        "    0.7,                     !- Fan Total Efficiency",
-        "    75,                      !- Pressure Rise {Pa}",
-        "    0.500,                   !- Maximum Flow Rate {m3/s}",
-        "    0.9,                     !- Motor Efficiency",
-        "    1,                       !- Motor In Airstream Fraction",
-        "    PTACOAMixerOutletNode,   !- Air Inlet Node Name",
-        "    SPACE1-1 Fan Outlet Node;!- Air Outlet Node Name",
+        "  SPACE1-1 Supply Fan,     !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  0.7,                     !- Fan Total Efficiency",
+        "  75,                      !- Pressure Rise {Pa}",
+        "  0.5,                     !- Maximum Flow Rate {m3/s}",
+        "  0.9,                     !- Motor Efficiency",
+        "  1,                       !- Motor In Airstream Fraction",
+        "  PTACOAMixerOutletNode,   !- Air Inlet Node Name",
+        "  SPACE1-1 Fan Outlet Node;  !- Air Outlet Node Name",
 
         "Coil:Heating:Fuel,",
-        "    SPACE1-1 Heating Coil,   !- Name",
-        "    ,           !- Availability Schedule Name",
-        "    NaturalGas,              !- Fuel Type",
-        "    0.8,                     !- Gas Burner Efficiency",
-        "    10000.0,                 !- Nominal Capacity {W}",
-        "    SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name",
-        "    SPACE1-1 Supply Inlet;   !- Air Outlet Node Name",
+        "  SPACE1-1 Heating Coil,   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  NaturalGas,              !- Fuel Type",
+        "  0.8,                     !- Burner Efficiency",
+        "  10000.0,                 !- Nominal Capacity {W}",
+        "  SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 Supply Inlet;   !- Air Outlet Node Name",
 
-        "  Coil:Cooling:DX:SingleSpeed,",
-        "    SPACE1-1 PTAC CCoil,     !- Name",
-        "    ,           !- Availability Schedule Name",
-        "    6680.0,                  !- Gross Rated Total Cooling Capacity {W}",
-        "    0.75,                    !- Gross Rated Sensible Heat Ratio",
-        "    3.0,                     !- Gross Rated Cooling COP {W/W}",
-        "    0.500,                   !- Rated Air Flow Rate {m3/s}",
-        "    ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
-        "    ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
-        "    SPACE1-1 Fan Outlet Node,!- Air Inlet Node Name",
-        "    SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name",
-        "    HPACCoolCapFT,           !- Total Cooling Capacity Function of Temperature Curve Name",
-        "    HPACCoolCapFFF,          !- Total Cooling Capacity Function of Flow Fraction Curve Name",
-        "    HPACEIRFT,               !- Energy Input Ratio Function of Temperature Curve Name",
-        "    HPACEIRFFF,              !- Energy Input Ratio Function of Flow Fraction Curve Name",
-        "    HPACPLFFPLR;             !- Part Load Fraction Correlation Curve Name",
+        "Coil:Cooling:DX:SingleSpeed,",
+        "  SPACE1-1 PTAC CCoil,     !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  6680.0,                  !- Gross Rated Total Cooling Capacity {W}",
+        "  0.75,                    !- Gross Rated Sensible Heat Ratio",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
+        "  0.5,                     !- Rated Air Flow Rate {m3/s}",
+        "  ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  SPACE1-1 Fan Outlet Node,  !- Air Inlet Node Name",
+        "  SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name",
+        "  HPACCoolCapFT,           !- Total Cooling Capacity Function of Temperature Curve Name",
+        "  HPACCoolCapFFF,          !- Total Cooling Capacity Function of Flow Fraction Curve Name",
+        "  HPACEIRFT,               !- Energy Input Ratio Function of Temperature Curve Name",
+        "  HPACEIRFFF,              !- Energy Input Ratio Function of Flow Fraction Curve Name",
+        "  HPACPLFFPLR,             !- Part Load Fraction Correlation Curve Name",
+        "  ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  ,                        !- Nominal Time for Condensate Removal to Begin {s}",
+        "  ;                        !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
 
-        "  Curve:Quadratic,",
-        "    HPACCoolCapFFF,          !- Name",
-        "    0.8,                     !- Coefficient1 Constant",
-        "    0.2,                     !- Coefficient2 x",
-        "    0.0,                     !- Coefficient3 x**2",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACCoolCapFFF,          !- Name",
+        "  0.8,                     !- Coefficient1 Constant",
+        "  0.2,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Quadratic,",
-        "    HPACEIRFFF,              !- Name",
-        "    1.1552,                  !- Coefficient1 Constant",
-        "    -0.1808,                 !- Coefficient2 x",
-        "    0.0256,                  !- Coefficient3 x**2",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACEIRFFF,              !- Name",
+        "  1.1552,                  !- Coefficient1 Constant",
+        "  -0.1808,                 !- Coefficient2 x",
+        "  0.0256,                  !- Coefficient3 x**2",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Quadratic,",
-        "    HPACPLFFPLR,             !- Name",
-        "    0.85,                    !- Coefficient1 Constant",
-        "    0.15,                    !- Coefficient2 x",
-        "    0.0,                     !- Coefficient3 x**2",
-        "    0.0,                     !- Minimum Value of x",
-        "    1.0;                     !- Maximum Value of x",
+        "Curve:Quadratic,",
+        "  HPACPLFFPLR,             !- Name",
+        "  0.85,                    !- Coefficient1 Constant",
+        "  0.15,                    !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.0;                     !- Maximum Value of x {BasedOnField A2}",
 
-        "  Curve:Cubic,",
-        "    FanEffRatioCurve,        !- Name",
-        "    0.33856828,              !- Coefficient1 Constant",
-        "    1.72644131,              !- Coefficient2 x",
-        "    -1.49280132,             !- Coefficient3 x**2",
-        "    0.42776208,              !- Coefficient4 x**3",
-        "    0.5,                     !- Minimum Value of x",
-        "    1.5,                     !- Maximum Value of x",
-        "    0.3,                     !- Minimum Curve Output",
-        "    1.0;                     !- Maximum Curve Output",
+        "Curve:Cubic,",
+        "  FanEffRatioCurve,        !- Name",
+        "  0.33856828,              !- Coefficient1 Constant",
+        "  1.72644131,              !- Coefficient2 x",
+        "  -1.49280132,             !- Coefficient3 x**2",
+        "  0.42776208,              !- Coefficient4 x**3",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5,                     !- Maximum Value of x {BasedOnField A2}",
+        "  0.3,                     !- Minimum Curve Output {BasedOnField A3}",
+        "  1.0;                     !- Maximum Curve Output {BasedOnField A3}",
 
-        "  Curve:Exponent,",
-        "    FanPowerRatioCurve,      !- Name",
-        "    0.0,                     !- Coefficient1 Constant",
-        "    1.0,                     !- Coefficient2 Constant",
-        "    3.0,                     !- Coefficient3 Constant",
-        "    0.0,                     !- Minimum Value of x",
-        "    1.5,                     !- Maximum Value of x",
-        "    0.01,                    !- Minimum Curve Output",
-        "    1.5;                     !- Maximum Curve Output",
+        "Curve:Exponent,",
+        "  FanPowerRatioCurve,      !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 Constant",
+        "  3.0,                     !- Coefficient3 Constant",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5,                     !- Maximum Value of x {BasedOnField A2}",
+        "  0.01,                    !- Minimum Curve Output {BasedOnField A3}",
+        "  1.5;                     !- Maximum Curve Output {BasedOnField A3}",
 
-        "  Curve:Biquadratic,",
-        "    HPACCoolCapFT,           !- Name",
-        "    0.942587793,             !- Coefficient1 Constant",
-        "    0.009543347,             !- Coefficient2 x",
-        "    0.000683770,             !- Coefficient3 x**2",
-        "    -0.011042676,            !- Coefficient4 y",
-        "    0.000005249,             !- Coefficient5 y**2",
-        "    -0.000009720,            !- Coefficient6 x*y",
-        "    12.77778,                !- Minimum Value of x",
-        "    23.88889,                !- Maximum Value of x",
-        "    18.0,                    !- Minimum Value of y",
-        "    46.11111,                !- Maximum Value of y",
-        "    ,                        !- Minimum Curve Output",
-        "    ,                        !- Maximum Curve Output",
-        "    Temperature,             !- Input Unit Type for X",
-        "    Temperature,             !- Input Unit Type for Y",
-        "    Dimensionless;           !- Output Unit Type",
+        "Curve:Biquadratic,",
+        "  HPACCoolCapFT,           !- Name",
+        "  0.942587793,             !- Coefficient1 Constant",
+        "  0.009543347,             !- Coefficient2 x",
+        "  0.00068377,              !- Coefficient3 x**2",
+        "  -0.011042676,            !- Coefficient4 y",
+        "  5.249e-06,               !- Coefficient5 y**2",
+        "  -9.72e-06,               !- Coefficient6 x*y",
+        "  12.77778,                !- Minimum Value of x {BasedOnField A2}",
+        "  23.88889,                !- Maximum Value of x {BasedOnField A2}",
+        "  18.0,                    !- Minimum Value of y {BasedOnField A3}",
+        "  46.11111,                !- Maximum Value of y {BasedOnField A3}",
+        "  ,                        !- Minimum Curve Output {BasedOnField A4}",
+        "  ,                        !- Maximum Curve Output {BasedOnField A4}",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
 
-        "  Curve:Biquadratic,",
-        "    HPACEIRFT,               !- Name",
-        "    0.342414409,             !- Coefficient1 Constant",
-        "    0.034885008,             !- Coefficient2 x",
-        "    -0.000623700,            !- Coefficient3 x**2",
-        "    0.004977216,             !- Coefficient4 y",
-        "    0.000437951,             !- Coefficient5 y**2",
-        "    -0.000728028,            !- Coefficient6 x*y",
-        "    12.77778,                !- Minimum Value of x",
-        "    23.88889,                !- Maximum Value of x",
-        "    18.0,                    !- Minimum Value of y",
-        "    46.11111,                !- Maximum Value of y",
-        "    ,                        !- Minimum Curve Output",
-        "    ,                        !- Maximum Curve Output",
-        "    Temperature,             !- Input Unit Type for X",
-        "    Temperature,             !- Input Unit Type for Y",
-        "    Dimensionless;           !- Output Unit Type",
+        "Curve:Biquadratic,",
+        "  HPACEIRFT,               !- Name",
+        "  0.342414409,             !- Coefficient1 Constant",
+        "  0.034885008,             !- Coefficient2 x",
+        "  -0.0006237,              !- Coefficient3 x**2",
+        "  0.004977216,             !- Coefficient4 y",
+        "  0.000437951,             !- Coefficient5 y**2",
+        "  -0.000728028,            !- Coefficient6 x*y",
+        "  12.77778,                !- Minimum Value of x {BasedOnField A2}",
+        "  23.88889,                !- Maximum Value of x {BasedOnField A2}",
+        "  18.0,                    !- Minimum Value of y {BasedOnField A3}",
+        "  46.11111,                !- Maximum Value of y {BasedOnField A3}",
+        "  ,                        !- Minimum Curve Output {BasedOnField A4}",
+        "  ,                        !- Maximum Curve Output {BasedOnField A4}",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
 
         "Zone,",
-        "    SPACE1-1;                !- Name",
+        "  SPACE1-1;                !- Name",
 
         "Zone,",
-        "    Plenum zone;                !- Name",
+        "  Plenum zone;             !- Name",
 
         "ZoneHVAC:EquipmentConnections,",
-        "    SPACE1-1,                !- Zone Name",
-        "    SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name",
-        "    SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name",
-        "    SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name",
-        "    SPACE1-1 Zone Air Node,  !- Zone Air Node Name",
-        "    SPACE1-1 Return Outlet;  !- Zone Return Air Node Name",
+        "  SPACE1-1,                !- Zone Name",
+        "  SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name",
+        "  SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name",
+        "  SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name",
+        "  SPACE1-1 Zone Air Node,  !- Zone Air Node Name",
+        "  SPACE1-1 Return Outlet;  !- Zone Return Air Node or NodeList Name",
 
         "NodeList,",
-        "    SPACE1-1 Inlets,         !- Name",
-        "    SPACE1-1 Supply Inlet;   !- Node 1 Name",
+        "  SPACE1-1 Inlets,         !- Name",
+        "  SPACE1-1 Supply Inlet;   !- Node Name",
 
         "NodeList,",
-        "    SPACE1-1 Exhausts,       !- Name",
-        "    SPACE1-1 HP Inlet Node;  !- Node 1 Name",
+        "  SPACE1-1 Exhausts,       !- Name",
+        "  SPACE1-1 HP Inlet Node;  !- Node Name",
 
         "NodeList,",
-        "    OutsideAirInletNodes,    !- Name",
-        "    PTACOAInNode;            !- Node 1 Name",
+        "  OutsideAirInletNodes,    !- Name",
+        "  PTACOAInNode;            !- Node Name",
 
         "OutdoorAir:NodeList,",
-        "    OutsideAirInletNodes;    !- Name",
+        "  OutsideAirInletNodes;    !- Node or NodeList Name",
 
         "AirLoopHVAC:ReturnPlenum,",
-        "  Zone Return Plenum,  !- Name",
-        "  Plenum zone,              !- Zone Name",
-        "  Plenum Node,              !- Zone Node Name", // illegal use of non-unique zone node name
-        "  Plenum Outlet Node,       !- Outlet Node Name",
+        "  Zone Return Plenum,      !- Name",
+        "  Plenum zone,             !- Zone Name",
+        "  Plenum Node,             !- Zone Node Name", // illegal use of non-unique zone node name
+        "  Plenum Outlet Node,      !- Outlet Node Name",
         "  Plenum Induced Air Node,  !- Induced Air Outlet Node or NodeList Name",
-        "  Plenum Inlet Node 1,           !- Inlet 1 Node Name",
-        "  SPACE1-1 Return Outlet;        !- Inlet 2 Node Name",
+        "  Plenum Inlet Node 1,     !- Inlet Node Name",
+        "  SPACE1-1 Return Outlet;  !- Inlet Node Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4377,188 +4392,192 @@ TEST_F(EnergyPlusFixture, ZonePTHP_ElectricityRateTest)
 
     std::string const idf_objects = delimited_string({
         "ZoneHVAC:PackagedTerminalHeatPump,",
-        "  PTHP Thermal Zone One,                  !- Name",
-        "  FanAndCoilAvailSched,                   !- Availability Schedule Name",
-        "  Thermal Zone One Exhaust Node,          !- Air Inlet Node Name",
-        "  Thermal Zone One Inlet Node,            !- Air Outlet Node Name",
-        "  OutdoorAir:Mixer,                       !- Outdoor Air Mixer Object Type",
-        "  PTHP Thermal Zone One OA Mixer,         !- Outdoor Air Mixer Name",
-        "  1.00,                                   !- Cooling Supply Air Flow Rate {m3/s}",
-        "  1.00,                                   !- Heating Supply Air Flow Rate {m3/s}",
-        "  1.00,                                   !- No Load Supply Air Flow Rate {m3/s}",
-        "  ,                                       !- No Load Supply Air Flow Rate Control Set To Low Speed",
-        "  0.50,                                   !- Cooling Outdoor Air Flow Rate {m3/s}",
-        "  0.50,                                   !- Heating Outdoor Air Flow Rate {m3/s}",
-        "  0.50,                                   !- No Load Outdoor Air Flow Rate {m3/s}",
-        "  Fan:OnOff,                              !- Supply Air Fan Object Type",
-        "  Thermal Zone One Supply Fan,            !- Supply Air Fan Name",
-        "  Coil:Heating:DX:SingleSpeed,            !- Heating Coil Object Type",
-        "  PTHP Thermal Zone One DX Htg Coil,      !- Heating Coil Name",
-        "  0.001,                                  !- Heating Convergence Tolerance {dimensionless}",
-        "  Coil:Cooling:DX:SingleSpeed,            !- Cooling Coil Object Type",
-        "  PTHP Thermal Zone One DX Clg Coil,      !- Cooling Coil Name",
-        "  0.001,                                  !- Cooling Convergence Tolerance {dimensionless}",
-        "  Coil:Heating:Electric,                  !- Supplemental Heating Coil Object Type",
-        "  PTHP Thermal Zone One Supp EL Htg Coil, !- Supplemental Heating Coil Name",
-        "  50.0,                                   !- Maximum Supply Air Temperature from Supplemental Heater {C}",
-        "  21,                                     !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}",
-        "  DrawThrough,                            !- Fan Placement",
-        "  ;                                       !- Supply Air Fan Operating Mode Schedule Name",
+        "  PTHP Thermal Zone One,   !- Name",
+        "  FanAndCoilAvailSched,    !- Availability Schedule Name",
+        "  Thermal Zone One Exhaust Node,  !- Air Inlet Node Name",
+        "  Thermal Zone One Inlet Node,  !- Air Outlet Node Name",
+        "  OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type",
+        "  PTHP Thermal Zone One OA Mixer,  !- Outdoor Air Mixer Name",
+        "  1.0,                     !- Cooling Supply Air Flow Rate {m3/s}",
+        "  1.0,                     !- Heating Supply Air Flow Rate {m3/s}",
+        "  1.0,                     !- No Load Supply Air Flow Rate {m3/s}",
+        "  ,                        !- No Load Supply Air Flow Rate Control Set To Low Speed",
+        "  0.5,                     !- Cooling Outdoor Air Flow Rate {m3/s}",
+        "  0.5,                     !- Heating Outdoor Air Flow Rate {m3/s}",
+        "  0.5,                     !- No Load Outdoor Air Flow Rate {m3/s}",
+        "  Fan:OnOff,               !- Supply Air Fan Object Type",
+        "  Thermal Zone One Supply Fan,  !- Supply Air Fan Name",
+        "  Coil:Heating:DX:SingleSpeed,  !- Heating Coil Object Type",
+        "  PTHP Thermal Zone One DX Htg Coil,  !- Heating Coil Name",
+        "  0.001,                   !- Heating Convergence Tolerance {dimensionless}",
+        "  Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type",
+        "  PTHP Thermal Zone One DX Clg Coil,  !- Cooling Coil Name",
+        "  0.001,                   !- Cooling Convergence Tolerance {dimensionless}",
+        "  Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",
+        "  PTHP Thermal Zone One Supp EL Htg Coil,  !- Supplemental Heating Coil Name",
+        "  50.0,                    !- Maximum Supply Air Temperature from Supplemental Heater {C}",
+        "  21,                      !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}",
+        "  DrawThrough,             !- Fan Placement",
+        "  ;                        !- Supply Air Fan Operating Mode Schedule Name",
 
         "OutdoorAir:Mixer,",
-        "  PTHP Thermal Zone One OA Mixer,         !- Name",
-        "  PTHP Thermal Zone One Mixed Air Node,   !- Mixed Air Node Name",
-        "  PTHP Thermal Zone One OA Node,          !- Outdoor Air Stream Node Name",
+        "  PTHP Thermal Zone One OA Mixer,  !- Name",
+        "  PTHP Thermal Zone One Mixed Air Node,  !- Mixed Air Node Name",
+        "  PTHP Thermal Zone One OA Node,  !- Outdoor Air Stream Node Name",
         "  PTHP Thermal Zone One Relief Air Node,  !- Relief Air Stream Node Name",
-        "  Thermal Zone One Exhaust Node;          !- Return Air Stream Node Name",
+        "  Thermal Zone One Exhaust Node;  !- Return Air Stream Node Name",
 
         "OutdoorAir:Node,",
-        "  PTHP Thermal Zone One OA Node;          !- Name",
+        "  PTHP Thermal Zone One OA Node;  !- Name",
 
         "Fan:OnOff,",
-        "  Thermal Zone One Supply Fan,            !- Name",
-        "  FanAndCoilAvailSched,                   !- Availability Schedule Name",
-        "  0.7,                                    !- Fan Total Efficiency",
-        "  600.0,                                  !- Pressure Rise{ Pa }",
-        "  1.0,                                    !- Maximum Flow Rate{ m3 / s }",
-        "  0.9,                                    !- Motor Efficiency",
-        "  1.0,                                    !- Motor In Airstream Fraction",
-        "  PTHP Thermal Zone One Heating Coil Outlet Node, !- Air Inlet Node Name",
+        "  Thermal Zone One Supply Fan,  !- Name",
+        "  FanAndCoilAvailSched,    !- Availability Schedule Name",
+        "  0.7,                     !- Fan Total Efficiency",
+        "  600.0,                   !- Pressure Rise {Pa}",
+        "  1.0,                     !- Maximum Flow Rate {m3/s}",
+        "  0.9,                     !- Motor Efficiency",
+        "  1.0,                     !- Motor In Airstream Fraction",
+        "  PTHP Thermal Zone One Heating Coil Outlet Node,  !- Air Inlet Node Name",
         "  PTHP Thermal Zone One Fan Outlet Node;  !- Air Outlet Node Name",
 
         "Coil:Heating:DX:SingleSpeed,",
-        "  PTHP Thermal Zone One DX Htg Coil,      !- Name",
-        "  FanAndCoilAvailSched,                   !- Availability Schedule Name",
-        "  18584.26,                               !- Gross Rated Heating Capacity {W}",
-        "  3.8,                                    !- Gross Rated Heating COP {W/W}",
-        "  1.0,                                    !- Rated Air Flow Rate {m3/s}",
-        "  673.3,                                  !- 2017 Rated Supply Fan Power Per Volume Flow Rate",
-        "  673.3,                                  !- 2023 Rated Supply Fan Power Per Volume Flow Rate",
-        "  PTHP Thermal Zone One Cooling Coil Outlet Node, !- Air Inlet Node Name",
-        "  PTHP Thermal Zone One Heating Coil Outlet Node, !- Air Outlet Node Name",
-        "  Curve Biquadratic,                      !- Total Cooling Capacity Function of Temperature Curve Name",
-        "  Curve Quadratic,                        !- Total Cooling Capacity Function of Flow Fraction Curve Name",
-        "  Curve Biquadratic,                      !- Energy Input Ratio Function of Temperature Curve Name",
-        "  Curve Quadratic,                        !- Energy Input Ratio Function of Flow Fraction Curve Name",
-        "  Curve Quadratic,                        !- Part Load Fraction Correlation Curve Name",
-        "  ,                                       !- Defrost Energy Input Ratio Function of Temperature Curve Name",
-        "  -8,                                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
-        "  ,                                       !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}",
-        "  5,                                      !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}",
-        "  0,                                      !- Crankcase Heater Capacity {W}",
-        "  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
-        "  Resistive,                              !- Defrost Strategy",
-        "  Timed,                                  !- Defrost Control",
-        "  0.166667,                               !- Defrost Time Period Fraction",
-        "  2000;                                   !- Resistive Defrost Heater Capacity {W}",
+        "  PTHP Thermal Zone One DX Htg Coil,  !- Name",
+        "  FanAndCoilAvailSched,    !- Availability Schedule Name",
+        "  18584.26,                !- Gross Rated Heating Capacity {W}",
+        "  3.8,                     !- Gross Rated Heating COP {W/W}",
+        "  1.0,                     !- Rated Air Flow Rate {m3/s}",
+        "  673.3,                   !- 2017 Rated Supply Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  673.3,                   !- 2023 Rated Supply Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  PTHP Thermal Zone One Cooling Coil Outlet Node,  !- Air Inlet Node Name",
+        "  PTHP Thermal Zone One Heating Coil Outlet Node,  !- Air Outlet Node Name",
+        "  Curve Biquadratic,       !- Heating Capacity Function of Temperature Curve Name",
+        "  Curve Quadratic,         !- Heating Capacity Function of Flow Fraction Curve Name",
+        "  Curve Biquadratic,       !- Energy Input Ratio Function of Temperature Curve Name",
+        "  Curve Quadratic,         !- Energy Input Ratio Function of Flow Fraction Curve Name",
+        "  Curve Quadratic,         !- Part Load Fraction Correlation Curve Name",
+        "  ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name",
+        "  -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  ,                        !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}",
+        "  5,                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}",
+        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        "  10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  Resistive,               !- Defrost Strategy",
+        "  Timed,                   !- Defrost Control",
+        "  0.166667,                !- Defrost Time Period Fraction",
+        "  2000,                    !- Resistive Defrost Heater Capacity {W}",
+        "  ,                        !- Region number for calculating HSPF",
+        "  ,                        !- Evaporator Air Inlet Node Name",
+        "  ,                        !- Zone Name for Evaporator Placement",
+        "  ,                        !- Secondary Coil Air Flow Rate {m3/s}",
+        "  ;                        !- Secondary Coil Fan Flow Scaling Factor {m3/s}",
 
         "Coil:Cooling:DX:SingleSpeed,",
-        "  PTHP Thermal Zone One DX Clg Coil,      !- Name",
-        "  FanAndCoilAvailSched,                   !- Availability Schedule Name",
-        "  18584.26,                               !- Gross Rated Total Cooling Capacity {W}",
-        "  0.75,                                   !- Gross Rated Sensible Heat Ratio",
-        "  4.40,                                   !- Gross Rated Cooling COP {W/W}",
-        "  1.0,                                    !- Rated Air Flow Rate {m3/s}",
-        "  673.3,                                  !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate",
-        "  673.3,                                  !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate",
-        "  PTHP Thermal Zone One Mixed Air Node,   !- Air Inlet Node Name",
-        "  PTHP Thermal Zone One Cooling Coil Outlet Node, !- Air Outlet Node Name",
-        "  Curve Biquadratic,                      !- Total Cooling Capacity Function of Temperature Curve Name",
-        "  Curve Quadratic,                        !- Total Cooling Capacity Function of Flow Fraction Curve Name",
-        "  Curve Biquadratic,                      !- Energy Input Ratio Function of Temperature Curve Name",
-        "  Curve Quadratic,                        !- Energy Input Ratio Function of Flow Fraction Curve Name",
-        "  Curve Quadratic,                        !- Part Load Fraction Correlation Curve Name",
-        "  -25,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
-        "  ,                                       !- Nominal Time for Condensate Removal to Begin {s}",
-        "  ,                                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
-        "  ,                                       !- Maximum Cycling Rate {cycles/hr}",
-        "  ,                                       !- Latent Capacity Time Constant {s}",
-        "  ,                                       !- Condenser Air Inlet Node Name",
-        "  AirCooled,                              !- Condenser Type",
-        "  0,                                      !- Evaporative Condenser Effectiveness {dimensionless}",
-        "  Autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}",
-        "  Autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}",
-        "  0,                                      !- Crankcase Heater Capacity {W}",
-        "  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  0,                                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
-        "  ,                                       !- Supply Water Storage Tank Name",
-        "  ,                                       !- Condensate Collection Water Storage Tank Name",
-        "  0,                                      !- Basin Heater Capacity {W/K}",
-        "  10;                                     !- Basin Heater Setpoint Temperature {C}",
+        "  PTHP Thermal Zone One DX Clg Coil,  !- Name",
+        "  FanAndCoilAvailSched,    !- Availability Schedule Name",
+        "  18584.26,                !- Gross Rated Total Cooling Capacity {W}",
+        "  0.75,                    !- Gross Rated Sensible Heat Ratio",
+        "  4.4,                     !- Gross Rated Cooling COP {W/W}",
+        "  1.0,                     !- Rated Air Flow Rate {m3/s}",
+        "  673.3,                   !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  673.3,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
+        "  PTHP Thermal Zone One Mixed Air Node,  !- Air Inlet Node Name",
+        "  PTHP Thermal Zone One Cooling Coil Outlet Node,  !- Air Outlet Node Name",
+        "  Curve Biquadratic,       !- Total Cooling Capacity Function of Temperature Curve Name",
+        "  Curve Quadratic,         !- Total Cooling Capacity Function of Flow Fraction Curve Name",
+        "  Curve Biquadratic,       !- Energy Input Ratio Function of Temperature Curve Name",
+        "  Curve Quadratic,         !- Energy Input Ratio Function of Flow Fraction Curve Name",
+        "  Curve Quadratic,         !- Part Load Fraction Correlation Curve Name",
+        "  -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  ,                        !- Nominal Time for Condensate Removal to Begin {s}",
+        "  ,                        !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
+        "  ,                        !- Maximum Cycling Rate {cycles/hr}",
+        "  ,                        !- Latent Capacity Time Constant {s}",
+        "  ,                        !- Condenser Air Inlet Node Name",
+        "  AirCooled,               !- Condenser Type",
+        "  0,                       !- Evaporative Condenser Effectiveness {dimensionless}",
+        "  Autosize,                !- Evaporative Condenser Air Flow Rate {m3/s}",
+        "  Autosize,                !- Evaporative Condenser Pump Rated Power Consumption {W}",
+        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        "  0,                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  ,                        !- Supply Water Storage Tank Name",
+        "  ,                        !- Condensate Collection Water Storage Tank Name",
+        "  0,                       !- Basin Heater Capacity {W/K}",
+        "  10;                      !- Basin Heater Setpoint Temperature {C}",
 
         "Curve:Biquadratic,",
-        "  Curve Biquadratic,                      !- Name",
-        "  1.0,                                    !- Coefficient1 Constant",
-        "  0.0,                                    !- Coefficient2 x",
-        "  0.0,                                    !- Coefficient3 x**2",
-        "  0.0,                                    !- Coefficient4 y",
-        "  0.0,                                    !- Coefficient5 y**2",
-        "  0.0,                                    !- Coefficient6 x*y",
-        " -50,                                     !- Minimum Value of x {BasedOnField A2}",
-        "  50,                                     !- Maximum Value of x {BasedOnField A2}",
-        " -50,                                     !- Minimum Value of y {BasedOnField A3}",
-        "  50;                                     !- Maximum Value of y {BasedOnField A3}",
+        "  Curve Biquadratic,       !- Name",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  -50,                     !- Minimum Value of x {BasedOnField A2}",
+        "  50,                      !- Maximum Value of x {BasedOnField A2}",
+        "  -50,                     !- Minimum Value of y {BasedOnField A3}",
+        "  50;                      !- Maximum Value of y {BasedOnField A3}",
 
         "Curve:Quadratic,",
-        "  Curve Quadratic,                        !- Name",
-        "  1.0,                                    !- Coefficient1 Constant",
-        "  0.0,                                    !- Coefficient2 x",
-        "  0,                                      !- Coefficient3 x**2",
-        "  0.0,                                    !- Minimum Value of x {BasedOnField A2}",
-        "  5.0;                                    !- Maximum Value of x {BasedOnField A2}",
+        "  Curve Quadratic,         !- Name",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0,                       !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x {BasedOnField A2}",
+        "  5.0;                     !- Maximum Value of x {BasedOnField A2}",
 
         "Coil:Heating:Electric,",
-        "  PTHP Thermal Zone one Supp EL Htg Coil, !- Name",
-        "  FanAndCoilAvailSched,                   !- Availability Schedule Name",
-        "  1,                                      !- Efficiency",
-        "  30000.0,                                !- Nominal Capacity {W}",
+        "  PTHP Thermal Zone one Supp EL Htg Coil,  !- Name",
+        "  FanAndCoilAvailSched,    !- Availability Schedule Name",
+        "  1,                       !- Efficiency",
+        "  30000.0,                 !- Nominal Capacity {W}",
         "  PTHP Thermal Zone One Fan Outlet Node,  !- Air Inlet Node Name",
-        "  Thermal Zone One Inlet Node;            !- Air Outlet Node Name",
+        "  Thermal Zone One Inlet Node;  !- Air Outlet Node Name",
 
         "Zone,",
-        "  Thermal Zone One;                       !- Name",
+        "  Thermal Zone One;        !- Name",
 
         "ZoneHVAC:EquipmentConnections,",
-        "  Thermal Zone One,                       !- Zone Name",
-        "  Thermal Zone One Equipment List,        !- Zone Conditioning Equipment List Name",
-        "  Thermal Zone One Inlet Node List,       !- Zone Air Inlet Node or NodeList Name",
-        "  Thermal Zone One Exhaust Node List,     !- Zone Air Exhaust Node or NodeList Name",
-        "  Thermal Zone One Air Node;              !- Zone Air Node Name",
+        "  Thermal Zone One,        !- Zone Name",
+        "  Thermal Zone One Equipment List,  !- Zone Conditioning Equipment List Name",
+        "  Thermal Zone One Inlet Node List,  !- Zone Air Inlet Node or NodeList Name",
+        "  Thermal Zone One Exhaust Node List,  !- Zone Air Exhaust Node or NodeList Name",
+        "  Thermal Zone One Air Node;  !- Zone Air Node Name",
 
         "NodeList,",
-        "  Thermal Zone One Inlet Node List,       !- Name",
-        "  Thermal Zone One Inlet Node;            !- Node Name 1",
+        "  Thermal Zone One Inlet Node List,  !- Name",
+        "  Thermal Zone One Inlet Node;  !- Node Name",
 
         "NodeList,",
-        "  Thermal Zone One Exhaust Node List,     !- Name",
-        "  Thermal Zone One Exhaust Node;          !- Node Name 1",
+        "  Thermal Zone One Exhaust Node List,  !- Name",
+        "  Thermal Zone One Exhaust Node;  !- Node Name",
 
         "ZoneHVAC:EquipmentList,",
-        "  Thermal Zone One Equipment List,        !- Name",
-        "  SequentialLoad,                         !- Load Distribution Scheme",
-        "  ZoneHVAC:PackagedTerminalHeatPump,      !- Zone Equipment Object Type 1",
-        "  PTHP Thermal Zone One,                  !- Zone Equipment Name 1",
-        "  1,                                      !- Zone Equipment Cooling Sequence 1",
-        "  1,                                      !- Zone Equipment Heating or No-Load Sequence 1",
-        "  ,                                       !- Zone Equipment Sequential Cooling Fraction Schedule Name 1",
-        "  ;                                       !- Zone Equipment Sequential Heating Fraction Schedule Name 1",
+        "  Thermal Zone One Equipment List,  !- Name",
+        "  SequentialLoad,          !- Load Distribution Scheme",
+        "  ZoneHVAC:PackagedTerminalHeatPump,  !- Zone Equipment Object Type",
+        "  PTHP Thermal Zone One,   !- Zone Equipment Name",
+        "  1,                       !- Zone Equipment Cooling Sequence",
+        "  1,                       !- Zone Equipment Heating or No-Load Sequence",
+        "  ,                        !- Zone Equipment Sequential Cooling Fraction Schedule Name",
+        "  ;                        !- Zone Equipment Sequential Heating Fraction Schedule Name",
 
         "Schedule:Compact,",
-        "  FanAndCoilAvailSched,                   !- Name",
-        "  Fraction,                               !- Schedule Type Limits Name",
-        "  Through: 12/31,                         !- Field 1",
-        "  For: AllDays,                           !- Field 2",
-        "  Until: 24:00,                           !- Field 3",
-        "  1.0;                                    !- Field 4",
+        "  FanAndCoilAvailSched,    !- Name",
+        "  Fraction,                !- Schedule Type Limits Name",
+        "  Through: 12/31,          !- Field",
+        "  For: AllDays,            !- Field",
+        "  Until: 24:00,            !- Field",
+        "  1.0;                     !- Field",
 
         "ScheduleTypeLimits,",
-        "  Fraction,                               !- Name",
-        "  0,                                      !- Lower Limit Value {BasedOnField A3}",
-        "  1,                                      !- Upper Limit Value {BasedOnField A3}",
-        "  Discrete,                               !- Numeric Type",
-        "  availability;                           !- Unit Type",
-
+        "  Fraction,                !- Name",
+        "  0,                       !- Lower Limit Value {BasedOnField A3}",
+        "  1,                       !- Upper Limit Value {BasedOnField A3}",
+        "  Discrete,                !- Numeric Type",
+        "  Availability;            !- Unit Type",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4712,186 +4731,193 @@ TEST_F(EnergyPlusFixture, PTAC_AvailabilityManagerTest)
     int PTUnitNum(0);
 
     std::string_view constexpr idf_objects = R"IDF(
-        Schedule:Compact,
-            FanAvailSched,           !- Name
-            Fraction,                !- Schedule Type Limits Name
-            Through: 12/31,          !- Field 1
-            For: AllDays,            !- Field 2
-            Until: 24:00,            !- Field 16
-            1.0;                     !- Field 17
 
-        Schedule:Compact,
-            FanCycling,              !- Name
-            Fraction,                !- Schedule Type Limits Name
-            Through: 12/31,          !- Field 1
-            For: AllDays,            !- Field 2
-            Until: 24:00,            !- Field 3
-            0;                       !- Field 4
+Schedule:Compact,
+  FanAvailSched,           !- Name
+  Fraction,                !- Schedule Type Limits Name
+  Through: 12/31,          !- Field
+  For: AllDays,            !- Field
+  Until: 24:00,            !- Field
+  1.0;                     !- Field
 
-        ZoneHVAC:EquipmentList,
-            SPACE1-1 Equipment,      !- Name
-            SequentialLoad,          !- Load Distribution Scheme
-            ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment 1 Object Type
-            SPACE1-1 PTAC,           !- Zone Equipment 1 Name
-            1,                       !- Zone Equipment 1 Cooling Sequence
-            1;                       !- Zone Equipment 1 Heating or No-Load Sequence
+Schedule:Compact,
+  FanCycling,              !- Name
+  Fraction,                !- Schedule Type Limits Name
+  Through: 12/31,          !- Field
+  For: AllDays,            !- Field
+  Until: 24:00,            !- Field
+  0;                       !- Field
 
-          ZoneHVAC:PackagedTerminalAirConditioner,
-            SPACE1-1 PTAC,           !- Name
-            FanAvailSched,           !- Availability Schedule Name
-            SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name
-            SPACE1-1 Supply Inlet,   !- Air Outlet Node Name
-            OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
-            PTACOAMixer,             !- Outdoor Air Mixer Name
-            0.500,                   !- Supply Air Flow Rate During Cooling Operation {m3/s}
-            0.500,                   !- Supply Air Flow Rate During Heating Operation {m3/s}
-            ,                        !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
-            No,                      !- No Load Supply Air Flow Rate Control Set To Low Speed",
-            0.200,                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
-            0.200,                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
-            0.200,                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
-            Fan:SystemModel,         !- Supply Air Fan Object Type
-            SPACE1-1 Supply Fan,     !- Supply Air Fan Name
-            Coil:Heating:Fuel,       !- Heating Coil Object Type
-            SPACE1-1 Heating Coil,   !- Heating Coil Name
-            Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type
-            SPACE1-1 PTAC CCoil,     !- Cooling Coil Name
-            BlowThrough,             !- Fan Placement
-            FanCycling,              !- Supply Air Fan Operating Mode Schedule Name
-		    PTAC-Avail Manager;      !- Availability Manager List Name
+ZoneHVAC:EquipmentList,
+  SPACE1-1 Equipment,      !- Name
+  SequentialLoad,          !- Load Distribution Scheme
+  ZoneHVAC:PackagedTerminalAirConditioner,  !- Zone Equipment Object Type
+  SPACE1-1 PTAC,           !- Zone Equipment Name
+  1,                       !- Zone Equipment Cooling Sequence
+  1,                       !- Zone Equipment Heating or No-Load Sequence
+  ,                        !- Zone Equipment Sequential Cooling Fraction Schedule Name
+  ;                        !- Zone Equipment Sequential Heating Fraction Schedule Name
 
-          AvailabilityManagerAssignmentList,
-            PTAC-Avail Manager,
-            AvailabilityManager:NightCycle,
-            PTAC-FanCycling;
+ZoneHVAC:PackagedTerminalAirConditioner,
+  SPACE1-1 PTAC,           !- Name
+  FanAvailSched,           !- Availability Schedule Name
+  SPACE1-1 HP Inlet Node,  !- Air Inlet Node Name
+  SPACE1-1 Supply Inlet,   !- Air Outlet Node Name
+  OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
+  PTACOAMixer,             !- Outdoor Air Mixer Name
+  0.5,                     !- Cooling Supply Air Flow Rate {m3/s}
+  0.5,                     !- Heating Supply Air Flow Rate {m3/s}
+  ,                        !- No Load Supply Air Flow Rate {m3/s}
+  No,                      !- No Load Supply Air Flow Rate Control Set To Low Speed
+  0.2,                     !- Cooling Outdoor Air Flow Rate {m3/s}
+  0.2,                     !- Heating Outdoor Air Flow Rate {m3/s}
+  0.2,                     !- No Load Outdoor Air Flow Rate {m3/s}
+  Fan:SystemModel,         !- Supply Air Fan Object Type
+  SPACE1-1 Supply Fan,     !- Supply Air Fan Name
+  Coil:Heating:Fuel,       !- Heating Coil Object Type
+  SPACE1-1 Heating Coil,   !- Heating Coil Name
+  Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type
+  SPACE1-1 PTAC CCoil,     !- Cooling Coil Name
+  BlowThrough,             !- Fan Placement
+  FanCycling,              !- Supply Air Fan Operating Mode Schedule Name
+  PTAC-Avail Manager;      !- Availability Manager List Name
 
-          AvailabilityManager:NightCycle,
-            PTAC-FanCycling,         !- Name
-            FanAvailSched,           !- Applicability Schedule Name
-            FanCycling,              !- Fan Schedule Name
-            CycleOnControlZone,      !- Control Type
-            0.2,                     !- Thermostat Tolerance
-            ThermostatWithMinimumRuntime, !- Cycling Run Time Control Type
-            300,                     !- Cycling Run Time
-            SPACE1-1;                !- Control Zone or Zone List Name
+AvailabilityManagerAssignmentList,
+  PTAC-Avail Manager,      !- Name
+  AvailabilityManager:NightCycle,  !- Availability Manager Object Type
+  PTAC-FanCycling;         !- Availability Manager Name
 
-          OutdoorAir:Mixer,
-        	PTACOAMixer,             !- Name
-        	PTACOAMixerOutletNode,   !- Mixed Air Node Name
-            PTACOAInNode,            !- Outdoor Air Stream Node Name
-            ZoneExhausts,            !- Relief Air Stream Node Name
-            SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name
+AvailabilityManager:NightCycle,
+  PTAC-FanCycling,         !- Name
+  FanAvailSched,           !- Applicability Schedule Name
+  FanCycling,              !- Fan Schedule Name
+  CycleOnControlZone,      !- Control Type
+  0.2,                     !- Thermostat Tolerance {deltaC}
+  ThermostatWithMinimumRunTime,  !- Cycling Run Time Control Type
+  300,                     !- Cycling Run Time {s}
+  SPACE1-1;                !- Control Zone or Zone List Name
 
-		  Fan:SystemModel,
-			SPACE1-1 Supply Fan,     !- Name
-			FanAvailSched,           !- Availability Schedule Name
-            PTACOAMixerOutletNode,   !- Air Inlet Node Name
-            SPACE1-1 Fan Outlet Node,!- Air Outlet Node Name
-			0.5,                     !- Design Maximum Air Flow Rate {m3/s}
-			Discrete,                !- Speed Control Method
-			0.0,                     !- Electric Power Minimum Flow Rate Fraction
-			75.0,                    !- Design Pressure Rise {Pa}
-			0.9,                     !- Motor Efficiency
-			1.0,                     !- Motor In Air Stream Fraction
-			AUTOSIZE,                !- Design Electric Power Consumption {W}
-			TotalEfficiencyAndPressure,  !- Design Power Sizing Method
-			,                        !- Electric Power Per Unit Flow Rate {W/(m3/s)}
-			,                        !- Electric Power Per Unit Flow Rate Per Unit Pressure {W/((m3/s)-Pa)}
-            0.7;                     !- Fan Total Efficiency
+OutdoorAir:Mixer,
+  PTACOAMixer,             !- Name
+  PTACOAMixerOutletNode,   !- Mixed Air Node Name
+  PTACOAInNode,            !- Outdoor Air Stream Node Name
+  ZoneExhausts,            !- Relief Air Stream Node Name
+  SPACE1-1 HP Inlet Node;  !- Return Air Stream Node Name
 
-        Coil:Heating:Fuel,
-            SPACE1-1 Heating Coil,   !- Name
-            FanAvailSched,           !- Availability Schedule Name
-            NaturalGas,              !- Fuel Type
-            0.8,                     !- Gas Burner Efficiency
-            10000.0,                 !- Nominal Capacity {W}
-            SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name
-            SPACE1-1 Supply Inlet;   !- Air Outlet Node Name
+Fan:SystemModel,
+  SPACE1-1 Supply Fan,     !- Name
+  FanAvailSched,           !- Availability Schedule Name
+  PTACOAMixerOutletNode,   !- Air Inlet Node Name
+  SPACE1-1 Fan Outlet Node,  !- Air Outlet Node Name
+  0.5,                     !- Design Maximum Air Flow Rate {m3/s}
+  Discrete,                !- Speed Control Method
+  0.0,                     !- Electric Power Minimum Flow Rate Fraction
+  75.0,                    !- Design Pressure Rise {Pa}
+  0.9,                     !- Motor Efficiency
+  1.0,                     !- Motor In Air Stream Fraction
+  Autosize,                !- Design Electric Power Consumption {W}
+  TotalEfficiencyAndPressure,  !- Design Power Sizing Method
+  ,                        !- Electric Power Per Unit Flow Rate {W/(m3/s)}
+  ,                        !- Electric Power Per Unit Flow Rate Per Unit Pressure {W/((m3/s)-Pa)}
+  0.7;                     !- Fan Total Efficiency
 
-          Coil:Cooling:DX:SingleSpeed,
-            SPACE1-1 PTAC CCoil,     !- Name
-            FanAvailSched,           !- Availability Schedule Name
-            6680.0,                  !- Gross Rated Total Cooling Capacity {W}
-            0.75,                    !- Gross Rated Sensible Heat Ratio
-            3.0,                     !- Gross Rated Cooling COP {W/W}
-            0.500,                   !- Rated Air Flow Rate {m3/s}
-            ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-            ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
-            SPACE1-1 Fan Outlet Node,!- Air Inlet Node Name
-            SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name
-            BiQuadCurveFT,           !- Total Cooling Capacity Function of Temperature Curve Name
-            QuadCurveFFF,            !- Total Cooling Capacity Function of Flow Fraction Curve Name
-            BiQuadCurveFT,           !- Energy Input Ratio Function of Temperature Curve Name
-            QuadCurveFFF,            !- Energy Input Ratio Function of Flow Fraction Curve Name
-            HPACPLFFPLR;             !- Part Load Fraction Correlation Curve Name
+Coil:Heating:Fuel,
+  SPACE1-1 Heating Coil,   !- Name
+  FanAvailSched,           !- Availability Schedule Name
+  NaturalGas,              !- Fuel Type
+  0.8,                     !- Burner Efficiency
+  10000.0,                 !- Nominal Capacity {W}
+  SPACE1-1 CCoil Outlet Node,  !- Air Inlet Node Name
+  SPACE1-1 Supply Inlet;   !- Air Outlet Node Name
 
-          Curve:Biquadratic,
-            BiQuadCurveFT,           !- Name
-            1.0,                     !- Coefficient1 Constant
-            0.0,                     !- Coefficient2 x
-            0.0,                     !- Coefficient3 x**2
-            0.0,                     !- Coefficient4 y
-            0.0,                     !- Coefficient5 y**2
-            0.0,                     !- Coefficient6 x*y
-            0.0,                     !- Minimum Value of x
-            50.0,                    !- Maximum Value of x
-            0.0,                     !- Minimum Value of y
-            50.0,                    !- Maximum Value of y
-            ,                        !- Minimum Curve Output
-            ,                        !- Maximum Curve Output
-            Temperature,             !- Input Unit Type for X
-            Temperature,             !- Input Unit Type for Y
-            Dimensionless;           !- Output Unit Type
+Coil:Cooling:DX:SingleSpeed,
+  SPACE1-1 PTAC CCoil,     !- Name
+  FanAvailSched,           !- Availability Schedule Name
+  6680.0,                  !- Gross Rated Total Cooling Capacity {W}
+  0.75,                    !- Gross Rated Sensible Heat Ratio
+  3.0,                     !- Gross Rated Cooling COP {W/W}
+  0.5,                     !- Rated Air Flow Rate {m3/s}
+  ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+  ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+  SPACE1-1 Fan Outlet Node,  !- Air Inlet Node Name
+  SPACE1-1 CCoil Outlet Node,  !- Air Outlet Node Name
+  BiQuadCurveFT,           !- Total Cooling Capacity Function of Temperature Curve Name
+  QuadCurveFFF,            !- Total Cooling Capacity Function of Flow Fraction Curve Name
+  BiQuadCurveFT,           !- Energy Input Ratio Function of Temperature Curve Name
+  QuadCurveFFF,            !- Energy Input Ratio Function of Flow Fraction Curve Name
+  HPACPLFFPLR,             !- Part Load Fraction Correlation Curve Name
+  ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
+  ,                        !- Nominal Time for Condensate Removal to Begin {s}
+  ;                        !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
 
-          Curve:Quadratic,
-            QuadCurveFFF,            !- Name
-            1.0,                     !- Coefficient1 Constant
-            0.0,                     !- Coefficient2 x
-            0.0,                     !- Coefficient3 x**2
-            0.5,                     !- Minimum Value of x
-            1.5;                     !- Maximum Value of x
+Curve:Biquadratic,
+  BiQuadCurveFT,           !- Name
+  1.0,                     !- Coefficient1 Constant
+  0.0,                     !- Coefficient2 x
+  0.0,                     !- Coefficient3 x**2
+  0.0,                     !- Coefficient4 y
+  0.0,                     !- Coefficient5 y**2
+  0.0,                     !- Coefficient6 x*y
+  0.0,                     !- Minimum Value of x {BasedOnField A2}
+  50.0,                    !- Maximum Value of x {BasedOnField A2}
+  0.0,                     !- Minimum Value of y {BasedOnField A3}
+  50.0,                    !- Maximum Value of y {BasedOnField A3}
+  ,                        !- Minimum Curve Output {BasedOnField A4}
+  ,                        !- Maximum Curve Output {BasedOnField A4}
+  Temperature,             !- Input Unit Type for X
+  Temperature,             !- Input Unit Type for Y
+  Dimensionless;           !- Output Unit Type
 
-          Curve:Quadratic,
-            HPACPLFFPLR,             !- Name
-            0.85,                    !- Coefficient1 Constant
-            0.15,                    !- Coefficient2 x
-            0.0,                     !- Coefficient3 x**2
-            0.0,                     !- Minimum Value of x
-            1.0;                     !- Maximum Value of x
+Curve:Quadratic,
+  QuadCurveFFF,            !- Name
+  1.0,                     !- Coefficient1 Constant
+  0.0,                     !- Coefficient2 x
+  0.0,                     !- Coefficient3 x**2
+  0.5,                     !- Minimum Value of x {BasedOnField A2}
+  1.5;                     !- Maximum Value of x {BasedOnField A2}
 
-        Zone,
-            SPACE1-1,                !- Name
-            0,                       !- Direction of Relative North {deg}
-            0,                       !- X Origin {m}
-            0,                       !- Y Origin {m}
-            0,                       !- Z Origin {m}
-            1,                       !- Type
-            1,                       !- Multiplier
-            2.438400269,             !- Ceiling Height {m}
-            239.247360229;           !- Volume {m3}
+Curve:Quadratic,
+  HPACPLFFPLR,             !- Name
+  0.85,                    !- Coefficient1 Constant
+  0.15,                    !- Coefficient2 x
+  0.0,                     !- Coefficient3 x**2
+  0.0,                     !- Minimum Value of x {BasedOnField A2}
+  1.0;                     !- Maximum Value of x {BasedOnField A2}
 
-        ZoneHVAC:EquipmentConnections,
-            SPACE1-1,                !- Zone Name
-            SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name
-            SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name
-            SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name
-            SPACE1-1 Zone Air Node,  !- Zone Air Node Name
-            SPACE1-1 Return Outlet;  !- Zone Return Air Node Name
+Zone,
+  SPACE1-1,                !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  2.438400269,             !- Ceiling Height {m}
+  239.247360229;           !- Volume {m3}
 
-        NodeList,
-            SPACE1-1 Inlets,         !- Name
-            SPACE1-1 Supply Inlet;   !- Node 1 Name
+ZoneHVAC:EquipmentConnections,
+  SPACE1-1,                !- Zone Name
+  SPACE1-1 Equipment,      !- Zone Conditioning Equipment List Name
+  SPACE1-1 Inlets,         !- Zone Air Inlet Node or NodeList Name
+  SPACE1-1 Exhausts,       !- Zone Air Exhaust Node or NodeList Name
+  SPACE1-1 Zone Air Node,  !- Zone Air Node Name
+  SPACE1-1 Return Outlet;  !- Zone Return Air Node or NodeList Name
 
-        NodeList,
-            SPACE1-1 Exhausts,       !- Name
-            SPACE1-1 HP Inlet Node;  !- Node 1 Name
+NodeList,
+  SPACE1-1 Inlets,         !- Name
+  SPACE1-1 Supply Inlet;   !- Node Name
 
-        NodeList,
-            OutsideAirInletNodes,    !- Name
-            PTACOAInNode;            !- Node 1 Name
+NodeList,
+  SPACE1-1 Exhausts,       !- Name
+  SPACE1-1 HP Inlet Node;  !- Node Name
 
-        OutdoorAir:NodeList,
-            OutsideAirInletNodes;    !- Name
+NodeList,
+  OutsideAirInletNodes,    !- Name
+  PTACOAInNode;            !- Node Name
+
+OutdoorAir:NodeList,
+  OutsideAirInletNodes;    !- Node or NodeList Name
+
 )IDF";
 
     ASSERT_TRUE(process_idf(idf_objects)); // read idf objects

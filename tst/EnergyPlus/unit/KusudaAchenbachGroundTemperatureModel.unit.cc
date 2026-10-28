@@ -62,13 +62,13 @@ TEST_F(EnergyPlusFixture, KusudaAchenbachGroundTempModelTest1)
 {
     std::string const idf_objects = delimited_string({
         "Site:GroundTemperature:Undisturbed:KusudaAchenbach,",
-        "	Test,	!- Name of ground temperature object",
-        "	1.08,		!- Soil Thermal Conductivity",
-        "	980,		!- Soil Density",
-        "	2570,		!- Soil Specific Heat",
-        "	15.0,		!- Average Surface Temperature",
-        "	5.0,		!- Average Amplitude of Surface Temperature",
-        "	1;			!- Phase Shift of Minimum Surface Temperature",
+        "  Test,                    !- Name",
+        "  1.08,                    !- Soil Thermal Conductivity {W/m-K}",
+        "  980,                     !- Soil Density {kg/m3}",
+        "  2570,                    !- Soil Specific Heat {J/kg-K}",
+        "  15.0,                    !- Average Soil Surface Temperature {C}",
+        "  5.0,                     !- Average Amplitude of Surface Temperature {deltaC}",
+        "  1;                       !- Phase Shift of Minimum Surface Temperature {days}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -88,27 +88,15 @@ TEST_F(EnergyPlusFixture, KusudaAchenbachGroundTempModelTest2) // lNumericFieldB
 {
     std::string const idf_objects = delimited_string({
         "Site:GroundTemperature:Undisturbed:KusudaAchenbach,",
-        "	Test,	!- Name of ground temperature object",
-        "	1.08,		!- Soil Thermal Conductivity",
-        "	980,		!- Soil Density",
-        "	2570,		!- Soil Specific Heat",
-        "	,			!- Average Surface Temperature",
-        "	,			!- Average Amplitude of Surface Temperature",
-        "	;			!- Phase Shift of Minimum Surface Temperature",
+        "  Test,                    !- Name",
+        "  1.08,                    !- Soil Thermal Conductivity {W/m-K}",
+        "  980,                     !- Soil Density {kg/m3}",
+        "  2570,                    !- Soil Specific Heat {J/kg-K}",
+        "  ,                        !- Average Soil Surface Temperature {C}",
+        "  ,                        !- Average Amplitude of Surface Temperature {deltaC}",
+        "  ;                        !- Phase Shift of Minimum Surface Temperature {days}",
 
-        "Site:GroundTemperature:Shallow,",
-        "	16.00,	!- January",
-        "	15.00,	!- February",
-        "	16.00,	!- March",
-        "	17.00,	!- April",
-        "	18.00,	!- May",
-        "	19.00,	!- June",
-        "	20.00,	!- July",
-        "	21.00,	!- August",
-        "	20.00,	!- September",
-        "	19.00,	!- October",
-        "	18.00,	!- November",
-        "	17.00;	!- December",
+        "Site:GroundTemperature:Shallow,16.0,15.0,16.0,17.0,18.0,19.0,20.0,21.0,20.0,19.0,18.0,17.0;",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

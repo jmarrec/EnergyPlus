@@ -136,31 +136,30 @@ TEST_F(EnergyPlusFixture, EMSManager_TestForUniqueEMSActuators)
 TEST_F(EnergyPlusFixture, Dual_NodeTempSetpoints)
 {
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node;",
-
-        "EnergyManagementSystem:Actuator,",
-        "TempSetpointLo,          !- Name",
-        "Test node,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Minimum Setpoint;    !- Actuated Component Control Type",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpointHi,          !- Name",
-        "Test node,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Maximum Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpointLo,          !- Name",
+        "  Test node,               !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Minimum Setpoint;  !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:Actuator,",
+        "  TempSetpointHi,          !- Name",
+        "  Test node,               !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Maximum Setpoint;  !- Actuated Component Control Type",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Dual Setpoint Test Manager,  !- Name",
-        "BeginNewEnvironment,  !- EnergyPlus Model Calling Point",
-        "DualSetpointTestControl;  !- Program Name 1",
+        "  Dual Setpoint Test Manager,  !- Name",
+        "  BeginNewEnvironment,     !- EnergyPlus Model Calling Point",
+        "  DualSetpointTestControl;  !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "DualSetpointTestControl,",
-        "Set TempSetpointLo = 16.0,",
-        "Set TempSetpointHi  = 20.0;",
-
+        "  DualSetpointTestControl,  !- Name",
+        "  Set TempSetpointLo = 16.0,  !- Program Line",
+        "  Set TempSetpointHi  = 20.0;  !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -186,24 +185,23 @@ TEST_F(EnergyPlusFixture, CheckActuatorInit)
 {
     // this test checks that new actuators have the Erl variable associated with them set to Null right away, issue #5710
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpointLo,          !- Name",
-        "Test node,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Minimum Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpointLo,          !- Name",
+        "  Test node,               !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Minimum Setpoint;  !- Actuated Component Control Type",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Dual Setpoint Test Manager,  !- Name",
-        "EndOfSystemTimestepBeforeHVACReporting,  !- EnergyPlus Model Calling Point",
-        "DualSetpointTestControl;  !- Program Name 1",
+        "  Dual Setpoint Test Manager,  !- Name",
+        "  EndOfSystemTimestepBeforeHVACReporting,  !- EnergyPlus Model Calling Point",
+        "  DualSetpointTestControl;  !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "DualSetpointTestControl,",
-        "Set TempSetpointLo = 16.0;",
-
+        "  DualSetpointTestControl,  !- Name",
+        "  Set TempSetpointLo = 16.0;  !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -221,21 +219,20 @@ TEST_F(EnergyPlusFixture, SupervisoryControl_PlantComponent_SetActuatedBranchFlo
     // test SetActuatedBranchFlowRate for expected response
 
     std::string const idf_objects = delimited_string({
-        " EnergyManagementSystem:Actuator,",
-        "  CoilActuator,          !- Name",
+        "EnergyManagementSystem:Actuator,",
+        "  CoilActuator,            !- Name",
         "  Zone1FanCoilHeatingCoil,  !- Actuated Component Unique Name",
-        "  Plant Component Coil:Heating:Water,    !- Actuated Component Type",
-        "  On/Off Supervisory;    !- Actuated Component Control Type",
+        "  Plant Component Coil:Heating:Water,  !- Actuated Component Type",
+        "  On/Off Supervisory;      !- Actuated Component Control Type",
 
-        " EnergyManagementSystem:ProgramCallingManager,",
+        "EnergyManagementSystem:ProgramCallingManager,",
         "  Supervisory Control Manager,  !- Name",
         "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
-        "  HeatCoilController;  !- Program Name 1",
+        "  HeatCoilController;      !- Program Name",
 
-        " EnergyManagementSystem:Program,",
-        "  HeatCoilController,",
-        "  Set CoilActuator = 0.0;",
-
+        "EnergyManagementSystem:Program,",
+        "  HeatCoilController,      !- Name",
+        "  Set CoilActuator = 0.0;  !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -389,21 +386,20 @@ TEST_F(EnergyPlusFixture, SupervisoryControl_PlantComponent_SetComponentFlowRate
     // test SetComponentFlowRate for expected response
 
     std::string const idf_objects = delimited_string({
-        " EnergyManagementSystem:Actuator,",
-        "  CoilActuator,          !- Name",
+        "EnergyManagementSystem:Actuator,",
+        "  CoilActuator,            !- Name",
         "  Zone1FanCoilHeatingCoil,  !- Actuated Component Unique Name",
-        "  Plant Component Coil:Heating:Water,    !- Actuated Component Type",
-        "  On/Off Supervisory;    !- Actuated Component Control Type",
+        "  Plant Component Coil:Heating:Water,  !- Actuated Component Type",
+        "  On/Off Supervisory;      !- Actuated Component Control Type",
 
-        " EnergyManagementSystem:ProgramCallingManager,",
+        "EnergyManagementSystem:ProgramCallingManager,",
         "  Supervisory Control Manager,  !- Name",
         "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
-        "  HeatCoilController;  !- Program Name 1",
+        "  HeatCoilController;      !- Program Name",
 
-        " EnergyManagementSystem:Program,",
-        "  HeatCoilController,",
-        "  Set CoilActuator = 0.0;",
-
+        "EnergyManagementSystem:Program,",
+        "  HeatCoilController,      !- Name",
+        "  Set CoilActuator = 0.0;  !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -561,159 +557,168 @@ TEST_F(EnergyPlusFixture, Test_EMSLogic)
     // specific issue was use of "-" just after operand, e.g., IF MyVar == -X,
 
     std::string const idf_objects = delimited_string({
+        "OutdoorAir:Node,",
+        "  Test node 1;             !- Name",
 
-        "OutdoorAir:Node, Test node 1;",
-        "OutdoorAir:Node, Test node 2;",
-        "OutdoorAir:Node, Test node 3;",
-        "OutdoorAir:Node, Test node 4;",
-        "OutdoorAir:Node, Test node 5;",
-        "OutdoorAir:Node, Test node 6;",
-        "OutdoorAir:Node, Test node 7;",
+        "OutdoorAir:Node,",
+        "  Test node 2;             !- Name",
 
-        "EnergyManagementSystem:Actuator,",
-        "TempSetpoint1,          !- Name",
-        "Test node 1,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "OutdoorAir:Node,",
+        "  Test node 3;             !- Name",
 
-        "EnergyManagementSystem:Actuator,",
-        "TempSetpoint2,          !- Name",
-        "Test node 2,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "OutdoorAir:Node,",
+        "  Test node 4;             !- Name",
 
-        "EnergyManagementSystem:Actuator,",
-        "TempSetpoint3,          !- Name",
-        "Test node 3,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "OutdoorAir:Node,",
+        "  Test node 5;             !- Name",
+
+        "OutdoorAir:Node,",
+        "  Test node 6;             !- Name",
+
+        "OutdoorAir:Node,",
+        "  Test node 7;             !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpoint4,          !- Name",
-        "Test node 4,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpoint1,           !- Name",
+        "  Test node 1,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpoint5,          !- Name",
-        "Test node 5,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpoint2,           !- Name",
+        "  Test node 2,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpoint6,          !- Name",
-        "Test node 6,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpoint3,           !- Name",
+        "  Test node 3,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpoint7,          !- Name",
-        "Test node 7,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpoint4,           !- Name",
+        "  Test node 4,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:Actuator,",
+        "  TempSetpoint5,           !- Name",
+        "  Test node 5,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:Actuator,",
+        "  TempSetpoint6,           !- Name",
+        "  Test node 6,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:Actuator,",
+        "  TempSetpoint7,           !- Name",
+        "  Test node 7,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Logic Manager 1,  !- Name",
-        "BeginNewEnvironment,  !- EnergyPlus Model Calling Point",
-        "LogicTest1;  !- Program Name 1",
+        "  Logic Manager 1,         !- Name",
+        "  BeginNewEnvironment,     !- EnergyPlus Model Calling Point",
+        "  LogicTest1;              !- Program Name",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Logic Manager 2,  !- Name",
-        "BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
-        "LogicTest2;  !- Program Name 1",
+        "  Logic Manager 2,         !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  LogicTest2;              !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "LogicTest1,",
-        "Set MyVar1 = 10,",
-        "Set MyVar2 = -10,",
-        "Set MyVar3 = -10+3-1-2,",
-        "Set MyVar4 = 10,",
-        "Set MyVar5 = -PI,",
-        "Set MyVar6 = ( 10 - ( ( @MOD 15.5 3 ) * 40 ) ),",
-        "Set MyVar7 = ( 9.9 - ( @MOD 15.5 3 ) * 20 ),",
-
-        "IF MyVar1 == 10,",
-        "  Set TempSetpoint1 = 11.0,",
-        "ELSE,",
-        "  Set TempSetpoint1 = 21.0,",
-        "ENDIF,",
-        "IF MyVar2 == -10,",
-        "  Set TempSetpoint2 = 12.0,",
-        "ELSE,",
-        "  Set TempSetpoint2 = 22.0,",
-        "ENDIF,",
-        "IF -10 == MyVar3,",
-        "  Set TempSetpoint3 = 13.0,",
-        "ELSE,",
-        "  Set TempSetpoint3 = 23.0,",
-        "ENDIF,",
-        "IF MyVar4 == -20+30,",
-        "  Set TempSetpoint4 = 14.0,",
-        "ELSE,",
-        "  Set TempSetpoint4 = 24.0,",
-        "ENDIF,",
-        "IF MyVar5 == -PI,",
-        "  Set TempSetpoint5 = 15.0,",
-        "ELSE,",
-        "  Set TempSetpoint5 = 25.0,",
-        "ENDIF,",
-        "IF MyVar6 == -10,",
-        "  Set TempSetpoint6 = 16.0,",
-        "ELSE,",
-        "  Set TempSetpoint6 = 26.0,",
-        "ENDIF,",
-        "IF MyVar7 > -11.0+3-1+8.89,",
-        "  Set TempSetpoint7 = 17.0,",
-        "ELSE,",
-        "  Set TempSetpoint7 = 27.0,",
-        "ENDIF;",
+        "  LogicTest1,              !- Name",
+        "  Set MyVar1 = 10,         !- Program Line",
+        "  Set MyVar2 = -10,        !- Program Line",
+        "  Set MyVar3 = -10+3-1-2,  !- Program Line",
+        "  Set MyVar4 = 10,         !- Program Line",
+        "  Set MyVar5 = -PI,        !- Program Line",
+        "  Set MyVar6 = ( 10 - ( ( @MOD 15.5 3 ) * 40 ) ),  !- Program Line",
+        "  Set MyVar7 = ( 9.9 - ( @MOD 15.5 3 ) * 20 ),  !- Program Line",
+        "  IF MyVar1 == 10,         !- Program Line",
+        "  Set TempSetpoint1 = 11.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint1 = 21.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF MyVar2 == -10,        !- Program Line",
+        "  Set TempSetpoint2 = 12.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint2 = 22.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF -10 == MyVar3,        !- Program Line",
+        "  Set TempSetpoint3 = 13.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint3 = 23.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF MyVar4 == -20+30,     !- Program Line",
+        "  Set TempSetpoint4 = 14.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint4 = 24.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF MyVar5 == -PI,        !- Program Line",
+        "  Set TempSetpoint5 = 15.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint5 = 25.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF MyVar6 == -10,        !- Program Line",
+        "  Set TempSetpoint6 = 16.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint6 = 26.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF MyVar7 > -11.0+3-1+8.89,  !- Program Line",
+        "  Set TempSetpoint7 = 17.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint7 = 27.0,  !- Program Line",
+        "  ENDIF;                   !- Program Line",
 
         "EnergyManagementSystem:Program,",
-        "LogicTest2,",
-        "Set MyVar1 = 10,",
-        "Set MyVar2 = -10,",
-        "Set MyVar3 = -10 + 3 - 1 - 2,",
-        "Set MyVar4 = 10,",
-        "Set MyVar5 = -PI,",
-        "Set MyVar6 = ( 10 - ( ( @MOD 15.5 3 ) * 40 ) ),",
-        "Set MyVar7 = ( 9.9 - ( @MOD 15.5 3 ) * 20 ),",
-
-        "IF ( MyVar1 <> 10 ),",
-        "  Set TempSetpoint1 = 11.0,",
-        "ELSE,",
-        "  Set TempSetpoint1 = 21.0,",
-        "ENDIF,",
-        "IF ( MyVar2 <> -10 ),",
-        "  Set TempSetpoint2 = 12.0,",
-        "ELSE,",
-        "  Set TempSetpoint2 = 22.0,",
-        "ENDIF,",
-        "IF ( -10 <> MyVar3 ),",
-        "  Set TempSetpoint3 = 13.0,",
-        "ELSE,",
-        "  Set TempSetpoint3 = 23.0,",
-        "ENDIF,",
-        "IF ( MyVar4 <> ( -20+30 ) ),",
-        "  Set TempSetpoint4 = 14.0,",
-        "ELSE,",
-        "  Set TempSetpoint4 = 24.0,",
-        "ENDIF,",
-        "IF ( MyVar5 <> -PI ),",
-        "  Set TempSetpoint5 = 15.0,",
-        "ELSE,",
-        "  Set TempSetpoint5 = 25.0,",
-        "ENDIF,",
-        "IF ( MyVar6 <> -10 ),",
-        "  Set TempSetpoint6 = 16.0,",
-        "ELSE,",
-        "  Set TempSetpoint6 = 26.0,",
-        "ENDIF,",
-        "IF ( MyVar7 == -0.1 ),",
-        "  Set TempSetpoint7 = 17.0,",
-        "ELSE,",
-        "  Set TempSetpoint7 = 27.0,",
-        "ENDIF;",
-
+        "  LogicTest2,              !- Name",
+        "  Set MyVar1 = 10,         !- Program Line",
+        "  Set MyVar2 = -10,        !- Program Line",
+        "  Set MyVar3 = -10 + 3 - 1 - 2,  !- Program Line",
+        "  Set MyVar4 = 10,         !- Program Line",
+        "  Set MyVar5 = -PI,        !- Program Line",
+        "  Set MyVar6 = ( 10 - ( ( @MOD 15.5 3 ) * 40 ) ),  !- Program Line",
+        "  Set MyVar7 = ( 9.9 - ( @MOD 15.5 3 ) * 20 ),  !- Program Line",
+        "  IF ( MyVar1 <> 10 ),     !- Program Line",
+        "  Set TempSetpoint1 = 11.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint1 = 21.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF ( MyVar2 <> -10 ),    !- Program Line",
+        "  Set TempSetpoint2 = 12.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint2 = 22.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF ( -10 <> MyVar3 ),    !- Program Line",
+        "  Set TempSetpoint3 = 13.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint3 = 23.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF ( MyVar4 <> ( -20+30 ) ),  !- Program Line",
+        "  Set TempSetpoint4 = 14.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint4 = 24.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF ( MyVar5 <> -PI ),    !- Program Line",
+        "  Set TempSetpoint5 = 15.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint5 = 25.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF ( MyVar6 <> -10 ),    !- Program Line",
+        "  Set TempSetpoint6 = 16.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint6 = 26.0,  !- Program Line",
+        "  ENDIF,                   !- Program Line",
+        "  IF ( MyVar7 == -0.1 ),   !- Program Line",
+        "  Set TempSetpoint7 = 17.0,  !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  Set TempSetpoint7 = 27.0,  !- Program Line",
+        "  ENDIF;                   !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -757,32 +762,30 @@ TEST_F(EnergyPlusFixture, Debug_EMSLogic)
     // Much easier to single step this unit test than a more complex version
 
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node 1;",
+        "OutdoorAir:Node,",
+        "  Test node 1;             !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpoint1,          !- Name",
-        "Test node 1,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpoint1,           !- Name",
+        "  Test node 1,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Logic Manager 1,  !- Name",
-        "BeginNewEnvironment,  !- EnergyPlus Model Calling Point",
-        "LogicTest1;  !- Program Name 1",
+        "  Logic Manager 1,         !- Name",
+        "  BeginNewEnvironment,     !- EnergyPlus Model Calling Point",
+        "  LogicTest1;              !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "LogicTest1,",
-        "Set MyVar1 = ( -2 ),",
-        "Set MyVar2 = ( -2 ),",
-        "Set TempSetpoint1 = MyVar1 / MyVar2;",
-
+        "  LogicTest1,              !- Name",
+        "  Set MyVar1 = ( -2 ),     !- Program Line",
+        "  Set MyVar2 = ( -2 ),     !- Program Line",
+        "  Set TempSetpoint1 = MyVar1 / MyVar2;  !- Program Line",
         //		"IF MyVar1 == 8,",
         //		"  Set TempSetpoint1 = 11.0,",
         //		"ELSE,",
         //		"  Set TempSetpoint1 = 21.0,",
         //		"ENDIF;",
-
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -805,23 +808,22 @@ TEST_F(EnergyPlusFixture, TestAnyRanArgument)
     // shows a simple way to setup sensor on a node, need to call SetupNodeVarsForReporting()
 
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "EnergyManagementSystem:Sensor,",
-        "Node_mdot,",
-        "Test node,",
-        "System Node Mass Flow Rate;",
+        "  Node_mdot,               !- Name",
+        "  Test node,               !- Output:Variable or Output:Meter Index Key Name",
+        "  System Node Mass Flow Rate;  !- Output:Variable or Output:Meter Name",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Test inside HVAC system iteration Loop,",
-        "InsideHVACSystemIterationLoop,",
-        "Test_InsideHVACSystemIterationLoop;",
+        "  Test inside HVAC system iteration Loop,  !- Name",
+        "  InsideHVACSystemIterationLoop,  !- EnergyPlus Model Calling Point",
+        "  Test_InsideHVACSystemIterationLoop;  !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "Test_InsideHVACSystemIterationLoop,",
-        "set dumm1 = Node_mdot;",
-
+        "  Test_InsideHVACSystemIterationLoop,  !- Name",
+        "  set dumm1 = Node_mdot;   !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -849,19 +851,17 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable1)
     // this tests the new initialized variable added to Erl variable value data structure, for issue #4943
     // this is also what is checked to see if an actuator has been used for issue #4404.
     std::string const idf_objects = delimited_string({
-
         "EnergyManagementSystem:GlobalVariable,",
-        "TempSetpoint1;          !- Name",
+        "  TempSetpoint1;           !- Erl Variable Name",
 
         "EnergyManagementSystem:Program,",
-        "InitVariableTest,",
-        "Set TempSetpoint1 = 21.0;"
+        "  InitVariableTest,        !- Name",
+        "  Set TempSetpoint1 = 21.0;  !- Program Line",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Test Program Manager 1,  !- Name",
-        "BeginNewEnvironment,  !- EnergyPlus Model Calling Point",
-        "InitVariableTest;  !- Program Name 1",
-
+        "  Test Program Manager 1,  !- Name",
+        "  BeginNewEnvironment,     !- EnergyPlus Model Calling Point",
+        "  InitVariableTest;        !- Program Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -889,36 +889,35 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable2)
     // this tests the new initialized variable added to Erl variable value data structure in a slightly different way
     // we call the routine EvaluateExpression and examine the new bool argument for fatal errors.
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node 1;",
+        "OutdoorAir:Node,",
+        "  Test node 1;             !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "TempSetpoint1,          !- Name",
-        "Test node 1,  !- Actuated Component Unique Name",
-        "System Node Setpoint,    !- Actuated Component Type",
-        "Temperature Setpoint;    !- Actuated Component Control Type",
+        "  TempSetpoint1,           !- Name",
+        "  Test node 1,             !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Program,",
-        "SetNodeSetpointTest,",
-        "Set TempSetpoint1 = testGlobalVar;"
+        "  SetNodeSetpointTest,     !- Name",
+        "  Set TempSetpoint1 = testGlobalVar;  !- Program Line",
 
         "EnergyManagementSystem:Program,",
-        "SetGlobalValue,",
-        "SET testGlobalVar = 21.0;"
+        "  SetGlobalValue,          !- Name",
+        "  SET testGlobalVar = 21.0;  !- Program Line",
 
-        "EnergyManagementSystem:GlobalVariable, ",
-        "testGlobalVar;"
-
-        "EnergyManagementSystem:ProgramCallingManager,",
-        "Test Program Manager 1,  !- Name",
-        "BeginNewEnvironment,  !- EnergyPlus Model Calling Point",
-        "SetNodeSetpointTest;  !- Program Name 1",
+        "EnergyManagementSystem:GlobalVariable,",
+        "  testGlobalVar;           !- Erl Variable Name",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Test Program Manager 2,  !- Name",
-        "BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
-        "SetGlobalValue;  !- Program Name 1",
+        "  Test Program Manager 1,  !- Name",
+        "  BeginNewEnvironment,     !- EnergyPlus Model Calling Point",
+        "  SetNodeSetpointTest;     !- Program Name",
 
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "  Test Program Manager 2,  !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  SetGlobalValue;          !- Program Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -956,16 +955,15 @@ TEST_F(EnergyPlusFixture, TestEMSVariableInitAfterRef1)
 {
     // test for #11360 - EMS variable initialized after reference, outside of ManageSimulation
     std::string const idf_objects = delimited_string({
-
         "EnergyManagementSystem:Program,",
-        "    ev_discharge_program,                          !- Name",
-        "    Set power_mult = site_temp_adj,                !- Program Line 1",
-        "    Set site_temp_adj = 0.1;                       !- Program Line 2",
+        "  ev_discharge_program,    !- Name",
+        "  Set power_mult = site_temp_adj,  !- Program Line",
+        "  Set site_temp_adj = 0.1;  !- Program Line",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "    ev_discharge_pcm,              !- Name",
-        "    BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
-        "    ev_discharge_program;          !- Program Name 1",
+        "  ev_discharge_pcm,        !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  ev_discharge_program;    !- Program Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1132,10 +1130,10 @@ TEST_F(EnergyPlusFixture, TestEMSVariableInitAfterRef2)
 TEST_F(EnergyPlusFixture, EMSManager_CheckIfAnyEMS_OutEMS)
 {
     std::string const idf_objects = delimited_string({
-        "  Output:EnergyManagementSystem,                                                                ",
-        "    Verbose,                 !- Actuator Availability Dictionary Reporting                      ",
-        "    Verbose,                 !- Internal Variable Availability Dictionary Reporting             ",
-        "    Verbose;                 !- EMS Runtime Language Debug Output Level                         ",
+        "Output:EnergyManagementSystem,",
+        "  Verbose,                 !- Actuator Availability Dictionary Reporting",
+        "  Verbose,                 !- Internal Variable Availability Dictionary Reporting",
+        "  Verbose;                 !- EMS Runtime Language Debug Output Level",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1150,133 +1148,133 @@ TEST_F(EnergyPlusFixture, EMSManager_TestFuntionCall)
     // test to demonstrate accurate function calls.
 
     std::string const idf_objects = delimited_string({
-
         "Curve:Quadratic,",
-        "  TestCurve,       !- Name",
-        "  0.8,             !- Coefficient1 Constant",
-        "  0.2,             !- Coefficient2 x",
-        "  0.0,             !- Coefficient3 x**2",
-        "  0.5,             !- Minimum Value of x",
-        "  1.5;             !- Maximum Value of x",
+        "  TestCurve,               !- Name",
+        "  0.8,                     !- Coefficient1 Constant",
+        "  0.2,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.5,                     !- Minimum Value of x {BasedOnField A2}",
+        "  1.5;                     !- Maximum Value of x {BasedOnField A2}",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Test inside HVAC system iteration Loop,",
-        "InsideHVACSystemIterationLoop,",
-        "Test_InsideHVACSystemIterationLoop;",
+        "  Test inside HVAC system iteration Loop,  !- Name",
+        "  InsideHVACSystemIterationLoop,  !- EnergyPlus Model Calling Point",
+        "  Test_InsideHVACSystemIterationLoop;  !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "Test_InsideHVACSystemIterationLoop,",
-        "set Var1 = @Round 2.1,",
-        "set Var2 = @Mod 7 3,",
-        "set Var3 = @Sin 0.785398163,", // 45 degrees
-        "set Var4 = @Cos 0.785398163,", // 45 degrees
-        "set Var5 = @ArcCos 0.70710678090550916,",
-        "set Var6 = @ArcSin 0.70710678090550916,",
-        "set Var7 = @DegToRad 45.0,",
-        "set Var8 = @RadToDeg 0.785398163,",
-        "set Var9 = @Exp 1.0,",
-        "set Var10 = @Ln 2.0,",
-        "set Var11 = @Max 0.5 1.5,",
-        "set Var12 = @Min 0.5 1.5,",
-        "set Var13 = @Abs 1.3,", // -3.1 does not work, (-3.1) does not work, "set absNum = -3.1" and use @Abs absNum does work if EMS line of code
-                                 // occurs before this line
-        "set Var14 = @SEEDRANDOM 2.65,",
-        "set Var15 = @RANDOMUNIFORM 0.0 1.0,",
-        "set Var16 = @RANDOMNORMAL 1.5 0.5 0.75 2.25,", // negative number does not get processed correctly
-        "set Var17 = @RhoAirFnPbTdbW 101325.0 30.0 0.01,",
-        "set Var18 = @CpAirFnW 0.01,",
-        "set Var19 = @HfgAirFnWTdb 0.01 30.0,",
-        "set Var20 = @HgAirFnWTdb 0.01 30.0,",
-        "set Var21 = @TdpFnTdbTwbPb 30.0 16.0 101325.0,",
-        "set Var22 = @TdpFnWPb 0.01 101325.0,",
-        "set Var23 = @HFnTdbW 30.0 0.01,",
-        "set Var24 = @HFnTdbRhPb 30.0 0.5 101325.0,",
-        "set Var25 = @TdbFnHW 30000.0 0.01,",
-        "set Var26 = @RhovFnTdbRh 30.0 0.5,",
-        "set Var27 = @RhovFnTdbRhLBnd0C 30.0 0.5,",
-        "set Var28 = @RhovFnTdbWPb 30.0 0.01 101325.0,",
-        "set Var29 = @RhFnTdbRhov 30.0 0.01,",
-        "set Var30 = @RhFnTdbRhovLBnd0C 30.0 0.01,",
-        "set Var31 = @RhFnTdbWPb 30.0 0.01 101325.0,",
-        "set Var32 = @TwbFnTdbWPb 30.0 0.01 101325.0,",
-        "set Var33 = @VFnTdbWPb 30.0 0.01 101325.0,",
-        "set Var34 = @WFnTdpPb 16.0 101325.0,",
-        "set Var35 = @WFnTdbH 20.0 30000.0,",
-        "set Var36 = @WFnTdbTwbPb 30.0 16.0 101325.0,",
-        "set Var37 = @WFnTdbRhPb 30.0 0.5 101325.0,", // this function implementation looks suspicious given it takes up to 4 arguments (CalledFrom is
-                                                      // 4th)
-        "set Var38 = @PsatFnTemp 30.0,",
-        "set Var39 = @TsatFnHPb 30000.0 101325.0,",
-        "set Var40 = @CpCW 30.0,",
-        "set Var41 = @CpHW 60.0,",
-        "set Var42 = @RhoH2O 20.0,",
-        "set Var43 = @SEVEREWARNEP 0.0,",
-        "set Var44 = @WARNEP 0.0,",
-        "set Var45 = @TRENDVALUE Variable_Trend1 1,",
-        "set Var46 = @TRENDAVERAGE Variable_Trend2 4,",
-        "set Var47 = @TRENDMAX Variable_Trend3 4,",
-        "set Var48 = @TRENDMIN Variable_Trend4 4,",
-        "set Var49 = @TRENDDIRECTION Variable_Trend5 4,",
-        "set Var50 = @TRENDSUM Variable_Trend6 4,",
-        "set Var51 = @CURVEVALUE 1 0.75,",
-        "set absNum = -3.1,",
-        "set Var53 = @Abs absNum,", // -3.1 does not work, (-3.1) does not work, "set absNum = -3.1" and use @Abs absNum does work if EMS "set absNum"
-                                    // line of code occurs before this line
-        "Run Test_Trend_Variables;"
+        "  Test_InsideHVACSystemIterationLoop,  !- Name",
+        "  set Var1 = @Round 2.1,   !- Program Line",
+        "  set Var2 = @Mod 7 3,     !- Program Line",
+        "  set Var3 = @Sin 0.785398163,  !- Program Line", // 45 degrees
+        "  set Var4 = @Cos 0.785398163,  !- Program Line", // 45 degrees
+        "  set Var5 = @ArcCos 0.70710678090550916,  !- Program Line",
+        "  set Var6 = @ArcSin 0.70710678090550916,  !- Program Line",
+        "  set Var7 = @DegToRad 45.0,  !- Program Line",
+        "  set Var8 = @RadToDeg 0.785398163,  !- Program Line",
+        "  set Var9 = @Exp 1.0,     !- Program Line",
+        "  set Var10 = @Ln 2.0,     !- Program Line",
+        "  set Var11 = @Max 0.5 1.5,  !- Program Line",
+        "  set Var12 = @Min 0.5 1.5,  !- Program Line",
+        "  set Var13 = @Abs 1.3,    !- Program Line", // -3.1 does not work, (-3.1) does not work, "set absNum = -3.1" and use @Abs absNum does work
+                                                      // if EMS line of code
+        // occurs before this line
+        "  set Var14 = @SEEDRANDOM 2.65,  !- Program Line",
+        "  set Var15 = @RANDOMUNIFORM 0.0 1.0,  !- Program Line",
+        "  set Var16 = @RANDOMNORMAL 1.5 0.5 0.75 2.25,  !- Program Line", // negative number does not get processed correctly
+        "  set Var17 = @RhoAirFnPbTdbW 101325.0 30.0 0.01,  !- Program Line",
+        "  set Var18 = @CpAirFnW 0.01,  !- Program Line",
+        "  set Var19 = @HfgAirFnWTdb 0.01 30.0,  !- Program Line",
+        "  set Var20 = @HgAirFnWTdb 0.01 30.0,  !- Program Line",
+        "  set Var21 = @TdpFnTdbTwbPb 30.0 16.0 101325.0,  !- Program Line",
+        "  set Var22 = @TdpFnWPb 0.01 101325.0,  !- Program Line",
+        "  set Var23 = @HFnTdbW 30.0 0.01,  !- Program Line",
+        "  set Var24 = @HFnTdbRhPb 30.0 0.5 101325.0,  !- Program Line",
+        "  set Var25 = @TdbFnHW 30000.0 0.01,  !- Program Line",
+        "  set Var26 = @RhovFnTdbRh 30.0 0.5,  !- Program Line",
+        "  set Var27 = @RhovFnTdbRhLBnd0C 30.0 0.5,  !- Program Line",
+        "  set Var28 = @RhovFnTdbWPb 30.0 0.01 101325.0,  !- Program Line",
+        "  set Var29 = @RhFnTdbRhov 30.0 0.01,  !- Program Line",
+        "  set Var30 = @RhFnTdbRhovLBnd0C 30.0 0.01,  !- Program Line",
+        "  set Var31 = @RhFnTdbWPb 30.0 0.01 101325.0,  !- Program Line",
+        "  set Var32 = @TwbFnTdbWPb 30.0 0.01 101325.0,  !- Program Line",
+        "  set Var33 = @VFnTdbWPb 30.0 0.01 101325.0,  !- Program Line",
+        "  set Var34 = @WFnTdpPb 16.0 101325.0,  !- Program Line",
+        "  set Var35 = @WFnTdbH 20.0 30000.0,  !- Program Line",
+        "  set Var36 = @WFnTdbTwbPb 30.0 16.0 101325.0,  !- Program Line",
+        "  set Var37 = @WFnTdbRhPb 30.0 0.5 101325.0,  !- Program Line", // this function implementation looks suspicious given it takes up to 4
+                                                                         // arguments (CalledFrom is
+        // 4th)
+        "  set Var38 = @PsatFnTemp 30.0,  !- Program Line",
+        "  set Var39 = @TsatFnHPb 30000.0 101325.0,  !- Program Line",
+        "  set Var40 = @CpCW 30.0,  !- Program Line",
+        "  set Var41 = @CpHW 60.0,  !- Program Line",
+        "  set Var42 = @RhoH2O 20.0,  !- Program Line",
+        "  set Var43 = @SEVEREWARNEP 0.0,  !- Program Line",
+        "  set Var44 = @WARNEP 0.0,  !- Program Line",
+        "  set Var45 = @TRENDVALUE Variable_Trend1 1,  !- Program Line",
+        "  set Var46 = @TRENDAVERAGE Variable_Trend2 4,  !- Program Line",
+        "  set Var47 = @TRENDMAX Variable_Trend3 4,  !- Program Line",
+        "  set Var48 = @TRENDMIN Variable_Trend4 4,  !- Program Line",
+        "  set Var49 = @TRENDDIRECTION Variable_Trend5 4,  !- Program Line",
+        "  set Var50 = @TRENDSUM Variable_Trend6 4,  !- Program Line",
+        "  set Var51 = @CURVEVALUE 1 0.75,  !- Program Line",
+        "  set absNum = -3.1,       !- Program Line",
+        "  set Var53 = @Abs absNum,  !- Program Line", // -3.1 does not work, (-3.1) does not work, "set absNum = -3.1" and use @Abs absNum does work
+                                                       // if EMS "set absNum"
+        // line of code occurs before this line
+        "  Run Test_Trend_Variables;  !- Program Line",
 
         //			"set Var54 = @TsatFnPb 0.0,", // not public in PsycRoutines so not available to EMS (commented out at line 2397 of
         // RuntimeLanguageProcessor.cc)
         //			"set Var55 = @FATALHALTEP 0.0,", // terminates program, not unit test friendly (but it was also verified here that it
         // halts program)
-
         "EnergyManagementSystem:GlobalVariable,",
-        "  argTrendValue;       !- Erl Variable 1 Name",
+        "  argTrendValue;           !- Erl Variable Name",
 
         "EnergyManagementSystem:TrendVariable,",
-        "  Variable_Trend1,     !- Name",
-        "  argTrendValue,       !- EMS Variable Name",
-        "  4;                   !- Number of Timesteps to be Logged",
+        "  Variable_Trend1,         !- Name",
+        "  argTrendValue,           !- EMS Variable Name",
+        "  4;                       !- Number of Timesteps to be Logged",
 
         "EnergyManagementSystem:TrendVariable,",
-        "  Variable_Trend2,     !- Name",
-        "  argTrendValue,       !- EMS Variable Name",
-        "  4;                   !- Number of Timesteps to be Logged",
+        "  Variable_Trend2,         !- Name",
+        "  argTrendValue,           !- EMS Variable Name",
+        "  4;                       !- Number of Timesteps to be Logged",
 
         "EnergyManagementSystem:TrendVariable,",
-        "  Variable_Trend3,     !- Name",
-        "  argTrendValue,       !- EMS Variable Name",
-        "  4;                   !- Number of Timesteps to be Logged",
+        "  Variable_Trend3,         !- Name",
+        "  argTrendValue,           !- EMS Variable Name",
+        "  4;                       !- Number of Timesteps to be Logged",
 
         "EnergyManagementSystem:TrendVariable,",
-        "  Variable_Trend4,     !- Name",
-        "  argTrendValue,       !- EMS Variable Name",
-        "  4;                   !- Number of Timesteps to be Logged",
+        "  Variable_Trend4,         !- Name",
+        "  argTrendValue,           !- EMS Variable Name",
+        "  4;                       !- Number of Timesteps to be Logged",
 
         "EnergyManagementSystem:TrendVariable,",
-        "  Variable_Trend5,     !- Name",
-        "  argTrendValue,       !- EMS Variable Name",
-        "  4;                   !- Number of Timesteps to be Logged",
+        "  Variable_Trend5,         !- Name",
+        "  argTrendValue,           !- EMS Variable Name",
+        "  4;                       !- Number of Timesteps to be Logged",
 
         "EnergyManagementSystem:TrendVariable,",
-        "  Variable_Trend6,     !- Name",
-        "  argTrendValue,       !- EMS Variable Name",
-        "  4;                   !- Number of Timesteps to be Logged",
+        "  Variable_Trend6,         !- Name",
+        "  argTrendValue,           !- EMS Variable Name",
+        "  4;                       !- Number of Timesteps to be Logged",
 
         "EnergyManagementSystem:Subroutine,",
-        "  Test_Trend_Variables,                             !- Name",
-        "  Set TrendVal = @TrendValue Variable_Trend1 1,     !- Program Line 1",
-        "  SET argTrendValue = TrendVal,                     !- Program Line 2",
-        "  Set TrendVal = @TrendAverage Variable_Trend2 4,   !- Program Line 3",
-        "  SET argTrendAvg = TrendVal,                       !- Program Line 4",
-        "  Set TrendVal = @TrendMax Variable_Trend3 4,       !- Program Line 5",
-        "  SET argTrendMax = TrendVal,                       !- Program Line 6",
-        "  Set TrendVal = @TrendMin Variable_Trend4 4,       !- Program Line 7",
-        "  SET argTrendMin = TrendVal,                       !- Program Line 8",
-        "  Set TrendVal = @TrendDirection Variable_Trend5 4, !- Program Line 9",
-        "  SET argTrendDirection = TrendVal,                 !- Program Line 10",
-        "  Set TrendVal = @TrendSum Variable_Trend6 4,       !- Program Line 11",
-        "  SET argTrendSum = TrendVal;                       !- Program Line 12",
-
+        "  Test_Trend_Variables,    !- Name",
+        "  Set TrendVal = @TrendValue Variable_Trend1 1,  !- Program Line",
+        "  SET argTrendValue = TrendVal,  !- Program Line",
+        "  Set TrendVal = @TrendAverage Variable_Trend2 4,  !- Program Line",
+        "  SET argTrendAvg = TrendVal,  !- Program Line",
+        "  Set TrendVal = @TrendMax Variable_Trend3 4,  !- Program Line",
+        "  SET argTrendMax = TrendVal,  !- Program Line",
+        "  Set TrendVal = @TrendMin Variable_Trend4 4,  !- Program Line",
+        "  SET argTrendMin = TrendVal,  !- Program Line",
+        "  Set TrendVal = @TrendDirection Variable_Trend5 4,  !- Program Line",
+        "  SET argTrendDirection = TrendVal,  !- Program Line",
+        "  Set TrendVal = @TrendSum Variable_Trend6 4,  !- Program Line",
+        "  SET argTrendSum = TrendVal;  !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1853,98 +1851,96 @@ TEST_F(EnergyPlusFixture, EMS_WeatherDataActuators)
 {
     // GetNextEnvironment Will call ReadUserWeatherInput which calls inputProcessor, so let's use process_idf to create one Environment (Design Day)
     std::string const idf_objects = delimited_string({
-
         "Site:Location,",
-        "   Atlanta Hartsfield Intl Ap_GA_USA Design_Conditions, !- Location Name",
-        "     33.63,    !- Latitude {N + S - }",
-        "    -84.43,    !- Longitude {W - E + }",
-        "     -5.00,    !- Time Zone Relative to GMT {GMT + / -}",
-        "    308.00;    !- Elevation {m}",
+        "  Atlanta Hartsfield Intl Ap_GA_USA Design_Conditions,  !- Name",
+        "  33.63,                   !- Latitude {deg}",
+        "  -84.43,                  !- Longitude {deg}",
+        "  -5.0,                    !- Time Zone {hr}",
+        "  308.0;                   !- Elevation {m}",
 
-        "  SizingPeriod:DesignDay,",
-        "    Atlanta Made Up Day,  !- Name",
-        "    7,                       !- Month",
-        "    21,                      !- Day of Month",
-        "    SummerDesignDay,         !- Day Type",
-        "    34.0,                    !- Maximum Dry-Bulb Temperature {C}",
-        "    11.6,                    !- Daily Dry-Bulb Temperature Range {deltaC}",
-        "    ,                        !- Dry-Bulb Temperature Range Modifier Type",
-        "    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
-        "    WetBulbProfileDefaultMultipliers,  !- Humidity Condition Type",
-        "    13.2,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
-        "    ,                        !- Humidity Condition Day Schedule Name",
-        "    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
-        "    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
-        "    8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "    97620,                   !- Barometric Pressure {Pa}",
-        "    5.0,                     !- Wind Speed {m/s}",
-        "    180.0,                   !- Wind Direction {deg}",
-        "    No,                      !- Rain Indicator",
-        "    No,                      !- Snow Indicator",
-        "    No,                      !- Daylight Saving Time Indicator",
-        "    ASHRAETau2017,           !- Solar Model Indicator",
-        "    ,                        !- Beam Solar Day Schedule Name",
-        "    ,                        !- Diffuse Solar Day Schedule Name",
-        "    0.325,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
-        "    2.461;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
-
-        "EnergyManagementSystem:Actuator,",
-        "OutDryBulb,              !- Name",
-        "Environment,             !- Actuated Component Unique Name",
-        "Weather Data,            !- Actuated Component Type",
-        "Outdoor Dry Bulb;        !- Actuated Component Control Type",
+        "SizingPeriod:DesignDay,",
+        "  Atlanta Made Up Day,     !- Name",
+        "  7,                       !- Month",
+        "  21,                      !- Day of Month",
+        "  SummerDesignDay,         !- Day Type",
+        "  34.0,                    !- Maximum Dry-Bulb Temperature {C}",
+        "  11.6,                    !- Daily Dry-Bulb Temperature Range {deltaC}",
+        "  ,                        !- Dry-Bulb Temperature Range Modifier Type",
+        "  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
+        "  WetBulbProfileDefaultMultipliers,  !- Humidity Condition Type",
+        "  13.2,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
+        "  ,                        !- Humidity Condition Day Schedule Name",
+        "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
+        "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
+        "  8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "  97620,                   !- Barometric Pressure {Pa}",
+        "  5.0,                     !- Wind Speed {m/s}",
+        "  180.0,                   !- Wind Direction {deg}",
+        "  No,                      !- Rain Indicator",
+        "  No,                      !- Snow Indicator",
+        "  No,                      !- Daylight Saving Time Indicator",
+        "  ASHRAETau2017,           !- Solar Model Indicator",
+        "  ,                        !- Beam Solar Day Schedule Name",
+        "  ,                        !- Diffuse Solar Day Schedule Name",
+        "  0.325,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
+        "  2.461;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
 
         "EnergyManagementSystem:Actuator,",
-        "OutDewPoint,             !- Name",
-        "Environment,             !- Actuated Component Unique Name",
-        "Weather Data,            !- Actuated Component Type",
-        "Outdoor Dew Point;       !- Actuated Component Control Type",
+        "  OutDryBulb,              !- Name",
+        "  Environment,             !- Actuated Component Unique Name",
+        "  Weather Data,            !- Actuated Component Type",
+        "  Outdoor Dry Bulb;        !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "OutRH,                   !- Name",
-        "Environment,             !- Actuated Component Unique Name",
-        "Weather Data,            !- Actuated Component Type",
-        "Outdoor Relative Humidity;  !- Actuated Component Control Type",
+        "  OutDewPoint,             !- Name",
+        "  Environment,             !- Actuated Component Unique Name",
+        "  Weather Data,            !- Actuated Component Type",
+        "  Outdoor Dew Point;       !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "DiffuseSolar,            !- Name",
-        "Environment,             !- Actuated Component Unique Name",
-        "Weather Data,            !- Actuated Component Type",
-        "Diffuse Solar;           !- Actuated Component Control Type",
+        "  OutRH,                   !- Name",
+        "  Environment,             !- Actuated Component Unique Name",
+        "  Weather Data,            !- Actuated Component Type",
+        "  Outdoor Relative Humidity;  !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "DirectSolar,              !- Name",
-        "Environment,             !- Actuated Component Unique Name",
-        "Weather Data,            !- Actuated Component Type",
-        "Direct Solar;        !- Actuated Component Control Type",
+        "  DiffuseSolar,            !- Name",
+        "  Environment,             !- Actuated Component Unique Name",
+        "  Weather Data,            !- Actuated Component Type",
+        "  Diffuse Solar;           !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "WindSpeed,               !- Name",
-        "Environment,             !- Actuated Component Unique Name",
-        "Weather Data,            !- Actuated Component Type",
-        "Wind Speed;              !- Actuated Component Control Type",
+        "  DirectSolar,             !- Name",
+        "  Environment,             !- Actuated Component Unique Name",
+        "  Weather Data,            !- Actuated Component Type",
+        "  Direct Solar;            !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "WindDirection,           !- Name",
-        "Environment,             !- Actuated Component Unique Name",
-        "Weather Data,            !- Actuated Component Type",
-        "Wind Direction;          !- Actuated Component Control Type",
+        "  WindSpeed,               !- Name",
+        "  Environment,             !- Actuated Component Unique Name",
+        "  Weather Data,            !- Actuated Component Type",
+        "  Wind Speed;              !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:Actuator,",
+        "  WindDirection,           !- Name",
+        "  Environment,             !- Actuated Component Unique Name",
+        "  Weather Data,            !- Actuated Component Type",
+        "  Wind Direction;          !- Actuated Component Control Type",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Dual Setpoint Test Manager,  !- Name",
-        "BeginZoneTimestepBeforeSetCurrentWeather,  !- EnergyPlus Model Calling Point",
-        "OverrideWeather;  !- Program Name 1",
+        "  Dual Setpoint Test Manager,  !- Name",
+        "  BeginZoneTimestepBeforeSetCurrentWeather,  !- EnergyPlus Model Calling Point",
+        "  OverrideWeather;         !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "OverrideWeather,",
-        "Set OutDryBulb = 50.0,",
-        "Set OutDewPoint = 25.0,",
-        "Set OutRH = 50.0,",
-        "Set DiffuseSolar = 500.0,",
-        "Set DirectSolar = 1000.0,",
-        "Set WindSpeed = 5.5,",
-        "Set WindDirection = 32.1;",
-
+        "  OverrideWeather,         !- Name",
+        "  Set OutDryBulb = 50.0,   !- Program Line",
+        "  Set OutDewPoint = 25.0,  !- Program Line",
+        "  Set OutRH = 50.0,        !- Program Line",
+        "  Set DiffuseSolar = 500.0,  !- Program Line",
+        "  Set DirectSolar = 1000.0,  !- Program Line",
+        "  Set WindSpeed = 5.5,     !- Program Line",
+        "  Set WindDirection = 32.1;  !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1998,82 +1994,80 @@ TEST_F(EnergyPlusFixture, EMS_TodayTomorrowFunctions)
 {
     // GetNextEnvironment Will call ReadUserWeatherInput which calls inputProcessor, so let's use process_idf to create one Environment (Design Day)
     std::string const idf_objects = delimited_string({
-
         "Site:Location,",
-        "   Atlanta Hartsfield Intl Ap_GA_USA Design_Conditions, !- Location Name",
-        "     33.63,    !- Latitude {N + S - }",
-        "    -84.43,    !- Longitude {W - E + }",
-        "     -5.00,    !- Time Zone Relative to GMT {GMT + / -}",
-        "    308.00;    !- Elevation {m}",
+        "  Atlanta Hartsfield Intl Ap_GA_USA Design_Conditions,  !- Name",
+        "  33.63,                   !- Latitude {deg}",
+        "  -84.43,                  !- Longitude {deg}",
+        "  -5.0,                    !- Time Zone {hr}",
+        "  308.0;                   !- Elevation {m}",
 
-        "  SizingPeriod:DesignDay,",
-        "    Atlanta Made Up Day,  !- Name",
-        "    7,                       !- Month",
-        "    21,                      !- Day of Month",
-        "    SummerDesignDay,         !- Day Type",
-        "    34.0,                    !- Maximum Dry-Bulb Temperature {C}",
-        "    11.6,                    !- Daily Dry-Bulb Temperature Range {deltaC}",
-        "    ,                        !- Dry-Bulb Temperature Range Modifier Type",
-        "    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
-        "    WetBulbProfileDefaultMultipliers,  !- Humidity Condition Type",
-        "    13.2,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
-        "    ,                        !- Humidity Condition Day Schedule Name",
-        "    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
-        "    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
-        "    8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "    97620,                   !- Barometric Pressure {Pa}",
-        "    5.0,                     !- Wind Speed {m/s}",
-        "    180.0,                   !- Wind Direction {deg}",
-        "    No,                      !- Rain Indicator",
-        "    No,                      !- Snow Indicator",
-        "    No,                      !- Daylight Saving Time Indicator",
-        "    ASHRAETau2017,           !- Solar Model Indicator",
-        "    ,                        !- Beam Solar Day Schedule Name",
-        "    ,                        !- Diffuse Solar Day Schedule Name",
-        "    0.325,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
-        "    2.461;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
+        "SizingPeriod:DesignDay,",
+        "  Atlanta Made Up Day,     !- Name",
+        "  7,                       !- Month",
+        "  21,                      !- Day of Month",
+        "  SummerDesignDay,         !- Day Type",
+        "  34.0,                    !- Maximum Dry-Bulb Temperature {C}",
+        "  11.6,                    !- Daily Dry-Bulb Temperature Range {deltaC}",
+        "  ,                        !- Dry-Bulb Temperature Range Modifier Type",
+        "  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
+        "  WetBulbProfileDefaultMultipliers,  !- Humidity Condition Type",
+        "  13.2,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
+        "  ,                        !- Humidity Condition Day Schedule Name",
+        "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
+        "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
+        "  8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "  97620,                   !- Barometric Pressure {Pa}",
+        "  5.0,                     !- Wind Speed {m/s}",
+        "  180.0,                   !- Wind Direction {deg}",
+        "  No,                      !- Rain Indicator",
+        "  No,                      !- Snow Indicator",
+        "  No,                      !- Daylight Saving Time Indicator",
+        "  ASHRAETau2017,           !- Solar Model Indicator",
+        "  ,                        !- Beam Solar Day Schedule Name",
+        "  ,                        !- Diffuse Solar Day Schedule Name",
+        "  0.325,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
+        "  2.461;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Dual Setpoint Test Manager,  !- Name",
-        "BeginZoneTimestepBeforeSetCurrentWeather,  !- EnergyPlus Model Calling Point",
-        "QueryWeather;  !- Program Name 1",
+        "  Dual Setpoint Test Manager,  !- Name",
+        "  BeginZoneTimestepBeforeSetCurrentWeather,  !- EnergyPlus Model Calling Point",
+        "  QueryWeather;            !- Program Name",
 
         "EnergyManagementSystem:GlobalVariable,",
-        "TodayDryBulb;",
+        "  TodayDryBulb;            !- Erl Variable Name",
 
         "EnergyManagementSystem:Program,",
-        "QueryWeather,",
-        "Set iHour = 5,",
-        "Set iTimeStep = 3,",
-        "Set TodayRain = @TodayIsRain iHour iTimeStep,",
-        "Set TodaySnow = @TodayIsSnow iHour iTimeStep,",
-        "Set TodayDryBulb = @TodayOutDryBulbTemp iHour iTimeStep,",
-        "Set TodayDewPoint = @TodayOutDewPointTemp iHour iTimeStep,",
-        "Set TodayBaroPress = @TodayOutBaroPress iHour iTimeStep,",
-        "Set TodayRelHum = @TodayOutRelHum iHour iTimeStep,",
-        "Set TodayWindSpd = @TodayWindSpeed iHour iTimeStep,",
-        "Set TodayWindDirect = @TodayWindDir iHour iTimeStep,",
-        "Set TodaySkyT = @TodaySkyTemp iHour iTimeStep,",
-        "Set TodayHorIR = @TodayHorizIRSky iHour iTimeStep,",
-        "Set TodayBeamSol = @TodayBeamSolarRad iHour iTimeStep,",
-        "Set TodayDifSol = @TodayDifSolarRad iHour iTimeStep,",
-        "Set TodayAlb = @TodayAlbedo iHour iTimeStep,",
-        "Set TodayPrecip = @TodayLiquidPrecip iHour iTimeStep,",
-        "Set TomorrowRain = @TomorrowIsRain iHour iTimeStep,",
-        "Set TomorrowSnow = @TomorrowIsSnow iHour iTimeStep,",
-        "Set TomorrowDryBulb = @TomorrowOutDryBulbTemp iHour iTimeStep,",
-        "Set TomorrowDewPoint = @TomorrowOutDewPointTemp iHour iTimeStep,",
-        "Set TomorrowBaroPress = @TomorrowOutBaroPress iHour iTimeStep,",
-        "Set TomorrowRelHum = @TomorrowOutRelHum iHour iTimeStep,",
-        "Set TomorrowWindSpd = @TomorrowWindSpeed iHour iTimeStep,",
-        "Set TomorrowWindDirect = @TomorrowWindDir iHour iTimeStep,",
-        "Set TomorrowSkyT = @TomorrowSkyTemp iHour iTimeStep,",
-        "Set TomorrowHorIR = @TomorrowHorizIRSky iHour iTimeStep,",
-        "Set TomorrowBeamSol = @TomorrowBeamSolarRad iHour iTimeStep,",
-        "Set TomorrowDifSol = @TomorrowDifSolarRad iHour iTimeStep,",
-        "Set TomorrowAlb = @TomorrowAlbedo iHour iTimeStep,",
-        "Set TomorrowPrecip = @TomorrowLiquidPrecip iHour iTimeStep;",
-
+        "  QueryWeather,            !- Name",
+        "  Set iHour = 5,           !- Program Line",
+        "  Set iTimeStep = 3,       !- Program Line",
+        "  Set TodayRain = @TodayIsRain iHour iTimeStep,  !- Program Line",
+        "  Set TodaySnow = @TodayIsSnow iHour iTimeStep,  !- Program Line",
+        "  Set TodayDryBulb = @TodayOutDryBulbTemp iHour iTimeStep,  !- Program Line",
+        "  Set TodayDewPoint = @TodayOutDewPointTemp iHour iTimeStep,  !- Program Line",
+        "  Set TodayBaroPress = @TodayOutBaroPress iHour iTimeStep,  !- Program Line",
+        "  Set TodayRelHum = @TodayOutRelHum iHour iTimeStep,  !- Program Line",
+        "  Set TodayWindSpd = @TodayWindSpeed iHour iTimeStep,  !- Program Line",
+        "  Set TodayWindDirect = @TodayWindDir iHour iTimeStep,  !- Program Line",
+        "  Set TodaySkyT = @TodaySkyTemp iHour iTimeStep,  !- Program Line",
+        "  Set TodayHorIR = @TodayHorizIRSky iHour iTimeStep,  !- Program Line",
+        "  Set TodayBeamSol = @TodayBeamSolarRad iHour iTimeStep,  !- Program Line",
+        "  Set TodayDifSol = @TodayDifSolarRad iHour iTimeStep,  !- Program Line",
+        "  Set TodayAlb = @TodayAlbedo iHour iTimeStep,  !- Program Line",
+        "  Set TodayPrecip = @TodayLiquidPrecip iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowRain = @TomorrowIsRain iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowSnow = @TomorrowIsSnow iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowDryBulb = @TomorrowOutDryBulbTemp iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowDewPoint = @TomorrowOutDewPointTemp iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowBaroPress = @TomorrowOutBaroPress iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowRelHum = @TomorrowOutRelHum iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowWindSpd = @TomorrowWindSpeed iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowWindDirect = @TomorrowWindDir iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowSkyT = @TomorrowSkyTemp iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowHorIR = @TomorrowHorizIRSky iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowBeamSol = @TomorrowBeamSolarRad iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowDifSol = @TomorrowDifSolarRad iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowAlb = @TomorrowAlbedo iHour iTimeStep,  !- Program Line",
+        "  Set TomorrowPrecip = @TomorrowLiquidPrecip iHour iTimeStep;  !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -2455,48 +2449,42 @@ TEST_F(EnergyPlusFixture, EMSManager_TrendValue_to_Actuator)
 {
     // Test for #10279 - Make sure that assigning the result of a TendVariable @TrendValue results in proper actuator behavior
     std::string const idf_objects = delimited_string({
-        "Schedule:Constant,",
-        "  Actuated Schedule Direct,               !- Name",
-        "  ,                                       !- Schedule Type Limits Name",
-        "  18;                                     !- Hourly Value",
+        "Schedule:Constant,Actuated Schedule Direct,,18;",
 
-        "Schedule:Constant,",
-        "  Actuated Schedule Indirect,             !- Name",
-        "  ,                                       !- Schedule Type Limits Name",
-        "  18;                                     !- Hourly Value",
+        "Schedule:Constant,Actuated Schedule Indirect,,18;",
 
         "EnergyManagementSystem:GlobalVariable,",
-        "  argTrendValue,                          !- Erl Variable Name 1",
-        "  resultValue1;                           !- Erl Variable Name 2",
+        "  argTrendValue,           !- Erl Variable Name",
+        "  resultValue1;            !- Erl Variable Name",
 
         "EnergyManagementSystem:TrendVariable,",
-        "  Trend_argTrendValue,                    !- Name",
-        "  argTrendValue,                          !- EMS Variable Name",
-        "  12;                                     !- Number of Timesteps to be Logged",
+        "  Trend_argTrendValue,     !- Name",
+        "  argTrendValue,           !- EMS Variable Name",
+        "  12;                      !- Number of Timesteps to be Logged",
 
         "EnergyManagementSystem:Actuator,",
-        "  actuator_sch_Direct,                    !- Name",
-        "  Actuated Schedule Direct,               !- Actuated Component Unique Name",
-        "  Schedule:Constant,                      !- Actuated Component Type",
-        "  Schedule Value;                         !- Actuated Component Control Type",
+        "  actuator_sch_Direct,     !- Name",
+        "  Actuated Schedule Direct,  !- Actuated Component Unique Name",
+        "  Schedule:Constant,       !- Actuated Component Type",
+        "  Schedule Value;          !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Actuator,",
-        "  actuator_sch_Indirect,                  !- Name",
-        "  Actuated Schedule Indirect,             !- Actuated Component Unique Name",
-        "  Schedule:Constant,                      !- Actuated Component Type",
-        "  Schedule Value;                         !- Actuated Component Control Type",
+        "  actuator_sch_Indirect,   !- Name",
+        "  Actuated Schedule Indirect,  !- Actuated Component Unique Name",
+        "  Schedule:Constant,       !- Actuated Component Type",
+        "  Schedule Value;          !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Program,",
-        "  sch_test,                               !- Name",
-        "  SET actuator_sch_Direct   = @TrendValue Trend_argTrendValue 1,  !- Program Line 1",
-        "  SET        resultValue1   = @TrendValue Trend_argTrendValue 1,  !- Program Line 2",
-        "  SET actuator_sch_Indirect = resultValue1,                       !- Program Line 3",
-        "  SET         argTrendValue = MINUTE;                             !- Program Line 4",
+        "  sch_test,                !- Name",
+        "  SET actuator_sch_Direct   = @TrendValue Trend_argTrendValue 1,  !- Program Line",
+        "  SET        resultValue1   = @TrendValue Trend_argTrendValue 1,  !- Program Line",
+        "  SET actuator_sch_Indirect = resultValue1,  !- Program Line",
+        "  SET         argTrendValue = MINUTE;  !- Program Line",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "  sch_test_pcm,                           !- Name",
-        "  BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point",
-        "  sch_test;                               !- Program Name 1",
+        "  sch_test_pcm,            !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  sch_test;                !- Program Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -2795,24 +2783,21 @@ TEST_F(EnergyPlusFixture, EMSManager_Sensor_On_ScheduleConstant)
     // Test for #10962 - Make sure that assigning a Sensor on a Schedule:Constant does not reset it to zero
 
     std::string const idf_objects = delimited_string({
-        "Schedule:Constant,",
-        "  ScheduleConstant,                       !- Name",
-        "  ,                                       !- Schedule Type Limits Name",
-        "  45.0;                                   !- Hourly Value",
+        "Schedule:Constant,ScheduleConstant,,45.0;",
 
         "EnergyManagementSystem:Sensor,",
-        "  ScheduleConstant_Sensor,                !- Name",
-        "  ScheduleConstant,                       !- Output:Variable or Output:Meter Index Key Name",
-        "  Schedule Value;                         !- Output:Variable or Output:Meter Name",
+        "  ScheduleConstant_Sensor,  !- Name",
+        "  ScheduleConstant,        !- Output:Variable or Output:Meter Index Key Name",
+        "  Schedule Value;          !- Output:Variable or Output:Meter Name",
 
         "EnergyManagementSystem:Program,",
-        "  sch_test,                               !- Name",
-        "  SET DummyVal = ScheduleConstant_Sensor; !- Program Line 1",
+        "  sch_test,                !- Name",
+        "  SET DummyVal = ScheduleConstant_Sensor;  !- Program Line",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "  sch_test_pcm,                           !- Name",
-        "  BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point",
-        "  sch_test;                               !- Program Name 1",
+        "  sch_test_pcm,            !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  sch_test;                !- Program Name",
 
         "Output:Variable,*,Schedule Value,Timestep;",
     });
@@ -3049,10 +3034,20 @@ TEST_F(EnergyPlusFixture, EMSManager_MeterSensor_ReadsLiveSourceSum_Issue7563)
     //   Post-fix: sensor == lightsEnergy        -> test PASSES
     std::string const idf_objects = delimited_string({
         "Output:Meter,Electricity:Facility,Timestep;",
-        "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
-        "EnergyManagementSystem:Program,NoOp,SET Dummy = 1;",
-        "EnergyManagementSystem:ProgramCallingManager,Mgr,"
-        "EndOfSystemTimestepBeforeHVACReporting,NoOp;",
+
+        "EnergyManagementSystem:Sensor,",
+        "  MeterSensor,             !- Name",
+        "  ,                        !- Output:Variable or Output:Meter Index Key Name",
+        "  Electricity:Facility;    !- Output:Variable or Output:Meter Name",
+
+        "EnergyManagementSystem:Program,",
+        "  NoOp,                    !- Name",
+        "  SET Dummy = 1;           !- Program Line",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "  Mgr,                     !- Name",
+        "  EndOfSystemTimestepBeforeHVACReporting,  !- EnergyPlus Model Calling Point",
+        "  NoOp;                    !- Program Name",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -3119,11 +3114,25 @@ TEST_F(EnergyPlusFixture, EMSManager_SensorOnMeter_FreshAtAllHVACManagerCallPoin
     // returned CurTSValue via GetCurrentMeterValue.
     std::string const idf_objects = delimited_string({
         "Output:Meter,Electricity:Facility,Timestep;",
-        "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
-        "EnergyManagementSystem:Sensor,VarSensor,TEST LIGHTS,Lights Electricity Energy;",
-        "EnergyManagementSystem:Program,NoOp,SET Dummy = 1;",
-        "EnergyManagementSystem:ProgramCallingManager,Mgr,"
-        "BeginTimestepBeforePredictor,NoOp;",
+
+        "EnergyManagementSystem:Sensor,",
+        "  MeterSensor,             !- Name",
+        "  ,                        !- Output:Variable or Output:Meter Index Key Name",
+        "  Electricity:Facility;    !- Output:Variable or Output:Meter Name",
+
+        "EnergyManagementSystem:Sensor,",
+        "  VarSensor,               !- Name",
+        "  TEST LIGHTS,             !- Output:Variable or Output:Meter Index Key Name",
+        "  Lights Electricity Energy;  !- Output:Variable or Output:Meter Name",
+
+        "EnergyManagementSystem:Program,",
+        "  NoOp,                    !- Name",
+        "  SET Dummy = 1;           !- Program Line",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "  Mgr,                     !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  NoOp;                    !- Program Name",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -3246,12 +3255,30 @@ TEST_F(EnergyPlusFixture, EMSManager_MeterSensor_MixedTypeEndToEnd_Issue7563)
     //   - after UpdateDataandReport, CurTSValue matches the sensor value
     std::string const idf_objects = delimited_string({
         "Output:Meter,Electricity:Facility,Timestep;",
-        "EnergyManagementSystem:Sensor,MeterSensor,,Electricity:Facility;",
-        "EnergyManagementSystem:Sensor,LightsSensor,TEST LIGHTS,Lights Electricity Energy;",
-        "EnergyManagementSystem:Sensor,FanSensor,TEST FAN,Fan Electricity Energy;",
-        "EnergyManagementSystem:Program,NoOp,SET Dummy = 1;",
-        "EnergyManagementSystem:ProgramCallingManager,Mgr,"
-        "EndOfSystemTimestepBeforeHVACReporting,NoOp;",
+
+        "EnergyManagementSystem:Sensor,",
+        "  MeterSensor,             !- Name",
+        "  ,                        !- Output:Variable or Output:Meter Index Key Name",
+        "  Electricity:Facility;    !- Output:Variable or Output:Meter Name",
+
+        "EnergyManagementSystem:Sensor,",
+        "  LightsSensor,            !- Name",
+        "  TEST LIGHTS,             !- Output:Variable or Output:Meter Index Key Name",
+        "  Lights Electricity Energy;  !- Output:Variable or Output:Meter Name",
+
+        "EnergyManagementSystem:Sensor,",
+        "  FanSensor,               !- Name",
+        "  TEST FAN,                !- Output:Variable or Output:Meter Index Key Name",
+        "  Fan Electricity Energy;  !- Output:Variable or Output:Meter Name",
+
+        "EnergyManagementSystem:Program,",
+        "  NoOp,                    !- Name",
+        "  SET Dummy = 1;           !- Program Line",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "  Mgr,                     !- Name",
+        "  EndOfSystemTimestepBeforeHVACReporting,  !- EnergyPlus Model Calling Point",
+        "  NoOp;                    !- Program Name",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -3373,24 +3400,23 @@ TEST_F(EnergyPlusFixture, UnusedActuatorWarning)
     // Al becomes a fresh local Erl variable; A1 is never assigned.
     // End-of-sim check must warn about unused actuator A1.
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "A1,                              !- Name",
-        "Test node,                       !- Actuated Component Unique Name",
-        "System Node Setpoint,            !- Actuated Component Type",
-        "Temperature Setpoint;            !- Actuated Component Control Type",
+        "  A1,                      !- Name",
+        "  Test node,               !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Typo Test Manager,               !- Name",
-        "BeginTimestepBeforePredictor,    !- EnergyPlus Model Calling Point",
-        "TypoProgram;                     !- Program Name 1",
+        "  Typo Test Manager,       !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  TypoProgram;             !- Program Name",
 
         "EnergyManagementSystem:Program,",
-        "TypoProgram,",
-        "Set Al = 2;",
-
+        "  TypoProgram,             !- Name",
+        "  Set Al = 2;              !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3418,30 +3444,29 @@ TEST_F(EnergyPlusFixture, UnusedActuatorWarning_ConditionalNullBranchNotFalsePos
     // trigger the unused-actuator warning just because the condition branch never fires at runtime.
     // Static parse-time reference check sees the SET target, flag flips even if only NULL branch runs.
     std::string const idf_objects = delimited_string({
-
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "EnergyManagementSystem:Actuator,",
-        "A1,                              !- Name",
-        "Test node,                       !- Actuated Component Unique Name",
-        "System Node Setpoint,            !- Actuated Component Type",
-        "Temperature Setpoint;            !- Actuated Component Control Type",
+        "  A1,                      !- Name",
+        "  Test node,               !- Actuated Component Unique Name",
+        "  System Node Setpoint,    !- Actuated Component Type",
+        "  Temperature Setpoint;    !- Actuated Component Control Type",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "Cond Null Manager,               !- Name",
-        "BeginTimestepBeforePredictor,    !- EnergyPlus Model Calling Point",
-        "CondNullProgram;                 !- Program Name 1",
+        "  Cond Null Manager,       !- Name",
+        "  BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "  CondNullProgram;         !- Program Name",
 
         // Condition always false at runtime -> only NULL branch fires -> old runtime flag would stay false.
         // Static parse check sees `SET A1 = ...` in the IF branch -> flag flips at parse time regardless.
         "EnergyManagementSystem:Program,",
-        "CondNullProgram,",
-        "IF 0 > 1,",
-        "SET A1 = 42,",
-        "ELSE,",
-        "SET A1 = NULL,",
-        "ENDIF;",
-
+        "  CondNullProgram,         !- Name",
+        "  IF 0 > 1,                !- Program Line",
+        "  SET A1 = 42,             !- Program Line",
+        "  ELSE,                    !- Program Line",
+        "  SET A1 = NULL,           !- Program Line",
+        "  ENDIF;                   !- Program Line",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
