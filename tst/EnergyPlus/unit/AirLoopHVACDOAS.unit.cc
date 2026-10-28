@@ -11744,36 +11744,36 @@ TEST_F(EnergyPlusFixture, AirLoopHVACDOAS_TestMixerSplitterMissingNodes)
 {
     // Test of Fix for Defect #10815
     std::string const idf_objects = delimited_string({
-        " AirLoopHVAC:Mixer,",
-        "  DOAS loop Mixer Correct,         !- Name",
-        "  MixerOutletNode1,         !- Outlet Node Name",
-        "  MixerInletNode1;  !- Inlet 1 Node Name",
+        "AirLoopHVAC:Mixer,",
+        "  DOAS loop Mixer Correct,  !- Name",
+        "  MixerOutletNode1,        !- Outlet Node Name",
+        "  MixerInletNode1;         !- Inlet Node Name",
 
-        " AirLoopHVAC:Mixer,",
-        "  DOAS loop Mixer Wrong,         !- Name",
-        "  MixerOutletNode2         !- Outlet Node Name",
-        "  MixerInletNode2;  !- Inlet 1 Node Name",
+        "AirLoopHVAC:Mixer,",
+        "  DOAS loop Mixer Wrong,   !- Name",
+        "  MixerOutletNode2         !- Outlet Node Name", // <-- Missing Comma
+        "  MixerInletNode2;         !- Inlet Node Name",
 
-        " AirLoopHVAC:Splitter,",
-        "  DOAS loop Splitter Correct,      !- Name",
-        "  SplitterInletNode1,       !- Inlet Node Name",
-        "  SplitterOutletNode1;  !- Outlet 1 Node Name",
+        "AirLoopHVAC:Splitter,",
+        "  DOAS loop Splitter Correct,  !- Name",
+        "  SplitterInletNode1,      !- Inlet Node Name",
+        "  SplitterOutletNode1;     !- Outlet Node Name",
 
-        " AirLoopHVAC:Splitter,",
-        "  DOAS loop Splitter Wrong,      !- Name",
-        "  SplitterInletNode2       !- Inlet Node Name",
-        "  SplitterOutletNode2;  !- Outlet 1 Node Name",
+        "AirLoopHVAC:Splitter,",
+        "  DOAS loop Splitter Wrong,  !- Name",
+        "  SplitterInletNode2       !- Inlet Node Name", // <-- Missing Comma
+        "  SplitterOutletNode2;     !- Outlet Node Name",
 
-        " NodeList,",
-        "  All The Nodes,  !- Name",
-        "  MixerInletNode1,  !- Node 1 Name",
-        "  MixerInletNode2,  !- Node 2 Name",
-        "  MixerOutletNode1,  !- Node 3 Name",
-        "  MixerOutletNode2,  !- Node 4 Name",
-        "  SplitterInletNode1,  !- Node 1 Name",
-        "  SplitterInletNode2,  !- Node 2 Name",
-        "  SplitterOutletNode1,  !- Node 3 Name",
-        "  SplitterOutletNode2;  !- Node 4 Name",
+        "NodeList,",
+        "  All The Nodes,           !- Name",
+        "  MixerInletNode1,         !- Node Name",
+        "  MixerInletNode2,         !- Node Name",
+        "  MixerOutletNode1,        !- Node Name",
+        "  MixerOutletNode2,        !- Node Name",
+        "  SplitterInletNode1,      !- Node Name",
+        "  SplitterInletNode2,      !- Node Name",
+        "  SplitterOutletNode1,     !- Node Name",
+        "  SplitterOutletNode2;     !- Node Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
