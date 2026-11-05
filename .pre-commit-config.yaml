@@ -28,6 +28,16 @@ repos:
   hooks:
   - id: isort
 
+- repo: https://github.com/jmarrec/energyplus-toolkit
+  rev: v0.2.1
+  hooks:
+  - id: energyplus-format-idd
+    args: [--idd, idd/Energy+.idd.in]
+  - id: energyplus-format-idf
+    args: [--idd, idd/Energy+.idd.in, -q]
+  - id: energyplus-format-unit-test
+    args: [--idd, idd/Energy+.idd.in, -q]
+
 - repo: https://github.com/pre-commit/mirrors-clang-format
   rev: 'v19.1.1'
   hooks:
